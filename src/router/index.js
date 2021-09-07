@@ -38,9 +38,7 @@ import store from "@/store";
  */
 export const constantRoutes = [
   ...common,
-  ...sample,
-  //...system(),
-  //...activiti(),
+  //...sample,
 ]
 
 /**
@@ -48,10 +46,10 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  ...system(),
+  //...system(),
   ...activiti(),
-  ...meta,
-  ...base,
+  //...meta,
+  //...base,
   // 404 page must be placed at the end !!!
   { path: '*', code: '404', redirect: '/dashboard', meta: { title: '首页', icon: 'dashboard' }, hidden: true }
   // { path: '*', code: '404', redirect: '/404', meta: {}, hidden: true }
