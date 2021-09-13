@@ -22,7 +22,7 @@ export default {
         assignee: null, // 指定单个人员
         assigneeArr: [], // 指定多个人员
         departmentArr: [], // 选中的部门
-        roleArr: [] // 选中的角色
+        roleCode: [] // 选中的角色
       },
       element: null,
       activeNames: ['task'], // 激活的面板
@@ -138,6 +138,7 @@ export default {
         // 任务分配人
         if (is(element, 'bpmn:UserTask') && element.businessObject && element.businessObject.$attrs) {
           this.assignInfo.assignee = element.businessObject.$attrs['activiti:assignee'] || element.businessObject.assignee
+          this.assignInfo.roleCode = element.businessObject.$attrs['activiti:candidateGroups'] || element.businessObject.candidateGroups
         }
       } else if (is(element, 'bpmn:Event')) {
         this.activeNames = ['event']
@@ -233,6 +234,11 @@ export default {
           }
           break
         case 'role':
+          if (this.assignInfo.roleCode) {
+            this.updateProperties({
+              'activiti:candidateGroups': this.assignInfo.roleCode
+            })
+          }
           break
         case 'dept':
           break

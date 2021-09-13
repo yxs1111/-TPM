@@ -36,5 +36,11 @@ export default {
   // 根据登录名查询API
   getByUsername(params) {
     return requestApi.request_get(this.url + '/getByUsername', params)
-  }
+  },
+  getAllUser() {
+    return request({
+      url: this.url + '/getAllUser',
+      method: 'get'
+    })
+  },
 }

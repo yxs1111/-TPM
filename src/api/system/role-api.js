@@ -1,4 +1,5 @@
 import requestApi from '@/api/request-api'
+import request from '@/utils/request'
 
 export default {
   url: '/auth/role',
@@ -16,5 +17,11 @@ export default {
   },
   getPermissionCodes(params) {
     return requestApi.request_get(this.url + '/getPermissionCodes', params)
-  }
+  },
+  getAllRole() {
+    return request({
+      url: this.url + '/getAllRole',
+      method: 'get'
+    })
+  },
 }
