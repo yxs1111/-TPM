@@ -10,6 +10,7 @@ import common from '@/router/routers/common'
 import system from '@/router/routers/system'
 import sample from '@/router/routers/sample'
 import activiti from '@/router/routers/activiti'
+import cityPlan from '@/router/routers/cityplan'
 import store from "@/store";
 
 /**
@@ -38,7 +39,8 @@ import store from "@/store";
  */
 export const constantRoutes = [
   ...common,
-  //...sample,
+  ...sample,
+  ...cityPlan(),
 ]
 
 /**
@@ -46,7 +48,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  //...system(),
+  ...system(),
   ...activiti(),
   //...meta,
   //...base,

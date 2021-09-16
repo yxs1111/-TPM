@@ -61,7 +61,11 @@ div:focus {
 
 // main-container global css
 .app-container {
+  // height: 100vh;
+  background-color: #fff;
   padding: 20px;
+  border-radius:16px;
+  overflow-y: auto;
 }
 .el-pagination{
   margin-bottom: 42px;

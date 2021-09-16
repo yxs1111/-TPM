@@ -37,7 +37,7 @@
       border
       fit
       stripe
-      height="600"
+      
       highlight-current-row
       @row-click="handleCurrentRowClick"
       @row-dblclick="handleCurrentRowDblClick"

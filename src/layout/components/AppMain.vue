@@ -27,8 +27,13 @@ export default {
     /* 50= navbar  50  */
     min-height: calc(100vh - 50px);
     width: 100%;
+    height: 100vh;
     position: relative;
-    /*overflow: hidden;*/
+    overflow: auto;
+    padding: 28px 20px;
+    box-sizing: border-box;
+   
+    background-color: #EFF3FA;
   }
 
   .fixed-header+.app-main {
@@ -38,7 +43,7 @@ export default {
   .hasTagsView {
     .app-main {
       /* 84 = navbar + tags-view = 50 + 34 */
-      min-height: calc(100vh - 134px);
+      // min-height: calc(100vh - 134px);
     }
 
     .fixed-header+.app-main {

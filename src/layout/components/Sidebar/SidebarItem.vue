@@ -97,8 +97,8 @@ export default {
 </script>
 <style scoped>
   .el-menu-item.is-active{
-    color: #ffffff!important;
+    color: #4192D3!important;
     font-weight: bold;
-    background: #175A9F!important;
+    background: #fff!important;
   }
 </style>

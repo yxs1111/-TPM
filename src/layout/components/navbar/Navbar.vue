@@ -1,6 +1,8 @@
 <template>
   <div :class="path=='Dashboard'?'navbar navbar-first':'navbar navbar-second'">
-    <div class="breadcrumb-container">北京地铁19号线智能管控系统</div>
+    <div class="breadcrumb-container">
+      <img src="../../../../src/assets/images/logo.png" alt="菲仕兰">
+    </div>
     <div v-if="path=='Dashboard'" class="layOutBtn">
       <div>操作</div>
     </div>
@@ -142,13 +144,15 @@
     background-size: 100% 100%;
   }
   .navbar-second {
-    background-image: url("../../../assets/images/background/topLogo1.png");
+    background-color: #4192d3;
     background-size: 100% 100%;
   }
   .navbar {
     height: 80px;
     overflow: hidden;
     position: relative;
+    top: 0;
+    left: 0;
     box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
   .hamburger-container {
@@ -187,14 +191,16 @@
   }
 
   .breadcrumb-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     float: left;
     font-size: 20px;
     font-weight: bold;
     color: #105AAE;
     height: 80px;
     line-height: 80px;
-    margin-left: 20px;
-    width: 300px;
+    padding-left: 36px;
   }
 
   .right-menu {
@@ -249,6 +255,7 @@
     float: left;
     line-height: 75px;
     margin-right: 10px;
+    color: #fff;
   }
 
   .el-icon-caret-bottom {
