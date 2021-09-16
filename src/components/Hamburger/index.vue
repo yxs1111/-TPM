@@ -1,13 +1,13 @@
 <template>
   <div style="padding: 0 15px;" @click="toggleClick">
-    <!-- <div v-if="!leftMenuToggle" class="inOutTex">
+    <div v-if="!leftMenuToggle" class="inOutTex">
       <img src="../../assets/images/background/in.png"  height="22" width="22"/>
       收起菜单
     </div>
 
     <div v-else class="inOutTexDis">
       <img src="../../assets/images/background/out.png" height="22" width="22"/>
-    </div> -->
+    </div>
   </div>
 </template>
 

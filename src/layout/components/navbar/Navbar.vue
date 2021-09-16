@@ -140,7 +140,7 @@
     float: left;font-size: 12px;color: #586ABA;
   }
   .navbar-first {
-    background-image: url("../../../assets/images/background/topLogo.png");
+    background-color: #4192d3;
     background-size: 100% 100%;
   }
   .navbar-second {

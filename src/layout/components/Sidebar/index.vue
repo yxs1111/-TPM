@@ -2,7 +2,7 @@
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <!-- <search v-if="leftMenuToggle" id="header-search" class="right-menu-item" /> -->
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <!-- <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
@@ -14,7 +14,7 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in permission_routes"  :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
     <!-- <div class="leftMenu"></div> -->
@@ -58,6 +58,12 @@ export default {
     return {
       leftMenuToggle:true,
     }
+  },
+  mounted() {
+    this.$on('changeSideBar', data => {
+      console.log("hh");
+      //this.toggleSideBar();
+    })
   },
   methods:{
     toggleSideBar() {

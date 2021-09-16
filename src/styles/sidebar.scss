@@ -2,11 +2,16 @@
 
   .main-container {
     width: calc(100% - 280px);
+    
     // min-height: 100%;
     // overflow-y: scroll;
-    transition: margin-left .28s;
+    transition: width .28s;
     // margin-left: $sideBarWidth;
     // position: relative;
+  }
+  .main-hideSideBar {
+    transition: width 0.28s;
+    width: calc(100% - 54px) !important;
   }
 
   .sidebar-container {
@@ -97,7 +102,7 @@
     }
 
     .main-container {
-      margin-left: 54px;
+      // margin-left: 54px;
     }
 
     .submenu-title-noDropdown {
@@ -114,6 +119,7 @@
     }
 
     .el-submenu {
+      width: 54px;
       overflow: hidden;
 
       &>.el-submenu__title {

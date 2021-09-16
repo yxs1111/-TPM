@@ -11,7 +11,7 @@
         <sidebar class="sidebar-container" />
       </div>
 
-      <div class="main-container hasTagsView">
+      <div class="hasTagsView" :class="sidebar.opened?'main-container':'main-hideSideBar'">
         <!-- <div
           :class="{ 'fixed-header': fixedHeader }"
           style="background: #E0E6F1"
@@ -129,7 +129,9 @@ export default {
 
 </style>
 <style lang="scss">
+
   .sidebarWrap {
+  // width: 280px;
   height: 100vh;
   background-color: #FFFFFF;
   overflow-y: auto;
