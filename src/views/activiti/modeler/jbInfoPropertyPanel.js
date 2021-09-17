@@ -167,6 +167,8 @@ export default {
         }
         if (element.businessObject && element.businessObject.conditionExpression) {
           this.gatewayInfo.conditions = element.businessObject.conditionExpression.body || ''
+        }else{
+          this.gatewayInfo.conditions = null
         }
       }
     },
