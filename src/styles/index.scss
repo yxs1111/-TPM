@@ -1,15 +1,16 @@
-@import './variables.scss';
-@import './mixin.scss';
-@import './transition.scss';
-@import './element-ui.scss';
-@import './sidebar.scss';
+@import "./variables.scss";
+@import "./mixin.scss";
+@import "./transition.scss";
+@import "./element-ui.scss";
+@import "./sidebar.scss";
 $editorTabsborderColor: #121315;
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Arial, sans-serif;
 }
 
 label {
@@ -64,41 +65,41 @@ div:focus {
   // height: 100vh;
   background-color: #fff;
   padding: 20px;
-  border-radius:16px;
+  border-radius: 16px;
   overflow-y: auto;
 }
-.el-pagination{
+.el-pagination {
   margin-bottom: 42px;
   margin-top: 10px;
 }
 
-.editor-tabs{
+.editor-tabs {
   background: $editorTabsborderColor;
-  .el-tabs__header{
+  .el-tabs__header {
     margin: 0;
     border-bottom-color: $editorTabsborderColor;
-    .el-tabs__nav{
+    .el-tabs__nav {
       border-color: $editorTabsborderColor;
     }
   }
-  .el-tabs__item{
+  .el-tabs__item {
     height: 32px;
     line-height: 32px;
     color: #888a8e;
-    border-left: 1px solid $editorTabsborderColor!important;
+    border-left: 1px solid $editorTabsborderColor !important;
     background: #363636;
     margin-right: 5px;
     user-select: none;
   }
-  .el-tabs__item.is-active{
+  .el-tabs__item.is-active {
     background: #1e1e1e;
-    border-bottom-color: #1e1e1e!important;
+    border-bottom-color: #1e1e1e !important;
     color: #fff;
   }
-  .el-icon-edit{
+  .el-icon-edit {
     color: #f1fa8c;
   }
-  .el-icon-document{
+  .el-icon-document {
     color: #a95812;
   }
   :focus.is-active.is-focus:not(:active) {
@@ -117,24 +118,24 @@ div:focus {
   overflow-x: hidden !important;
   margin-bottom: 0 !important;
 }
-.center-tabs{
-  .el-tabs__header{
-    margin-bottom: 0!important;
+.center-tabs {
+  .el-tabs__header {
+    margin-bottom: 0 !important;
   }
-  .el-tabs__item{
+  .el-tabs__item {
     width: 50%;
     text-align: center;
   }
-  .el-tabs__nav{
+  .el-tabs__nav {
     width: 100%;
   }
 }
-.reg-item{
+.reg-item {
   padding: 12px 6px;
   background: #f8f8f8;
   position: relative;
   border-radius: 4px;
-  .close-btn{
+  .close-btn {
     position: absolute;
     right: -6px;
     top: -6px;
@@ -149,16 +150,16 @@ div:focus {
     z-index: 1;
     cursor: pointer;
     font-size: 12px;
-    &:hover{
-      background: rgba(210, 23, 23, 0.5)
+    &:hover {
+      background: rgba(210, 23, 23, 0.5);
     }
   }
-  & + .reg-item{
+  & + .reg-item {
     margin-top: 18px;
   }
 }
-.action-bar{
-  & .el-button+.el-button {
+.action-bar {
+  & .el-button + .el-button {
     margin-left: 15px;
   }
   & i {
@@ -169,67 +170,132 @@ div:focus {
   }
 }
 
-.custom-tree-node{
+.custom-tree-node {
   width: 100%;
   font-size: 14px;
-  .node-operation{
+  .node-operation {
     float: right;
   }
-  i[class*="el-icon"] + i[class*="el-icon"]{
+  i[class*="el-icon"] + i[class*="el-icon"] {
     margin-left: 6px;
   }
-  .el-icon-plus{
-    color: #409EFF;
+  .el-icon-plus {
+    color: #409eff;
   }
-  .el-icon-delete{
+  .el-icon-delete {
     color: #157a0c;
   }
 }
 
-.el-scrollbar__view{
+.el-scrollbar__view {
   overflow-x: hidden;
 }
 
-.el-rate{
+.el-rate {
   display: inline-block;
   vertical-align: text-top;
 }
-.el-upload__tip{
+.el-upload__tip {
   line-height: 1.2;
 }
-.el-table th{
-  background:#F0F2F6 ;
-  border: 1px solid #EBEBEB;
+.el-table th {
+  background: #f0f2f6;
+  border: 1px solid #ebebeb;
 }
-.search-form .el-input, .el-input--suffix{
-  width: 190px!important;
+.search-form .el-input,
+.el-input--suffix {
+  width: 190px !important;
 }
-.search-form .el-date-editor.el-input, .el-date-editor.el-input__inner{
-  width: 190px!important;
+.search-form .el-date-editor.el-input,
+.el-date-editor.el-input__inner {
+  width: 190px !important;
 }
-.el-button--success{
-  background-color:#1BB7A3;
-  border-color:#1BB7A3;
+.el-button--success {
+  background-color: #1bb7a3;
+  border-color: #1bb7a3;
 }
-.el-button--primary{
-  background-color:#009FEB;
-  border-color:#009FEB;
+.el-button--primary {
+  background-color: #009feb;
+  border-color: #009feb;
 }
-.el-button--reset{
-  background-color:#E8E8E8;
-  border-color:#E8E8E8;
-  color: #515C82;
+.el-button--reset {
+  background-color: #e8e8e8;
+  border-color: #e8e8e8;
+  color: #515c82;
 }
-.show-search-btn{
-  background: #F2F2F2;border-radius: 6px;font-size: 12px;color: #A6A6A6;border: none;float: left;
+.show-search-btn {
+  background: #f2f2f2;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #a6a6a6;
+  border: none;
+  float: left;
 }
-.search-btn{
+.search-btn {
   float: right;
 }
-.form-height{
+.form-height {
   height: 50px;
   overflow: hidden;
 }
-.function-button{
-  margin-bottom: 20px;float: right;margin-top: 10px;
+.function-button {
+  margin-bottom: 20px;
+  float: right;
+  margin-top: 10px;
+}
+
+// 水平线
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: #eaeaea;
+  margin: 15px 0;
+}
+// 操作板块
+.SelectBarWrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  .SelectBar {
+    display: flex;
+    align-items: center;
+    .Selectli {
+      margin-right: 20px;
+      .SelectliTitle {
+        font-size: 14px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #4d4d4d;
+        margin-right: 15px;
+      }
+      .el-input__inner {
+        background-color: #f0f2fa;
+      }
+    }
+  }
+  .OpertionBar {
+    display: flex;
+    align-items: center;
+  }
+}
+.TpmButtonBG {
+  width: 107px;
+  height: 38px;
+  background: #4192d3;
+  border: 1px solid #e7e7e7;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #4192d3 !important;
+  margin-left: 10px;
+  .text {
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #ffffff;
+    margin-left: 12px;
+  }
 }

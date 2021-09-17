@@ -76,6 +76,7 @@
               <input :value="element.businessObject.name" @change="(event) => changeField(event, 'name')">
             </div>
           </fieldset>
+          <el-button type="success" @click="gatewayConfigDialog.visible = true">条件配置</el-button>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -93,6 +94,13 @@
       @submit="handleBindingForm"
     />
     <!--  绑定流程单据Dialog End -->
+    <!--  条件配置 Start  -->
+    <gateway-config
+      :visible.sync="gatewayConfigDialog.visible"
+      :gateway-info="gatewayInfo"
+      @submit="handleGatewayConfig"
+    />
+    <!--  条件配置 End  -->
   </div>
 </template>
 <script src="./jbInfoPropertyPanel.js"/>

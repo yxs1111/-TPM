@@ -16,7 +16,7 @@ export default function() {
           path: '/V0',
           code: 'V0',
           name: 'V0',
-          component: () => import('@/views/activiti/model'),
+          component: () => import('@/views/cityplan/cityplanApply/index.vue'),
           meta: { title: 'V0', icon: 'form' }
         },
         {

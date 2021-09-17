@@ -32,7 +32,7 @@ export default {
     overflow: auto;
     padding: 28px 20px;
     box-sizing: border-box;
-   
+    padding-bottom: 100px;
     background-color: #EFF3FA;
   }
 

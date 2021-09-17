@@ -82,7 +82,7 @@
 
     .is-active>.el-submenu__title {
       color: $subMenuActiveText !important;
-      background: #EBF0FF!important;
+      background: #fff!important;
     }
 
     & .nest-menu .el-submenu>.el-submenu__title,
@@ -91,6 +91,7 @@
       background-color: $subMenuBg;
 
       &:hover {
+        color: $subMenuActiveText !important;
         background-color: $subMenuHover !important;
       }
     }

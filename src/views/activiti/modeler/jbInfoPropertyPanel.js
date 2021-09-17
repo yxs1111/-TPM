@@ -2,11 +2,13 @@ const is = require('bpmn-js/lib/util/ModelUtil').is
 import BindForm from '@/views/activiti/modeler/BindForm'
 import AssignTask from '@/views/activiti/modeler/components/AssignTask'
 import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
+import gatewayConfig from '@/views/activiti/modeler/GatewayConfig'
+import { Message } from 'element-ui'
 
 export default {
   name: 'JBInfoPropertyPanel',
   components: {
-    BindForm, AssignTask
+    BindForm, AssignTask, gatewayConfig
   },
   props: {
     modeler: {
@@ -54,6 +56,13 @@ export default {
       },
       assignTaskDialog: {
         visible: false
+      },
+      gatewayConfigDialog: {
+        visible: false
+      },
+      gatewayInfo:{
+        conditions: null,
+        nextGroups: null
       }
     }
   },
@@ -151,6 +160,14 @@ export default {
       ])) {
         this.activeNames = ['gateway']
         this.gateWayType = element.type
+      } else if(is(element, 'bpmn:SequenceFlow')){
+        // 网关条件配置
+        if (element.businessObject && element.businessObject.targetRef) {
+          this.gatewayInfo.nextGroups = element.businessObject.targetRef.name || element.businessObject.targetRef.id
+        }
+        if (element.businessObject && element.businessObject.conditionExpression) {
+          this.gatewayInfo.conditions = element.businessObject.conditionExpression.body || ''
+        }
       }
     },
     /**
@@ -246,6 +263,25 @@ export default {
           return
       }
       this.assignTaskDialog.visible = false
+    },
+    handleGatewayConfig(){
+      if(this.gatewayInfo.conditions){
+        this.updateGatewayConfig();
+        this.gatewayConfigDialog.visible = false
+      }else{
+        Message.error({
+          type: 'error',
+          message: '请填写配置内容'
+        })
+      }
+    },
+    updateGatewayConfig(){
+      const { modeler, element } = this
+      const moddle = modeler._moddle;
+      var conditionExpression = moddle.create('bpmn:FormalExpression', { body: this.gatewayInfo.conditions });
+
+      const modeling = modeler.get('modeling')
+      modeling.updateProperties(element, { conditionExpression: conditionExpression });
     }
   }
 }

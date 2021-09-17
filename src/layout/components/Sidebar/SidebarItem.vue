@@ -143,10 +143,11 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+@import "@/styles/variables.scss";
 .el-menu-item.is-active {
   color: #4192d3 !important;
   font-weight: bold;
-  background: #fff !important;
+  background: #EBF0FF !important;
 }
 .dashboardBar {
   margin-top: 10px;
