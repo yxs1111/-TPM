@@ -3,7 +3,7 @@
     <logo v-if="showLogo" :collapse="isCollapse" />
     <!-- <search v-if="leftMenuToggle" id="header-search" class="right-menu-item" /> -->
     <!-- <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <!-- <el-scrollbar wrap-class="scrollbar-wrapper"> -->
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
@@ -17,7 +17,7 @@
       >
         <sidebar-item v-for="route in permission_routes"  :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
-    </el-scrollbar>
+    <!-- </el-scrollbar> -->
     <!-- <div class="leftMenu"></div> -->
   </div>
 </template>

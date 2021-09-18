@@ -7,9 +7,9 @@
     />
     <navbar />
     <div class="content">
-      <div class="sidebarWrap">
+      <!-- <div class="sidebarWrap"> -->
         <sidebar class="sidebar-container" />
-      </div>
+      <!-- </div> -->
 
       <div class="hasTagsView" :class="sidebar.opened?'main-container':'main-hideSideBar'">
         <!-- <div
