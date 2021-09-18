@@ -20,6 +20,13 @@ export default function() {
           meta: { title: '模型管理', icon: 'form' }
         },
         {
+          path: '/master',
+          code: 'master',
+          name: 'master',
+          component: () => import('@/views/activiti/master'),
+          meta: { title: '主数据管理', icon: 'form' }
+        },
+        {
           path: '/process',
           code: 'process',
           name: 'Process',
