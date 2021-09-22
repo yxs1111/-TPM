@@ -37,7 +37,7 @@ export default {
           amount1: 4,
           amount2: 3,
           amount3: 10,
-          NKA: 0,
+          NKA: 0
         },
         {
           id: "1",
@@ -45,7 +45,7 @@ export default {
           amount1: "165",
           amount2: 2,
           amount3: 12,
-          NKA: 0,
+          NKA: 0
         },
         {
           id: "2",
@@ -53,7 +53,7 @@ export default {
           amount1: 221,
           amount2: 3,
           amount3: 9,
-          NKA: 0,
+          NKA: 0
         },
         {
           id: "2",
@@ -61,7 +61,7 @@ export default {
           amount1: 221,
           amount2: 4,
           amount3: 17,
-          NKA: 0,
+          NKA: 0
         },
         {
           id: "3",
@@ -69,27 +69,74 @@ export default {
           amount1: 20,
           amount2: 4,
           amount3: 15,
-          NKA: 0,
-         
-
-        }
+          NKA: 0
+        },
+        {
+          id: "4",
+          name: "王小虎",
+          amount1: 20,
+          amount2: 4,
+          amount3: 15,
+          NKA: 0
+        },
+        {
+          id: "4",
+          name: "王小虎",
+          amount1: 20,
+          amount2: 4,
+          amount3: 15,
+          NKA: 0
+        },
+        
       ],
-      spanArr:[],
-      pos:'',
+      spanArr: [],
+      pos: "",
+      tableKey: ""
     };
   },
   directives: { elDragDialog, permission },
   mounted() {
-    this.getSpanArr(this.tableData)
+    this.getSpanArr(this.tableData);
+    this.setRowSpans()
   },
-  computed: {
-   
-  },
+  computed: {},
   methods: {
     
+    // 用于区分出id相同的值
+    setRowSpans() {
+      // 先给所有的数据都加一个v.rowspan = 1
+      this.tableData.forEach(v => {
+        v.rowspan = 1
+        v.classStripe = false
+      })
+      // 双层循环
+      for (let i = 0; i < this.tableData.length; i++) {
+        // 内层循环，上面已经给所有的行都加了v.rowspan = 1
+        // 这里进行判断
+        // 如果当前行的id和下一行的id相等
+        // 就把当前v.rowspan + 1
+        // 下一行的v.rowspan - 1
+        for (let j = i + 1; j < this.tableData.length; j++) {
+          if (this.tableData[i].id === this.tableData[j].id) {
+            this.tableData[i].rowspan++
+            this.tableData[j].rowspan--
+            this.tableData[j].classStripe = this.tableData[i].classStripe
+          }else{
+            this.tableData[j].classStripe = !this.tableData[i].classStripe
+          }
+        }
+        // 这里跳过已经重复的数据
+        i = i + this.tableData[i].rowspan - 1
+      }
+    },
+    tabRowClassName({row,rowIndex}){
+      if(row.classStripe){
+        return 'warning-row'
+      }
+    },
+
     //合并行
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      
       // columnIndex === xx 找到第xx列，实现合并随机出现的行数
       if (columnIndex === 0) {
         const _row = this.spanArr[rowIndex];
@@ -98,8 +145,8 @@ export default {
           rowspan: _row,
           colspan: _col
         };
-      } 
-      if(columnIndex === 5) {
+      }
+      if (columnIndex === 5) {
         const _row = this.spanArr[rowIndex];
         const _col = _row > 0 ? 1 : 0;
         return {
@@ -110,7 +157,6 @@ export default {
     },
     // 因为要合并的行数是不固定的，此函数是实现合并随意行数的功能
     getSpanArr(data) {
-     
       this.spanArr = [];
       this.pos = 0;
       for (var i = 0; i < data.length; i++) {
@@ -119,7 +165,10 @@ export default {
           this.spanArr.push(1);
           this.pos = 0;
         } else {
-          if (data[i].id === data[i - 1].id && data[i].NKA === data[i - 1].NKA) {
+          if (
+            data[i].id === data[i - 1].id &&
+            data[i].NKA === data[i - 1].NKA
+          ) {
             // 如果id相等就累加，并且push 0
             this.spanArr[this.pos] += 1;
             this.spanArr.push(0);
@@ -131,6 +180,6 @@ export default {
         }
       }
       console.log(this.spanArr);
-    },
+    }
   }
 };
