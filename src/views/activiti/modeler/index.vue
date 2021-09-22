@@ -92,7 +92,7 @@ import paletteEntries from '@/components/activiti/palette/PaletteEntries'
 // 描述文件
 import etlExtension from '@/components/activiti/template/etl.json'
 import activitiDescriptor from '@/components/activiti/descriptors/activitiDescriptor.json'
-import minimapModule from 'diagram-js-minimap'
+// import minimapModule from 'diagram-js-minimap'
 export default {
   components: {
     jbinfoPropertyPanel
