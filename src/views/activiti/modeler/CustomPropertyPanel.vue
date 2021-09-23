@@ -2,7 +2,7 @@
   <div class="custom-properties-panel">
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item title="任务属性" name="task">
-        <el-card shadow="hover">
+        <!-- <el-card shadow="hover"> -->
           <div v-if="selectedElements.length<=0" class="empty">请选择一个元素</div>
           <div v-else-if="selectedElements.length>1" class="empty">只能选择一个元素</div>
           <div v-else>
@@ -30,7 +30,7 @@
             <el-button type="success" @click="assignTaskDialog.visible = true">分配任务</el-button>
             <!-- <el-button type="success" @click="bindFormDialog.visible = true">流程单据</el-button> -->
           </div>
-        </el-card>
+        <!-- </el-card> -->
       </el-collapse-item>
       <el-collapse-item title="事件属性" name="event">
         <div v-if="selectedElements.length<=0" class="empty">请选择一个元素</div>
