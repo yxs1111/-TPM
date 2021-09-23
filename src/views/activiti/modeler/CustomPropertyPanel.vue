@@ -28,7 +28,7 @@
               </div>
             </fieldset>
             <el-button type="success" @click="assignTaskDialog.visible = true">分配任务</el-button>
-            <el-button type="success" @click="bindFormDialog.visible = true">流程单据</el-button>
+            <!-- <el-button type="success" @click="bindFormDialog.visible = true">流程单据</el-button> -->
           </div>
         </el-card>
       </el-collapse-item>
