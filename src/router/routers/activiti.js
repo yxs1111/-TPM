@@ -19,13 +19,20 @@ export default function() {
           component: () => import('@/views/activiti/model'),
           meta: { title: '模型管理', icon: 'form' }
         },
-        // {
-        //   path: '/process',
-        //   code: 'process',
-        //   name: 'Process',
-        //   component: () => import('@/views/activiti/process'),
-        //   meta: { title: '流程管理', icon: 'user' }
-        // },
+        {
+          path: '/master',
+          code: 'master',
+          name: 'master',
+          component: () => import('@/views/activiti/master'),
+          meta: { title: '主数据管理', icon: 'form' }
+        },
+        {
+          path: '/process',
+          code: 'process',
+          name: 'Process',
+          component: () => import('@/views/activiti/process'),
+          meta: { title: '流程管理', icon: 'user' }
+        },
         // {
         //   path: '/task',
         //   code: 'task',

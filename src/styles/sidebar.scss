@@ -1,11 +1,10 @@
 #app {
-
   .main-container {
     width: calc(100% - 280px);
-    
+
     // min-height: 100%;
     // overflow-y: scroll;
-    transition: width .28s;
+    transition: width 0.28s;
     // margin-left: $sideBarWidth;
     // position: relative;
   }
@@ -18,8 +17,18 @@
     transition: width 0.28s;
     width: $sideBarWidth !important;
     background-color: $menuBg;
-    // overflow-y: scroll;
-    // height: 100%;
+    overflow-y: auto;
+    height: 87vh;
+    /*滚动条的宽度*/
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    /* //滚动条的滑块 */
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(49, 49, 49, 0.04);
+      border-radius: 3px;
+    }
     // position: fixed;
     // font-size: 0px;
     // top: 0;
@@ -30,7 +39,8 @@
 
     // reset element-ui css
     .horizontal-collapse-transition {
-      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
+      transition: 0s width ease-in-out, 0s padding-left ease-in-out,
+        0s padding-right ease-in-out;
     }
 
     .scrollbar-wrapper {
@@ -80,12 +90,12 @@
       }
     }
 
-    .is-active>.el-submenu__title {
+    .is-active > .el-submenu__title {
       color: $subMenuActiveText !important;
-      background: #fff!important;
+      background: #fff !important;
     }
 
-    & .nest-menu .el-submenu>.el-submenu__title,
+    & .nest-menu .el-submenu > .el-submenu__title,
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg;
@@ -123,7 +133,7 @@
       width: 54px;
       overflow: hidden;
 
-      &>.el-submenu__title {
+      & > .el-submenu__title {
         padding: 0 !important;
 
         .svg-icon {
@@ -138,8 +148,8 @@
 
     .el-menu--collapse {
       .el-submenu {
-        &>.el-submenu__title {
-          &>span {
+        & > .el-submenu__title {
+          & > span {
             height: 0;
             width: 0;
             overflow: hidden;
@@ -162,7 +172,7 @@
     }
 
     .sidebar-container {
-      transition: transform .28s;
+      transition: transform 0.28s;
       width: $sideBarWidth !important;
     }
 
@@ -176,7 +186,6 @@
   }
 
   .withoutAnimation {
-
     .main-container,
     .sidebar-container {
       transition: none;
@@ -186,13 +195,13 @@
 
 // when menu collapsed
 .el-menu--vertical {
-  &>.el-menu {
+  & > .el-menu {
     .svg-icon {
       margin-right: 16px;
     }
   }
 
-  .nest-menu .el-submenu>.el-submenu__title,
+  .nest-menu .el-submenu > .el-submenu__title,
   .el-menu-item {
     &:hover {
       // you can use $subMenuHover
@@ -201,7 +210,7 @@
   }
 
   // the scroll bar appears when the subMenu is too long
-  >.el-menu--popup {
+  > .el-menu--popup {
     max-height: 100vh;
     overflow-y: auto;
 
