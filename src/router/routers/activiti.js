@@ -33,13 +33,13 @@ export default function() {
           component: () => import('@/views/activiti/process'),
           meta: { title: '流程管理', icon: 'user' }
         },
-        // {
-        //   path: '/task',
-        //   code: 'task',
-        //   name: 'task',
-        //   component: () => import('@/views/activiti/tasks'),
-        //   meta: { title: '待办事项', icon: 'user' }
-        // },
+        {
+          path: '/task',
+          code: 'task',
+          name: 'task',
+          component: () => import('@/views/activiti/tasks'),
+          meta: { title: '待办事项', icon: 'user' }
+        },
         // {
         //   path: '/form',
         //   code: 'form',
