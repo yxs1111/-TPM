@@ -69,7 +69,7 @@ div:focus {
   overflow-y: auto;
 }
 .el-pagination {
-  margin-bottom: 42px;
+  // margin-bottom: 42px;
   margin-top: 10px;
 }
 
@@ -279,6 +279,13 @@ div:focus {
     align-items: center;
   }
 }
+//操作按钮板块
+.TpmButtonBGWrap {
+  width: 100%;
+  display: flex;
+  margin-bottom: 20px;
+}
+//操作按钮
 .TpmButtonBG {
   width: 107px;
   height: 38px;
@@ -297,5 +304,53 @@ div:focus {
     font-weight: 400;
     color: #ffffff;
     margin-left: 12px;
+  }
+}
+//TpmPagination
+.TpmPaginationWrap {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  .el-pagination {
+    display: flex;
+    align-items: center;
+  }
+  // align-items: center;
+  .el-pagination .el-pager li {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    margin: 0 6px;
+    font-size: 12px;
+    /*对页数的样式进行修改*/
+    // background-color: #10263c;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0;
+  }
+  .el-pagination .btn-next {
+    /*对下一页的按钮样式进行修改*/
+    // background-color: #10263c;
+    background-color: #fff;
+  }
+  .el-pagination .btn-prev {
+    /*对上一页的按钮样式进行修改*/
+    // background-color: #10263c;
+
+    background-color: #fff;
+  }
+  .el-pagination .el-pager li:not(.disabled).active {
+    /*当前选中页数的样式进行修改*/
+    background-color: #4192d3;
+    border: 1px solid #4192d3;
+    color: #fff !important;
+    border-radius: 4px;
+  }
+  .el-pager li:hover {
+    color: #4192d3 !important;
+  }
+  .el-input--suffix {
+    width: 100px !important;
   }
 }

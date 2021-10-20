@@ -11,6 +11,7 @@ import system from '@/router/routers/system'
 import sample from '@/router/routers/sample'
 import activiti from '@/router/routers/activiti'
 import cityPlan from '@/router/routers/cityplan'
+import masterData from '@/router/routers/masterData'
 import store from "@/store";
 
 /**
@@ -41,6 +42,7 @@ export const constantRoutes = [
   ...common,
   //...sample,
   ...cityPlan(),
+  ...masterData()
 ]
 
 /**
