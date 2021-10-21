@@ -49,10 +49,25 @@
         >发布</el-button
       >
     </div>
-    <el-table :data="tableData" border stripe style="width: 100%">
-      <el-table-column align="center" prop="date" label="日期"> </el-table-column>
-      <el-table-column align="center" prop="name" label="姓名"> </el-table-column>
-      <el-table-column align="center" prop="address" label="地址"> </el-table-column>
+    <el-table :data="tableData" border :header-cell-style="HeadTable"  :row-class-name="tableRowClassName"   style="width: 100%">
+      <el-table-column width="150" fixed align="center" prop="date" label="产品编号"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="产品中文名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="产品英文名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="产品简称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="品类"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="品牌"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="系列"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="阶段"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="包装"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="含量"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="大小单位转换比"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="大单位"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="大单位价格"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="小单位"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="小单位价格"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="上市日期"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="备注"> </el-table-column>
+      <el-table-column width="150" align="center" prop="address" label="是否有效"> </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -112,22 +127,22 @@ export default {
         {
           date: "2016-05-02",
           name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
+          address: "上海市"
         },
         {
           date: "2016-05-04",
           name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
+          address: "上海市"
         },
         {
           date: "2016-05-01",
           name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
+          address: "上海市普陀"
         },
         {
           date: "2016-05-03",
           name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
+          address: "上海市普陀"
         }
       ]
     };
@@ -148,6 +163,17 @@ export default {
     handleCurrentChange(num) {
       this.pageNum = num;
       this.fetchData();
+    },
+    // 行样式
+    tableRowClassName({ row, rowIndex }) {
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
+    },
+     HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     }
   }
 };

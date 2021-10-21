@@ -198,10 +198,10 @@ div:focus {
 .el-upload__tip {
   line-height: 1.2;
 }
-.el-table th {
-  background: #f0f2f6;
-  border: 1px solid #ebebeb;
-}
+// .el-table th {
+//   background: #f0f2f6;
+//   border: 1px solid #ebebeb;
+// }
 .search-form .el-input,
 .el-input--suffix {
   width: 190px !important;
@@ -352,5 +352,46 @@ div:focus {
   }
   .el-input--suffix {
     width: 100px !important;
+  }
+}
+// 表格样式
+.el-table {
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  font-weight: 400;
+  color: #666;
+  // 滚动条的宽度
+  .el-table__body-wrapper::-webkit-scrollbar {
+    width: 16px; // 横向滚动条
+    height: 16px; // 纵向滚动条 必写
+  }
+  // 滚动条的滑块
+  .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background: #b9b9b9;
+    border-radius: 8px;
+  }
+  .el-table__fixed {
+    height: 100% !important; //设置高优先，以覆盖内联样式
+  }
+  .el-table__fixed-right {
+    height: 100% !important; //设置高优先，以覆盖内联样式
+  }
+  .el-table__fixed-left {
+    height: 100% !important; //设置高优先，以覆盖内联样式
+  }
+  .el-table--striped .el-table__body tr.el-table__row--striped td {
+    background: #fff;
+}
+  .el-table-head {
+    background: #fff;
+    font-size: 16px;
+    text-align: center;
+  }
+  .odd-row {
+    background-color: #F3F7F8 !important;
+  }
+
+  .even-row {
+    background-color: #fff !important;
   }
 }

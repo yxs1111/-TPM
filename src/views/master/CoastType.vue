@@ -50,9 +50,12 @@
       >
     </div>
     <el-table :data="tableData" border stripe style="width: 100%">
-      <el-table-column align="center" prop="date" label="日期"> </el-table-column>
-      <el-table-column align="center" prop="name" label="姓名"> </el-table-column>
-      <el-table-column align="center" prop="address" label="地址"> </el-table-column>
+      <el-table-column align="center" prop="date" label="费用编码"> </el-table-column>
+      <el-table-column align="center" prop="name" label="Cost Type"> </el-table-column>
+      <el-table-column align="center" prop="address" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" prop="address" label="Cost item"> </el-table-column>
+      <el-table-column align="center" prop="address" label="Cost item 中文名称"> </el-table-column>
+      <el-table-column align="center" prop="address" label="Remark"> </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">

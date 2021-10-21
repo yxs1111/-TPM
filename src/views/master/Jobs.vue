@@ -50,9 +50,13 @@
       >
     </div>
     <el-table :data="tableData" border stripe style="width: 100%">
-      <el-table-column align="center" prop="date" label="日期"> </el-table-column>
-      <el-table-column align="center" prop="name" label="姓名"> </el-table-column>
-      <el-table-column align="center" prop="address" label="地址"> </el-table-column>
+      <el-table-column align="center" prop="date" label="岗位编号"> </el-table-column>
+      <el-table-column align="center" prop="name" label="岗位名称"> </el-table-column>
+      <el-table-column align="center" prop="address" label="职位"> </el-table-column>
+      <el-table-column align="center" prop="address" label="工作地点"> </el-table-column>
+      <el-table-column align="center" prop="address" label="上级岗位编号"> </el-table-column>
+      <el-table-column align="center" prop="address" label="覆盖销售架构"> </el-table-column>
+      <el-table-column align="center" prop="address" label="销售架构层级"> </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
