@@ -49,10 +49,25 @@
         >发布</el-button
       >
     </div>
-    <el-table :data="tableData" border stripe style="width: 100%">
-      <el-table-column align="center" prop="date" label="日期"> </el-table-column>
-      <el-table-column align="center" prop="name" label="姓名"> </el-table-column>
-      <el-table-column align="center" prop="address" label="地址"> </el-table-column>
+    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable"  :row-class-name="tableRowClassName"  stripe style="width: 100%">
+      <el-table-column width="150" align="center" prop="channelCode" label="渠道编号"> </el-table-column>
+      <el-table-column width="320" align="center" prop="channelCsName" label="渠道中文名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="productCode" label="产品编号"> </el-table-column>
+      <el-table-column width="320" align="center" prop="productCsName" label="产品中文名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="gear" label="档位"> </el-table-column>
+      <el-table-column width="150" align="center" prop="volMix" label="Vol Mix"> </el-table-column>
+      <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间"> </el-table-column>
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人"> </el-table-column>
+      <el-table-column width="180" align="center" prop="updateDate" label="修改时间"> </el-table-column>
+      <el-table-column width="150" align="center" prop="state" label="状态"> 
+        <template slot-scope="{row}">
+          <div>
+            {{row.state?'正常':'无效'}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -73,6 +88,7 @@
 import permission from "@/directive/permission";
 import elDragDialog from "@/directive/el-drag-dialog";
 import { getDefaultPermissions, parseTime, getTextMap } from "@/utils";
+import API from '@/api/masterData/masterData.js'
 export default {
   name: "PriceStallMasterData",
 
@@ -81,21 +97,6 @@ export default {
       total: 1,
       pageSize: 10,
       pageNum: 1,
-      modelDialog: {
-        type: null,
-        visible: false,
-        data: {
-          id: null,
-          category: null,
-          name: "",
-          key: "",
-          version: null,
-          description: ""
-        },
-        confirm: {
-          visible: false
-        }
-      },
       filterObj: {
         name: "",
         key: "",
@@ -103,39 +104,32 @@ export default {
       },
       tableLoading:'',
       categoryArr: [{ label: "19号线", value: "19" }],
-      flowDirection: [
-        { text: "从左往右", value: "horizontal" },
-        { text: "从上往下", value: "vertical" }
-      ],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      tableData: []
     };
   },
   directives: { elDragDialog, permission },
-  mounted() {},
+  mounted() {
+    this.getTableData()
+  },
   computed: {},
   methods: {
+    //获取表格数据
+    getTableData() {
+      this.tableLoading = true
+      API.getPageMdPriceGear({
+        pageNum: this.pageNum, //当前页
+        pageSize: this.pageSize //每页条数
+      })
+        .then(response => {
+          this.tableLoading = false
+          this.tableData = response.data.records
+          this.pageNum = response.data.pageNum
+          this.pageSize = response.data.pageSize
+          this.total = response.data.total
+        })
+        .catch(error => {})
+    },
     handleSelectionChange(val) {
       this.checkArr = val;
       console.log(val);
@@ -143,11 +137,23 @@ export default {
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size;
+      this.getTableData()
     },
     // 当前页变更
     handleCurrentChange(num) {
       this.pageNum = num;
-      this.fetchData();
+      this.getTableData()
+    },
+    // 行样式
+    tableRowClassName({ row, rowIndex }) {
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
+    },
+     HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     }
   }
 };
