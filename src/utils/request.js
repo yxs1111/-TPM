@@ -45,17 +45,17 @@ service.interceptors.request.use(
       auth.refreshToken()
     }
     // 设置加密信息,过滤form表单类型
-    if (!(config.data instanceof FormData)) {
-      config.headers['Algorithm'] = 'sm4'
-      if (config.params) {
-        config.params = { '0': encrypt(JSON.stringify(config.params)) }
-      }
-      if (config.data) {
-        const d = {}
-        d.data = encrypt(JSON.stringify(config.data))
-        config.data = d
-      }
-    }
+    // if (!(config.data instanceof FormData)) {
+    //   config.headers['Algorithm'] = 'sm4'
+    //   if (config.params) {
+    //     config.params = { '0': encrypt(JSON.stringify(config.params)) }
+    //   }
+    //   if (config.data) {
+    //     const d = {}
+    //     d.data = encrypt(JSON.stringify(config.data))
+    //     config.data = d
+    //   }
+    // }
     // 设置完毕
     return config
   },

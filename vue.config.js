@@ -51,21 +51,6 @@ module.exports = {
       errors: true
     },
     proxy: {
-      [process.env.VUE_APP_BASE_API + '/base']: {
-        // target: `http://47.105.112.41:7777`,
-        target: `http://localhost:9100`,
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API + '/base']: ''
-        }
-      },
-      [process.env.VUE_APP_BASE_API + '/im']: {
-        target: `http://localhost:9004`,
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API + '/im']: ''
-        }
-      },
       [process.env.VUE_APP_BASE_API]: {
         target: `http://192.168.40.193:7777`,
         //target: `http://192.168.40.90:7777`,
@@ -73,7 +58,7 @@ module.exports = {
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
-      }
+      },
     }
   },
   configureWebpack: {

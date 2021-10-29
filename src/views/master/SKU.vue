@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="TpmButtonBG">重置</el-button>
@@ -22,10 +22,24 @@
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
+      <el-button type="danger" plain class="my-export" icon="el-icon-delete" @click="mutidel">删除</el-button>
+
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" v-loading="tableLoading" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+      style="width: 100%">
+      <el-table-column type="selection" align="center" />
       <el-table-column width="150" fixed align="center" prop="productCode" label="产品编号">
       </el-table-column>
+      <el-table-column fixed align="center" label="操作" width="100">
+        <template slot-scope="{ row }">
+          <div class="table_operation">
+            <div class="table_operation_detail" @click="editor(row)">
+              <i class="el-icon-edit-outline"></i>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+
       <el-table-column width="360" align="center" prop="productCsName" label="产品中文名称">
       </el-table-column>
       <el-table-column width="220" align="center" prop="productEsName" label="产品英文名称">
@@ -252,38 +266,131 @@ export default {
     add() {
       this.dialogVisible = true
     },
+    search() {
+      this.getTableData()
+    },
     closeDialog() {
       this.dialogVisible = false
       this.isEditor = false
       this.editorId = ''
+      this.ruleForm = {
+        productCode: '',
+        productStandardName: '',
+        productCsName: '',
+        productEsName: '',
+        productAbbreviation: '',
+        category: '',
+        brand: '',
+        series: '',
+        stage: '',
+        pack: '',
+        content: '',
+        conversionRatio: '',
+        largeUnit: '',
+        largeUnitPrice: '',
+        smallUnit: '',
+        smallUnitPrice: '',
+        remark: '',
+      }
+    },
+    editor(obj) {
+      this.isEditor = true
+      this.dialogVisible = true
+      this.ruleForm = {
+        productCode: obj.productCode,
+        productStandardName: obj.productStandardName,
+        productCsName: obj.productCsName,
+        productEsName: obj.productEsName,
+        productAbbreviation: obj.productAbbreviation,
+        category: obj.category,
+        brand: obj.brand,
+        series: obj.series,
+        stage: obj.stage,
+        pack: obj.pack,
+        content: obj.content,
+        conversionRatio: obj.conversionRatio,
+        largeUnit: obj.largeUnit,
+        largeUnitPrice: obj.largeUnitPrice,
+        smallUnit: obj.smallUnit,
+        smallUnitPrice: obj.smallUnitPrice,
+        remark: obj.remark,
+      }
+      this.editorId = obj.id
     },
     //提交form
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.resetForm(formName)
-          // let url = this.isEditor ? API.updateAsMdConfig : API.insertAsMdConfig
-          // url({
-          //   id: this.editorId,
-          // }).then((response) => {
-          //   if (response.code === 1000) {
-          //     this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
-          //     this.resetForm(formName)
-          //     this.getTableData()
-          //   }
-          // })
+          let url = this.isEditor ? API.updateMdProduct : API.insertMdProduct
+          url({
+            id: this.editorId,
+            productCode: this.ruleForm.productCode,
+            productStandardName: this.ruleForm.productStandardName,
+            productCsName: this.ruleForm.productCsName,
+            productEsName: this.ruleForm.productEsName,
+            productAbbreviation: this.ruleForm.productAbbreviation,
+            category: this.ruleForm.category,
+            brand: this.ruleForm.brand,
+            series: this.ruleForm.series,
+            stage: this.ruleForm.stage,
+            pack: this.ruleForm.pack,
+            content: this.ruleForm.content,
+            conversionRatio: this.ruleForm.conversionRatio,
+            largeUnit: this.ruleForm.largeUnit,
+            largeUnitPrice: this.ruleForm.largeUnitPrice,
+            smallUnit: this.ruleForm.smallUnit,
+            smallUnitPrice: this.ruleForm.smallUnitPrice,
+            remark: this.ruleForm.remark,
+          }).then((response) => {
+            if (response.code === 1000) {
+              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+              this.resetForm(formName)
+              this.getTableData()
+            }
+          })
         } else {
           this.$message.error('提交失败')
           return false
         }
       })
     },
+    //多个删除
+    mutidel() {
+      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
+      else {
+        const IdList = []
+        this.checkArr.forEach((item) => {
+          IdList.push(item.id)
+        })
+        this.$confirm('确定要删除数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.deleteMdProduct(IdList).then((response) => {
+              if (response.code === 1000) {
+                this.getTableData()
+                this.$message.success('删除成功!')
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
+      }
+    },
     //取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
       this.closeDialog()
     },
-
+    handleSelectionChange(val) {
+      this.checkArr = val
+    },
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size
