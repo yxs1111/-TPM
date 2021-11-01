@@ -671,12 +671,16 @@ div:focus {
   flex-wrap: wrap;
   /* 自定义el-select样式 */
   .my-el-select {
-    width: 186px;
+    width: 226px !important;
     border-radius: 5px;
     margin-right: 20px;
     /* selecte 框的高度设置，默认是 40px*/
     .el-input__inner {
       height: 32px;
+      width: 226px !important;
+    }
+    .el-input--suffix {
+      width: 226px !important;
     }
     /* 下面设置右侧按钮居中 */
     .el-input__suffix {
@@ -696,6 +700,10 @@ div:focus {
     margin-right: 20px;
     .el-input__inner {
       height: 32px;
+      width: 226px !important;
+    }
+    .el-input--suffix {
+      width: 226px !important;
     }
   }
   .el-form-item__error {
@@ -704,6 +712,7 @@ div:focus {
     top: 80%;
   }
   .el-form-item {
+    // width: 45%;
     margin-bottom: 10px;
   }
   .el-form-item__label {

@@ -84,7 +84,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="备注">
-            <el-input v-model="ruleForm.emark" class="my-el-input" placeholder="请输入">
+            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
         </el-form>

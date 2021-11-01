@@ -21,7 +21,7 @@
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -40,6 +40,28 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '品牌信息'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+      <div class="el-dialogContent">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
+          <el-form-item label="品牌编号">
+            <el-input v-model="ruleForm.bandCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="品牌名称">
+            <el-input v-model="ruleForm.bandName" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -66,6 +88,24 @@ export default {
       categoryArr: [{ label: '19号线', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      ruleForm: {
+        bandCode: '',
+        bandName: '',
+        remark: '',
+      },
+      rules: {
+        bandCode: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+      },
+      dialogVisible: false,
+      isEditor: '',
+      editorId: '',
+      checkArr: [], //批量删除,存放选中
     }
   },
   directives: { elDragDialog, permission },
@@ -89,6 +129,93 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    add() {
+      this.dialogVisible = true
+    },
+    search() {
+      this.getTableData()
+    },
+    closeDialog() {
+      this.dialogVisible = false
+      this.isEditor = false
+      this.editorId = ''
+      this.ruleForm = {
+        bandCode: '',
+        bandName: '',
+        remark: '',
+      }
+    },
+    editor(obj) {
+      this.isEditor = true
+      this.dialogVisible = true
+      this.ruleForm = {
+        bandCode: obj.bandCode,
+        bandName: obj.bandName,
+        remark: obj.remark,
+      }
+      this.editorId = obj.id
+    },
+    //提交form
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let url = this.isEditor ? API.updateMdBrand : API.insertMdBrand
+          url({
+            id: this.editorId,
+            bandCode: this.ruleForm.bandCode,
+            bandName: this.ruleForm.bandName,
+            remark: this.ruleForm.remark,
+          }).then((response) => {
+            if (response.code === 1000) {
+              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+              this.resetForm(formName)
+              this.getTableData()
+            }
+          })
+        } else {
+          this.$message.error('提交失败')
+          return false
+        }
+      })
+    },
+    //多个删除
+    mutidel() {
+      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
+      else {
+        const IdList = []
+        this.checkArr.forEach((item) => {
+          IdList.push(item.id)
+        })
+        this.$confirm('确定要删除数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.deleteMdBrand(IdList).then((response) => {
+              if (response.code === 1000) {
+                this.getTableData()
+                this.$message.success('删除成功!')
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
+      }
+    },
+    //取消
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+      this.closeDialog()
+    },
+    handleSelectionChange(val) {
+      this.checkArr = val
+      console.log(val)
     },
     handleSelectionChange(val) {
       this.checkArr = val

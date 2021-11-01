@@ -21,7 +21,7 @@
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -44,6 +44,47 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '经销商信息'" :visible="dialogVisible" width="48%" v-el-drag-dialog @close="closeDialog">
+      <div class="el-dialogContent">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
+          <el-form-item label="经销商编码" prop="distributorCode">
+            <el-input v-model="ruleForm.distributorCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+            <!-- <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
+              <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />
+            </el-select> -->
+          </el-form-item>
+          <el-form-item label="经销商名称">
+            <el-input v-model="ruleForm.distributorName" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="大区编码">
+            <el-input v-model="ruleForm.zoneCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="区域编码">
+            <el-input v-model="ruleForm.regionCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="城市群编码">
+            <el-input v-model="ruleForm.cityGroupCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="城市">
+            <el-input v-model="ruleForm.cityCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -69,6 +110,28 @@ export default {
       categoryArr: [{ label: '19号线', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      ruleForm: {
+        distributorCode: '',
+        distributorName: '',
+        zoneCode: '',
+        regionCode: '',
+        cityGroupCode: '',
+        cityCode: '',
+        remark: '',
+      },
+      rules: {
+        distributorCode: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+      },
+      dialogVisible: false,
+      isEditor: '',
+      editorId: '',
+      checkArr: [], //批量删除,存放选中
     }
   },
   directives: { elDragDialog, permission },
@@ -92,6 +155,104 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    add() {
+      this.dialogVisible = true
+    },
+    search() {
+      this.getTableData()
+    },
+    closeDialog() {
+      this.dialogVisible = false
+      this.isEditor = false
+      this.editorId = ''
+      this.ruleForm = {
+        customerCode: '',
+        customerCsName: '',
+        customerEsName: '',
+        customerType: '',
+        channelCode: '',
+        isBlacklist: '',
+        state: '',
+        remark: '',
+      }
+    },
+    editor(obj) {
+      this.isEditor = true
+      this.dialogVisible = true
+      this.ruleForm = {
+        distributorCode: obj.distributorCode,
+        distributorName: obj.distributorName,
+        zoneCode: obj.zoneCode,
+        regionCode: obj.regionCode,
+        cityGroupCode: obj.cityGroupCode,
+        cityCode: obj.cityCode,
+        remark: obj.remark,
+      }
+      this.editorId = obj.id
+    },
+    //提交form
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let url = this.isEditor
+            ? API.updateMdDistributor
+            : API.insertMdDistributor
+          url({
+            id: this.editorId,
+            distributorCode: this.ruleForm.distributorCode,
+            distributorName: this.ruleForm.distributorName,
+            zoneCode: this.ruleForm.zoneCode,
+            regionCode: this.ruleForm.regionCode,
+            cityGroupCode: this.ruleForm.cityGroupCode,
+            cityCode: this.ruleForm.cityCode,
+            remark: this.ruleForm.remark,
+          }).then((response) => {
+            if (response.code === 1000) {
+              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+              this.resetForm(formName)
+              this.getTableData()
+            }
+          })
+        } else {
+          this.$message.error('提交失败')
+          return false
+        }
+      })
+    },
+    //多个删除
+    mutidel() {
+      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
+      else {
+        const IdList = []
+        this.checkArr.forEach((item) => {
+          IdList.push(item.id)
+        })
+        this.$confirm('确定要删除数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.deleteMdDistributor(IdList).then((response) => {
+              if (response.code === 1000) {
+                this.getTableData()
+                this.$message.success('删除成功!')
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
+      }
+    },
+    //取消
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+      this.closeDialog()
     },
     handleSelectionChange(val) {
       this.checkArr = val
