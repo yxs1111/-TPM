@@ -22,9 +22,20 @@
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
+      <el-button type="primary"  class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  @selection-change="handleSelectionChange" style="width: 100%">
+      <el-table-column type="selection" align="center" />
+      <el-table-column fixed align="center" label="操作" width="100">
+        <template slot-scope="{ row }">
+          <div class="table_operation">
+            <div class="table_operation_detail" @click="editor(row)">
+              <i class="el-icon-edit-outline"></i>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="costItemTypeNumber" label="一级费用类型编码"> </el-table-column>
       <el-table-column align="center" prop="costItem" label="一级费用类型名称"> </el-table-column>
       <el-table-column align="center" prop="costItemCsName" label="一级Cost item中文名称"> </el-table-column>
@@ -38,9 +49,9 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '费用科目信息'" :visible="dialogVisible" width="48%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '费用科目信息'" :visible="dialogVisible" width="30%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="el-form-row">
           <el-form-item label="Cost item中文名称" prop="costItemName">
             <el-input v-model="ruleForm.costItemName" class="my-el-input" placeholder="请输入">
             </el-input>

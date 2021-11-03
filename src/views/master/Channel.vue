@@ -14,16 +14,12 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button  type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" class="TpmButtonBG">重置</el-button>
+        <el-button  class="TpmButtonBG">重置</el-button>
       </el-form-item>
     </el-form>
-    <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">新增</el-button>
-      <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
-    </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="channelCode" label="渠道编码"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="中文名称"> </el-table-column>
@@ -93,9 +89,8 @@ export default {
         })
         .catch((error) => {})
     },
-    handleSelectionChange(val) {
-      this.checkArr = val
-      console.log(val)
+    search() {
+      this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

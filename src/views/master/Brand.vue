@@ -14,17 +14,28 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button  type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" class="TpmButtonBG">重置</el-button>
+        <el-button  class="TpmButtonBG">重置</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column type="selection" align="center" />
+      <el-table-column fixed align="center" label="操作" width="100">
+        <template slot-scope="{ row }">
+          <div class="table_operation">
+            <div class="table_operation_detail" @click="editor(row)">
+              <i class="el-icon-edit-outline"></i>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="brandCode" label="品牌编码"> </el-table-column>
       <el-table-column align="center" prop="brandName" label="品牌名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
@@ -43,12 +54,16 @@
     <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '品牌信息'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="品牌编号">
-            <el-input v-model="ruleForm.bandCode" class="my-el-input" placeholder="请输入">
+          <el-form-item label="品牌编号" v-show="!isEditor">
+            <el-input v-model="ruleForm.brandCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="品牌编号"  v-show="isEditor">
+            <el-input v-model="ruleForm.brandCode" disabled class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
           <el-form-item label="品牌名称">
-            <el-input v-model="ruleForm.bandName" class="my-el-input" placeholder="请输入">
+            <el-input v-model="ruleForm.brandName" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
           <el-form-item label="备注">
@@ -89,12 +104,12 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       ruleForm: {
-        bandCode: '',
-        bandName: '',
+        brandCode: '',
+        brandName: '',
         remark: '',
       },
       rules: {
-        bandCode: [
+        brandCode: [
           {
             required: true,
             message: 'This field is required',
@@ -117,6 +132,7 @@ export default {
     //获取表格数据
     getTableData() {
       this.tableLoading = true
+      this.tableData=[]
       API.getPageMdBrand({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -141,8 +157,8 @@ export default {
       this.isEditor = false
       this.editorId = ''
       this.ruleForm = {
-        bandCode: '',
-        bandName: '',
+        brandCode: '',
+        brandName: '',
         remark: '',
       }
     },
@@ -150,8 +166,8 @@ export default {
       this.isEditor = true
       this.dialogVisible = true
       this.ruleForm = {
-        bandCode: obj.bandCode,
-        bandName: obj.bandName,
+        brandCode: obj.brandCode,
+        brandName: obj.brandName,
         remark: obj.remark,
       }
       this.editorId = obj.id
@@ -163,8 +179,8 @@ export default {
           let url = this.isEditor ? API.updateMdBrand : API.insertMdBrand
           url({
             id: this.editorId,
-            bandCode: this.ruleForm.bandCode,
-            bandName: this.ruleForm.bandName,
+            brandCode: this.ruleForm.brandCode,
+            brandName: this.ruleForm.brandName,
             remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {
@@ -212,10 +228,6 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
       this.closeDialog()
-    },
-    handleSelectionChange(val) {
-      this.checkArr = val
-      console.log(val)
     },
     handleSelectionChange(val) {
       this.checkArr = val

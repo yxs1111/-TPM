@@ -21,16 +21,19 @@
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
+      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
+      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%">
+    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" stripe
+      style="width: 100%">
+      <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="channelCode" label="渠道编号"> </el-table-column>
       <el-table-column width="320" align="center" prop="channelCsName" label="渠道中文名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="productCode" label="产品编号"> </el-table-column>
       <el-table-column width="320" align="center" prop="productCsName" label="产品中文名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="gear" label="档位"> </el-table-column>
       <el-table-column width="150" align="center" prop="volMix" label="Vol Mix"> </el-table-column>
+      <el-table-column width="150" align="center" prop="actualNum" label="计划销量"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
       <el-table-column width="180" align="center" prop="createDate" label="创建时间"> </el-table-column>
       <el-table-column width="150" align="center" prop="updateBy" label="修改人"> </el-table-column>
@@ -53,7 +56,7 @@
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
           <el-form-item label="渠道编号" prop="channelCode">
-            <el-input v-model="ruleForm.productCode" class="my-el-input" placeholder="请输入">
+            <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入">
             </el-input>
             <!-- <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
               <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />

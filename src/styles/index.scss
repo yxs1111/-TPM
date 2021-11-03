@@ -396,6 +396,9 @@ div:focus {
     background-color: #fff !important;
   }
 }
+.el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
+  padding: 0 10px;
+}
 .my-el-dialog {
   min-width: 500px;
   border-radius: 6px;
