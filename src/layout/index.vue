@@ -12,13 +12,7 @@
       <!-- </div> -->
 
       <div class="hasTagsView" :class="sidebar.opened?'main-container':'main-hideSideBar'">
-        <!-- <div
-          :class="{ 'fixed-header': fixedHeader }"
-          style="background: #E0E6F1"
-        >
-          <navbar  />
-          <tags-view  />
-        </div> -->
+        <Brand></Brand>
         <app-main />
         <!-- <div class="bottomTxt" >{{bottomTxt}}</div> -->
       </div>
@@ -31,14 +25,15 @@ import { Sidebar, AppMain, TagsView } from "./components";
 import Navbar from "./components/navbar/Navbar.vue";
 import ResizeMixin from "./mixin/ResizeHandler";
 import { mapState } from "vuex";
-
+import Brand from '@/components/Breadcrumb/index.vue'
 export default {
   name: "Layout",
   components: {
     Navbar,
     Sidebar,
     AppMain,
-    TagsView
+    TagsView,
+    Brand
   },
   mixins: [ResizeMixin],
   computed: {
@@ -58,8 +53,11 @@ export default {
   },
   data() {
     return {
-      bottomTxt: "2021年©北京地铁19号线智能管控系统所有"
+      bottomTxt: ""
     };
+  },
+  mounted() {
+    console.log(this.$router)
   },
   methods: {
     handleClickOutside() {

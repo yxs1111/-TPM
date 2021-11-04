@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-09-16 09:36:50
+ * @LastEditTime: 2021-11-04 11:18:14
+ */
 import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
@@ -5,39 +10,25 @@ import { showRouter } from '@/utils'
 export default function() {
   const cityPlan = [
     {
-      path: '/CityPlan',
+      path: '/V0',
       component: Layout,
-      code: 'CityPlan',
-      name: 'CityPlan',
-      meta: { title: 'CityPlan', icon: 'form' },
+      code: 'V0',
+      name: 'V0',
+      meta: { title: 'V0 - Pre city plan 预拆分', icon: 'form' },
       children: [
         {
-          path: '/CityPlan/CityPlanApply',
-          code: 'CityPlanApply',
-          name: 'CityPlanApply',
-          component: () => import('@/views/CityPlan/CityPlanApply/index.vue'),
-          redirect: '/CityPlan/CityPlanApply/V0',
-          meta: { title: 'CityPlan申请', icon: 'form' },
-          children: [
-            {
-              hidden: true,
-              path: '/CityPlan/CityPlanApply/V0',
-              code: 'V0',
-              name: 'V0',
-              component: () => import('@/views/CityPlan/CityPlanApply/V0/index.vue'),
-              meta: { title: 'V0', icon: 'form' ,activeMenu: '/CityPlan/CityPlanApply'},
-              
-            },
-            {
-              hidden: true,
-              path: '/CityPlan/CityPlanApply/V1',
-              code: 'V1',
-              name: 'V1',
-              component: () => import('@/views/CityPlan/CityPlanApply/V1/index.vue'),
-              meta: { title: 'V1', icon: 'form', activeMenu: '/CityPlan/CityPlanApply' },
-             
-            },
-          ]
+          path: '/V0/V0Apply',
+          code: 'V0Apply',
+          name: 'V0Apply',
+          component: () => import('@/views/V0/V0Apply.vue'),
+          meta: { title: 'V0 - Pre city plan 预拆分', icon: 'form' },
+        },
+        {
+          path: '/V0/V0Approval',
+          code: 'V0Approval',
+          name: 'V0Approval',
+          component: () => import('@/views/V0/V0Approval.vue'),
+          meta: { title: '审批', icon: 'form' },
         },
       ]
     },

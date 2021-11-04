@@ -68,6 +68,12 @@ div:focus {
   border-radius: 16px;
   overflow-y: auto;
 }
+.MainContent {
+  // height: 100vh;
+  background-color: #fff;
+  padding: 20px;
+  overflow-y: auto;
+}
 .el-pagination {
   // margin-bottom: 42px;
   margin-top: 10px;
@@ -262,15 +268,24 @@ div:focus {
     align-items: center;
     .Selectli {
       margin-right: 20px;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
       .SelectliTitle {
         font-size: 14px;
         font-family: Microsoft YaHei;
         font-weight: 400;
         color: #4d4d4d;
         margin-right: 15px;
+        white-space: nowrap;
       }
       .el-input__inner {
         background-color: #f0f2fa;
+      }
+      input::-webkit-input-placeholder,
+      textarea::-webkit-input-placeholder {
+        color: #888;
+        font-size: 14px;
       }
     }
   }
@@ -287,8 +302,9 @@ div:focus {
 }
 //操作按钮
 .TpmButtonBG {
-  width: 107px;
+  // width: 107px;
   height: 38px;
+  padding: 0 20px;
   background: #4192d3;
   border: 1px solid #e7e7e7;
   border-radius: 3px;
@@ -305,6 +321,13 @@ div:focus {
     font-weight: 400;
     color: #ffffff;
     margin-left: 12px;
+    -webkit-user-select: none;
+
+    -moz-user-select: none;
+
+    -ms-user-select: none;
+
+    user-select: none;
   }
 }
 //TpmPagination
@@ -395,8 +418,14 @@ div:focus {
   .even-row {
     background-color: #fff !important;
   }
+  .first-row {
+    background-color: #e3f3ff !important;
+    color: #001111 !important;
+  }
 }
-.el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
+.el-table .cell,
+.el-table--border td:first-child .cell,
+.el-table--border th:first-child .cell {
   padding: 0 10px;
 }
 .my-el-dialog {

@@ -1,3 +1,8 @@
+<!--
+ * @Description: 
+ * @Date: 2021-09-15 16:17:33
+ * @LastEditTime: 2021-11-04 13:47:09
+-->
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
@@ -72,7 +77,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     handleSelect() {
-      sessionStorage.removeItem('TabIndex')
+      sessionStorage.removeItem('currentIndex')
     },
   }
 }
