@@ -10,39 +10,20 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户</span>
+          <span class="SelectliTitle">客户:</span>
           <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择">
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">经销商:</span>
+          <span class="SelectliTitle">品牌:</span>
           <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
-          </el-select>
-        </div>
-
-      </div>
-      <div class="OpertionBar">
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
       <div class="TpmButtonBG">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出</span>
@@ -60,20 +41,20 @@
       <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="客户系统名称"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="品牌"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="SKU"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="价格档位（RMB/Tin）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="价格档位销量总计（CTN）"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="经销商"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="区域"> </el-table-column>
       <el-table-column width="220" align="center" prop="name" label="系统拆分销量（CTN）"> </el-table-column>
       <el-table-column width="220" align="center" prop="name" label="调整后销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="销量差值（%）"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制名称"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动开始时间"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动结束时间"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="系统判定"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="申请人备注"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="销售差值（%）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="调整后费用（RMB）"> </el-table-column>
+      <el-table-column width="120" align="center" prop="name" label="系统判定"> 
+        <template slot-scope="{row}">
+          <div class="statusWrap">
+            <img src="../../../assets/images/success.png" alt="" v-if="row.status">
+            <img src="../../../assets/images/warning.png" alt="" v-if="!row.status">
+            {{row.name}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="name" label="申请人备注"></el-table-column>
       <el-table-column width="220" align="center" prop="name" label="Package Owner审批意见"> </el-table-column>
       <el-table-column width="220" align="center" prop="name" label="Finance审批意见"> </el-table-column>
     </el-table>
@@ -113,6 +94,7 @@ export default {
           number: '165',
           channel: 'NKA',
           amount3: 12,
+          status:true,
         },
         {
           id: '12987124',
@@ -120,6 +102,7 @@ export default {
           number: '324',
           channel: 'NKA',
           amount3: 9,
+          status:false,
         },
         {
           id: '12987125',
@@ -127,6 +110,7 @@ export default {
           number: '621',
           channel: 'NKA',
           amount3: 17,
+          status:false,
         },
         {
           id: '12987126',
@@ -134,6 +118,7 @@ export default {
           number: '539',
           channel: 'NKA',
           amount3: 15,
+          status:true,
         },
       ],
       dialogVisible: false,
@@ -191,4 +176,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>

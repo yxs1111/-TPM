@@ -425,6 +425,17 @@ div:focus {
     background-color: #e3f3ff !important;
     color: #001111 !important;
   }
+  .statusWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666666;
+    img {
+      width: 23px;
+      height: 23px;
+      margin-right: 10px;
+    }
+  }
 }
 .el-table .cell,
 .el-table--border td:first-child .cell,
