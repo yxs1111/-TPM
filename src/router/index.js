@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-11-04 11:29:15
+ * @LastEditTime: 2021-11-05 09:54:22
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -17,6 +17,8 @@ import sample from '@/router/routers/sample'
 import activiti from '@/router/routers/activiti'
 import cityPlan from '@/router/routers/cityplan'
 import V1 from '@/router/routers/V1'
+import V2 from '@/router/routers/V2'
+import V3 from '@/router/routers/V3'
 import masterData from '@/router/routers/masterData'
 import store from "@/store";
 
@@ -49,6 +51,8 @@ export const constantRoutes = [
   //...sample,
   ...cityPlan(),
   ...V1(),
+  ...V2(),
+  ...V3(),
   ...masterData()
 ]
 

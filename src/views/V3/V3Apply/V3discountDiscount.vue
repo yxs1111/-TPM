@@ -60,29 +60,17 @@
       <el-table-column width="120" align="center" prop="name" label="客户系统名称"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="品牌"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="SKU"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="价格档位（RMB/Tin）">
-        <template slot-scope="scope">
-          <div class="priceLevelWrap">
-            <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{scope.row.number}}</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="total" label="价格档位销量总计（CTN）">
-        <template slot-scope="scope">
-          <div class="priceLevelWrap">
-            <div class="TotalNum">{{scope.row.total.toFixed(1)}}</div>
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="经销商"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="区域"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="系统拆分销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="调整后销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="销量差值（%）"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制名称"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动开始时间"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动结束时间"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="V1计划销量（CTN）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="V1计划均价（RMB/Tin）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="V1计划费用（RMB）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="V2预测销量（CTN）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="V2调整后均价（RMB/Tin）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="V2调整后费用（RMB）"> </el-table-column>
+      <el-table-column width="160" align="center" prop="name" label="均价差值（%）"> </el-table-column>
+      <el-table-column width="160" align="center" prop="name" label="销量差值（%）"> </el-table-column>
+      <el-table-column width="120" align="center" prop="name" label="费用差值"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="系统判定"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="申请人备注"> </el-table-column>
       <el-table-column width="220" align="center" prop="name" label="Package Owner审批意见"> </el-table-column>
@@ -103,7 +91,7 @@ import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
-  name: 'V1discountDiscount',
+  name: 'V2discountDiscount',
 
   data() {
     return {

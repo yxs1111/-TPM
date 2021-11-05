@@ -52,17 +52,28 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
-      style="width: 100%">
-      <el-table-column align="center"  prop="number" label="CPID" fixed> </el-table-column>
+    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" prop="number" label="CPID" fixed> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="活动月"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="客户系统名称"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="品牌"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="SKU"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="价格档位（RMB/Tin）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="价格档位销量总计（CTN）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="name" label="价格档位（RMB/Tin）">
+        <template slot-scope="scope">
+          <div class="priceLevelWrap">
+            <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{scope.row.number}}</div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="total" label="价格档位销量总计（CTN）">
+        <template slot-scope="scope">
+          <div class="priceLevelWrap">
+            <div class="TotalNum">{{scope.row.total.toFixed(1)}}</div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="经销商"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="区域"> </el-table-column>
       <el-table-column width="220" align="center" prop="name" label="系统拆分销量（CTN）"> </el-table-column>
@@ -110,23 +121,26 @@ export default {
         {
           id: '12987123',
           name: '王小虎',
-          number: '165',
+          number: 200,
           channel: 'NKA',
           amount3: 12,
+          total: 20.0,
         },
         {
           id: '12987124',
           name: '王小虎',
-          number: '324',
+          number: 180,
           channel: 'NKA',
           amount3: 9,
+          total: 21.0,
         },
         {
           id: '12987125',
           name: '王小虎',
-          number: '621',
+          number: 160,
           channel: 'NKA',
           amount3: 17,
+          total: 68.5,
         },
         {
           id: '12987126',
@@ -134,6 +148,7 @@ export default {
           number: '539',
           channel: 'NKA',
           amount3: 15,
+          total: 47.0,
         },
       ],
       dialogVisible: false,
@@ -191,4 +206,34 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.MainContent {
+  .priceLevelWrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .priceLevel {
+      width: 88px;
+      height: 34px;
+      line-height: 34px;
+      border-radius: 17px;
+      background: #f2e9ea;
+      color: #e87071 !important;
+      text-align: center;
+    }
+    .priceCenter {
+      background: #ebfbf8;
+      color: #38d7b7 !important;
+    }
+    .priceLow {
+      background: #e1edf4;
+      color: #4192d3 !important;
+    }
+    .TotalNum {
+      font-weight: bold;
+      color: #ff8912;
+    }
+  }
+}
+</style>

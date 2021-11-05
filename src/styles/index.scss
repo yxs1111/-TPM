@@ -282,6 +282,9 @@ div:focus {
       .el-input__inner {
         background-color: #f0f2fa;
       }
+      .el-icon-arrow-up:before {
+        content: "\e78f";
+      }      
       input::-webkit-input-placeholder,
       textarea::-webkit-input-placeholder {
         color: #888;

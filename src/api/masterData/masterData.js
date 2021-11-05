@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-10-27 14:30:59
+ * @LastEditTime: 2021-11-05 10:33:52
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -136,6 +136,19 @@ export default {
   },
   deleteMdBrand(params) {
     return requestApi.request_delete('/mdm/mdBrand/delete', params)
+  },
+  //门店信息
+  getPageMdStore(params) {
+    return requestApi.request_get('/mdm/mdStore/getPage', params)
+  },
+  insertMdStore(params) {
+    return requestApi.request_post('/mdm/mdStore/insert', params)
+  },
+  updateMdStore(params) {
+    return requestApi.request_put('/mdm/mdStore/update', params)
+  },
+  deleteMdStore(params) {
+    return requestApi.request_delete('/mdm/mdStore/delete', params)
   },
   
 }

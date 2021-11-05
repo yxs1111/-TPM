@@ -103,7 +103,7 @@ import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
-  name: 'V1discountDiscount',
+  name: 'V2discountAll',
 
   data() {
     return {
