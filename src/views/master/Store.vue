@@ -42,6 +42,8 @@
       <el-table-column align="center" prop="channel_code" label="渠道编码"> </el-table-column>
       <el-table-column align="center" prop="customer_code" label="客户编码"> </el-table-column>
       <el-table-column align="center" prop="distributor_code" label="经销商编码"> </el-table-column>
+      <el-table-column align="center" prop="customer_cs_name" label="客户中文名称"> </el-table-column>
+      <el-table-column align="center" prop="distributor_name" label="经销商名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>

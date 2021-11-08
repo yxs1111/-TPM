@@ -61,6 +61,13 @@ export default function() {
           component: () => import('@/views/master/Brand.vue'),
           meta: { title: '品牌信息', icon: 'form' }
         },
+        {
+          path: '/Store',
+          code: 'Store',
+          name: 'Store',
+          component: () => import('@/views/master/Store.vue'),
+          meta: { title: '门店信息', icon: 'form' }
+        },
 
         // {
         //   path: '/CoastType',
