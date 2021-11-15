@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-11-05 09:54:22
+ * @LastEditTime: 2021-11-11 14:27:30
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -48,7 +48,7 @@ import store from "@/store";
  */
 export const constantRoutes = [
   ...common,
-  //...sample,
+  ...sample,
   ...cityPlan(),
   ...V1(),
   ...V2(),
