@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-09-15 16:17:33
- * @LastEditTime: 2021-11-04 13:47:09
+ * @LastEditTime: 2021-11-16 15:12:39
 -->
 <template>
   <div :class="{'has-logo':showLogo}">
@@ -78,6 +78,7 @@ export default {
     },
     handleSelect() {
       sessionStorage.removeItem('currentIndex')
+      this.$store.dispatch('app/openBreadCrumb')
     },
   }
 }

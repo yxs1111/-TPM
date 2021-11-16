@@ -1,35 +1,28 @@
+<!--
+ * @Description: 
+ * @Date: 2021-08-30 10:38:43
+ * @LastEditTime: 2021-11-16 14:47:56
+-->
 <template>
   <div class="app-container" @keyup.enter="search">
-    <el-form ref="processSearchForm" :inline="true" :model="queryParams" class="demo-form-inline">
-      <!-- 查询条件 -->
-      <el-form-item label="流程名称" prop="name">
-        <el-input v-model="queryParams.name" placeholder="请输入流程名称" maxlength="50" />
-      </el-form-item>
-      <el-form-item label="流程关键字" prop="key">
-        <el-input v-model="queryParams.key" placeholder="请输入流程关键字" />
-      </el-form-item>
-      <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="loading" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button v-permission="permissions['get']" icon="el-icon-refresh-left" @click="reset">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">流程名称：</span>
+          <el-input v-model="filterObj.name" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">流程关键词：</span>
+          <el-input v-model="filterObj.keyName" placeholder="请输入" />
+        </div>
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" autofocusclass="TpmButtonBG">查询</el-button>
+      </div>
+    </div>
     <!--  流程列表  -->
-    <el-table
-      ref="processTable"
-      v-loading="loading"
-      :data="tableData"
-      element-loading-text="正在查询"
-      border
-      fit
-      stripe
-      height="600"
-      highlight-current-row
-      @row-click="handleCurrentRowClick"
-      @row-dblclick="handleCurrentRowDblClick"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table ref="processTable" v-loading="loading" :data="tableData" element-loading-text="正在查询" border fit stripe height="600" highlight-current-row
+      @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
         {{ scopeProps.$index+1 }}
@@ -62,23 +55,12 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination
-      :current-page="queryParams.start"
-      :page-sizes="[5, 10, 50, 100]"
-      :page-size="queryParams.size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="queryParams.total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+    <div class="TpmPaginationWrap">
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    </div>
     <!--  流程图  -->
-    <flow-diagram
-      svg-type="definition"
-      :process-definition-id="flowDiagram.processDefinitionId"
-      :visible.sync="flowDiagram.visible"
-      title="流程图"
-      width="90%"
-    />
+    <flow-diagram svg-type="definition" :process-definition-id="flowDiagram.processDefinitionId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
   </div>
 </template>
 

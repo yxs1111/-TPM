@@ -52,7 +52,7 @@ module.exports = {
     },
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://192.168.40.134:7777`,  //现云
+        target: `http://192.168.40.66:7777`,  //现云
         //target: `http://192.168.40.90:7777`,  //宗桂
         changeOrigin: true,
         pathRewrite: {

@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-08-30 10:38:43
+ * @LastEditTime: 2021-11-16 15:48:42
+ */
 import { getLanguage } from '@/lang/index'
 import local_db from '@/utils/local-db'
 
@@ -8,7 +13,8 @@ const state = {
   },
   homePath:'',
   language: getLanguage(),
-  device: 'desktop'
+  device: 'desktop',
+  isBreadcrumb:local_db.get('isBreadcrumb'), //面包屑的显示与隐藏
 }
 
 const mutations = {
@@ -26,6 +32,15 @@ const mutations = {
     state.sidebar.opened = false
     state.sidebar.withoutAnimation = withoutAnimation
   },
+  //隐藏面包屑
+  HIDE_BREADCRUMB() {
+    state.isBreadcrumb=false
+    local_db.set('isBreadcrumb', 0)
+  },
+  OPEN_BREADCRUMB() {
+    state.isBreadcrumb=true
+    local_db.set('isBreadcrumb', 1)
+  },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device
   },
@@ -41,6 +56,12 @@ const mutations = {
 const actions = {
   toggleSideBar({ commit }) {
     commit('TOGGLE_SIDEBAR')
+  },
+  hideBreadcrumb({ commit }) {
+    commit('HIDE_BREADCRUMB')
+  },
+  openBreadCrumb({commit}) {
+    commit('OPEN_BREADCRUMB')
   },
   closeSideBar({ commit }, { withoutAnimation }) {
     commit('CLOSE_SIDEBAR', withoutAnimation)

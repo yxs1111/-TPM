@@ -6,10 +6,18 @@ import flowDiagram from '@/components/FlowDiagram'
 export default {
   data() {
     return {
+      total: 1,
+      pageSize: 10,
+      pageNum: 1,
       modelSelected: null,
       flowDiagram: {
         visible: false,
         processDefinitionId: null
+      },
+      filterObj:{
+        name:'',
+        keyName:'',
+        type:'',
       },
       permissions: getDefaultPermissions(),
       textMap: getTextMap(),

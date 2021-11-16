@@ -137,6 +137,7 @@ export default {
     },
     goDashBoard() {
       this.$router.push('/dashboard');
+      this.$store.dispatch('app/hideBreadcrumb') //进入首页隐藏面包屑
     },
     generateTitle
   }
