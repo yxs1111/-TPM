@@ -1,3 +1,8 @@
+<!--
+ * @Description: 
+ * @Date: 2021-08-30 10:38:43
+ * @LastEditTime: 2021-11-16 09:52:15
+-->
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
@@ -32,7 +37,7 @@ export default {
     overflow: auto;
     padding: 28px 20px;
     box-sizing: border-box;
-    padding-bottom: 100px;
+    padding-bottom: 150px;
     background-color: #EFF3FA;
   }
 

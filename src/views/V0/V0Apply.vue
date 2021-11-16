@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-04 11:21:48
+ * @LastEditTime: 2021-11-15 19:33:13
 -->
 <template>
   <div class="app-container">
@@ -26,7 +26,7 @@
             <img src="../../assets/images/huoqu.png" alt="">
             <span class="text">获取CPT数据</span>
           </div>
-          <div class="TpmButtonBG">
+          <div class="TpmButtonBG" @click="importData">
             <img src="../../assets/images/import.png" alt="">
             <span class="text">导入</span>
           </div>
@@ -50,7 +50,7 @@
           </div>
           <div class="contentInfoWrap">
             <el-table :data="tableData" class="customTable" :summary-method="getSummaries" show-summary border :header-cell-style="HeadTable" :cell-style="columnStyle"
-              :row-class-name="tableRowClassName" style="width: 100%">
+              style="width: 100%">
               <el-table-column width="150" fixed>
                 <template slot="header">
                   <div></div>
@@ -120,27 +120,85 @@
         </div>
       </div>
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
-      <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="Scenario">
-            <el-input v-model="ruleForm.scenario" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="Version">
-            <el-input v-model="ruleForm.version" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="渠道">
-            <el-input v-model="ruleForm.channel" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
-      </span>
-    </el-dialog>
+        <div class="el-dialogContent">
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
+            <el-form-item label="Scenario">
+              <el-input v-model="ruleForm.scenario" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="Version">
+              <el-input v-model="ruleForm.version" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="渠道">
+              <el-input v-model="ruleForm.channel" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+          <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        </span>
+      </el-dialog>
+      <!-- 导入 -->
+      <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
+        <div class="el-downloadFileBar">
+          <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
+          <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+        </div>
+
+        <div class="fileInfo">
+          <div class="fileTitle">文件</div>
+          <el-button type="primary" class="my-search selectFile">选择文件</el-button>
+          <div class="fileName">
+            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+            <span>文件名文件名文件名.XLSX</span>
+          </div>
+        </div>
+        <div class="seeData">
+          <div class="LeftBar">
+            <div class="seeDataTitle">浏览数据</div>
+            <div class="SelectLi">
+              <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
+                <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
+              </el-select>
+            </div>
+          </div>
+
+          <div class="exportError">
+            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon" />
+            <span>导出错误信息</span>
+          </div>
+        </div>
+        <div class="tableWrap">
+          <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+                background: '#fff',
+                color: '#333',
+                fontSize: '16px',
+                textAlign: 'center',
+                fontWeight: 400,
+                fontFamily: 'Source Han Sans CN'
+              }" :row-class-name="tableRowClassName" stripe>
+            <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
+            </el-table-column>
+            <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="验证信息" width="380">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="SKU" width="380">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="月份" width="380">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="KA" width="380">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="档位" width="380">
+            </el-table-column>
+            <el-table-column prop="address" align="center" label="VOL" width="380">
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -210,16 +268,63 @@ export default {
       dialogVisible: false,
       isEditor: '',
       editorId: '',
+      //导入
+      importVisible: false, //导入弹窗
+      filterImportData: { sku: '' }, //筛选导入数据
+      ImportData: [
+        {
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄',
+        },
+        {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄',
+        },
+        {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄',
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄',
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄',
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄',
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄',
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄',
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄',
+        },
+      ],
     }
   },
   directives: { elDragDialog, permission },
-  mounted() {
-  },
+  mounted() {},
   computed: {},
   methods: {
-    search() {
-      
-    },
+    search() {},
     getCPTData() {
       this.dialogVisible = true
     },
@@ -250,6 +355,7 @@ export default {
         channel: '',
       }
     },
+    //汇总计算
     getSummaries(param) {
       const { columns, data } = param
       const sums = []
@@ -275,11 +381,21 @@ export default {
       })
       return sums
     },
+    //导入数据
+    importData() {
+      this.importVisible = true
+    },
+    //关闭导入
+    closeimportDialog() {
+      this.importVisible = false
+    },
     // 行样式
     tableRowClassName({ row, rowIndex }) {
-      // if (rowIndex === 0) {
-      //   return 'first-row'
-      // }
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
     },
     HeadTable() {
       return ' background: #4192D3;color: #fff;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'

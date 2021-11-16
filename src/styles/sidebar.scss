@@ -18,7 +18,8 @@
     width: $sideBarWidth !important;
     background-color: $menuBg;
     overflow-y: auto;
-    height: 87vh;
+    height: 92vh;
+    overflow-x: hidden;
     /*滚动条的宽度*/
     &::-webkit-scrollbar {
       width: 6px;

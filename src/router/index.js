@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-11-11 14:27:30
+ * @LastEditTime: 2021-11-15 19:49:07
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -20,6 +20,7 @@ import V1 from '@/router/routers/V1'
 import V2 from '@/router/routers/V2'
 import V3 from '@/router/routers/V3'
 import masterData from '@/router/routers/masterData'
+import Report from '@/router/routers/Report'
 import store from "@/store";
 
 /**
@@ -53,7 +54,11 @@ export const constantRoutes = [
   ...V1(),
   ...V2(),
   ...V3(),
-  ...masterData()
+  ...Report(),
+  ...masterData(),
+  ...system(),
+  ...activiti(),
+  
 ]
 
 /**
@@ -61,8 +66,7 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  ...system(),
-  ...activiti(),
+  
   ...meta,
   ...base,
   // 404 page must be placed at the end !!!
