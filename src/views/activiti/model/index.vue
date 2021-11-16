@@ -1,48 +1,29 @@
 <template>
   <div class="app-container" @keyup.enter="search">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="queryParams" class="demo-form-inline">
-      <el-form-item label="模型名称" prop="name">
-        <el-input v-model="queryParams.name" placeholder="请输入模型名称" />
-      </el-form-item>
-      <el-form-item label="模型关键词" prop="name">
-        <el-input v-model="queryParams.key" placeholder="请输入模型关键词" />
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="queryParams.category" placeholder="请选择">
-          <el-option
-            v-for="item in categoryArr"
-            :key="item.name"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button v-permission="permissions['get']" @click="reset">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <div id="buttonDiv" style="margin-bottom: 20px">
-      <el-button type="primary" icon="el-icon-plus" @click="openModelDialog">新增</el-button>
-      <el-button type="success" icon="el-icon-plus" @click="publishModel">发布</el-button>
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">模型名称：</span>
+          <el-input v-model="filterObj.name" placeholder="请输入模型" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">模型关键词：</span>
+          <el-input v-model="filterObj.keyName" placeholder="请输入模型" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">分类：</span>
+          <el-select v-model="filterObj.type" placeholder="请选择">
+            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          </el-select>
+        </div>
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary"  class="TpmButtonBG">查询</el-button>
+      </div>
     </div>
-    <el-table
-      ref="modelInfoTable"
-      v-loading="tableLoading"
-      :data="tableData"
-      element-loading-text="正在查询"
-      border
-      fit
-      stripe
-      
-      highlight-current-row
-      @row-click="handleCurrentRowClick"
-      @row-dblclick="handleCurrentRowDblClick"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table ref="modelInfoTable" v-loading="tableLoading" :data="tableData" element-loading-text="正在查询" border fit stripe highlight-current-row @row-click="handleCurrentRowClick"
+      @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
         {{ scopeProps.$index+1 }}
@@ -77,31 +58,14 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="block">
-      <el-pagination
-        :current-page="queryParams.start"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="queryParams.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="queryParams.total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+    <div class="TpmPaginationWrap">
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 新增 -->
-    <el-dialog
-      v-el-drag-dialog
-      v-loading="loading"
-      :title="textMap[modelDialog.type]"
-      :visible.sync="modelDialog.visible"
-      element-loading-text="加载中"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.5)"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :show-close="false"
-      center
-    >
+    <el-dialog v-el-drag-dialog v-loading="loading" :title="textMap[modelDialog.type]" :visible.sync="modelDialog.visible" element-loading-text="加载中"
+      element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"
+      center>
       <el-form ref="modelDataForm" :model="modelDialog.data" :rules="rules">
         <el-input v-show="false" v-model="modelDialog.data.id" />
         <el-form-item label="编码" prop="key" label-width="80px">
@@ -115,12 +79,7 @@
         </el-form-item>
         <el-form-item label="分类" prop="category" label-width="80px">
           <el-select v-model="modelDialog.data.category" placeholder="请选择">
-            <el-option
-              v-for="item in categoryArr"
-              :key="item.name"
-              :label="item.name"
-              :value="item.id"
-            />
+            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="流程方向" prop="direction" label-width="80px">

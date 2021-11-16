@@ -7,6 +7,9 @@ import elDragDialog from '@/directive/el-drag-dialog'
 export default {
   data() {
     return {
+      total: 1,
+      pageSize: 10,
+      pageNum: 1,
       modelDialog: {
         type: null,
         visible: false,
@@ -25,6 +28,11 @@ export default {
       categoryArr: [
         { label: '19号线', value: '19' }
       ],
+      filterObj:{
+        name:'',
+        keyName:'',
+        type:'',
+      },
       flowDirection: [
         { text: '从左往右', value: 'horizontal' },
         { text: '从上往下', value: 'vertical' }

@@ -12,7 +12,7 @@
       <!-- </div> -->
 
       <div class="hasTagsView" :class="sidebar.opened?'main-container':'main-hideSideBar'">
-        <Brand></Brand>
+        <Brand v-if="isBread"></Brand>
         <app-main />
         <!-- <div class="bottomTxt" >{{bottomTxt}}</div> -->
       </div>
@@ -40,7 +40,8 @@ export default {
     ...mapState({
       sidebar: state => state.app.sidebar,
       device: state => state.app.device,
-      fixedHeader: state => state.settings.fixedHeader
+      fixedHeader: state => state.settings.fixedHeader,
+      isBread:state => state.app.isBreadcrumb
     }),
     classObj() {
       return {

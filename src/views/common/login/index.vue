@@ -20,13 +20,16 @@
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </span>
         </el-form-item>
-        <el-form-item class="code-input" prop="code">
+        <div class="VerificationWrap">
+          <el-form-item class="code-input" prop="code">
           <span class="svg-container">
             <svg-icon icon-class="password" />
           </span>
           <el-input ref="code" v-model="loginForm.code" placeholder="请输入验证码" autocomplete="off" name="code" type="text" @keyup.enter.native="handleLogin" />
         </el-form-item>
         <img v-show="imageCode && imageCode.length > 100" :src="imageCode" alt="codeImage" class="code-image" @click="getCodeImage">
+        </div>
+        
         <div class="rememberPwd">
           <el-checkbox v-model="checked">记住密码</el-checkbox>
         </div>
@@ -284,6 +287,11 @@ $light_gray: #eee;
       display: inline-block;
       vertical-align: top;
       cursor: pointer;
+      margin-bottom: 22px;
+    }
+    .VerificationWrap {
+      display: flex;
+      align-items: center;
     }
   }
 

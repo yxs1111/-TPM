@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-15 19:33:13
+ * @LastEditTime: 2021-11-16 14:11:06
 -->
 <template>
   <div class="app-container">
@@ -88,7 +88,7 @@
           </div>
           <div class="contentInfoWrap">
             <el-table :data="tableData" class="customTable" :summary-method="getSummaries" show-summary border :header-cell-style="HeadTable" :cell-style="columnStyle"
-              :row-class-name="tableRowClassName" style="width: 100%">
+               style="width: 100%">
               <el-table-column width="150" fixed>
                 <template slot="header">
                   <div></div>

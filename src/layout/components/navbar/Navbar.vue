@@ -3,10 +3,7 @@
     <div class="breadcrumb-container">
       <img src="../../../../src/assets/images/logo.png" alt="菲仕兰">
     </div>
-    <div v-if="path=='Dashboard'" class="layOutBtn">
-      <div>操作</div>
-    </div>
-    <div v-else class="right-menu">
+    <div class="right-menu">
       <!--          <template v-if="device!=='mobile'">-->
       <!--            <search id="header-search" class="right-menu-item" />-->
       <!--            <screenfull id="screenfull" class="right-menu-item hover-effect" />-->

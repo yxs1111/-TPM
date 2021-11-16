@@ -72,7 +72,7 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+  login({ commit,dispatch }, userInfo) {
     const { username, password, code, key } = userInfo
     return new Promise((resolve, reject) => {
       user.login({ username: username, password: password, captcha: code, randomId: key }).then(response => {
@@ -80,6 +80,7 @@ const actions = {
         initUserInfo(data)
         resetRouter()
         resolve()
+        dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
       }).catch(error => {
         console.error(error)
         reject(error)

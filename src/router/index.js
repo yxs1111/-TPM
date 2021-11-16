@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-11-15 19:49:07
+ * @LastEditTime: 2021-11-16 14:06:23
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -21,6 +21,7 @@ import V2 from '@/router/routers/V2'
 import V3 from '@/router/routers/V3'
 import masterData from '@/router/routers/masterData'
 import Report from '@/router/routers/Report'
+import taskManage from '@/router/routers/taskManage'
 import store from "@/store";
 
 /**
@@ -55,6 +56,7 @@ export const constantRoutes = [
   ...V2(),
   ...V3(),
   ...Report(),
+  ...taskManage(),
   ...masterData(),
   ...system(),
   ...activiti(),
