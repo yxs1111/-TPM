@@ -21,3 +21,4 @@ tests/**/coverage/
 
 ### VS Code ###
 .vscode
+.history
