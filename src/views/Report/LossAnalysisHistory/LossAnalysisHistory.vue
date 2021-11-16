@@ -54,7 +54,7 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="500" :row-class-name="tableRowClassName" style="width: 100%">
+            <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
               <el-table-column align="center" width="150" fixed prop="channel" label="数据维度"> </el-table-column>
               <el-table-column align="center" prop="name" label="Total">
                 <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
@@ -86,7 +86,7 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="500" :row-class-name="tableRowClassName" style="width: 100%">
+            <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
               <el-table-column align="center" width="150" fixed prop="channel" label="数据维度"> </el-table-column>
               <el-table-column align="center" prop="name" label="Total">
                 <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
@@ -166,41 +166,6 @@ export default {
           number: '621',
           channel: 'NKA',
           amount3: 17,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
         },
         {
           id: '12987126',

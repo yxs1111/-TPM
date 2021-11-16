@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2021-11-16 09:32:54
+ * @LastEditTime: 2021-11-16 13:03:28
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -74,6 +74,20 @@ export default function() {
           name: 'LossAnalysisHistory',
           component: () => import('@/views/Report/LossAnalysisHistory/LossAnalysisHistory.vue'),
           meta: { title: '损益分析报告-历史', icon: 'form' }
+        },
+        {
+          path: '/TotalAnalysisMonth',
+          code: 'TotalAnalysisMonth',
+          name: 'TotalAnalysisMonth',
+          component: () => import('@/views/Report/TotalAnalysisMonth/TotalAnalysisMonth.vue'),
+          meta: { title: '汇总分析报告-当月', icon: 'form' }
+        },
+        {
+          path: '/TotalAnalysisHistory',
+          code: 'TotalAnalysisHistory',
+          name: 'TotalAnalysisHistory',
+          component: () => import('@/views/Report/TotalAnalysisHistory/TotalAnalysisHistory.vue'),
+          meta: { title: '汇总分析报告-历史', icon: 'form' }
         },
       ]
     }
