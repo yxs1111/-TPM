@@ -68,6 +68,53 @@ export default function() {
           component: () => import('@/views/master/Store.vue'),
           meta: { title: '门店信息', icon: 'form' }
         },
+        {
+          path: '/priceSale',
+          name: 'PriceModel',
+          component: () => import('@/views/master/modelIndex.vue'),
+          meta: { title: '价格和促销', icon: 'form' },
+          // redirect: '/priceSale/saleComputeKeep',
+          children: [
+            // 促销计算维护
+            {
+              path: '/priceSale/saleComputeKeep',
+              name: 'saleComputeKeep',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/saleComputeKeep.vue'
+                ),
+              meta: {
+                title: '促销计算维护',
+                icon: 'form'
+              }
+            },
+            // 价格主数据
+            {
+              path: '/priceSale/priceMasterData',
+              name: 'PriceMasterData',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/priceMasterData.vue'
+                ),
+              meta: {
+                title: '价格主数据',
+                icon: 'form'
+              }
+            },
+            { // 价格档位维护
+              path: '/priceSale/priceLevelKeep',
+              name: 'PriceLevelKeep',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/priceLevelKeep.vue'
+                ),
+              meta: {
+                title: '价格档位维护',
+                icon: 'form'
+              }
+            }
+          ]
+        },
 
         // {
         //   path: '/CoastType',
