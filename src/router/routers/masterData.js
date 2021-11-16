@@ -7,66 +7,143 @@ export default function() {
     {
       path: '/master',
       component: Layout,
-      redirect: '/master/zone',
       code: 'master',
       name: 'master',
       meta: { title: '主数据管理', icon: 'form' },
       children: [
         {
-          path: '/SKU',
-          code: 'SKU',
-          name: 'SKU',
-          component: () => import('@/views/master/SKU.vue'),
-          meta: { title: 'SKU', icon: 'form' }
+          path: '/organization',
+          name: 'PriceModel',
+          component: () => import('@/views/master/modelIndex.vue'),
+          meta: { title: '组织架构', icon: 'form' },
+          // redirect: '/priceSale/saleComputeKeep',
+          children: [
+            // 组织架构
+            {
+              path: '/organization/Channel',
+              code: 'Channel',
+              name: 'Channel',
+              component: () => import('@/views/master/organization/Channel.vue'),
+              meta: { title: '渠道', icon: 'form' }
+            },
+            {
+              path: '/organization/Customer',
+              code: 'Customer',
+              name: 'Customer',
+              component: () => import('@/views/master/organization/Customer.vue'),
+              meta: { title: '客户', icon: 'form' }
+            },
+            {
+              path: '/organization/Store',
+              code: 'Store',
+              name: 'Store',
+              component: () => import('@/views/master/organization/Store.vue'),
+              meta: { title: '门店', icon: 'form' }
+            },
+            {
+              path: '/organization/Dealers',
+              code: 'Dealers',
+              name: 'Dealers',
+              component: () => import('@/views/master/organization/Dealers.vue'),
+              meta: { title: '经销商', icon: 'form' }
+            }
+          ]
         },
+        // 产品信息
         {
-          path: '/PriceStallMasterData',
-          code: 'PriceStallMasterData',
-          name: 'PriceStallMasterData',
-          component: () => import('@/views/master/PriceStallMasterData.vue'),
-          meta: { title: '价格档位', icon: 'form' }
+          path: '/itemInfo',
+          name: 'PriceModel',
+          component: () => import('@/views/master/modelIndex.vue'),
+          meta: { title: '产品信息', icon: 'form' },
+          // redirect: '/priceSale/saleComputeKeep',
+          children: [
+            {
+              path: '/itemInfo/Brand',
+              code: 'Brand',
+              name: 'Brand',
+              component: () => import('@/views/master/itemInfo/Brand.vue'),
+              meta: { title: '品牌', icon: 'form' }
+            },
+            {
+              path: '/itemInfo/SKU',
+              code: 'SKU',
+              name: 'SKU',
+              component: () => import('@/views/master/itemInfo/SKU.vue'),
+              meta: { title: '产品', icon: 'form' }
+            }
+          ]
         },
+        // 财务信息
         {
-          path: '/Customer',
-          code: 'Customer',
-          name: 'Customer',
-          component: () => import('@/views/master/Customer.vue'),
-          meta: { title: '客户信息', icon: 'form' }
+          path: '/financeInfo/priceSale',
+          name: 'PriceModel',
+          component: () => import('@/views/master/modelIndex.vue'),
+          meta: { title: '财务信息', icon: 'form' },
+          // redirect: '/priceSale/saleComputeKeep',
+          children: [
+            {
+              path: '/RoleCostSubjectControl',
+              code: 'RoleCostSubjectControl',
+              name: 'RoleCostSubjectControl',
+              component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
+              meta: { title: '费用科目', icon: 'form' }
+            },
+            {
+              path: '/RoleCostSubjectControl',
+              code: 'RoleCostSubjectControl',
+              name: 'RoleCostSubjectControl',
+              component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
+              meta: { title: '费用类型', icon: 'form' }
+            }
+          ]
         },
+        // 规则控制
         {
-          path: '/Channel',
-          code: 'Channel',
-          name: 'Channel',
-          component: () => import('@/views/master/Channel.vue'),
-          meta: { title: '渠道信息', icon: 'form' }
-        },
-        {
-          path: '/Dealers',
-          code: 'Dealers',
-          name: 'Dealers',
-          component: () => import('@/views/master/Dealers.vue'),
-          meta: { title: '经销商信息', icon: 'form' }
-        },
-        {
-          path: '/RoleCostSubjectControl',
-          code: 'RoleCostSubjectControl',
-          name: 'RoleCostSubjectControl',
-          component: () => import('@/views/master/RoleCostSubjectControl.vue'),
-          meta: { title: '费用科目信息', icon: 'form' }
-        },
-        {
-          path: '/Brand',
-          code: 'Brand',
-          name: 'Brand',
-          component: () => import('@/views/master/Brand.vue'),
-          meta: { title: '品牌信息', icon: 'form' }
-        },
-        {
-          path: '/Store',
-          code: 'Store',
-          name: 'Store',
-          component: () => import('@/views/master/Store.vue'),
-          meta: { title: '门店信息', icon: 'form' }
+          path: '/ruleCtrl',
+          name: 'PriceModel',
+          component: () => import('@/views/master/modelIndex.vue'),
+          meta: { title: '规则控制', icon: 'form' },
+          // redirect: '/priceSale/saleComputeKeep',
+          children: [
+            // 促销计算维护
+            {
+              path: '/priceSale/saleComputeKeep',
+              name: 'saleComputeKeep',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/saleComputeKeep.vue'
+                ),
+              meta: {
+                title: '促销计算维护',
+                icon: 'form'
+              }
+            },
+            // 价格主数据
+            {
+              path: '/priceSale/priceMasterData',
+              name: 'PriceMasterData',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/priceMasterData.vue'
+                ),
+              meta: {
+                title: '价格主数据',
+                icon: 'form'
+              }
+            },
+            { // 价格档位维护
+              path: '/priceSale/priceLevelKeep',
+              name: 'PriceLevelKeep',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/priceLevelKeep.vue'
+                ),
+              meta: {
+                title: '价格档位维护',
+                icon: 'form'
+              }
+            }
+          ]
         },
         {
           path: '/priceSale',
@@ -112,7 +189,14 @@ export default function() {
                 title: '价格档位维护',
                 icon: 'form'
               }
-            }
+            },
+            {
+              path: '/priceSale/PriceStallMasterData',
+              code: 'PriceStallMasterData',
+              name: 'PriceStallMasterData',
+              component: () => import('@/views/master/priceSale/PriceStallMasterData.vue'),
+              meta: { title: '价格档位', icon: 'form' }
+            },
           ]
         },
 
