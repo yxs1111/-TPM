@@ -89,9 +89,9 @@ export default function() {
               meta: { title: '费用科目', icon: 'form' }
             },
             {
-              path: '/RoleCostSubjectControl',
-              code: 'RoleCostSubjectControl',
-              name: 'RoleCostSubjectControl',
+              path: '/RoleCostType',
+              code: 'RoleCostType',
+              name: 'RoleCostType',
               component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
               meta: { title: '费用类型', icon: 'form' }
             }

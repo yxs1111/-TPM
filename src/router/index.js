@@ -50,7 +50,7 @@ import store from "@/store";
  */
 export const constantRoutes = [
   ...common,
-  ...sample,
+  //...sample,
   ...cityPlan(),
   ...V1(),
   ...V2(),

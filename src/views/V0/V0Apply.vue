@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-16 14:11:06
+ * @LastEditTime: 2021-11-17 14:05:21
 -->
 <template>
   <div class="app-container">
@@ -19,7 +19,7 @@
             <el-date-picker v-model="month" type="month" placeholder="选择月">
             </el-date-picker>
           </div>
-          <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
+          <el-button type="primary"  class="TpmButtonBG">查询</el-button>
         </div>
         <div class="OpertionBar">
           <div class="TpmButtonBG" @click="getCPTData">
@@ -489,38 +489,38 @@ export default {
 }
 </style>
 <style  lang="scss">
-// 合计行样式
-.el-table__footer-wrapper tbody td,
-.el-table__header-wrapper tbody td {
-  background-color: #e3f3ff !important;
-  color: #666;
-}
-.el-table__footer-wrapper .is-leaf {
-  color: #666 !important;
-}
-.el-table__fixed-footer-wrapper tbody td {
-  border-top: 1px solid #ebeef5;
-  background-color: #e3f3ff;
-  color: #666;
-  text-align: center !important;
-}
-.has-gutter tr td .cell {
-  text-align: center;
-  color: #001111;
-}
-//合并行放在第一行
-.contentInfoWrap .el-table {
-  display: flex;
-  flex-direction: column;
-}
-.contentInfoWrap .el-table__body-wrapper {
-  order: 1;
-}
-.contentInfoWrap .el-table__fixed-body-wrapper {
-  top: 97px !important;
-}
-.contentInfoWrap .el-table__fixed-footer-wrapper {
-  z-index: 0;
-  top: 50px;
-}
+// // 合计行样式
+// .el-table__footer-wrapper tbody td,
+// .el-table__header-wrapper tbody td {
+//   background-color: #e3f3ff !important;
+//   color: #666;
+// }
+// .el-table__footer-wrapper .is-leaf {
+//   color: #666 !important;
+// }
+// .el-table__fixed-footer-wrapper tbody td {
+//   border-top: 1px solid #ebeef5;
+//   background-color: #e3f3ff;
+//   color: #666;
+//   text-align: center !important;
+// }
+// .has-gutter tr td .cell {
+//   text-align: center;
+//   color: #001111;
+// }
+// //合并行放在第一行
+// .contentInfoWrap .el-table {
+//   display: flex;
+//   flex-direction: column;
+// }
+// .contentInfoWrap .el-table__body-wrapper {
+//   order: 1;
+// }
+// .contentInfoWrap .el-table__fixed-body-wrapper {
+//   top: 97px !important;
+// }
+// .contentInfoWrap .el-table__fixed-footer-wrapper {
+//   z-index: 0;
+//   top: 50px;
+// }
 </style>
