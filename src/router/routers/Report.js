@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2021-11-16 13:03:28
+ * @LastEditTime: 2021-11-17 14:49:30
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -21,7 +21,38 @@ export default function() {
           code: 'AbnormalAnalysisMonth',
           name: 'AbnormalAnalysisMonth',
           component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonth.vue'),
-          meta: { title: '异常分析报告-当月', icon: 'form' }
+          meta: { title: '异常分析报告-当月', icon: 'form' },
+          redirect: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
+          children: [
+            {
+              path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
+              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
+              name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
+              component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel.vue'),
+              meta: { title: 'by Channel', icon: 'form' }
+            },
+            {
+              path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
+              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
+              name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
+              component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA.vue'),
+              meta: { title: 'by kA', icon: 'form' }
+            },
+            {
+              path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist',
+              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist',
+              name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthAbnormalAnalysisMonthTop10Dist',
+              component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist.vue'),
+              meta: { title: 'Top 10 Dist', icon: 'form' }
+            },
+            {
+              path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
+              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
+              name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
+              component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone.vue'),
+              meta: { title: 'by Zone', icon: 'form' }
+            },
+          ]
         },
         {
           path: '/AbnormalAnalysisHistory',
