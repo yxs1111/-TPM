@@ -1,8 +1,9 @@
 <template>
   <div class="header-notice">
     <div class="notice-box" @click.stop="click">
-      <i class="el-icon-bell notice-box-i"></i>
-      <div class="notice-box-txt">消息&nbsp;&nbsp;({{unreadNumberAll}})</div>
+      <img src="../../assets/images/message.png" alt="" class="messageIcon">
+      <!-- <i class="el-icon-bell notice-box-i"></i>
+      <div class="notice-box-txt">消息&nbsp;&nbsp;({{unreadNumberAll}})</div> -->
     </div>
     <el-dialog :visible.sync="noticePage.dialogVisible" title="消息" width="70%" height="40%">
       <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" element-loading-text="正在查询" border fit stripe height="400"
@@ -344,11 +345,11 @@ export default {
 </style>
 <style lang="scss" scoped>
 .notice-box {
-  width: 100px;
   height: 40px;
   border-radius: 20px;
-  background: #f3f6fc;
-  margin-top: 20px;
+  // background: #f3f6fc;
+  margin-top: 25px;
+  margin-right: 20px;
 }
 .notice-box-txt {
   height: 40px;
@@ -377,6 +378,10 @@ export default {
 .item {
   margin-top: 8px;
   margin-right: 10px;
+}
+.messageIcon {
+  width: 22px;
+  height: 19px;
 }
 </style>
 
