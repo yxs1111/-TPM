@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-11-17 13:24:14
+ * @LastEditTime: 2021-11-17 19:21:02
 -->
 <template>
   <div class="dashboard-container">
@@ -41,13 +41,7 @@
         <div class="BarTitleWrap">
           <span>我的待办</span>
           <div class="TabBar">
-            <div
-              class="Tabli "
-              :class="currentIndex == index ? 'currentTabli' : ''"
-              v-for="(item, index) in TabList"
-              :key="item.id"
-              @click="changeCurrent(index)"
-            >
+            <div class="Tabli " :class="currentIndex == index ? 'currentTabli' : ''" v-for="(item, index) in TabList" :key="item.id" @click="changeCurrent(index)">
               {{ item.title }}
             </div>
             <!-- <div class="Tabli ">已完成</div> -->
@@ -63,6 +57,17 @@
           </div>
           <div class="TimeLineBar">
             <el-timeline>
+              <el-timeline-item color="#4192d3">
+                <div class="TimeLineli">
+                  <div class="TimeLineTitleli">2019年10月1日</div>
+                  <div class="TimeLineTitleli">V3</div>
+                  <div class="TimeLineTitleli">Fin 审批</div>
+                  <div class="TimeLineTitleli">Frodo</div>
+                  <div class="TimeLineTitleli">
+                    <div class="TimeLineOpertion">办理</div>
+                  </div>
+                </div>
+              </el-timeline-item>
               <el-timeline-item color="#4192d3">
                 <div class="TimeLineli">
                   <div class="TimeLineTitleli">2019年10月1日</div>
@@ -152,9 +157,9 @@ export default {
       ActualSalesChart: '',
       TabList: [
         { id: 0, title: '待完成' },
-        { id: 1, title: '已完成' }
+        { id: 1, title: '已完成' },
       ],
-      currentIndex: 0
+      currentIndex: 0,
     }
   },
   mounted() {
@@ -171,7 +176,7 @@ export default {
         this.SalesAmountChart.resize()
         this.ActualSalesChart.resize()
       }, 200)
-    }
+    },
   },
   methods: {
     // 创建图表
@@ -184,38 +189,38 @@ export default {
           trigger: 'axis',
           axisPointer: {
             // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
+            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
         title: {
           text: '每月促销金额',
           textStyle: {
             fontSize: 22,
-            color: '#333'
+            color: '#333',
           },
           top: '5%',
-          left: '2%'
+          left: '2%',
         },
         grid: {
           top: '24%',
           left: '5%',
           right: '5%',
           bottom: '10%',
-          containLabel: true
+          containLabel: true,
         },
         xAxis: {
           type: 'category',
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           nameTextStyle: {
             fontSize: 16,
-            color: '#999999'
+            color: '#999999',
           },
           axisTick: {
-            show: false
-          }
+            show: false,
+          },
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
         },
         series: [
           {
@@ -224,10 +229,10 @@ export default {
             barWidth: 14,
             itemStyle: {
               color: '#4192d3',
-              borderRadius: [7, 7, 0, 0]
-            }
-          }
-        ]
+              borderRadius: [7, 7, 0, 0],
+            },
+          },
+        ],
       })
       this.SalesAmountChart = SalesAmountChart
       var ActualSalesChart = echarts.init(
@@ -240,25 +245,25 @@ export default {
             // 坐标轴指示器，坐标轴触发有效
             type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
             label: {
-              backgroundColor: '#6a7985'
-            }
-          }
+              backgroundColor: '#6a7985',
+            },
+          },
         },
         title: {
           text: '每月实际销量',
           textStyle: {
             fontSize: 22,
-            color: '#333'
+            color: '#333',
           },
           top: '5%',
-          left: '2%'
+          left: '2%',
         },
         grid: {
           top: '24%',
           left: '5%',
           right: '5%',
           bottom: '10%',
-          containLabel: true
+          containLabel: true,
         },
         xAxis: {
           type: 'category',
@@ -266,14 +271,14 @@ export default {
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           nameTextStyle: {
             fontSize: 16,
-            color: '#999999'
+            color: '#999999',
           },
           axisTick: {
-            show: false
-          }
+            show: false,
+          },
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
         },
         series: [
           {
@@ -285,10 +290,10 @@ export default {
             itemStyle: {
               color: '#579cf9',
               borderWidth: 2,
-              borderColor: '#ffffff'
+              borderColor: '#ffffff',
             },
             lineStyle: {
-              color: '#579cf9'
+              color: '#579cf9',
             },
 
             areaStyle: {
@@ -296,24 +301,24 @@ export default {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
-                  color: '#4c8bfd'
+                  color: '#4c8bfd',
                 },
                 {
                   offset: 1,
-                  color: '#ffffff'
-                }
-              ])
+                  color: '#ffffff',
+                },
+              ]),
             },
-            smooth: true
-          }
-        ]
+            smooth: true,
+          },
+        ],
       })
       this.ActualSalesChart = ActualSalesChart
     },
     changeCurrent(index) {
       this.currentIndex = index
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -541,8 +546,22 @@ export default {
 }
 </style>
 <style>
+/* timeLine 样式设置 */
 .el-timeline-item__wrapper {
   width: 100%;
+}
+.el-timeline-item__timestamp.is-bottom {
+  margin-bottom: 0;
+}
+.el-timeline-item__tail {
+  height: 190%;
+  width: 3px;
+  background-color: #4192d3;
+  border: none;
+}
+.el-timeline-item__node {
+  background-color: #fff !important;
+  border: 2px solid #4192d3!important;
 }
 /*滚动条的宽度*/
 ::-webkit-scrollbar {
@@ -553,8 +572,5 @@ export default {
 ::-webkit-scrollbar-thumb {
   background-color: #d1d1d1;
   border-radius: 3px;
-}
-.el-timeline-item__timestamp.is-bottom {
-  margin-bottom: 0;
 }
 </style>
