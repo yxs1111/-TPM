@@ -1,73 +1,38 @@
 <template>
   <div class="header-notice">
     <div class="notice-box" @click.stop="click">
-      <i class="el-icon-bell notice-box-i"  ></i><div class="notice-box-txt" >消息&nbsp;&nbsp;({{unreadNumberAll}})</div>
+      <img src="../../assets/images/message.png" alt="" class="messageIcon">
+      <!-- <i class="el-icon-bell notice-box-i"></i>
+      <div class="notice-box-txt">消息&nbsp;&nbsp;({{unreadNumberAll}})</div> -->
     </div>
-    <el-dialog
-      :visible.sync="noticePage.dialogVisible"
-      title="消息"
-      width="70%"
-      height="40%"
-    >
-      <el-tabs v-model="noticePage.category" type="border-card" @tab-click="handleClick()">
-        <el-tab-pane v-for="(item, index) in noticePage.title" :key="index" :label="item.label" :name="item.name">
-          <span slot="label">{{item.label}}
-            <el-badge v-if="unreadNumber[item.name]" :value="unreadNumber[item.name].count" />
-            <el-badge v-else :value="0" />
-          </span>
-          <el-table
-            ref="noticeListTable"
-            v-loading="noticePage.searchLoading"
-            :data="noticePage.noticePageProps.record"
-            element-loading-text="正在查询"
-            border
-            fit
-            stripe
-            height="400"
-            highlight-current-row
-            @row-click="handleCurrentRowClick"
-            @row-dblclick="handleCurrentRowDblClick"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column align="center" prop="title" label="标题" />
-            <el-table-column align="center" prop="senderName" label="发送人" />
-            <el-table-column align="center" prop="createDate" label="日期" />
-            <el-table-column align="center" prop="readFlag" label="状态">
-              <template slot-scope="{row}">
-                <el-tag :type="row.readFlag | statusStyleFilter">{{ row.readFlag | statusWordFilter }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-              <template slot-scope="{row}">
-                <el-button size="mini" type="default" @click="getRowData(row)">
-                  {{ $t('table.detail') }}
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="noticePage.noticePageProps.total"
-        :page-size="noticePage.noticePageProps.pageSize"
-        :current-page="noticePage.noticePageProps.pageNum"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+    <el-dialog :visible.sync="noticePage.dialogVisible" title="消息" width="70%" height="40%">
+      <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" element-loading-text="正在查询" border fit stripe height="400"
+        highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
+        <el-table-column align="center" prop="title" label="标题" />
+        <el-table-column align="center" prop="senderName" label="发送人" />
+        <el-table-column align="center" prop="createDate" label="日期" />
+        <el-table-column align="center" prop="readFlag" label="状态">
+          <template slot-scope="{row}">
+            <el-tag :type="row.readFlag | statusStyleFilter">{{ row.readFlag | statusWordFilter }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+          <template slot-scope="{row}">
+            <el-button size="mini" type="default" @click="getRowData(row)">
+              {{ $t('table.detail') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="noticePage.noticePageProps.total" :page-size="noticePage.noticePageProps.pageSize"
+        :current-page="noticePage.noticePageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="noticePage.dialogVisible = false">确定</el-button>
       </span>
     </el-dialog>
     <!--信息框-->
     <el-dialog :title="noticePage.detailDialog.title" :visible.sync="noticePage.detailDialog.visible">
-      <el-form
-        :model="noticePage.detailDialog.data"
-        label-position="left"
-        label-width="120px"
-        style="width: 600px; margin-left:50px;"
-      >
+      <el-form :model="noticePage.detailDialog.data" label-position="left" label-width="120px" style="width: 600px; margin-left:50px;">
         <el-form-item prop="title" label="标题">
           <span>{{ noticePage.detailDialog.data.title }}</span>
         </el-form-item>
@@ -111,19 +76,19 @@ export default {
     // 状态样式
     statusStyleFilter(status) {
       const statusMap = {
-        '1': 'success',
-        '0': 'danger'
+        1: 'success',
+        0: 'danger',
       }
       return statusMap[status]
     },
     // 状态文字
     statusWordFilter(status) {
       const statusMap = {
-        '0': '未读',
-        '1': '已读'
+        0: '未读',
+        1: '已读',
       }
       return statusMap[status]
-    }
+    },
   },
   data() {
     return {
@@ -133,40 +98,43 @@ export default {
           record: null,
           total: 0,
           pageSize: 10,
-          pageNum: 1
+          pageNum: 1,
         },
-        title: [{ label: '待办列表', name: '1', message: '111' },
+        title: [
+          { label: '待办列表', name: '1', message: '111' },
           { label: '消息通知', name: '2', message: '222' },
-          { label: '警告', name: '3', message: '333' }],
+          { label: '警告', name: '3', message: '333' },
+        ],
         dialogVisible: false,
         category: '1',
         permissions: getDefaultPermissions(),
         detailDialog: {
           title: '详情',
           visible: false,
-          data: { category: null,
+          data: {
+            category: null,
             title: null,
             summary: null,
             content: null,
             senderName: null,
             deptName: null,
-            createTime: null }
-        }
+            createTime: null,
+          },
+        },
       },
       unreadNumberAll: 0,
-      unreadNumber: {}
+      unreadNumber: {},
     }
   },
-  computed: {
-  },
+  computed: {},
   watch: {
     'noticePage.category': {
       handler(newTitle) {
         this.initPageProps()
         this.fetchData(newTitle)
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   mounted() {
     // WebSocket
@@ -176,7 +144,7 @@ export default {
     } else {
       Message.error({
         message: '当前浏览器 Not support websocket',
-        duration: 10 * 1000
+        duration: 10 * 1000,
       })
     }
   },
@@ -184,9 +152,7 @@ export default {
     this.onbeforeunload()
   },
   methods: {
-
-    handleClick() {
-    },
+    handleClick() {},
     click() {
       this.noticePage.dialogVisible = true
       this.getUnReadNum()
@@ -206,7 +172,9 @@ export default {
       window.onbeforeunload = this.onbeforeunload
     },
     setErrorMessage() {
-      console.log('WebSocket连接发生错误   状态码：' + this.websocket.readyState)
+      console.log(
+        'WebSocket连接发生错误   状态码：' + this.websocket.readyState
+      )
     },
     setOnopenMessage() {
       console.log('WebSocket连接成功    状态码：' + this.websocket.readyState)
@@ -226,7 +194,7 @@ export default {
         onClick: () => {
           this.instance.close()
           this.getRowData(res)
-        }
+        },
       })
     },
     setOncloseMessage() {
@@ -241,49 +209,72 @@ export default {
     // 查询方法
     fetchData(newTitle) {
       this.noticePage.searchLoading = true
-      requestApi.request_get('/im/message/getMessageListByUserCode', {
-        category: this.noticePage.category,
-        receiverCode: 'admin',
-        pageSize: this.noticePage.noticePageProps.pageSize, pageNum: this.noticePage.noticePageProps.pageNum }).then(response => {
-        this.formatTime(response.data.records)
-        this.noticePage.noticePageProps.record = response.data.records
-      }).catch(error => {
-        console.log(error)
-      })
+      requestApi
+        .request_get('/im/message/getMessageListByUserCode', {
+          category: this.noticePage.category,
+          receiverCode: 'admin',
+          pageSize: this.noticePage.noticePageProps.pageSize,
+          pageNum: this.noticePage.noticePageProps.pageNum,
+        })
+        .then((response) => {
+          this.formatTime(response.data.records)
+          this.noticePage.noticePageProps.record = response.data.records
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       this.noticePage.searchLoading = false
     },
     // 获取未读消息数量
     getUnReadNum() {
-      requestApi.request_get('/im/message/getUnReadNumByUsername', {
-        username: auth.getLoginName() }).then(response => {
-        const data = response.data
-        this.unreadNumber = data
-        this.unreadNumberAll = 0
-        for (const i in data) {
-          this.unreadNumberAll += data[i].count
-        }
-      }).catch(error => {
-        console.log(error)
-      })
+      requestApi
+        .request_get('/im/message/getUnReadNumByUsername', {
+          username: auth.getLoginName(),
+        })
+        .then((response) => {
+          const data = response.data
+          this.unreadNumber = data
+          this.unreadNumberAll = 0
+          for (const i in data) {
+            this.unreadNumberAll += data[i].count
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     // 消息已读
     receiveMessage(category, messageId) {
-      requestApi.request_put('/im/message/receiveMessage', {
-        id: messageId,
-        readFlag: 1
-      }).then(response => {
-        this.unreadNumberAll--
-        this.unreadNumber[category].count--
-        this.fetchData(category)
-      }).catch(error => {
-        console.log(error)
-      })
+      requestApi
+        .request_put('/im/message/receiveMessage', {
+          id: messageId,
+          readFlag: 1,
+        })
+        .then((response) => {
+          this.unreadNumberAll--
+          this.unreadNumber[category].count--
+          this.fetchData(category)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     formatTime(records) {
-      records.forEach(e => {
+      records.forEach((e) => {
         try {
           const createDate = new Date(e.createDate)
-          e.createDate = createDate.getFullYear() + '/' + (createDate.getMonth() + 1) + '/' + createDate.getDate() + ' ' + createDate.getHours() + ':' + createDate.getMinutes() + ':' + createDate.getSeconds()
+          e.createDate =
+            createDate.getFullYear() +
+            '/' +
+            (createDate.getMonth() + 1) +
+            '/' +
+            createDate.getDate() +
+            ' ' +
+            createDate.getHours() +
+            ':' +
+            createDate.getMinutes() +
+            ':' +
+            createDate.getSeconds()
         } catch (exception) {
           console.log(exception)
           e.createDate = '-'
@@ -316,14 +307,15 @@ export default {
         content: null,
         senderName: null,
         deptName: null,
-        createDate: null }
+        createDate: null,
+      }
     },
     initPageProps() {
       this.noticePage.noticePageProps = {
         record: null,
         total: 0,
         pageSize: 10,
-        pageNum: 1
+        pageNum: 1,
       }
     },
     // 每页显示页面数变更
@@ -336,49 +328,45 @@ export default {
       this.noticePage.noticePageProps.pageNum = num
       this.fetchData()
     },
-    handleCurrentRowClick() {
-    },
-    handleCurrentRowDblClick() {
-    },
-    handleSelectionChange() {
-    },
-  }
+    handleCurrentRowClick() {},
+    handleCurrentRowDblClick() {},
+    handleSelectionChange() {},
+  },
 }
-
 </script>
 <style >
-.item .el-badge__content{
-    position: absolute;
-    top: 7px!important;
-    right: 12px;
-    -webkit-transform: translateY(-50%) translateX(100%);
-    transform: translateY(-50%) translateX(100%);
+.item .el-badge__content {
+  position: absolute;
+  top: 7px !important;
+  right: 12px;
+  -webkit-transform: translateY(-50%) translateX(100%);
+  transform: translateY(-50%) translateX(100%);
 }
 </style>
 <style lang="scss" scoped>
-  .notice-box{
-    width: 100px;
-    height: 40px;
-    border-radius: 20px;
-    background:#F3F6FC;
-    margin-top: 20px;
-  }
-  .notice-box-txt{
-    height: 40px;
-    font-size: 12px;
-    color: #586ABA;
-    float: left;
-    line-height: 45px;
-  }
-  .notice-box-i{
-    font-size: 20px;
-    color:#586ABA;
-    float: left;
-    vertical-align: middle;
-    margin-top: 12px;
-    margin-left: 15px;
-    margin-right: 3px;
-  }
+.notice-box {
+  height: 40px;
+  border-radius: 20px;
+  // background: #f3f6fc;
+  margin-top: 25px;
+  margin-right: 20px;
+}
+.notice-box-txt {
+  height: 40px;
+  font-size: 12px;
+  color: #586aba;
+  float: left;
+  line-height: 45px;
+}
+.notice-box-i {
+  font-size: 20px;
+  color: #586aba;
+  float: left;
+  vertical-align: middle;
+  margin-top: 12px;
+  margin-left: 15px;
+  margin-right: 3px;
+}
 .header-notice {
   font-size: 0 !important;
 
@@ -388,8 +376,12 @@ export default {
   }
 }
 .item {
- margin-top: 8px;
- margin-right: 10px;
+  margin-top: 8px;
+  margin-right: 10px;
+}
+.messageIcon {
+  width: 22px;
+  height: 19px;
 }
 </style>
 
