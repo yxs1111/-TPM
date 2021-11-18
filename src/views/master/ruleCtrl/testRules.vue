@@ -5,12 +5,12 @@
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="Mine Package" prop="name">
         <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="客户" prop="name">
         <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="年月" prop="name">
@@ -36,17 +36,17 @@
       <el-table-column width="" align="center" prop="channelCode" label="版本" />
       <el-table-column width="" align="center" prop="channelCsName" label="验证规则" />
       <el-table-column width="150" align="center" prop="productCode" label="" />
-      <el-table-column width="320" align="center" prop="productCsName" label="">
+      <el-table-column width="320" align="center" label="">
         <template>
           <el-select v-model="filterObj.category" placeholder="请选择" size="small">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
           </el-select>
         </template>
       </el-table-column>
       <el-table-column width="" align="center" prop="gear" label="验证类型">
         <template>
           <el-select v-model="filterObj.category" placeholder="请选择" size="small">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
           </el-select>
         </template>
       </el-table-column>
@@ -65,7 +65,7 @@
               :value="item.name"
             >
               <div class="option_box">
-                <el-image class="option_img" src="../../../assets/images/selectError.png" />
+                <el-image class="option_img" :src="require('@/assets/images/selectError.png')" />
                 <span v-text="111" />
               </div>
             </el-option>
@@ -136,6 +136,7 @@ export default {
 
   data() {
     return {
+      url: '@/assets/images/selectError.png',
       total: 1,
       pageSize: 10,
       pageNum: 1,
@@ -145,7 +146,7 @@ export default {
         category: ''
       },
       tableLoading: '',
-      categoryArr: [{ label: '19号线', value: '19' }],
+      categoryArr: [{ name: '19号线', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [
         {
@@ -190,16 +191,19 @@ export default {
   methods: {
     // select标签的change事件
     changeSelection(val) {
-      let optionsImg = this.optionsImg
-      let i = optionsImg.findIndex((item) => item.label === val)
+      // let optionsImg = this.optionsImg
+      // let i = optionsImg.findIndex((item) => item.label === val)
+      debugger
       this.$refs['refSelect']
         .$el.children[0]
         .children[0]
         .setAttribute(
           'style',
           `
-          background-color: red;
-          background: url(../../../assets/images/selectError.png) no-repeat; 
+          background: url('@/assets/images/selectError.png') no-repeat; 
+          background-position: 10px center; 
+          background-size: 20px 20px; 
+          text-indent: 30px;
           `
         )
     },
@@ -359,7 +363,6 @@ export default {
   width: 25px;
   height: 25px;
   margin-right: 7px;
-  background: url(../../../assets/images/selectError.png) no-repeat;
 }
 
 .inputStatus input {
