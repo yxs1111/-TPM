@@ -5,7 +5,7 @@
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="Mine Package" prop="name">
         <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+          <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="客户" prop="name">
@@ -24,22 +24,14 @@
       <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
       <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
     </div>
-    <el-table
-      v-loading="tableLoading"
-      :data="tableData"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      stripe
-      style="width: 100%"
-    >
+    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%">
       <el-table-column width="" align="center" prop="channelCode" label="版本" />
       <el-table-column width="" align="center" prop="channelCsName" label="验证规则" />
       <el-table-column width="150" align="center" prop="productCode" label="" />
       <el-table-column width="320" align="center" prop="productCsName" label="">
-        <template>
-          <el-select v-model="filterObj.category" placeholder="请选择" size="small">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+        <template slot-scope="{row}">
+          <el-select v-model="row.errorType" placeholder="请选择" size="small">
+            <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
           </el-select>
         </template>
       </el-table-column>
@@ -51,22 +43,12 @@
         </template>
       </el-table-column>
       <el-table-column width="" align="center" prop="volMix" label="异常类型">
-        <template>
-          <el-select
-            ref="refSelect"
-            v-model="filterObj.category"
-            style="width: 100%"
-            placeholder="请选择图标"
-            @change="changeSelection"
-          >
-            <el-option
-              v-for="item in categoryArr"
-              :key="item.name"
-              :value="item.name"
-            >
+        <template slot-scope="{row}">
+          <el-select ref="refSelect" v-model="row.ErrorType" style="width: 100%" placeholder="请选择图标" @change="changeSelection">
+            <el-option v-for="item in optionsImg" :key="item.id" :value="item.label" :label="item.label">
               <div class="option_box">
-                <el-image class="option_img" src="../../../assets/images/selectError.png" />
-                <span v-text="111" />
+                <el-image class="option_img" :src="item.valueImg" />
+                {{item.label}}
               </div>
             </el-option>
           </el-select>
@@ -75,15 +57,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
       <div class="el-dialogContent">
@@ -142,7 +117,7 @@ export default {
       filterObj: {
         name: '',
         key: '',
-        category: ''
+        category: '',
       },
       tableLoading: '',
       categoryArr: [{ label: '19号线', value: '19' }],
@@ -154,8 +129,9 @@ export default {
           productCode: '',
           productCsName: '',
           gear: '',
-          volMix: ''
-        }
+          volMix: '',
+          errorType:'',
+        },
       ],
       ruleForm: {
         channelCode: '',
@@ -166,21 +142,35 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       },
       rules: {
         channelCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       dialogVisible: false,
       isEditor: '',
       editorId: '',
-      checkArr: [] // 批量删除,存放选中
+      checkArr: [], // 批量删除,存放选中
+      //异常数组
+      optionsImg: [
+        {
+          id: 0,
+          label: 'Error',
+          valueImg: require('@/assets/images/selectError.png'),
+        },
+        {
+          id: 1,
+          label: 'Exception',
+          valueImg: require('@/assets/images/warning.png'),
+        },
+      ],
+      ErrorType: '', //异常类型
     }
   },
   computed: {},
@@ -190,25 +180,28 @@ export default {
   methods: {
     // select标签的change事件
     changeSelection(val) {
+      console.log(val)
       let optionsImg = this.optionsImg
       let i = optionsImg.findIndex((item) => item.label === val)
-      this.$refs['refSelect']
-        .$el.children[0]
-        .children[0]
-        .setAttribute(
-          'style',
+      this.ErrorType = val
+      this.$refs['refSelect'].$el.children[0].children[0].setAttribute(
+        'style',
+        `background: url(${optionsImg[i].valueImg}) no-repeat; 
+         background-position: 10px center; 
+				background-size: 20px 20px!important;
+				text-indent: 30px;
+          
           `
-          background-color: red;
-          background: url(../../../assets/images/selectError.png) no-repeat; 
-          `
-        )
+      )
+      this.$forceUpdate()
+      console.log(this.ErrorType)
     },
     // 获取表格数据
     getTableData() {
       this.tableLoading = true
       API.getPageMdPriceGear({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -238,7 +231,7 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       }
     },
     editor(obj) {
@@ -253,7 +246,7 @@ export default {
         gear: obj.gear,
         volMin: obj.volMin,
         yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark
+        remark: obj.remark,
       }
       this.editorId = obj.id
     },
@@ -273,7 +266,7 @@ export default {
             gear: this.ruleForm.gear,
             volMin: this.ruleForm.volMin,
             yearAndMonth: this.ruleForm.yearAndMonth,
-            remark: this.ruleForm.remark
+            remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
@@ -298,7 +291,7 @@ export default {
         this.$confirm('确定要删除数据吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
         })
           .then(() => {
             API.deleteMdPriceGear(IdList).then((response) => {
@@ -311,7 +304,7 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消'
+              message: '已取消',
             })
           })
       }
@@ -344,8 +337,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -353,19 +346,20 @@ export default {
 .option_box {
   display: flex;
   align-items: center;
+  background-color: #fff;
 }
 
 .option_img {
   width: 25px;
   height: 25px;
   margin-right: 7px;
-  background: url(../../../assets/images/selectError.png) no-repeat;
+  // background: url(../../../assets/images/selectError.png) no-repeat;
 }
 
 .inputStatus input {
   background: url(../../../assets/images/selectError.png) no-repeat;
 }
-.inputStatus div{
+.inputStatus div {
   background-color: blueviolet;
 }
 // .el-select>.el-input input{
