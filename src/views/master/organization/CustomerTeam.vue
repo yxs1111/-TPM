@@ -1,51 +1,33 @@
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
-    <div class="SelectBarWrap">
-      <div class="SelectBar">
-        <div class="Selectli">
-          <span class="SelectliTitle">SKU</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">月份</span>
-          <el-date-picker v-model="filterObj.month" type="month" placeholder="选择月">
-          </el-date-picker>
-        </div>
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
-      </div>
-      <div class="OpertionBar">
-        <div class="TpmButtonBG">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出</span>
-        </div>
-        <div class="TpmButtonBG">
-          <svg-icon icon-class="submit" />
-          <span class="text">提交</span>
-        </div>
-      </div>
-    </div>
-    <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" >新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" >删除</el-button>
-      <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
-    </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
-      style="width: 100%">
-      <el-table-column type="selection" align="center" />
-      <el-table-column fixed align="center" label="操作" width="100">
-        <template slot-scope="{ row }">
-          <div class="table_operation">
-            <div class="table_operation_detail" @click="editor(row)">
-              <i class="el-icon-edit-outline"></i>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="brandCode" label="品牌编码"> </el-table-column>
-      <el-table-column align="center" prop="brandName" label="品牌名称"> </el-table-column>
+    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
+      <el-form-item label="模型名称" prop="name">
+        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+      </el-form-item>
+      <el-form-item label="模型关键词" prop="name">
+        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
+      </el-form-item>
+      <el-form-item label="分类" prop="name">
+        <el-select v-model="filterObj.category" placeholder="请选择">
+          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button  type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button  class="TpmButtonBG">重置</el-button>
+      </el-form-item>
+    </el-form>
+    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column type="selection"/>
+      <el-table-column align="center" prop="customerCode" label="客户编号"> </el-table-column>
+      <el-table-column align="center" prop="customerCsName" label="客户中文名称"> </el-table-column>
+      <el-table-column align="center" prop="customerCsName" label="客户英文名称"> </el-table-column>
+      <el-table-column align="center" prop="customerType" label="客户类型"> </el-table-column>
+      <el-table-column align="center" prop="address" label="组织架构"> </el-table-column>
+      <el-table-column align="center" prop="address" label="渠道"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -69,7 +51,7 @@ import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
-  name: 'AbnormalAnalysisMonth',
+  name: 'CustomerTeam',
 
   data() {
     return {
@@ -77,27 +59,27 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        type: '',
-        month: '',
+        name: '',
+        key: '',
         category: '',
       },
       tableLoading: '',
       categoryArr: [{ label: '19号线', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      checkArr: [], //批量删除,存放选中
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
-    // this.getTableData()
+    this.getTableData()
   },
   computed: {},
   methods: {
     //获取表格数据
     getTableData() {
       this.tableLoading = true
-      this.tableData = []
-      API.getPageMdBrand({
+      API.getPageMdCustomer({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })

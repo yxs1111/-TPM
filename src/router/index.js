@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-11-17 17:33:57
+ * @LastEditTime: 2021-11-16 14:06:23
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -15,7 +15,7 @@ import common from '@/router/routers/common'
 import system from '@/router/routers/system'
 import sample from '@/router/routers/sample'
 import activiti from '@/router/routers/activiti'
-import V0 from '@/router/routers/V0'
+import cityPlan from '@/router/routers/cityplan'
 import V1 from '@/router/routers/V1'
 import V2 from '@/router/routers/V2'
 import V3 from '@/router/routers/V3'
@@ -50,8 +50,8 @@ import store from "@/store";
  */
 export const constantRoutes = [
   ...common,
-  //...sample,
-  ...V0(),
+  ...sample,
+  ...cityPlan(),
   ...V1(),
   ...V2(),
   ...V3(),
@@ -69,7 +69,7 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   
-  // ...meta,
+  ...meta,
   ...base,
   // 404 page must be placed at the end !!!
   { path: '*', code: '404', redirect: '/dashboard', meta: { title: '首页', icon: 'dashboard' }, hidden: true }

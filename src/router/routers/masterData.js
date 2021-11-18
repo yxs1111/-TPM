@@ -46,6 +46,13 @@ export default function() {
               name: 'Dealers',
               component: () => import('@/views/master/organization/Dealers.vue'),
               meta: { title: '经销商', icon: 'form' }
+            },
+            {
+              path: '/organization/Supplier',
+              code: 'Supplier',
+              name: 'Supplier',
+              component: () => import('@/views/master/organization/Supplier.vue'),
+              meta: { title: '供应商', icon: 'form' }
             }
           ]
         },
@@ -89,9 +96,9 @@ export default function() {
               meta: { title: '费用科目', icon: 'form' }
             },
             {
-              path: '/RoleCostType',
-              code: 'RoleCostType',
-              name: 'RoleCostType',
+              path: '/RoleCostSubjectControl',
+              code: 'RoleCostSubjectControl',
+              name: 'RoleCostSubjectControl',
               component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
               meta: { title: '费用类型', icon: 'form' }
             }
@@ -107,39 +114,39 @@ export default function() {
           children: [
             // 促销计算维护
             {
-              path: '/priceSale/saleComputeKeep',
-              name: 'saleComputeKeep',
+              path: '/ruleCtrl/splitRules',
+              name: 'SplitRules',
               component: () =>
                 import(
-                  '@/views/master/priceSale/saleComputeKeep.vue'
+                  '@/views/master/ruleCtrl/splitRules.vue'
                 ),
               meta: {
-                title: '促销计算维护',
+                title: '拆分规则',
                 icon: 'form'
               }
             },
             // 价格主数据
             {
-              path: '/priceSale/priceMasterData',
-              name: 'PriceMasterData',
+              path: '/ruleCtrl/testRules',
+              name: 'TestRules',
               component: () =>
                 import(
-                  '@/views/master/priceSale/priceMasterData.vue'
+                  '@/views/master/ruleCtrl/testRules.vue'
                 ),
               meta: {
-                title: '价格主数据',
+                title: '检验规则',
                 icon: 'form'
               }
             },
-            { // 价格档位维护
-              path: '/priceSale/priceLevelKeep',
-              name: 'PriceLevelKeep',
+            {
+              path: '/ruleCtrl/newUserC',
+              name: 'NewUserC',
               component: () =>
                 import(
-                  '@/views/master/priceSale/priceLevelKeep.vue'
+                  '@/views/master/ruleCtrl/newUserC.vue'
                 ),
               meta: {
-                title: '价格档位维护',
+                title: '新客达成率',
                 icon: 'form'
               }
             }
@@ -155,7 +162,7 @@ export default function() {
             // 促销计算维护
             {
               path: '/priceSale/saleComputeKeep',
-              name: 'saleComputeKeep',
+              name: 'SaleComputeKeep',
               component: () =>
                 import(
                   '@/views/master/priceSale/saleComputeKeep.vue'
@@ -197,8 +204,15 @@ export default function() {
               component: () => import('@/views/master/priceSale/PriceStallMasterData.vue'),
               meta: { title: '价格档位', icon: 'form' }
             },
+            {
+              path: '/priceSale/systemPool',
+              code: 'SystemPool',
+              name: 'SystemPool',
+              component: () => import('@/views/master/priceSale/systemPool.vue'),
+              meta: { title: '机制池', icon: 'form' }
+            }
           ]
-        },
+        }
 
         // {
         //   path: '/CoastType',

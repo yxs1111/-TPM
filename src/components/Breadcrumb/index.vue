@@ -1,8 +1,3 @@
-<!--
- * @Description: 
- * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-11-17 17:02:57
--->
 <template>
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
@@ -80,12 +75,10 @@ export default {
   font-size: 14px;
   line-height: 50px;
   margin-left: 8px;
-  color: #333;
-  font-weight: 600;
+
   .no-redirect {
-    color: #4192d3;
-    cursor: pointer;
-    font-weight: 600;
+    color: #97a8be;
+    cursor: text;
   }
 }
 </style>
