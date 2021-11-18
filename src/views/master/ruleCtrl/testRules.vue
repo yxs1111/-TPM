@@ -5,7 +5,7 @@
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="Mine Package" prop="name">
         <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
+          <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="客户" prop="name">
@@ -24,22 +24,14 @@
       <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
       <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
     </div>
-    <el-table
-      v-loading="tableLoading"
-      :data="tableData"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      stripe
-      style="width: 100%"
-    >
+    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%">
       <el-table-column width="" align="center" prop="channelCode" label="版本" />
       <el-table-column width="" align="center" prop="channelCsName" label="验证规则" />
       <el-table-column width="150" align="center" prop="productCode" label="" />
-      <el-table-column width="320" align="center" label="">
-        <template>
-          <el-select v-model="filterObj.category" placeholder="请选择" size="small">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
+      <el-table-column width="320" align="center" prop="productCsName" label="">
+        <template slot-scope="{row}">
+          <el-select v-model="row.errorType" placeholder="请选择" size="small">
+            <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
           </el-select>
         </template>
       </el-table-column>
@@ -51,22 +43,12 @@
         </template>
       </el-table-column>
       <el-table-column width="" align="center" prop="volMix" label="异常类型">
-        <template>
-          <el-select
-            ref="refSelect"
-            v-model="filterObj.category"
-            style="width: 100%"
-            placeholder="请选择图标"
-            @change="changeSelection"
-          >
-            <el-option
-              v-for="item in categoryArr"
-              :key="item.name"
-              :value="item.name"
-            >
+        <template slot-scope="{row}">
+          <el-select ref="refSelect" v-model="row.ErrorType" style="width: 100%" placeholder="请选择图标" @change="changeSelection">
+            <el-option v-for="item in optionsImg" :key="item.id" :value="item.label" :label="item.label">
               <div class="option_box">
-                <el-image class="option_img" :src="require('@/assets/images/selectError.png')" />
-                <span v-text="111" />
+                <el-image class="option_img" :src="item.valueImg" />
+                {{ item.label }}
               </div>
             </el-option>
           </el-select>
@@ -155,7 +137,8 @@ export default {
           productCode: '',
           productCsName: '',
           gear: '',
-          volMix: ''
+          volMix: '',
+          errorType: ''
         }
       ],
       ruleForm: {
@@ -181,7 +164,21 @@ export default {
       dialogVisible: false,
       isEditor: '',
       editorId: '',
-      checkArr: [] // 批量删除,存放选中
+      checkArr: [], // 批量删除,存放选中
+      // 异常数组
+      optionsImg: [
+        {
+          id: 0,
+          label: 'Error',
+          valueImg: require('@/assets/images/selectError.png')
+        },
+        {
+          id: 1,
+          label: 'Exception',
+          valueImg: require('@/assets/images/warning.png')
+        }
+      ],
+      ErrorType: '' // 异常类型
     }
   },
   computed: {},
@@ -191,21 +188,21 @@ export default {
   methods: {
     // select标签的change事件
     changeSelection(val) {
-      // let optionsImg = this.optionsImg
-      // let i = optionsImg.findIndex((item) => item.label === val)
-      debugger
-      this.$refs['refSelect']
-        .$el.children[0]
-        .children[0]
-        .setAttribute(
-          'style',
+      console.log(val)
+      const optionsImg = this.optionsImg
+      const i = optionsImg.findIndex((item) => item.label === val)
+      this.ErrorType = val
+      this.$refs['refSelect'].$el.children[0].children[0].setAttribute(
+        'style',
+        `background: url(${optionsImg[i].valueImg}) no-repeat; 
+         background-position: 10px center; 
+				background-size: 20px 20px!important;
+				text-indent: 30px;
+          
           `
-          background: url('@/assets/images/selectError.png') no-repeat; 
-          background-position: 10px center; 
-          background-size: 20px 20px; 
-          text-indent: 30px;
-          `
-        )
+      )
+      this.$forceUpdate()
+      console.log(this.ErrorType)
     },
     // 获取表格数据
     getTableData() {
@@ -357,18 +354,20 @@ export default {
 .option_box {
   display: flex;
   align-items: center;
+  background-color: #fff;
 }
 
 .option_img {
   width: 25px;
   height: 25px;
   margin-right: 7px;
+  // background: url(../../../assets/images/selectError.png) no-repeat;
 }
 
 .inputStatus input {
   background: url(../../../assets/images/selectError.png) no-repeat;
 }
-.inputStatus div{
+.inputStatus div {
   background-color: blueviolet;
 }
 // .el-select>.el-input input{
