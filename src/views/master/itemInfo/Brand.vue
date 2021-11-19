@@ -2,11 +2,11 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="模型名称" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+      <el-form-item label="品牌编码" prop="name">
+        <el-input v-model="filterObj.name" placeholder="请输入" />
       </el-form-item>
-      <el-form-item label="模型关键词" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
+      <el-form-item label="品牌名称" prop="name">
+        <el-input v-model="filterObj.key" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="分类" prop="name">
         <el-select v-model="filterObj.category" placeholder="请选择">
@@ -23,7 +23,6 @@
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-      <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
