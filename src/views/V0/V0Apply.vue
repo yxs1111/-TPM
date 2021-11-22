@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-16 14:11:06
+ * @LastEditTime: 2021-11-18 13:41:56
 -->
 <template>
   <div class="app-container">
@@ -23,15 +23,15 @@
         </div>
         <div class="OpertionBar">
           <div class="TpmButtonBG" @click="getCPTData">
-            <img src="../../assets/images/huoqu.png" alt="">
+            <img src="../../assets/images/huoqu.png" alt="" />
             <span class="text">获取CPT数据</span>
           </div>
           <div class="TpmButtonBG" @click="importData">
-            <img src="../../assets/images/import.png" alt="">
+            <img src="../../assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
           <div class="TpmButtonBG">
-            <img src="../../assets/images/export.png" alt="">
+            <img src="../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
           <div class="TpmButtonBG">
@@ -88,7 +88,7 @@
           </div>
           <div class="contentInfoWrap">
             <el-table :data="tableData" class="customTable" :summary-method="getSummaries" show-summary border :header-cell-style="HeadTable" :cell-style="columnStyle"
-               style="width: 100%">
+              style="width: 100%">
               <el-table-column width="150" fixed>
                 <template slot="header">
                   <div></div>
@@ -150,10 +150,13 @@
 
         <div class="fileInfo">
           <div class="fileTitle">文件</div>
-          <el-button type="primary" class="my-search selectFile">选择文件</el-button>
-          <div class="fileName">
+          <el-upload  ref="upload" action="/"  :auto-upload="false" :on-change="openFile"  accept="csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+            <el-button type="primary" class="my-search selectFile">选择文件</el-button>
+          </el-upload>
+
+          <div class="fileName" v-if="uploadFileName!=''">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-            <span>文件名文件名文件名.XLSX</span>
+            <span>{{uploadFileName}}</span>
           </div>
         </div>
         <div class="seeData">
@@ -173,13 +176,13 @@
         </div>
         <div class="tableWrap">
           <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
-                background: '#fff',
-                color: '#333',
-                fontSize: '16px',
-                textAlign: 'center',
-                fontWeight: 400,
-                fontFamily: 'Source Han Sans CN'
-              }" :row-class-name="tableRowClassName" stripe>
+              background: '#fff',
+              color: '#333',
+              fontSize: '16px',
+              textAlign: 'center',
+              fontWeight: 400,
+              fontFamily: 'Source Han Sans CN'
+            }" :row-class-name="tableRowClassName" stripe>
             <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
             </el-table-column>
             <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
@@ -266,8 +269,6 @@ export default {
         ],
       },
       dialogVisible: false,
-      isEditor: '',
-      editorId: '',
       //导入
       importVisible: false, //导入弹窗
       filterImportData: { sku: '' }, //筛选导入数据
@@ -318,6 +319,7 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄',
         },
       ],
+      uploadFileName:'',
     }
   },
   directives: { elDragDialog, permission },
@@ -384,6 +386,12 @@ export default {
     //导入数据
     importData() {
       this.importVisible = true
+    },
+    //打开文件
+    openFile(file) {
+      console.log(file)
+      this.uploadFileName=file.name
+      this.$refs.upload.clearFiles(); //去掉文件列表
     },
     //关闭导入
     closeimportDialog() {
@@ -486,9 +494,12 @@ export default {
       }
     }
   }
+  .hide {
+    display: none;
+  }
 }
 </style>
-<style  lang="scss">
+<style lang="scss">
 // 合计行样式
 .el-table__footer-wrapper tbody td,
 .el-table__header-wrapper tbody td {

@@ -627,6 +627,9 @@ div:focus {
       }
     }
   }
+  .ImportContent {
+    justify-content: center;
+  }
   .seeData {
     width: 100%;
     display: flex;
@@ -765,5 +768,43 @@ div:focus {
     .el-input__suffix {
       top: 3px;
     }
+  }
+}
+// 表格操作
+.table_operation {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  .table_operation_submit {
+    width: 26px;
+    height: 26px;
+    border: 1px solid #07c160;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .table_operation_detail {
+    width: 26px;
+    height: 26px;
+    border: 1px solid #3694fe;
+    color: #3694fe;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .table_operation_delete {
+    width: 26px;
+    height: 26px;
+    border: 1px solid #cb2d32;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    color: #cb2d32;
+    align-items: center;
+    cursor: pointer;
   }
 }

@@ -1,12 +1,13 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-11-05 10:33:52
+ * @LastEditTime: 2021-11-19 17:17:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
  */
 import requestApi from '@/api/request-api'
+import request from '@/utils/request'
 
 export default {
 
@@ -159,6 +160,32 @@ export default {
   },
   getMdChannelList(params) {
     return requestApi.request_get('/mdm/mdChannel/getMdChannelList', params)
+  },
+
+  // 供应商信息
+  getPageMdSupplier(params) {
+    return requestApi.request_get('/mdm/mdSupplier/getPage', params)
+  },
+  insertMdSupplier(params) {
+    return requestApi.request_post('/mdm/mdSupplier/insert', params)
+  },
+  updateMdSupplier(params) {
+    return requestApi.request_put('/mdm/mdSupplier/update', params)
+  },
+  deleteMdSupplier(params) {
+    return requestApi.request_delete('/mdm/mdSupplier/delete', params)
+  },
+  importSupplier(params) {
+    return requestApi.request_post('/mdm/mdSupplier/importSupplier', params)
+  },
+  exportSupplier(params) {
+    return request({
+      url: 'mdm/mdSupplier/exportSupplier',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
+    // return requestApi.request_post('/mdm/mdSupplier/exportSupplier', params)
   }
 
 }
