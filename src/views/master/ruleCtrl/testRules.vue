@@ -3,47 +3,53 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="Mine Package" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
+      <el-form-item label="Mine Package：">
+        <el-select v-model="filterObj.minePackage" placeholder="请选择" clearable>
+          <el-option v-for="item in minePackage" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
         </el-select>
       </el-form-item>
-      <el-form-item label="客户" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
+      <el-form-item label="渠道：">
+        <el-select v-model="filterObj.channel" placeholder="请选择" clearable>
+          <el-option v-for="item in channelArr" :key="item.channelCode" :label="item.channelCode" :value="item.channelCode" />
         </el-select>
       </el-form-item>
-      <el-form-item label="年月" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+      <el-form-item label="年月：">
+        <el-date-picker
+          v-model="filterObj.date"
+          type="month"
+          value-format="yyyyMM"
+          format="yyyyMM"
+          placeholder="选择月"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="getTableData">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
       <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%">
-      <el-table-column width="" align="center" prop="channelCode" label="版本" />
-      <el-table-column width="" align="center" prop="channelCsName" label="验证规则" />
-      <el-table-column width="150" align="center" prop="productCode" label="" />
-      <el-table-column width="320" align="center" prop="productCsName" label="">
-        <template slot-scope="{row}">
-          <el-select v-model="row.errorType" placeholder="请选择" size="small">
+    <el-table v-loading="tableLoading" :data="tableData" :span-method="objectSpanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column width="" align="center" prop="version" label="版本" />
+      <el-table-column width="" align="left" prop="ruleContentFront" label="验证规则" />
+      <el-table-column width="100" align="left" prop="ruleUnit" label="" />
+      <el-table-column width="320" align="left" prop="ruleContentAfter" label="">
+        <!-- <template slot-scope="{row}">
+          <el-select v-model="row.ruleContentAfter" placeholder="请选择" size="small">
             <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
           </el-select>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column width="" align="center" prop="gear" label="验证类型">
-        <template>
+      <el-table-column width="" align="left" prop="checkType" label="验证类型">
+        <!-- <template>
           <el-select v-model="filterObj.category" placeholder="请选择" size="small">
             <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
           </el-select>
-        </template>
+        </template> -->
       </el-table-column>
-      <el-table-column width="" align="center" prop="volMix" label="异常类型">
-        <template slot-scope="{row}">
+      <el-table-column width="" align="left" prop="exceptionType" label="异常类型">
+        <!-- <template slot-scope="{row}">
           <el-select ref="refSelect" v-model="row.ErrorType" style="width: 100%" placeholder="请选择图标" @change="changeSelection">
             <el-option v-for="item in optionsImg" :key="item.id" :value="item.label" :label="item.label">
               <div class="option_box">
@@ -52,7 +58,7 @@
               </div>
             </el-option>
           </el-select>
-        </template>
+        </template> -->
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -123,24 +129,14 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: ''
+        minePackage: '',
+        channel: '',
+        date: ''
       },
-      tableLoading: '',
+      tableLoading: false,
       categoryArr: [{ name: '19号线', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          channelCode: '111',
-          channelCsName: '',
-          productCode: '',
-          productCsName: '',
-          gear: '',
-          volMix: '',
-          errorType: ''
-        }
-      ],
+      tableData: [],
       ruleForm: {
         channelCode: '',
         channelCsName: '',
@@ -178,17 +174,101 @@ export default {
           valueImg: require('@/assets/images/warning.png')
         }
       ],
-      ErrorType: '' // 异常类型
+      ErrorType: '', // 异常类型
+      minePackage: [],
+      channelArr: [],
+      V0Total: 0,
+      V1Total: 0,
+      V2Total: 0,
+      V3Total: 0
     }
   },
   computed: {},
   mounted() {
-    // this.getTableData()
+    this.getChannel()
+    this.getCostTypeList()
+    this.getTableData()
+    // 获取下拉框
   },
   methods: {
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (row.version === 'V0') {
+        if (columnIndex === 0) {
+          if (rowIndex % this.V0Total === 0) {
+            return {
+              rowspan: this.V0Total,
+              colspan: 1
+            }
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            }
+          }
+        }
+      } else if (row.version === 'V1') {
+        if (columnIndex === 0) {
+          if ((rowIndex - this.V0Total) % this.V1Total === 0) {
+            return {
+              rowspan: this.V1Total,
+              colspan: 1
+            }
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            }
+          }
+        }
+      } else if (row.version === 'V2') {
+        if (columnIndex === 0) {
+          if ((rowIndex - this.V0Total - this.V1Total) % this.V2Total === 0) {
+            return {
+              rowspan: this.V2Total,
+              colspan: 1
+            }
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            }
+          }
+        }
+      } else if (row.version === 'V3') {
+        if (columnIndex === 0) {
+          if ((rowIndex - this.V0Total - this.V1Total - this.V2Total) % this.V3Total === 0) {
+            return {
+              rowspan: this.V3Total,
+              colspan: 1
+            }
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            }
+          }
+        }
+      }
+    },
+    // mine package
+    getCostTypeList() {
+      var params = { costLevel: 2 }
+      API.getCostTypeList(params).then(res => {
+        if (res.code === 1000) {
+          this.minePackage = res.data
+        }
+      }).catch()
+    },
+    // 渠道
+    getChannel() {
+      API.getMdChannelList().then(res => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      }).catch()
+    },
     // select标签的change事件
     changeSelection(val) {
-      console.log(val)
       const optionsImg = this.optionsImg
       const i = optionsImg.findIndex((item) => item.label === val)
       this.ErrorType = val
@@ -207,18 +287,39 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableLoading = true
-      API.getPageMdPriceGear({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+      API.getPageByDto({
+        channelCode: this.filterObj.channel,
+        minePackage: this.filterObj.minePackage,
+        yearAndMonth: this.filterObj.date,
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       })
         .then((response) => {
           this.tableLoading = false
           this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
           this.total = response.data.total
+          this.computerColspan(this.tableData)
         })
         .catch(() => {})
+    },
+    // 计算各版本的条数
+    computerColspan(data) {
+      // 初始化
+      this.V0Total = 0
+      this.V1Total = 0
+      this.V2Total = 0
+      this.V3Total = 0
+      for (const ele of data) {
+        if (ele.version === 'V0') {
+          this.V0Total += 1
+        } else if (ele.version === 'V1') {
+          this.V1Total += 1
+        } else if (ele.version === 'V2') {
+          this.V2Total += 1
+        } else if (ele.version === 'V3') {
+          this.V3Total += 1
+        }
+      }
     },
     add() {
       this.dialogVisible = true
@@ -328,10 +429,12 @@ export default {
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size
+      this.tableLoading = true
       this.getTableData()
     },
     // 当前页变更
     handleCurrentChange(num) {
+      this.tableLoading = true
       this.pageNum = num
       this.getTableData()
     },
@@ -344,13 +447,37 @@ export default {
       }
     },
     HeadTable() {
-      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+      return ' background: #fff;color: #333;font-size: 16px;font-weight: 400;font-family: Source Han Sans CN;border-right:none;'
+    },
+    // 单元格样式
+    cellStyle(val) {
+      console.log('******val*******', val)
+      // 待定判断cols 设置边框
+      if (val.column.colSpan === 5) {
+        return 'border:1px solid #EBEEF5;;'
+      }
+      if (val.columnIndex === 0) {
+        return 'background:white;border:none;'
+      } else {
+        return 'border:none;'
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+// ::v-deep .el-table__body tr:hover > td{
+//     background-color:yellow !important;
+// }
+table th{
+     border-bottom: none;
+}
+
+table th {
+    border-right: none;
+}
+
 .option_box {
   display: flex;
   align-items: center;
@@ -364,18 +491,4 @@ export default {
   // background: url(../../../assets/images/selectError.png) no-repeat;
 }
 
-.inputStatus input {
-  background: url(../../../assets/images/selectError.png) no-repeat;
-}
-.inputStatus div {
-  background-color: blueviolet;
-}
-// .el-select>.el-input input{
-//     display: block;
-//     margin: 10px 0;
-//     background: url(../../../assets/images/selectError.png) no-repeat;
-//     background-position: 3px;
-//     padding-left: 30px;
-//     outline: none;
-// }
 </style>
