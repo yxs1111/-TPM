@@ -34,6 +34,13 @@ export default function() {
               meta: { title: '客户', icon: 'form' }
             },
             {
+              path: '/organization/CustomerTeam',
+              code: 'CustomerTeam',
+              name: 'CustomerTeam',
+              component: () => import('@/views/master/organization/CustomerTeam.vue'),
+              meta: { title: '客户组', icon: 'form' }
+            },
+            {
               path: '/organization/Store',
               code: 'Store',
               name: 'Store',

@@ -20,16 +20,16 @@
             <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="importData">
-        <img src="../../../assets/images/import.png" alt="">
+        <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG" @click="exportData">
-        <img src="../../../assets/images/export.png" alt="">
+        <img src="@/assets/images/export.png" alt="">
         <span class="text">导出</span>
       </div>
     </div>
@@ -56,10 +56,6 @@
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
-        <!-- <el-upload ref="upload" action="/" :auto-upload="false" :on-change="openFile"
-          accept="csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-          <el-button type="primary" class="my-search selectFile">选择文件</el-button>
-        </el-upload> -->
         <el-button size="mini" class="el_user_btn user_portIn" @click="parsingExcelBtn">导入
           <i class="iconfont icon-piliangdaoru icon_font"></i>
         </el-button>

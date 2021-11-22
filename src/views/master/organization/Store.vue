@@ -37,13 +37,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="store_code" label="门店编码"> </el-table-column>
-      <el-table-column align="center" prop="store_name" label="门店名称"> </el-table-column>
-      <el-table-column align="center" prop="channel_code" label="渠道编码"> </el-table-column>
-      <el-table-column align="center" prop="customer_code" label="客户编码"> </el-table-column>
-      <el-table-column align="center" prop="distributor_code" label="经销商编码"> </el-table-column>
-      <el-table-column align="center" prop="customer_cs_name" label="客户中文名称"> </el-table-column>
-      <el-table-column align="center" prop="distributor_name" label="经销商名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="storeCode" label="门店编码"> </el-table-column>
+      <el-table-column width="250" align="center" prop="storeName" label="门店名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="channelCode" label="渠道编码"> </el-table-column>
+      <el-table-column width="150" align="center" prop="customerCode" label="客户编码"> </el-table-column>
+      <el-table-column width="150" align="center" prop="distributorCode" label="经销商编码"> </el-table-column>
+      <el-table-column width="250" align="center" prop="customerCode" label="客户中文名称"> </el-table-column>
+      <el-table-column width="250" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -51,11 +51,11 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
+      <!-- <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="创建时间"> </el-table-column>
       <el-table-column width="150" align="center" prop="updateBy" label="修改人"> </el-table-column>
       <el-table-column width="150" align="center" prop="updateDate" label="修改时间"> </el-table-column>
-      <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column>
+      <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column> -->
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -65,16 +65,28 @@
     <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '品牌信息'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="品牌编号" v-show="!isEditor">
-            <el-input v-model="ruleForm.brandCode" class="my-el-input" placeholder="请输入">
+          <el-form-item label="门店编码" v-show="!isEditor">
+            <el-input v-model="ruleForm.storeCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="品牌编号" v-show="isEditor">
-            <el-input v-model="ruleForm.brandCode" disabled class="my-el-input" placeholder="请输入">
+          <el-form-item label="门店编码" v-show="isEditor">
+            <el-input v-model="ruleForm.storeCode" disabled class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="品牌名称">
-            <el-input v-model="ruleForm.brandName" class="my-el-input" placeholder="请输入">
+          <el-form-item label="门店名称">
+            <el-input v-model="ruleForm.storeName" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="渠道编号">
+            <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="客户编号">
+            <el-input v-model="ruleForm.customerCode" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="经销商编码">
+            <el-input v-model="ruleForm.distributorCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
           <el-form-item label="备注">
@@ -115,8 +127,11 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       ruleForm: {
-        brandCode: '',
-        brandName: '',
+        storeCode: '',
+        storeName: '',
+        customerCode: '',
+        channelCode: '',
+        distributorCode: '',
         remark: '',
       },
       rules: {
@@ -168,8 +183,11 @@ export default {
       this.isEditor = false
       this.editorId = ''
       this.ruleForm = {
-        brandCode: '',
-        brandName: '',
+        storeCode: '',
+        storeName: '',
+        customerCode: '',
+        channelCode: '',
+        distributorCode: '',
         remark: '',
       }
     },
@@ -177,8 +195,11 @@ export default {
       this.isEditor = true
       this.dialogVisible = true
       this.ruleForm = {
-        brandCode: obj.brandCode,
-        brandName: obj.brandName,
+        storeCode: obj.storeCode,
+        storeName: obj.storeName,
+        customerCode: obj.customerCode,
+        channelCode: obj.channelCode,
+        distributorCode: obj.distributorCode,
         remark: obj.remark,
       }
       this.editorId = obj.id
@@ -190,8 +211,11 @@ export default {
           let url = this.isEditor ? API.updateMdStore : API.insertMdStore
           url({
             id: this.editorId,
-            brandCode: this.ruleForm.brandCode,
-            brandName: this.ruleForm.brandName,
+            storeCode: this.ruleForm.storeCode,
+            storeName: this.ruleForm.storeName,
+            customerCode: this.ruleForm.customerCode,
+            channelCode: this.ruleForm.channelCode,
+            distributorCode: this.ruleForm.distributorCode,
             remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {

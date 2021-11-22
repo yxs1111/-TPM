@@ -37,37 +37,34 @@
     <el-table ref="roleTable" v-loading="searchLoading" :data="rolePageProps.records" element-loading-text="正在查询" border fit stripe height="600" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
-          {{ scope.$index+1 }}
+          <div>
+            {{ (rolePageProps.pageNum - 1) * rolePageProps.pageSize + 1 + scope.$index }}
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="角色名称" align="center">
-        <template slot-scope="{row}">
-          {{ row.name }}
-        </template>
-      </el-table-column>
-      <el-table-column label="创建人" align="center">
-        <template slot-scope="{row}">
-          {{ row.createBy }}
-        </template>
-      </el-table-column>
+      <el-table-column fixed width="280" label="角色名称" align="center" prop="name"></el-table-column>
+      <el-table-column fixed label="权限区分类型" align="center" prop="permissionType"></el-table-column>
+      <el-table-column label="创建人" align="center" prop="createBy"></el-table-column>
       <el-table-column align="center" prop="created_date" label="创建时间">
         <template slot-scope="{row}">
           <em class="el-icon-time" />
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="锁定状态" align="center">
+      <el-table-column class-name="status-col" label="状态" align="center">
         <template slot-scope="{row}">
           <el-tag :type="row.locked | lockedStatusFilter">{{ row.locked | lockedWordFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="430" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="480" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini">
-             数据权限绑定
-             <!-- (下边权限管理整合到这里) -->
+            数据权限绑定
+          </el-button>
+          <el-button type="primary" size="mini" @click="showPermission(row)">
+            功能权限绑定
           </el-button>
           <el-button type="primary" size="mini" @click="editRowData(row)">
             {{ $t('table.edit') }}
@@ -75,15 +72,16 @@
           <el-button size="mini" type="danger" @click="handleDelete(row)">
             {{ $t('table.delete') }}
           </el-button>
-          <el-button size="mini" type="default" @click="getRowData(row)">
-            {{ $t('table.detail') }}
-          </el-button>
+
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="rolePageProps.total" :page-size="rolePageProps.pageSize"
-      :current-page="rolePageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <div class="TpmPaginationWrap">
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="rolePageProps.total" :page-size="rolePageProps.pageSize"
+        :current-page="rolePageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    </div>
+
     <!--信息框-->
     <el-dialog v-el-drag-dialog :title="textMap[roleDialog.state]" :visible.sync="roleDialog.visible" @dragDialog="handleDrag">
       <el-form ref="roleDataForm" :rules="rules" :model="roleDialog.data" label-position="left" label-width="120px" style="width: 600px; margin-left:50px;">
@@ -138,8 +136,8 @@
         <el-button v-if="multipleSelection && multipleSelection.length>0" type="primary" @click="handleDeleteRows">确 定</el-button>
       </span>
     </el-dialog>
-    <!--权限绑定框-->
-    <el-dialog v-el-drag-dialog title="权限绑定" :visible.sync="rolePermissionDialog.visible" top="3vh" width="70%" @dragDialog="handleDrag">
+    <!--功能权限绑定框-->
+    <el-dialog v-el-drag-dialog title="功能权限绑定" :visible.sync="rolePermissionDialog.visible" top="3vh" width="70%" @dragDialog="handleDrag">
       <el-row style="margin-left: 20px; padding-bottom: 0; padding-top: 0;">
         <el-col :span="10">
           <!--查询条件-->
@@ -180,11 +178,11 @@
               <el-checkbox v-model="showCheckedOnly">只看已绑定</el-checkbox>
             </el-form-item>
             <el-form-item style="margin-bottom: 5px;">
-              <el-button v-permission="permissions['get']" type="primary" :loading="searchLoading" @click="clickToSearchPer">搜索</el-button>
+              <el-button type="primary" :loading="searchLoading" @click="clickToSearchPer">搜索</el-button>
             </el-form-item>
-            <el-form-item style="margin-bottom: 5px;">
-              <el-button v-permission="permissions['update']" type="primary" @click="bindPermission">绑定权限</el-button>
-            </el-form-item>
+            <!-- <el-form-item style="margin-bottom: 5px;">
+              <el-button type="primary" @click="bindPermission">绑定权限</el-button>
+            </el-form-item> -->
           </el-form>
           <!--查询结果-->
           <el-table ref="perTable" v-loading="searchLoading" :data="filterPerPage()" element-loading-text="正在查询" border fit stripe height="490" highlight-current-row size="mini"
@@ -209,8 +207,9 @@
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button size="medium" @click="rolePermissionDialog.visible = false">
-          关闭
+        <el-button type="primary" @click="bindPermission">保存</el-button>
+        <el-button   @click="rolePermissionDialog.visible = false">
+          取消
         </el-button>
       </div>
     </el-dialog>
@@ -276,7 +275,6 @@ export default {
       },
       currentNodeKey: '',
       currentRoleCode: '',
-      currentRoleTenantId: '',
       osSelectOption: [],
       searchLoading: false,
       saveLoading: false,
@@ -303,6 +301,7 @@ export default {
         { key: 0, display_name: '未锁定' },
         { key: 1, display_name: '已锁定' },
       ],
+      //角色信息弹窗
       roleDialog: {
         state: '',
         visible: false,
@@ -318,6 +317,7 @@ export default {
         },
         formLabelWidth: '120px',
       },
+      //角色权限弹窗
       rolePermissionDialog: {
         state: '',
         visible: false,
@@ -331,6 +331,7 @@ export default {
         },
         formLabelWidth: '120px',
       },
+      //角色管理列表筛选
       roleQuery: {
         name: '',
         locked: null,
@@ -338,6 +339,7 @@ export default {
         startDate: '',
         endDate: '',
       },
+      //分页
       rolePageProps: {
         records: null,
         total: 0,
@@ -685,32 +687,30 @@ export default {
       }
     },
     // 绑定权限
-    showPermission() {
-      if (this.multipleSelection && this.multipleSelection.length === 1) {
-        this.rolePermissionDialog.visible = true
-        this.currentRoleCode = this.multipleSelection[0].code
-        this.currentRoleTenantId = this.multipleSelection[0].tenantId
-        this.perPageProps.records = null
-        this.bindingPermissions = null
-        this.showCheckedOnly = false
-        this.filterTableText = ''
-        if (
-          !this.treeProps.data[0].children ||
-          this.treeProps.data[0].children.length === 0
-        ) {
-          this.fetchMenuData()
-        }
-        if (this.osSelectOption.length === 0) {
-          this.listAllOs()
-        }
+    showPermission(obj) {
+      console.log(obj)
+      this.rolePermissionDialog.visible = true
+      this.currentRoleCode = obj.code
+      this.perPageProps.records = null
+      this.bindingPermissions = null
+      this.showCheckedOnly = false
+      this.filterTableText = ''
+      if (
+        !this.treeProps.data[0].children ||
+        this.treeProps.data[0].children.length === 0
+      ) {
+        this.fetchMenuData()
       }
+      if (this.osSelectOption.length === 0) {
+        this.listAllOs()
+      }
+      
     },
     // 绑定权限
     bindPermission() {
       const rolePermissionDTO = {}
       const permissions = this.multiplePerSelection.map((row) => row.code)
       rolePermissionDTO.roleCode = this.currentRoleCode
-      rolePermissionDTO.tenantId = this.currentRoleTenantId
       rolePermissionDTO.osCode = this.menuQuery.currentOsCode
       rolePermissionDTO.menuCode = this.currentNodeKey
       rolePermissionDTO.permissionCodes = permissions

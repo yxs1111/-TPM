@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-11-19 17:17:12
+ * @LastEditTime: 2021-11-22 09:53:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -166,7 +166,6 @@ export default {
   },
   importSupplier(params) {
     return requestApi.request_post('/mdm/mdSupplier/importSupplier', params)
-    
   },
   exportSupplier(params) {
     return request({
@@ -175,7 +174,19 @@ export default {
       params:params,
       responseType:'blob',
     })
-    // return requestApi.request_post('/mdm/mdSupplier/exportSupplier', params)
-  }
+  },
+  //客户组信息
+  getPageMdCustomerGroup(params) {
+    return requestApi.request_get('/mdm/mdCustomerGroup/getPage', params)
+  },
+  insertMdCustomerGroup(params) {
+    return requestApi.request_post('/mdm/mdCustomerGroup/insert', params)
+  },
+  updateMdCustomerGroup(params) {
+    return requestApi.request_put('/mdm/mdCustomerGroup/update', params)
+  },
+  deleteMdCustomerGroup(params) {
+    return requestApi.request_delete('/mdm/mdCustomerGroup/delete', params)
+  },
   
 }

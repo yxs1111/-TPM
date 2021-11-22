@@ -1,34 +1,29 @@
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="供应商编码" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="供应商编码" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="TpmButtonBG">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli">
+          <span class="SelectliTitle">供应商编码</span>
+          <el-input v-model="filterObj.supplierCode" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">供应商名称</span>
+          <el-input v-model="filterObj.supplierName" placeholder="请输入" />
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <div class="TpmButtonBG" @click="importData">
-        <img src="../../../assets/images/import.png" alt="">
+        <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG" @click="exportData">
-        <img src="../../../assets/images/export.png" alt="">
+        <img src="@/assets/images/export.png" alt="">
         <span class="text">导出</span>
       </div>
     </div>
@@ -52,7 +47,7 @@
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="supplierCode" label="供应商编码"> </el-table-column>
-      <el-table-column width="320" align="center" prop="supplierName" label="供应商编码"> </el-table-column>
+      <el-table-column width="320" align="center" prop="supplierName" label="供应商名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="country" label="country"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
       <el-table-column width="180" align="center" prop="createDate" label="创建时间"> </el-table-column>
@@ -105,13 +100,7 @@
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
-        <!-- <el-upload ref="upload" action="/" :auto-upload="false" :on-change="openFile"
-          accept="csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-          <el-button type="primary" class="my-search selectFile">选择文件</el-button>
-        </el-upload> -->
-        <el-button size="mini" class="el_user_btn user_portIn" @click="parsingExcelBtn">导入
-          <i class="iconfont icon-piliangdaoru icon_font"></i>
-        </el-button>
+        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
         <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
         <div class="fileName" v-if="uploadFileName!=''">
           <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
@@ -131,8 +120,6 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-import axios from 'axios'
-import auth from '@/utils/auth'
 export default {
   name: 'Supplier',
 
@@ -142,8 +129,8 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
+        supplierCode: '',
+        supplierName: '',
         category: '',
       },
       tableLoading: '',
@@ -173,6 +160,7 @@ export default {
       importVisible: false, //导入弹窗
       uploadFileName: '',
       uploadFile: '',
+      event:'',
     }
   },
   directives: { elDragDialog, permission },
@@ -187,6 +175,7 @@ export default {
       API.getPageMdSupplier({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        supplierName: this.filterObj.supplierName,
       })
         .then((response) => {
           this.tableLoading = false
@@ -201,6 +190,13 @@ export default {
       this.dialogVisible = true
     },
     search() {
+      this.getTableData()
+    },
+    Reset() {
+      this.filterObj = {
+        supplierCode: '',
+        supplierName: '',
+      }
       this.getTableData()
     },
     closeDialog() {
@@ -287,42 +283,45 @@ export default {
     importData() {
       this.importVisible = true
     },
-    //打开文件
-    openFile(file) {
-      console.log(file)
-      this.uploadFileName = file.name
-      this.uploadFile = file.raw
-      this.$refs.upload.clearFiles() //去掉文件列表
-    },
     //确认导入
     confirmImport() {
+      
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importSupplier(formData)
         .then((response) => {
-          this.importVisible = false
+          this.closeImport()
         })
         .catch(() => {})
     },
+    //选择导入文件
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     //导入
     parsingExcel(event) {
+      
+      this.event = event
+      this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
+      console.log(this.event)
     },
     //关闭导入
     closeImport() {
       this.importVisible = false
+      this.event.srcElement.value = '' //置空
+      this.uploadFileName = ''
+      this.uploadFile = ''
+      console.log(this.event)
     },
     //导出数据
     exportData() {
-      
+      //导出数据筛选
       var data = {}
       data = { ...this.filterObj }
       API.exportSupplier().then((res) => {
-         this.downloadFile(res, '供销商信息' + '.xlsx') //自定义Excel文件名
-         this.$message.success('导出成功!')
+        this.downloadFile(res, '供销商信息' + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
       })
     },
     //下载文件
@@ -346,7 +345,6 @@ export default {
     },
     handleSelectionChange(val) {
       this.checkArr = val
-      console.log(val)
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
