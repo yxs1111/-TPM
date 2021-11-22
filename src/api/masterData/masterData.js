@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-11-22 09:53:33
+ * @LastEditTime: 2021-11-22 14:38:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -10,7 +10,7 @@ import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
-  
+
   /**
    * @description: 产品信息--查询
    * @param {*} params
@@ -21,16 +21,16 @@ export default {
   },
   /**
    * 产品信息--添加
-   * @param {*} params 
-   * @returns 
+   * @param {*} params
+   * @returns
    */
   insertMdProduct(params) {
     return requestApi.request_post('/mdm/mdProduct/insert', params)
   },
   /**
    * 产品信息--更新
-   * @param {*} params 
-   * @returns 
+   * @param {*} params
+   * @returns
    */
   updateMdProduct(params) {
     return requestApi.request_put('/mdm/mdProduct/update', params)
@@ -43,7 +43,7 @@ export default {
   deleteMdProduct(params) {
     return requestApi.request_delete('/mdm/mdProduct/delete', params)
   },
-  //价格档位
+  // 价格档位
   getPageMdPriceGear(params) {
     return requestApi.request_get('/mdm/mdPriceGear/getPage', params)
   },
@@ -56,12 +56,12 @@ export default {
   deleteMdPriceGear(params) {
     return requestApi.request_delete('/mdm/mdPriceGear/delete', params)
   },
-  //渠道列表
+  // 渠道列表
   /**
    * @description: 渠道列表
    * @param {*} params
    * @return {*}
-   */  
+   */
   getPageMdChannelList(params) {
     return requestApi.request_get('/mdm/mdChannel/getMdChannelList', params)
   },
@@ -73,7 +73,7 @@ export default {
   getPageMdProductList(params) {
     return requestApi.request_get('/mdm/mdProduct/getMdProductList', params)
   },
-  //客户信息
+  // 客户信息
   getPageMdCustomer(params) {
     return requestApi.request_get('/mdm/mdCustomer/getPage', params)
   },
@@ -86,7 +86,7 @@ export default {
   deleteMdCustomer(params) {
     return requestApi.request_delete('/mdm/mdCustomer/delete', params)
   },
-  //渠道信息
+  // 渠道信息
   getPageMdChannel(params) {
     return requestApi.request_get('/mdm/mdChannel/getPage', params)
   },
@@ -99,7 +99,7 @@ export default {
   deleteMdChannel(params) {
     return requestApi.request_delete('/mdm/mdChannel/delete', params)
   },
-  //经销商信息
+  // 经销商信息
   getPageMdDistributor(params) {
     return requestApi.request_get('/mdm/mdDistributor/getPage', params)
   },
@@ -112,7 +112,7 @@ export default {
   deleteMdDistributor(params) {
     return requestApi.request_delete('/mdm/mdDistributor/delete', params)
   },
-  //费用科目
+  // 费用科目
   getPageMdCostType(params) {
     return requestApi.request_get('/mdm/mdCostType/getPage', params)
   },
@@ -125,7 +125,7 @@ export default {
   deleteMdCostType(params) {
     return requestApi.request_delete('/mdm/mdCostType/delete', params)
   },
-  //品牌信息
+  // 品牌信息
   getPageMdBrand(params) {
     return requestApi.request_get('/mdm/mdBrand/getPage', params)
   },
@@ -138,7 +138,7 @@ export default {
   deleteMdBrand(params) {
     return requestApi.request_delete('/mdm/mdBrand/delete', params)
   },
-  //门店信息
+  // 门店信息
   getPageMdStore(params) {
     return requestApi.request_get('/mdm/mdStore/getPage', params)
   },
@@ -151,7 +151,18 @@ export default {
   deleteMdStore(params) {
     return requestApi.request_delete('/mdm/mdStore/delete', params)
   },
-  //供应商信息
+  // 规则控制---检验规则
+  getPageByDto(params) {
+    return requestApi.request_get('/mdm/mdExceptionRule/getPageByDto', params)
+  },
+  getCostTypeList(params) {
+    return requestApi.request_get('/mdm/mdCostType/getCostTypeList', params)
+  },
+  getMdChannelList(params) {
+    return requestApi.request_get('/mdm/mdChannel/getMdChannelList', params)
+  },
+
+  // 供应商信息
   getPageMdSupplier(params) {
     return requestApi.request_get('/mdm/mdSupplier/getPage', params)
   },
@@ -169,10 +180,10 @@ export default {
   },
   exportSupplier(params) {
     return request({
-      url:'mdm/mdSupplier/exportSupplier',
-      method:'post',
-      params:params,
-      responseType:'blob',
+      url: 'mdm/mdSupplier/exportSupplier',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
     })
   },
   //客户组信息

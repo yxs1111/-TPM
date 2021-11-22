@@ -413,17 +413,21 @@ div:focus {
   .el-table--striped .el-table__body tr.el-table__row--striped td {
     background: #fff;
   }
+  .el-table__body tr:hover > td{
+    background-color:transparent !important;
+  }
+
   .el-table-head {
     background: #fff;
     font-size: 16px;
     text-align: center;
   }
   .odd-row {
-    background-color: #f3f7f8 !important;
+    background-color: #F3F7F8 !important;
   }
 
   .even-row {
-    background-color: #fff !important;
+    background-color: #FFFFFF !important;
   }
   .first-row {
     background-color: #e3f3ff !important;
