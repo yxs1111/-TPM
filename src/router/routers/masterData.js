@@ -88,20 +88,20 @@ export default function() {
           meta: { title: '财务信息', icon: 'form' },
           // redirect: '/priceSale/saleComputeKeep',
           children: [
-            // {
-            //   path: '/RoleCostSubjectControl',
-            //   code: 'RoleCostSubjectControl',
-            //   name: 'RoleCostSubjectControl',
-            //   component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
-            //   meta: { title: '费用科目', icon: 'form' }
-            // },
-            // {
-            //   path: '/RoleCostSubjectControl',
-            //   code: 'RoleCostSubjectControl',
-            //   name: 'RoleCostSubjectControl',
-            //   component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
-            //   meta: { title: '费用类型', icon: 'form' }
-            // }
+            {
+              path: '/RoleCostSubjectControl',
+              code: 'RoleCostSubjectControl',
+              name: 'RoleCostSubjectControl',
+              component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
+              meta: { title: '费用科目', icon: 'form' }
+            },
+            {
+              path: '/RoleCostType',
+              code: 'RoleCostType',
+              name: 'RoleCostType',
+              component: () => import('@/views/master/financeInfo/RoleCostType.vue'),
+              meta: { title: '费用类型', icon: 'form' }
+            }
           ]
         },
         // 规则控制

@@ -22,66 +22,66 @@
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary"  class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  @selection-change="handleSelectionChange" style="width: 100%">
+    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">
         <template slot-scope="{ row }">
           <div class="table_operation">
             <div class="table_operation_detail" @click="editor(row)">
-              <i class="el-icon-edit-outline"></i>
+              <i class="el-icon-edit-outline" />
             </div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="costItemTypeNumber" label="一级费用类型编码"> </el-table-column>
-      <el-table-column align="center" prop="costItem" label="一级费用类型名称"> </el-table-column>
-      <el-table-column align="center" prop="costItemCsName" label="一级Cost item中文名称"> </el-table-column>
-      <el-table-column align="center" prop="minePackageNumber" label="二级费用类型编码"> </el-table-column>
-      <el-table-column align="center" prop="minePackage" label="二级费用类型名称"> </el-table-column>
-      <el-table-column align="center" prop="costTypeNumber" label="三级费用类型编码"> </el-table-column>
-      <el-table-column align="center" prop="costType" label="三级费用类型名称"> </el-table-column>
+      <el-table-column align="center" prop="costItemTypeNumber" label="一级费用类型编码" />
+      <el-table-column align="center" prop="costItem" label="一级费用类型名称" />
+      <el-table-column align="center" prop="costItemCsName" label="一级Cost item中文名称" />
+      <el-table-column align="center" prop="minePackageNumber" label="二级费用类型编码" />
+      <el-table-column align="center" prop="minePackage" label="二级费用类型名称" />
+      <el-table-column align="center" prop="costTypeNumber" label="三级费用类型编码" />
+      <el-table-column align="center" prop="costType" label="三级费用类型名称" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '费用科目信息'" :visible="dialogVisible" width="30%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '费用科目信息'" :visible="dialogVisible" width="30%" @close="closeDialog">
       <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="el-form-row">
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="150px" class="el-form-row">
           <el-form-item label="Cost item中文名称" prop="costItemName">
-            <el-input v-model="ruleForm.costItemName" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.costItemName" class="my-el-input" placeholder="请输入" />
             <!-- <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
               <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />
             </el-select> -->
           </el-form-item>
           <el-form-item label="费用级别">
-            <el-input v-model="ruleForm.costLevel" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.costLevel" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="费用类型">
-            <el-input v-model="ruleForm.costType" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.costType" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="费用类型编码">
-            <el-input v-model="ruleForm.costTypeNumber" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.costTypeNumber" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="城市群编码">
-            <el-input v-model="ruleForm.cityGroupCode" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.cityGroupCode" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="父级编码 ">
-            <el-input v-model="ruleForm.parentNumber" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.parentNumber" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入" />
           </el-form-item>
         </el-form>
       </div>
@@ -96,10 +96,11 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'RoleCostType',
+  directives: { elDragDialog, permission },
 
   data() {
     return {
@@ -109,7 +110,7 @@ export default {
       filterObj: {
         name: '',
         key: '',
-        category: '',
+        category: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '19号线', value: '19' }],
@@ -121,35 +122,34 @@ export default {
         costType: '',
         costTypeNumber: '',
         parentNumber: '',
-        remark: '',
+        remark: ''
       },
       rules: {
         distributorCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
+            trigger: 'blur'
+          }
+        ]
       },
       dialogVisible: false,
       isEditor: '',
       editorId: '',
-      checkArr: [], //批量删除,存放选中
+      checkArr: [] // 批量删除,存放选中
     }
   },
-  directives: { elDragDialog, permission },
+  computed: {},
   mounted() {
     this.getTableData()
   },
-  computed: {},
   methods: {
-    //获取表格数据
+    // 获取表格数据
     getTableData() {
       this.tableLoading = true
       API.getPageMdCostType({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -176,7 +176,7 @@ export default {
         costType: '',
         costTypeNumber: '',
         parentNumber: '',
-        remark: '',
+        remark: ''
       }
     },
     editor(obj) {
@@ -188,15 +188,15 @@ export default {
         costType: obj.costType,
         costTypeNumber: obj.costTypeNumber,
         parentNumber: obj.parentNumber,
-        remark: obj.remark,
+        remark: obj.remark
       }
       this.editorId = obj.id
     },
-    //提交form
+    // 提交form
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = this.isEditor ? API.updateMdCostType : API.insertMdCostType
+          const url = this.isEditor ? API.updateMdCostType : API.insertMdCostType
           url({
             id: this.editorId,
             costItemName: this.ruleForm.costItemName,
@@ -204,7 +204,7 @@ export default {
             costType: this.ruleForm.costType,
             costTypeNumber: this.ruleForm.costTypeNumber,
             parentNumber: this.ruleForm.parentNumber,
-            remark: this.ruleForm.remark,
+            remark: this.ruleForm.remark
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
@@ -218,7 +218,7 @@ export default {
         }
       })
     },
-    //多个删除
+    // 多个删除
     mutidel() {
       if (this.checkArr.length === 0) return this.$message.error('请选择数据')
       else {
@@ -229,7 +229,7 @@ export default {
         this.$confirm('确定要删除数据吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning',
+          type: 'warning'
         })
           .then(() => {
             API.deleteMdCostType(IdList).then((response) => {
@@ -242,12 +242,12 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消',
+              message: '已取消'
             })
           })
       }
     },
-    //取消
+    // 取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
       this.closeDialog()
@@ -276,8 +276,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 
