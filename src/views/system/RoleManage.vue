@@ -29,9 +29,9 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="showDeleteDialog">
         删除
       </el-button>
-      <el-button :disabled="editDisabled" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="showPermission">
+      <!-- <el-button :disabled="editDisabled" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="showPermission">
         权限绑定
-      </el-button>
+      </el-button> -->
     </div>
     <!--查询结果-->
     <el-table ref="roleTable" v-loading="searchLoading" :data="rolePageProps.records" element-loading-text="正在查询" border fit stripe height="600" highlight-current-row
@@ -60,7 +60,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="480" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini">
+          <el-button type="primary" size="mini" @click="showRoleDialog(row)">
             数据权限绑定
           </el-button>
           <el-button type="primary" size="mini" @click="showPermission(row)">
@@ -81,7 +81,6 @@
       <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="rolePageProps.total" :page-size="rolePageProps.pageSize"
         :current-page="rolePageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-
     <!--信息框-->
     <el-dialog v-el-drag-dialog :title="textMap[roleDialog.state]" :visible.sync="roleDialog.visible" @dragDialog="handleDrag">
       <el-form ref="roleDataForm" :rules="rules" :model="roleDialog.data" label-position="left" label-width="120px" style="width: 600px; margin-left:50px;">
@@ -137,7 +136,7 @@
       </span>
     </el-dialog>
     <!--功能权限绑定框-->
-    <el-dialog v-el-drag-dialog title="功能权限绑定" :visible.sync="rolePermissionDialog.visible" top="3vh" width="70%" @dragDialog="handleDrag">
+    <el-dialog v-el-drag-dialog title="功能权限绑定" :visible.sync="rolePermissionDialog.visible" top="3vh" width="50%" @dragDialog="handleDrag">
       <el-row style="margin-left: 20px; padding-bottom: 0; padding-top: 0;">
         <el-col :span="10">
           <!--查询条件-->
@@ -148,70 +147,90 @@
               </el-select>
             </el-form-item>
             <el-form-item style="margin-bottom: 5px;">
-              <el-button type="primary" icon="el-icon-search" :loading="searchLoading" @click="fetchMenuData">刷新</el-button>
+              <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" :loading="searchLoading" @click="fetchMenuData">刷新</el-button>
             </el-form-item>
           </el-form>
           <!--搜索框-->
-          <el-input v-model="filterText" placeholder="输入菜单名称进行过滤" clearable maxlength="50" style="width: 90%" />
+          <el-input v-model="filterText" placeholder="输入菜单名称进行过滤" clearable maxlength="50" style="width: 90%;margin:10px 0;" />
           <!--菜单树-->
-          <el-tree ref="menuTree" class="filter-tree" :data="treeProps.data" :props="defaultProps" :current-node-key="currentNodeKey" :filter-node-method="filterNode" accordion
-            node-key="code" highlight-current :expand-on-click-node="true" :default-expanded-keys="['root']" @current-change="handleCurrentNodeChange">
-            <span slot-scope="{ node, data }" class="custom-tree-node">
-              <span>
-                <span class="info">
-                  {{ node.label }}
-                </span>
-                <span v-if="data.locked === 1" class="danger">
-                  （已锁定）
+          <div class="menuWrap">
+            <el-tree ref="menuTree" class="filter-tree" :data="treeProps.data" :props="defaultProps" :current-node-key="currentNodeKey" :filter-node-method="filterNode" accordion
+              node-key="code" highlight-current :expand-on-click-node="true" :default-expanded-keys="['root']" @current-change="handleCurrentNodeChange">
+              <span slot-scope="{ node, data }" class="custom-tree-node">
+                <span>
+                  <span class="info">
+                    {{ node.label }}
+                  </span>
+                  <span v-if="data.locked === 1" class="danger">
+                    （已锁定）
+                  </span>
                 </span>
               </span>
-            </span>
-          </el-tree>
+            </el-tree>
+          </div>
+
         </el-col>
-        <el-col :span="13">
-          <!--查询条件-->
-          <el-form ref="perForm" :inline="true" :model="perQuery" :disabled="perSearch" class="demo-form-inline">
-            <el-form-item style="margin-bottom: 5px;">
-              <el-input v-model="filterTableText" placeholder="输入名称或编码过滤" clearable maxlength="50" />
-            </el-form-item>
-            <el-form-item style="margin-bottom: 5px;">
-              <el-checkbox v-model="showCheckedOnly">只看已绑定</el-checkbox>
-            </el-form-item>
-            <el-form-item style="margin-bottom: 5px;">
-              <el-button type="primary" :loading="searchLoading" @click="clickToSearchPer">搜索</el-button>
-            </el-form-item>
-            <!-- <el-form-item style="margin-bottom: 5px;">
+        <el-col :span="14">
+          <div class="permissionWrap">
+            <!--查询条件-->
+            <el-form ref="perForm" :inline="true" :model="perQuery" :disabled="perSearch" class="demo-form-inline">
+              <el-form-item style="margin-bottom: 5px;">
+                <el-input v-model="filterTableText" placeholder="输入名称或编码过滤" clearable maxlength="50" />
+              </el-form-item>
+              <el-form-item style="margin-bottom: 5px;">
+                <el-checkbox v-model="showCheckedOnly">只看已绑定</el-checkbox>
+              </el-form-item>
+              <el-form-item style="margin-bottom: 5px;">
+                <el-button type="primary" :loading="searchLoading" @click="clickToSearchPer">搜索</el-button>
+              </el-form-item>
+              <!-- <el-form-item style="margin-bottom: 5px;">
               <el-button type="primary" @click="bindPermission">绑定权限</el-button>
             </el-form-item> -->
-          </el-form>
-          <!--查询结果-->
-          <el-table ref="perTable" v-loading="searchLoading" :data="filterPerPage()" element-loading-text="正在查询" border fit stripe height="490" highlight-current-row size="mini"
-            :row-class-name="perTableRowClassName" @row-click="handleCurrentPerRowClick" @selection-change="handlePerSelectionChange">
-            <el-table-column align="center" type="selection" width="55" />
-            <el-table-column align="center" label="序号" width="55">
-              <template slot-scope="scope">
-                {{ scope.$index+1 }}
-              </template>
-            </el-table-column>
-            <el-table-column ref="perColumn" label="权限名称" align="center">
-              <template slot-scope="{row}">
-                {{ row.name }}
-              </template>
-            </el-table-column>
-            <el-table-column label="权限编码" align="center">
-              <template slot-scope="{row}">
-                {{ row.code }}
-              </template>
-            </el-table-column>
-          </el-table>
+            </el-form>
+            <!--查询结果-->
+            <el-table ref="perTable" v-loading="searchLoading" :data="filterPerPage()" element-loading-text="正在查询" border fit stripe height="490" highlight-current-row size="mini"
+              :row-class-name="perTableRowClassName" @row-click="handleCurrentPerRowClick" @selection-change="handlePerSelectionChange">
+              <el-table-column align="center" type="selection" width="55" />
+              <el-table-column align="center" label="序号" width="55">
+                <template slot-scope="scope">
+                  {{ scope.$index+1 }}
+                </template>
+              </el-table-column>
+              <el-table-column ref="perColumn" label="权限名称" align="center">
+                <template slot-scope="{row}">
+                  {{ row.name }}
+                </template>
+              </el-table-column>
+              <el-table-column label="权限编码" align="center">
+                <template slot-scope="{row}">
+                  {{ row.code }}
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+
         </el-col>
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="bindPermission">保存</el-button>
-        <el-button   @click="rolePermissionDialog.visible = false">
+        <el-button @click="rolePermissionDialog.visible = false">
           取消
         </el-button>
       </div>
+    </el-dialog>
+    <!-- 数据权限绑定 -->
+    <el-dialog width="55%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
+      <div class="roleBindWrap">
+        <div class="roleName">Package Owner - Price Promotion</div>
+        <div class="roleTree">
+          <el-tree :data="RoleTreedata" :show-checkbox="true" default-expand-all node-key="id" ref="tree" highlight-current :props="Role_KA">
+          </el-tree>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmRoleDialog()">保 存</el-button>
+        <el-button @click="confirmRoleDialog">取 消</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -366,6 +385,63 @@ export default {
         { value: 10, label: '租户' },
         { value: 100, label: '普通' },
       ],
+      roleVisible: false, //数据权限绑定弹窗
+      RoleTreedata: [
+        {
+          id: 1,
+          label: '一级 1',
+          children: [
+            {
+              id: 4,
+              label: '二级 1-1',
+              children: [
+                {
+                  id: 9,
+                  label: '三级 1-1-1',
+                },
+                {
+                  id: 10,
+                  label: '三级 1-1-2',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 2,
+          label: '一级 2',
+          children: [
+            {
+              id: 5,
+              label: '二级 2-1',
+            },
+            {
+              id: 6,
+              label: '二级 2-2',
+            },
+          ],
+        },
+        {
+          id: 3,
+          label: '一级 3',
+          children: [
+            {
+              id: 7,
+              label: '二级 3-1',
+            },
+            {
+              id: 8,
+              label: '二级 3-2',
+            },
+          ],
+        },
+      ],
+      Role_KA: {
+        children: 'children',
+        label: 'label',
+      },
+      Role_KAData: {}, //KA 权限数据
+      permissionType: '', //角色数据权限类型
     }
   },
   created() {
@@ -704,7 +780,6 @@ export default {
       if (this.osSelectOption.length === 0) {
         this.listAllOs()
       }
-      
     },
     // 绑定权限
     bindPermission() {
@@ -800,11 +875,45 @@ export default {
         return 'hide-row'
       }
     },
+    //数据权限绑定--弹窗显示
+    showRoleDialog(obj) {
+      console.log(obj.permissionType)
+      if (obj.permissionType == 'KA') {
+        this.getKAList()
+      }
+      this.roleVisible = true
+    },
+    //数据权限绑定--确认
+    confirmRoleDialog() {
+      this.roleVisible = false
+    },
+    //数据权限绑定--关闭
+    closeRoleDialog() {
+      this.roleVisible = false
+    },
+    getKAList() {
+      roleApi.getKAList().then((res) => {
+        // this.Role_KAData=res.channelList
+        // console.log(this.Role_KAData)
+        let list = res.data.channelList
+        console.log(list)
+        return
+        for (let i = 0; i < list.length; i++) {
+          list[i]["label"] = list[i].channelCode
+
+          list[i]["children"] = list[i].customerList
+          for (let j = 0; j < list[i].children.length; j++) {
+            list[i].children[j]["label"] = list[i].children[j].channelCode
+          }
+        }
+        console.log(list)
+      })
+    },
   },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .treeWrap {
   float: left;
   width: 40%;
@@ -829,6 +938,43 @@ export default {
 }
 .el-table .hide-row {
   display: none;
+}
+.menuWrap {
+  height: 360px;
+  overflow-y: scroll;
+  /*滚动条的宽度*/
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  /* //滚动条的滑块 */
+  ::-webkit-scrollbar-thumb {
+    background-color: #a1a3a9;
+    border-radius: 3px;
+  }
+}
+.permissionWrap {
+  width: 100%;
+}
+.roleDailog {
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.roleBindWrap {
+  width: 100%;
+  height: 400px;
+  .roleName {
+    color: #4192d3;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .roleTree {
+    width: 100%;
+    height: 400px;
+    overflow-y: scroll;
+  }
 }
 </style>
 

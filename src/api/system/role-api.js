@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-08-30 10:38:43
+ * @LastEditTime: 2021-11-22 17:14:50
+ */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
@@ -23,5 +28,10 @@ export default {
       url: this.url + '/getAllRole',
       method: 'get'
     })
+  },
+  roleUrl:'auth/authRoleDataPermission',
+  //角色数据权限
+  getKAList(params) {
+    return requestApi.request_get(this.roleUrl + '/getKAList', params)
   },
 }
