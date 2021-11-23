@@ -32,9 +32,9 @@
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="objectSpanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="" align="center" prop="version" label="版本" />
-      <el-table-column width="" align="left" prop="ruleContentFront" label="验证规则" />
+      <el-table-column width="350" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="100" align="left" prop="ruleUnit" label="" />
-      <el-table-column width="320" align="left" prop="ruleContentAfter" label="">
+      <el-table-column width="260" align="left" prop="ruleContentAfter" label="">
         <!-- <template slot-scope="{row}">
           <el-select v-model="row.ruleContentAfter" placeholder="请选择" size="small">
             <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
@@ -446,18 +446,23 @@ export default {
         return 'odd-row'
       }
     },
-    HeadTable() {
-      return ' background: #fff;color: #333;font-size: 16px;font-weight: 400;font-family: Source Han Sans CN;border-right:none;'
+    HeadTable(valHead) {
+      console.log('******head****', valHead)
+      if (valHead.columnIndex === 0) {
+        return 'background: #fff;color: #333;font-size: 16px;font-weight: 400;font-family: Source Han Sans CN;'
+      } else {
+        return ' background: #fff;color: #333;font-size: 16px;font-weight: 400;font-family: Source Han Sans CN;border-right:none;'
+      }
     },
     // 单元格样式
     cellStyle(val) {
-      console.log('******val*******', val)
+      // console.log('******val*******', val)
       // 待定判断cols 设置边框
-      if (val.column.colSpan === 5) {
-        return 'border:1px solid #EBEEF5;;'
-      }
+      // if (val.column.colSpan === 5) {
+      //   return 'border:1px solid #EBEEF5;;'
+      // }
       if (val.columnIndex === 0) {
-        return 'background:white;border:none;'
+        return 'background:white;'
       } else {
         return 'border:none;'
       }
