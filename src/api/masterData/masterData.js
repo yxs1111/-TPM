@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-11-22 14:38:57
+ * @LastEditTime: 2021-11-23 16:24:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -211,5 +211,30 @@ export default {
   },
   deleteConfig(params) {
     return requestApi.request_delete('/mdm/mdCdmConfig/delete', params)
-  }
+  },
+  //价促计算维护
+  getPageSaleComputeKeep(params) {
+    return requestApi.request_get('/mdm/mdPricepromotionCalculationandmaintenance/getPageByDto', params)
+  },
+  importSaleComputeKeep(params) {
+    return requestApi.request_post('/mdm/mdPricepromotionCalculationandmaintenance/importData', params)
+  },
+  exportSaleComputeKeep(params) {
+    return request({
+      url: 'mdm/mdPricepromotionCalculationandmaintenance/exportToExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+    // return requestApi.request_post('/mdm/mdPricepromotionCalculationandmaintenance/exportToExcel', params)
+  },
+  SaleComputeKeepTemplateDownload(params) {
+    return request({
+      url: 'mdm/mdPricepromotionCalculationandmaintenance/templateDownload',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+    //return requestApi.request_get('/mdm/mdPricepromotionCalculationandmaintenance/templateDownload', params)
+  },
 }

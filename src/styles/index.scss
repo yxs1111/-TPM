@@ -797,6 +797,19 @@ div:focus {
     align-items: center;
     cursor: pointer;
   }
+  .table_operationText {
+    height: 26px;
+    border: 1px solid #3694fe;
+    color: #3694fe;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
   .table_operation_delete {
     width: 26px;
     height: 26px;
