@@ -3,22 +3,39 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="年月" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+      <el-form-item label="渠道：">
+        <el-select v-model="filterObj.channelCode" placeholder="请选择">
+          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+        </el-select>
       </el-form-item>
-      <el-form-item label="客户名称" prop="name">
+      <el-form-item label="Mine Package：">
+        <el-select v-model="filterObj.costTypeNumber" placeholder="请选择">
+          <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="SKU：">
+        <el-select v-model="filterObj.productCode" placeholder="请选择">
+          <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="机制类型：">
         <el-select v-model="filterObj.category" placeholder="请选择">
           <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
-      <el-form-item style="color:red;">暂时缺少页面</el-form-item>
+      <el-form-item label="机制名称：">
+        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">导出</el-button>
+      </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
-      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
+      <!-- <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">新增</el-button> -->
+      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button>
     </div>
     <el-table
       v-loading="tableLoading"
@@ -30,12 +47,11 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" align="center" />
-      <el-table-column width="150" align="center" prop="channelCode" label="客户名称" />
-      <el-table-column width="320" align="center" prop="channelCsName" label="年月" />
-      <el-table-column width="150" align="center" prop="productCode" label="零售价(PTC)" />
-      <el-table-column width="320" align="center" prop="productCsName" label="平台进货含税价(PTR)" />
-      <el-table-column width="200" align="center" prop="gear" label="经销商进货含税价(PTW)" />
+      <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="320" align="center" prop="channelCsName" label="Mine Package" />
+      <el-table-column width="150" align="center" prop="productCode" label="SKU" />
+      <el-table-column width="320" align="center" prop="productCsName" label="机制类型" />
+      <el-table-column width="200" align="center" prop="gear" label="机制名称" />
       <el-table-column width="150" align="center" prop="volMix" label="创建时间" />
       <el-table-column width="150" align="center" prop="actualNum" label="创建人" />
       <el-table-column width="150" align="center" prop="createBy" label="更新时间" />
@@ -54,40 +70,117 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
       <div class="el-dialogContent">
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
-          <el-form-item label="渠道编号" prop="channelCode">
-            <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入" />
-            <!-- <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
-              <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />
-            </el-select> -->
-          </el-form-item>
-          <el-form-item label="渠道中文名称">
-            <el-input v-model="ruleForm.channelCsName" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="产品编号">
-            <el-input v-model="ruleForm.productCode" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="产品中文名称">
-            <el-input v-model="ruleForm.productCsName" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="档位">
-            <el-input v-model="ruleForm.gear" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="volMin">
-            <el-input v-model="ruleForm.volMin" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="所属年月">
-            <el-input v-model="ruleForm.yearAndMonth" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-        </el-form>
+        <div style="margin-bottom:15px;">
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <div class="grid-content bg-purple">
+                渠道：
+                <el-select v-model="value" placeholder="请选择" size="small">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content bg-purple">
+                Mine Package：
+                <el-select v-model="value" placeholder="请选择" size="small">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="5">
+              <div class="grid-content bg-purple">
+                SKU：
+                <el-select v-model="value" placeholder="请选择" size="small">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="7">
+              <div class="grid-content bg-purple">
+                备注：
+                <el-input v-model="input" style="width: 260px;" placeholder="请输入内容" size="small" />
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div>
+          <el-button plain type="primary">添加一行</el-button>
+        </div>
+        <div style="height:1px;background:#dcdfe6;margin:20px 0px;" />
+        <div style="border: 1px solid #dcdfe6;">
+          <el-table>
+            <el-table-column label="序号" align="center" prop="" width="50" />
+            <el-table-column label="机制类型" align="center" prop="ts">
+              <template slot-scope="scope">
+                <el-select
+                  v-model="bcglXiangXiList[scope.row.xh-1].ts"
+                  clearable
+                  @change="changezdts(scope.row)"
+                >
+                  <el-option
+                    v-for="dict in zdtsOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="机制规则" align="center" prop="ts">
+              <template slot-scope="scope">
+                <el-select
+                  v-model="bcglXiangXiList[scope.row.xh-1].ts"
+                  clearable
+                  @change="changezdts(scope.row)"
+                >
+                  <el-option
+                    v-for="dict in zdtsOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column label="机制名称" align="center" prop="ts">
+              <template slot-scope="scope">
+                <el-select
+                  v-model="bcglXiangXiList[scope.row.xh-1].ts"
+                  clearable
+                  @change="changezdts(scope.row)"
+                >
+                  <el-option
+                    v-for="dict in zdtsOptions"
+                    :key="dict.dictValue"
+                    :label="dict.dictLabel"
+                    :value="dict.dictValue"
+                  />
+                </el-select>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
     </el-dialog>
@@ -98,6 +191,7 @@
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'SystemPool',
@@ -105,13 +199,14 @@ export default {
 
   data() {
     return {
+      input: '',
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: ''
+        channelCode: '',
+        costTypeNumber: '',
+        productCode: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '19号线', value: '19' }],
@@ -140,14 +235,37 @@ export default {
       dialogVisible: false,
       isEditor: '',
       editorId: '',
-      checkArr: [] // 批量删除,存放选中
+      checkArr: [], // 批量删除,存放选中
+      channelOptons: [],
+      skuOptons: [],
+      mpOptons: []
     }
   },
   computed: {},
   mounted() {
-    this.getTableData()
+    // this.getTableData()
+    // 获取下拉框
+    this.getQueryChannelSelect()
+    this.getQuerySkuSelect()
+    this.getQueryMinePackageSelect()
   },
   methods: {
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then(res => {
+        this.channelOptons = res.data
+      }).catch()
+    },
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then(res => {
+        this.skuOptons = res.data
+      }).catch()
+    },
+    getQueryMinePackageSelect() {
+      selectAPI.queryMinePackageSelect().then(res => {
+        this.mpOptons = res.data
+      }).catch()
+    },
     // 获取表格数据
     getTableData() {
       this.tableLoading = true
@@ -263,7 +381,7 @@ export default {
     },
     // 取消
     resetForm(formName) {
-      this.$refs[formName].resetFields()
+      // this.$refs[formName].resetFields()
       this.closeDialog()
     },
     handleSelectionChange(val) {
@@ -294,4 +412,32 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    // background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+    line-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+  }
+</style>
