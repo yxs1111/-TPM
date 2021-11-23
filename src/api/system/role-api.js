@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-11-22 17:14:50
+ * @LastEditTime: 2021-11-23 14:21:20
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -30,8 +30,24 @@ export default {
     })
   },
   roleUrl:'auth/authRoleDataPermission',
-  //角色数据权限
+  //角色数据权限--KA权限
   getKAList(params) {
     return requestApi.request_get(this.roleUrl + '/getKAList', params)
+  },
+  //角色数据权限--MinePackage权限
+  getMinePackage(params) {
+    return requestApi.request_get(this.roleUrl + '/getMinePackage', params)
+  },
+  //角色数据权限--FieldSales权限
+  getFieldSales(params) {
+    return requestApi.request_get('/auth/organization/organization', params)
+  },
+  //角色数据权限--已绑定权限
+  getDefaultRolePermissions(params) {
+    return requestApi.request_get(this.roleUrl + '/getDataPermissionList', params)
+  },
+  //角色数据权限--绑定权限
+  bindDataPermissions(params) {
+    return requestApi.request_put(this.roleUrl + '/bindDataPermissions', params)
   },
 }

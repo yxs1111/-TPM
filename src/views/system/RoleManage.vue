@@ -220,16 +220,18 @@
     </el-dialog>
     <!-- 数据权限绑定 -->
     <el-dialog width="55%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
-      <div class="roleBindWrap">
+      <div class="roleBindWrap" v-loading='bindLoading'>
         <div class="roleName">Package Owner - Price Promotion</div>
+        <el-input placeholder="输入关键字进行过滤" v-model="RoleTreeFilter">
+        </el-input>
         <div class="roleTree">
-          <el-tree :data="RoleTreedata" :show-checkbox="true" default-expand-all node-key="id" ref="tree" highlight-current :props="Role_KA">
+          <el-tree :data="RoleTreedata" ref="RoleTree" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="id" highlight-current :props="Role_KA">
           </el-tree>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmRoleDialog()">保 存</el-button>
-        <el-button @click="confirmRoleDialog">取 消</el-button>
+        <el-button @click="closeRoleDialog">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -386,62 +388,16 @@ export default {
         { value: 100, label: '普通' },
       ],
       roleVisible: false, //数据权限绑定弹窗
-      RoleTreedata: [
-        {
-          id: 1,
-          label: '一级 1',
-          children: [
-            {
-              id: 4,
-              label: '二级 1-1',
-              children: [
-                {
-                  id: 9,
-                  label: '三级 1-1-1',
-                },
-                {
-                  id: 10,
-                  label: '三级 1-1-2',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: '一级 2',
-          children: [
-            {
-              id: 5,
-              label: '二级 2-1',
-            },
-            {
-              id: 6,
-              label: '二级 2-2',
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: '一级 3',
-          children: [
-            {
-              id: 7,
-              label: '二级 3-1',
-            },
-            {
-              id: 8,
-              label: '二级 3-2',
-            },
-          ],
-        },
-      ],
+      RoleTreedata: [], //数据权限
+      RoleTreeFilter: '', //数据权限过滤
       Role_KA: {
         children: 'children',
         label: 'label',
       },
+      bindLoading: '',
       Role_KAData: {}, //KA 权限数据
       permissionType: '', //角色数据权限类型
+      roleCode: '',
     }
   },
   created() {
@@ -475,6 +431,10 @@ export default {
     },
     showCheckedOnly() {
       this.defaultSelection()
+    },
+    //角色数据权限
+    RoleTreeFilter(val) {
+      this.$refs['RoleTree'].filter(val)
     },
   },
   methods: {
@@ -877,37 +837,170 @@ export default {
     },
     //数据权限绑定--弹窗显示
     showRoleDialog(obj) {
-      console.log(obj.permissionType)
+      this.bindLoading = true
       if (obj.permissionType == 'KA') {
         this.getKAList()
+      } else if (obj.permissionType == 'Mine Package') {
+        this.getMinePackage()
+      } else if (obj.permissionType == 'Field sales') {
+        this.getFieldSales()
+      } else if (!obj.permissionType) {
+        this.getKAList()
+        this.getMinePackage()
+        this.getFieldSales()
       }
-      this.roleVisible = true
+      this.roleCode = obj.code
+      this.bindLoading = false
     },
     //数据权限绑定--确认
     confirmRoleDialog() {
-      this.roleVisible = false
+      this.bindLoading = true
+      let list = this.$refs.RoleTree.getCheckedNodes()
+      console.log(list);
+      let dataList = []
+      for (let m = 0; m < list.length; m++) {
+        let obj = {
+          dataFircode: list[m].dataFircode,
+          dataSecCode: list[m].dataSecCode,
+          dataSecId: list[m].dataSecId,
+          dataTerCode: list[m].dataTerCode,
+          dataTerId: list[m].dataTerId,
+        }
+        dataList.push(obj)
+      }
+      roleApi
+        .bindDataPermissions({ roleCode: this.roleCode, dataList })
+        .then((res) => {
+          console.log(res)
+          this.bindLoading = false
+          this.$message.success('权限绑定成功')
+          this.closeRoleDialog()
+        })
     },
     //数据权限绑定--关闭
     closeRoleDialog() {
       this.roleVisible = false
+      this.roleCode = ''
+      this.RoleTreedata = []
     },
+    //获取默认权限
+    getDefaultRolePermissions(roleCode) {
+      roleApi.getDefaultRolePermissions({ roleCode }).then((res) => {
+        console.log(res)
+        let list = res.data
+        let IdList = []
+        for (let i = 0; i < list.length; i++) {
+          IdList.push(list[i].dataTerId)
+        }
+        this.$refs.RoleTree.setCheckedKeys(IdList, true)
+      })
+    },
+    //获取KA 权限
     getKAList() {
       roleApi.getKAList().then((res) => {
-        // this.Role_KAData=res.channelList
-        // console.log(this.Role_KAData)
         let list = res.data.channelList
-        console.log(list)
-        return
         for (let i = 0; i < list.length; i++) {
-          list[i]["label"] = list[i].channelCode
-
-          list[i]["children"] = list[i].customerList
-          for (let j = 0; j < list[i].children.length; j++) {
-            list[i].children[j]["label"] = list[i].children[j].channelCode
+          list[i]['label'] = list[i].channelCode
+          if (list[i].customerList) {
+            list[i]['children'] = list[i].customerList
+            for (let j = 0; j < list[i].children.length; j++) {
+              list[i].children[j]['label'] = list[i].children[j].customerCsName
+              list[i].children[j]['dataTerId'] = list[i].children[j].id
+              list[i].children[j]['dataTerCode'] =
+                list[i].children[j].customerCode
+              list[i].children[j]['dataSecId'] = list[i].id
+              list[i].children[j]['dataSecCode'] = list[i].channelCode
+              list[i].children[j]['dataFircode'] = 'KA'
+            }
+          } else {
+            list[i]['children'] = []
           }
         }
-        console.log(list)
+        var obj = {
+          label: 'KA',
+          children: [...list],
+        }
+        this.RoleTreedata.push(obj)
+        this.roleVisible = true
+        //获取已绑定权限
+        this.getDefaultRolePermissions(this.roleCode)
+        console.log(this.RoleTreedata)
       })
+    },
+    //获取Mine Package 权限
+    getMinePackage() {
+      roleApi.getMinePackage().then((res) => {
+        let list = res.data.mdCostTypeDTOList
+        for (let i = 0; i < list.length; i++) {
+          list[i]['label'] = list[i].costType
+          if (list[i].channelList) {
+            list[i]['children'] = list[i].channelList
+            for (let j = 0; j < list[i].children.length; j++) {
+              list[i].children[j]['label'] = list[i].children[j].channelCode
+              list[i].children[j]['dataTerId'] = list[i].children[j].id
+              list[i].children[j]['dataTerCode'] =
+                list[i].children[j].channelCode
+              list[i].children[j]['dataSecId'] = list[i].id
+              list[i].children[j]['dataSecCode'] = list[i].costTypeNumber
+              list[i].children[j]['dataFircode'] = 'MinePackage'
+            }
+          } else {
+            list[i]['children'] = []
+          }
+        }
+        var obj = {
+          label: 'Mine Package',
+          children: [...list],
+        }
+        this.RoleTreedata.push(obj)
+        this.roleVisible = true
+        //获取已绑定权限
+        this.getDefaultRolePermissions(this.roleCode)
+      })
+    },
+    //获取Field sales 权限
+    getFieldSales() {
+      roleApi.getFieldSales().then((res) => {
+        let list = res.data.children
+        for (let i = 0; i < list.length; i++) {
+          list[i]['label'] = list[i].name
+          if (list[i].children) {
+            for (let j = 0; j < list[i].children.length; j++) {
+              list[i].children[j]['label'] = list[i].children[j].name
+              list[i].children[j]['dataTerId'] = list[i].children[j].id
+              list[i].children[j]['dataTerCode'] = list[i].children[j].code
+              list[i].children[j]['dataSecId'] = list[i].id
+              list[i].children[j]['dataSecCode'] = list[i].name
+              list[i].children[j]['dataFircode'] = 'FieldSales'
+            }
+          } else {
+            list[i]['children'] = []
+          }
+        }
+        var obj = {
+          label: 'Field sales',
+          children: [...list],
+        }
+        this.RoleTreedata.push(obj)
+        this.roleVisible = true
+        //获取已绑定权限
+        this.getDefaultRolePermissions(this.roleCode)
+      })
+    },
+    //筛选
+    RoleTreeFilterMethod(value, data, node) {
+      return this.getHasKeyword(value, node)
+    },
+    //筛选的时候显示子数据
+    getHasKeyword(value, node) {
+      if (node.data instanceof Array) {
+        node.data = node.data.length > 0 ? node.data[0] : {}
+      }
+      if (node.data.label && node.data.label.indexOf(value) !== -1) {
+        return true
+      } else {
+        return node.parent && this.getHasKeyword(value, node.parent)
+      }
     },
   },
 }
@@ -972,7 +1065,7 @@ export default {
   }
   .roleTree {
     width: 100%;
-    height: 400px;
+    height: 350px;
     overflow-y: scroll;
   }
 }

@@ -25,13 +25,13 @@ export default function() {
              component: () => import('@/views/system/RoleManage.vue'),
              meta: { title: '角色管理', icon: 'form' }
         },
-        {
-             path: '/System/powerManage',
-             code: 'powerManage',
-             name: 'powerManage',
-             component: () => import('@/views/system/permission/index.vue'),
-             meta: { title: '权限管理(需合并到角色管理)', icon: 'form' }
-        },
+     //    {
+     //         path: '/System/powerManage',
+     //         code: 'powerManage',
+     //         name: 'powerManage',
+     //         component: () => import('@/views/system/permission/index.vue'),
+     //         meta: { title: '权限管理(需合并到角色管理)', icon: 'form' }
+     //    },
         {
              path: '/System/MenuManage',
              code: 'MenuManage',
