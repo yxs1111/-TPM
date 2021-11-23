@@ -16,17 +16,17 @@
           :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd" :default-time="['00:00:00','23:59:59']" @change="search" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" :loading="searchLoading" @click="search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" :loading="searchLoading" @click="search">搜索</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button @click="reset">重置</el-button>
+        <el-button @click="reset" class="TpmButtonBG">重置</el-button>
       </el-form-item>
     </el-form>
-    <div id="buttonDiv" style="margin-bottom: 20px">
-      <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="newRowData">
+    <div class="TpmButtonBGWrap ">
+      <el-button class="TpmButtonBG" type="primary" icon="el-icon-edit" @click="newRowData">
         新增
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="showDeleteDialog">
+      <el-button class="TpmButtonBG" type="primary" icon="el-icon-delete" @click="showDeleteDialog">
         删除
       </el-button>
       <!-- <el-button :disabled="editDisabled" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="showPermission">
@@ -60,18 +60,20 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="480" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="showRoleDialog(row)">
-            数据权限绑定
-          </el-button>
-          <el-button type="primary" size="mini" @click="showPermission(row)">
-            功能权限绑定
-          </el-button>
-          <el-button type="primary" size="mini" @click="editRowData(row)">
-            {{ $t('table.edit') }}
-          </el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(row)">
-            {{ $t('table.delete') }}
-          </el-button>
+          <div class="table_operation">
+            <span class="table_operationText" @click="showRoleDialog(row)">
+              数据权限绑定
+            </span>
+            <span class="table_operationText" @click="showPermission(row)">
+              功能权限绑定
+            </span>
+            <span class="table_operationText" @click="editRowData(row)">
+              {{ $t('table.edit') }}
+            </span>
+            <span class="table_operationText"  @click="handleDelete(row)">
+              {{ $t('table.delete') }}
+            </span>
+          </div>
 
         </template>
       </el-table-column>
@@ -384,7 +386,6 @@ export default {
       permissions: getDefaultPermissions(),
       typeOptions: [
         { value: 0, label: '系统' },
-        { value: 10, label: '租户' },
         { value: 100, label: '普通' },
       ],
       roleVisible: false, //数据权限绑定弹窗
@@ -856,7 +857,7 @@ export default {
     confirmRoleDialog() {
       this.bindLoading = true
       let list = this.$refs.RoleTree.getCheckedNodes()
-      console.log(list);
+      console.log(list)
       let dataList = []
       for (let m = 0; m < list.length; m++) {
         let obj = {

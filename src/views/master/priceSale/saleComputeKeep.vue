@@ -2,92 +2,79 @@
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="年月" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
-      </el-form-item>
-      <el-form-item label="客户" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
-      </el-form-item>
-    </el-form>
-    <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
-      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli">
+          <span class="SelectliTitle">年月</span>
+          <el-input v-model="filterObj.yearAndMonth" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">客户</span>
+          <el-select v-model="filterObj.customerCsName" placeholder="请选择">
+            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+          </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+      </div>
     </div>
-    <el-table
-      v-loading="tableLoading"
-      :data="tableData"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      stripe
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG" @click="importData">
+        <img src="@/assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG" @click="exportData">
+        <img src="@/assets/images/export.png" alt="">
+        <span class="text">导出</span>
+      </div>
+      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="TemplateDownload">下载模板</el-button>
+    </div>
+    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%"
+      @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
-      <el-table-column width="150" align="center" prop="channelCode" label="客户名称" />
-      <el-table-column width="150" align="center" prop="channelCsName" label="年月" />
-      <el-table-column width="150" align="center" prop="productCode" label="毛利点数" />
-      <el-table-column width="320" align="center" prop="productCsName" label="经销商返利" />
-      <el-table-column width="150" align="center" prop="gear" label="平台返利" />
-      <el-table-column width="150" align="center" prop="volMix" label="创建时间" />
-      <el-table-column width="150" align="center" prop="actualNum" label="创建人" />
-      <el-table-column width="150" align="center" prop="createBy" label="更新时间" />
-      <el-table-column width="180" align="center" prop="createDate" label="更新人" />
-      <el-table-column width="150" align="center" prop="updateBy" label="备注" />
+      <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
+      <el-table-column width="150" align="center" prop="productEsName" label="产品名称" />
+      <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
+      <el-table-column width="150" align="center" prop="grossProfitPoints" label="毛利点数" />
+      <el-table-column width="320" align="center" prop="dealerRebate" label="经销商返利" />
+      <el-table-column width="150" align="center" prop="platformRebate" label="平台返利" />
+      <el-table-column width="150" align="center" prop="createDate" label="创建时间">
+        <template slot-scope="{row}">
+          <div>
+            {{row.createDate?row.createDate.slice(0,10):''}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="150" align="center" prop="updateDate" label="更新时间">
+        <template slot-scope="{row}">
+          <div>
+            {{row.updateDate?row.updateDate.slice(0,10):''}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="180" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
-      <div class="el-dialogContent">
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
-          <el-form-item label="渠道编号" prop="channelCode">
-            <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入" />
-            <!-- <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
-              <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />
-            </el-select> -->
-          </el-form-item>
-          <el-form-item label="渠道中文名称">
-            <el-input v-model="ruleForm.channelCsName" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="产品编号">
-            <el-input v-model="ruleForm.productCode" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="产品中文名称">
-            <el-input v-model="ruleForm.productCsName" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="档位">
-            <el-input v-model="ruleForm.gear" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="volMin">
-            <el-input v-model="ruleForm.volMin" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="所属年月">
-            <el-input v-model="ruleForm.yearAndMonth" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-        </el-form>
+    <!-- 导入 -->
+    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+      <div class="fileInfo ImportContent">
+        <div class="fileTitle">文件</div>
+        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+        <div class="fileName" v-if="uploadFileName!=''">
+          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+          <span>{{uploadFileName}}</span>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button type="primary" @click="confirmImport()">确 定</el-button>
+        <el-button @click="closeImport">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -108,38 +95,19 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: ''
+        yearAndMonth: '',
+        customerCsName: '',
+        productEsName: '',
       },
       tableLoading: '',
       categoryArr: [{ label: '19号线', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      ruleForm: {
-        channelCode: '',
-        channelCsName: '',
-        productCode: '',
-        productEsName: '',
-        productCsName: '',
-        gear: '',
-        volMin: '',
-        yearAndMonth: '',
-        remark: ''
-      },
-      rules: {
-        channelCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur'
-          }
-        ]
-      },
-      dialogVisible: false,
-      isEditor: '',
-      editorId: '',
-      checkArr: [] // 批量删除,存放选中
+      //导入
+      importVisible: false, //导入弹窗
+      uploadFileName: '',
+      uploadFile: '',
+      event:'',
     }
   },
   computed: {},
@@ -150,9 +118,12 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableLoading = true
-      API.getPageMdPriceGear({
+      API.getPageSaleComputeKeep({
+        yearAndMonth: this.filterObj.yearAndMonth,
+        customerCsName: this.filterObj.customerCsName,
+        productEsName: this.filterObj.productEsName,
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -163,107 +134,83 @@ export default {
         })
         .catch(() => {})
     },
-    add() {
-      this.dialogVisible = true
-    },
     search() {
       this.getTableData()
     },
-    closeDialog() {
-      this.dialogVisible = false
-      this.isEditor = false
-      this.editorId = ''
-      this.ruleForm = {
-        channelCode: '',
-        channelCsName: '',
-        productCode: '',
-        productEsName: '',
-        productCsName: '',
-        gear: '',
-        volMin: '',
+    Reset() {
+      this.filterObj = {
         yearAndMonth: '',
-        remark: ''
+        customerCsName: '',
+        productEsName: '',
       }
+      this.getTableData()
     },
-    editor(obj) {
-      this.isEditor = true
-      this.dialogVisible = true
-      this.ruleForm = {
-        channelCode: obj.channelCode,
-        channelCsName: obj.channelCsName,
-        productCode: obj.productCode,
-        productEsName: obj.productEsName,
-        productCsName: obj.productCsName,
-        gear: obj.gear,
-        volMin: obj.volMin,
-        yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark
-      }
-      this.editorId = obj.id
+    //导入数据
+    importData() {
+      this.importVisible = true
     },
-    // 提交form
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          const url = this.isEditor
-            ? API.updateMdPriceGear
-            : API.insertMdPriceGear
-          url({
-            id: this.editorId,
-            channelCode: this.ruleForm.channelCode,
-            channelCsName: this.ruleForm.channelCsName,
-            productCode: this.ruleForm.productCode,
-            productCsName: this.ruleForm.productCsName,
-            gear: this.ruleForm.gear,
-            volMin: this.ruleForm.volMin,
-            yearAndMonth: this.ruleForm.yearAndMonth,
-            remark: this.ruleForm.remark
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
-              this.resetForm(formName)
-              this.getTableData()
-            }
-          })
-        } else {
-          this.$message.error('提交失败')
-          return false
-        }
+    //确认导入
+    confirmImport() {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importSaleComputeKeep(formData)
+        .then((response) => {
+          this.$message.success('导入成功!')
+          this.closeImport()
+        })
+        .catch(() => {})
+    },
+    //选择导入文件
+    parsingExcelBtn() {
+      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
+    },
+    //导入
+    parsingExcel(event) {
+      this.event = event
+      this.uploadFileName = event.target.files[0].name
+      this.uploadFile = event.target.files[0]
+    },
+    //关闭导入
+    closeImport() {
+      this.importVisible = false
+      this.event.srcElement.value = '' //置空
+      this.uploadFileName = ''
+      this.uploadFile = ''
+    },
+    //导出数据
+    exportData() {
+      //导出数据筛选
+      var data = {}
+      data = { ...this.filterObj }
+      API.exportSaleComputeKeep(data).then((res) => {
+        this.downloadFile(res, '促销计算维护' + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
       })
     },
-    // 多个删除
-    mutidel() {
-      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
-      else {
-        const IdList = []
-        this.checkArr.forEach((item) => {
-          IdList.push(item.id)
-        })
-        this.$confirm('确定要删除数据吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-          .then(() => {
-            API.deleteMdPriceGear(IdList).then((response) => {
-              if (response.code === 1000) {
-                this.getTableData()
-                this.$message.success('删除成功!')
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
-      }
+    TemplateDownload() {
+      API.SaleComputeKeepTemplateDownload().then((res) => {
+        this.downloadFile(res, '促销计算维护模板' + '.xlsx') //自定义Excel文件名
+        this.$message.success('下载成功!')
+      })
     },
-    // 取消
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-      this.closeDialog()
+    //下载文件
+    downloadFile(res, fileName) {
+      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
     },
     handleSelectionChange(val) {
       this.checkArr = val
@@ -288,8 +235,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 
