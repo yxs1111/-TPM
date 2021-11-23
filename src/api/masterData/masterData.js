@@ -199,5 +199,17 @@ export default {
   deleteMdCustomerGroup(params) {
     return requestApi.request_delete('/mdm/mdCustomerGroup/delete', params)
   },
-  
+  // 机制池
+  getPageByRequestConfig(params) {
+    return requestApi.request_get('/mdm/mdCdmConfig/getPageByRequest', params)
+  },
+  insertDataConfig(params) {
+    return requestApi.request_post('/mdm/mdCdmConfig/insertData', params)
+  },
+  updateConfig(params) {
+    return requestApi.request_put('/mdm/mdCdmConfig/update', params)
+  },
+  deleteConfig(params) {
+    return requestApi.request_delete('/mdm/mdCdmConfig/delete', params)
+  }
 }
