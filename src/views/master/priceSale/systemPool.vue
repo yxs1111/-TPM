@@ -4,30 +4,30 @@
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="渠道：">
-        <el-select v-model="filterObj.channelCode" placeholder="请选择">
+        <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
           <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
         </el-select>
       </el-form-item>
       <el-form-item label="Mine Package：">
-        <el-select v-model="filterObj.costTypeNumber" placeholder="请选择">
+        <el-select v-model="filterObj.costTypeNumber" placeholder="请选择" clearable>
           <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
         </el-select>
       </el-form-item>
       <el-form-item label="SKU：">
-        <el-select v-model="filterObj.productCode" placeholder="请选择">
+        <el-select v-model="filterObj.productCode" placeholder="请选择" clearable>
           <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
         </el-select>
       </el-form-item>
       <el-form-item label="机制类型：">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+        <el-select v-model="filterObj.cdmType" placeholder="请选择" clearable>
+          <el-option v-for="item in cdmTypeOptions" :key="item.code" :label="item.name" :value="item.code" />
         </el-select>
       </el-form-item>
       <el-form-item label="机制名称：">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+        <el-input v-model="filterObj.cdmName" placeholder="请输入模型名称" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">导出</el-button>
@@ -47,16 +47,28 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="320" align="center" prop="channelCsName" label="Mine Package" />
-      <el-table-column width="150" align="center" prop="productCode" label="SKU" />
-      <el-table-column width="320" align="center" prop="productCsName" label="机制类型" />
-      <el-table-column width="200" align="center" prop="gear" label="机制名称" />
-      <el-table-column width="150" align="center" prop="volMix" label="创建时间" />
-      <el-table-column width="150" align="center" prop="actualNum" label="创建人" />
-      <el-table-column width="150" align="center" prop="createBy" label="更新时间" />
-      <el-table-column width="180" align="center" prop="createDate" label="更新人" />
-      <el-table-column width="150" align="center" prop="updateBy" label="备注" />
+      <el-table-column width="150" align="center" prop="channelCsName" label="渠道" />
+      <el-table-column width="320" align="center" prop="costType" label="Mine Package" />
+      <el-table-column width="150" align="center" prop="sku" label="SKU" />
+      <el-table-column width="320" align="center" prop="cdmType" label="机制类型">
+        <template slot-scope="scope">
+          {{ typeVSinfo(scope.row.cdmType) }}
+        </template>
+      </el-table-column>
+      <el-table-column width="200" align="center" prop="cdmName" label="机制名称" />
+      <el-table-column width="180" align="center" label="创建时间">
+        <template slot-scope="scope">
+          {{ scope.row.createDate.replace('T', ' ') }}
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="180" align="center" label="更新时间">
+        <template slot-scope="scope">
+          {{ scope.row.updateDate==null ? '': scope.row.updateDate.replace('T', ' ') }}
+        </template>
+      </el-table-column>
+      <el-table-column width="180" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -70,32 +82,32 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
       <div class="el-dialogContent">
         <div style="margin-bottom:15px;">
           <el-row :gutter="20">
-            <el-col :span="6">
+            <el-col :span="5">
               <div class="grid-content bg-purple">
                 渠道：
-                <el-select v-model="value" placeholder="请选择" size="small">
+                <el-select v-model="dialogAdd.channelcode" placeholder="请选择" size="small">
                   <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    v-for="item in channelOptons"
+                    :key="item.channelCode"
+                    :label="item.channelEsName"
+                    :value="item.channelCode"
                   />
                 </el-select>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="7">
               <div class="grid-content bg-purple">
                 Mine Package：
-                <el-select v-model="value" placeholder="请选择" size="small">
+                <el-select v-model="dialogAdd.costTypeNumber" placeholder="请选择" size="small">
                   <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    v-for="item in mpOptons"
+                    :key="item.costTypeNumber"
+                    :label="item.costType"
+                    :value="item.costTypeNumber"
                   />
                 </el-select>
               </div>
@@ -103,12 +115,12 @@
             <el-col :span="5">
               <div class="grid-content bg-purple">
                 SKU：
-                <el-select v-model="value" placeholder="请选择" size="small">
+                <el-select v-model="dialogAdd.productCode" placeholder="请选择" size="small">
                   <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    v-for="item in skuOptons"
+                    :key="item.productCode"
+                    :label="item.productCsName"
+                    :value="item.productCode"
                   />
                 </el-select>
               </div>
@@ -116,71 +128,64 @@
             <el-col :span="7">
               <div class="grid-content bg-purple">
                 备注：
-                <el-input v-model="input" style="width: 260px;" placeholder="请输入内容" size="small" />
+                <el-input v-model="dialogAdd.remark" style="width: 260px;" placeholder="请输入内容" size="small" />
               </div>
             </el-col>
           </el-row>
         </div>
         <div>
-          <el-button plain type="primary">添加一行</el-button>
+          <el-button plain type="primary" size="mini" icon="el-icon-plus" @click="handleAddDetails">添加一行</el-button>
+          <el-button
+            type="success"
+            icon="el-icon-delete"
+            size="mini"
+            @click="handleDeleteDetails"
+          >删除</el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+            @click="handleDeleteAllDetails"
+          >清空</el-button>
         </div>
         <div style="height:1px;background:#dcdfe6;margin:20px 0px;" />
         <div style="border: 1px solid #dcdfe6;">
-          <el-table>
-            <el-table-column label="序号" align="center" prop="" width="50" />
-            <el-table-column label="机制类型" align="center" prop="ts">
+          <el-table ref="tb" :data="systemList" :row-class-name="rowClassName" @selection-change="handleDetailSelectionChange">
+            <el-table-column type="selection" width="55" />
+            <el-table-column type="index" label="序号" align="center" width="50" />
+            <el-table-column label="机制类型" align="center" prop="cdmType">
               <template slot-scope="scope">
                 <el-select
-                  v-model="bcglXiangXiList[scope.row.xh-1].ts"
+                  v-model="systemList[scope.row.xh-1].cdmType"
+                  size="small"
                   clearable
-                  @change="changezdts(scope.row)"
                 >
                   <el-option
-                    v-for="dict in zdtsOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictLabel"
-                    :value="dict.dictValue"
+                    v-for="dict in cdmTypeOptions"
+                    :key="dict.code"
+                    :label="dict.name"
+                    :value="dict.code"
                   />
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="机制规则" align="center" prop="ts">
+            <el-table-column label="机制规则" align="center" prop="fs">
               <template slot-scope="scope">
-                <el-select
-                  v-model="bcglXiangXiList[scope.row.xh-1].ts"
-                  clearable
-                  @change="changezdts(scope.row)"
-                >
-                  <el-option
-                    v-for="dict in zdtsOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictLabel"
-                    :value="dict.dictValue"
-                  />
-                </el-select>
+                <el-input v-model="systemList[scope.row.xh-1].cdmRuleF" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;margin-right:8px;" size="small" placeholder="请输入" />
+                <el-input v-model="systemList[scope.row.xh-1].cdmRuleS" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;" size="small" placeholder="请输入" />
               </template>
             </el-table-column>
-            <el-table-column label="机制名称" align="center" prop="ts">
+            <el-table-column label="机制名称" align="center" prop="cdmName">
               <template slot-scope="scope">
-                <el-select
-                  v-model="bcglXiangXiList[scope.row.xh-1].ts"
-                  clearable
-                  @change="changezdts(scope.row)"
-                >
-                  <el-option
-                    v-for="dict in zdtsOptions"
-                    :key="dict.dictValue"
-                    :label="dict.dictLabel"
-                    :value="dict.dictValue"
-                  />
-                </el-select>
+                <span v-if="systemList[scope.row.xh-1].cdmType != '5'">{{ '满 '+ systemList[scope.row.xh-1].cdmRuleF + ' 听 '+ systemList[scope.row.xh-1].cdmRuleS + ' 折' }}</span>
+                <el-input v-if="systemList[scope.row.xh-1].cdmType == '5'" v-model="systemList[scope.row.xh-1].cdmName" style="width:260px;" size="small" placeholder="请输入内容" />
               </template>
             </el-table-column>
           </el-table>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">保 存</el-button>
+        <el-button type="primary" @click="submitForm()">保 存</el-button>
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
     </el-dialog>
@@ -206,9 +211,18 @@ export default {
       filterObj: {
         channelCode: '',
         costTypeNumber: '',
-        productCode: ''
+        productCode: '',
+        cdmType: '',
+        cdmName: ''
+      },
+      dialogAdd: {
+        channelCode: '',
+        costTypeNumber: '',
+        productCode: '',
+        remark: ''
       },
       tableLoading: '',
+      value: '',
       categoryArr: [{ label: '19号线', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -238,18 +252,105 @@ export default {
       checkArr: [], // 批量删除,存放选中
       channelOptons: [],
       skuOptons: [],
-      mpOptons: []
+      mpOptons: [],
+      systemList: [],
+      checkedDetail: [],
+      cdmTypeOptions: [
+        {
+          code: '1',
+          name: '打折'
+        },
+        {
+          code: '2',
+          name: '特价'
+        },
+        {
+          code: '3',
+          name: '满减'
+        },
+        {
+          code: '4',
+          name: '买赠'
+        },
+        {
+          code: '5',
+          name: '其它'
+        }
+      ]
     }
   },
-  computed: {},
+
+  computed: {
+    typeVSinfo() {
+      return function(type) {
+        switch (type) {
+          case '1':
+            return '打折'
+            break
+          case '2':
+            return '特价'
+            break
+          case '3':
+            return '满减'
+            break
+          case '4':
+            return '买赠'
+            break
+          case '5':
+            return '其它'
+            break
+          default:
+            break
+        }
+      }
+    }
+  },
   mounted() {
-    // this.getTableData()
+    this.getTableData()
     // 获取下拉框
     this.getQueryChannelSelect()
     this.getQuerySkuSelect()
     this.getQueryMinePackageSelect()
   },
   methods: {
+    // 弹框 动态增加行
+    rowClassName({ row, rowIndex }) {
+      row.xh = rowIndex + 1
+    },
+    // 单选框选中数据
+    handleDetailSelectionChange(selection) {
+      if (selection.length > 1) {
+        this.$refs.tb.clearSelection()
+        this.$refs.tb.toggleRowSelection(selection.pop())
+      } else {
+        this.checkedDetail = selection
+      }
+    },
+    handleAddDetails() {
+      if (this.systemList === undefined) {
+        // eslint-disable-next-line no-array-constructor
+        this.systemList = new Array()
+      }
+      const obj = {}
+      obj.cdmType = '1'
+      obj.cdmRuleF = '0'
+      obj.cdmRuleS = '0'
+      obj.cdmName = ''
+      this.systemList.push(obj)
+    },
+    handleDeleteDetails() {
+      if (this.checkedDetail.length === 0) {
+        this.$alert('请先选择要删除的数据', '提示', {
+          confirmButtonText: '确定'
+        })
+      } else {
+        this.systemList.splice(this.checkedDetail[0].xh - 1, 1)
+      }
+    },
+    handleDeleteAllDetails() {
+      this.systemList = undefined
+    },
+
     // 获取下拉框 渠道
     getQueryChannelSelect() {
       selectAPI.queryChannelSelect().then(res => {
@@ -266,10 +367,31 @@ export default {
         this.mpOptons = res.data
       }).catch()
     },
+    // 查询
+    search() {
+      this.tableLoading = true
+      API.getPageByRequestConfig({
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        channelCode: this.filterObj.channelCode,
+        minePackageCode: this.filterObj.costTypeNumber,
+        sku: this.filterObj.productCode,
+        cdmType: this.filterObj.cdmType,
+        cdmName: this.filterObj.cdmName
+      })
+        .then((response) => {
+          this.tableLoading = false
+          this.tableData = response.data.records
+          this.pageNum = response.data.pageNum
+          this.pageSize = response.data.pageSize
+          this.total = response.data.total
+        })
+        .catch(() => {})
+    },
     // 获取表格数据
     getTableData() {
       this.tableLoading = true
-      API.getPageMdPriceGear({
+      API.getPageByRequestConfig({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize // 每页条数
       })
@@ -284,9 +406,6 @@ export default {
     },
     add() {
       this.dialogVisible = true
-    },
-    search() {
-      this.getTableData()
     },
     closeDialog() {
       this.dialogVisible = false
@@ -321,34 +440,64 @@ export default {
       this.editorId = obj.id
     },
     // 提交form
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          const url = this.isEditor
-            ? API.updateMdPriceGear
-            : API.insertMdPriceGear
-          url({
-            id: this.editorId,
-            channelCode: this.ruleForm.channelCode,
-            channelCsName: this.ruleForm.channelCsName,
-            productCode: this.ruleForm.productCode,
-            productCsName: this.ruleForm.productCsName,
-            gear: this.ruleForm.gear,
-            volMin: this.ruleForm.volMin,
-            yearAndMonth: this.ruleForm.yearAndMonth,
-            remark: this.ruleForm.remark
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
-              this.resetForm(formName)
-              this.getTableData()
-            }
-          })
-        } else {
-          this.$message.error('提交失败')
-          return false
+    submitForm() {
+      console.log('*******addInfo*******')
+      console.log(this.systemList)
+      // 新增接口
+      const cdmListLocal = []
+      for (const item of this.systemList) {
+        const cdnItem = {
+          cdmTypeItem: '',
+          cdmNameItem: '',
+          beginNumItem: '',
+          endNumItem: ''
         }
-      })
+        cdnItem.cdmTypeItem = item.cdmType
+        cdnItem.cdmNameItem = item.cdmType === '5' ? item.cdmName : '满' + item.cdmRuleF + '听' + item.cdmRuleS + '折'
+        cdnItem.beginNumItem = item.cdmRuleF
+        cdnItem.endNumItem = item.cdmRuleS
+        cdmListLocal.push(cdnItem)
+      }
+
+      const params = {
+        'channelCode': this.dialogAdd.channelCode,
+        'minePackageCode': this.dialogAdd.costTypeNumber,
+        'sku': this.dialogAdd.productCode,
+        'remark': this.dialogAdd.remark,
+        'cdmList': cdmListLocal
+      }
+      API.insertDataConfig(params).then(res => {
+        if (res.code == 1000) {
+          this.closeDialog()
+        }
+      }).catch()
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     const url = this.isEditor
+      //       ? API.updateMdPriceGear
+      //       : API.insertMdPriceGear
+      //     url({
+      //       id: this.editorId,
+      //       channelCode: this.ruleForm.channelCode,
+      //       channelCsName: this.ruleForm.channelCsName,
+      //       productCode: this.ruleForm.productCode,
+      //       productCsName: this.ruleForm.productCsName,
+      //       gear: this.ruleForm.gear,
+      //       volMin: this.ruleForm.volMin,
+      //       yearAndMonth: this.ruleForm.yearAndMonth,
+      //       remark: this.ruleForm.remark
+      //     }).then((response) => {
+      //       if (response.code === 1000) {
+      //         this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+      //         this.resetForm(formName)
+      //         this.getTableData()
+      //       }
+      //     })
+      //   } else {
+      //     this.$message.error('提交失败')
+      //     return false
+      //   }
+      // })
     },
     // 多个删除
     mutidel() {
