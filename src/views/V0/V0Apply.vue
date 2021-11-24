@@ -1,25 +1,25 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-18 13:41:56
+ * @LastEditTime: 2021-11-24 20:26:37
 -->
 <template>
   <div class="app-container">
-    <div class="Maincontent" @keyup.enter="search">
-      <div class="SelectBarWrap">
+    <div class="Maincontent">
+      <div class="SelectBarWrap" @keyup.enter="search">
         <div class="SelectBar">
           <div class="Selectli">
             <span class="SelectliTitle">SKU</span>
-            <el-select v-model="SKU" placeholder="请选择">
-              <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-select v-model="filterObj.SKU" placeholder="请选择">
+              <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
             </el-select>
           </div>
           <div class="Selectli">
             <span class="SelectliTitle">月份</span>
-            <el-date-picker v-model="month" type="month" placeholder="选择月">
+            <el-date-picker v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
             </el-date-picker>
           </div>
-          <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
         </div>
         <div class="OpertionBar">
           <div class="TpmButtonBG" @click="getCPTData">
@@ -30,91 +30,62 @@
             <img src="../../assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
-          <div class="TpmButtonBG">
+          <div class="TpmButtonBG" @click="exportData">
             <img src="../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
-          <div class="TpmButtonBG">
+          <div class="TpmButtonBG" @click="approve">
             <svg-icon icon-class="submit" />
             <span class="text">提交</span>
           </div>
         </div>
       </div>
       <!-- 商品 -->
-      <div class="ContentWrap">
-        <div class="contentli">
+      <div class="ContentWrap" v-loading='loading' element-loading-text="正在查询">
+        <div class="contentli" v-for="(tableData,key,index) in ContentData" :key="index">
           <div class="contentTop">
             <div class="SKUTitle">
-              皇家美素力1段婴儿配方奶粉12*350g
+              {{key}}
             </div>
           </div>
           <div class="contentInfoWrap">
-            <el-table :data="tableData" class="customTable" :summary-method="getSummaries" show-summary border :header-cell-style="HeadTable" :cell-style="columnStyle"
-              style="width: 100%">
+            <el-table :data="tableData" class="customTable" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :cell-style="columnStyle" style="width: 100%">
               <el-table-column width="150" fixed>
                 <template slot="header">
                   <div></div>
                 </template>
                 <template slot-scope="scope">
-                  <div class="filstColumn">
-                    <span>{{ scope.row.name }}</span>
+                  <div :class="scope.$index==0?'filstColumn_total':'filstColumn'">
+                    <span>{{ scope.row.dimCustomer }} </span>
+                    <!-- {{scope.$index}} -->
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="120" prop="name" label="活动月"></el-table-column>
-              <el-table-column align="center" width="120" prop="channel" label="渠道"></el-table-column>
-              <el-table-column align="center" width="120" prop="number" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="200.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="CPT均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="均价差值(%)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="费用差值(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="系统判定"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="申请人备注"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="Package Owner审批意见"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="Finance审批意见"></el-table-column>
-            </el-table>
-          </div>
-        </div>
-        <div class="contentli">
-          <div class="contentTop">
-            <div class="SKUTitle">
-              皇家美素力1段婴儿配方奶粉12*350g
-            </div>
-          </div>
-          <div class="contentInfoWrap">
-            <el-table :data="tableData" class="customTable" :summary-method="getSummaries" show-summary border :header-cell-style="HeadTable" :cell-style="columnStyle"
-              style="width: 100%">
-              <el-table-column width="150" fixed>
+              <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
+              <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
+              <el-table-column align="center" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
+              <el-table-column align="center" width="250" v-for="(citem,cindex) in columnList(tableData)" :key="cindex">
                 <template slot="header">
-                  <div></div>
+                  {{ tableData[0].customGearList[cindex].gear }}RMB/听 档位销量(箱)
                 </template>
-                <template slot-scope="scope">
-                  <div class="filstColumn">
-                    <span>{{ scope.row.name }}</span>
+                <template slot-scope="{row}">
+                  <div>
+                    {{row.customGearList[cindex].actualNum}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="120" prop="name" label="活动月"></el-table-column>
-              <el-table-column align="center" width="120" prop="channel" label="渠道"></el-table-column>
-              <el-table-column align="center" width="120" prop="number" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="200.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="CPT均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="均价差值(%)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="费用差值(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="系统判定"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="申请人备注"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="Package Owner审批意见"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="Finance审批意见"></el-table-column>
+              <!-- <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
+              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column> -->
+              <el-table-column align="center" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
+              <el-table-column align="center" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
+              <el-table-column align="center" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
+              <el-table-column align="center" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
+              <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
+              <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
+              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
+              <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
+              <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
+              <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
             </el-table>
           </div>
         </div>
@@ -122,16 +93,20 @@
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
         <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-            <el-form-item label="Scenario">
-              <el-input v-model="ruleForm.scenario" class="my-el-input" placeholder="请输入">
+            <el-form-item label="年月">
+              <el-date-picker v-model="ruleForm.yearAndMonth" class="my-el-input" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="渠道编码">
+              <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入">
               </el-input>
             </el-form-item>
-            <el-form-item label="Version">
-              <el-input v-model="ruleForm.version" class="my-el-input" placeholder="请输入">
+            <el-form-item label="cpt年月">
+              <el-input v-model="ruleForm.dimScenario" class="my-el-input" placeholder="请输入">
               </el-input>
             </el-form-item>
-            <el-form-item label="渠道">
-              <el-input v-model="ruleForm.channel" class="my-el-input" placeholder="请输入">
+            <el-form-item label="cpt版本号">
+              <el-input v-model="ruleForm.dimVersion" class="my-el-input" placeholder="请输入">
               </el-input>
             </el-form-item>
           </el-form>
@@ -144,15 +119,17 @@
       <!-- 导入 -->
       <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
         <div class="el-downloadFileBar">
-          <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
-          <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+          <div>
+            <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
+            <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+          </div>
+          <el-button type="primary" class="TpmButtonBG">保存</el-button>
         </div>
 
         <div class="fileInfo">
           <div class="fileTitle">文件</div>
-          <el-upload  ref="upload" action="/"  :auto-upload="false" :on-change="openFile"  accept="csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-            <el-button type="primary" class="my-search selectFile">选择文件</el-button>
-          </el-upload>
+          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
 
           <div class="fileName" v-if="uploadFileName!=''">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
@@ -210,57 +187,49 @@
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
+import API from '@/api/V0/V0.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
+
 export default {
   data() {
     return {
-      categoryArr: [{ label: '19号线', value: '19' }],
+      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      month: '',
-      SKU: '',
-      tableData: [
-        {
-          id: '12987122',
-          name: '王小虎',
-          number: '234',
-          channel: 'NKA',
-          amount3: 10,
-        },
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: '165',
-          channel: 'NKA',
-          amount3: 12,
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: '324',
-          channel: 'NKA',
-          amount3: 9,
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: '621',
-          channel: 'NKA',
-          amount3: 17,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-        },
-      ],
+      filterObj: {
+        month: '',
+        SKU: '',
+      },
+      skuOptons: [],
+      ContentData: [],
       ruleForm: {
-        scenario: '',
-        version: '',
-        channel: '',
+        yearAndMonth: '',
+        channelCode: '',
+        dimScenario: '',
+        dimVersion: '',
       },
       rules: {
-        scenario: [
+        yearAndMonth: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        channelCode: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        dimScenario: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        dimVersion: [
           {
             required: true,
             message: 'This field is required',
@@ -272,69 +241,141 @@ export default {
       //导入
       importVisible: false, //导入弹窗
       filterImportData: { sku: '' }, //筛选导入数据
-      ImportData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-        },
-      ],
-      uploadFileName:'',
+      ImportData: [],
+      uploadFileName: '',
+      loading: '',
+      uploadFileName: '',
+      uploadFile: '',
+      event: '',
     }
   },
   directives: { elDragDialog, permission },
-  mounted() {},
+  mounted() {
+    //this.getList()
+    this.getQuerySkuSelect()
+  },
   computed: {},
   methods: {
-    search() {},
+    getList() {
+      this.loading = true
+      API.getList({
+        yearAndMonth: this.filterObj.month,
+        productCode: this.filterObj.SKU,
+      })
+        .then((response) => {
+          this.ContentData = response.data
+          for (const key in this.ContentData) {
+            let list = this.ContentData[key]
+            for (let i = 0; i < list.length; i++) {
+              list[i].customGearList = JSON.parse(list[i].customGear)
+            }
+          }
+          this.loading = false
+          console.log(this.ContentData)
+        })
+        .catch(() => {})
+    },
+    getQuerySkuSelect() {
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          this.skuOptons = res.data
+        })
+        .catch()
+    },
+    //档位列
+    columnList(list) {
+      let columnList = list[0].customGearList
+      return columnList
+    },
+    search() {
+      this.getList()
+      console.log(this.filterObj)
+    },
     getCPTData() {
       this.dialogVisible = true
     },
-    //提交form
+    //检测数据
+    confirmImport() {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importSupplier(formData)
+        .then((response) => {
+          this.closeImport()
+        })
+        .catch(() => {})
+    },
+    //导入数据弹窗显示
+    importData() {
+      this.importVisible = true
+    },
+    //关闭导入
+    closeimportDialog() {
+      this.importVisible = false
+    },
+    //选择导入文件
+    parsingExcelBtn() {
+      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
+    },
+    //导入
+    parsingExcel(event) {
+      this.event = event
+      this.uploadFileName = event.target.files[0].name
+      this.uploadFile = event.target.files[0]
+      console.log(this.event)
+    },
+    //导出数据
+    exportData() {
+      //导出数据筛选
+      API.exportExcel().then((res) => {
+        this.downloadFile(res, 'V0' + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
+    //下载文件
+    downloadFile(res, fileName) {
+      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
+    },
+    //确认获取CPT 数据
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.resetForm(formName)
+          this.loading = true
+          API.getCPTData({
+            yearAndMonth: this.ruleForm.yearAndMonth,
+            channelCode: this.ruleForm.channelCode,
+            dimScenario: this.ruleForm.dimScenario,
+            dimVersion: this.ruleForm.dimVersion,
+          })
+            .then((response) => {
+              this.$message.success('获取成功!')
+              //对数据进行处理
+              // this.ContentData = response.data
+              // for (const key in this.ContentData) {
+              //   let list = this.ContentData[key]
+              //   for (let i = 0; i < list.length; i++) {
+              //     list[i].customGearList = JSON.parse(list[i].customGear)
+              //   }
+              // }
+              this.loading = false
+              this.resetForm(formName)
+            })
+            .catch(() => {})
         } else {
           this.$message.error('提交失败')
           return false
@@ -352,74 +393,50 @@ export default {
       this.isEditor = false
       this.editorId = ''
       this.ruleForm = {
-        scenario: '',
-        version: '',
-        channel: '',
+        yearAndMonth: '',
+        channelCode: '',
+        dimScenario: '',
+        dimVersion: '',
       }
     },
-    //汇总计算
-    getSummaries(param) {
-      const { columns, data } = param
-      const sums = []
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = 'Total(销量)'
-          return
-        }
-        const values = data.map((item) => Number(item[column.property]))
-        if (!values.every((value) => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr)
-            if (!isNaN(value)) {
-              return prev + curr
-            } else {
-              return prev
-            }
-          }, 0)
-          sums[index] += ' '
-        } else {
-          sums[index] = ' '
-        }
-      })
-      return sums
-    },
-    //导入数据
-    importData() {
-      this.importVisible = true
-    },
-    //打开文件
-    openFile(file) {
-      console.log(file)
-      this.uploadFileName=file.name
-      this.$refs.upload.clearFiles(); //去掉文件列表
-    },
-    //关闭导入
-    closeimportDialog() {
-      this.importVisible = false
+    //V0 提交审批
+    approve() {
+      var arr = Object.keys(this.ContentData)
+      if (arr.length) {
+        let mainId = this.ContentData[arr[0]][0].mainId
+        console.log(mainId)
+        return
+        API.approve({
+          mainId: '1463428237300322305', //主表id
+          approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+        })
+          .then((response) => {})
+          .catch(() => {})
+      } else {
+        this.$message.error('数据不能为空')
+      }
     },
     // 行样式
     tableRowClassName({ row, rowIndex }) {
-      if ((rowIndex + 1) % 2 === 0) {
-        return 'even-row'
-      } else {
-        return 'odd-row'
+      if (rowIndex == 0) {
+        return 'first-row'
       }
     },
     HeadTable() {
       return ' background: #4192D3;color: #fff;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     columnStyle({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
-        return 'background:#4192d3'
+      if (columnIndex === 0 && rowIndex != 0) {
+        return 'background:#4192d3!important'
       }
-      if (columnIndex === 4) {
+      if (columnIndex === 4 && rowIndex != 0) {
         return 'background:#FEF5F6'
       }
-      if (columnIndex === 5) {
+      if (columnIndex === 5 && rowIndex != 0) {
         return 'background:#EFFCF9'
       }
-      if (columnIndex === 6) {
-        return 'background:#F0F6FC '
+      if (columnIndex === 6 && rowIndex != 0) {
+        return 'background:#F0F6FC'
       }
     },
   },
@@ -441,6 +458,7 @@ export default {
   }
   .ContentWrap {
     width: 100%;
+    min-height: 50vh;
     .contentli {
       // height: 480px;
       padding: 20px;
@@ -488,8 +506,11 @@ export default {
         overflow: hidden;
         .filstColumn {
           text-align: center;
-          background-color: #4192d3;
           color: #fff;
+        }
+        .filstColumn_total {
+          text-align: center;
+          color: #001111;
         }
       }
     }
@@ -497,41 +518,5 @@ export default {
   .hide {
     display: none;
   }
-}
-</style>
-<style lang="scss">
-// 合计行样式
-.el-table__footer-wrapper tbody td,
-.el-table__header-wrapper tbody td {
-  background-color: #e3f3ff !important;
-  color: #666;
-}
-.el-table__footer-wrapper .is-leaf {
-  color: #666 !important;
-}
-.el-table__fixed-footer-wrapper tbody td {
-  border-top: 1px solid #ebeef5;
-  background-color: #e3f3ff;
-  color: #666;
-  text-align: center !important;
-}
-.has-gutter tr td .cell {
-  text-align: center;
-  color: #001111;
-}
-//合并行放在第一行
-.contentInfoWrap .el-table {
-  display: flex;
-  flex-direction: column;
-}
-.contentInfoWrap .el-table__body-wrapper {
-  order: 1;
-}
-.contentInfoWrap .el-table__fixed-body-wrapper {
-  top: 97px !important;
-}
-.contentInfoWrap .el-table__fixed-footer-wrapper {
-  z-index: 0;
-  top: 50px;
 }
 </style>

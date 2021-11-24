@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-18 10:47:49
+ * @LastEditTime: 2021-11-24 20:26:50
 -->
 <template>
   <div class="app-container">
@@ -10,111 +10,82 @@
         <div class="SelectBar">
           <div class="Selectli">
             <span class="SelectliTitle">SKU</span>
-            <el-select v-model="SKU" placeholder="请选择">
+            <el-select v-model="filterObj.SKU" placeholder="请选择">
               <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
             </el-select>
           </div>
           <div class="Selectli">
             <span class="SelectliTitle">月份</span>
-            <el-date-picker v-model="month" type="month" placeholder="选择月">
+            <el-date-picker v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyy-MM" format="yyyy-MM">
             </el-date-picker>
           </div>
-          <el-button type="primary" class="TpmButtonBG">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" class="TpmButtonBG">查询</el-button>
         </div>
         <div class="OpertionBar">
           <div class="TpmButtonBG" @click="importData">
             <img src="../../assets/images/import.png" alt="">
             <span class="text">导入</span>
           </div>
-          <div class="TpmButtonBG">
+          <div class="TpmButtonBG" @click="exportExcel">
             <img src="../../assets/images/export.png" alt="">
             <span class="text">导出</span>
           </div>
-           <div class="TpmButtonBG">
+          <div class="TpmButtonBG" @click="approve(1)">
             <img src="../../assets/images/submitIcon.png" alt="">
             <span class="text">通过</span>
           </div>
-          <div class="TpmButtonBG">
+          <div class="TpmButtonBG" @click="approve(0)">
             <svg-icon icon-class="close" />
             <span class="text">驳回</span>
           </div>
         </div>
       </div>
       <!-- 商品 -->
-      <div class="ContentWrap">
-        <div class="contentli">
+      <div class="ContentWrap" v-loading='loading' element-loading-text="正在查询">
+        <div class="contentli" v-for="(tableData,key,index) in ContentData" :key="index">
           <div class="contentTop">
             <div class="SKUTitle">
-              皇家美素力1段婴儿配方奶粉12*350g
+              {{key}}
             </div>
           </div>
           <div class="contentInfoWrap">
-            <el-table :data="tableData" class="customTable" :summary-method="getSummaries" show-summary border :header-cell-style="HeadTable" :cell-style="columnStyle"
-              style="width: 100%">
+            <el-table :data="tableData" class="customTable" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :cell-style="columnStyle" style="width: 100%">
               <el-table-column width="150" fixed>
                 <template slot="header">
                   <div></div>
                 </template>
                 <template slot-scope="scope">
-                  <div class="filstColumn">
-                    <span>{{ scope.row.name }}</span>
+                  <div :class="scope.$index==0?'filstColumn_total':'filstColumn'">
+                    <span>{{ scope.row.dimCustomer }} </span>
+                    <!-- {{scope.$index}} -->
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="120" prop="name" label="活动月"></el-table-column>
-              <el-table-column align="center" width="120" prop="channel" label="渠道"></el-table-column>
-              <el-table-column align="center" width="120" prop="number" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="200.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="CPT均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="均价差值(%)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="费用差值(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="系统判定"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="申请人备注"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="Package Owner审批意见"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="Finance审批意见"></el-table-column>
-            </el-table>
-          </div>
-        </div>
-        <div class="contentli">
-          <div class="contentTop">
-            <div class="SKUTitle">
-              皇家美素力1段婴儿配方奶粉12*350g
-            </div>
-          </div>
-          <div class="contentInfoWrap">
-            <el-table :data="tableData" class="customTable" :summary-method="getSummaries" show-summary border :header-cell-style="HeadTable" :cell-style="columnStyle"
-               style="width: 100%">
-              <el-table-column width="150" fixed>
+              <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
+              <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
+              <el-table-column align="center" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
+              <el-table-column align="center" width="250" prop="number" v-for="(citem,cindex) in columnList(tableData)" :key="cindex">
                 <template slot="header">
-                  <div></div>
+                  {{ tableData[0].customGearList[cindex].gear }}RMB/听 档位销量(箱)
                 </template>
-                <template slot-scope="scope">
-                  <div class="filstColumn">
-                    <span>{{ scope.row.name }}</span>
+                <template slot-scope="{row}">
+                  <div>
+                    {{row.customGearList[cindex].actualNum}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="120" prop="name" label="活动月"></el-table-column>
-              <el-table-column align="center" width="120" prop="channel" label="渠道"></el-table-column>
-              <el-table-column align="center" width="120" prop="number" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="200.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="City Plan预拆分费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="CPT均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="均价差值(%)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="费用差值(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="系统判定"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="申请人备注"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="Package Owner审批意见"></el-table-column>
-              <el-table-column align="center" width="160" prop="number" label="Finance审批意见"></el-table-column>
+              <!-- <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
+              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column> -->
+              <el-table-column align="center" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
+              <el-table-column align="center" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
+              <el-table-column align="center" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
+              <el-table-column align="center" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
+              <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
+              <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
+              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
+              <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
+              <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
+              <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
             </el-table>
           </div>
         </div>
@@ -185,68 +156,21 @@
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
+import API from '@/api/V0/V0.js'
 export default {
   name: 'V0Approval',
   data() {
     return {
-      categoryArr: [{ label: '19号线', value: '19' }],
+      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      month: '',
-      SKU: '',
-      tableData: [
-        {
-          id: '12987122',
-          name: '王小虎',
-          number: '234',
-          channel: 'NKA',
-          amount3: 10,
-        },
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: '165',
-          channel: 'NKA',
-          amount3: 12,
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: '324',
-          channel: 'NKA',
-          amount3: 9,
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: '621',
-          channel: 'NKA',
-          amount3: 17,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-        },
-      ],
-      ruleForm: {
-        scenario: '',
-        version: '',
-        channel: '',
+      filterObj: {
+        month: '',
+        SKU: '',
       },
-      rules: {
-        scenario: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-      },
+      permissions: getDefaultPermissions(),
+      ContentData: [],
+      loading: '',
       dialogVisible: false,
-      isEditor: '',
-      editorId: '',
       //导入
       importVisible: false, //导入弹窗
       filterImportData: { sku: '' }, //筛选导入数据
@@ -297,68 +221,39 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄',
         },
       ],
+      mainId:'',
     }
   },
   directives: { elDragDialog, permission },
-  mounted() {},
+  mounted() {
+    this.getList()
+  },
   computed: {},
   methods: {
-    search() {},
-    getCPTData() {
-      this.dialogVisible = true
-    },
-    //提交form
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.resetForm(formName)
-        } else {
-          this.$message.error('提交失败')
-          return false
-        }
-      })
-    },
-    //取消
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-      this.closeDialog()
-    },
-    // 弹窗关闭
-    closeDialog() {
-      this.dialogVisible = false
-      this.isEditor = false
-      this.editorId = ''
-      this.ruleForm = {
-        scenario: '',
-        version: '',
-        channel: '',
-      }
-    },
-    //汇总计算
-    getSummaries(param) {
-      const { columns, data } = param
-      const sums = []
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = 'Total(销量)'
-          return
-        }
-        const values = data.map((item) => Number(item[column.property]))
-        if (!values.every((value) => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr)
-            if (!isNaN(value)) {
-              return prev + curr
-            } else {
-              return prev
+    getList() {
+      this.loading = true
+      API.getList({})
+        .then((response) => {
+          this.ContentData = response.data
+          for (const key in this.ContentData) {
+            let list = this.ContentData[key]
+            this.mainId=this.ContentData[key][0].mainId
+            for (let i = 0; i < list.length; i++) {
+              list[i].customGearList = JSON.parse(list[i].customGear)
             }
-          }, 0)
-          sums[index] += ' '
-        } else {
-          sums[index] = ' '
-        }
-      })
-      return sums
+          }
+          this.loading = false
+          console.log(this.mainId)
+        })
+        .catch(() => {})
+    },
+    //档位列
+    columnList(list) {
+      let columnList = list[0].customGearList
+      return columnList
+    },
+    search() {
+      this.getList()
     },
     //导入数据
     importData() {
@@ -368,29 +263,57 @@ export default {
     closeimportDialog() {
       this.importVisible = false
     },
+    exportExcel() {},
+    //审批
+    approve(value) {
+      let arr = Object.keys(this.ContentData)
+      if (arr.length) {
+        let mainId = this.ContentData[arr[0]][0].mainId
+        console.log(mainId)
+        if (value) {
+          API.approve({
+            mainId: '1463428237300322305', //主表id
+            approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+          })
+            .then((response) => {
+              this.$message.success('审批通过!')
+            })
+            .catch(() => {})
+        } else {
+          API.approve({
+            mainId: '1463428237300322305', //主表id
+            approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
+          })
+            .then((response) => {
+              this.$message.success('审批驳回!')
+            })
+            .catch(() => {})
+        }
+      } else {
+        this.$message.error('数据不能为空')
+      }
+    },
     // 行样式
     tableRowClassName({ row, rowIndex }) {
-      if ((rowIndex + 1) % 2 === 0) {
-        return 'even-row'
-      } else {
-        return 'odd-row'
+      if (rowIndex == 0) {
+        return 'first-row'
       }
     },
     HeadTable() {
       return ' background: #4192D3;color: #fff;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     columnStyle({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
-        return 'background:#4192d3'
+      if (columnIndex === 0 && rowIndex != 0) {
+        return 'background:#4192d3!important'
       }
-      if (columnIndex === 4) {
+      if (columnIndex === 4 && rowIndex != 0) {
         return 'background:#FEF5F6'
       }
-      if (columnIndex === 5) {
+      if (columnIndex === 5 && rowIndex != 0) {
         return 'background:#EFFCF9'
       }
-      if (columnIndex === 6) {
-        return 'background:#F0F6FC '
+      if (columnIndex === 6 && rowIndex != 0) {
+        return 'background:#F0F6FC'
       }
     },
   },
@@ -412,6 +335,7 @@ export default {
   }
   .ContentWrap {
     width: 100%;
+    min-height: 50vh;
     .contentli {
       // height: 480px;
       padding: 20px;
@@ -462,44 +386,12 @@ export default {
           background-color: #4192d3;
           color: #fff;
         }
+        .filstColumn_total {
+          text-align: center;
+          color: #001111;
+        }
       }
     }
   }
 }
-</style>
-<style  lang="scss">
-// // 合计行样式
-// .el-table__footer-wrapper tbody td,
-// .el-table__header-wrapper tbody td {
-//   background-color: #e3f3ff !important;
-//   color: #666;
-// }
-// .el-table__footer-wrapper .is-leaf {
-//   color: #666 !important;
-// }
-// .el-table__fixed-footer-wrapper tbody td {
-//   border-top: 1px solid #ebeef5;
-//   background-color: #e3f3ff;
-//   color: #666;
-//   text-align: center !important;
-// }
-// .has-gutter tr td .cell {
-//   text-align: center;
-//   color: #001111;
-// }
-// //合并行放在第一行
-// .contentInfoWrap .el-table {
-//   display: flex;
-//   flex-direction: column;
-// }
-// .contentInfoWrap .el-table__body-wrapper {
-//   order: 1;
-// }
-// .contentInfoWrap .el-table__fixed-body-wrapper {
-//   top: 97px !important;
-// }
-// .contentInfoWrap .el-table__fixed-footer-wrapper {
-//   z-index: 0;
-//   top: 50px;
-// }
 </style>

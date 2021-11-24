@@ -70,7 +70,7 @@
             <span class="table_operationText" @click="editRowData(row)">
               {{ $t('table.edit') }}
             </span>
-            <span class="table_operationText"  @click="handleDelete(row)">
+            <span class="table_operationText" @click="handleDelete(row)">
               {{ $t('table.delete') }}
             </span>
           </div>
@@ -861,7 +861,7 @@ export default {
       let dataList = []
       for (let m = 0; m < list.length; m++) {
         let obj = {
-          dataFircode: list[m].dataFircode,
+          dataFirCode: list[m].dataFircode,
           dataSecCode: list[m].dataSecCode,
           dataSecId: list[m].dataSecId,
           dataTerCode: list[m].dataTerCode,
@@ -888,12 +888,28 @@ export default {
     getDefaultRolePermissions(roleCode) {
       roleApi.getDefaultRolePermissions({ roleCode }).then((res) => {
         console.log(res)
+        // let list = res.data
+        // for (let i = 0; i < list.length; i++) {
+        //   let secondList = list[i].childList
+        //   for (let j = 0; j < secondList.length; j++) {
+        //     let thirdList = secondList[j].childList
+        //     for (let m = 0; m < thirdList.length; m++) {
+        //       thirdList[m].label = thirdList[m].dataTerCode
+        //       thirdList[m].dataSecId = secondList[j].dataSecId
+        //       thirdList[m].dataSecCode = secondList[j].dataSecCode
+        //       thirdList[m].dataFircode = list[i].dataFirCode
+        //     }
+        //   }
+        // }
+        // console.log(list)
         let list = res.data
-        let IdList = []
         for (let i = 0; i < list.length; i++) {
-          IdList.push(list[i].dataTerId)
+          list[i].label=list[i].dataTerCode
+          list[i].id=list[i].dataTerId
         }
-        this.$refs.RoleTree.setCheckedKeys(IdList, true)
+        console.log(list);
+        this.$refs.RoleTree.setCheckedNodes(list)
+        // this.$refs.RoleTree.setCheckedKeys(IdList, true)
       })
     },
     //获取KA 权限

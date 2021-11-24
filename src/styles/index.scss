@@ -431,7 +431,7 @@ div:focus {
   }
   .first-row {
     background-color: #e3f3ff !important;
-    color: #001111 !important;
+    color: #666 !important;
   }
   .statusWrap {
     display: flex;
@@ -569,6 +569,7 @@ div:focus {
     border-bottom: 1px solid #d9d9d9;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     .el-button--primary {
       width: 122px;
       height: 41px;

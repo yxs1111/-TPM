@@ -6,44 +6,45 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户</span>
-          <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择">
-          </el-date-picker>
+          <span class="SelectliTitle">客户:</span>
+          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+            <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.region" clearable filterable placeholder="请选择">
+            <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.SKU" clearable filterable placeholder="请选择">
+            <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
           </el-select>
         </div>
 
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
+        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG" @click="exportExcel">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出</span>
       </div>
@@ -53,34 +54,98 @@
       </div>
     </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="number" label="CPID" fixed> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动月"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
+      <el-table-column align="center" prop="cpId" label="CPID" fixed> </el-table-column>
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月"> </el-table-column>
+      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型"> </el-table-column>
+      <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage"> </el-table-column>
+      <el-table-column width="120" align="center" prop="costItemName" label="费用科目"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="客户系统名称"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="品牌"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="SKU"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="经销商"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="区域"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="V1计划销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="V1计划均价（RMB/Tin）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="V1计划费用（RMB）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="V2预测销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="V2调整后均价（RMB/Tin）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="V2调整后费用（RMB）"> </el-table-column>
-      <el-table-column width="160" align="center" prop="name" label="均价差值（%）"> </el-table-column>
-      <el-table-column width="160" align="center" prop="name" label="销量差值（%）"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="费用差值"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="系统判定"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="申请人备注"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="Package Owner审批意见"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="Finance审批意见"> </el-table-column>
+      <el-table-column width="120" align="center" prop="brandName" label="品牌"> </el-table-column>
+      <el-table-column width="120" align="center" prop="productName" label="SKU"> </el-table-column>
+      <el-table-column width="120" align="center" prop="distributorName" label="经销商"> </el-table-column>
+      <el-table-column width="120" align="center" prop="regionName" label="区域"> </el-table-column>
+      <el-table-column width="220" align="center" prop="planSales" label="V1计划销量（CTN）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="planPriceAve" label="V1计划均价（RMB/Tin）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="planCost" label="V1计划费用（RMB）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="forecastSales" label="V2预测销量（CTN）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）"> </el-table-column>
+      <el-table-column width="220" align="center" prop="adjustedCost" label="V2调整后费用（RMB）"> </el-table-column>
+      <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）"> </el-table-column>
+      <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）"> </el-table-column>
+      <el-table-column width="120" align="center" prop="costDifference" label="费用差值"> </el-table-column>
+      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定"> </el-table-column>
+      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注"> </el-table-column>
+      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见"> </el-table-column>
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见"> </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
+    <!-- 导入 -->
+    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
+      <div class="el-downloadFileBar">
+        <div>
+          <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
+          <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search">保存</el-button>
+      </div>
+
+      <div class="fileInfo">
+        <div class="fileTitle">文件</div>
+        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+
+        <div class="fileName" v-if="uploadFileName!=''">
+          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+          <span>{{uploadFileName}}</span>
+        </div>
+      </div>
+      <div class="seeData">
+        <div class="LeftBar">
+          <div class="seeDataTitle">浏览数据</div>
+          <div class="SelectLi">
+            <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
+              <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
+            </el-select>
+          </div>
+        </div>
+
+        <div class="exportError">
+          <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon" />
+          <span>导出错误信息</span>
+        </div>
+      </div>
+      <div class="tableWrap">
+        <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+              background: '#fff',
+              color: '#333',
+              fontSize: '16px',
+              textAlign: 'center',
+              fontWeight: 400,
+              fontFamily: 'Source Han Sans CN'
+            }" :row-class-name="tableRowClassName" stripe>
+          <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
+          </el-table-column>
+          <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
+          </el-table-column>
+          <el-table-column prop="address" align="center" label="验证信息" width="380">
+          </el-table-column>
+          <el-table-column prop="address" align="center" label="SKU" width="380">
+          </el-table-column>
+          <el-table-column prop="address" align="center" label="月份" width="380">
+          </el-table-column>
+          <el-table-column prop="address" align="center" label="KA" width="380">
+          </el-table-column>
+          <el-table-column prop="address" align="center" label="档位" width="380">
+          </el-table-column>
+          <el-table-column prop="address" align="center" label="VOL" width="380">
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -88,7 +153,8 @@
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
-import API from '@/api/masterData/masterData.js'
+import API from '@/api/V2/V2'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'V2discountDiscount',
@@ -105,46 +171,24 @@ export default {
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: 200,
-          channel: 'NKA',
-          amount3: 12,
-          total: 20.0,
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: 180,
-          channel: 'NKA',
-          amount3: 9,
-          total: 21.0,
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: 160,
-          channel: 'NKA',
-          amount3: 17,
-          total: 68.5,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-          total: 47.0,
-        },
-      ],
+      tableData: [],
+      skuOptons: [],
+      channelOptons: [],
       dialogVisible: false,
+      //导入
+      importVisible: false, //导入弹窗
+      filterImportData: { sku: '' }, //筛选导入数据
+      ImportData: [],
+      uploadFileName: '',
+      uploadFile: '',
+      event: '',
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
-    //this.getTableData()
+    this.getTableData()
+    this.getQuerySkuSelect()
+    this.getQueryChannelSelect()
   },
   computed: {},
   methods: {
@@ -152,7 +196,7 @@ export default {
     getTableData() {
       this.tableLoading = true
       this.tableData = []
-      API.getPageMdBrand({
+      API.getPage({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
@@ -165,9 +209,80 @@ export default {
         })
         .catch((error) => {})
     },
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI
+        .queryChannelSelect()
+        .then((res) => {
+          this.channelOptons = res.data
+        })
+        .catch()
+    },
+    getQuerySkuSelect() {
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          this.skuOptons = res.data
+        })
+        .catch()
+    },
     search() {
-      console.log('hh')
-      // this.getTableData()
+      this.getTableData()
+    },
+    importData() {
+      this.importVisible = true
+    },
+    //检测数据
+    confirmImport() {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importSupplier(formData)
+        .then((response) => {
+          this.closeImport()
+        })
+        .catch(() => {})
+    },
+    //选择导入文件
+    parsingExcelBtn() {
+      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
+    },
+    //导入
+    parsingExcel(event) {
+      this.event = event
+      this.uploadFileName = event.target.files[0].name
+      this.uploadFile = event.target.files[0]
+      console.log(this.event)
+    },
+    //关闭导入
+    closeimportDialog() {
+      this.importVisible = false
+    },
+    //导出数据
+    exportExcel() {
+      //导出数据筛选
+      API.exportExcel().then((res) => {
+        this.downloadFile(res, 'V2' + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
+    //下载文件
+    downloadFile(res, fileName) {
+      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
