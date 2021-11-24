@@ -55,8 +55,35 @@ export default function() {
           path: '/V3/V3Approval',
           code: 'V3Approval',
           name: 'V3Approval',
-          component: () => import('@/views/V3/V3Approval.vue'),
+          component: () => import('@/views/V3/V3ApprovalModel.vue'),
           meta: { title: '审批', icon: 'form' },
+          redirect: '/V3/V3Approval/V3discountAllApproval',
+          children: [
+            {
+              hidden: true,
+              path: '/V3/V3Approval/V3discountAllApproval',
+              code: 'V3discountAllApproval',
+              name: 'V3discountAllApproval',
+              component: () => import('@/views/V3/V3Approval/V3discountAllApproval.vue'),
+              meta: { title: '折扣项-汇总', icon: 'form' ,activeMenu: '/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/V3/V3Approval/V3discountDiscountApproval',
+              code: 'V3discountDiscountApproval',
+              name: 'V3discountDiscountApproval',
+              component: () => import('@/views/V3/V3Approval/V3discountDiscountApproval.vue'),
+              meta: { title: '折扣项-价促', icon: 'form' ,activeMenu: '/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/V3/V3Approval/V3discountNUApproval',
+              code: 'V3discountNUApproval',
+              name: 'V3discountNUApproval',
+              component: () => import('@/views/V3/V3Approval/V3discountNUApproval.vue'),
+              meta: { title: '折扣项-新客', icon: 'form' ,activeMenu: '/V3/V3Approval'},
+            },
+          ]
         },
       ]
     },

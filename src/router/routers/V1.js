@@ -1,12 +1,11 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-09-16 09:36:50
  * @LastEditTime: 2021-11-04 13:59:04
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
-
 
 export default function() {
   const V1 = [
@@ -31,7 +30,7 @@ export default function() {
               code: 'V1discountAll',
               name: 'V1discountAll',
               component: () => import('@/views/V1/V1Apply/V1discountAll.vue'),
-              meta: { title: '折扣项-汇总', icon: 'form' ,activeMenu: '/V1/V1Apply'},
+              meta: { title: '折扣项-汇总', icon: 'form', activeMenu: '/V1/V1Apply' }
             },
             {
               hidden: true,
@@ -39,7 +38,7 @@ export default function() {
               code: 'V1discountDiscount',
               name: 'V1discountDiscount',
               component: () => import('@/views/V1/V1Apply/V1discountDiscount.vue'),
-              meta: { title: '折扣项-价促', icon: 'form' ,activeMenu: '/V1/V1Apply'},
+              meta: { title: '折扣项-价促', icon: 'form', activeMenu: '/V1/V1Apply' }
             },
             {
               hidden: true,
@@ -47,19 +46,46 @@ export default function() {
               code: 'V1discountNU',
               name: 'V1discountNU',
               component: () => import('@/views/V1/V1Apply/V1discountNU.vue'),
-              meta: { title: '折扣项-新客', icon: 'form' ,activeMenu: '/V1/V1Apply'},
-            },
+              meta: { title: '折扣项-新客', icon: 'form', activeMenu: '/V1/V1Apply' }
+            }
           ]
         },
         {
           path: '/V1/V1Approval',
           code: 'V1Approval',
           name: 'V1Approval',
-          component: () => import('@/views/V1/V1Approval.vue'),
+          component: () => import('@/views/V1/V1ApprovalModel.vue'),
           meta: { title: '审批', icon: 'form' },
-        },
+          redirect: '/V1/V1Approval/V1discountAllApproval',
+          children: [
+            {
+              hidden: true,
+              path: '/V1/V1Approval/V1discountAllApproval',
+              code: 'V1discountAllApproval',
+              name: 'V1discountAllApproval',
+              component: () => import('@/views/V1/V1Approval/V1discountAllApproval.vue'),
+              meta: { title: '折扣项-汇总', icon: 'form', activeMenu: '/V1/V1Approval' }
+            },
+            {
+              hidden: true,
+              path: '/V1/V1Approval/V1discountDiscountApproval',
+              code: 'V1discountDiscountApproval',
+              name: 'V1discountDiscountApproval',
+              component: () => import('@/views/V1/V1Approval/V1discountDiscountApproval.vue'),
+              meta: { title: '折扣项-价促', icon: 'form', activeMenu: '/V1/V1Approval' }
+            },
+            {
+              hidden: true,
+              path: '/V1/V1Approval/V1discountNUApproval',
+              code: 'V1discountNUApproval',
+              name: 'V1discountNUApproval',
+              component: () => import('@/views/V1/V1Approval/V1discountNUApproval.vue'),
+              meta: { title: '折扣项-新客', icon: 'form', activeMenu: '/V1/V1Approval' }
+            }
+          ]
+        }
       ]
-    },
+    }
   ]
   if (showRouter([settings.stageKey])) {
     return []

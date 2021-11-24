@@ -11,7 +11,7 @@
           <span class="SelectliTitle">供应商名称</span>
           <el-input v-model="filterObj.supplierName" placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
@@ -27,8 +27,15 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
-      style="width: 100%">
+    <el-table
+      v-loading="tableLoading"
+      :data="tableData"
+      border
+      :header-cell-style="HeadTable"
+      :row-class-name="tableRowClassName"
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" align="center" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
@@ -41,18 +48,18 @@
         <template slot-scope="{ row }">
           <div class="table_operation">
             <div class="table_operation_detail" @click="editor(row)">
-              <i class="el-icon-edit-outline"></i>
+              <i class="el-icon-edit-outline" />
             </div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="supplierCode" label="供应商编码"> </el-table-column>
-      <el-table-column width="320" align="center" prop="supplierName" label="供应商名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="country" label="country"> </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间"> </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="修改人"> </el-table-column>
-      <el-table-column width="180" align="center" prop="updateDate" label="修改时间"> </el-table-column>
+      <el-table-column width="150" align="center" prop="supplierCode" label="供应商编码" />
+      <el-table-column width="320" align="center" prop="supplierName" label="供应商名称" />
+      <el-table-column width="150" align="center" prop="country" label="country" />
+      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间" />
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
+      <el-table-column width="180" align="center" prop="updateDate" label="修改时间" />
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -63,31 +70,33 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '供应商信息'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '供应商信息'" :visible="dialogVisible" width="25%" @close="closeDialog">
       <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="供应商编码" v-show="!isEditor">
-            <el-input v-model="ruleForm.supplierCode" class="my-el-input" placeholder="请输入">
-            </el-input>
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
+          <el-form-item v-show="!isEditor" label="供应商编码">
+            <el-input v-model="ruleForm.supplierCode" class="my-el-input" placeholder="请输入" />
           </el-form-item>
-          <el-form-item label="供应商编码" v-show="isEditor">
-            <el-input v-model="ruleForm.supplierCode" disabled class="my-el-input" placeholder="请输入">
-            </el-input>
+          <el-form-item v-show="isEditor" label="供应商编码">
+            <el-input v-model="ruleForm.supplierCode" disabled class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="供应商名称">
-            <el-input v-model="ruleForm.supplierName" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.supplierName" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="country">
-            <el-input v-model="ruleForm.country" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.country" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入" />
           </el-form-item>
         </el-form>
       </div>
@@ -101,10 +110,10 @@
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div class="fileName" v-if="uploadFileName!=''">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-          <span>{{uploadFileName}}</span>
+        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+        <div v-if="uploadFileName!=''" class="fileName">
+          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
+          <span>{{ uploadFileName }}</span>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -122,6 +131,7 @@ import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'Supplier',
+  directives: { elDragDialog, permission },
 
   data() {
     return {
@@ -131,7 +141,7 @@ export default {
       filterObj: {
         supplierCode: '',
         supplierName: '',
-        category: '',
+        category: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '19号线', value: '19' }],
@@ -141,41 +151,40 @@ export default {
         supplierCode: '',
         supplierName: '',
         country: '',
-        remark: '',
+        remark: ''
       },
       rules: {
         supplierCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
+            trigger: 'blur'
+          }
+        ]
       },
       dialogVisible: false,
       isEditor: '',
       editorId: '',
-      checkArr: [], //批量删除,存放选中
-      //导入
-      importVisible: false, //导入弹窗
+      checkArr: [], // 批量删除,存放选中
+      // 导入
+      importVisible: false, // 导入弹窗
       uploadFileName: '',
       uploadFile: '',
-      event:'',
+      event: ''
     }
   },
-  directives: { elDragDialog, permission },
+  computed: {},
   mounted() {
     this.getTableData()
   },
-  computed: {},
   methods: {
-    //获取表格数据
+    // 获取表格数据
     getTableData() {
       this.tableLoading = true
       API.getPageMdSupplier({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
-        supplierName: this.filterObj.supplierName,
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        supplierName: this.filterObj.supplierName
       })
         .then((response) => {
           this.tableLoading = false
@@ -195,7 +204,7 @@ export default {
     Reset() {
       this.filterObj = {
         supplierCode: '',
-        supplierName: '',
+        supplierName: ''
       }
       this.getTableData()
     },
@@ -207,7 +216,7 @@ export default {
         supplierCode: '',
         supplierName: '',
         country: '',
-        remark: '',
+        remark: ''
       }
     },
     editor(obj) {
@@ -217,21 +226,21 @@ export default {
         supplierCode: obj.supplierCode,
         supplierName: obj.supplierName,
         country: obj.country,
-        remark: obj.remark,
+        remark: obj.remark
       }
       this.editorId = obj.id
     },
-    //提交form
+    // 提交form
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = this.isEditor ? API.updateMdSupplier : API.insertMdSupplier
+          const url = this.isEditor ? API.updateMdSupplier : API.insertMdSupplier
           url({
             id: this.editorId,
             supplierCode: this.ruleForm.supplierCode,
             supplierName: this.ruleForm.supplierName,
             country: this.ruleForm.country,
-            remark: this.ruleForm.remark,
+            remark: this.ruleForm.remark
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
@@ -245,7 +254,7 @@ export default {
         }
       })
     },
-    //多个删除
+    // 多个删除
     mutidel() {
       if (this.checkArr.length === 0) return this.$message.error('请选择数据')
       else {
@@ -256,7 +265,7 @@ export default {
         this.$confirm('确定要删除数据吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning',
+          type: 'warning'
         })
           .then(() => {
             API.deleteMdSupplier(IdList).then((response) => {
@@ -269,23 +278,22 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消',
+              message: '已取消'
             })
           })
       }
     },
-    //取消
+    // 取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
       this.closeDialog()
     },
-    //导入数据
+    // 导入数据
     importData() {
       this.importVisible = true
     },
-    //确认导入
+    // 确认导入
     confirmImport() {
-      
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importSupplier(formData)
@@ -294,39 +302,38 @@ export default {
         })
         .catch(() => {})
     },
-    //选择导入文件
+    // 选择导入文件
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
-    //导入
+    // 导入
     parsingExcel(event) {
-      
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       console.log(this.event)
     },
-    //关闭导入
+    // 关闭导入
     closeImport() {
       this.importVisible = false
-      this.event.srcElement.value = '' //置空
+      this.event.srcElement.value = '' // 置空
       this.uploadFileName = ''
       this.uploadFile = ''
       console.log(this.event)
     },
-    //导出数据
+    // 导出数据
     exportData() {
-      //导出数据筛选
+      // 导出数据筛选
       var data = {}
       data = { ...this.filterObj }
       API.exportSupplier().then((res) => {
-        this.downloadFile(res, '供销商信息' + '.xlsx') //自定义Excel文件名
+        this.downloadFile(res, '供销商信息' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
-    //下载文件
+    // 下载文件
     downloadFile(res, fileName) {
-      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
       if (!fileName) {
         fileName = res.headers['content-disposition'].split('filename=').pop()
       }
@@ -366,8 +373,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 
