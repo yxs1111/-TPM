@@ -134,7 +134,7 @@ export default {
         date: ''
       },
       tableLoading: false,
-      categoryArr: [{ name: '19号线', value: '19' }],
+      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       ruleForm: {

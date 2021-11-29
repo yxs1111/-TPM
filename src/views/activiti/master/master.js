@@ -22,9 +22,7 @@ export default {
           visible: false
         }
       },
-      categoryArr: [
-        { label: '19号线', value: '19' }
-      ],
+      categoryArr: [{ label: 'test', value: '19' }],
       flowDirection: [
         { text: '从左往右', value: 'horizontal' },
         { text: '从上往下', value: 'vertical' }

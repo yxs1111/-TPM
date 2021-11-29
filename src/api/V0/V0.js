@@ -1,24 +1,15 @@
 /*
  * @Description: 
- * @Date: 2021-11-24 10:01:14
- * @LastEditTime: 2021-11-24 20:32:02
- */
-/*
- * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-11-19 16:34:06
+ * @LastEditTime: 2021-11-25 17:06:03
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
-  url: '/cityplan/investCpVZero',
-  get(params) {
-    return requestApi.request_get(this.url+'/get', params)
-  },
-  getPage(params) {
-    return requestApi.request_get(this.url+'/getPage', params)
-  },
+  //url: '/cityplan/investCpVZero',
+  url: '/investCpVZero',
+  //获取V0数据
   getList(params) {
     return requestApi.request_get(this.url+'/getList', params)
   },
@@ -30,7 +21,7 @@ export default {
   exportExcel(params) {
     //二进制数据流转blob
     return request({
-      url:this.url+'/export',
+      url:this.url+'/downExcel',
       method:'get',
       params:params,
       responseType:'blob'
@@ -38,17 +29,9 @@ export default {
   },
   //导入excel
   importExcel(params) {
-    //return requestApi.request_get('mdprice/import', params)
-    return request({
-      url:this.url+'/import',
-      method:'get',
-      params:params,
-      processData : false,
-      contentType : false,
-      headers: { "Content-Type": "multipart/form-data" }
-    })
+    return requestApi.request_post(this.url+'/import', params)
   },
-  //提交
+  //审批提交,审批驳回
   approve(params) {
     return requestApi.request_post(this.url+'/approve', params)
   },

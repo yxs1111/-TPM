@@ -1,18 +1,14 @@
 /*
  * @Description: 
- * @Date: 2021-11-24 10:01:14
- * @LastEditTime: 2021-11-24 15:17:30
- */
-/*
- * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-11-19 16:34:06
+ * @LastEditTime: 2021-11-27 08:36:39
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
-  url: '/cityplan/investCpVTwoDetail',
+  //url: '/cityplan/investCpVTwoDetail',
+  url: '/investCpVTwoDetail',
   getPage(params) {
     return requestApi.request_get(this.url+'/getPage', params)
   },
@@ -27,17 +23,21 @@ export default {
     })
   },
   //导入excel
+  /**
+   * 导入excel
+   * @param {params} params 
+   * @returns request
+   */
   importExcel(params) {
-    //return requestApi.request_get('mdprice/import', params)
-    return request({
-      url:this.url+'/import',
-      method:'get',
-      params:params,
-      processData : false,
-      contentType : false,
-      headers: { "Content-Type": "multipart/form-data" }
-    })
+    return requestApi.request_post(this.url+'/import', params)
   },
+  /**
+   * 审批
+   * @returns 
+   */
+  approve() {
+    return requestApi.request_post(this.url+'/approve', params)
+  }
   
 }
 

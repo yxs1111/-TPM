@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-24 20:26:37
+ * @LastEditTime: 2021-11-26 17:13:53
 -->
 <template>
   <div class="app-container">
@@ -20,21 +20,22 @@
             </el-date-picker>
           </div>
           <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
-        </div>
-        <div class="OpertionBar">
-          <div class="TpmButtonBG" @click="getCPTData">
-            <img src="../../assets/images/huoqu.png" alt="" />
-            <span class="text">获取CPT数据</span>
-          </div>
-          <div class="TpmButtonBG" @click="importData">
-            <img src="../../assets/images/import.png" alt="" />
-            <span class="text">导入</span>
-          </div>
           <div class="TpmButtonBG" @click="exportData">
             <img src="../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
-          <div class="TpmButtonBG" @click="approve">
+        </div>
+        <div class="OpertionBar">
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="getCPTData">
+            <img src="../../assets/images/huoqu.png" alt="" />
+            <span class="text">获取CPT数据</span>
+          </div>
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+            <img src="../../assets/images/import.png" alt="" />
+            <span class="text">导入</span>
+          </div>
+
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve">
             <svg-icon icon-class="submit" />
             <span class="text">提交</span>
           </div>
@@ -91,7 +92,7 @@
         </div>
       </div>
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
-        <div class="el-dialogContent">
+        <div class="el-dialogContent" v-loading='dialogLoading' element-loading-text="正在获取">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="年月">
               <el-date-picker v-model="ruleForm.yearAndMonth" class="my-el-input" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
@@ -118,41 +119,26 @@
       </el-dialog>
       <!-- 导入 -->
       <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-        <div class="el-downloadFileBar">
-          <div>
-            <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
-            <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+        <div v-loading='dialogLoading' element-loading-text="正在导入">
+          <div class="el-downloadFileBar">
+            <div>
+              <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
+              <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+            </div>
+            <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
           </div>
-          <el-button type="primary" class="TpmButtonBG">保存</el-button>
-        </div>
+          <div class="fileInfo">
+            <div class="fileTitle">文件</div>
+            <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+            <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
 
-        <div class="fileInfo">
-          <div class="fileTitle">文件</div>
-          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-          <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-
-          <div class="fileName" v-if="uploadFileName!=''">
-            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-            <span>{{uploadFileName}}</span>
-          </div>
-        </div>
-        <div class="seeData">
-          <div class="LeftBar">
-            <div class="seeDataTitle">浏览数据</div>
-            <div class="SelectLi">
-              <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
-                <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
-              </el-select>
+            <div class="fileName" v-if="uploadFileName!=''">
+              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+              <span>{{uploadFileName}}</span>
             </div>
           </div>
-
-          <div class="exportError">
-            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon" />
-            <span>导出错误信息</span>
-          </div>
-        </div>
-        <div class="tableWrap">
-          <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+          <div class="tableWrap">
+            <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -160,31 +146,38 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
-            </el-table-column>
-            <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="验证信息" width="380">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="SKU" width="380">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="月份" width="380">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="KA" width="380">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="档位" width="380">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="VOL" width="380">
-            </el-table-column>
-          </el-table>
+              <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
+              </el-table-column>
+              <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
+              </el-table-column>
+              <el-table-column prop="address" align="center" label="验证信息" width="380">
+              </el-table-column>
+              <el-table-column prop="address" align="center" label="SKU" width="380">
+              </el-table-column>
+              <el-table-column prop="address" align="center" label="月份" width="380">
+              </el-table-column>
+              <el-table-column prop="address" align="center" label="KA" width="380">
+              </el-table-column>
+              <el-table-column prop="address" align="center" label="档位" width="380">
+              </el-table-column>
+              <el-table-column prop="address" align="center" label="VOL" width="380">
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
+
       </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import {
+  getDefaultPermissions,
+  getCPTMonth,
+  parseTime,
+  getTextMap,
+} from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import API from '@/api/V0/V0.js'
@@ -244,14 +237,17 @@ export default {
       ImportData: [],
       uploadFileName: '',
       loading: '',
+      dialogLoading: '',
       uploadFileName: '',
       uploadFile: '',
       event: '',
+      isSubmit:0,
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     //this.getList()
+    this.filterObj.month = getCPTMonth()
     this.getQuerySkuSelect()
   },
   computed: {},
@@ -266,12 +262,12 @@ export default {
           this.ContentData = response.data
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
+            this.isSubmit=this.ContentData[key][0].isSubmit
             for (let i = 0; i < list.length; i++) {
               list[i].customGearList = JSON.parse(list[i].customGear)
             }
           }
           this.loading = false
-          console.log(this.ContentData)
         })
         .catch(() => {})
     },
@@ -290,20 +286,24 @@ export default {
     },
     search() {
       this.getList()
-      console.log(this.filterObj)
     },
     getCPTData() {
       this.dialogVisible = true
     },
-    //检测数据
+    //确认导入文件
     confirmImport() {
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importSupplier(formData)
-        .then((response) => {
-          this.closeImport()
+      if (this.uploadFile != '') {
+        this.dialogLoading = true
+        var formData = new FormData()
+        formData.append('file', this.uploadFile)
+        API.importExcel(formData).then((response) => {
+          this.dialogLoading = false
+          this.$message.success('导入成功!')
+          this.closeimportDialog()
         })
-        .catch(() => {})
+      } else {
+        this.$message.error('请选择文件')
+      }
     },
     //导入数据弹窗显示
     importData() {
@@ -312,6 +312,8 @@ export default {
     //关闭导入
     closeimportDialog() {
       this.importVisible = false
+      this.uploadFileName = ''
+      this.uploadFile = ''
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -326,11 +328,19 @@ export default {
     },
     //导出数据
     exportData() {
-      //导出数据筛选
-      API.exportExcel().then((res) => {
-        this.downloadFile(res, 'V0' + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
+      if (this.filterObj.month != '') {
+        //导出数据筛选
+        API.exportExcel({
+          yearAndMonth: this.filterObj.month,
+          productCode: this.filterObj.SKU,
+        }).then((res) => {
+          let timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
+          this.$message.success('导出成功!')
+        })
+      } else {
+        this.$message.error('请先选择年月')
+      }
     },
     //下载文件
     downloadFile(res, fileName) {
@@ -355,7 +365,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.loading = true
+          this.dialogLoading = true
           API.getCPTData({
             yearAndMonth: this.ruleForm.yearAndMonth,
             channelCode: this.ruleForm.channelCode,
@@ -363,16 +373,9 @@ export default {
             dimVersion: this.ruleForm.dimVersion,
           })
             .then((response) => {
+              this.dialogLoading = false
               this.$message.success('获取成功!')
-              //对数据进行处理
-              // this.ContentData = response.data
-              // for (const key in this.ContentData) {
-              //   let list = this.ContentData[key]
-              //   for (let i = 0; i < list.length; i++) {
-              //     list[i].customGearList = JSON.parse(list[i].customGear)
-              //   }
-              // }
-              this.loading = false
+              this.getList()
               this.resetForm(formName)
             })
             .catch(() => {})
@@ -403,15 +406,17 @@ export default {
     approve() {
       var arr = Object.keys(this.ContentData)
       if (arr.length) {
+        this.loading = true
         let mainId = this.ContentData[arr[0]][0].mainId
-        console.log(mainId)
-        return
         API.approve({
-          mainId: '1463428237300322305', //主表id
+          mainId: Number(mainId), //主表id
           approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+        }).then((response) => {
+          if (response.code === 1000) {
+            this.loading = false
+            this.$message.success('提交成功')
+          }
         })
-          .then((response) => {})
-          .catch(() => {})
       } else {
         this.$message.error('数据不能为空')
       }

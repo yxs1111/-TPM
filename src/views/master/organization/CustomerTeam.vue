@@ -118,7 +118,7 @@ export default {
         groupName: '',
       },
       tableLoading: '',
-      categoryArr: [{ label: '19号线', value: '19' }],
+      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       ruleForm: {

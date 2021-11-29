@@ -95,7 +95,7 @@ export default {
         SKU: '',
       },
       tableLoading: '',
-      categoryArr: [{ label: '19号线', value: '19' }],
+      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       checkArr: [], // 批量删除,存放选中

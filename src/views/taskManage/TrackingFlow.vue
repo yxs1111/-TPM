@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-11-16 14:01:16
+ * @LastEditTime: 2021-11-29 09:47:06
 -->
 <template>
   <div class="app-container">
@@ -105,7 +105,7 @@ export default {
         category: '',
       },
       tableLoading: '',
-      categoryArr: [{ label: '19号线', value: '19' }],
+      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       ruleForm: {

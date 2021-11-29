@@ -392,5 +392,15 @@ export function replaceUnderLine(val, char = '_') {
   val = arr.join('')
   return val
 }
-
+/**
+ * 获取CPT版本月
+ * @returns yyyy-mm
+ */
+ export function getCPTMonth() {
+  const date=new Date()
+  let year=date.getFullYear()
+  let month=date.getMonth()-1
+  month = month < 10 ? "0" + month : month;
+  return year+''+month
+}
 export const exportDefault = 'export default '

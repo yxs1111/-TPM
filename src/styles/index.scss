@@ -823,3 +823,7 @@ div:focus {
     cursor: pointer;
   }
 }
+.noClick {
+  pointer-events: none;
+  background-color: #ccc!important;
+}
