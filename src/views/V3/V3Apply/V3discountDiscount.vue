@@ -41,17 +41,18 @@
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="exportData">
         <img src="../../../assets/images/export.png" alt="">
-        <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a>
+        <span class="text">导出</span>
+        <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
       </div>
       <div class="TpmButtonBG" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG" @click="supplement">
         <i class="el-icon-download" />
         <span class="text">补录</span>
       </div>
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG" @click="submitApply">
         <svg-icon icon-class="submit" />
         <span class="text">提交</span>
       </div>
@@ -59,14 +60,14 @@
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="120" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
+      <el-table-column width="180" align="center" prop="minePackageName" label="Mine Package" />
+      <el-table-column width="160" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelName" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="180" align="center" prop="productName" label="SKU" />
-      <el-table-column width="120" align="center" prop="distributorName" label="经销商" />
+      <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="center" prop="planSales" label="V1计划销量（CTN）" />
       <el-table-column width="220" align="center" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
@@ -101,46 +102,50 @@
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-      <div class="el-downloadFileBar">
-        <el-button type="primary" plain class="my-export" icon="el-icon-download">
+      <div class="el-downloadFileBar" style="display:flex;justify-content: flex-start;">
+        <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">
           <a href="/investCpVThreeDetail/exportTemplate" download="exportTemplate.xlsx">下载模板</a>
         </el-button>
-        <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
+        <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
           <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
+        </el-button> -->
+        <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
+        </el-button>
+        <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
         </el-button>
       </div>
 
       <div class="fileInfo">
         <div class="fileTitle">文件</div>
-        <el-upload ref="upload" action="/" :auto-upload="false" :on-change="openFile" accept="csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-          <el-button type="primary" class="my-search selectFile">选择文件</el-button>
-        </el-upload>
-
+        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
         <div v-if="uploadFileName!=''" class="fileName">
           <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
           <span>{{ uploadFileName }}</span>
         </div>
+        <!-- <el-button v-if="uploadFileName!=''" style="line-height: 27px;color: #4192d3;border: 1px solid #4192d3;font-size:12px;padding:0 3px;margin-left:3px;" @click="confirmImport()">确定上传</el-button> -->
       </div>
       <div class="seeData">
-        <div class="LeftBar">
+        <!-- <div class="LeftBar">
           <div class="seeDataTitle">浏览数据</div>
           <div class="SelectLi">
             <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
               <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
             </el-select>
           </div>
-        </div>
+        </div> -->
 
-        <div class="exportError">
+        <div class="exportError" @click="downLoadException">
           <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
           <span>导出错误信息</span>
         </div>
       </div>
       <div class="tableWrap">
         <el-table
+          v-loading="dialogTableLoading"
           border
-          height="240"
-          :data="ImportData"
+          height="400"
+          :data="dialogData"
           style="width: 100%"
           :header-cell-style="{
             background: '#fff',
@@ -153,14 +158,128 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <el-table-column prop="date" fixed align="center" label="是否通过" width="180" />
-          <el-table-column prop="name" fixed align="center" label="Excel行号" width="180" />
-          <el-table-column prop="address" align="center" label="验证信息" width="380" />
-          <el-table-column prop="address" align="center" label="SKU" width="380" />
-          <el-table-column prop="address" align="center" label="月份" width="380" />
-          <el-table-column prop="address" align="center" label="KA" width="380" />
-          <el-table-column prop="address" align="center" label="档位" width="380" />
-          <el-table-column prop="address" align="center" label="VOL" width="380" />
+          <el-table-column prop="date" align="center" label="是否通过" width="180" fixed />
+          <el-table-column align="center" width="400" prop="cpId" label="CPID" />
+          <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+          <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
+          <el-table-column width="180" align="center" prop="minePackageName" label="Mine Package" />
+          <el-table-column width="160" align="center" prop="costItemName" label="费用科目" />
+          <el-table-column width="120" align="center" prop="channelName" label="渠道" />
+          <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+          <el-table-column width="120" align="center" prop="brandName" label="品牌" />
+          <el-table-column width="180" align="center" prop="productName" label="SKU" />
+          <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
+          <el-table-column width="220" align="center" prop="regionName" label="区域" />
+          <el-table-column width="220" align="center" prop="planSales" label="V1计划销量（CTN）" />
+          <el-table-column width="220" align="center" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="planCost" label="V1计划费用（RMB）" />
+          <el-table-column width="220" align="center" prop="forecastSales" label="V2预测销量（CTN）" />
+          <el-table-column width="220" align="center" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="adjustedCost" label="V2调整后费用（RMB）" />
+          <el-table-column width="220" align="center" prop="actualSales" label="V3实际销量（CTN）" />
+          <el-table-column width="220" align="center" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）" />
+          <el-table-column width="220" align="center" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="afterNegotiationCost" label="V3谈判后费用（RMB）" />
+          <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
+          <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）" />
+          <el-table-column width="120" align="center" prop="costDifference" label="费用差值" />
+          <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+          <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+          <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
+          <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+        </el-table>
+      </div>
+    </el-dialog>
+
+    <!-- 补录对话框 -->
+    <el-dialog width="66%" class="my-el-dialog" title="补录" :visible="supplementVisible" @close="closeimportDialog">
+      <div class="el-downloadFileBar" style="display:flex;justify-content: flex-start;">
+        <el-button type="primary" plain class="my-export" icon="el-icon-download">
+          <a href="" download="exportTemplate.xlsx">下载模板</a>
+        </el-button>
+        <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
+          <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
+        </el-button> -->
+        <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer">检测数据
+        </el-button>
+        <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="">保存
+        </el-button>
+      </div>
+
+      <div class="fileInfo">
+        <div class="fileTitle">文件</div>
+        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+        <input id="fileElem" ref="filElem" type="file" style="display: none">
+        <div v-if="uploadFileName!=''" class="fileName">
+          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
+          <span>{{ uploadFileName }}</span>
+        </div>
+        <!-- <el-button v-if="uploadFileName!=''" style="line-height: 27px;color: #4192d3;border: 1px solid #4192d3;font-size:12px;padding:0 3px;margin-left:3px;" @click="confirmImport()">确定上传</el-button> -->
+      </div>
+      <div class="seeData">
+        <!-- <div class="LeftBar">
+          <div class="seeDataTitle">浏览数据</div>
+          <div class="SelectLi">
+            <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
+              <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
+            </el-select>
+          </div>
+        </div> -->
+
+        <div class="exportError">
+          <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+          <span>导出错误信息</span>
+        </div>
+      </div>
+      <div class="tableWrap">
+        <el-table
+          v-loading="dialogTableLoading"
+          border
+          height="400"
+          :data="dialogData"
+          style="width: 100%"
+          :header-cell-style="{
+            background: '#fff',
+            color: '#333',
+            fontSize: '16px',
+            textAlign: 'center',
+            fontWeight: 400,
+            fontFamily: 'Source Han Sans CN'
+          }"
+          :row-class-name="tableRowClassName"
+          stripe
+        >
+          <el-table-column prop="date" align="center" label="检测数据" width="180" fixed />
+          <el-table-column align="center" width="400" prop="cpId" label="CPID" />
+          <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+          <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
+          <el-table-column width="180" align="center" prop="minePackageName" label="Mine Package" />
+          <el-table-column width="160" align="center" prop="costItemName" label="费用科目" />
+          <el-table-column width="120" align="center" prop="channelName" label="渠道" />
+          <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+          <el-table-column width="120" align="center" prop="brandName" label="品牌" />
+          <el-table-column width="180" align="center" prop="productName" label="SKU" />
+          <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
+          <el-table-column width="220" align="center" prop="regionName" label="区域" />
+          <el-table-column width="220" align="center" prop="planSales" label="V1计划销量（CTN）" />
+          <el-table-column width="220" align="center" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="planCost" label="V1计划费用（RMB）" />
+          <el-table-column width="220" align="center" prop="forecastSales" label="V2预测销量（CTN）" />
+          <el-table-column width="220" align="center" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="adjustedCost" label="V2调整后费用（RMB）" />
+          <el-table-column width="220" align="center" prop="actualSales" label="V3实际销量（CTN）" />
+          <el-table-column width="220" align="center" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）" />
+          <el-table-column width="220" align="center" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）" />
+          <el-table-column width="220" align="center" prop="afterNegotiationCost" label="V3谈判后费用（RMB）" />
+          <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
+          <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）" />
+          <el-table-column width="120" align="center" prop="costDifference" label="费用差值" />
+          <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+          <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+          <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
+          <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
         </el-table>
       </div>
     </el-dialog>
@@ -170,7 +289,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions } from '@/utils'
 import API from '@/api/V3/v3.js'
 
 export default {
@@ -179,6 +298,7 @@ export default {
 
   data() {
     return {
+      mainIdLocal: null,
       // 导入
       ImportData: [],
       uploadFileName: '',
@@ -228,7 +348,10 @@ export default {
           total: 47.0
         }
       ],
-      dialogVisible: false
+      dialogVisible: false,
+      dialogData: [],
+      dialogTableLoading: false,
+      supplementVisible: false
     }
   },
   computed: {},
@@ -236,13 +359,91 @@ export default {
     this.getTableData()
   },
   methods: {
+    // 提交
+    submitApply() {
+      API.submitApply({
+        mainId: this.mainIdLocal
+      }).then().catch()
+    },
+    // 导入文件检索后保存
+    saveImportInfo() {
+      API.saveImportInfo({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        console.log('111', res)
+      }).catch()
+    },
+    // 导入数据
+    importData() {
+      this.importVisible = true
+    },
+    // 补录
+    supplement() {
+      this.supplementVisible = true
+    },
+    // 确认导入
+    confirmImport() {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('mainId', this.mainIdLocal)
+      this.dialogTableLoading = true
+      // 添加mainId
+      API.importV3(formData)
+        .then((response) => {
+          if (response.code === 1000) {
+            this.event.srcElement.value = '' // 置空
+            this.uploadFileName = ''
+            this.uploadFile = ''
+            this.dialogData = response.data
+            this.dialogTableLoading = false
+            this.$message({
+              type: 'success',
+              message: '上传成功'
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '上传失败，请重新上传。'
+            })
+          }
+        })
+        .catch(() => {})
+    },
+    // 选择导入文件
+    parsingExcelBtn() {
+      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
+    },
+    // 导入
+    parsingExcel(event) {
+      this.event = event
+      this.uploadFileName = event.target.files[0].name
+      this.uploadFile = event.target.files[0]
+    },
+    // 关闭导入
+    closeImport() {
+      this.importVisible = false
+      this.event.srcElement.value = '' // 置空
+      this.uploadFileName = ''
+      this.uploadFile = ''
+    },
+
+    // 文件上传
+    uploadFileLocal() {
+      this.$refs.upload.submit()
+    },
+    fileChange(file, fileList) {
+      // 这是关键一句
+      if (fileList.length > 0) {
+        this.fileList = [fileList[fileList.length - 1]]
+      }
+    },
     // 下载excel模板
     downLoadElxModel() {
       API.exportTemplate().then(
         response => {
-          const fileName = '模板' + new Date().getTime() + '.xlsx'
+          const fileName = '导入模板' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
-          const blob = new Blob([response.data], {
+          const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'
           }) // 1.创建一个blob
           const link = document.createElement('a') // 2.创建一个a链接
@@ -261,7 +462,7 @@ export default {
         response => {
           const fileName = '校验' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
-          const blob = new Blob([response.data], {
+          const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'
           }) // 1.创建一个blob
           const link = document.createElement('a') // 2.创建一个a链接
@@ -283,10 +484,7 @@ export default {
     // 关闭导入
     closeimportDialog() {
       this.importVisible = false
-    },
-    // 导入数据
-    importData() {
-      this.importVisible = true
+      this.supplementVisible = false
     },
     // 导出数据
     exportData() {
@@ -328,6 +526,7 @@ export default {
         .then((response) => {
           this.tableLoading = false
           this.tableData = response.data.records
+          this.mainIdLocal = response.data.records[0].mainId
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
