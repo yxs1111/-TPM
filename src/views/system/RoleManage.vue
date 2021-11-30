@@ -223,7 +223,7 @@
     <!-- 数据权限绑定 -->
     <el-dialog width="55%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
       <div class="roleBindWrap" v-loading='bindLoading'>
-        <div class="roleName">Package Owner - Price Promotion</div>
+        <div class="roleName">{{roleName}}</div>
         <el-input placeholder="输入关键字进行过滤" v-model="RoleTreeFilter">
         </el-input>
         <div class="roleTree">
@@ -399,6 +399,7 @@ export default {
       Role_KAData: {}, //KA 权限数据
       permissionType: '', //角色数据权限类型
       roleCode: '',
+      roleName:'', //角色数据权限--角色名称
     }
   },
   created() {
@@ -838,6 +839,8 @@ export default {
     },
     //数据权限绑定--弹窗显示
     showRoleDialog(obj) {
+      this.roleName=obj.name
+      this.searchLoading=true
       this.bindLoading = true
       if (obj.permissionType == 'KA') {
         this.getKAList()
@@ -852,6 +855,7 @@ export default {
       }
       this.roleCode = obj.code
       this.bindLoading = false
+      this.searchLoading=false
     },
     //数据权限绑定--确认
     confirmRoleDialog() {

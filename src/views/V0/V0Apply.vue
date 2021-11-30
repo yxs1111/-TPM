@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-26 17:13:53
+ * @LastEditTime: 2021-11-30 15:35:53
 -->
 <template>
   <div class="app-container">
@@ -21,17 +21,17 @@
           </div>
           <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
           <div class="TpmButtonBG" @click="exportData">
-            <img src="../../assets/images/export.png" alt="" />
+            <img src="@/assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
         </div>
         <div class="OpertionBar">
           <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="getCPTData">
-            <img src="../../assets/images/huoqu.png" alt="" />
+            <img src="@/assets/images/huoqu.png" alt="" />
             <span class="text">获取CPT数据</span>
           </div>
           <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
-            <img src="../../assets/images/import.png" alt="" />
+            <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
 

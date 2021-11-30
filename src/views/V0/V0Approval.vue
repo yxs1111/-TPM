@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-26 17:37:06
+ * @LastEditTime: 2021-11-30 15:36:53
 -->
 <template>
   <div class="app-container">
@@ -23,15 +23,15 @@
         </div>
         <div class="OpertionBar">
           <div class="TpmButtonBG" @click="importData">
-            <img src="@/assets/images/import.png" alt="">
+            <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
           <div class="TpmButtonBG" @click="exportData">
-            <img src="@/assets/images/export.png" alt="">
+            <img src="@/assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
           <div class="TpmButtonBG" @click="approve(1)">
-            <img src="@/assets/images/submitIcon.png" alt="">
+            <img src="@/assets/images/submitIcon.png" alt="" />
             <span class="text">通过</span>
           </div>
           <div class="TpmButtonBG" @click="approve(0)">
@@ -41,11 +41,11 @@
         </div>
       </div>
       <!-- 商品 -->
-      <div class="ContentWrap" v-loading='loading' element-loading-text="正在查询">
-        <div class="contentli" v-for="(tableData,key,index) in ContentData" :key="index">
+      <div class="ContentWrap" v-loading="loading" element-loading-text="正在查询">
+        <div class="contentli" v-for="(tableData, key, index) in ContentData" :key="index">
           <div class="contentTop">
             <div class="SKUTitle">
-              {{key}}
+              {{ key }}
             </div>
           </div>
           <div class="contentInfoWrap">
@@ -55,7 +55,9 @@
                   <div></div>
                 </template>
                 <template slot-scope="scope">
-                  <div :class="scope.$index==0?'filstColumn_total':'filstColumn'">
+                  <div :class="
+                      scope.$index == 0 ? 'filstColumn_total' : 'filstColumn'
+                    ">
                     <span>{{ scope.row.dimCustomer }} </span>
                     <!-- {{scope.$index}} -->
                   </div>
@@ -64,13 +66,14 @@
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
               <el-table-column align="center" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" v-for="(citem,cindex) in columnList(tableData)" :key="cindex">
+              <el-table-column align="center" width="250" prop="number" v-for="(citem, cindex) in columnList(tableData)" :key="cindex">
                 <template slot="header">
-                  {{ tableData[0].customGearList[cindex].gear }}RMB/听 档位销量(箱)
+                  {{ tableData[0].customGearList[cindex].gear }}RMB/听
+                  档位销量(箱)
                 </template>
-                <template slot-scope="{row}">
+                <template slot-scope="{ row }">
                   <div>
-                    {{row.customGearList[cindex].actualNum}}
+                    {{ row.customGearList[cindex].actualNum }}
                   </div>
                 </template>
               </el-table-column>
@@ -92,7 +95,7 @@
       </div>
       <!-- 导入 -->
       <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-        <div v-loading='dialogLoading' element-loading-text="正在导入">
+        <div v-loading="dialogLoading" element-loading-text="正在导入">
           <div class="el-downloadFileBar">
             <div>
               <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
@@ -137,7 +140,6 @@
             </el-table>
           </div>
         </div>
-
       </el-dialog>
     </div>
   </div>
