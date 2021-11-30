@@ -6,6 +6,9 @@ export default {
   getPageV1(params) {
     return requestApi.request_get('/cityplan/investCpVOneDetail/getPage', params)
   },
+  getApprovePageV1(params) {
+    return requestApi.request_get('/cityplan/investCpVOneDetail/getApprovePage', params)
+  },
   approveV1(params) {
     return requestApi.request_post('/cityplan/investCpVOneDetail/approve', params)
   },
@@ -23,9 +26,32 @@ export default {
   importV1(params) {
     return request({
       url: '/cityplan/investCpVOneDetail/import',
-      method: 'get',
-      params: params,
+      method: 'post',
+      data: params,
+      params: { importType: 1 },
       headers: { 'Content-Type': 'multipart/form-data' }
     })
+  },
+  // 导出excel模板
+  exportExcel(params) {
+    return request({
+      url: '/cityplan/investCpVOneDetail/exportExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  // 导出错误信息
+  exportErrorList(params) {
+    return request({
+      url: '/cityplan/investCpVOneDetail/exportErrorList',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  // 文件检索后保存
+  saveImportInfo(params) {
+    return requestApi.request_get('/cityplan/investCpVOneDetail/saveImportInfo', params)
   }
 }

@@ -238,7 +238,7 @@ export default {
     getTableData() {
       this.tableLoading = true
       this.tableData = []
-      API.getPageV1({
+      API.getApprovePageV1({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize // 每页条数
       })
