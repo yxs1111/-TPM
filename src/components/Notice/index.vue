@@ -1,34 +1,48 @@
 <template>
   <div class="header-notice">
     <div class="notice-box" @click.stop="click">
-      <img src="../../assets/images/message.png" alt="" class="messageIcon">
+      <img src="@/assets/images/message.png" alt="" class="messageIcon" />
       <!-- <i class="el-icon-bell notice-box-i"></i>
       <div class="notice-box-txt">消息&nbsp;&nbsp;({{unreadNumberAll}})</div> -->
     </div>
-    <el-dialog :visible.sync="noticePage.dialogVisible" title="消息" width="70%" height="40%">
+    <el-dialog :visible.sync="noticePage.dialogVisible" title="消息" width="70%" height="40%" class="my-el-dialog">
+      <div class="flex_start">
+        <el-button type="primary" class="TpmButtonBG" @click="ReadAll">全部已读</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="ReadMuti">标记已读</el-button>
+      </div>
+
       <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" element-loading-text="正在查询" border fit stripe height="400"
         highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" align="center" />
         <el-table-column align="center" prop="title" label="标题" />
         <el-table-column align="center" prop="senderName" label="发送人" />
-        <el-table-column align="center" prop="createDate" label="日期" />
-        <el-table-column align="center" prop="readFlag" label="状态">
-          <template slot-scope="{row}">
-            <el-tag :type="row.readFlag | statusStyleFilter">{{ row.readFlag | statusWordFilter }}</el-tag>
+        <el-table-column align="center" prop="createDate" label="日期">
+          <template slot-scope="{ row }">
+            <div>
+              {{ row.createDate.slice(0, 10) }}
+            </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-          <template slot-scope="{row}">
-            <el-button size="mini" type="default" @click="getRowData(row)">
-              {{ $t('table.detail') }}
-            </el-button>
+        <el-table-column align="center" label="状态">
+          <template slot-scope="{ row }">
+            <div>
+              {{ row.state | statusWordFilter(row.state) }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" prop="createDate" label="操作">
+          <template slot-scope="{ row }">
+            <div class="flex">
+              <el-button type="primary" class="TpmButtonBG" @click="Read(row.id)">标记已读</el-button>
+              <el-button type="primary" class="TpmButtonBG" @click="detail(row)">查看</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="noticePage.noticePageProps.total" :page-size="noticePage.noticePageProps.pageSize"
-        :current-page="noticePage.noticePageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="noticePage.dialogVisible = false">确定</el-button>
-      </span>
+      <div class="TpmPaginationWrap">
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="noticePage.noticePageProps.total" :page-size="noticePage.noticePageProps.pageSize"
+          :current-page="noticePage.noticePageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      </div>
     </el-dialog>
     <!--信息框-->
     <el-dialog :title="noticePage.detailDialog.title" :visible.sync="noticePage.detailDialog.visible">
@@ -36,20 +50,23 @@
         <el-form-item prop="title" label="标题">
           <span>{{ noticePage.detailDialog.data.title }}</span>
         </el-form-item>
-        <el-form-item prop="summary" label="概要">
-          <span>{{ noticePage.detailDialog.data.summary }}</span>
-        </el-form-item>
-        <el-form-item prop="content" label="内容">
-          <span>{{ noticePage.detailDialog.data.content }}</span>
-        </el-form-item>
-        <el-form-item prop="deptName" label="发送部门">
-          <span>{{ noticePage.detailDialog.data.deptName }}</span>
-        </el-form-item>
         <el-form-item prop="senderName" label="发送方">
           <span>{{ noticePage.detailDialog.data.senderName }}</span>
         </el-form-item>
         <el-form-item prop="createDate" label="发送时间">
-          <span>{{ noticePage.detailDialog.data.createTime }}</span>
+          <span>{{ noticePage.detailDialog.data.createDate }}</span>
+        </el-form-item>
+        <el-form-item prop="markName" label="已读">
+          <span>{{ noticePage.detailDialog.data.markName }}</span>
+        </el-form-item>
+        <el-form-item prop="markDate" label="已读时间">
+          <span>{{ noticePage.detailDialog.data.markDate }}</span>
+        </el-form-item>
+        <el-form-item prop="source" label="消息来源">
+          <span>{{ noticePage.detailDialog.data.source }}</span>
+        </el-form-item>
+        <el-form-item prop="stateFlg" label="状态">
+          <span>{{ noticePage.detailDialog.data.stateFlg }}</span>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -112,18 +129,24 @@ export default {
           title: '详情',
           visible: false,
           data: {
-            category: null,
             title: null,
-            summary: null,
-            content: null,
             senderName: null,
-            deptName: null,
-            createTime: null,
+            createDate: null,
+            markName: null,
+            markDate: null,
+            stateFlg: null,
+            source: null,
           },
         },
       },
       unreadNumberAll: 0,
       unreadNumber: {},
+      filterObj: {
+        title: '',
+        source: '',
+        state: '',
+      },
+      checkarr:[], //选中的数组
     }
   },
   computed: {},
@@ -138,24 +161,24 @@ export default {
   },
   mounted() {
     // WebSocket
-    if ('WebSocket' in window) {
-      this.websocket = new WebSocket('ws://127.0.0.1:9004/websocket/admin')
-      this.initWebSocket()
-    } else {
-      Message.error({
-        message: '当前浏览器 Not support websocket',
-        duration: 10 * 1000,
-      })
-    }
+    // if ('WebSocket' in window) {
+    //   this.websocket = new WebSocket('ws://127.0.0.1:9004/websocket/admin')
+    //   this.initWebSocket()
+    // } else {
+    //   Message.error({
+    //     message: '当前浏览器 Not support websocket',
+    //     duration: 10 * 1000,
+    //   })
+    // }
   },
   beforeDestroy() {
-    this.onbeforeunload()
+    // this.onbeforeunload()
   },
   methods: {
     handleClick() {},
     click() {
       this.noticePage.dialogVisible = true
-      this.getUnReadNum()
+      // this.getUnReadNum()
       this.initPageProps()
       this.fetchData(1)
     },
@@ -210,14 +233,17 @@ export default {
     fetchData(newTitle) {
       this.noticePage.searchLoading = true
       requestApi
-        .request_get('/im/message/getMessageListByUserCode', {
+        .request_get('/messageAudit/getPageByDto', {
+          title: this.filterObj.title,
+          state: this.filterObj.state,
           category: this.noticePage.category,
           receiverCode: 'admin',
           pageSize: this.noticePage.noticePageProps.pageSize,
           pageNum: this.noticePage.noticePageProps.pageNum,
         })
         .then((response) => {
-          this.formatTime(response.data.records)
+          // this.formatTime(response.data.records)
+          this.noticePage.noticePageProps.total = response.data.total
           this.noticePage.noticePageProps.record = response.data.records
         })
         .catch((error) => {
@@ -318,6 +344,40 @@ export default {
         pageNum: 1,
       }
     },
+    ReadAll() {
+      requestApi
+        .request_put('/messageAudit/markReadAll', )
+        .then((response) => {
+          this.$message.success('全部已读成功')
+          this.fetchData()
+        })
+    },
+    Read(id) {
+      console.log(this.checkarr);
+      let arr=[]
+      arr.push(id)
+      requestApi
+        .request_put('/messageAudit/markRead', arr)
+        .then((response) => {
+          this.$message.success('已读成功')
+          this.fetchData()
+        })
+    },
+    //多个已读
+    ReadMuti() {
+      let list=[]
+      this.checkarr.forEach(item=>{
+        list.push(item.id)
+      })
+      console.log(list)
+      requestApi
+        .request_put('/messageAudit/markRead', list)
+        .then((response) => {
+
+          this.$message.success('已读成功')
+          this.fetchData()
+        })
+    },
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.noticePage.noticePageProps.pageSize = size
@@ -329,12 +389,21 @@ export default {
       this.fetchData()
     },
     handleCurrentRowClick() {},
-    handleCurrentRowDblClick() {},
-    handleSelectionChange() {},
+    handleCurrentRowDblClick(res) {
+      this.getRowData(res)
+    },
+    handleSelectionChange(val) {
+      this.checkarr=val
+      console.log(this.checkarr);
+    },
+    //查看详情
+    detail(res) {
+      this.getRowData(res)
+    },
   },
 }
 </script>
-<style >
+<style>
 .item .el-badge__content {
   position: absolute;
   top: 7px !important;
@@ -342,8 +411,18 @@ export default {
   -webkit-transform: translateY(-50%) translateX(100%);
   transform: translateY(-50%) translateX(100%);
 }
+.my-el-dialog .el-pager li {
+  vertical-align: middle;
+}
 </style>
 <style lang="scss" scoped>
+.flex {
+  display: flex;
+  justify-content: center;
+}
+.flex_start {
+  display: flex;
+}
 .notice-box {
   height: 40px;
   border-radius: 20px;
@@ -383,5 +462,24 @@ export default {
   width: 22px;
   height: 19px;
 }
-</style>
 
+.TpmButtonBG {
+  height: 38 px;
+  padding: 0 20 px;
+  background: #4192d3;
+  border: 1 px solid #e7e7e7;
+  border-radius: 3 px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #4192d3 !important;
+  color: #fff;
+}
+</style>

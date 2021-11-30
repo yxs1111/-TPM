@@ -63,19 +63,22 @@
     </div>
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div class="fileInfo ImportContent">
-        <div class="fileTitle">文件</div>
-        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div class="fileName" v-if="uploadFileName!=''">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-          <span>{{uploadFileName}}</span>
+      <div v-loading='dialogLoading' element-loading-text="正在导入">
+        <div class="fileInfo ImportContent">
+          <div class="fileTitle">文件</div>
+          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <div class="fileName" v-if="uploadFileName!=''">
+            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+            <span>{{uploadFileName}}</span>
+          </div>
         </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="confirmImport()">确 定</el-button>
+          <el-button @click="closeImport">取 消</el-button>
+        </span>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmImport()">确 定</el-button>
-        <el-button @click="closeImport">取 消</el-button>
-      </span>
+
     </el-dialog>
   </div>
 </template>
@@ -100,6 +103,7 @@ export default {
         productEsName: '',
       },
       tableLoading: '',
+      dialogLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -107,7 +111,7 @@ export default {
       importVisible: false, //导入弹窗
       uploadFileName: '',
       uploadFile: '',
-      event:'',
+      event: '',
     }
   },
   computed: {},
@@ -151,12 +155,25 @@ export default {
     },
     //确认导入
     confirmImport() {
+      this.dialogLoading = true
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importSaleComputeKeep(formData)
         .then((response) => {
-          this.$message.success('导入成功!')
-          this.closeImport()
+          if (response.code === 1000) {
+            this.$message.success('导入成功!')
+            this.closeImport()
+            this.getTableData()
+            this.dialogLoading = false
+          } else {
+            var list=response.data
+            let str=''
+            list.forEach(item => {
+              str+=item
+            });
+            this.$message.error(`${str}`)
+            this.dialogLoading = false
+          } 
         })
         .catch(() => {})
     },
