@@ -42,7 +42,7 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="exportExcelModel">
+      <div class="TpmButtonBG" @click="exportExcelInfo">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出</span>
       </div>
@@ -105,40 +105,37 @@
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-      <div class="el-downloadFileBar" style="display:flex;justify-content: flex-start;">
-        <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">下载模板
-        </el-button>
-        <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
-        </el-button>
-        <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
-        </el-button>
+      <div class="el-downloadFileBar" style="display:flex;">
+        <div>
+          <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">下载模板
+          </el-button>
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
+          </el-button>
+        </div>
+        <div>
+          <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          </el-button>
+        </div>
       </div>
 
-      <div class="fileInfo">
-        <div class="fileTitle">文件</div>
-        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div v-if="uploadFileName!=''" class="fileName">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
-          <span>{{ uploadFileName }}</span>
-        </div>
-        <!-- <el-button v-if="uploadFileName!=''" style="line-height: 27px;color: #4192d3;border: 1px solid #4192d3;font-size:12px;padding:0 3px;margin-left:3px;" @click="confirmImport()">确定上传</el-button> -->
-      </div>
-      <div class="seeData">
-        <!-- <div class="LeftBar">
-          <div class="seeDataTitle">浏览数据</div>
-          <div class="SelectLi">
-            <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
-              <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
-            </el-select>
+      <div class="fileInfo" style="justify-content: space-between;">
+        <div style="display: flex;">
+          <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
+          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <div v-if="uploadFileName!=''" class="fileName">
+            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
+            <span>{{ uploadFileName }}</span>
           </div>
-        </div> -->
-
-        <div class="exportError" @click="exportErrorList">
-          <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-          <span>导出错误信息</span>
+        </div>
+        <div class="seeData" style="width: auto;">
+          <div class="exportError" @click="exportErrorList">
+            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+            <span>导出错误信息</span>
+          </div>
         </div>
       </div>
+
       <div class="tableWrap">
         <el-table
           border
@@ -303,13 +300,13 @@ export default {
           document.body.removeChild(link) // 9.移除a链接dom
         })
     },
-    // 下载excel模板
-    exportExcelModel() {
+    // 导出excel
+    exportExcelInfo() {
       API.exportExcel({
         mainId: this.mainIdLocal
       }).then(
         response => {
-          const fileName = 'Excel模板' + new Date().getTime() + '.xlsx'
+          const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
           const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'
@@ -332,6 +329,7 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
+      formData.append('importType', 1)
       API.importV1(formData)
         .then((response) => {
           if (response.code === 1000) {
@@ -415,7 +413,7 @@ export default {
         importType: 1
       }).then(
         response => {
-          const fileName = '模板' + new Date().getTime() + '.xlsx'
+          const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
           const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'

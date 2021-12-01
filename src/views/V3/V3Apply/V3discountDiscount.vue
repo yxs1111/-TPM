@@ -7,7 +7,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -28,8 +28,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.sku" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
           </el-select>
         </div>
 
@@ -102,44 +102,42 @@
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-      <div class="el-downloadFileBar" style="display:flex;justify-content: flex-start;">
-        <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">
-          <a href="/investCpVThreeDetail/exportTemplate" download="exportTemplate.xlsx">下载模板</a>
-        </el-button>
-        <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
+      <div class="el-downloadFileBar" style="display:flex;">
+        <div>
+          <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">
+            <a href="/investCpVThreeDetail/exportTemplate" download="exportTemplate.xlsx">下载模板</a>
+          </el-button>
+          <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
           <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
         </el-button> -->
-        <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
-        </el-button>
-        <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
-        </el-button>
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
+          </el-button>
+        </div>
+        <div>
+          <el-button type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          </el-button>
+        </div>
       </div>
 
-      <div class="fileInfo">
-        <div class="fileTitle">文件</div>
-        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div v-if="uploadFileName!=''" class="fileName">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
-          <span>{{ uploadFileName }}</span>
+      <div class="fileInfo" style="justify-content: space-between;">
+        <div style="display: flex;">
+          <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
+          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <div v-if="uploadFileName!=''" class="fileName">
+            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
+            <span>{{ uploadFileName }}</span>
+          </div>
+        </div>
+        <div class="seeData" style="width: auto;">
+          <div class="exportError" @click="downLoadException">
+            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+            <span>导出错误信息</span>
+          </div>
         </div>
         <!-- <el-button v-if="uploadFileName!=''" style="line-height: 27px;color: #4192d3;border: 1px solid #4192d3;font-size:12px;padding:0 3px;margin-left:3px;" @click="confirmImport()">确定上传</el-button> -->
       </div>
-      <div class="seeData">
-        <!-- <div class="LeftBar">
-          <div class="seeDataTitle">浏览数据</div>
-          <div class="SelectLi">
-            <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
-              <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
-            </el-select>
-          </div>
-        </div> -->
 
-        <div class="exportError" @click="downLoadException">
-          <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-          <span>导出错误信息</span>
-        </div>
-      </div>
       <div class="tableWrap">
         <el-table
           v-loading="dialogTableLoading"
@@ -291,6 +289,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/V3/v3.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'V2discountDiscount',
@@ -298,6 +297,9 @@ export default {
 
   data() {
     return {
+      // 下拉框
+      channelArr: [],
+      skuArr: [],
       mainIdLocal: null,
       // 导入
       ImportData: [],
@@ -309,7 +311,7 @@ export default {
       pageNum: 1,
       filterObj: {
         sku: '',
-        month: ''
+        channel: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
@@ -357,8 +359,33 @@ export default {
   computed: {},
   mounted() {
     this.getTableData()
+    this.getChannel()
+    this.getSKU()
+    this.getMP()
   },
   methods: {
+    // 获取下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then(res => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      }).catch()
+    },
+    getSKU() {
+      selectAPI.querySkuSelect().then(res => {
+        if (res.code === 1000) {
+          this.skuArr = res.data
+        }
+      }).catch()
+    },
+    getMP() {
+      selectAPI.queryMinePackageSelect().then(res => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      }).catch()
+    },
     // 提交
     submitApply() {
       API.submitApply({
@@ -386,6 +413,7 @@ export default {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('mainId', this.mainIdLocal)
+      formData.append('isApprove', false)
       this.dialogTableLoading = true
       // 添加mainId
       API.importV3(formData)

@@ -6,6 +6,7 @@ export default {
   getPageV1(params) {
     return requestApi.request_get('/cityplan/investCpVOneDetail/getPage', params)
   },
+  // 审批分页查询
   getApprovePageV1(params) {
     return requestApi.request_get('/cityplan/investCpVOneDetail/getApprovePage', params)
   },
@@ -28,7 +29,6 @@ export default {
       url: '/cityplan/investCpVOneDetail/import',
       method: 'post',
       data: params,
-      params: { importType: 1 },
       headers: { 'Content-Type': 'multipart/form-data' }
     })
   },

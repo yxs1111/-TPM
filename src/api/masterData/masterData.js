@@ -237,4 +237,11 @@ export default {
     })
     //return requestApi.request_get('/mdm/mdPricepromotionCalculationandmaintenance/templateDownload', params)
   },
+  // 导入测试
+  importNkaRawData(params) {
+    return requestApi.request_post('/importData/importNkaRawData', params)
+  },
+  importNkaRawDataGuideline(params) {
+    return requestApi.request_post('/importData/importNkaRawDataGuideline', params)
+  }
 }

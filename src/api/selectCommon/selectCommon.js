@@ -13,5 +13,13 @@ export default {
   // MinePackage下拉框
   queryMinePackageSelect(params) {
     return requestApi.request_get('/mdm/mdSplitRuleConfig/queryMinePackageSelect', params)
+  },
+  // 客户
+  queryCustomerList(params) {
+    return requestApi.request_get('/mdm/mdCustomer/getCustomerList', params)
+  },
+  // 经销商
+  queryDistributorList(params) {
+    return requestApi.request_get('/mdm/mdDistributor/getDistributorList', params)
   }
 }
