@@ -29,13 +29,21 @@
       <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
-      <el-form-item>
+      <!-- <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">导出</el-button>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG" @click="add">
+        <img src="../../../assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG" @click="mutidel">
+        <img src="../../../assets/images/export.png" alt="">
+        <span class="text">导出</span>
+      </div>
       <!-- <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">新增</el-button> -->
-      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button>
+      <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
     <el-table
       v-loading="tableLoading"

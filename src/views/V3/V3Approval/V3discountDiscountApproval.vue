@@ -6,19 +6,19 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -30,7 +30,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
           </el-select>
         </div>
 
@@ -208,6 +208,8 @@ export default {
       // 下拉框
       channelArr: [],
       skuArr: [],
+      customerArr: [],
+      distributorArr: [],
       saveBtn: false,
       importVisible: false, // 导入弹窗
       mainIdLocal: '',
@@ -223,40 +225,7 @@ export default {
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: 200,
-          channel: 'NKA',
-          amount3: 12,
-          total: 20.0
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: 180,
-          channel: 'NKA',
-          amount3: 9,
-          total: 21.0
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: 160,
-          channel: 'NKA',
-          amount3: 17,
-          total: 68.5
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-          total: 47.0
-        }
-      ],
+      tableData: [],
       dialogVisible: false,
       dialogTableLoading: false,
       dialogData: [],
@@ -266,6 +235,11 @@ export default {
   computed: {},
   mounted() {
     this.getTableData()
+    this.getChannel()
+    this.getSKU()
+    this.getMP()
+    this.getCustomerList()
+    this.getDistributorList()
   },
   methods: {
     // 获取下拉框
@@ -287,6 +261,22 @@ export default {
       selectAPI.queryMinePackageSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
+        }
+      }).catch()
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI.queryCustomerList().then(res => {
+        if (res.code === 1000) {
+          this.customerArr = res.data
+        }
+      }).catch()
+    },
+    // 经销商
+    getDistributorList() {
+      selectAPI.queryDistributorList().then(res => {
+        if (res.code === 1000) {
+          this.distributorArr = res.data
         }
       }).catch()
     },
@@ -442,10 +432,10 @@ export default {
       API.getPageV3({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelCode: '',
-        customerCode: '',
-        distributorCode: '',
-        productCode: ''
+        channelCode: this.filterObj.channelCode,
+        customerCode: this.filterObj.customerCode,
+        distributorCode: this.filterObj.distributorCode,
+        productCode: this.filterObj.productCode
       })
         .then((response) => {
           this.tableLoading = false

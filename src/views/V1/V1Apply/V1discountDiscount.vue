@@ -5,18 +5,21 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" />
+          <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -27,14 +30,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
           </el-select>
         </div>
 
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
+        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="getTableData">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -211,6 +214,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/V1/v1.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'V1discountDiscount',
@@ -278,14 +282,61 @@ export default {
       dialogVisible: false,
       mainIdLocal: null,
       checkedData: [],
-      saveBtn: false
+      saveBtn: false,
+      channelArr: [],
+      skuArr: [],
+      customerArr: [],
+      distributorArr: []
     }
   },
   computed: {},
   mounted() {
     this.getTableData()
+    this.getChannel()
+    this.getSKU()
+    this.getMP()
+    this.getCustomerList()
+    this.getDistributorList()
   },
   methods: {
+    // 获取下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then(res => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      }).catch()
+    },
+    getSKU() {
+      selectAPI.querySkuSelect().then(res => {
+        if (res.code === 1000) {
+          this.skuArr = res.data
+        }
+      }).catch()
+    },
+    getMP() {
+      selectAPI.queryMinePackageSelect().then(res => {
+        if (res.code === 1000) {
+          // this.channelArr = res.data
+        }
+      }).catch()
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI.queryCustomerList().then(res => {
+        if (res.code === 1000) {
+          this.customerArr = res.data
+        }
+      }).catch()
+    },
+    // 经销商
+    getDistributorList() {
+      selectAPI.queryDistributorList().then(res => {
+        if (res.code === 1000) {
+          this.distributorArr = res.data
+        }
+      }).catch()
+    },
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo().then(res => {
@@ -456,8 +507,8 @@ export default {
     exportData() {
       // 导出数据筛选
       var data = {}
-      // data = { ...this.filterObj }
-      API.exportV3().then((res) => {
+      data = { ...this.filterObj }
+      API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
@@ -487,7 +538,11 @@ export default {
       this.tableData = []
       API.getPageV1({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
+        channelCode: this.filterObj.channelCode,
+        customerCode: this.filterObj.customerCode,
+        distributorCode: this.filterObj.distributorCode,
+        productCode: this.filterObj.productCode
       })
         .then((response) => {
           this.tableLoading = false
