@@ -5,13 +5,15 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" />
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
@@ -21,20 +23,20 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
 
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -112,7 +114,7 @@
           </el-button>
         </div>
         <div>
-          <el-button type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -203,14 +205,20 @@ export default {
 
   data() {
     return {
+      // 下拉框
+      channelArr: [],
+      skuArr: [],
+      saveBtn: false,
       importVisible: false, // 导入弹窗
       mainIdLocal: '',
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        sku: '',
-        month: ''
+        channelCode: '',
+        customerCode: '',
+        distributorCode: '',
+        productCode: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
@@ -252,7 +260,7 @@ export default {
       dialogVisible: false,
       dialogTableLoading: false,
       dialogData: [],
-      uploadFileName: '',
+      uploadFileName: ''
     }
   },
   computed: {},
@@ -260,6 +268,28 @@ export default {
     this.getTableData()
   },
   methods: {
+    // 获取下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then(res => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      }).catch()
+    },
+    getSKU() {
+      selectAPI.querySkuSelect().then(res => {
+        if (res.code === 1000) {
+          this.skuArr = res.data
+        }
+      }).catch()
+    },
+    getMP() {
+      selectAPI.queryMinePackageSelect().then(res => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      }).catch()
+    },
     // 校验excel
     downLoadException() {
       API.exportException().then(
@@ -328,12 +358,17 @@ export default {
             this.event.srcElement.value = '' // 置空
             this.uploadFileName = ''
             this.uploadFile = ''
-            this.dialogData = response.data
             this.dialogTableLoading = false
             this.$message({
               type: 'success',
               message: '上传成功'
             })
+            if (response.data != null) {
+              this.dialogData = response.data
+              this.saveBtn = response.data[0].judgmentType !== 'Error'
+            } else {
+              this.dialogData = []
+            }
           } else {
             this.$message({
               type: 'error',
@@ -357,8 +392,8 @@ export default {
     exportData() {
       // 导出数据筛选
       var data = {}
-      // data = { ...this.filterObj }
-      API.exportV3().then((res) => {
+      data = { ...this.filterObj }
+      API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
@@ -371,11 +406,34 @@ export default {
       } else if (val === 2) {
         statusLocal = 'reject'
       }
-      API.approve({
-        mainId: this.mainIdLocal,
-        state: statusLocal,
-        opinion: ''
-      }).then().catch()
+      this.$confirm(statusLocal === 'agree' ? '此操作将通过审批, 是否继续?' : '此操作将驳回审批, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        API.approveV1({
+          mainId: this.mainIdLocal,
+          state: statusLocal,
+          opinion: ''
+        }).then(res => {
+          if (res.code === 1000) {
+            this.$message({
+              type: 'success',
+              message: '审批成功!'
+            })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '审批失败!'
+            })
+          }
+        }).catch()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消提交'
+        })
+      })
     },
     // 获取表格数据
     getTableData() {
@@ -383,7 +441,11 @@ export default {
       this.tableData = []
       API.getPageV3({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
+        channelCode: '',
+        customerCode: '',
+        distributorCode: '',
+        productCode: ''
       })
         .then((response) => {
           this.tableLoading = false

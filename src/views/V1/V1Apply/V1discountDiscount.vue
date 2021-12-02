@@ -113,7 +113,7 @@
           </el-button>
         </div>
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -139,7 +139,7 @@
       <div class="tableWrap">
         <el-table
           border
-          height="240"
+          height="400"
           :data="checkedData"
           style="width: 100%"
           :header-cell-style="{
@@ -153,7 +153,14 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <el-table-column prop="date" fixed align="center" label="检测数据" width="100" />
+          <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+            <template slot-scope="scope">
+              <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+              <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+              <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+            </template>
+          </el-table-column>
+          <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
           <el-table-column width="400" align="center" prop="cpId" label="CPID" />
           <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
           <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -211,6 +218,9 @@ export default {
 
   data() {
     return {
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
       fileList: [],
       file: undefined,
       pic: {},
@@ -267,7 +277,8 @@ export default {
       ],
       dialogVisible: false,
       mainIdLocal: null,
-      checkedData: []
+      checkedData: [],
+      saveBtn: false
     }
   },
   computed: {},
@@ -342,6 +353,7 @@ export default {
             })
             if (response.data != null) {
               this.checkedData = response.data
+              this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
             } else {
               this.checkedData = []
             }
@@ -437,6 +449,7 @@ export default {
     // 关闭导入
     closeimportDialog() {
       this.importVisible = false
+      this.checkedData = []
     },
 
     // 导出数据

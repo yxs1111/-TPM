@@ -11,9 +11,9 @@ let unauthorized_state = true
 const sourceKey = process.env.VUE_APP_SOURCE_KEY
 const loginKey = process.env.VUE_APP_LOGIN_KEY
 // 提示框过期时间
-const messageDuration = 5 * 1000
+const messageDuration = 10 * 1000
 // 请求超时时间
-const requestTimeout = 50 * 1000
+const requestTimeout = 90 * 1000
 
 // create an axios instance
 const service = axios.create({

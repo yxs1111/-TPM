@@ -3,34 +3,44 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="年月：" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
-      </el-form-item>
-      <el-form-item label="渠道：" prop="name">
+      <el-form-item label="渠道：">
         <el-select v-model="filterObj.category" placeholder="请选择">
           <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="客户：" prop="name">
+      <el-form-item label="Mine Package:">
         <el-select v-model="filterObj.category" placeholder="请选择">
           <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="品牌：" prop="name">
+      <el-form-item label="年月：">
+        <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" />
+      </el-form-item>
+      <el-form-item label="版本：">
         <el-select v-model="filterObj.category" placeholder="请选择">
           <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
-      <el-form-item style="color:red;">
-        暂时缺少页面
+      <el-form-item label="拆分类型：">
+        <el-select v-model="filterObj.category" placeholder="请选择">
+          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
-      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
+      <div class="TpmButtonBG" @click="add">
+        <img src="../../../assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG" @click="mutidel">
+        <img src="../../../assets/images/export.png" alt="">
+        <span class="text">导出</span>
+      </div>
+      <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
+      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button> -->
     </div>
     <el-table
       v-loading="tableLoading"
@@ -41,16 +51,17 @@
       stripe
       style="width: 100%"
     >
-      <el-table-column width="" align="center" prop="channelCode" label="年月" />
       <el-table-column width="" align="center" prop="channelCsName" label="渠道" />
-      <el-table-column width="150" align="center" prop="productCode" label="客户" />
-      <el-table-column width="200" align="center" prop="productCsName" label="品牌" />
-      <el-table-column width="" align="center" prop="volMix" label="新客达成率" />
+      <el-table-column width="" align="center" prop="channelCode" label="年月" />
+      <el-table-column width="150" align="center" prop="productCode" label="版本" />
+      <el-table-column width="200" align="center" prop="productCsName" label="拆分类型" />
+      <el-table-column width="" align="center" prop="volMix" label="拆分规则" />
+      <el-table-column width="" align="center" prop="volMix" label="权重" />
       <el-table-column width="" align="center" prop="channelCode" label="创建人" />
       <el-table-column width="" align="center" prop="channelCsName" label="创建时间" />
       <el-table-column width="150" align="center" prop="productCode" label="修改人" />
-      <el-table-column width="320" align="center" prop="productCsName" label="修改时间" />
-      <el-table-column width="" align="center" prop="volMix" label="状态" />
+      <el-table-column width="180" align="center" prop="productCsName" label="修改时间" />
+      <el-table-column width="" align="center" prop="volMix" label="备注" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">

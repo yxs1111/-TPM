@@ -26,7 +26,7 @@ export default {
   },
   importV1(params) {
     return request({
-      url: '/cityplan/investCpVOneDetail/import',
+      url: '/cityplan/investCpVOneDetail/importExcel',
       method: 'post',
       data: params,
       headers: { 'Content-Type': 'multipart/form-data' }
