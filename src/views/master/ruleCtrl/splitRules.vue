@@ -4,37 +4,36 @@
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="渠道：">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Mine Package:">
-        <el-select v-model="filterObj.category" placeholder="请选择">
+        <el-select v-model="filterObj.channelCode" placeholder="请选择">
           <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="年月：">
-        <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" />
+        <el-date-picker v-model="filterObj.yeardate" type="month" placeholder="请选择" />
       </el-form-item>
       <el-form-item label="版本：">
-        <el-select v-model="filterObj.category" placeholder="请选择">
+        <el-select v-model="filterObj.versions" placeholder="请选择">
           <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="拆分类型：">
-        <el-select v-model="filterObj.category" placeholder="请选择">
+        <el-select v-model="filterObj.splitType" placeholder="请选择">
           <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="getTableData">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="add">
         <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
+        <span class="text">新增</span>
       </div>
+      <!-- <div class="TpmButtonBG" @click="add">
+        <img src="../../../assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div> -->
       <div class="TpmButtonBG" @click="mutidel">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出</span>
@@ -112,6 +111,111 @@
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
     </el-dialog>
+    <!-- 新增 -->
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
+      <div class="el-dialogContent">
+        <div style="margin-bottom:15px;">
+          <el-row :gutter="20" style="margin-bottom:8px;">
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                渠道：
+                <el-select v-model="dialogAdd.channelcode" placeholder="请选择" size="small">
+                  <el-option
+                    v-for="item in channelOptons"
+                    :key="item.channelCode"
+                    :label="item.channelEsName"
+                    :value="item.channelCode"
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                Mine Package：
+                <el-select v-model="dialogAdd.costTypeNumber" placeholder="请选择" size="small">
+                  <el-option
+                    v-for="item in mpOptons"
+                    :key="item.costTypeNumber"
+                    :label="item.costType"
+                    :value="item.costTypeNumber"
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                年月:
+                <el-date-picker v-model="filterObj.yeardate" type="month" placeholder="请选择" size="small" />
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                版本：
+                <el-select v-model="filterObj.versions" placeholder="请选择"  size="small">
+                  <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                拆分类型：
+                <el-select v-model="filterObj.splitType" placeholder="请选择" size="small">
+                  <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                备注：
+                <el-input v-model="dialogAdd.remark" style="width: 260px;" placeholder="请输入内容" size="small" />
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div>
+          <el-button plain type="primary" size="mini" icon="el-icon-plus" @click="handleAddDetails">添加一行</el-button>
+          <el-button
+            type="success"
+            icon="el-icon-delete"
+            size="mini"
+            @click="handleDeleteDetails"
+          >删除</el-button>
+          <el-button
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+            @click="handleDeleteAllDetails"
+          >清空</el-button>
+        </div>
+        <div style="height:1px;background:#dcdfe6;margin:20px 0px;" />
+        <div style="border: 1px solid #dcdfe6;">
+          <el-table ref="tb" :data="systemList" :row-class-name="rowClassName" @selection-change="handleDetailSelectionChange">
+            <el-table-column type="selection" width="55" />
+            <el-table-column type="index" label="序号" align="center" width="50" />
+            <el-table-column label="拆分规则" align="center" prop="fs">
+              <template slot-scope="scope">
+                P&nbsp;
+                <el-input v-model="systemList[scope.row.xh-1].cdmRuleF" style="width:30px;margin-right:8px;" size="small" placeholder="请输入" />
+                &nbsp;M —— P&nbsp;
+                <el-input v-model="systemList[scope.row.xh-1].cdmRuleS" style="width:30px;" size="small" placeholder="请输入" />
+                &nbsp;M
+              </template>
+            </el-table-column>
+            <el-table-column label="权重" align="center" prop="cdmName">
+              <template slot-scope="scope">
+                <span>{{ 60 }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm()">保 存</el-button>
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -126,13 +230,41 @@ export default {
 
   data() {
     return {
+      checkArr: [], // 批量删除,存放选中
+      channelOptons: [],
+      skuOptons: [],
+      mpOptons: [],
+      systemList: [],
+      cdmTypeOptions: [
+        {
+          code: 'cdm1',
+          name: '打折'
+        },
+        {
+          code: 'cdm2',
+          name: '特价'
+        },
+        {
+          code: 'cdm3',
+          name: '满减'
+        }
+      ],
+      checkedDetail: [],
+      dialogAdd: {
+        channelCode: '',
+        costTypeNumber: '',
+        productCode: '',
+        remark: ''
+      },
+      dialogVisible: false,
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: ''
+        channelCode: '',
+        yeardate: '',
+        versions: '',
+        splitType: ''
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
@@ -167,17 +299,70 @@ export default {
           }
         ]
       },
-      dialogVisible: false,
       isEditor: '',
-      editorId: '',
-      checkArr: [] // 批量删除,存放选中
+      editorId: ''
     }
   },
   computed: {},
   mounted() {
-    // this.getTableData()
+    this.getTableData()
   },
   methods: {
+    // 弹框 动态增加行
+    rowClassName({ row, rowIndex }) {
+      row.xh = rowIndex + 1
+    },
+    // 单选框选中数据
+    handleDetailSelectionChange(selection) {
+      if (selection.length > 1) {
+        this.$refs.tb.clearSelection()
+        this.$refs.tb.toggleRowSelection(selection.pop())
+      } else {
+        this.checkedDetail = selection
+      }
+    },
+    handleAddDetails() {
+      if (this.systemList === undefined) {
+        // eslint-disable-next-line no-array-constructor
+        this.systemList = new Array()
+      }
+      const obj = {}
+      obj.cdmType = '1'
+      obj.cdmRuleF = '0'
+      obj.cdmRuleS = '0'
+      obj.cdmName = ''
+      this.systemList.push(obj)
+    },
+    handleDeleteDetails() {
+      if (this.checkedDetail.length === 0) {
+        this.$alert('请先选择要删除的数据', '提示', {
+          confirmButtonText: '确定'
+        })
+      } else {
+        this.systemList.splice(this.checkedDetail[0].xh - 1, 1)
+      }
+    },
+    handleDeleteAllDetails() {
+      this.systemList = undefined
+    },
+    // 新增弹框
+    add() {
+      this.dialogVisible = true
+    },
+    closeDialog() {
+      this.dialogVisible = false
+      this.ruleForm = {
+        channelCode: '',
+        channelCsName: '',
+        productCode: '',
+        productEsName: '',
+        productCsName: '',
+        gear: '',
+        volMin: '',
+        yearAndMonth: '',
+        remark: ''
+      }
+    },
     // select标签的change事件
     changeSelection(val) {
       const optionsImg = this.optionsImg
@@ -196,9 +381,13 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableLoading = true
-      API.getPageMdPriceGear({
+      API.getPageByRequestSplitRule({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
+        channelCode: this.filterObj.channelCode,
+        yeardate: this.filterObj.yeardate,
+        versions: this.filterObj.versions,
+        splitType: this.filterObj.splitType
       })
         .then((response) => {
           this.tableLoading = false
@@ -209,27 +398,8 @@ export default {
         })
         .catch(() => {})
     },
-    add() {
-      this.dialogVisible = true
-    },
     search() {
       this.getTableData()
-    },
-    closeDialog() {
-      this.dialogVisible = false
-      this.isEditor = false
-      this.editorId = ''
-      this.ruleForm = {
-        channelCode: '',
-        channelCsName: '',
-        productCode: '',
-        productEsName: '',
-        productCsName: '',
-        gear: '',
-        volMin: '',
-        yearAndMonth: '',
-        remark: ''
-      }
     },
     editor(obj) {
       this.isEditor = true

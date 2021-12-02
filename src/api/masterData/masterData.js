@@ -243,5 +243,43 @@ export default {
   },
   importNkaRawDataGuideline(params) {
     return requestApi.request_post('/importData/importNkaRawDataGuideline', params)
+  },
+  // 价格和促销
+  downloadExcelSyspool() {
+    return request({
+      url: '/mdCdmConfig/downloadExcel',
+      method: 'post',
+      responseType: 'blob'
+    })
+  },
+  importExcelSyspool(params) {
+    return request({
+      url: '/mdCdmConfig/importExcel',
+      method: 'post',
+      data: params,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  exportExcelSyspool(data) {
+    return request({
+      url: '/mdCdmConfig/exportExcel',
+      method: 'post',
+      data: data,
+      responseType: 'blob'
+    })
+  },
+  // 拆分规则
+  getPageByRequestSplitRule(params) {
+    return requestApi.request_get('/mdm/mdSplitRuleConfig/getPageByRequest', params)
+  },
+  insertSplitRule(params) {
+    return requestApi.request_post('/mdm/mdSplitRuleConfig/insertData', params)
+  },
+  updateSplitRule(params) {
+    return requestApi.request_put('/mdm/mdSplitRuleConfig/updateData', params)
+  },
+  deleteSplitRule(params) {
+    return requestApi.request_delete('/mdm/mdSplitRuleConfig/delete', params)
   }
+
 }
