@@ -125,10 +125,10 @@
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar">
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
+          <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="exportExcel">下载模板</el-button>
           <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+        <el-button v-if="saveBtn"  type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
       </div>
 
       <div class="fileInfo">
@@ -258,6 +258,7 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
+      saveBtn: false,
     }
   },
   directives: { elDragDialog, permission },
@@ -345,6 +346,7 @@ export default {
       if (this.uploadFileName != '') {
         API.exceptionCheck().then((response) => {
           this.ImportData = response.data
+          this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
         })
       } else {
         this.$message.error('请先选择文件再检测数据!')

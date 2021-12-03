@@ -123,7 +123,7 @@ export default {
 .content {
   position: relative;
   display: flex;
-  // height: calc(100% - 80px);
+  height: calc(100% - 80px);
 }
 
 </style>
