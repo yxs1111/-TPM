@@ -57,6 +57,7 @@ module.exports = {
         //target: `http://192.168.40.165:7777`,  //宋佳
         //target: `http://192.168.40.90:7777`,  //宗桂
         target: `http://10.176.80.242:7777`,  //测试服务器
+        //target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`,  //测试服务器
         
         changeOrigin: true,
         pathRewrite: {

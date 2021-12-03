@@ -398,9 +398,12 @@ export function replaceUnderLine(val, char = '_') {
  */
  export function getCPTMonth() {
   const date=new Date()
-  let year=date.getFullYear()
-  let month=date.getMonth()-1
+  const cdate=new Date()
+  cdate.setDate(date.getDate()+60)
+  let year=cdate.getFullYear()
+  let month=cdate.getMonth()+1
   month = month < 10 ? "0" + month : month;
+  console.log(cdate);
   return year+''+month
 }
 export const exportDefault = 'export default '

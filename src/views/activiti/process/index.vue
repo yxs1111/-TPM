@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-11-16 14:47:56
+ * @LastEditTime: 2021-12-03 08:59:20
 -->
 <template>
   <div class="app-container" @keyup.enter="search">
@@ -43,13 +43,13 @@
         <el-tag :type="row.suspended | processStatsStyleFilter">{{ row.suspended | processStatsTextFilter }}</el-tag>
       </el-table-column>
       <el-table-column v-slot="{row}" label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <el-button v-permission="permissions['update']" size="mini" type="primary" @click="startProcess(row)">
+        <el-button  size="mini" type="primary" @click="startProcess(row)">
           {{ $t('table.enable') }}
         </el-button>
-        <el-button v-if="row.suspended" v-permission="permissions['update']" size="mini" type="success" @click="activateProcess(row)">
+        <el-button v-if="row.suspended"  size="mini" type="success" @click="activateProcess(row)">
           {{ $t('table.activate') }}
         </el-button>
-        <el-button v-else v-permission="permissions['update']" size="mini" type="danger" @click="suspendProcess(row)">
+        <el-button v-else  size="mini" type="danger" @click="suspendProcess(row)">
           {{ $t('table.suspend') }}
         </el-button>
       </el-table-column>
