@@ -9,7 +9,7 @@ export default function() {
       component: Layout,
       code: 'master',
       name: 'master',
-      meta: { title: '主数据管理', icon: 'form' },
+      meta: { title: '主数据管理', icon: 'mainData' },
       children: [
         {
           path: '/organization',
@@ -125,12 +125,31 @@ export default function() {
               name: 'SplitRules',
               component: () =>
                 import(
-                  '@/views/master/ruleCtrl/splitRules.vue'
+                  '@/views/master/ruleCtrl/model/splitRulesM.vue'
                 ),
               meta: {
                 title: '拆分规则',
                 icon: 'form'
-              }
+              },
+              redirect: '/master/ruleCtrl/model/splitRules',
+              children: [
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRules',
+                  code: 'splitRules',
+                  name: 'splitRules',
+                  component: () => import('@/views/master/ruleCtrl/splitRules.vue'),
+                  meta: { title: 'Price Promotion', icon: 'form', activeMenu: '/ruleCtrl/splitRules' }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesNew',
+                  code: 'splitRulesNew',
+                  name: 'splitRulesNew',
+                  component: () => import('@/views/master/ruleCtrl/splitRulesNew.vue'),
+                  meta: { title: 'New User', icon: 'form', activeMenu: '/ruleCtrl/splitRules' }
+                }
+              ]
             },
             // 价格主数据
             {

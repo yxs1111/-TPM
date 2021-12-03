@@ -14,21 +14,21 @@ export default function() {
       component: Layout,
       code: 'V0',
       name: 'V0',
-      meta: { title: 'V0 - Pre city plan 预拆分', icon: 'form' },
+      meta: { title: 'V0 - Pre city plan 预拆分', icon: 'V0' },
       children: [
         {
           path: '/V0/V0Apply',
           code: 'V0Apply',
           name: 'V0Apply',
           component: () => import('@/views/V0/V0Apply.vue'),
-          meta: { title: 'V0 - Pre city plan 预拆分', icon: 'form' },
+          meta: { title: 'V0 - Pre city plan 预拆分', icon: 'apply' },
         },
         {
           path: '/V0/V0Approval',
           code: 'V0Approval',
           name: 'V0Approval',
           component: () => import('@/views/V0/V0Approval.vue'),
-          meta: { title: '审批', icon: 'form' },
+          meta: { title: '审批', icon: 'approve' },
         },
       ]
     },

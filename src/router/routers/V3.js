@@ -15,14 +15,14 @@ export default function() {
       component: Layout,
       code: 'V3',
       name: 'V3',
-      meta: { title: 'V3 - Actual 实际入账', icon: 'form' },
+      meta: { title: 'V3 - Actual 实际入账', icon: 'V3' },
       children: [
         {
           path: '/V3/V3Apply',
           code: 'V3Apply',
           name: 'V3Apply',
           component: () => import('@/views/V3/V3Apply.vue'),
-          meta: { title: '申请', icon: 'form' },
+          meta: { title: '申请', icon: 'apply' },
           redirect: '/V3/V3Apply/V3discountAll',
           children: [
             {
@@ -56,7 +56,7 @@ export default function() {
           code: 'V3Approval',
           name: 'V3Approval',
           component: () => import('@/views/V3/V3ApprovalModel.vue'),
-          meta: { title: '审批', icon: 'form' },
+          meta: { title: '审批', icon: 'approve' },
           redirect: '/V3/V3Approval/V3discountAllApproval',
           children: [
             {

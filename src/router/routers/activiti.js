@@ -9,7 +9,7 @@ export default function() {
       component: Layout,
       code: 'flow',
       name: 'Flow',
-      meta: { title: '审批流管理', icon: 'form' },
+      meta: { title: '审批流管理', icon: 'approveStream' },
       children: [
         {
           path: '/model',

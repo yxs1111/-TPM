@@ -52,8 +52,8 @@
     >
       <el-table-column width="" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="" align="center" prop="yeardate" label="年月" />
-      <el-table-column width="130" align="center" prop="versions" label="版本" />
-      <el-table-column width="150" align="center" prop="splitType" label="拆分类型">
+      <el-table-column width="150" align="center" prop="versions" label="版本" />
+      <el-table-column width="200" align="center" prop="splitType" label="拆分类型">
         <template slot-scope="scope">
           {{ scope.row.splitType === 1 ? '连续拆分':'不连续拆分' }}
         </template>
@@ -86,14 +86,14 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <!-- <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisibleT" width="48%" @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
       <div class="el-dialogContent">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
           <el-form-item label="渠道编号" prop="channelCode">
             <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入" />
-            <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
+            <!-- <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
               <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />
-            </el-select>
+            </el-select> -->
           </el-form-item>
           <el-form-item label="渠道中文名称">
             <el-input v-model="ruleForm.channelCsName" class="my-el-input" placeholder="请输入" />
@@ -122,16 +122,16 @@
         <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
-    </el-dialog> -->
+    </el-dialog>
     <!-- 新增 -->
-    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="687px" @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
       <div class="el-dialogContent">
         <div style="margin-bottom:15px;">
           <el-row :gutter="20" style="margin-bottom:8px;">
-            <el-col :span="12">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
-                <span style="color:red;">*</span>渠道：
-                <el-select v-model="dialogAdd.channelCode" placeholder="请选择" size="small">
+                渠道：
+                <el-select v-model="dialogAdd.channelcode" placeholder="请选择" size="small">
                   <el-option
                     v-for="item in channelOptons"
                     :key="item.channelCode"
@@ -141,10 +141,10 @@
                 </el-select>
               </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
-                <span style="color:red;">*</span>Mine Package：
-                <el-select v-model="dialogAdd.minePackageCode" placeholder="请选择" size="small">
+                Mine Package：
+                <el-select v-model="dialogAdd.costTypeNumber" placeholder="请选择" size="small">
                   <el-option
                     v-for="item in mpOptons"
                     :key="item.costTypeNumber"
@@ -154,41 +154,39 @@
                 </el-select>
               </div>
             </el-col>
-          </el-row>
-          <el-row :gutter="20" style="margin-bottom:8px;">
-            <el-col :span="12">
+            <el-col :span="8">
               <div class="grid-content bg-purple">
-                <span style="color:red;">*</span>年月：
-                <el-date-picker v-model="dialogAdd.yeardate" value-format="yyyyMM" type="month" placeholder="请选择" size="small" />
-              </div>
-            </el-col>
-            <el-col :span="12">
-              <div class="grid-content bg-purple" style="padding-left: 60px;">
-                <span style="color:red;">*</span>版本：
-                <el-select v-model="dialogAdd.versions" placeholder="请选择" size="small">
-                  <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-                </el-select>
+                年月:
+                <el-date-picker v-model="filterObj.yeardate" type="month" placeholder="请选择" size="small" />
               </div>
             </el-col>
           </el-row>
           <el-row :gutter="20">
-            <el-col :span="12">
-              <div class="grid-content bg-purple" style="padding-left:5px;">
-                备注：
-                <el-input v-model="dialogAdd.remark" style="width: 190px;" placeholder="请输入内容" size="small" />
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                版本：
+                <el-select v-model="filterObj.versions" placeholder="请选择" size="small">
+                  <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+                </el-select>
               </div>
             </el-col>
-            <el-col :span="12">
-              <div class="grid-content bg-purple" style="padding-left: 31px;">
-                <span style="color:red;">*</span>拆分类型：
-                <el-select v-model="dialogAdd.splitType" placeholder="请选择" size="small">
-                  <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                拆分类型：
+                <el-select v-model="filterObj.splitType" placeholder="请选择" size="small">
+                  <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
                 </el-select>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="grid-content bg-purple">
+                备注：
+                <el-input v-model="dialogAdd.remark" style="width: 260px;" placeholder="请输入内容" size="small" />
               </div>
             </el-col>
           </el-row>
         </div>
-        <div v-if="dialogAdd.splitType===2">
+        <div>
           <el-button plain type="primary" size="mini" icon="el-icon-plus" @click="handleAddDetails">添加一行</el-button>
           <el-button
             type="success"
@@ -203,32 +201,23 @@
             @click="handleDeleteAllDetails"
           >清空</el-button>
         </div>
-        <!-- 分割线 -->
         <div style="height:1px;background:#dcdfe6;margin:20px 0px;" />
-        <div v-if="dialogAdd.splitType===1" style="text-align:center;">
-          拆分规则：
-          P&nbsp;
-          <el-input v-model="dialogAdd.splitRuleF" style="width:60px;" size="small" />
-          &nbsp;M —— P&nbsp;
-          <el-input v-model="dialogAdd.splitRuleS" style="width:60px;" size="small" />
-          &nbsp;M
-        </div>
-        <div v-if="dialogAdd.splitType===2" style="border: 1px solid #dcdfe6;">
+        <div style="border: 1px solid #dcdfe6;">
           <el-table ref="tb" :data="systemList" :row-class-name="rowClassName" @selection-change="handleDetailSelectionChange">
             <el-table-column type="selection" width="55" />
-            <!-- <el-table-column type="index" label="序号" align="center" width="50" /> -->
+            <el-table-column type="index" label="序号" align="center" width="50" />
             <el-table-column label="拆分规则" align="center" prop="fs">
               <template slot-scope="scope">
                 P&nbsp;
-                <el-input v-model="systemList[scope.row.xh-1].splitRuleF" style="width:60px;" size="small" placeholder="请输入" />
+                <el-input v-model="systemList[scope.row.xh-1].cdmRuleF" style="width:30px;margin-right:8px;" size="small" placeholder="请输入" />
                 &nbsp;M —— P&nbsp;
-                <el-input v-model="systemList[scope.row.xh-1].splitRuleS" style="width:60px;" size="small" placeholder="请输入" />
+                <el-input v-model="systemList[scope.row.xh-1].cdmRuleS" style="width:30px;" size="small" placeholder="请输入" />
                 &nbsp;M
               </template>
             </el-table-column>
-            <el-table-column label="权重（%）" align="center" prop="cdmName">
+            <el-table-column label="权重" align="center" prop="cdmName">
               <template slot-scope="scope">
-                <el-input v-model="systemList[scope.row.xh-1].splitWeight" type="Number" style="width:130px;" size="small" placeholder="请输入数字" />
+                <span>{{ 60 }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -249,12 +238,11 @@ import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'SplitRules',
+  name: 'SplitRulesNew',
   directives: { elDragDialog, permission },
 
   data() {
     return {
-      dialogVisibleT: false,
       versionsArr: [],
       splitTypeArr: [{
         key: 1,
@@ -287,14 +275,8 @@ export default {
       dialogAdd: {
         channelCode: '',
         costTypeNumber: '',
-        remark: '',
-        yeardate: '',
-        versions: '',
-        splitType: '',
-        minePackageCode: '',
-        splitWeight: '',
-        splitRuleF: '',
-        splitRuleS: ''
+        productCode: '',
+        remark: ''
       },
       dialogVisible: false,
       total: 1,
@@ -310,7 +292,17 @@ export default {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      ruleForm: {},
+      ruleForm: {
+        channelCode: '',
+        channelCsName: '',
+        productCode: '',
+        productEsName: '',
+        productCsName: '',
+        gear: '',
+        volMin: '',
+        yearAndMonth: '',
+        remark: ''
+      },
       rules: {
         channelCode: [
           {
@@ -396,6 +388,17 @@ export default {
     },
     closeDialog() {
       this.dialogVisible = false
+      this.ruleForm = {
+        channelCode: '',
+        channelCsName: '',
+        productCode: '',
+        productEsName: '',
+        productCsName: '',
+        gear: '',
+        volMin: '',
+        yearAndMonth: '',
+        remark: ''
+      }
     },
     // select标签的change事件
     changeSelection(val) {
@@ -452,30 +455,34 @@ export default {
       this.editorId = obj.id
     },
     // 提交form
-    submitForm() {
-      // 新增接口
-      let splitRuleThis = ''
-      let splitWeightThis = ''
-      if (this.dialogAdd.splitType === 1) {
-        splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M-P' + this.dialogAdd.splitRuleS + 'M,'
-        splitWeightThis = this.dialogAdd.splitWeight
-      } else if (this.dialogAdd.splitType === 2) {
-        for (const item of this.systemList) {
-          splitRuleThis += 'P' + item.splitRuleF + 'M-P' + item.splitRuleS + 'M,'
-          splitWeightThis += item.splitWeight + ','
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const url = this.isEditor
+            ? API.updateMdPriceGear
+            : API.insertMdPriceGear
+          url({
+            id: this.editorId,
+            channelCode: this.ruleForm.channelCode,
+            channelCsName: this.ruleForm.channelCsName,
+            productCode: this.ruleForm.productCode,
+            productCsName: this.ruleForm.productCsName,
+            gear: this.ruleForm.gear,
+            volMin: this.ruleForm.volMin,
+            yearAndMonth: this.ruleForm.yearAndMonth,
+            remark: this.ruleForm.remark
+          }).then((response) => {
+            if (response.code === 1000) {
+              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+              this.resetForm(formName)
+              this.getTableData()
+            }
+          })
+        } else {
+          this.$message.error('提交失败')
+          return false
         }
-      }
-      let params = {
-        'channelCode': this.dialogAdd.channelCode,
-        'minePackageCode': this.dialogAdd.minePackageCode,
-        'yeardate': this.dialogAdd.yeardate,
-        'versions': this.dialogAdd.versions,
-        'splitType': this.dialogAdd.splitType,
-        'splitRule': splitRuleThis.slice(0, -1),
-        'splitWeight': splitWeightThis.slice(0, -1),
-        'remark': this.dialogAdd.remark
-      }
-      API.insertSplitRule(params).then().catch()
+      })
     },
     // 多个删除
     mutidel() {
@@ -507,8 +514,8 @@ export default {
       }
     },
     // 取消
-    resetForm() {
-      // this.$refs[formName].resetFields()
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
       this.closeDialog()
     },
     handleSelectionChange(val) {

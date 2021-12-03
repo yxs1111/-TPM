@@ -21,5 +21,9 @@ export default {
   // 经销商
   queryDistributorList(params) {
     return requestApi.request_get('/mdm/mdDistributor/getDistributorList', params)
+  },
+  // 版本
+  getDictInfoByType(params) {
+    return requestApi.request_get('/dict/info/getDictInfoByType', params)
   }
 }
