@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-03 09:46:25
+ * @LastEditTime: 2021-12-03 11:17:02
 -->
 <template>
   <div class="app-container">
@@ -98,10 +98,10 @@
         <div v-loading="dialogLoading" element-loading-text="正在导入">
           <div class="el-downloadFileBar">
             <div>
-              <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
+              <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="exportData">下载模板</el-button>
               <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
             </div>
-            <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+            <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
           </div>
           <div class="fileInfo">
             <div class="fileInfo">
@@ -192,6 +192,7 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
+      saveBtn: false,
     }
   },
   directives: { elDragDialog, permission },
@@ -266,6 +267,7 @@ export default {
       API.exceptionCheck().then((response) => {
         console.log(response)
         this.ImportData = response.data
+        this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
       })
     },
     //确认导入文件
