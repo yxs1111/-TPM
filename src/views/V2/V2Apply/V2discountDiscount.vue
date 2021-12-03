@@ -131,12 +131,14 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
+            <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+              <template slot-scope="scope">
+                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+                <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+              </template>
             </el-table-column>
-            <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
-            </el-table-column>
-            <el-table-column prop="address" align="center" label="验证信息" width="380">
-            </el-table-column>
+            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
             <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed> </el-table-column>
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月"> </el-table-column>
             <el-table-column width="150" align="center" prop="costTypeName" label="费用类型"> </el-table-column>
@@ -204,6 +206,9 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       isSubmit: 0, //提交状态  1：已提交，0：未提交
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
     }
   },
   directives: { elDragDialog, permission },
@@ -298,14 +303,13 @@ export default {
     },
     //校验数据
     checkImport() {
-      if(this.importData.length!=0) {
+      if (this.uploadFileName != '') {
         API.exceptionCheck().then((response) => {
-        console.log(response)
-      })
+          this.ImportData = response.data
+        })
       } else {
         this.$message.error('请先选择文件再检测数据!')
       }
-      
     },
     //确认导入
     confirmImport() {
@@ -361,17 +365,30 @@ export default {
     //V0 提交审批
     approve() {
       if (this.tableData.length) {
-        this.loading = true
-        let mainId = this.tableData[0].mainId
-        API.approve({
-          mainId: Number(mainId), //主表id
-          approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
-        }).then((response) => {
-          if (response.code === 1000) {
-            this.loading = false
-            this.$message.success('提交成功')
-          }
+        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         })
+          .then(() => {
+            this.tableLoading = true
+            let mainId = this.tableData[0].mainId
+            API.approve({
+              mainId: Number(mainId), //主表id
+              approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.tableLoading = false
+                this.$message.success('提交成功')
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消提交',
+            })
+          })
       } else {
         this.$message.error('数据不能为空')
       }

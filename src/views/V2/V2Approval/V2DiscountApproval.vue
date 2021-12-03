@@ -144,7 +144,7 @@
         </div>
         <div class="seeData" style="width: auto;">
           <div class="exportError" @click="exportErrorList">
-            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon" />
             <span>导出错误信息</span>
           </div>
         </div>
@@ -158,21 +158,59 @@
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
           }" :row-class-name="tableRowClassName" stripe>
-          <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
+          <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+            <template slot-scope="scope">
+              <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg" />
+              <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;" />
+              <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;" />
+            </template>
           </el-table-column>
-          <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
+          <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+          <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed>
           </el-table-column>
-          <el-table-column prop="address" align="center" label="验证信息" width="380">
+          <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="SKU" width="380">
+          <el-table-column width="150" align="center" prop="costTypeName" label="费用类型">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="月份" width="380">
+          <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="KA" width="380">
+          <el-table-column width="150" align="center" prop="costItemName" label="费用科目">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="档位" width="380">
+          <el-table-column width="120" align="center" prop="customerName" label="客户系统名称">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="VOL" width="380">
+          <el-table-column width="120" align="center" prop="brandName" label="品牌">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="productName" label="SKU">
+          </el-table-column>
+          <el-table-column width="240" align="center" prop="distributorName" label="经销商">
+          </el-table-column>
+          <el-table-column width="120" align="center" prop="regionName" label="区域">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="planSales" label="V1计划销量（CTN）">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="planCost" label="V1计划费用（RMB）">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="forecastSales" label="V2预测销量（CTN）">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="adjustedCost" label="V2调整后费用（RMB）">
+          </el-table-column>
+          <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）">
+          </el-table-column>
+          <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）">
+          </el-table-column>
+          <el-table-column width="120" align="center" prop="costDifference" label="费用差值">
+          </el-table-column>
+          <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+          </el-table-column>
+          <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见">
+          </el-table-column>
+          <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见">
           </el-table-column>
         </el-table>
       </div>
@@ -217,6 +255,9 @@ export default {
       ImportData: [],
       uploadFileName: '',
       uploadFile: '',
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
     }
   },
   directives: { elDragDialog, permission },
@@ -301,9 +342,9 @@ export default {
     },
     //校验数据
     checkImport() {
-      if (this.importData.length != 0) {
+      if (this.uploadFileName != '') {
         API.exceptionCheck().then((response) => {
-          console.log(response)
+          this.ImportData = response.data
         })
       } else {
         this.$message.error('请先选择文件再检测数据!')
@@ -366,25 +407,59 @@ export default {
         this.loading = true
         let mainId = this.tableData[0].mainId
         if (value) {
-          API.approve({
-            mainId: Number(mainId), //主表id
-            approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.loading = false
-              this.$message.success('审批通过!')
-            }
+          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
           })
+            .then(() => {
+              API.approve({
+                mainId: Number(mainId), //主表id
+                approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+              }).then((response) => {
+                if (res.code === 1000) {
+                  this.$message({
+                    type: 'success',
+                    message: '审批成功!',
+                  })
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '审批失败!',
+                  })
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         } else {
-          API.approve({
-            mainId: Number(mainId), //主表id
-            approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.loading = false
-              this.$message.success('审批驳回')
-            }
+          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
           })
+            .then(() => {
+              API.approve({
+                mainId: Number(mainId), //主表id
+                approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
+              }).then((response) => {
+                if (res.code === 1000) {
+                  this.$message.success('驳回审批成功!')
+                } else {
+                  this.$message.error('驳回审批失败!')
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         }
       } else {
         this.$message.error('数据不能为空')

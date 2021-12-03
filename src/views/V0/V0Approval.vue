@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-02 11:00:23
+ * @LastEditTime: 2021-12-03 09:46:25
 -->
 <template>
   <div class="app-container">
@@ -129,12 +129,15 @@
                 fontWeight: 400,
                 fontFamily: 'Source Han Sans CN'
               }" :row-class-name="tableRowClassName" stripe>
-              <el-table-column prop="date" fixed align="center" label="是否通过" width="180">
+              <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+                <template slot-scope="scope">
+                  <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+                  <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+                  <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+                </template>
               </el-table-column>
-              <el-table-column prop="name" fixed align="center" label="Excel行号" width="180">
-              </el-table-column>
-              <el-table-column prop="address" align="center" label="验证信息" width="380">
-              </el-table-column>
+              <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+              <el-table-column align="center" width="160" prop="dimCustomer" label="客户名称"></el-table-column>
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
               <el-table-column align="center" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
@@ -186,6 +189,9 @@ export default {
       mainId: '',
       uploadFileName: '',
       uploadFile: '',
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
     }
   },
   directives: { elDragDialog, permission },
@@ -259,6 +265,7 @@ export default {
     checkImport() {
       API.exceptionCheck().then((response) => {
         console.log(response)
+        this.ImportData = response.data
       })
     },
     //确认导入文件
@@ -316,26 +323,61 @@ export default {
     approve(value) {
       let arr = Object.keys(this.ContentData)
       if (arr.length) {
-        let mainId = this.ContentData[arr[0]][0].mainId
-        console.log(mainId)
+        let mainId = Number(this.ContentData[arr[0]][0].mainId)
         if (value) {
-          API.approve({
-            mainId, //主表id
-            approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
           })
-            .then((response) => {
-              this.$message.success('审批通过!')
+            .then(() => {
+              API.approve({
+                mainId, //主表id
+                approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+              }).then((response) => {
+                if (res.code === 1000) {
+                  this.$message({
+                    type: 'success',
+                    message: '审批成功!',
+                  })
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '审批失败!',
+                  })
+                }
+              })
             })
-            .catch(() => {})
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         } else {
-          API.approve({
-            mainId, //主表id
-            approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
+          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
           })
-            .then((response) => {
-              this.$message.success('审批驳回!')
+            .then(() => {
+              API.approve({
+                mainId, //主表id
+                approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
+              }).then((response) => {
+                if (res.code === 1000) {
+                  this.$message.success('驳回审批成功!')
+                } else {
+                  this.$message.error('驳回审批失败!')
+                }
+              })
             })
-            .catch(() => {})
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         }
       } else {
         this.$message.error('数据不能为空')
