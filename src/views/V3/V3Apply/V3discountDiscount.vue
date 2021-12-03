@@ -6,36 +6,38 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" />
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.sku" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
           </el-select>
         </div>
 
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -114,7 +116,7 @@
           </el-button>
         </div>
         <div>
-          <el-button type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -156,7 +158,15 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <el-table-column prop="date" align="center" label="是否通过" width="180" fixed />
+          <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+            <template slot-scope="scope">
+              <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+              <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+              <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+              <img v-else :src="errorImg" style="width:25px;height:25px;">
+            </template>
+          </el-table-column>
+          <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
           <el-table-column align="center" width="400" prop="cpId" label="CPID" />
           <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
           <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -297,6 +307,7 @@ export default {
 
   data() {
     return {
+      saveBtn: false,
       // 下拉框
       channelArr: [],
       skuArr: [],
@@ -310,50 +321,21 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        sku: '',
-        channel: ''
+        distributorCodechannelCode: '',
+        customerCode: '',
+        distributorCode: '',
+        productCode: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: 200,
-          channel: 'NKA',
-          amount3: 12,
-          total: 20.0
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: 180,
-          channel: 'NKA',
-          amount3: 9,
-          total: 21.0
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: 160,
-          channel: 'NKA',
-          amount3: 17,
-          total: 68.5
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-          total: 47.0
-        }
-      ],
+      tableData: [],
       dialogVisible: false,
       dialogData: [],
       dialogTableLoading: false,
-      supplementVisible: false
+      supplementVisible: false,
+      customerArr: [],
+      distributorArr: []
     }
   },
   computed: {},
@@ -362,6 +344,8 @@ export default {
     this.getChannel()
     this.getSKU()
     this.getMP()
+    this.getCustomerList()
+    this.getDistributorList()
   },
   methods: {
     // 获取下拉框
@@ -382,7 +366,23 @@ export default {
     getMP() {
       selectAPI.queryMinePackageSelect().then(res => {
         if (res.code === 1000) {
-          this.channelArr = res.data
+          // this.channelArr = res.data
+        }
+      }).catch()
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI.queryCustomerList().then(res => {
+        if (res.code === 1000) {
+          this.customerArr = res.data
+        }
+      }).catch()
+    },
+    // 经销商
+    getDistributorList() {
+      selectAPI.queryDistributorList().then(res => {
+        if (res.code === 1000) {
+          this.distributorArr = res.data
         }
       }).catch()
     },
@@ -422,12 +422,17 @@ export default {
             this.event.srcElement.value = '' // 置空
             this.uploadFileName = ''
             this.uploadFile = ''
-            this.dialogData = response.data
             this.dialogTableLoading = false
             this.$message({
               type: 'success',
               message: '上传成功'
             })
+            if (response.data != null) {
+              this.dialogData = response.data
+              this.saveBtn = response.data[0].judgmentType !== 'Error'
+            } else {
+              this.dialogData = []
+            }
           } else {
             this.$message({
               type: 'error',
@@ -518,8 +523,8 @@ export default {
     exportData() {
       // 导出数据筛选
       var data = {}
-      // data = { ...this.filterObj }
-      API.exportV3().then((res) => {
+      data = { ...this.filterObj }
+      API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
@@ -549,7 +554,11 @@ export default {
       this.tableData = []
       API.getPageV3({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
+        channelCode: this.filterObj.channelCode,
+        customerCode: this.filterObj.customerCode,
+        distributorCode: this.filterObj.distributorCode,
+        productCode: this.filterObj.productCode
       })
         .then((response) => {
           this.tableLoading = false

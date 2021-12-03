@@ -5,36 +5,12 @@
 -->
 <template>
   <div class="dashboard-container">
-    <div class="TopBar">
-      <div class="Topli">
-        <div>上月总金额</div>
-        <div class="TopliNumWrap">
-          <span class="unit">¥</span>
-          <span class="TopliNum">564,839.00</span>
-        </div>
-      </div>
-      <div class="Topli">
-        <div>上月总销量</div>
-        <div class="TopliNumWrap">
-          <span class="TopliNum">396.0</span>
-        </div>
-      </div>
-      <div class="Topli">
-        <div>上月新客达成率</div>
-        <div class="TopliNumWrap">
-          <span class="TopliNum">80%</span>
-        </div>
-      </div>
-      <div class="Topli">
-        <div>待审批任务</div>
-        <div class="TopliNumWrap">
-          <span class="TopliNum">483</span>
-        </div>
-      </div>
-    </div>
     <div class="chartWrap">
-      <div class="chartli" id="SalesAmount"></div>
-      <div class="chartli" id="ActualSales"></div>
+      <div class="box1"></div>
+      <div class="box2"></div>
+
+      <!-- <div class="chartli" id="SalesAmount"></div>
+      <div class="chartli" id="ActualSales"></div> -->
     </div>
     <div class="BottomBar">
       <div class="MyToDo">
@@ -323,6 +299,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.box1{
+  width: 1083px;
+  height: 340px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
+  border-radius: 20px;
+}
+.box2{
+  width: 462px;
+  height: 340px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
+  border-radius: 20px;
+}
 .dashboard-container {
   font-size: 16px;
   width: 100%;

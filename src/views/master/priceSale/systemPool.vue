@@ -5,17 +5,17 @@
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="渠道：">
         <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
-          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
         </el-select>
       </el-form-item>
       <el-form-item label="Mine Package：">
-        <el-select v-model="filterObj.costTypeNumber" placeholder="请选择" clearable>
-          <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
+        <el-select v-model="filterObj.minePackageCode" placeholder="请选择" clearable>
+          <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costType" />
         </el-select>
       </el-form-item>
       <el-form-item label="SKU：">
-        <el-select v-model="filterObj.productCode" placeholder="请选择" clearable>
-          <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
+        <el-select v-model="filterObj.sku" placeholder="请选择" clearable>
+          <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCsName" />
         </el-select>
       </el-form-item>
       <el-form-item label="机制类型：">
@@ -29,13 +29,25 @@
       <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
-      <el-form-item>
+      <!-- <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">导出</el-button>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG" @click="importData">
+        <img src="../../../assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div>
+      <!-- <div class="TpmButtonBG" @click="add">
+        <img src="../../../assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div> -->
+      <div class="TpmButtonBG" @click="exportExcelInfo">
+        <img src="../../../assets/images/export.png" alt="">
+        <span class="text">导出</span>
+      </div>
       <!-- <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">新增</el-button> -->
-      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button>
+      <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
     <el-table
       v-loading="tableLoading"
@@ -47,9 +59,9 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column width="150" align="center" prop="channelCsName" label="渠道" />
-      <el-table-column width="320" align="center" prop="costType" label="Mine Package" />
-      <el-table-column width="150" align="center" prop="sku" label="SKU" />
+      <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="320" align="center" prop="minePackageCode" label="Mine Package" />
+      <el-table-column width="150" align="center" prop="productCode" label="SKU" />
       <el-table-column width="320" align="center" prop="cdmType" label="机制类型">
         <template slot-scope="scope">
           {{ typeVSinfo(scope.row.cdmType) }}
@@ -82,6 +94,7 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <!-- 新增 -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
       <div class="el-dialogContent">
         <div style="margin-bottom:15px;">
@@ -189,6 +202,23 @@
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
     </el-dialog>
+    <!-- 导入 -->
+    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+      <div style="color:#4192d3;text-align:center;cursor:pointer;" @click="downLoadElxModel">下 载 模 板</div>
+      <div class="fileInfo ImportContent">
+        <div class="fileTitle">文件</div>
+        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+        <div v-if="uploadFileName!=''" class="fileName">
+          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
+          <span>{{ uploadFileName }}</span>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmImport()">确定导入</el-button>
+        <el-button @click="closeImport">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -204,14 +234,17 @@ export default {
 
   data() {
     return {
+      event: '',
+      uploadFileName: '',
+      uploadFile: '',
       input: '',
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        costTypeNumber: '',
-        productCode: '',
+        minePackageCode: '',
+        sku: '',
         cdmType: '',
         cdmName: ''
       },
@@ -257,26 +290,19 @@ export default {
       checkedDetail: [],
       cdmTypeOptions: [
         {
-          code: '1',
+          code: 'cdm1',
           name: '打折'
         },
         {
-          code: '2',
+          code: 'cdm2',
           name: '特价'
         },
         {
-          code: '3',
+          code: 'cdm3',
           name: '满减'
-        },
-        {
-          code: '4',
-          name: '买赠'
-        },
-        {
-          code: '5',
-          name: '其它'
         }
-      ]
+      ],
+      importVisible: false
     }
   },
 
@@ -313,6 +339,85 @@ export default {
     this.getQueryMinePackageSelect()
   },
   methods: {
+    // 导出excel
+    exportExcelInfo() {
+      var data = {
+        channelCode: this.filterObj.channelCode,
+        minePackageCode: this.filterObj.minePackageCode,
+        sku: this.filterObj.sku,
+        cdmType: this.filterObj.cdmType,
+        cdmName: this.filterObj.cdmName
+      }
+      API.exportExcelSyspool(data).then(
+        response => {
+          const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
+          //   res.data:请求到的二进制数据
+          const blob = new Blob([response], {
+            type: 'application/vnd.ms-excel'
+          }) // 1.创建一个blob
+          const link = document.createElement('a') // 2.创建一个a链接
+          link.download = fileName // 3.设置名称
+          link.style.display = 'none' // 4.默认不显示
+          link.href = URL.createObjectURL(blob) // 5.设置a链接href
+          document.body.appendChild(link) // 6.将a链接dom插入当前html中
+          link.click() // 7.点击事件
+          URL.revokeObjectURL(link.href) // 8.释放url对象
+          document.body.removeChild(link) // 9.移除a链接dom
+        })
+    },
+    // 下载excel模板
+    downLoadElxModel() {
+      API.downloadExcelSyspool().then(
+        response => {
+          const fileName = '机制池模板' + new Date().getTime() + '.xlsx'
+          //   res.data:请求到的二进制数据
+          const blob = new Blob([response], {
+            type: 'application/vnd.ms-excel'
+          }) // 1.创建一个blob
+          const link = document.createElement('a') // 2.创建一个a链接
+          link.download = fileName // 3.设置名称
+          link.style.display = 'none' // 4.默认不显示
+          link.href = URL.createObjectURL(blob) // 5.设置a链接href
+          document.body.appendChild(link) // 6.将a链接dom插入当前html中
+          link.click() // 7.点击事件
+          URL.revokeObjectURL(link.href) // 8.释放url对象
+          document.body.removeChild(link) // 9.移除a链接dom
+        })
+    },
+    // 导入数据
+    importData() {
+      this.importVisible = true
+    },
+    // 确认导入
+    confirmImport() {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importExcelSyspool(formData)
+        .then((response) => {
+          this.closeImport()
+        })
+        .catch(() => {})
+    },
+    // 选择导入文件
+    parsingExcelBtn() {
+      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
+    },
+    // 导入
+    parsingExcel(event) {
+      this.event = event
+      this.uploadFileName = event.target.files[0].name
+      this.uploadFile = event.target.files[0]
+    },
+    // 关闭导入
+    closeImport() {
+      this.importVisible = false
+      console.log('************', this.event, this.event.srcElement)
+      if (this.event.srcElement) {
+        this.event.srcElement.value = '' // 置空
+      }
+      this.uploadFileName = ''
+      this.uploadFile = ''
+    },
     // 弹框 动态增加行
     rowClassName({ row, rowIndex }) {
       row.xh = rowIndex + 1
@@ -374,8 +479,8 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         channelCode: this.filterObj.channelCode,
-        minePackageCode: this.filterObj.costTypeNumber,
-        sku: this.filterObj.productCode,
+        minePackageCode: this.filterObj.minePackageCode,
+        sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
         cdmName: this.filterObj.cdmName
       })
@@ -441,8 +546,6 @@ export default {
     },
     // 提交form
     submitForm() {
-      console.log('*******addInfo*******')
-      console.log(this.systemList)
       // 新增接口
       const cdmListLocal = []
       for (const item of this.systemList) {
@@ -467,7 +570,7 @@ export default {
         'cdmList': cdmListLocal
       }
       API.insertDataConfig(params).then(res => {
-        if (res.code == 1000) {
+        if (res.code === 1000) {
           this.closeDialog()
         }
       }).catch()
@@ -498,35 +601,6 @@ export default {
       //     return false
       //   }
       // })
-    },
-    // 多个删除
-    mutidel() {
-      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
-      else {
-        const IdList = []
-        this.checkArr.forEach((item) => {
-          IdList.push(item.id)
-        })
-        this.$confirm('确定要删除数据吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-          .then(() => {
-            API.deleteMdPriceGear(IdList).then((response) => {
-              if (response.code === 1000) {
-                this.getTableData()
-                this.$message.success('删除成功!')
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
-      }
     },
     // 取消
     resetForm(formName) {
