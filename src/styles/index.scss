@@ -593,6 +593,7 @@ div:focus {
   .fileInfo {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin: 20px 0;
     .el-button {
       padding: 0;

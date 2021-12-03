@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-30 15:35:53
+ * @LastEditTime: 2021-12-02 11:00:30
 -->
 <template>
   <div class="app-container">
@@ -123,18 +123,25 @@
           <div class="el-downloadFileBar">
             <div>
               <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
-              <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+              <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
             </div>
             <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
           </div>
           <div class="fileInfo">
-            <div class="fileTitle">文件</div>
-            <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-            <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-
-            <div class="fileName" v-if="uploadFileName!=''">
-              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-              <span>{{uploadFileName}}</span>
+            <div class="fileInfo">
+              <div class="fileTitle">文件</div>
+              <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+              <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+              <div class="fileName" v-if="uploadFileName!=''">
+                <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+                <span>{{uploadFileName}}</span>
+              </div>
+            </div>
+            <div class="seeData" style="width: auto;">
+              <div class="exportError" @click="exportErrorList">
+                <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+                <span>导出错误信息</span>
+              </div>
             </div>
           </div>
           <div class="tableWrap">
@@ -152,16 +159,19 @@
               </el-table-column>
               <el-table-column prop="address" align="center" label="验证信息" width="380">
               </el-table-column>
-              <el-table-column prop="address" align="center" label="SKU" width="380">
-              </el-table-column>
-              <el-table-column prop="address" align="center" label="月份" width="380">
-              </el-table-column>
-              <el-table-column prop="address" align="center" label="KA" width="380">
-              </el-table-column>
-              <el-table-column prop="address" align="center" label="档位" width="380">
-              </el-table-column>
-              <el-table-column prop="address" align="center" label="VOL" width="380">
-              </el-table-column>
+              <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
+              <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
+              <el-table-column align="center" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
+              <el-table-column align="center" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
+              <el-table-column align="center" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
+              <el-table-column align="center" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
+              <el-table-column align="center" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
+              <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
+              <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
+              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
+              <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
+              <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
+              <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
             </el-table>
           </div>
         </div>
@@ -233,15 +243,13 @@ export default {
       dialogVisible: false,
       //导入
       importVisible: false, //导入弹窗
-      filterImportData: { sku: '' }, //筛选导入数据
       ImportData: [],
       uploadFileName: '',
       loading: '',
       dialogLoading: '',
       uploadFileName: '',
       uploadFile: '',
-      event: '',
-      isSubmit:0,
+      isSubmit: 0,
     }
   },
   directives: { elDragDialog, permission },
@@ -262,7 +270,7 @@ export default {
           this.ContentData = response.data
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
-            this.isSubmit=this.ContentData[key][0].isSubmit
+            this.isSubmit = this.ContentData[key][0].isSubmit
             for (let i = 0; i < list.length; i++) {
               list[i].customGearList = JSON.parse(list[i].customGear)
             }
@@ -290,21 +298,6 @@ export default {
     getCPTData() {
       this.dialogVisible = true
     },
-    //确认导入文件
-    confirmImport() {
-      if (this.uploadFile != '') {
-        this.dialogLoading = true
-        var formData = new FormData()
-        formData.append('file', this.uploadFile)
-        API.importExcel(formData).then((response) => {
-          this.dialogLoading = false
-          this.$message.success('导入成功!')
-          this.closeimportDialog()
-        })
-      } else {
-        this.$message.error('请选择文件')
-      }
-    },
     //导入数据弹窗显示
     importData() {
       this.importVisible = true
@@ -321,10 +314,43 @@ export default {
     },
     //导入
     parsingExcel(event) {
-      this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      console.log(this.event)
+      if (this.uploadFile != '') {
+        this.dialogLoading = true
+        var formData = new FormData()
+        formData.append('file', this.uploadFile)
+        API.importExcel(formData).then((response) => {
+          this.dialogLoading = false
+          //清除input的value ,上传一样的
+          event.target.value = null
+          this.$message.success('导入成功!请点击检测数据')
+        })
+      } else {
+        this.$message.error('请选择文件')
+      }
+    },
+    //校验数据
+    checkImport() {
+      API.exceptionCheck().then((response) => {
+        console.log(response)
+      })
+    },
+    //确认导入文件
+    confirmImport() {
+      API.exceptionSave().then((res) => {
+        this.dialogLoading = false
+        this.$message.success('保存成功!')
+        this.closeimportDialog()
+      })
+    },
+    //导出异常信息
+    exportErrorList() {
+      API.exceptionDownExcel().then((res) => {
+        let timestamp = Date.parse(new Date())
+        this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     //导出数据
     exportData() {

@@ -126,19 +126,27 @@
       <div class="el-downloadFileBar">
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-download">下载模板</el-button>
-          <el-button type="primary" plain class="my-export" icon="el-icon-odometer">检测数据</el-button>
+          <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
       </div>
 
       <div class="fileInfo">
-        <div class="fileTitle">文件</div>
-        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)" />
+        <div class="fileInfo">
+          <div class="fileTitle">文件</div>
+          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)" />
 
-        <div class="fileName" v-if="uploadFileName != ''">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-          <span>{{ uploadFileName }}</span>
+          <div class="fileName" v-if="uploadFileName != ''">
+            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+            <span>{{ uploadFileName }}</span>
+          </div>
+        </div>
+        <div class="seeData" style="width: auto;">
+          <div class="exportError" @click="exportErrorList">
+            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+            <span>导出错误信息</span>
+          </div>
         </div>
       </div>
       <div class="tableWrap">
@@ -209,7 +217,6 @@ export default {
       ImportData: [],
       uploadFileName: '',
       uploadFile: '',
-      event: '',
     }
   },
   directives: { elDragDialog, permission },
@@ -267,35 +274,56 @@ export default {
     importData() {
       this.importVisible = true
     },
-    //检测数据
-    confirmImport() {
-      if (this.uploadFile != '') {
-        this.dialogLoading = true
-        var formData = new FormData()
-        formData.append('file', this.uploadFile)
-        API.importExcel(formData).then((response) => {
-          this.dialogLoading = false
-          this.$message.success('导入成功!')
-          this.closeimportDialog()
-        })
-      } else {
-        this.$message.error('请选择文件')
-      }
-    },
+
     //选择导入文件
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     //导入
     parsingExcel(event) {
-      this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      console.log(this.event)
+      this.dialogLoading = true
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importExcel(formData).then((response) => {
+        this.dialogLoading = false
+        //清除input的value ,上传一样的
+        event.target.value = null
+        this.$message.success('导入成功!请点击检测数据')
+      })
     },
     //关闭导入
     closeimportDialog() {
       this.importVisible = false
+      this.uploadFileName = ''
+      this.uploadFile = ''
+    },
+    //校验数据
+    checkImport() {
+      if (this.importData.length != 0) {
+        API.exceptionCheck().then((response) => {
+          console.log(response)
+        })
+      } else {
+        this.$message.error('请先选择文件再检测数据!')
+      }
+    },
+    //导入--保存
+    confirmImport() {
+      API.exceptionSave().then((res) => {
+        this.dialogLoading = false
+        this.$message.success('保存成功!')
+        this.closeimportDialog()
+      })
+    },
+    //导出异常信息
+    exportErrorList() {
+      API.exceptionDownExcel().then((res) => {
+        let timestamp = Date.parse(new Date())
+        this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     //导出数据
     exportExcel() {

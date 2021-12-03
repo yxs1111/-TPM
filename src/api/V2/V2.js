@@ -1,14 +1,14 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-11-27 08:36:39
+ * @LastEditTime: 2021-12-03 08:40:30
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
   //url: '/cityplan/investCpVTwoDetail',
-  url: '/investCpVTwoDetail',
+  url: '/cityplan/investCpVTwoDetail',
   getPage(params) {
     return requestApi.request_get(this.url+'/getPage', params)
   },

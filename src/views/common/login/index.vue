@@ -179,7 +179,6 @@ export default {
     },
     //读取cookie
     getCookie: function () {
-      console.log(document.cookie)
       if (document.cookie.length > 0) {
         var arr = document.cookie.split('; ') //这里显示的格式需要切割一下自己可输出看下
         for (var i = 0; i < arr.length; i++) {
@@ -187,15 +186,19 @@ export default {
           //判断查找相对应的值
           if (arr2[0] == 'userName') {
             this.loginForm.username = arr2[1]
+            
           } else if (arr2[0] == 'userPassword') {
             this.loginForm.password = arr2[1]
+          }
+          if(this.loginForm.username!=''&&this.loginForm.password!='') {
+            this.checked=true
           }
         }
       }
     },
     //清除cookie
     clearCookie: function () {
-      this.setCookie('', '', '', -1) //修改2值都为空，天数为负1天就好了
+      this.setCookie('', '', -1) //修改2值都为空，天数为负1天就好了
     },
   },
 }

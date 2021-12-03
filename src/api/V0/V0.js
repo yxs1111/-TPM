@@ -1,14 +1,15 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-11-25 17:06:03
+ * @LastEditTime: 2021-12-03 08:40:10
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
   //url: '/cityplan/investCpVZero',
-  url: '/investCpVZero',
+  url: '/cityplan/investCpVZero',
+  ImportUrl: '/cityplan/investCpVZeroEb',
   //获取V0数据
   getList(params) {
     return requestApi.request_get(this.url+'/getList', params)
@@ -35,6 +36,17 @@ export default {
   approve(params) {
     return requestApi.request_post(this.url+'/approve', params)
   },
-  
+  //v0数据异常项校验
+  exceptionCheck(params) {
+    return requestApi.request_get(this.ImportUrl+'/exceptionCheck', params)
+  },
+  //v0数据异常项保存
+  exceptionSave(params) {
+    return requestApi.request_get(this.ImportUrl+'/save', params)
+  },
+  //v0数据异常项校验
+  exceptionDownExcel(params) {
+    return requestApi.request_get(this.ImportUrl+'/downExcel', params)
+  },
 }
 
