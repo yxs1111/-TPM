@@ -4,12 +4,12 @@
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="渠道：">
-        <el-select v-model="filterObj.channelCode" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+        <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
+          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
         </el-select>
       </el-form-item>
       <el-form-item label="年月：">
-        <el-date-picker v-model="filterObj.yeardate" type="month" placeholder="请选择" />
+        <el-date-picker v-model="filterObj.yeardate" type="month" value-format="yyyyMM" placeholder="请选择" />
       </el-form-item>
       <el-form-item label="版本：">
         <el-select v-model="filterObj.versions" placeholder="请选择">
@@ -18,7 +18,7 @@
       </el-form-item>
       <el-form-item label="拆分类型：">
         <el-select v-model="filterObj.splitType" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+          <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -50,17 +50,29 @@
       stripe
       style="width: 100%"
     >
-      <el-table-column width="" align="center" prop="channelCsName" label="渠道" />
-      <el-table-column width="" align="center" prop="channelCode" label="年月" />
-      <el-table-column width="150" align="center" prop="productCode" label="版本" />
-      <el-table-column width="200" align="center" prop="productCsName" label="拆分类型" />
-      <el-table-column width="" align="center" prop="volMix" label="拆分规则" />
-      <el-table-column width="" align="center" prop="volMix" label="权重" />
-      <el-table-column width="" align="center" prop="channelCode" label="创建人" />
-      <el-table-column width="" align="center" prop="channelCsName" label="创建时间" />
-      <el-table-column width="150" align="center" prop="productCode" label="修改人" />
-      <el-table-column width="180" align="center" prop="productCsName" label="修改时间" />
-      <el-table-column width="" align="center" prop="volMix" label="备注" />
+      <el-table-column width="" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="" align="center" prop="yeardate" label="年月" />
+      <el-table-column width="150" align="center" prop="versions" label="版本" />
+      <el-table-column width="200" align="center" prop="splitType" label="拆分类型">
+        <template slot-scope="scope">
+          {{ scope.row.splitType === 1 ? '连续拆分':'不连续拆分' }}
+        </template>
+      </el-table-column>
+      <el-table-column width="300" align="center" prop="splitRule" label="拆分规则" />
+      <el-table-column width="" align="center" prop="splitWeight" label="权重" />
+      <el-table-column width="" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间">
+        <template slot-scope="scope">
+          {{ scope.row.createDate.replace('T', ' ') }}
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
+      <el-table-column width="180" align="center" prop="updateDate" label="修改时间">
+        <template slot-scope="scope">
+          {{ scope.row.updateDate===null ? '': scope.row.updateDate.replace('T', ' ') }}
+        </template>
+      </el-table-column>
+      <el-table-column width="" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -224,12 +236,21 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'SplitRules',
   directives: { elDragDialog, permission },
 
   data() {
     return {
+      splitTypeArr: [{
+        key: 1,
+        value: '连续拆分'
+      },
+      {
+        key: 2,
+        value: '不连续拆分'
+      }],
       checkArr: [], // 批量删除,存放选中
       channelOptons: [],
       skuOptons: [],
@@ -269,16 +290,7 @@ export default {
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          channelCode: '111',
-          channelCsName: '',
-          productCode: '',
-          productCsName: '',
-          gear: '',
-          volMix: ''
-        }
-      ],
+      tableData: [],
       ruleForm: {
         channelCode: '',
         channelCsName: '',
@@ -306,8 +318,21 @@ export default {
   computed: {},
   mounted() {
     this.getTableData()
+    this.getQueryChannelSelect()
+    this.getQueryMinePackageSelect()
   },
   methods: {
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then(res => {
+        this.channelOptons = res.data
+      }).catch()
+    },
+    getQueryMinePackageSelect() {
+      selectAPI.queryMinePackageSelect().then(res => {
+        this.mpOptons = res.data
+      }).catch()
+    },
     // 弹框 动态增加行
     rowClassName({ row, rowIndex }) {
       row.xh = rowIndex + 1
