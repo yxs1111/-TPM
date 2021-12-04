@@ -14,14 +14,14 @@ export default function() {
       component: Layout,
       code: 'V1',
       name: 'V1',
-      meta: { title: 'V1 - City plan 详细拆分', icon: 'form' },
+      meta: { title: 'V1 - City plan 详细拆分', icon: 'V1' },
       children: [
         {
           path: '/V1/V1Apply',
           code: 'V1Apply',
           name: 'V1Apply',
           component: () => import('@/views/V1/V1Apply.vue'),
-          meta: { title: '申请', icon: 'form' },
+          meta: { title: '申请', icon: 'apply' },
           redirect: '/V1/V1Apply/V1discountAll',
           children: [
             {
@@ -55,7 +55,7 @@ export default function() {
           code: 'V1Approval',
           name: 'V1Approval',
           component: () => import('@/views/V1/V1ApprovalModel.vue'),
-          meta: { title: '审批', icon: 'form' },
+          meta: { title: '审批', icon: 'approve' },
           redirect: '/V1/V1Approval/V1discountAllApproval',
           children: [
             {

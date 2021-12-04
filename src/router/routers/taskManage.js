@@ -15,7 +15,7 @@ export default function() {
       component: Layout,
       code: 'taskManage',
       name: 'taskManage',
-      meta: { title: '任务管理', icon: 'form' },
+      meta: { title: '任务管理', icon: 'missionMana' },
       children: [
         {
           path: '/taskManage/TrackingFlow',

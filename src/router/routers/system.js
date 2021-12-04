@@ -15,7 +15,7 @@ export default function() {
       redirect: '/os/os',
       code: 'osPage',
       name: 'OsPage',
-      meta: { title: '系统管理', icon: 'form' },
+      meta: { title: '系统管理', icon: 'sysManage' },
       children: [
         // {
         //   path: 'organization',

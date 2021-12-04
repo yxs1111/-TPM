@@ -14,7 +14,7 @@ export default function() {
       component: Layout,
       code: 'Report',
       name: 'Report',
-      meta: { title: '报表', icon: 'form' },
+      meta: { title: '报表', icon: 'report' },
       children: [
         {
           path: '/AbnormalAnalysisMonth',

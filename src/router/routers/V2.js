@@ -15,14 +15,14 @@ export default function() {
       component: Layout,
       code: 'V2',
       name: 'V2',
-      meta: { title: 'V2 - Accrual 预提调整', icon: 'form' },
+      meta: { title: 'V2 - Accrual 预提调整', icon: 'V2' },
       children: [
         {
           path: '/V2/V2Apply',
           code: 'V2Apply',
           name: 'V2Apply',
           component: () => import('@/views/V2/V2Apply.vue'),
-          meta: { title: '申请', icon: 'form' },
+          meta: { title: '申请', icon: 'apply' },
           redirect: '/V2/V2Apply/V2discountAll',
           children: [
             {
@@ -56,7 +56,7 @@ export default function() {
           code: 'V2Approval',
           name: 'V2Approval',
           component: () => import('@/views/V2/V2Approval.vue'),
-          meta: { title: '审批', icon: 'form' },
+          meta: { title: '审批', icon: 'approve' },
           redirect: '/V2/V2Approval/V2AllApproval',
           children: [
             {
