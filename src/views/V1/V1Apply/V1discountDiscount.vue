@@ -34,15 +34,20 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
-
-      </div>
-      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
+
       </div>
+      <!-- <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </div> -->
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="importData">
@@ -110,7 +115,7 @@
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar" style="display:flex;">
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">下载模板
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
           <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
           </el-button>
@@ -585,6 +590,17 @@ export default {
 }
 </script>
 
+<style>
+.el-icon-my-down{
+  background: url('~@/assets/images/downModel.png') no-repeat;
+  font-size: 16px;
+  background-size: cover;
+}
+.el-icon-my-down:before{
+    content: "\e611";
+    font-size: 16px;
+}
+</style>
 <style lang="scss" scoped>
 ::v-deep.my-el-dialog .upload-demo {
     display: flex;
