@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-11-17 19:21:02
+ * @LastEditTime: 2021-12-03 10:33:58
 -->
 <template>
   <div class="dashboard-container">
@@ -139,19 +139,19 @@ export default {
     }
   },
   mounted() {
-    this.createdEchart()
-    window.addEventListener('resize', () => {
-      this.SalesAmountChart.resize()
-      this.ActualSalesChart.resize()
-    })
+    // this.createdEchart()
+    // window.addEventListener('resize', () => {
+    //   this.SalesAmountChart.resize()
+    //   this.ActualSalesChart.resize()
+    // })
   },
   watch: {
     '$store.state.app.sidebar.opened'() {
-      setTimeout(() => {
-        console.log('change')
-        this.SalesAmountChart.resize()
-        this.ActualSalesChart.resize()
-      }, 200)
+      // setTimeout(() => {
+      //   console.log('change')
+      //   this.SalesAmountChart.resize()
+      //   this.ActualSalesChart.resize()
+      // }, 200)
     },
   },
   methods: {

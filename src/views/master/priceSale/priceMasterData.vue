@@ -14,12 +14,6 @@
             <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
           </el-select>
         </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">SKU</span>
-          <el-select v-model="filterObj.SKU" placeholder="请选择">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
-          </el-select>
-        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
       </div>
     </div>

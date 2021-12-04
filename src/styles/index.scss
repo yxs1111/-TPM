@@ -286,8 +286,14 @@ div:focus {
         background-color: #f0f2fa;
       }
       .el-icon-arrow-up:before {
-        content: "\e78f";
-      }      
+        content: '\e78f';
+      }
+      // .el-input--prefix .el-input__inner {
+      //   padding-left: 10px;
+      // }
+      // .el-input__prefix {
+      //   right: -150px;
+      // }
       input::-webkit-input-placeholder,
       textarea::-webkit-input-placeholder {
         color: #888;
@@ -309,6 +315,7 @@ div:focus {
 //操作按钮
 .TpmButtonBG {
   // width: 107px;
+  min-width: 84px;
   height: 38px;
   padding: 0 20px;
   background: #4192d3;
@@ -413,8 +420,8 @@ div:focus {
   .el-table--striped .el-table__body tr.el-table__row--striped td {
     background: #fff;
   }
-  .el-table__body tr:hover > td{
-    background-color:transparent !important;
+  .el-table__body tr:hover > td {
+    background-color: transparent !important;
   }
 
   .el-table-head {
@@ -423,11 +430,11 @@ div:focus {
     text-align: center;
   }
   .odd-row {
-    background-color: #F3F7F8 !important;
+    background-color: #f3f7f8 !important;
   }
 
   .even-row {
-    background-color: #FFFFFF !important;
+    background-color: #ffffff !important;
   }
   .first-row {
     background-color: #e3f3ff !important;
@@ -491,8 +498,7 @@ div:focus {
     margin-bottom: 10px;
   }
   .el-dialog__body {
-    padding: 20px 20px;
-    padding-top: 0;
+    padding: 10px 20px;
   }
   .el-dialogContent {
     .el-selectLi {
@@ -698,7 +704,6 @@ div:focus {
     font-family: Microsoft YaHei;
     font-weight: 400;
     color: #333333;
-    
   }
 }
 .el-form-row {
@@ -712,7 +717,7 @@ div:focus {
     margin-right: 20px;
     /* selecte 框的高度设置，默认是 40px*/
     .el-input__inner {
-      height: 32px;
+      height: 37px;
       width: 226px !important;
     }
     .el-input--suffix {
@@ -728,6 +733,9 @@ div:focus {
     .el-input__suffix-inner {
       display: inline-block;
     }
+    .el-icon-arrow-up:before {
+      content: '\e78f';
+    }
   }
   //自定义el-input
   .my-el-input {
@@ -735,7 +743,7 @@ div:focus {
     border-radius: 5px;
     margin-right: 20px;
     .el-input__inner {
-      height: 32px;
+      height: 37px;
       width: 226px !important;
     }
     .el-input--suffix {
@@ -826,5 +834,5 @@ div:focus {
 }
 .noClick {
   pointer-events: none;
-  background-color: #ccc!important;
+  background-color: #ccc !important;
 }

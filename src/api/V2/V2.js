@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-03 10:00:14
+ * @LastEditTime: 2021-12-03 20:35:24
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -36,7 +36,7 @@ export default {
    * 审批
    * @returns 
    */
-  approve() {
+  approve(params) {
     return requestApi.request_post(this.url+'/approve', params)
   },
   //v1数据异常项校验

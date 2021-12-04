@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-03 11:15:34
+ * @LastEditTime: 2021-12-03 19:01:32
 -->
 <template>
   <div class="app-container">
@@ -10,16 +10,16 @@
         <div class="SelectBar">
           <div class="Selectli">
             <span class="SelectliTitle">SKU</span>
-            <el-select v-model="filterObj.SKU" placeholder="请选择">
-              <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
+            <el-select v-model="filterObj.SKU" filterable clearable placeholder="请选择">
+              <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
             </el-select>
           </div>
           <div class="Selectli">
             <span class="SelectliTitle">月份</span>
-            <el-date-picker v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+            <el-date-picker disabled v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
             </el-date-picker>
           </div>
-          <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
+          <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
           <div class="TpmButtonBG" @click="exportData">
             <img src="@/assets/images/export.png" alt="" />
             <span class="text">导出</span>
@@ -94,21 +94,24 @@
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
         <div class="el-dialogContent" v-loading='dialogLoading' element-loading-text="正在获取">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-            <el-form-item label="年月">
+            <!-- <el-form-item label="年月">
               <el-date-picker v-model="ruleForm.yearAndMonth" class="my-el-input" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
               </el-date-picker>
+            </el-form-item> -->
+            <el-form-item label="Scenario">
+              <el-select v-model="ruleForm.dimScenario" placeholder="请选择" class="my-el-select">
+                <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="渠道编码">
-              <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入">
-              </el-input>
+            <el-form-item label="Version">
+              <el-select v-model="ruleForm.dimVersion" placeholder="请选择" class="my-el-select">
+                <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
+              </el-select>
             </el-form-item>
-            <el-form-item label="cpt年月">
-              <el-input v-model="ruleForm.dimScenario" class="my-el-input" placeholder="请输入">
-              </el-input>
-            </el-form-item>
-            <el-form-item label="cpt版本号">
-              <el-input v-model="ruleForm.dimVersion" class="my-el-input" placeholder="请输入">
-              </el-input>
+            <el-form-item label="渠道">
+              <el-select v-model="ruleForm.channelCode" placeholder="请选择" class="my-el-select">
+                <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+              </el-select>
             </el-form-item>
           </el-form>
         </div>
@@ -188,6 +191,7 @@
 import {
   getDefaultPermissions,
   getCPTMonth,
+  yearAndMonthList,
   parseTime,
   getTextMap,
 } from '@/utils'
@@ -195,14 +199,14 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import API from '@/api/V0/V0.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
+import commonAPI from '@/api/masterData/masterData.js'
 export default {
   data() {
     return {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       filterObj: {
-        month: '',
+        month: '202101',
         SKU: '',
       },
       skuOptons: [],
@@ -257,42 +261,57 @@ export default {
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
+      yearAndMonthList: yearAndMonthList(),
+      VersionList: ['Final'],
+      ChannelList: [],
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
-    //this.getList()
-    this.filterObj.month = getCPTMonth()
+    // this.getMonth()
+    this.getList()
     this.getQuerySkuSelect()
+    this.getChannelList()
   },
   computed: {},
   methods: {
+    getMonth() {
+      API.getMonth({ version: 'V0' }).then((res) => {
+        this.filterObj.month=res.data
+        this.getList()
+      })
+    },
     getList() {
       this.loading = true
       API.getList({
+
         yearAndMonth: this.filterObj.month,
         productCode: this.filterObj.SKU,
       })
         .then((response) => {
-          this.ContentData = response.data
-          for (const key in this.ContentData) {
-            let list = this.ContentData[key]
-            this.isSubmit = this.ContentData[key][0].isSubmit
-            for (let i = 0; i < list.length; i++) {
-              list[i].customGearList = JSON.parse(list[i].customGear)
+          if (response.code === 1000) {
+            this.ContentData = response.data
+            for (const key in this.ContentData) {
+              let list = this.ContentData[key]
+              this.isSubmit = this.ContentData[key][0].isSubmit
+              for (let i = 0; i < list.length; i++) {
+                list[i].customGearList = JSON.parse(list[i].customGear)
+              }
             }
+            this.loading = false
           }
-          this.loading = false
         })
         .catch(() => {})
     },
     getQuerySkuSelect() {
-      selectAPI
-        .querySkuSelect()
-        .then((res) => {
-          this.skuOptons = res.data
-        })
-        .catch()
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptons = res.data
+      })
+    },
+    getChannelList() {
+      commonAPI.getPageMdChannel().then((res) => {
+        this.ChannelList = res.data.records
+      })
     },
     //档位列
     columnList(list) {
@@ -402,16 +421,18 @@ export default {
         if (valid) {
           this.dialogLoading = true
           API.getCPTData({
-            yearAndMonth: this.ruleForm.yearAndMonth,
+            yearAndMonth: '202101',
             channelCode: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
           })
             .then((response) => {
+              if (response.code == 1000) {
+                this.$message.success('获取成功!')
+                this.getList()
+                this.resetForm(formName)
+              }
               this.dialogLoading = false
-              this.$message.success('获取成功!')
-              this.getList()
-              this.resetForm(formName)
             })
             .catch(() => {})
         } else {
@@ -450,7 +471,7 @@ export default {
             this.loading = true
             let mainId = this.ContentData[arr[0]][0].mainId
             API.approve({
-              mainId: Number(mainId), //主表id
+              mainId: mainId, //主表id
               approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
             }).then((response) => {
               if (response.code === 1000) {

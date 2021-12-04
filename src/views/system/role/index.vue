@@ -31,20 +31,20 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="searchLoading" @click="search">搜索</el-button>
+        <el-button  type="primary" icon="el-icon-search" :loading="searchLoading" @click="search">搜索</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" @click="reset">重置</el-button>
+        <el-button  @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <div id="buttonDiv" style="margin-bottom: 20px">
-      <el-button v-permission="permissions['delete']" class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="showDeleteDialog">
+      <el-button  class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="showDeleteDialog">
         删除
       </el-button>
-      <el-button v-permission="permissions['insert']" class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="newRowData">
+      <el-button  class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="newRowData">
         新增
       </el-button>
-      <el-button v-permission="permissions['get']" :disabled="editDisabled" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="showPermission">
+      <el-button  :disabled="editDisabled" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="showPermission">
         权限绑定
       </el-button>
     </div>
@@ -96,13 +96,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button v-permission="permissions['update']" type="primary" size="mini" @click="editRowData(row)">
+          <el-button  type="primary" size="mini" @click="editRowData(row)">
             {{ $t('table.edit') }}
           </el-button>
-          <el-button v-permission="permissions['delete']" size="mini" type="danger" @click="handleDelete(row)">
+          <el-button  size="mini" type="danger" @click="handleDelete(row)">
             {{ $t('table.delete') }}
           </el-button>
-          <el-button v-permission="permissions['get']" size="mini" type="default" @click="getRowData(row)">
+          <el-button  size="mini" type="default" @click="getRowData(row)">
             {{ $t('table.detail') }}
           </el-button>
         </template>
@@ -174,10 +174,10 @@
         <el-button @click="roleDialog.visible = false">
           关闭
         </el-button>
-        <el-button v-if="roleDialog.state==='info'" v-permission="permissions['update']" type="primary" @click="changeToEdit">
+        <el-button v-if="roleDialog.state==='info'"  type="primary" @click="changeToEdit">
           编辑
         </el-button>
-        <el-button v-else v-permission="permissions['update']" type="primary" :loading="saveLoading" @click="saveOrUpdate">
+        <el-button v-else  type="primary" :loading="saveLoading" @click="saveOrUpdate">
           保存并关闭
         </el-button>
       </div>
@@ -273,10 +273,10 @@
               <el-checkbox v-model="showCheckedOnly">只看已绑定</el-checkbox>
             </el-form-item>
             <el-form-item style="margin-bottom: 5px;">
-              <el-button v-permission="permissions['get']" type="primary" :loading="searchLoading" @click="clickToSearchPer">搜索</el-button>
+              <el-button  type="primary" :loading="searchLoading" @click="clickToSearchPer">搜索</el-button>
             </el-form-item>
             <el-form-item style="margin-bottom: 5px;">
-              <el-button v-permission="permissions['update']" type="primary" @click="bindPermission">绑定权限</el-button>
+              <el-button  type="primary" @click="bindPermission">绑定权限</el-button>
             </el-form-item>
           </el-form>
           <!--查询结果-->

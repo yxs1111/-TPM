@@ -1,13 +1,16 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-05 09:55:03
+ * @LastEditTime: 2021-12-03 16:19:58
 -->
 <template>
   <div>
     <div class="tabViews">
       <router-link :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" v-for="(item, index) in routerList" :key="index"
-        @click.native="changeTab(index)">{{ item.name }}</router-link>
+        @click.native="changeTab(index)">
+        <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
+        <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex"> 
+        {{ item.name }}</router-link>
     </div>
     <div>
       <router-view />
@@ -27,7 +30,15 @@ export default {
         {name:'折扣项-价促',path:'/V3/V3Apply/V3discountDiscount'},
         {name:'折扣项-新客',path:'/V3/V3Apply/V3discountNU'},
       ],
-      currentIndex: 0
+      currentIndex: 0,
+      imgSrcList: [
+        require('@/assets/images/tab/tab1_l.png'),
+        require('@/assets/images/tab/tab2_l.png'),
+        require('@/assets/images/tab/tab3_l.png'),
+        require('@/assets/images/tab/tab1.png'),
+        require('@/assets/images/tab/tab2.png'),
+        require('@/assets/images/tab/tab3.png'),
+      ],
     }
   },
   directives: { elDragDialog, permission },
@@ -52,25 +63,31 @@ export default {
 <style lang="scss" scoped>
 .tabViews {
   width: 100%;
-  height: 36px;
+  height: 38px;
   display: flex;
   margin-left: 25px;
   .tabli {
+    display: flex;
+    align-items: center;
     padding: 0 52px;
-    height: 36px;
-    background: #FFF;
+    height: 38px;
+    background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
     font-size: 14px;
-    color: #666;
+    color: #fff;
     text-align: center;
-    line-height: 36px;
+    line-height: 38px;
     cursor: pointer;
+    img {
+      width: 17px;
+      height: 17px;
+      margin-right: 10px;
+    }
   }
   .currentTabli {
-    
-    background-color: #4192D3;
-    color: #fff;
+    background-color: #fff;
+    color: #666;
     font-weight: 600;
   }
 }

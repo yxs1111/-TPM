@@ -77,7 +77,7 @@
       </el-table-column>
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage">
       </el-table-column>
-      <el-table-column width="150" align="center" prop="costItemName" label="费用科目">
+      <el-table-column width="250" align="center" prop="costItemName" label="费用科目">
       </el-table-column>
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称">
       </el-table-column>
@@ -126,9 +126,9 @@
       <div class="el-downloadFileBar">
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="exportExcel">下载模板</el-button>
-          <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
+          <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport" v-if="uploadFileName!=''">检测数据</el-button>
         </div>
-        <el-button v-if="saveBtn"  type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+        <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
       </div>
 
       <div class="fileInfo">
@@ -346,7 +346,8 @@ export default {
       if (this.uploadFileName != '') {
         API.exceptionCheck().then((response) => {
           this.ImportData = response.data
-          this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
+          this.saveBtn =
+            response.data[0].judgmentType === 'Error' ? false : true
         })
       } else {
         this.$message.error('请先选择文件再检测数据!')
@@ -416,10 +417,10 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: Number(mainId), //主表id
+                mainId: mainId, //主表id
                 approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
-                if (res.code === 1000) {
+                if (response.code === 1000) {
                   this.$message({
                     type: 'success',
                     message: '审批成功!',
@@ -446,10 +447,10 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: Number(mainId), //主表id
+                mainId: mainId, //主表id
                 approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
-                if (res.code === 1000) {
+                if (response.code === 1000) {
                   this.$message.success('驳回审批成功!')
                 } else {
                   this.$message.error('驳回审批失败!')

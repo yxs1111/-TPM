@@ -233,7 +233,7 @@ export default {
     fetchData(newTitle) {
       this.noticePage.searchLoading = true
       requestApi
-        .request_get('/messageAudit/getPageByDto', {
+        .request_get('/cityplan/messageAudit/getPageByDto', {
           title: this.filterObj.title,
           state: this.filterObj.state,
           category: this.noticePage.category,
@@ -346,7 +346,7 @@ export default {
     },
     ReadAll() {
       requestApi
-        .request_put('/messageAudit/markReadAll', )
+        .request_put('/cityplan/messageAudit/markReadAll', )
         .then((response) => {
           this.$message.success('全部已读成功')
           this.fetchData()
@@ -357,7 +357,7 @@ export default {
       let arr=[]
       arr.push(id)
       requestApi
-        .request_put('/messageAudit/markRead', arr)
+        .request_put('/cityplan/messageAudit/markRead', arr)
         .then((response) => {
           this.$message.success('已读成功')
           this.fetchData()
@@ -371,7 +371,7 @@ export default {
       })
       console.log(list)
       requestApi
-        .request_put('/messageAudit/markRead', list)
+        .request_put('/cityplan/messageAudit/markRead', list)
         .then((response) => {
 
           this.$message.success('已读成功')

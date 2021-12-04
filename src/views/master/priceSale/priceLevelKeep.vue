@@ -20,19 +20,18 @@
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
-      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
+
+      <div class="TpmButtonBG">
+        <img src="@/assets/images/import.png" alt="" />
+        <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG">
+        <img src="@/assets/images/export.png" alt="" />
+        <span class="text">导出</span>
+      </div>
     </div>
-    <el-table
-      v-loading="tableLoading"
-      :data="tableData"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      stripe
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%"
+      @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="channelCode" label="SKU" />
       <el-table-column width="320" align="center" prop="channelCsName" label="维护名称信息" />
@@ -53,15 +52,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
       <div class="el-dialogContent">
@@ -120,7 +112,7 @@ export default {
       filterObj: {
         name: '',
         key: '',
-        category: ''
+        category: '',
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
@@ -135,21 +127,21 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       },
       rules: {
         channelCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       dialogVisible: false,
       isEditor: '',
       editorId: '',
-      checkArr: [] // 批量删除,存放选中
+      checkArr: [], // 批量删除,存放选中
     }
   },
   computed: {},
@@ -162,7 +154,7 @@ export default {
       this.tableLoading = true
       API.getPageMdPriceGear({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -192,7 +184,7 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       }
     },
     editor(obj) {
@@ -207,7 +199,7 @@ export default {
         gear: obj.gear,
         volMin: obj.volMin,
         yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark
+        remark: obj.remark,
       }
       this.editorId = obj.id
     },
@@ -227,7 +219,7 @@ export default {
             gear: this.ruleForm.gear,
             volMin: this.ruleForm.volMin,
             yearAndMonth: this.ruleForm.yearAndMonth,
-            remark: this.ruleForm.remark
+            remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
@@ -252,7 +244,7 @@ export default {
         this.$confirm('确定要删除数据吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
         })
           .then(() => {
             API.deleteMdPriceGear(IdList).then((response) => {
@@ -265,7 +257,7 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消'
+              message: '已取消',
             })
           })
       }
@@ -298,8 +290,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 

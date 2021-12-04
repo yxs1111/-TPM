@@ -2,41 +2,15 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="模型名称" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
-      </el-form-item>
-      <el-form-item label="模型关键词" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-        </el-select>
+      <el-form-item label="门店名称">
+        <el-input v-model="filterObj.name" placeholder="请输入" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="TpmButtonBG">重置</el-button>
+        <el-button type="primary" class="TpmButtonBG"  :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
     </el-form>
-    <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-      <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
-    </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
       style="width: 100%">
-      <el-table-column type="selection" align="center" />
-      <el-table-column fixed align="center" label="操作" width="100">
-        <template slot-scope="{ row }">
-          <div class="table_operation">
-            <div class="table_operation_detail" @click="editor(row)">
-              <i class="el-icon-edit-outline"></i>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="150" align="center" prop="storeCode" label="门店编码"> </el-table-column>
       <el-table-column width="250" align="center" prop="storeName" label="门店名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="channelCode" label="渠道编码"> </el-table-column>

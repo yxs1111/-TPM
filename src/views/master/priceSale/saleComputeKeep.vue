@@ -27,7 +27,6 @@
         <img src="@/assets/images/export.png" alt="">
         <span class="text">导出</span>
       </div>
-      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="TemplateDownload">下载模板</el-button>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%"
       @selection-change="handleSelectionChange">
@@ -64,6 +63,7 @@
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div v-loading='dialogLoading' element-loading-text="正在导入">
+        <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="TemplateDownload">下载模板</el-button>
         <div class="fileInfo ImportContent">
           <div class="fileTitle">文件</div>
           <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>

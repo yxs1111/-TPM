@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-03 08:40:10
+ * @LastEditTime: 2021-12-03 17:34:42
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -48,5 +48,9 @@ export default {
   exceptionDownExcel(params) {
     return requestApi.request_get(this.ImportUrl+'/downExcel', params)
   },
+  getMonth(params) {
+    return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)
+  },
+  
 }
 

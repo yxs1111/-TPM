@@ -23,7 +23,6 @@
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="primary"  class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-      <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" />

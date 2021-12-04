@@ -12,12 +12,9 @@
           <el-input v-model="filterObj.supplierName" placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <div class="TpmButtonBG" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
@@ -41,15 +38,6 @@
         <template slot-scope="scope">
           <div>
             {{ (pageNum - 1) * pageSize + 1 + scope.$index }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column fixed align="center" label="操作" width="100">
-        <template slot-scope="{ row }">
-          <div class="table_operation">
-            <div class="table_operation_detail" @click="editor(row)">
-              <i class="el-icon-edit-outline" />
-            </div>
           </div>
         </template>
       </el-table-column>
@@ -327,7 +315,7 @@ export default {
       var data = {}
       data = { ...this.filterObj }
       API.exportSupplier().then((res) => {
-        this.downloadFile(res, '供销商信息' + '.xlsx') // 自定义Excel文件名
+        this.downloadFile(res, '供应商信息' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },

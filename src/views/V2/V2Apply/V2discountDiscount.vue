@@ -376,7 +376,7 @@ export default {
             this.tableLoading = true
             let mainId = this.tableData[0].mainId
             API.approve({
-              mainId: Number(mainId), //主表id
+              mainId: mainId, //主表id
               approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
             }).then((response) => {
               if (response.code === 1000) {

@@ -1,7 +1,7 @@
-<!--
+priceLevelKeep<!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-03 11:17:02
+ * @LastEditTime: 2021-12-03 17:08:02
 -->
 <template>
   <div class="app-container">
@@ -10,7 +10,7 @@
         <div class="SelectBar">
           <div class="Selectli">
             <span class="SelectliTitle">SKU</span>
-            <el-select v-model="filterObj.SKU" placeholder="请选择">
+            <el-select v-model="filterObj.SKU" clearable placeholder="请选择">
               <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
             </el-select>
           </div>
@@ -19,16 +19,16 @@
             <el-date-picker v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
             </el-date-picker>
           </div>
-          <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
+          <el-button type="primary"  class="TpmButtonBG" @click="search">查询</el-button>
+          <div class="TpmButtonBG" @click="exportData">
+            <img src="@/assets/images/export.png" alt="" />
+            <span class="text">导出</span>
+          </div>
         </div>
         <div class="OpertionBar">
           <div class="TpmButtonBG" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
-          </div>
-          <div class="TpmButtonBG" @click="exportData">
-            <img src="@/assets/images/export.png" alt="" />
-            <span class="text">导出</span>
           </div>
           <div class="TpmButtonBG" @click="approve(1)">
             <img src="@/assets/images/submitIcon.png" alt="" />
@@ -107,15 +107,15 @@
             <div class="fileInfo">
               <div class="fileTitle">文件</div>
               <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-              <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-              <div class="fileName" v-if="uploadFileName!=''">
+              <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)" />
+              <div class="fileName" v-if="uploadFileName != ''">
                 <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-                <span>{{uploadFileName}}</span>
+                <span>{{ uploadFileName }}</span>
               </div>
             </div>
             <div class="seeData" style="width: auto;">
               <div class="exportError" @click="exportErrorList">
-                <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+                <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon" />
                 <span>导出错误信息</span>
               </div>
             </div>
@@ -131,9 +131,9 @@
               }" :row-class-name="tableRowClassName" stripe>
               <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
                 <template slot-scope="scope">
-                  <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                  <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
-                  <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+                  <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg" />
+                  <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;" />
+                  <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;" />
                 </template>
               </el-table-column>
               <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
@@ -176,7 +176,7 @@ export default {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       filterObj: {
-        month: '',
+        month: '202101',
         SKU: '',
       },
       permissions: getDefaultPermissions(),
@@ -197,8 +197,8 @@ export default {
   },
   directives: { elDragDialog, permission },
   mounted() {
-    //this.getList()
-    this.filterObj.month = getCPTMonth()
+    this.getList()
+    //this.filterObj.month = getCPTMonth()
   },
   computed: {},
   methods: {
@@ -253,10 +253,12 @@ export default {
         var formData = new FormData()
         formData.append('file', this.uploadFile)
         API.importExcel(formData).then((response) => {
-          this.dialogLoading = false
-          //清除input的value ,上传一样的
-          event.target.value = null
-          this.$message.success('导入成功!请点击检测数据')
+          if (response.code === 1000) {
+            this.dialogLoading = false
+            //清除input的value ,上传一样的
+            event.target.value = null
+            this.$message.success('导入成功!请点击检测数据')
+          }
         })
       } else {
         this.$message.error('请选择文件')
@@ -265,7 +267,6 @@ export default {
     //校验数据
     checkImport() {
       API.exceptionCheck().then((response) => {
-        console.log(response)
         this.ImportData = response.data
         this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
       })
@@ -273,17 +274,20 @@ export default {
     //确认导入文件
     confirmImport() {
       API.exceptionSave().then((res) => {
-        this.dialogLoading = false
-        this.$message.success('保存成功!')
-        this.closeimportDialog()
+        if (res.code === 1000) {
+          this.$message.success('保存成功!')
+          this.closeimportDialog()
+        }
       })
     },
     //导出异常信息
     exportErrorList() {
       API.exceptionDownExcel().then((res) => {
-        let timestamp = Date.parse(new Date())
-        this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        if (res.code === 1000) {
+          let timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
+          this.$message.success('导出成功!')
+        }
       })
     },
     //导出数据
@@ -325,7 +329,7 @@ export default {
     approve(value) {
       let arr = Object.keys(this.ContentData)
       if (arr.length) {
-        let mainId = Number(this.ContentData[arr[0]][0].mainId)
+        let mainId = this.ContentData[arr[0]][0].mainId
         if (value) {
           this.$confirm('此操作将审批通过, 是否继续?', '提示', {
             confirmButtonText: '确定',
@@ -337,7 +341,7 @@ export default {
                 mainId, //主表id
                 approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
-                if (res.code === 1000) {
+                if (response.code === 1000) {
                   this.$message({
                     type: 'success',
                     message: '审批成功!',
@@ -367,7 +371,7 @@ export default {
                 mainId, //主表id
                 approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
-                if (res.code === 1000) {
+                if (response.code === 1000) {
                   this.$message.success('驳回审批成功!')
                 } else {
                   this.$message.error('驳回审批失败!')

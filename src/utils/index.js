@@ -403,7 +403,19 @@ export function replaceUnderLine(val, char = '_') {
   let year=cdate.getFullYear()
   let month=cdate.getMonth()+1
   month = month < 10 ? "0" + month : month;
-  console.log(cdate);
   return year+''+month
+}
+// 获取Scenario
+export function yearAndMonthList() {
+  const date=new Date()
+  let year=date.getFullYear()
+  let yearAndMonthList=[]
+  for (let i = 0; i < 12; i++) {
+    let str=year+' '+i+'+'+(12-i)
+    yearAndMonthList.push(str)
+    
+  }
+
+  return yearAndMonthList
 }
 export const exportDefault = 'export default '

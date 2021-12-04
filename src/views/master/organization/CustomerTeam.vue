@@ -4,36 +4,18 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">分组编码</span>
-          <el-input v-model="filterObj.groupCode" placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">分组名称</span>
+          <span class="SelectliTitle">客户组名称</span>
           <el-input v-model="filterObj.groupName" placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+      
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-    </div>
     <el-table :data="tableData" v-loading="tableLoading" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" type="selection" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
             {{ (pageNum - 1) * pageSize + 1 + scope.$index }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column fixed align="center" label="操作" width="100">
-        <template slot-scope="{ row }">
-          <div class="table_operation">
-            <div class="table_operation_detail" @click="editor(row)">
-              <i class="el-icon-edit-outline"></i>
-            </div>
           </div>
         </template>
       </el-table-column>

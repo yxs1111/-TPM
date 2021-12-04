@@ -16,9 +16,6 @@
       <el-form-item>
         <el-button  type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
-      <el-form-item>
-        <el-button  class="TpmButtonBG">重置</el-button>
-      </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>

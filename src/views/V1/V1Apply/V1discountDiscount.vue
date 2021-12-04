@@ -13,7 +13,7 @@
           <span class="SelectliTitle">客户</span>
           <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -37,7 +37,7 @@
 
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <el-button type="primary"  class="TpmButtonBG" @click="getTableData">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -58,7 +58,7 @@
       <el-table-column width="400" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
+      <el-table-column width="150" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelName" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
@@ -107,7 +107,7 @@
       />
     </div>
     <!-- 导入 -->
-    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
+    <el-dialog width="66%"  class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar" style="display:flex;">
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">下载模板
