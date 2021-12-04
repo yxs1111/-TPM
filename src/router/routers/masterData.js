@@ -12,10 +12,52 @@ export default function() {
       meta: { title: '主数据管理', icon: 'mainData' },
       children: [
         {
+          path: '/NKAEC',
+          name: 'NKAEC',
+          component: () => import('@/views/master/nkaec/model.vue'),
+          meta: { title: 'NKAEC', icon: 'form' },
+          redirect: '/nkaec/pages/nka',
+          children: [
+            // 组织架构
+            {
+              hidden: true,
+              path: '/nkaec/pages/nka',
+              code: 'NKA',
+              name: 'NKA',
+              component: () => import('@/views/master/nkaec/pages/nka.vue'),
+              meta: { title: 'NKA', icon: 'form' }
+            },
+            {
+              hidden: true,
+              path: '/nkaec/pages/EC',
+              code: 'EC',
+              name: 'EC',
+              component: () => import('@/views/master/nkaec/pages/EC.vue'),
+              meta: { title: 'EC', icon: 'form' }
+            },
+            {
+              hidden: true,
+              path: '/nkaec/pages/NKALine',
+              code: 'NKALine',
+              name: 'NKALine',
+              component: () => import('@/views/master/nkaec/pages/NKALine.vue'),
+              meta: { title: 'NKALine', icon: 'form' }
+            },
+            {
+              hidden: true,
+              path: '/nkaec/pages/ECLine',
+              code: 'ECLine',
+              name: 'ECLine',
+              component: () => import('@/views/master/nkaec/pages/ECLine.vue'),
+              meta: { title: 'ECLine', icon: 'form' }
+            }
+          ]
+        },
+        {
           path: '/organization',
           name: 'PriceModel',
           component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '组织架构', icon: 'form' },
+          meta: { title: '组织架构', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
           children: [
             // 组织架构
@@ -60,6 +102,20 @@ export default function() {
               name: 'Supplier',
               component: () => import('@/views/master/organization/Supplier.vue'),
               meta: { title: '供应商', icon: 'form' }
+            },
+            {
+              path: '/organization/SaleKJ',
+              code: 'SaleKJ',
+              name: 'SaleKJ',
+              component: () => import('@/views/master/organization/saleKJ.vue'),
+              meta: { title: '销售架构', icon: 'form' }
+            },
+            {
+              path: '/organization/CityVstore',
+              code: 'CityVstore',
+              name: 'CityVstore',
+              component: () => import('@/views/master/organization/cityVStore.vue'),
+              meta: { title: '城市&门店对应关系', icon: 'form' }
             }
           ]
         },
@@ -68,7 +124,7 @@ export default function() {
           path: '/itemInfo',
           name: 'PriceModel',
           component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '产品信息', icon: 'form' },
+          meta: { title: '产品信息', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
           children: [
             {
@@ -87,12 +143,73 @@ export default function() {
             }
           ]
         },
+        {
+          path: '/priceSale',
+          name: 'PriceModel',
+          component: () => import('@/views/master/modelIndex.vue'),
+          meta: { title: '价格和促销', icon: 'approve' },
+          // redirect: '/priceSale/saleComputeKeep',
+          children: [
+            // 价格主数据
+            {
+              path: '/priceSale/priceMasterData',
+              name: 'PriceMasterData',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/priceMasterData.vue'
+                ),
+              meta: {
+                title: '价格主数据',
+                icon: 'form'
+              }
+            },
+            { // 价格档位维护
+              path: '/priceSale/priceLevelKeep',
+              name: 'PriceLevelKeep',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/priceLevelKeep.vue'
+                ),
+              meta: {
+                title: '价格档位维护',
+                icon: 'form'
+              }
+            },
+            // 促销计算维护
+            {
+              path: '/priceSale/saleComputeKeep',
+              name: 'SaleComputeKeep',
+              component: () =>
+                import(
+                  '@/views/master/priceSale/saleComputeKeep.vue'
+                ),
+              meta: {
+                title: '价促计算维护',
+                icon: 'form'
+              }
+            },
+            // {
+            //   path: '/priceSale/PriceStallMasterData',
+            //   code: 'PriceStallMasterData',
+            //   name: 'PriceStallMasterData',
+            //   component: () => import('@/views/master/priceSale/PriceStallMasterData.vue'),
+            //   meta: { title: '价格档位', icon: 'form' }
+            // },
+            {
+              path: '/priceSale/systemPool',
+              code: 'SystemPool',
+              name: 'SystemPool',
+              component: () => import('@/views/master/priceSale/systemPool.vue'),
+              meta: { title: '机制池', icon: 'form' }
+            }
+          ]
+        },
         // 财务信息
         {
           path: '/financeInfo/priceSale',
           name: 'PriceModel',
           component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '财务信息', icon: 'form' },
+          meta: { title: '财务信息', icon: 'approve' },
           // redirect: '/priceSale/saleComputeKeep',
           children: [
             {
@@ -108,6 +225,13 @@ export default function() {
               name: 'RoleCostType',
               component: () => import('@/views/master/financeInfo/RoleCostType.vue'),
               meta: { title: '费用类型', icon: 'form' }
+            },
+            {
+              path: '/MinePackage',
+              code: 'MinePackage',
+              name: 'MinePackage',
+              component: () => import('@/views/master/financeInfo/minePackage.vue'),
+              meta: { title: 'Mine Package', icon: 'form' }
             }
           ]
         },
@@ -116,7 +240,7 @@ export default function() {
           path: '/ruleCtrl',
           name: 'PriceModel',
           component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '规则控制', icon: 'form' },
+          meta: { title: '规则控制', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
           children: [
             // 促销计算维护
@@ -175,67 +299,6 @@ export default function() {
                 title: '新客达成率',
                 icon: 'form'
               }
-            }
-          ]
-        },
-        {
-          path: '/priceSale',
-          name: 'PriceModel',
-          component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '价格和促销', icon: 'form' },
-          // redirect: '/priceSale/saleComputeKeep',
-          children: [
-            // 促销计算维护
-            {
-              path: '/priceSale/saleComputeKeep',
-              name: 'SaleComputeKeep',
-              component: () =>
-                import(
-                  '@/views/master/priceSale/saleComputeKeep.vue'
-                ),
-              meta: {
-                title: '促销计算维护',
-                icon: 'form'
-              }
-            },
-            // 价格主数据
-            {
-              path: '/priceSale/priceMasterData',
-              name: 'PriceMasterData',
-              component: () =>
-                import(
-                  '@/views/master/priceSale/priceMasterData.vue'
-                ),
-              meta: {
-                title: '价格主数据',
-                icon: 'form'
-              }
-            },
-            { // 价格档位维护
-              path: '/priceSale/priceLevelKeep',
-              name: 'PriceLevelKeep',
-              component: () =>
-                import(
-                  '@/views/master/priceSale/priceLevelKeep.vue'
-                ),
-              meta: {
-                title: '价格档位维护',
-                icon: 'form'
-              }
-            },
-            {
-              path: '/priceSale/PriceStallMasterData',
-              code: 'PriceStallMasterData',
-              name: 'PriceStallMasterData',
-              component: () => import('@/views/master/priceSale/PriceStallMasterData.vue'),
-              meta: { title: '价格档位', icon: 'form' }
-            },
-            {
-              path: '/priceSale/systemPool',
-              code: 'SystemPool',
-              name: 'SystemPool',
-              component: () => import('@/views/master/priceSale/systemPool.vue'),
-              meta: { title: '机制池', icon: 'form' }
             }
           ]
         }

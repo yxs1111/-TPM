@@ -12,6 +12,17 @@
     transition: width 0.28s;
     width: calc(100% - 54px) !important;
   }
+  
+  .el-submenu__title{
+    font-size: 16px !important;
+  }
+
+  .el-submenu__title i {
+    color: #909399;
+    transform: rotateZ(270deg);
+  }
+
+
 
   .sidebar-container {
     transition: width 0.28s;
@@ -94,6 +105,10 @@
     .is-active > .el-submenu__title {
       color: $subMenuActiveText !important;
       background: #fff !important;
+      & i{
+        transform: rotateZ(0deg);
+        color: $subMenuActiveText !important;
+      }
     }
 
     & .nest-menu .el-submenu > .el-submenu__title,

@@ -16,7 +16,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">

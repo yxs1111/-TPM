@@ -4,32 +4,44 @@
  * @LastEditTime: 2021-11-29 09:47:06
 -->
 <template>
-  <div class="app-container">
+  <div class="app-container" style="border-radius:0px;">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="模型名称" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
-      </el-form-item>
-      <el-form-item label="模型关键词" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button  type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button  class="TpmButtonBG">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <div class="TpmButtonBGWrap">
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli" @keyup.enter="search">
+          <span class="SelectliTitle">年月:</span>
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Mine Package</span>
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">流程状态:</span>
+          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          </el-select>
+        </div>
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+      </div>
+    </div>
+    <!-- <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
-    </div>
+    </div> -->
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">

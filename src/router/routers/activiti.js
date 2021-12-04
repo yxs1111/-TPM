@@ -16,14 +16,14 @@ export default function() {
           code: 'model',
           name: 'model',
           component: () => import('@/views/activiti/model'),
-          meta: { title: '模型管理', icon: 'form' }
+          meta: { title: '模型管理', icon: 'apply' }
         },
         {
           path: '/process',
           code: 'process',
           name: 'Process',
           component: () => import('@/views/activiti/process'),
-          meta: { title: '流程管理', icon: 'user' }
+          meta: { title: '流程管理', icon: 'approve' }
         },
         // {
         //   path: '/task',

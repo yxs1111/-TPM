@@ -37,6 +37,10 @@
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -44,16 +48,12 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="exportData">
-        <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
       <div class="TpmButtonBG" @click="approve(1)">
-        <svg-icon icon-class="submit" />
+        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
       <div class="TpmButtonBG" @click="approve(2)">
-        <svg-icon icon-class="close" />
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
     </div>
@@ -266,7 +266,9 @@ export default {
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList().then(res => {
+      selectAPI.queryCustomerList({
+        channelCode: this.filterObj.channelCode
+      }).then(res => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }

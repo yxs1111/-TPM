@@ -5,14 +5,16 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">年月</span>
+          <span class="SelectliTitle">年月:</span>
           <el-input v-model="filterObj.yearAndMonth" placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户名称</span>
-          <el-select v-model="filterObj.customerCode" placeholder="请选择">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
-          </el-select>
+          <span class="SelectliTitle">渠道:</span>
+          <el-input></el-input>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">SKU:</span>
+          <el-input></el-input>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
       </div>

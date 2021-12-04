@@ -33,7 +33,7 @@
         <span class="text">导出</span>
       </div>
       <div class="TpmButtonBG">
-        <svg-icon icon-class="submit" />
+        <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
     </div>

@@ -30,13 +30,17 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
+            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
 
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -44,16 +48,12 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="exportExcelInfo">
-        <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
       <div class="TpmButtonBG" @click="agree">
-        <svg-icon icon-class="submit" />
+        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
       <div class="TpmButtonBG" @click="reject">
-        <svg-icon icon-class="close" />
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
     </div>
@@ -239,7 +239,7 @@ export default {
     this.getTableData()
     this.getChannel()
     this.getSKU()
-    this.getMP()
+    // this.getMP()
     this.getCustomerList()
     this.getDistributorList()
   },
@@ -268,7 +268,9 @@ export default {
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList().then(res => {
+      selectAPI.queryCustomerList({
+        channelCode: this.filterObj.channelCode
+      }).then(res => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
@@ -306,7 +308,9 @@ export default {
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo().then(res => {
-        console.log('111', res)
+        if (res.code === 1000) {
+          this.closeimportDialog()
+        }
       }).catch()
     },
     // 确认导入

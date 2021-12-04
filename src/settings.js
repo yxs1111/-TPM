@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'April',
+  title: 'FrieslandCampina iInvest System',
 
   /**
    * @type {boolean} true | false

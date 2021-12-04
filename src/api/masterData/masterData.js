@@ -280,6 +280,19 @@ export default {
   },
   deleteSplitRule(params) {
     return requestApi.request_delete('/mdm/mdSplitRuleConfig/delete', params)
+  },
+  // NKAEC
+  getPageByDtoNKA(params) {
+    return requestApi.request_get('/importData/nkaRawData/getPageByDto', params)
+  },
+  getPageByDtoEC(params) {
+    return requestApi.request_get('/importData/ecRawData/getPageByDto', params)
+  },
+  getPageByDtoNKAL(params) {
+    return requestApi.request_get('/importData/nkaRawDataGuideline/getPageByDto', params)
+  },
+  getPageByDtoECL(params) {
+    return requestApi.request_get('/importData/ecRawDataGuideline/getPageByDto', params)
   }
 
 }
