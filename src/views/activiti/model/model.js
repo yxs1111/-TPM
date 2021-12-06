@@ -159,10 +159,7 @@ export default {
       this.resetModelInfoDialog()
     },
     init() {
-      // 获取分类数据
-      modelApi.getCategoryOfModel({ tenantId: '0' }).then(res => {
-        this.categoryArr = res.data
-      })
+      
       // 初始化列表页
       this.pageList()
     },
@@ -223,6 +220,17 @@ export default {
         return ''
       }
       return parseTime(time, cFormat)
-    }
+    },
+    // 行样式
+    tableRowClassName({ row, rowIndex }) {
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
+    },
+    HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
   }
 }

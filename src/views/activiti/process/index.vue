@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-03 08:59:20
+ * @LastEditTime: 2021-12-06 20:26:36
 -->
 <template>
   <div class="app-container" @keyup.enter="search">
@@ -27,14 +27,11 @@
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
         {{ scopeProps.$index+1 }}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="关键字" align="center">
-        {{ row.key }}
+      <el-table-column prop="key" label="关键字" align="center">
       </el-table-column>
-      <el-table-column v-slot="{row}" label="流程名" align="center">
-        {{ row.name }}
+      <el-table-column prop="name" label="流程名" align="center">
       </el-table-column>
-      <el-table-column v-slot="{row}" label="模型版本" align="center">
-        {{ row.version }}
+      <el-table-column prop="version" label="模型版本" align="center">
       </el-table-column>
       <el-table-column v-slot="{row}" label="是否有流程图" :show-overflow-tooltip="true" align="center">
         <el-tag :type="row.graphicalNotationDefined | hasGraphicalStyleFilter" @click="showFlowDiagram(row)">{{ row.graphicalNotationDefined | hasGraphicalTextFilter }}</el-tag>
@@ -43,13 +40,13 @@
         <el-tag :type="row.suspended | processStatsStyleFilter">{{ row.suspended | processStatsTextFilter }}</el-tag>
       </el-table-column>
       <el-table-column v-slot="{row}" label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <el-button  size="mini" type="primary" @click="startProcess(row)">
+        <el-button size="mini" type="primary" @click="startProcess(row)">
           {{ $t('table.enable') }}
         </el-button>
-        <el-button v-if="row.suspended"  size="mini" type="success" @click="activateProcess(row)">
+        <el-button v-if="row.suspended" size="mini" type="success" @click="activateProcess(row)">
           {{ $t('table.activate') }}
         </el-button>
-        <el-button v-else  size="mini" type="danger" @click="suspendProcess(row)">
+        <el-button v-else size="mini" type="danger" @click="suspendProcess(row)">
           {{ $t('table.suspend') }}
         </el-button>
       </el-table-column>

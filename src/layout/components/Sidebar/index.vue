@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-09-15 16:17:33
- * @LastEditTime: 2021-11-16 15:12:39
+ * @LastEditTime: 2021-12-06 20:18:55
 -->
 <template>
   <div :class="{'has-logo':showLogo}">
@@ -90,7 +90,7 @@ export default {
     position: absolute;
     bottom: 0;
     height: 200px;
-    background-image: url('../../../assets/images/background/car.png');
+    /* background-image: url('../../../assets/images/background/car.png'); */
     background-size: 90% 90%;
     background-repeat: no-repeat;
     pointer-events: none;

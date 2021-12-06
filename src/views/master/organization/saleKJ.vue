@@ -16,9 +16,6 @@
       <el-form-item>
         <el-button  type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
-      <el-form-item>
-        <el-button  class="TpmButtonBG">重置</el-button>
-      </el-form-item>
     </el-form>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="channelCode" label="渠道编码"> </el-table-column>
