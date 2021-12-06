@@ -6,13 +6,12 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">年月</span>
-          <el-input v-model="filterObj.yearAndMonth" placeholder="请输入" />
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+          </el-date-picker>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-select v-model="filterObj.customerCsName" placeholder="请选择">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-          </el-select>
+          <el-input v-model="filterObj.customerCsName" placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
@@ -32,7 +31,6 @@
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
-      <el-table-column width="150" align="center" prop="productEsName" label="产品名称" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column width="150" align="center" prop="grossProfitPoints" label="毛利点数" />
       <el-table-column width="320" align="center" prop="dealerRebate" label="经销商返利" />
@@ -63,10 +61,24 @@
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div v-loading='dialogLoading' element-loading-text="正在导入">
-        <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="TemplateDownload">下载模板</el-button>
+        <div class="fileInfo ImportContent">
+          <!-- <el-button type="primary" class="my-search selectFile" @click="TemplateDownload">
+            <svg-icon icon-class="download_white" style="font-size: 16px;" />
+            下载模板
+          </el-button> -->
+          <div class="fileTitle">模板</div>
+          <div class="my-search selectFile" @click="TemplateDownload">
+            <svg-icon icon-class="download_white" style="font-size: 16px;" />
+            <span class="text">下载模板</span>
+          </div>
+        </div>
+
         <div class="fileInfo ImportContent">
           <div class="fileTitle">文件</div>
-          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <div class="my-search selectFile" @click="parsingExcelBtn">
+            <img src="@/assets/images/selectFile.png" alt="" />
+            <span class="text">选择文件</span>
+          </div>
           <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
           <div class="fileName" v-if="uploadFileName!=''">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
@@ -166,14 +178,14 @@ export default {
             this.getTableData()
             this.dialogLoading = false
           } else {
-            var list=response.data
-            let str=''
-            list.forEach(item => {
-              str+=item
-            });
+            var list = response.data
+            let str = ''
+            list.forEach((item) => {
+              str += item
+            })
             this.$message.error(`${str}`)
             this.dialogLoading = false
-          } 
+          }
         })
         .catch(() => {})
     },

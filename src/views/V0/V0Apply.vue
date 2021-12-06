@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-03 19:01:32
+ * @LastEditTime: 2021-12-06 11:31:49
 -->
 <template>
   <div class="app-container">
@@ -42,7 +42,7 @@
         </div>
       </div>
       <!-- 商品 -->
-      <div class="ContentWrap" v-loading='loading' element-loading-text="正在查询">
+      <div class="ContentWrap">
         <div class="contentli" v-for="(tableData,key,index) in ContentData" :key="index">
           <div class="contentTop">
             <div class="SKUTitle">
@@ -64,10 +64,10 @@
               </el-table-column>
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
-              <el-table-column align="center" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="center" width="250" v-for="(citem,cindex) in columnList(tableData)" :key="cindex">
+              <el-table-column align="center" width="150" prop="cptVolBox" label="CPT VOL(CTN)"></el-table-column>
+              <el-table-column align="center" width="250" v-for="(citem,cindex) in tableData[0].priceGearNum" :key="cindex">
                 <template slot="header">
-                  {{ tableData[0].customGearList[cindex].gear }}RMB/听 档位销量(箱)
+                  {{ tableData[0].customGearList[cindex].gear }}RMB/Tin 档位销量(CTN)
                 </template>
                 <template slot-scope="{row}">
                   <div>
@@ -92,7 +92,7 @@
         </div>
       </div>
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
-        <div class="el-dialogContent" v-loading='dialogLoading' element-loading-text="正在获取">
+        <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <!-- <el-form-item label="年月">
               <el-date-picker v-model="ruleForm.yearAndMonth" class="my-el-input" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
@@ -122,18 +122,21 @@
       </el-dialog>
       <!-- 导入 -->
       <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-        <div v-loading='dialogLoading' element-loading-text="正在导入">
+        <div>
           <div class="el-downloadFileBar">
             <div>
-              <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="exportData">下载模板</el-button>
-              <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
+              <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
+              <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
             </div>
             <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
           </div>
           <div class="fileInfo">
             <div class="fileInfo">
               <div class="fileTitle">文件</div>
-              <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+              <div class="my-search selectFile" @click="parsingExcelBtn">
+                <img src="@/assets/images/selectFile.png" alt="" />
+                <span class="text">选择文件</span>
+              </div>
               <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
               <div class="fileName" v-if="uploadFileName!=''">
                 <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
@@ -203,7 +206,6 @@ import commonAPI from '@/api/masterData/masterData.js'
 export default {
   data() {
     return {
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       filterObj: {
         month: '202101',
@@ -252,9 +254,6 @@ export default {
       importVisible: false, //导入弹窗
       ImportData: [],
       uploadFileName: '',
-      loading: '',
-      dialogLoading: '',
-      uploadFileName: '',
       uploadFile: '',
       isSubmit: 0,
       errorImg: require('@/assets/images/selectError.png'),
@@ -264,6 +263,11 @@ export default {
       yearAndMonthList: yearAndMonthList(),
       VersionList: ['Final'],
       ChannelList: [],
+      backgroundList: [
+        'background:#EFFCF9',
+        'background:#FEF5F6',
+        'background:#F0F6FC',
+      ], //价格档位背景色
     }
   },
   directives: { elDragDialog, permission },
@@ -277,31 +281,30 @@ export default {
   methods: {
     getMonth() {
       API.getMonth({ version: 'V0' }).then((res) => {
-        this.filterObj.month=res.data
+        this.filterObj.month = res.data
         this.getList()
       })
     },
     getList() {
-      this.loading = true
       API.getList({
-
         yearAndMonth: this.filterObj.month,
-        productCode: this.filterObj.SKU,
-      })
-        .then((response) => {
-          if (response.code === 1000) {
-            this.ContentData = response.data
-            for (const key in this.ContentData) {
-              let list = this.ContentData[key]
-              this.isSubmit = this.ContentData[key][0].isSubmit
-              for (let i = 0; i < list.length; i++) {
-                list[i].customGearList = JSON.parse(list[i].customGear)
-              }
+        dim_product: this.filterObj.SKU,
+      }).then((response) => {
+        if (response.code === 1000) {
+          this.ContentData = response.data
+          for (const key in this.ContentData) {
+            let list = this.ContentData[key]
+            this.isSubmit = this.ContentData[key][0].isSubmit
+            for (let i = 0; i < list.length; i++) {
+              list[i].customGearList = JSON.parse(list[i].customGear)
+              //价格档位降序排序
+              list[i].customGearList.sort(function (a, b) {
+                return b.gear - a.gear
+              })
             }
-            this.loading = false
           }
-        })
-        .catch(() => {})
+        }
+      })
     },
     getQuerySkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
@@ -343,11 +346,9 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       if (this.uploadFile != '') {
-        this.dialogLoading = true
         var formData = new FormData()
         formData.append('file', this.uploadFile)
         API.importExcel(formData).then((response) => {
-          this.dialogLoading = false
           //清除input的value ,上传一样的
           event.target.value = null
           this.$message.success('导入成功!请点击检测数据')
@@ -367,7 +368,6 @@ export default {
     //确认导入文件
     confirmImport() {
       API.exceptionSave().then((res) => {
-        this.dialogLoading = false
         this.$message.success('保存成功!')
         this.closeimportDialog()
       })
@@ -419,9 +419,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.dialogLoading = true
           API.getCPTData({
-            yearAndMonth: '202101',
+            yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
@@ -432,7 +431,6 @@ export default {
                 this.getList()
                 this.resetForm(formName)
               }
-              this.dialogLoading = false
             })
             .catch(() => {})
         } else {
@@ -468,14 +466,12 @@ export default {
           type: 'warning',
         })
           .then(() => {
-            this.loading = true
             let mainId = this.ContentData[arr[0]][0].mainId
             API.approve({
               mainId: mainId, //主表id
               approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
             }).then((response) => {
               if (response.code === 1000) {
-                this.loading = false
                 this.$message.success('提交成功')
               }
             })
@@ -503,14 +499,13 @@ export default {
       if (columnIndex === 0 && rowIndex != 0) {
         return 'background:#4192d3!important'
       }
-      if (columnIndex === 4 && rowIndex != 0) {
-        return 'background:#FEF5F6'
-      }
-      if (columnIndex === 5 && rowIndex != 0) {
-        return 'background:#EFFCF9'
-      }
-      if (columnIndex === 6 && rowIndex != 0) {
-        return 'background:#F0F6FC'
+      let num = (4 + row.priceGearNum - columnIndex) % 3
+      if (
+        4 <= columnIndex &&
+        columnIndex < 4 + row.priceGearNum &&
+        rowIndex != 0
+      ) {
+        return this.backgroundList[num]
       }
     },
   },

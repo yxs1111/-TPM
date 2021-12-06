@@ -2,25 +2,19 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="模型名称" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+      <el-form-item label="渠道编码" prop="name">
+        <el-input v-model="filterObj.channelCode" placeholder="请输入" />
       </el-form-item>
-      <el-form-item label="模型关键词" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+      <el-form-item label="状态" prop="name">
+        <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+          <el-option v-for="item,index in ['正常','无效']" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button  type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button  class="TpmButtonBG">重置</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="channelCode" label="渠道编码"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="中文名称"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="英文名称"> </el-table-column>
@@ -57,11 +51,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
+        channelCode: '',
+        state: '',
         category: '',
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -75,13 +68,11 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageMdChannel({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize

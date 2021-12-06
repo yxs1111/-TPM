@@ -1,10 +1,11 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import { MessageBox, Message,Loading } from 'element-ui'
 import store from '@/store'
 import auth from '@/utils/auth'
 import router from '@/router'
 import { encrypt } from '@/utils/crypto/crypto-util'
-
+import elementui from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 // 401状态，默认true：可以弹出登出框
 let unauthorized_state = true
 // 请求头key
@@ -14,7 +15,28 @@ const loginKey = process.env.VUE_APP_LOGIN_KEY
 const messageDuration = 10 * 1000
 // 请求超时时间
 const requestTimeout = 90 * 1000
-
+//全局 loading
+let loading;
+//内存中正在请求的数量
+let loadingNum=0;
+function startLoading() {    
+	if(loadingNum==0){
+		loading = Loading.service({
+		  lock: true,
+		  text: '请稍候',
+		  background:'rgba(255,255,255,0.5)',
+		})
+	}
+	//请求数量加1
+	loadingNum++;
+}
+function endLoading() {
+    //请求数量减1
+	loadingNum--
+	if(loadingNum<=0){
+		loading.close()
+	}
+}
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -25,6 +47,7 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    startLoading()
     // do something before request is sent
     // 处理是否携带token请求
     if (config.url.indexOf('/login') < 0 && config.url.indexOf('/logout') < 0 && auth.getToken()) {
@@ -79,6 +102,7 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+    endLoading()
     const res = response.data
     if (response.config.responseType === 'arraybuffer' || response.config.responseType === 'blob') {
       return res
@@ -92,6 +116,7 @@ service.interceptors.response.use(
     return res
   },
   error => {
+    endLoading()
     console.log('err' + error) // for debug
     const errorCode = error.request.status
     const errorMessage = error.response.data.message || '服务器开小差了，请稍后尝试!'
