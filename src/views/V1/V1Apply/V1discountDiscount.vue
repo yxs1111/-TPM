@@ -5,7 +5,7 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
@@ -13,7 +13,7 @@
           <span class="SelectliTitle">客户</span>
           <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -50,17 +50,17 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :disabled="submitBtn==1" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="submitInfo">
+      <div class="TpmButtonBG" :disabled="submitBtn==0" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column width="400" align="center" prop="cpId" label="CPID" fixed />
+      <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
@@ -169,7 +169,7 @@
             </template>
           </el-table-column>
           <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-          <el-table-column width="400" align="center" prop="cpId" label="CPID" />
+          <el-table-column width="420" align="center" prop="cpId" label="CPID" />
           <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
           <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
           <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
@@ -244,8 +244,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        sku: '',
-        month: ''
+        customerCode: '',
+        channelCode: '',
+        distributorCode: '',
+        productCode: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
@@ -291,7 +293,8 @@ export default {
       channelArr: [],
       skuArr: [],
       customerArr: [],
-      distributorArr: []
+      distributorArr: [],
+      submitBtn: 0
     }
   },
   computed: {},
@@ -328,6 +331,7 @@ export default {
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode = ''
       selectAPI.queryCustomerList({
         channelCode: this.filterObj.channelCode
       }).then(res => {
@@ -555,6 +559,7 @@ export default {
           this.tableLoading = false
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
+          this.submitBtn = response.data.records[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total

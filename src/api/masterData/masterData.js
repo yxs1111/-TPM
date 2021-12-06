@@ -293,6 +293,20 @@ export default {
   },
   getPageByDtoECL(params) {
     return requestApi.request_get('/importData/ecRawDataGuideline/getPageByDto', params)
-  }
+  },
+  // 检验规则
+  // 保存
+  updateRuleSave(params) {
+    return requestApi.request_post('/mdm/mdExceptionRule/updateRule', params)
+  },
+  // 导出
+  excportRuleSave(params) {
+    return request({
+      url: '/mdm/mdExceptionRule/excport',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
 
 }

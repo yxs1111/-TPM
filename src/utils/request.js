@@ -13,7 +13,7 @@ const loginKey = process.env.VUE_APP_LOGIN_KEY
 // 提示框过期时间
 const messageDuration = 10 * 1000
 // 请求超时时间
-const requestTimeout = 90 * 1000
+const requestTimeout = 3600 * 1000
 
 // create an axios instance
 const service = axios.create({
