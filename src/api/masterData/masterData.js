@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-11-23 16:24:38
+ * @LastEditTime: 2021-12-06 14:45:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -244,17 +244,17 @@ export default {
   importNkaRawDataGuideline(params) {
     return requestApi.request_post('/importData/importNkaRawDataGuideline', params)
   },
-  // 价格和促销
+  // 机制池
   downloadExcelSyspool() {
     return request({
-      url: '/mdCdmConfig/downloadExcel',
+      url: '/mdm/mdCdmConfig/downloadExcel',
       method: 'post',
       responseType: 'blob'
     })
   },
   importExcelSyspool(params) {
     return request({
-      url: '/mdCdmConfig/importExcel',
+      url: '/mdm/mdCdmConfig/importExcel',
       method: 'post',
       data: params,
       headers: { 'Content-Type': 'multipart/form-data' }
@@ -262,7 +262,7 @@ export default {
   },
   exportExcelSyspool(data) {
     return request({
-      url: '/mdCdmConfig/exportExcel',
+      url: '/mdm/mdCdmConfig/exportExcel',
       method: 'post',
       data: data,
       responseType: 'blob'

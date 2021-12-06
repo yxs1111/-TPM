@@ -212,13 +212,13 @@ export default {
       var data = {}
       data = { ...this.filterObj }
       API.exportSaleComputeKeep(data).then((res) => {
-        this.downloadFile(res, '促销计算维护' + '.xlsx') //自定义Excel文件名
+        this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
     TemplateDownload() {
       API.SaleComputeKeepTemplateDownload().then((res) => {
-        this.downloadFile(res, '促销计算维护模板' + '.xlsx') //自定义Excel文件名
+        this.downloadFile(res, '价促计算维护模板' + '.xlsx') //自定义Excel文件名
         this.$message.success('下载成功!')
       })
     },

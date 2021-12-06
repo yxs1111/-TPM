@@ -25,16 +25,11 @@ export default {
           visible: false
         }
       },
-      categoryArr: [{ label: 'test', value: '19' }],
       filterObj:{
         name:'',
         keyName:'',
         type:'',
       },
-      flowDirection: [
-        { text: '从左往右', value: 'horizontal' },
-        { text: '从上往下', value: 'vertical' }
-      ],
       permissions: getDefaultPermissions(),
       textMap: getTextMap(),
       rules: {
