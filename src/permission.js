@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-02 11:13:37
- * @LastEditTime: 2021-11-16 15:37:38
+ * @LastEditTime: 2021-12-03 14:42:17
  */
 import router from './router'
 import store from './store'
@@ -19,7 +19,7 @@ router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
   // set page title
-  document.title = getPageTitle(to.meta.title)
+  document.title = 'FrieslandCampina iInvest System'
 
   // determine whether the user has logged in
   const hasToken = auth.getToken()
