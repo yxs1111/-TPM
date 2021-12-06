@@ -10,38 +10,38 @@ priceLevelKeep<!--
         <div class="SelectBar">
           <div class="Selectli">
             <span class="SelectliTitle">SKU</span>
-            <el-select v-model="filterObj.SKU" clearable placeholder="请选择">
+            <el-select v-model="filterObj.SKU" filterable clearable placeholder="请选择">
               <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
             </el-select>
           </div>
           <div class="Selectli">
             <span class="SelectliTitle">月份</span>
-            <el-date-picker v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+            <el-date-picker disabled v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
             </el-date-picker>
           </div>
-          <el-button type="primary"  class="TpmButtonBG" @click="search">查询</el-button>
+          <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
           <div class="TpmButtonBG" @click="exportData">
             <img src="@/assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
         </div>
         <div class="OpertionBar">
-          <div class="TpmButtonBG" @click="importData">
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
-          <div class="TpmButtonBG" @click="approve(1)">
-            <img src="@/assets/images/submitIcon.png" alt="" />
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
+            <svg-icon icon-class="passApprove" style="font-size: 24px;" />
             <span class="text">通过</span>
           </div>
-          <div class="TpmButtonBG" @click="approve(0)">
-            <svg-icon icon-class="close" />
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
+            <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
             <span class="text">驳回</span>
           </div>
         </div>
       </div>
       <!-- 商品 -->
-      <div class="ContentWrap" v-loading="loading" element-loading-text="正在查询">
+      <div class="ContentWrap">
         <div class="contentli" v-for="(tableData, key, index) in ContentData" :key="index">
           <div class="contentTop">
             <div class="SKUTitle">
@@ -65,11 +65,11 @@ priceLevelKeep<!--
               </el-table-column>
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
-              <el-table-column align="center" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" v-for="(citem, cindex) in columnList(tableData)" :key="cindex">
+              <el-table-column align="center" width="150" prop="cptVolBox" label="CPT VOL(CTN)"></el-table-column>
+              <el-table-column align="center" width="250" prop="number" v-for="(citem, cindex) in tableData[0].priceGearNum" :key="cindex">
                 <template slot="header">
-                  {{ tableData[0].customGearList[cindex].gear }}RMB/听
-                  档位销量(箱)
+                  {{ tableData[0].customGearList[cindex].gear }}RMB/Tin
+                  档位销量(CTN)
                 </template>
                 <template slot-scope="{ row }">
                   <div>
@@ -77,8 +77,6 @@ priceLevelKeep<!--
                   </div>
                 </template>
               </el-table-column>
-              <!-- <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column> -->
               <el-table-column align="center" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
               <el-table-column align="center" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
               <el-table-column align="center" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
@@ -95,18 +93,22 @@ priceLevelKeep<!--
       </div>
       <!-- 导入 -->
       <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-        <div v-loading="dialogLoading" element-loading-text="正在导入">
+        <div>
           <div class="el-downloadFileBar">
             <div>
-              <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="exportData">下载模板</el-button>
-              <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
+              <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
+              <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="checkImport">检测数据</el-button>
             </div>
             <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
           </div>
           <div class="fileInfo">
             <div class="fileInfo">
               <div class="fileTitle">文件</div>
-              <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+              <!-- <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button> -->
+              <div class="my-search selectFile" @click="parsingExcelBtn">
+                <img src="@/assets/images/selectFile.png" alt="" />
+                <span class="text">选择文件</span>
+              </div>
               <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)" />
               <div class="fileName" v-if="uploadFileName != ''">
                 <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
@@ -181,29 +183,32 @@ export default {
       },
       permissions: getDefaultPermissions(),
       ContentData: [],
-      loading: '',
-      dialogLoading: '',
       //导入
       importVisible: false, //导入弹窗
       ImportData: [],
       mainId: '',
       uploadFileName: '',
       uploadFile: '',
+      isSubmit: 0,
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
+      backgroundList: [
+        'background:#EFFCF9',
+        'background:#FEF5F6',
+        'background:#F0F6FC',
+      ], //价格档位背景色
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     this.getList()
-    //this.filterObj.month = getCPTMonth()
+    // this.getMonth()
   },
   computed: {},
   methods: {
     getList() {
-      this.loading = true
       API.getList({
         yearAndMonth: this.filterObj.month,
         productCode: this.filterObj.SKU,
@@ -212,15 +217,24 @@ export default {
           this.ContentData = response.data
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
+            this.isSubmit = this.ContentData[key][0].isSubmit
             this.mainId = this.ContentData[key][0].mainId
             for (let i = 0; i < list.length; i++) {
               list[i].customGearList = JSON.parse(list[i].customGear)
+              //价格档位降序排序
+              list[i].customGearList.sort(function (a, b) {
+                return b.gear - a.gear
+              })
             }
           }
-          this.loading = false
-          console.log(this.mainId)
         })
         .catch(() => {})
+    },
+    getMonth() {
+      API.getMonth({ version: 'V0' }).then((res) => {
+        this.filterObj.month = res.data
+        this.getList()
+      })
     },
     //档位列
     columnList(list) {
@@ -249,12 +263,10 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       if (this.uploadFile != '') {
-        this.dialogLoading = true
         var formData = new FormData()
         formData.append('file', this.uploadFile)
         API.importExcel(formData).then((response) => {
           if (response.code === 1000) {
-            this.dialogLoading = false
             //清除input的value ,上传一样的
             event.target.value = null
             this.$message.success('导入成功!请点击检测数据')
@@ -402,14 +414,9 @@ export default {
       if (columnIndex === 0 && rowIndex != 0) {
         return 'background:#4192d3!important'
       }
-      if (columnIndex === 4 && rowIndex != 0) {
-        return 'background:#FEF5F6'
-      }
-      if (columnIndex === 5 && rowIndex != 0) {
-        return 'background:#EFFCF9'
-      }
-      if (columnIndex === 6 && rowIndex != 0) {
-        return 'background:#F0F6FC'
+      let num = ((4 + row.priceGearNum)-columnIndex)%3
+      if (4 <= columnIndex && columnIndex < 4 + row.priceGearNum && rowIndex != 0) {
+        return this.backgroundList[num]
       }
     },
   },

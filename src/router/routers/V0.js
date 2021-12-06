@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-11-04 11:18:14
+ * @LastEditTime: 2021-12-06 11:41:51
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -21,7 +21,7 @@ export default function() {
           code: 'V0Apply',
           name: 'V0Apply',
           component: () => import('@/views/V0/V0Apply.vue'),
-          meta: { title: 'V0 - Pre city plan 预拆分', icon: 'apply' },
+          meta: { title: '申请', icon: 'apply' },
         },
         {
           path: '/V0/V0Approval',
