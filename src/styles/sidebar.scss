@@ -15,6 +15,7 @@
   
   .el-submenu__title{
     font-size: 16px !important;
+    font-family: Source Han Sans CN;
   }
 
   .el-submenu__title i {
@@ -115,6 +116,7 @@
     & .el-submenu .el-menu-item {
       min-width: $sideBarWidth !important;
       background-color: $subMenuBg;
+      font-family: Source Han Sans CN;
 
       &:hover {
         color: $subMenuActiveText !important;
@@ -221,7 +223,7 @@
   .el-menu-item {
     &:hover {
       // you can use $subMenuHover
-      background-color: $menuHover !important;
+      // background-color: $menuHover !important;
     }
   }
 

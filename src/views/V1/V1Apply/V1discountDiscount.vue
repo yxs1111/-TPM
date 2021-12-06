@@ -350,7 +350,9 @@ export default {
     },
     // 导入文件检索后保存
     saveImportInfo() {
-      API.saveImportInfo().then(res => {
+      API.saveImportInfo({
+        mainId: this.mainIdLocal
+      }).then(res => {
         console.log('111', res)
       }).catch()
     },

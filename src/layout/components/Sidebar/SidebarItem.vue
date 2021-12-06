@@ -49,9 +49,7 @@
         :item="child"
         :base-path="resolvePath(child.path)"
         class="nest-menu"
-      ><div style="background:red;width:10px;height:10px;"></div>
-      </sidebar-item>
-      
+      />
     </el-submenu>
   </div>
 </template>
@@ -149,15 +147,16 @@ export default {
 @import "@/styles/variables.scss";
 .el-menu-item.is-active {
   color: #4192d3 !important;
-  font-weight: bold;
   background: #EBF0FF !important;
+  border-right: 2px solid #4192d3;
 }
 .dashboardBar {
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
   padding-right: 20px;
   justify-content: space-between;
+  margin-bottom: 10px;
   .toggleIcon {
     width: 16px;
     height: 18px;
