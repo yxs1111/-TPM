@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-06 16:46:36
+ * @LastEditTime: 2021-12-06 19:15:35
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -76,7 +76,7 @@
     </div>
     <!--  流程图  -->
     <div v-if="flowDiagram.visible">
-      <flow-diagram svg-type="instance" :business-id="flowDiagram.businessId" :process-id="flowDiagram.processId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
+      <flow-diagram svg-type="instance"  :business-id="flowDiagram.businessId" :process-id="flowDiagram.processId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
     </div>
   </div>
 </template>
@@ -138,7 +138,7 @@ export default {
     },
     //查看流程
     openFlowDiagram(row) {
-      this.flowDiagram.businessId = row.id
+      this.flowDiagram.businessId = row.businessKey
       this.flowDiagram.processId = row.processId
       this.flowDiagram.visible = true
     },

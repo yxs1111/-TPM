@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-12-06 14:45:50
+ * @LastEditTime: 2021-12-06 18:26:24
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -55,6 +55,17 @@ export default {
   },
   deleteMdPriceGear(params) {
     return requestApi.request_delete('/mdm/mdPriceGear/delete', params)
+  },
+  importPriceGear(params) {
+    return requestApi.request_post('/mdm/mdPriceGear/importPriceGear', params)
+  },
+  exportPriceGear(params) {
+    return request({
+      url: 'mdm/mdPriceGear/exportPriceGear',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
   },
   // 渠道列表
   /**
@@ -308,5 +319,6 @@ export default {
       responseType: 'blob'
     })
   },
+  //
 
 }

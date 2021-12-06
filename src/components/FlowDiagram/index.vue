@@ -1,25 +1,9 @@
 <template>
-  <el-dialog
-    v-loading="dialogLoading"
-    v-el-drag-dialog
-    v-bind="$attrs"
-    @open="getFlowSVG"
-    v-on="$listeners"
-  >
+  <el-dialog v-el-drag-dialog v-bind="$attrs" @open="getFlowSVG" v-on="$listeners">
     <div v-if="svgType === 'instance'" @click="event => showTaskHistory(event)" v-html="svg" />
     <div v-else v-html="svg" />
     <!--  活动历史  -->
-    <el-table
-      v-show="svgType === 'instance'"
-      ref="activityHistoryTable"
-      v-loading="activityHistory.loading"
-      :data="activityHistory.data"
-      element-loading-text="正在查询"
-      border
-      fit
-      stripe
-      highlight-current-row
-    >
+    <el-table v-show="svgType === 'instance'" ref="activityHistoryTable" :data="activityHistory.data" border fit stripe highlight-current-row>
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
         {{ scopeProps.$index + 1 }}
@@ -54,31 +38,29 @@ export default {
     processDefinitionId: {
       type: String,
       default: '',
-      required: false
+      required: false,
     },
     // 业务ID
     businessId: {
       type: String,
       default: '',
-      required: false
+      required: false,
     },
     // 查看SVG的类型
     svgType: {
       required: true,
       type: String,
-      validator: function(value) {
+      validator: function (value) {
         return ['definition', 'instance'].includes(value)
-      }
-    }
+      },
+    },
   },
   data() {
     return {
       svg: null,
-      dialogLoading: false,
       activityHistory: {
-        loading: false,
-        data: []
-      }
+        data: [],
+      },
     }
   },
   mounted() {
@@ -92,19 +74,20 @@ export default {
     showTaskHistory(event) {
       const activityId = event.path[1].getAttribute('id')
       if (activityId) {
-        console.log('当前选中activity', activityId)
-        this.activityHistory.loading = true
         if (this.businessId && this.svgType === 'instance') {
-          historyApi.getHisOfActInsByBusinessIdAndActId(activityId, this.businessId).then(res => {
-            this.activityHistory.loading = false
-            if (res && res.code === 1000) {
-              this.handleActivityHistory(res.data.records)
-            } else {
-              if (res) {
-                this.$message.error(`获取活动历史出错，错误信息:${res.message}`)
+          historyApi
+            .getHisOfActInsByBusinessIdAndActId(activityId, this.businessId)
+            .then((res) => {
+              if (res && res.code === 1000) {
+                this.handleActivityHistory(res.data.records)
+              } else {
+                if (res) {
+                  this.$message.error(
+                    `获取活动历史出错，错误信息:${res.message}`
+                  )
+                }
               }
-            }
-          })
+            })
         }
       }
     },
@@ -113,12 +96,14 @@ export default {
      */
     handleActivityHistory(activityHisArr) {
       this.activityHistory.data = []
-      activityHisArr.forEach(his => {
+      activityHisArr.forEach((his) => {
         const record = {}
         Object.assign(record, his)
-        if (!record.endTime) { return true }
+        if (!record.endTime) {
+          return true
+        }
         if (Array.isArray(his.restVariables) && his.restVariables.length > 0) {
-          his.restVariables.forEach(variable => {
+          his.restVariables.forEach((variable) => {
             if (variable.name === 'result') {
               Object.assign(record, { result: variable.value })
             } else if (variable.name === 'idea') {
@@ -135,28 +120,32 @@ export default {
      * 获取流程图
      **/
     getFlowSVG() {
-      this.dialogLoading = true
       if (this.processDefinitionId && this.processDefinitionId !== '') {
         // 通过"流程实例"或者"流程定义"获取流程图
         this.svg = null
         if (this.svgType === 'definition') {
-          processApi.getProcessDefinitionDiagram(this.processDefinitionId).then(res => {
-            this.setSVG(res)
-          })
+          processApi
+            .getProcessDefinitionDiagram(this.processDefinitionId)
+            .then((res) => {
+              this.setSVG(res)
+            })
         } else if (this.svgType === 'instance') {
-          processApi.getProcessInstanceDiagram(this.processDefinitionId).then(res => {
-            this.setSVG(res)
-          })
+          processApi
+            .getProcessInstanceDiagram(this.processDefinitionId)
+            .then((res) => {
+              this.setSVG(res)
+            })
         } else {
           throw new Error('请配置正确的SVG类型')
         }
       } else if (this.businessId && this.businessId !== '') {
         // 通过业务ID获取流程图
-        processApi.getProcessInstanceDiagramByBusinessId(this.businessId).then(res => {
-          this.setSVG(res)
-        })
+        processApi
+          .getProcessInstanceDiagramByBusinessId(this.businessId)
+          .then((res) => {
+            this.setSVG(res)
+          })
       }
-      this.dialogLoading = false
     },
     /**
      * 从接口返回中获取SVG
@@ -174,7 +163,7 @@ export default {
         return ''
       }
       return parseTime(time, cFormat)
-    }
-  }
+    },
+  },
 }
 </script>

@@ -2,34 +2,39 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="模型名称" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+      <el-form-item label="产品英文名称" prop="name">
+        <el-input v-model="filterObj.brandEName" placeholder="请输入" />
       </el-form-item>
-      <el-form-item label="模型关键词" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
+      <el-form-item label="品牌" prop="name">
+        <el-input v-model="filterObj.brand" placeholder="请输入" />
       </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+      <el-form-item label="阶段" prop="name">
+        <el-input v-model="filterObj.step" placeholder="请输入" />
+      </el-form-item>
+      <el-form-item label="状态" prop="name">
+        <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+          <el-option v-for="item,index in ['正常','无效']" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="TpmButtonBG">重置</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="tableData" v-loading="tableLoading" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
-      style="width: 100%">
-      <el-table-column type="selection" align="center" />
+    <el-table :data="tableData" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" fixed type="index" label="序号" width="80">
+        <template slot-scope="scope">
+          <div>
+            {{ (pageNum - 1) * pageSize + 1 + scope.$index }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="150" fixed align="center" prop="productCode" label="产品编号">
       </el-table-column>
       <el-table-column width="360" align="center" prop="productCsName" label="产品中文名称">
       </el-table-column>
       <el-table-column width="220" align="center" prop="productEsName" label="产品英文名称">
       </el-table-column>
-      <el-table-column width="180" align="center" prop="productAbbreviation" label="产品简称">
+      <el-table-column width="340" align="center" prop="productAbbreviation" label="产品简称">
       </el-table-column>
       <el-table-column width="150" align="center" prop="category" label="品类">
       </el-table-column>
@@ -86,67 +91,13 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: '',
+        brandEName: '',
+        brand: '',
+        step: '',
+        state:'',
       },
-      tableLoading: '',
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      ruleForm: {
-        productCode: '',
-        productStandardName: '',
-        productCsName: '',
-        productEsName: '',
-        productAbbreviation: '',
-        category: '',
-        brand: '',
-        series: '',
-        stage: '',
-        pack: '',
-        content: '',
-        conversionRatio: '',
-        largeUnit: '',
-        largeUnitPrice: '',
-        smallUnit: '',
-        smallUnitPrice: '',
-        remark: '',
-      },
-      rules: {
-        productCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        productStandardName: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        configtype: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        configvalue: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-      },
-      dialogVisible: false,
-      isEditor: '',
-      editorId: '',
-      checkArr: [], //批量删除,存放选中
     }
   },
   directives: { elDragDialog, permission },
@@ -157,13 +108,11 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageMdProduct({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize

@@ -1,64 +1,50 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-11-29 09:47:06
+ * @LastEditTime: 2021-12-06 17:23:07
 -->
 <template>
-  <div class="app-container" style="border-radius:0px;">
+  <div class="MainContent" @keyup.enter="pageList">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">年月:</span>
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+          </el-date-picker>
+        </div>
+        <div class="Selectli" @keyup.enter="search">
+          <span class="SelectliTitle">版本名称:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Mine Package</span>
+          <span class="SelectliTitle">类型:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
+            <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">流程状态:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
-          </el-select>
-        </div>
-      </div>
-      <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
-    <!-- <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-      <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
-    </div> -->
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column type="selection" align="center" />
-      <el-table-column fixed align="center" label="操作" width="100">
-        <template slot-scope="{ row }">
-          <div class="table_operation">
-            <div class="table_operation_detail" @click="editor(row)">
-              <i class="el-icon-edit-outline"></i>
-            </div>
-          </div>
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" type="selection" />
+      <el-table-column align="center" label="序号" width="55">
+        <template slot-scope="scope">
+          {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="brandCode" label="品牌编码"> </el-table-column>
-      <el-table-column align="center" prop="brandName" label="品牌名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="state" label="状态">
-        <template slot-scope="{ row }">
-          <div>
-            {{ row.state ? '正常' : '无效' }}
+      <el-table-column align="center" prop="version" label="年月"> </el-table-column>
+      <el-table-column align="center" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" prop="name" label="渠道"> </el-table-column>
+      <el-table-column align="center" prop="activityName" label="流程状态"> </el-table-column>
+      <el-table-column align="center" prop="channelEsName" label="发起人"> </el-table-column>
+      <el-table-column align="center" prop="createTime" label="发起时间"> </el-table-column>
+      <el-table-column width="150" align="center" prop="createDate" label="查看">
+        <template slot-scope="{row}">
+          <div class="seeActivity" @click="openFlowDiagram(row)">
+            查看流程
           </div>
         </template>
       </el-table-column>
@@ -68,94 +54,58 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '品牌信息'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
-      <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="品牌编号" v-show="!isEditor">
-            <el-input v-model="ruleForm.brandCode" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="品牌编号"  v-show="isEditor">
-            <el-input v-model="ruleForm.brandCode" disabled class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="品牌名称">
-            <el-input v-model="ruleForm.brandName" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
-      </span>
-    </el-dialog>
+    <!--  流程图  -->
+    <div v-if="flowDiagram.visible">
+      <flow-diagram svg-type="instance" :business-id="flowDiagram.businessId" :process-id="flowDiagram.processId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
+    </div>
   </div>
 </template>
 
 <script>
-import permission from '@/directive/permission'
+import API from '@/api/taskManage/MyTodo.js'
+import { getDefaultPermissions, getTextMap, parseTime } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
-import API from '@/api/masterData/masterData.js'
-
+import permission from '@/directive/permission'
+import ApproveFlow from '@/components/ApproveFlow'
+import FlowDiagram from '@/components/FlowDiagram'
 export default {
-  name: 'TrackingFlow',
-
   data() {
     return {
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
+        channelCode: '',
+        state: '',
         category: '',
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      ruleForm: {
-        brandCode: '',
-        brandName: '',
-        remark: '',
+      versionList: ['Final'],
+      flowDiagram: {
+        visible: false,
+        activate: false,
+        businessId: null,
+        processId: null,
       },
-      rules: {
-        brandCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-      },
-      dialogVisible: false,
-      isEditor: '',
-      editorId: '',
-      checkArr: [], //批量删除,存放选中
     }
   },
-  directives: { elDragDialog, permission },
   mounted() {
-    //this.getTableData()
+    this.getTableData()
   },
-  computed: {},
+  components: {
+    FlowDiagram,
+  },
+  directives: { elDragDialog, permission },
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
-      this.tableData=[]
-      API.getPageMdBrand({
+      API.getList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
@@ -163,93 +113,17 @@ export default {
         })
         .catch((error) => {})
     },
-    add() {
-      this.dialogVisible = true
-    },
     search() {
       this.getTableData()
     },
-    closeDialog() {
-      this.dialogVisible = false
-      this.isEditor = false
-      this.editorId = ''
-      this.ruleForm = {
-        brandCode: '',
-        brandName: '',
-        remark: '',
-      }
+    //查看流程
+    openFlowDiagram(row) {
+      this.flowDiagram.businessId = row.id
+      this.flowDiagram.processId = row.processId
+      this.flowDiagram.visible = true
     },
-    editor(obj) {
-      this.isEditor = true
-      this.dialogVisible = true
-      this.ruleForm = {
-        brandCode: obj.brandCode,
-        brandName: obj.brandName,
-        remark: obj.remark,
-      }
-      this.editorId = obj.id
-    },
-    //提交form
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          let url = this.isEditor ? API.updateMdBrand : API.insertMdBrand
-          url({
-            id: this.editorId,
-            brandCode: this.ruleForm.brandCode,
-            brandName: this.ruleForm.brandName,
-            remark: this.ruleForm.remark,
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
-              this.resetForm(formName)
-              this.getTableData()
-            }
-          })
-        } else {
-          this.$message.error('提交失败')
-          return false
-        }
-      })
-    },
-    //多个删除
-    mutidel() {
-      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
-      else {
-        const IdList = []
-        this.checkArr.forEach((item) => {
-          IdList.push(item.id)
-        })
-        this.$confirm('确定要删除数据吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            API.deleteMdBrand(IdList).then((response) => {
-              if (response.code === 1000) {
-                this.getTableData()
-                this.$message.success('删除成功!')
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消',
-            })
-          })
-      }
-    },
-    //取消
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-      this.closeDialog()
-    },
-    handleSelectionChange(val) {
-      this.checkArr = val
-      console.log(val)
-    },
+    // 导出数据
+    exportExcel() {},
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size
@@ -275,4 +149,24 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.seeActivity {
+  height: 32px;
+  background: #dcefe7;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #59be87;
+  line-height: 32px;
+  cursor: pointer;
+}
+.operation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4192d3;
+  cursor: pointer;
+  .submit_icon {
+    font-size: 20px;
+  }
+}
+</style>

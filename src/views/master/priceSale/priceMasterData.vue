@@ -6,17 +6,22 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
-          <el-input v-model="filterObj.yearAndMonth" placeholder="请输入" />
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+          </el-date-picker>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
-          <el-input></el-input>
+          <el-select v-model="filterObj.channelCode" placeholder="请选择">
+            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-input></el-input>
+          <el-select v-model="filterObj.productCode" placeholder="请选择">
+            <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -29,10 +34,8 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%"
-      @selection-change="handleSelectionChange">
-      <el-table-column type="selection" align="center" />
-      <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%">
+      <el-table-column width="150" align="center" prop="customerCode" label="客户" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column width="150" align="center" prop="ptc" label="零售价(PTC)" />
       <el-table-column width="320" align="center" prop="ptr" label="平台进货含税价(PTR)" />
@@ -70,12 +73,11 @@
 </template>
 
 <script>
-import axios from 'axios'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/mdprice.js'
-import auth from '@/utils/auth'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'PriceMasterData',
   directives: { elDragDialog, permission },
@@ -90,11 +92,10 @@ export default {
         yearAndMonth: '',
         SKU: '',
       },
-      tableLoading: '',
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      checkArr: [], // 批量删除,存放选中
+      skuOptons: [],
+      channelOptons: [],
       //导入
       importVisible: false, //导入弹窗
       uploadFileName: '',
@@ -104,11 +105,12 @@ export default {
   computed: {},
   mounted() {
     this.getTableData()
+    this.getQuerySkuSelect()
+    this.getQueryChannelSelect()
   },
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageMdprice({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
@@ -116,13 +118,23 @@ export default {
         yearAndMonth: this.filterObj.yearAndMonth,
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
         .catch(() => {})
+    },
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptons = res.data
+      })
+    },
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        this.channelOptons = res.data
+      })
     },
     search() {
       this.getTableData()
@@ -142,21 +154,21 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('excelFile', this.uploadFile)
-      var that=this;
+      var that = this
       $.ajax({
-        url : 'mdprice/import',
-        type : 'GET',
-        async : false,
-        data : formData,
+        url: 'mdprice/import',
+        type: 'GET',
+        async: false,
+        data: formData,
         // 告诉jQuery不要去处理发送的数据
-        processData : false,
+        processData: false,
         // 告诉jQuery不要去设置Content-Type请求头
-        contentType : false,
-        success : function(data) {
-         that.importVisible = false
-         that.getTableData()
-        }
-    });
+        contentType: false,
+        success: function (data) {
+          that.importVisible = false
+          that.getTableData()
+        },
+      })
       // API.importMdprice(formData)
       //   .then((response) => {
       //     this.importVisible = false
@@ -169,7 +181,6 @@ export default {
     //导入
     parsingExcel(event) {
       this.uploadFile = event.target.files[0]
-      
     },
     //关闭导入
     closeImport() {

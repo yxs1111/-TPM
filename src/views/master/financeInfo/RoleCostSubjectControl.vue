@@ -14,17 +14,14 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
-      </el-form-item>
-      <el-form-item>
-        <el-button v-permission="permissions['get']" class="TpmButtonBG">重置</el-button>
+        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary"  class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  @selection-change="handleSelectionChange" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">
         <template slot-scope="{ row }">
@@ -110,7 +107,6 @@ export default {
         key: '',
         category: '',
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -145,13 +141,11 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageMdCostType({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize

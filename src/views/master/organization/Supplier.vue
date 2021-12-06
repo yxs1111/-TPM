@@ -46,8 +46,14 @@
       <el-table-column width="150" align="center" prop="country" label="country" />
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间" />
-      <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
-      <el-table-column width="180" align="center" prop="updateDate" label="修改时间" />
+      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间" >
+        <template slot-scope="{row}">
+          <div>
+              {{row.createDate.replace("T"," ")}}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
