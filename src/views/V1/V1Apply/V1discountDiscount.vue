@@ -50,11 +50,11 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :disabled="submitBtn==1" @click="importData">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" :disabled="submitBtn==1" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :disabled="submitBtn==0" @click="submitInfo">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" :disabled="submitBtn==0" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
