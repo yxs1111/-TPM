@@ -8,18 +8,14 @@
       </div>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="channelCode" label="渠道编码" />
-      <el-table-column align="center" prop="channelEsName" label="中文名称" />
-      <el-table-column align="center" prop="channelEsName" label="英文名称" />
-      <el-table-column width="150" align="center" prop="state" label="状态">
-        <template slot-scope="{ row }">
-          <div>
-            {{ row.state ? '正常' : '无效' }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间" />
+      <el-table-column align="center" prop="item" label="名称" />
+      <el-table-column align="center" prop="dimProduct" label="SKU" />
+      <el-table-column width="150" align="center" prop="dimShopperType" label="销售商类型" />
+      <el-table-column width="150" align="center" prop="dimUvType" label="UV类型" />
+      <el-table-column align="center" prop="dimBudgetOwner" label="渠道" />
+      <el-table-column align="center" prop="dimScenario" label="周期" />
+      <el-table-column align="center" prop="dimVersion" label="版本" />
+      <el-table-column width="150" align="center" prop="dimCustomer" label="经销商" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -92,6 +88,11 @@ export default {
       formData.append('type', 'NKA')
       API.importNkaRawData(formData)
         .then((response) => {
+          if (response === 1000) {
+            this.$message.success(response.data)
+          } else {
+            this.$message.error(response.data)
+          }
           this.closeImport()
         })
         .catch(() => {})

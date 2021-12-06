@@ -3,15 +3,8 @@
   <div class="app-container">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="Mine Package：">
-        <el-select v-model="filterObj.minePackage" placeholder="请选择" clearable>
-          <el-option v-for="item in minePackage" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
-        </el-select>
-      </el-form-item>
       <el-form-item label="渠道：">
-        <el-select v-model="filterObj.channel" placeholder="请选择" clearable>
-          <el-option v-for="item in channelArr" :key="item.channelCode" :label="item.channelCode" :value="item.channelCode" />
-        </el-select>
+        <el-input v-model="filterObj.channel" placeholder="请输入渠道" />
       </el-form-item>
       <el-form-item label="年月：">
         <el-date-picker
@@ -25,21 +18,29 @@
       <el-form-item>
         <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
       </el-form-item>
+      <el-form-item>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button>
-      <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
+      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="objectSpanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column width="" align="center" prop="version" label="版本" />
+      <el-table-column width="220" align="center" prop="version" label="版本" />
       <el-table-column width="350" align="left" prop="ruleContentFront" label="验证规则" />
-      <el-table-column width="100" align="left" prop="ruleUnit" label="" />
-      <el-table-column width="260" align="left" prop="ruleContentAfter" label="">
-        <!-- <template slot-scope="{row}">
-          <el-select v-model="row.ruleContentAfter" placeholder="请选择" size="small">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.label" :value="item.value" />
-          </el-select>
-        </template> -->
+      <el-table-column width="250" align="left" prop="ruleUnit" label="" />
+      <el-table-column width="370" align="left" prop="ruleContentAfter" label="">
+        <template slot-scope="{row}">
+          <div v-if="row.ruleUnit === '∈'">
+            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" />%&nbsp;]
+          </div>
+          <div v-else>
+            {{ row.ruleContentAfter }}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column width="" align="left" prop="checkType" label="验证类型">
         <!-- <template>
@@ -48,8 +49,8 @@
           </el-select>
         </template> -->
       </el-table-column>
-      <el-table-column width="" align="left" prop="exceptionType" label="异常类型">
-        <!-- <template slot-scope="{row}">
+      <!-- <el-table-column width="" align="left" prop="exceptionType" label="异常类型">
+        <template slot-scope="{row}">
           <el-select ref="refSelect" v-model="row.ErrorType" style="width: 100%" placeholder="请选择图标" @change="changeSelection">
             <el-option v-for="item in optionsImg" :key="item.id" :value="item.label" :label="item.label">
               <div class="option_box">
@@ -58,8 +59,8 @@
               </div>
             </el-option>
           </el-select>
-        </template> -->
-      </el-table-column>
+        </template>
+      </el-table-column> -->
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -118,6 +119,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import type from '@/views/meta/dict/type'
 export default {
   name: 'SaleComputeKeep',
   directives: { elDragDialog, permission },
@@ -191,6 +193,49 @@ export default {
     // 获取下拉框
   },
   methods: {
+    // 导出excel
+    exportExcelInfo() {
+      API.excportRuleSave().then(
+        response => {
+          const fileName = '检验数据Excel' + new Date().getTime() + '.xls'
+          //   res.data:请求到的二进制数据
+          const blob = new Blob([response], {
+            type: 'application/vnd.ms-excel'
+          }) // 1.创建一个blob
+          const link = document.createElement('a') // 2.创建一个a链接
+          link.download = fileName // 3.设置名称
+          link.style.display = 'none' // 4.默认不显示
+          link.href = URL.createObjectURL(blob) // 5.设置a链接href
+          document.body.appendChild(link) // 6.将a链接dom插入当前html中
+          link.click() // 7.点击事件
+          URL.revokeObjectURL(link.href) // 8.释放url对象
+          document.body.removeChild(link) // 9.移除a链接dom
+        })
+    },
+    // 保存
+    updateSave() {
+      const params = []
+      for (const item of this.tableData) {
+        if (item.ruleUnit === '∈') {
+          const tempItem = {
+            ruleUnit: item.ruleUnit.trim(),
+            startRule: item.startRule + '%',
+            endRule: item.endRule.trim() + '%',
+            id: item.id
+          }
+          params.push(tempItem)
+        }
+      }
+      API.updateRuleSave(params).then(res => {
+        if (res.code === 1000) {
+          this.getTableData()
+          this.$message.success('保存成功')
+        } else {
+          this.$message.error('保存失败')
+        }
+      }).catch()
+    },
+    // 合并第一行操作
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (row.version === 'V0') {
         if (columnIndex === 0) {
@@ -282,7 +327,6 @@ export default {
           `
       )
       this.$forceUpdate()
-      console.log(this.ErrorType)
     },
     // 获取表格数据
     getTableData() {
@@ -298,6 +342,15 @@ export default {
           this.tableLoading = false
           this.tableData = response.data.records
           this.total = response.data.total
+          // 验证内容字段修改
+          for (let i = 0; i < this.tableData.length; i++) {
+            if (this.tableData[i].ruleUnit === '∈') {
+              const temp = this.tableData[i].ruleContentAfter.split('%,')
+              this.tableData[i].startRule = temp[0].replace('[', '')
+              this.tableData[i].endRule = temp[1].replace(']', '').replace('%', '')
+            }
+          }
+          this.$forceUpdate()
           this.computerColspan(this.tableData)
         })
         .catch(() => {})
@@ -389,35 +442,6 @@ export default {
         }
       })
     },
-    // 多个删除
-    mutidel() {
-      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
-      else {
-        const IdList = []
-        this.checkArr.forEach((item) => {
-          IdList.push(item.id)
-        })
-        this.$confirm('确定要删除数据吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-          .then(() => {
-            API.deleteMdPriceGear(IdList).then((response) => {
-              if (response.code === 1000) {
-                this.getTableData()
-                this.$message.success('删除成功!')
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
-      }
-    },
     // 取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -447,7 +471,6 @@ export default {
       }
     },
     HeadTable(valHead) {
-      console.log('******head****', valHead)
       if (valHead.columnIndex === 0) {
         return 'background: #fff;color: #333;font-size: 16px;font-weight: 400;font-family: Source Han Sans CN;'
       } else {
@@ -470,6 +493,18 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-icon-my-saveBtn{
+  background: url('~@/assets/images/saveBtn.png') no-repeat;
+  font-size: 16px;
+  background-size: cover;
+}
+.el-icon-my-saveBtn:before{
+    content: "\e611";
+    font-size: 16px;
+}
+</style>
 
 <style lang="scss" scoped>
 // ::v-deep .el-table__body tr:hover > td{

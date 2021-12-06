@@ -160,7 +160,7 @@ export default function() {
                 ),
               meta: {
                 title: '价格主数据',
-                icon: 'form'
+                icon: 'apply'
               }
             },
             { // 价格档位维护
@@ -172,7 +172,7 @@ export default function() {
                 ),
               meta: {
                 title: '价格档位维护',
-                icon: 'form'
+                icon: 'apply'
               }
             },
             // 促销计算维护
@@ -185,7 +185,7 @@ export default function() {
                 ),
               meta: {
                 title: '价促计算维护',
-                icon: 'form'
+                icon: 'apply'
               }
             },
             // {
@@ -200,7 +200,7 @@ export default function() {
               code: 'SystemPool',
               name: 'SystemPool',
               component: () => import('@/views/master/priceSale/systemPool.vue'),
-              meta: { title: '机制池', icon: 'form' }
+              meta: { title: '机制池', icon: 'apply' }
             }
           ]
         },
@@ -253,7 +253,7 @@ export default function() {
                 ),
               meta: {
                 title: '拆分规则',
-                icon: 'form'
+                icon: 'approve'
               },
               redirect: '/master/ruleCtrl/model/splitRules',
               children: [
@@ -285,7 +285,7 @@ export default function() {
                 ),
               meta: {
                 title: '检验规则',
-                icon: 'form'
+                icon: 'approve'
               }
             },
             {
