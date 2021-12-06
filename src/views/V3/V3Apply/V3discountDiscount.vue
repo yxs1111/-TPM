@@ -6,8 +6,8 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -31,7 +31,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
 
@@ -46,15 +46,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="supplement">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="supplement">
         <svg-icon icon-class="nextSave" style="font-size: 20px;" />
         <span class="text">补录</span>
       </div>
-      <div class="TpmButtonBG" @click="submitApply">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="submitApply">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -64,7 +64,7 @@
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="180" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="160" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelName" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
@@ -106,17 +106,14 @@
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar" style="display:flex;">
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">
-            <a href="/investCpVThreeDetail/exportTemplate" download="exportTemplate.xlsx">下载模板</a>
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">
+            下载模板
           </el-button>
-          <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
-          <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
-        </el-button> -->
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" class="my-export" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -124,7 +121,7 @@
       <div class="fileInfo" style="justify-content: space-between;">
         <div style="display: flex;">
           <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
-          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
           <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
@@ -202,44 +199,37 @@
 
     <!-- 补录对话框 -->
     <el-dialog width="66%" class="my-el-dialog" title="补录" :visible="supplementVisible" @close="closeimportDialog">
-      <div class="el-downloadFileBar" style="display:flex;justify-content: flex-start;">
-        <el-button type="primary" plain class="my-export" icon="el-icon-download">
-          <a href="" download="exportTemplate.xlsx">下载模板</a>
+      <div class="el-downloadFileBar" style="display:flex;">
+        <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">
+          下载模板
         </el-button>
         <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
           <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
         </el-button> -->
-        <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer">检测数据
+        <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData">检测数据
         </el-button>
-        <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="">保存
+        <el-button v-if="saveBtn" type="primary" plain class="my-export" @click="saveImportInfo">保存
         </el-button>
       </div>
 
-      <div class="fileInfo">
-        <div class="fileTitle">文件</div>
-        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input id="fileElem" ref="filElem" type="file" style="display: none">
-        <div v-if="uploadFileName!=''" class="fileName">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
-          <span>{{ uploadFileName }}</span>
-        </div>
-        <!-- <el-button v-if="uploadFileName!=''" style="line-height: 27px;color: #4192d3;border: 1px solid #4192d3;font-size:12px;padding:0 3px;margin-left:3px;" @click="confirmImport()">确定上传</el-button> -->
-      </div>
-      <div class="seeData">
-        <!-- <div class="LeftBar">
-          <div class="seeDataTitle">浏览数据</div>
-          <div class="SelectLi">
-            <el-select v-model="filterImportData.sku" class="my-el-viewData-select" clearable placeholder="请选择">
-              <el-option v-for="item in ['SKU']" :key="item" :label="item" :value="item" />
-            </el-select>
+      <div class="fileInfo" style="justify-content: space-between;">
+        <div style="display: flex;">
+          <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
+          <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
+          <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <div v-if="uploadFileName!=''" class="fileName">
+            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
+            <span>{{ uploadFileName }}</span>
           </div>
-        </div> -->
-
-        <div class="exportError">
-          <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-          <span>导出错误信息</span>
+        </div>
+        <div class="seeData" style="width: auto;">
+          <div class="exportError" @click="downLoadException">
+            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+            <span>导出错误信息</span>
+          </div>
         </div>
       </div>
+
       <div class="tableWrap">
         <el-table
           v-loading="dialogTableLoading"
@@ -307,6 +297,7 @@ export default {
 
   data() {
     return {
+      submitBtn: 0,
       saveBtn: false,
       // 下拉框
       channelArr: [],
@@ -321,7 +312,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        distributorCodechannelCode: '',
+        channelCode: '',
         customerCode: '',
         distributorCode: '',
         productCode: ''
@@ -344,7 +335,7 @@ export default {
     this.getChannel()
     this.getSKU()
     this.getMP()
-    this.getCustomerList()
+    // this.getCustomerList()
     this.getDistributorList()
   },
   methods: {
@@ -372,7 +363,10 @@ export default {
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList().then(res => {
+      this.filterObj.customerCode = ''
+      selectAPI.queryCustomerList({
+        channelCode: this.filterObj.channelCode
+      }).then(res => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
@@ -564,6 +558,7 @@ export default {
           this.tableLoading = false
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
+          this.submitBtn = response.data.records[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -599,6 +594,17 @@ export default {
 }
 </script>
 
+<style>
+.el-icon-my-file{
+  background: url('~@/assets/images/selFile.png') no-repeat;
+  font-size: 16px;
+  background-size: cover;
+}
+.el-icon-my-file:before{
+    content: "\e611";
+    font-size: 16px;
+}
+</style>
 <style lang="scss" scoped>
 .MainContent {
   .priceLevelWrap {

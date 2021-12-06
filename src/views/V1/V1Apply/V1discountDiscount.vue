@@ -50,11 +50,11 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :disabled="submitBtn==1" @click="importData">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" :disabled="submitBtn==1" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :disabled="submitBtn==0" @click="submitInfo">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" :disabled="submitBtn==0" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -117,11 +117,11 @@
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" plain class="my-export" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -129,7 +129,7 @@
       <div class="fileInfo" style="justify-content: space-between;">
         <div style="display: flex;">
           <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
-          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
           <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
@@ -303,7 +303,7 @@ export default {
     this.getChannel()
     this.getSKU()
     // this.getMP()
-    this.getCustomerList()
+    // this.getCustomerList()
     this.getDistributorList()
   },
   methods: {
@@ -596,6 +596,18 @@ export default {
 </script>
 
 <style>
+.el-icon-my-file{
+  background: url('~@/assets/images/selFile.png') no-repeat;
+  font-size: 16px;
+  background-size: cover;
+}
+.el-icon-my-file:before{
+    content: "\e611";
+    font-size: 16px;
+}
+</style>
+
+<style>
 .el-icon-my-down{
   background: url('~@/assets/images/downModel.png') no-repeat;
   font-size: 16px;
@@ -625,8 +637,8 @@ export default {
     align-items: center;
     .priceLevel {
       width: 60px;
-      // height: 34px;
-      // line-height: 34px;
+      height: 34px;
+      line-height: 34px;
       border-radius: 17px;
       background: #f2e9ea;
       color: #e87071 !important;

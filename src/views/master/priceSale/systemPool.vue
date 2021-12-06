@@ -8,11 +8,11 @@
           <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
         </el-select>
       </el-form-item>
-      <el-form-item label="Mine Package：">
+      <!-- <el-form-item label="Mine Package：">
         <el-select v-model="filterObj.minePackageCode" placeholder="请选择" clearable>
           <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costType" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="SKU：">
         <el-select v-model="filterObj.sku" placeholder="请选择" clearable>
           <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCsName" />
@@ -27,11 +27,14 @@
         <el-input v-model="filterObj.cdmName" placeholder="请输入模型名称" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </el-form-item>
-      <!-- <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">导出</el-button>
-      </el-form-item> -->
+      <el-form-item>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="importData">
@@ -42,10 +45,6 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div> -->
-      <div class="TpmButtonBG" @click="exportExcelInfo">
-        <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
       <!-- <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">新增</el-button> -->
       <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
