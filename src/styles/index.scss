@@ -856,3 +856,12 @@ div:focus {
 .el-icon-odometer:before{
     font-size: 16px;
 }
+.el-icon-my-checkData{
+  background: url('~@/assets/images/checkData.png') no-repeat;
+  font-size: 16px;
+  background-size: cover;
+}
+.el-icon-my-checkData:before{
+    content: "\e611";
+    font-size: 16px;
+}

@@ -5,14 +5,14 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -30,7 +30,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productEsName" :value="item.productCode" />
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
 
@@ -58,11 +58,11 @@
       </div>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column width="400" align="center" prop="cpId" label="CPID" fixed />
+      <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="120" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="240" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelName" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
@@ -114,13 +114,13 @@
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar" style="display:flex;">
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">下载模板
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
           </el-button>
         </div>
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button type="primary" plain class="my-export" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -128,7 +128,7 @@
       <div class="fileInfo" style="justify-content: space-between;">
         <div style="display: flex;">
           <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
-          <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
+          <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
           <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
@@ -217,8 +217,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        sku: '',
-        month: ''
+        customerCode: '',
+        channelCode: '',
+        distributorCode: '',
+        productCode: ''
       },
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
@@ -241,7 +243,7 @@ export default {
     this.getChannel()
     this.getSKU()
     // this.getMP()
-    this.getCustomerList()
+    // this.getCustomerList()
     this.getDistributorList()
   },
   methods: {
@@ -269,6 +271,7 @@ export default {
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode = ''
       selectAPI.queryCustomerList({
         channelCode: this.filterObj.channelCode
       }).then(res => {
@@ -508,7 +511,22 @@ export default {
 }
 </script>
 
+<style>
+.el-icon-my-file{
+  background: url('~@/assets/images/selFile.png') no-repeat;
+  font-size: 16px;
+  background-size: cover;
+}
+.el-icon-my-file:before{
+    content: "\e611";
+    font-size: 16px;
+}
+</style>
+
 <style lang="scss" scoped>
+::v-deep.el-table td{
+  padding: 6px 0;
+}
 .MainContent {
   .priceLevelWrap {
     width: 100%;
