@@ -11,8 +11,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" type="month" placeholder="选择月">
-          </el-date-picker>
+          <el-date-picker v-model="filterObj.month" type="month" placeholder="选择月" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
@@ -51,13 +50,13 @@
       </div>
 
       <el-button type="primary" class="TpmButtonBG my-search">查询</el-button>
+      <div class="TpmButtonBG">
+        <img src="../../../assets/images/export.png" alt="">
+        <span class="text">导出Raw Date</span>
+      </div>
     </div>
     <div class="colorWrap">
       <div class="TpmButtonBGWrap">
-        <div class="TpmButtonBG">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出Raw Date</span>
-        </div>
         <div class="TpmButtonBG">
           <img src="../../../assets/images/downloadIcon.png" alt="">
           <span class="text">下载报表</span>
@@ -65,49 +64,56 @@
       </div>
       <div class="colorBar">
         <div class="colorli">
-          <div class="color"></div>
+          <div class="color" />
           <span>V1</span>
         </div>
         <div class="colorli">
-          <div class="color v2color"></div>
+          <div class="color v2color" />
           <span>V2</span>
         </div>
         <div class="colorli">
-          <div class="color v3color"></div>
+          <div class="color v3color" />
           <span>V3</span>
         </div>
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="550" :row-class-name="tableRowClassName" style="width: 100%">
-        <el-table-column align="center" width="150" fixed prop="channel" label="数据维度"> </el-table-column>
+      <el-table v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" height="550" :row-class-name="tableRowClassName" style="width: 100%">
+        <el-table-column align="center" width="150" fixed prop="channel" label="数据维度" />
         <el-table-column align="center" prop="name" label="202010">
-          <el-table-column align="center" width="150" prop="name" label="Pass数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Pass占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3占比"></el-table-column>
+          <el-table-column align="center" width="150" prop="name" label="Pass数量" />
+          <el-table-column align="center" width="150" prop="name" label="Exception1数量" />
+          <el-table-column align="center" width="150" prop="name" label="Exception2数量" />
+          <el-table-column align="center" width="150" prop="name" label="Exception3数量" />
+          <el-table-column align="center" width="150" prop="name" label="Pass占比" />
+          <el-table-column align="center" width="150" prop="name" label="Exception1占比" />
+          <el-table-column align="center" width="150" prop="name" label="Exception2占比" />
+          <el-table-column align="center" width="150" prop="name" label="Exception3占比" />
         </el-table-column>
         <el-table-column align="center" prop="name" label="202011">
-          <el-table-column align="center" width="150" prop="name" label="Pass数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Pass占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3占比"></el-table-column>
+          <el-table-column align="center" width="150" prop="name" label="Pass数量" />
+          <el-table-column align="center" width="150" prop="name" label="Exception1数量" />
+          <el-table-column align="center" width="150" prop="name" label="Exception2数量" />
+          <el-table-column align="center" width="150" prop="name" label="Exception3数量" />
+          <el-table-column align="center" width="150" prop="name" label="Pass占比" />
+          <el-table-column align="center" width="150" prop="name" label="Exception1占比" />
+          <el-table-column align="center" width="150" prop="name" label="Exception2占比" />
+          <el-table-column align="center" width="150" prop="name" label="Exception3占比" />
         </el-table-column>
       </el-table>
     </div>
 
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -120,6 +126,7 @@ import API from '@/api/masterData/masterData.js'
 
 export default {
   name: 'AbnormalAnalysisMonthByChannel',
+  directives: { elDragDialog, permission },
 
   data() {
     return {
@@ -129,7 +136,7 @@ export default {
       filterObj: {
         type: '',
         month: '',
-        category: '',
+        category: ''
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
@@ -140,88 +147,87 @@ export default {
           name: '王小虎',
           number: '234',
           channel: 'NKA',
-          amount3: 10,
+          amount3: 10
         },
         {
           id: '12987123',
           name: '王小虎',
           number: '165',
           channel: 'NKA',
-          amount3: 12,
+          amount3: 12
         },
         {
           id: '12987124',
           name: '王小虎',
           number: '324',
           channel: 'NKA',
-          amount3: 9,
+          amount3: 9
         },
         {
           id: '12987125',
           name: '王小虎',
           number: '621',
           channel: 'NKA',
-          amount3: 17,
+          amount3: 17
         },
         {
           id: '12987126',
           name: '王小虎',
           number: '539',
           channel: 'NKA',
-          amount3: 15,
+          amount3: 15
         },
         {
           id: '12987126',
           name: '王小虎',
           number: '539',
           channel: 'NKA',
-          amount3: 15,
+          amount3: 15
         },
         {
           id: '12987126',
           name: '王小虎',
           number: '539',
           channel: 'NKA',
-          amount3: 15,
+          amount3: 15
         },
         {
           id: '12987126',
           name: '王小虎',
           number: '539',
           channel: 'NKA',
-          amount3: 15,
+          amount3: 15
         },
         {
           id: '12987126',
           name: '王小虎',
           number: '539',
           channel: 'NKA',
-          amount3: 15,
+          amount3: 15
         },
         {
           id: '12987126',
           name: '王小虎',
           number: '539',
           channel: 'NKA',
-          amount3: 15,
-        },
+          amount3: 15
+        }
       ],
-      checkList: ['0', '1'],
+      checkList: ['0', '1']
     }
   },
-  directives: { elDragDialog, permission },
+  computed: {},
   mounted() {
     // this.getTableData()
   },
-  computed: {},
   methods: {
-    //获取表格数据
+    // 获取表格数据
     getTableData() {
       this.tableLoading = true
       this.tableData = []
       API.getPageMdBrand({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -264,8 +270,8 @@ export default {
       if (rowIndex === 0 || rowIndex === 1) {
         return 'headerStyle'
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

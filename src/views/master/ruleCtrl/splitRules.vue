@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="getTableData">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
@@ -465,7 +465,7 @@ export default {
           splitWeightThis += item.splitWeight + ','
         }
       }
-      let params = {
+      const params = {
         'channelCode': this.dialogAdd.channelCode,
         'minePackageCode': this.dialogAdd.minePackageCode,
         'yeardate': this.dialogAdd.yeardate,
@@ -475,7 +475,11 @@ export default {
         'splitWeight': splitWeightThis.slice(0, -1),
         'remark': this.dialogAdd.remark
       }
-      API.insertSplitRule(params).then().catch()
+      API.insertSplitRule(params).then(res => {
+        if (res.code === 1000) {
+          this.closeDialog()
+        }
+      }).catch()
     },
     // 多个删除
     mutidel() {

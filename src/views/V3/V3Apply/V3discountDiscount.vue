@@ -38,24 +38,24 @@
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="exportData">
-        <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出</span>
-        <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
-      </div>
       <div class="TpmButtonBG" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG" @click="supplement">
-        <i class="el-icon-download" />
+        <svg-icon icon-class="nextSave" style="font-size: 20px;" />
         <span class="text">补录</span>
       </div>
       <div class="TpmButtonBG" @click="submitApply">
-        <svg-icon icon-class="submit" />
+        <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
     </div>

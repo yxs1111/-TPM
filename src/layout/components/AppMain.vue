@@ -35,7 +35,7 @@ export default {
     height: 100vh;
     position: relative;
     overflow: auto;
-    padding: 28px 20px;
+    padding: 21px 20px;
     box-sizing: border-box;
     padding-bottom: 150px;
     background-color: #EFF3FA;

@@ -99,7 +99,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
-  name: 'RoleCostType',
+  name: 'MinePackage',
   directives: { elDragDialog, permission },
 
   data() {

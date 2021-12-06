@@ -27,7 +27,7 @@
         <el-input v-model="filterObj.cdmName" placeholder="请输入模型名称" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
       </el-form-item>
       <!-- <el-form-item>
         <el-button type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">导出</el-button>

@@ -36,7 +36,7 @@
           </div>
 
           <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve">
-            <svg-icon icon-class="submit" />
+            <svg-icon icon-class="passLocal" style="font-size: 22px;" />
             <span class="text">提交</span>
           </div>
         </div>

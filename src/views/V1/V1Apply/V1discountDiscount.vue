@@ -31,26 +31,31 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in skuArr" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
         </div>
 
       </div>
-      <div class="OpertionBar">
-        <el-button type="primary"  class="TpmButtonBG" @click="getTableData">查询</el-button>
-      </div>
+      <!-- <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </div> -->
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="exportExcelInfo">
-        <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
       <div class="TpmButtonBG" @click="submitInfo">
-        <svg-icon icon-class="submit" />
+        <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
     </div>
@@ -58,7 +63,7 @@
       <el-table-column width="400" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="150" align="center" prop="minePackageCode" label="Mine Package" />
+      <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
       <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelName" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
@@ -107,10 +112,10 @@
       />
     </div>
     <!-- 导入 -->
-    <el-dialog width="66%"  class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
+    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar" style="display:flex;">
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-download" @click="downLoadElxModel">下载模板
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
           <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-odometer" @click="confirmImport()">检测数据
           </el-button>
@@ -294,7 +299,7 @@ export default {
     this.getTableData()
     this.getChannel()
     this.getSKU()
-    this.getMP()
+    // this.getMP()
     this.getCustomerList()
     this.getDistributorList()
   },
@@ -323,7 +328,9 @@ export default {
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList().then(res => {
+      selectAPI.queryCustomerList({
+        channelCode: this.filterObj.channelCode
+      }).then(res => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
@@ -404,7 +411,7 @@ export default {
             })
             if (response.data != null) {
               this.checkedData = response.data
-              this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
+              this.saveBtn = response.data[0].judgmentType !== 'Error'
             } else {
               this.checkedData = []
             }
@@ -583,6 +590,17 @@ export default {
 }
 </script>
 
+<style>
+.el-icon-my-down{
+  background: url('~@/assets/images/downModel.png') no-repeat;
+  font-size: 16px;
+  background-size: cover;
+}
+.el-icon-my-down:before{
+    content: "\e611";
+    font-size: 16px;
+}
+</style>
 <style lang="scss" scoped>
 ::v-deep.my-el-dialog .upload-demo {
     display: flex;

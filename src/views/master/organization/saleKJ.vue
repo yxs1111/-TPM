@@ -49,7 +49,7 @@ import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
-  name: 'Channel',
+  name: 'SaleKJ',
 
   data() {
     return {

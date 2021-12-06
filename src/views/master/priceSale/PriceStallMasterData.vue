@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" icon="el-icon-search" :loading="tableLoading">查询</el-button>
+        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" :loading="tableLoading">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button v-permission="permissions['get']" class="TpmButtonBG">重置</el-button>
