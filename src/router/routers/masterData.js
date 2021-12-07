@@ -275,18 +275,18 @@ export default function() {
                 icon: 'approve'
               }
             },
-            {
-              path: '/ruleCtrl/newUserC',
-              name: 'NewUserC',
-              component: () =>
-                import(
-                  '@/views/master/ruleCtrl/newUserC.vue'
-                ),
-              meta: {
-                title: '新客达成率',
-                icon: 'form'
-              }
-            }
+            // {
+            //   path: '/ruleCtrl/newUserC',
+            //   name: 'NewUserC',
+            //   component: () =>
+            //     import(
+            //       '@/views/master/ruleCtrl/newUserC.vue'
+            //     ),
+            //   meta: {
+            //     title: '新客达成率',
+            //     icon: 'form'
+            //   }
+            // }
           ]
         }
 
