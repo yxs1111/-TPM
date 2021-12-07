@@ -274,8 +274,8 @@ export default {
   exportExcelSyspool(data) {
     return request({
       url: '/mdm/mdCdmConfig/exportExcel',
-      method: 'post',
-      data: data,
+      method: 'get',
+      params: data,
       responseType: 'blob'
     })
   },
@@ -291,6 +291,14 @@ export default {
   },
   deleteSplitRule(params) {
     return requestApi.request_delete('/mdm/mdSplitRuleConfig/delete', params)
+  },
+  exportExcelSplitRule(params) {
+    return request({
+      url: '/mdm/mdSplitRuleConfig/exportExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
   // NKAEC
   getPageByDtoNKA(params) {

@@ -60,7 +60,7 @@
     >
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="320" align="center" prop="minePackageCode" label="Mine Package" />
-      <el-table-column width="150" align="center" prop="productCode" label="SKU" />
+      <el-table-column width="150" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="cdmType" label="机制类型">
         <template slot-scope="scope">
           {{ typeVSinfo(scope.row.cdmType) }}
@@ -349,7 +349,7 @@ export default {
       }
       API.exportExcelSyspool(data).then(
         response => {
-          const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
+          const fileName = '机制池导出Excel' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
           const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'
