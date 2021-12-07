@@ -14,8 +14,17 @@
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="请输入密码" name="password" tabindex="2" autocomplete="on"
-          @keyup.enter.native="handleLogin" />
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="loginForm.password"
+          :type="passwordType"
+          placeholder="请输入密码"
+          name="password"
+          tabindex="2"
+          autocomplete="on"
+          @keyup.enter.native="handleLogin"
+        />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
@@ -40,18 +49,19 @@
         <img src="@/assets/images/login/wechatIcon.png" alt="" class="wechatImg" @click="loginByWechat">
       </div>
     </el-form>
-    <div class="niu"></div>
-    <div class="WechatLogin" v-show="isLoginByWechat">
+    <div class="niu" />
+    <div v-show="isLoginByWechat" class="WechatLogin">
       <div class="WechatBar">
         <!-- <iframe class="wechat" name="wechat"
           src="https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx" frameborder="0"></iframe> -->
-        <div class="loginByWechatText">企业微信登录</div>
-        <div class="Ercode"></div>
-        <div class="loginByWechat">请使用企业微信扫码登录</div>
+        <!-- <div class="loginByWechatText">企业微信登录</div> -->
+        <iframe id="content" sandbox="allow-presentation allow-popups-to-escape-sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-top-navigation" referrerpolicy="unsafe-url" :src="srcUrl" frameborder="0" />
+        <!-- <div class="Ercode"></div> -->
+        <!-- <div class="loginByWechat">请使用企业微信扫码登录</div> -->
         <div class="closeIcon" @click="closeWechat">
-          <i class="el-icon-close" ></i>
+          <i class="el-icon-close" />
         </div>
-        
+
       </div>
     </div>
 
@@ -81,36 +91,37 @@ export default {
       }
     }
     return {
+      srcUrl: 'https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https%3a%2f%2fwww.baidu.com%2f',
       loginForm: {
         username: 'admin',
         password: '',
-        code: '',
+        code: ''
       },
       loginRules: {
         username: [
-          { required: true, trigger: 'blur', validator: validateUsername },
+          { required: true, trigger: 'blur', validator: validateUsername }
         ],
         password: [
-          { required: true, trigger: 'blur', validator: validatePassword },
+          { required: true, trigger: 'blur', validator: validatePassword }
         ],
-        code: [{ required: true, message: '验证码不能为空', trigger: 'blur' }],
+        code: [{ required: true, message: '验证码不能为空', trigger: 'blur' }]
       },
       loading: false,
       passwordType: 'password',
       redirect: undefined,
       randomId: randomNum(24, 16),
       imageCode: '',
-      checked: false, //记住密码
-      isLoginByWechat: false,
+      checked: false, // 记住密码
+      isLoginByWechat: false
     }
   },
   watch: {
     $route: {
-      handler: function (route) {
+      handler: function(route) {
         this.redirect = route.query && route.query.redirect
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   mounted() {
     this.getCodeImage()
@@ -160,7 +171,7 @@ export default {
           if (res.byteLength <= 100) {
             this.$message({
               message: '系统维护中，请稍微再试',
-              type: 'error',
+              type: 'error'
             })
           }
           return (
@@ -183,22 +194,22 @@ export default {
     redirectToRegister() {
       this.$router.push('/register')
     },
-    //记住密码功能
-    //设置cookie
+    // 记住密码功能
+    // 设置cookie
     setCookie(c_name, c_pwd, exdays) {
-      var exdate = new Date() //获取时间
-      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays) //保存的天数
-      //字符串拼接cookie
+      var exdate = new Date() // 获取时间
+      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays) // 保存的天数
+      // 字符串拼接cookie
       window.document.cookie = 'userName' + '=' + c_name + ';path=/;expires='
       window.document.cookie = 'userPassword' + '=' + c_pwd + ';path=/;expires='
     },
-    //读取cookie
-    getCookie: function () {
+    // 读取cookie
+    getCookie: function() {
       if (document.cookie.length > 0) {
-        var arr = document.cookie.split('; ') //这里显示的格式需要切割一下自己可输出看下
+        var arr = document.cookie.split('; ') // 这里显示的格式需要切割一下自己可输出看下
         for (var i = 0; i < arr.length; i++) {
-          var arr2 = arr[i].split('=') //再次切割
-          //判断查找相对应的值
+          var arr2 = arr[i].split('=') // 再次切割
+          // 判断查找相对应的值
           if (arr2[0] == 'userName') {
             this.loginForm.username = arr2[1]
           } else if (arr2[0] == 'userPassword') {
@@ -210,13 +221,14 @@ export default {
         }
       }
     },
-    //清除cookie
-    clearCookie: function () {
-      this.setCookie('', '', -1) //修改2值都为空，天数为负1天就好了
+    // 清除cookie
+    clearCookie: function() {
+      this.setCookie('', '', -1) // 修改2值都为空，天数为负1天就好了
     },
-    //企业微信登录
+    // 企业微信登录
     loginByWechat() {
       this.isLoginByWechat = true
+      // window.open('https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx')
       // // 1. 先选择iframe
       // var iframe = document.querySelector('.wechat').contentWindow
       // // 2. 选择iframe内的元素
@@ -224,9 +236,9 @@ export default {
       // console.log(qrcode);
     },
     closeWechat() {
-      this.isLoginByWechat=false
-    },
-  },
+      this.isLoginByWechat = false
+    }
+  }
 }
 </script>
 
@@ -414,7 +426,7 @@ $light_gray: #eee;
     z-index: 6;
     .WechatBar {
       width: 500px;
-      height: 474px;
+      height: 560px;
       position: relative;
       z-index: 7;
       top: 50%;
@@ -455,5 +467,9 @@ $light_gray: #eee;
       }
     }
   }
+}
+#content {
+    height: 100%;
+    width: 100%;
 }
 </style>

@@ -22,24 +22,17 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="add">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">新增</span>
-      </div>
-      <!-- <div class="TpmButtonBG" @click="add">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div> -->
-      <div class="TpmButtonBG" @click="mutidel">
-        <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
-      <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">导出</el-button>
-      <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">导入</el-button> -->
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="add">新增</el-button>
     </div>
     <el-table
       v-loading="tableLoading"
@@ -165,8 +158,8 @@
             <el-col :span="12">
               <div class="grid-content bg-purple" style="padding-left: 60px;">
                 <span style="color:red;">*</span>版本：
-                <el-select v-model="dialogAdd.versions" placeholder="请选择" size="small">
-                  <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
+                <el-select v-model="dialogAdd.versions" placeholder="请选择" clearable>
+                  <el-option v-for="item in versionsArr" :key="item.code" :label="item.name" :value="item.code" />
                 </el-select>
               </div>
             </el-col>
@@ -208,9 +201,9 @@
         <div v-if="dialogAdd.splitType===1" style="text-align:center;">
           拆分规则：
           P&nbsp;
-          <el-input v-model="dialogAdd.splitRuleF" style="width:60px;" size="small" />
+          <el-input v-model="dialogAdd.splitRuleF" style="width:60px;" size="small" @blur="number($event)" />
           &nbsp;M —— P&nbsp;
-          <el-input v-model="dialogAdd.splitRuleS" style="width:60px;" size="small" />
+          <el-input v-model="dialogAdd.splitRuleS" style="width:60px;" size="small" @blur="number($event)" />
           &nbsp;M
         </div>
         <div v-if="dialogAdd.splitType===2" style="border: 1px solid #dcdfe6;">
@@ -220,15 +213,15 @@
             <el-table-column label="拆分规则" align="center" prop="fs">
               <template slot-scope="scope">
                 P&nbsp;
-                <el-input v-model="systemList[scope.row.xh-1].splitRuleF" style="width:60px;" size="small" placeholder="请输入" />
+                <el-input v-model="systemList[scope.row.xh-1].splitRuleF" style="width:60px;" size="small" placeholder="请输入" @blur="numberNo($event, scope.row.xh-1)" />
                 &nbsp;M —— P&nbsp;
-                <el-input v-model="systemList[scope.row.xh-1].splitRuleS" style="width:60px;" size="small" placeholder="请输入" />
+                <el-input v-model="systemList[scope.row.xh-1].splitRuleS" style="width:60px;" size="small" placeholder="请输入" @blur="numberNo($event, scope.row.xh-1)" />
                 &nbsp;M
               </template>
             </el-table-column>
             <el-table-column label="权重（%）" align="center" prop="cdmName">
               <template slot-scope="scope">
-                <el-input v-model="systemList[scope.row.xh-1].splitWeight" type="Number" style="width:130px;" size="small" placeholder="请输入数字" />
+                <el-input v-model="systemList[scope.row.xh-1].splitWeight" style="width:130px;" size="small" placeholder="请输入数字" @blur="numberNo($event, scope.row.xh-1)" />
               </template>
             </el-table-column>
           </el-table>
@@ -332,6 +325,57 @@ export default {
     this.getDictInfoByType()
   },
   methods: {
+    number(e) {
+      const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
+      if (!flag) {
+        this.dialogAdd.splitRuleF = ''
+        this.dialogAdd.splitRuleS = ''
+        this.$message({
+          showClose: true,
+          message: '拆分规则需要输入正整数！',
+          type: 'warning'
+        })
+      }
+    },
+    numberNo(e, i) {
+      const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
+      if (!flag) {
+        debugger
+        this.systemList[i].splitRuleF = ''
+        this.systemList[i].splitRuleS = ''
+        this.systemList[i].splitWeight = ''
+        this.$message({
+          showClose: true,
+          message: '拆分规则、权重需要输入正整数！',
+          type: 'warning'
+        })
+      }
+    },
+    // 导出excel
+    exportExcelInfo() {
+      var data = {
+        channelCode: this.filterObj.channelCode,
+        yeardate: this.filterObj.yeardate,
+        versions: this.filterObj.versions,
+        splitType: this.filterObj.splitType
+      }
+      API.exportExcelSplitRule(data).then(
+        response => {
+          const fileName = '拆分规则导出Excel' + new Date().getTime() + '.xlsx'
+          //   res.data:请求到的二进制数据
+          const blob = new Blob([response], {
+            type: 'application/vnd.ms-excel'
+          }) // 1.创建一个blob
+          const link = document.createElement('a') // 2.创建一个a链接
+          link.download = fileName // 3.设置名称
+          link.style.display = 'none' // 4.默认不显示
+          link.href = URL.createObjectURL(blob) // 5.设置a链接href
+          document.body.appendChild(link) // 6.将a链接dom插入当前html中
+          link.click() // 7.点击事件
+          URL.revokeObjectURL(link.href) // 8.释放url对象
+          document.body.removeChild(link) // 9.移除a链接dom
+        })
+    },
     // 获取下拉框 渠道
     getQueryChannelSelect() {
       selectAPI.queryChannelSelect().then(res => {
@@ -396,6 +440,19 @@ export default {
     },
     closeDialog() {
       this.dialogVisible = false
+      this.dialogAdd = {
+        channelCode: '',
+        costTypeNumber: '',
+        remark: '',
+        yeardate: '',
+        versions: '',
+        splitType: '',
+        minePackageCode: '',
+        splitWeight: '',
+        splitRuleF: '',
+        splitRuleS: ''
+      }
+      this.systemList = []
     },
     // select标签的change事件
     changeSelection(val) {
@@ -453,33 +510,41 @@ export default {
     },
     // 提交form
     submitForm() {
-      // 新增接口
-      let splitRuleThis = ''
-      let splitWeightThis = ''
-      if (this.dialogAdd.splitType === 1) {
-        splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M-P' + this.dialogAdd.splitRuleS + 'M,'
-        splitWeightThis = this.dialogAdd.splitWeight
-      } else if (this.dialogAdd.splitType === 2) {
-        for (const item of this.systemList) {
-          splitRuleThis += 'P' + item.splitRuleF + 'M-P' + item.splitRuleS + 'M,'
-          splitWeightThis += item.splitWeight + ','
+      if (this.dialogAdd.channelCode == '' || this.dialogAdd.minePackageCode == '' || this.dialogAdd.yeardate == '' || this.dialogAdd.versions == '' || this.dialogAdd.splitType == '') {
+        this.$alert('带*号为必选项', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {}
+        })
+      } else {
+        // 新增接口
+        let splitRuleThis = ''
+        let splitWeightThis = ''
+        if (this.dialogAdd.splitType === 1) {
+          splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M-P' + this.dialogAdd.splitRuleS + 'M,'
+          splitWeightThis = this.dialogAdd.splitWeight
+        } else if (this.dialogAdd.splitType === 2) {
+          for (const item of this.systemList) {
+            splitRuleThis += 'P' + item.splitRuleF + 'M-P' + item.splitRuleS + 'M,'
+            splitWeightThis += item.splitWeight + ','
+          }
         }
-      }
-      const params = {
-        'channelCode': this.dialogAdd.channelCode,
-        'minePackageCode': this.dialogAdd.minePackageCode,
-        'yeardate': this.dialogAdd.yeardate,
-        'versions': this.dialogAdd.versions,
-        'splitType': this.dialogAdd.splitType,
-        'splitRule': splitRuleThis.slice(0, -1),
-        'splitWeight': splitWeightThis.slice(0, -1),
-        'remark': this.dialogAdd.remark
-      }
-      API.insertSplitRule(params).then(res => {
-        if (res.code === 1000) {
-          this.closeDialog()
+        const params = {
+          'channelCode': this.dialogAdd.channelCode,
+          'minePackageCode': this.dialogAdd.minePackageCode,
+          'yeardate': this.dialogAdd.yeardate,
+          'versions': this.dialogAdd.versions,
+          'splitType': this.dialogAdd.splitType,
+          'splitRule': splitRuleThis.slice(0, -1),
+          'splitWeight': splitWeightThis.slice(0, -1),
+          'remark': this.dialogAdd.remark
         }
-      }).catch()
+        API.insertSplitRule(params).then(res => {
+          if (res.code === 1000) {
+            this.closeDialog()
+            this.getTableData()
+          }
+        }).catch()
+      }
     },
     // 多个删除
     mutidel() {

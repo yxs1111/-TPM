@@ -48,7 +48,7 @@
       @selection-change="handleSelectionChange">
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="320" align="center" prop="minePackageCode" label="Mine Package" />
-      <el-table-column width="150" align="center" prop="productCode" label="SKU" />
+      <el-table-column width="150" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="cdmType" label="机制类型">
         <template slot-scope="scope">
           {{ typeVSinfo(scope.row.cdmType) }}
@@ -295,21 +295,22 @@ export default {
         cdmType: this.filterObj.cdmType,
         cdmName: this.filterObj.cdmName,
       }
-      API.exportExcelSyspool(data).then((response) => {
-        const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
-        //   res.data:请求到的二进制数据
-        const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel',
-        }) // 1.创建一个blob
-        const link = document.createElement('a') // 2.创建一个a链接
-        link.download = fileName // 3.设置名称
-        link.style.display = 'none' // 4.默认不显示
-        link.href = URL.createObjectURL(blob) // 5.设置a链接href
-        document.body.appendChild(link) // 6.将a链接dom插入当前html中
-        link.click() // 7.点击事件
-        URL.revokeObjectURL(link.href) // 8.释放url对象
-        document.body.removeChild(link) // 9.移除a链接dom
-      })
+      API.exportExcelSyspool(data).then(
+        response => {
+          const fileName = '机制池导出Excel' + new Date().getTime() + '.xlsx'
+          //   res.data:请求到的二进制数据
+          const blob = new Blob([response], {
+            type: 'application/vnd.ms-excel'
+          }) // 1.创建一个blob
+          const link = document.createElement('a') // 2.创建一个a链接
+          link.download = fileName // 3.设置名称
+          link.style.display = 'none' // 4.默认不显示
+          link.href = URL.createObjectURL(blob) // 5.设置a链接href
+          document.body.appendChild(link) // 6.将a链接dom插入当前html中
+          link.click() // 7.点击事件
+          URL.revokeObjectURL(link.href) // 8.释放url对象
+          document.body.removeChild(link) // 9.移除a链接dom
+        })
     },
     // 下载excel模板
     downLoadElxModel() {

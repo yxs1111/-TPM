@@ -44,7 +44,7 @@
       />
     </div>
     <!-- NKA导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="NKA导入" :visible="importVisibleNKA" @close="closeImport">
+    <el-dialog width="30%" class="my-el-dialog" title="NKA导入" :visible="importVisibleNKA" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
@@ -55,9 +55,19 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmImport">确 定</el-button>
+        <el-button type="primary" :disabled="warningShow" @click="confirmImport">确 定</el-button>
         <el-button @click="closeImport">取 消</el-button>
       </span>
+      <div v-if="warningShow">
+        <el-alert
+          v-for="(item, index) in warningList"
+          :key="index"
+          :title="item"
+          style="margin-bottom:5px;"
+          type="warning"
+          effect="dark"
+        />
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -74,6 +84,7 @@ export default {
 
   data() {
     return {
+      warningShow: false,
       importVisibleNKA: false,
       total: 1,
       pageSize: 10,
@@ -87,7 +98,8 @@ export default {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      uploadFileName: ''
+      uploadFileName: '',
+      warningList: []
     }
   },
   computed: {},
@@ -104,10 +116,15 @@ export default {
         .then((response) => {
           if (response === 1000) {
             this.$message.success(response.data)
+            this.closeImport()
           } else {
-            this.$message.error(response.data)
+            if (response.data === null) {
+              this.$message.error(response.data)
+            } else if (response.data.length > 0) {
+              this.warningShow = true
+              this.warningList = response.data
+            }
           }
-          this.closeImport()
         })
         .catch(() => {})
     },
@@ -120,6 +137,8 @@ export default {
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
+      this.warningList = []
+      this.warningShow = false
     },
     // 关闭导入
     closeImport() {
@@ -127,6 +146,7 @@ export default {
       this.event.srcElement.value = '' // 置空
       this.uploadFileName = ''
       this.uploadFile = ''
+      this.warningList = []
     },
     // 导入数据
     importDataNKA() {
