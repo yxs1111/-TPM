@@ -1,20 +1,21 @@
 <template>
   <div class="app-container">
-    <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="经销商" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="状态" prop="name">
-        <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
-          <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button  type="primary" class="TpmButtonBG"  :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-    </el-form>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商</span>
+          <el-input v-model="filterObj.Distributor" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
+      </div>
+    </div>
+    <el-table :data="tableData"  border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="distributorCode" label="经销商编号"> </el-table-column>
       <el-table-column width="320" align="center" prop="distributorName" label="经销商中文名称"> </el-table-column>
       <el-table-column align="center" prop="zoneCode" label="大区"> </el-table-column>
@@ -51,12 +52,9 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: '',
+        Distributor: '',
+        state: '',
       },
-      tableLoading: '',
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
     }
@@ -69,13 +67,11 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageMdDistributor({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize

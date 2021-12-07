@@ -14,7 +14,6 @@
           <el-input v-model="filterObj.customerCsName" placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -27,7 +26,7 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%"
+    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  style="width: 100%"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />

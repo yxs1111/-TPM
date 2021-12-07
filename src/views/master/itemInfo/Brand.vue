@@ -1,27 +1,24 @@
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="品牌编码" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="品牌名称" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button  type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli">
+          <span class="SelectliTitle">品牌编码</span>
+          <el-input v-model="filterObj.brandCode" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">品牌名称</span>
+          <el-input v-model="filterObj.brandName" placeholder="请输入" />
+        </div>
+        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">
         <template slot-scope="{ row }">
@@ -91,12 +88,9 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: '',
+        brandCode: '',
+        brandName: '',
       },
-      tableLoading: '',
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       ruleForm: {
@@ -127,14 +121,12 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
       this.tableData=[]
       API.getPageMdBrand({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize

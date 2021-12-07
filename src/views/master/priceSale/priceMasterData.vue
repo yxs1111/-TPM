@@ -10,15 +10,9 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" placeholder="请选择">
-            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" placeholder="请选择">
-            <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          <span class="SelectliTitle">客户:</span>
+          <el-select v-model="filterObj.customerCode" filterable clearable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -34,7 +28,7 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="150" align="center" prop="customerCode" label="客户" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column width="150" align="center" prop="ptc" label="零售价(PTC)" />
@@ -90,12 +84,10 @@ export default {
       filterObj: {
         customerCode: '',
         yearAndMonth: '',
-        SKU: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
-      skuOptons: [],
-      channelOptons: [],
+      customerArr: [],
       //导入
       importVisible: false, //导入弹窗
       uploadFileName: '',
@@ -105,8 +97,7 @@ export default {
   computed: {},
   mounted() {
     this.getTableData()
-    this.getQuerySkuSelect()
-    this.getQueryChannelSelect()
+    this.getCustomerList()
   },
   methods: {
     // 获取表格数据
@@ -125,15 +116,12 @@ export default {
         })
         .catch(() => {})
     },
-    getQuerySkuSelect() {
-      selectAPI.querySkuSelect().then((res) => {
-        this.skuOptons = res.data
-      })
-    },
-    // 获取下拉框 渠道
-    getQueryChannelSelect() {
-      selectAPI.queryChannelSelect().then((res) => {
-        this.channelOptons = res.data
+    // 客户
+    getCustomerList() {
+      selectAPI.queryCustomerList({}).then((res) => {
+        if (res.code === 1000) {
+          this.customerArr = res.data
+        }
       })
     },
     search() {

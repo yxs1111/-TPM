@@ -1,22 +1,23 @@
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="模型名称" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
-      </el-form-item>
-      <el-form-item label="模型关键词" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
-      </el-form-item>
-      <el-form-item label="分类" prop="name">
-        <el-select v-model="filterObj.category" placeholder="请选择">
-          <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" icon="el-icon-search">查询</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli">
+          <span class="SelectliTitle">费用类型名称</span>
+          <el-input v-model="filterObj.costTypeName" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">MinePackage</span>
+          <el-input v-model="filterObj.MinePackage" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">费用科目</span>
+          <el-input v-model="filterObj.costItem" placeholder="请输入" />
+        </div>
+        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
@@ -32,12 +33,14 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="costItemTypeNumber" label="费用类型编码"> </el-table-column>
-      <el-table-column align="center" prop="costItem" label="费用类型名称"> </el-table-column>
+      <el-table-column align="center" prop="costTypeNumber" label="费用类型编码"> </el-table-column>
+      <el-table-column align="center" prop="costType" label="费用类型"> </el-table-column>
       <el-table-column align="center" prop="minePackageNumber" label="minePackageNumber"> </el-table-column>
       <el-table-column align="center" prop="minePackage" label="minePackage"> </el-table-column>
-      <el-table-column align="center" prop="costTypeNumber" label="费用科目编码"> </el-table-column>
-      <el-table-column align="center" prop="costType" label="费用科目"> </el-table-column>
+      <el-table-column align="center" prop="costItemTypeNumber" label="费用科目编码"> </el-table-column>
+      <el-table-column align="center" prop="costItem" label="费用科目名称"> </el-table-column>
+      
+ 
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -117,7 +120,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+        <el-button  type="primary" @click="resetForm('ruleForm')">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -137,9 +140,9 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: '',
+        costTypeName: '',
+        MinePackage: '',
+        costItem: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
