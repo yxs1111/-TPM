@@ -353,7 +353,10 @@ export default {
       API.saveImportInfo({
         mainId: this.mainIdLocal
       }).then(res => {
-        console.log('111', res)
+        if (res.code === 1000) {
+          this.closeimportDialog()
+          this.$message.success('保存成功！')
+        }
       }).catch()
     },
     // 导出错误信息

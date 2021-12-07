@@ -314,6 +314,7 @@ export default {
       API.saveImportInfo().then(res => {
         if (res.code === 1000) {
           this.closeimportDialog()
+          this.$message.success('保存成功！')
         }
       }).catch()
     },
