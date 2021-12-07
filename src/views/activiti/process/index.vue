@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-06 20:26:36
+ * @LastEditTime: 2021-12-07 09:19:47
 -->
 <template>
   <div class="app-container" @keyup.enter="search">
@@ -15,13 +15,11 @@
           <span class="SelectliTitle">流程关键词：</span>
           <el-input v-model="filterObj.keyName" placeholder="请输入" />
         </div>
-      </div>
-      <div class="OpertionBar">
-        <el-button type="primary" autofocusclass="TpmButtonBG">查询</el-button>
+         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
     <!--  流程列表  -->
-    <el-table ref="processTable" v-loading="loading" :data="tableData" element-loading-text="正在查询" border fit stripe height="600" highlight-current-row
+    <el-table ref="processTable"  :data="tableData"  border fit :header-cell-style="HeadTable" :row-class-name="tableRowClassName" height="600" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">

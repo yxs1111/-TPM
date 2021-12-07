@@ -11,7 +11,7 @@ priceLevelKeep<!--
           <div class="Selectli">
             <span class="SelectliTitle">SKU</span>
             <el-select v-model="filterObj.SKU" filterable clearable placeholder="请选择">
-              <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+              <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
             </el-select>
           </div>
           <div class="Selectli">
@@ -175,7 +175,6 @@ export default {
   name: 'V0Approval',
   data() {
     return {
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       filterObj: {
         month: '202101',
@@ -183,6 +182,7 @@ export default {
       },
       permissions: getDefaultPermissions(),
       ContentData: [],
+      skuOptons: [],
       //导入
       importVisible: false, //导入弹窗
       ImportData: [],
@@ -204,6 +204,7 @@ export default {
   directives: { elDragDialog, permission },
   mounted() {
     this.getList()
+    this.getQuerySkuSelect()
     // this.getMonth()
   },
   computed: {},
@@ -211,7 +212,7 @@ export default {
     getList() {
       API.getList({
         yearAndMonth: this.filterObj.month,
-        productCode: this.filterObj.SKU,
+        dim_product: this.filterObj.SKU,
       })
         .then((response) => {
           this.ContentData = response.data
@@ -229,6 +230,11 @@ export default {
           }
         })
         .catch(() => {})
+    },
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptons = res.data
+      })
     },
     getMonth() {
       API.getMonth({ version: 'V0' }).then((res) => {

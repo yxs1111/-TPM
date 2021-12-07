@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2021-12-06 10:35:11
+ * @LastEditTime: 2021-12-07 09:16:46
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -29,7 +29,7 @@ export default {
   },
   // 版本
   getDictInfoByType(params) {
-    return requestApi.request_get('/dict/info/getDictInfoByType', params)
+    return requestApi.request_get('/auth/dict/info/getDictInfoByType', params)
   },
   getMonth(params) {
     return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)

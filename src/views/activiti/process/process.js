@@ -104,7 +104,18 @@ export default {
         this.flowDiagram.processDefinitionId = row.id
         this.flowDiagram.visible = true
       }
-    }
+    },
+    // 行样式
+    tableRowClassName({ row, rowIndex }) {
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
+    },
+    HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
   },
   computed: {
     ...mapState('process', ['queryParams', 'loading', 'tableData', 'processSelected'])

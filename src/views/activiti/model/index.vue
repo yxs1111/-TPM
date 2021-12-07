@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-12-06 08:33:29
- * @LastEditTime: 2021-12-07 08:39:32
+ * @LastEditTime: 2021-12-07 09:17:30
 -->
 <template>
   <div class="app-container" @keyup.enter="search">
@@ -21,9 +21,12 @@
     </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="openModelDialog">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="publishModel">发布</el-button>
+      <div class="TpmButtonBG" @click="publishModel">
+        <svg-icon icon-class="publish" style="font-size: 16px;" />
+        <span class="text">发布</span>
+      </div>
     </div>
-    <el-table ref="modelInfoTable" :data="tableData" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" border fit  height="600" highlight-current-row
+    <el-table ref="modelInfoTable" :data="tableData" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" border fit height="600" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
@@ -121,7 +124,7 @@
     }
   }
   .deleteOperation {
-    color: #EB4F48 !important;
+    color: #eb4f48 !important;
   }
 }
 </style>
