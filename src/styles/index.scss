@@ -123,7 +123,14 @@ div:focus {
   box-sizing: border-box;
   overflow-x: hidden !important;
   margin-bottom: 0 !important;
+  overflow-y: hidden !important;
 }
+// ::-webkit-scrollbar {
+  //   width: 0 !important;
+  // }
+// ::-webkit-scrollbar {
+//   width: 0 !important;height: 0;
+// }
 .center-tabs {
   .el-tabs__header {
     margin-bottom: 0 !important;
