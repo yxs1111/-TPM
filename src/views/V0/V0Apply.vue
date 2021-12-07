@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-06 11:31:49
+ * @LastEditTime: 2021-12-07 08:48:49
 -->
 <template>
   <div class="app-container">
@@ -193,10 +193,7 @@
 <script>
 import {
   getDefaultPermissions,
-  getCPTMonth,
-  yearAndMonthList,
-  parseTime,
-  getTextMap,
+  yearAndMonthList,VersionList
 } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -261,7 +258,7 @@ export default {
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
       yearAndMonthList: yearAndMonthList(),
-      VersionList: ['Final'],
+      VersionList: VersionList(),
       ChannelList: [],
       backgroundList: [
         'background:#EFFCF9',

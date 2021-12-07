@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-12-06 08:33:29
- * @LastEditTime: 2021-12-06 20:24:32
+ * @LastEditTime: 2021-12-07 08:39:32
 -->
 <template>
   <div class="app-container" @keyup.enter="search">
@@ -21,9 +21,9 @@
     </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="openModelDialog">新增</el-button>
-      <el-button type="success" icon="el-icon-plus" @click="publishModel">发布</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="publishModel">发布</el-button>
     </div>
-    <el-table ref="modelInfoTable" :data="tableData" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" border fit stripe height="600" highlight-current-row
+    <el-table ref="modelInfoTable" :data="tableData" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" border fit  height="600" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
@@ -35,17 +35,17 @@
       </el-table-column>
       <el-table-column prop="version" align="center" label="模型版本">
       </el-table-column>
-      <el-table-column align="center" label="创建时间">
+      <el-table-column v-slot="{row}" align="center" label="创建时间">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>
-      <el-table-column align="center" label="最后更新时间">
+      <el-table-column v-slot="{row}" align="center" label="最后更新时间">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.lastUpdateTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>
       <el-table-column v-slot="{row}" label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <div class="operationWrap">
-          <div @click="deleteModel(row)" class="operation">
+          <div @click="deleteModel(row)" class="operation deleteOperation">
             <img src="@/assets/images/delete_l.png" alt="">
             <span>删除</span>
           </div>
@@ -105,6 +105,7 @@
 .operationWrap {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   .operation {
     display: flex;
     align-items: center;
@@ -112,6 +113,7 @@
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #4192d3;
+    cursor: pointer;
     img {
       width: 16px;
       height: 16px;
@@ -119,7 +121,7 @@
     }
   }
   .deleteOperation {
-    color: #EB4F48;
+    color: #EB4F48 !important;
   }
 }
 </style>

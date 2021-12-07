@@ -410,12 +410,16 @@ export function yearAndMonthList() {
   const date=new Date()
   let year=date.getFullYear()
   let yearAndMonthList=[]
-  for (let i = 0; i < 12; i++) {
+  for (let i = 1; i <= 12; i++) {
     let str=year+' '+i+'+'+(12-i)
     yearAndMonthList.push(str)
     
   }
 
   return yearAndMonthList
+}
+//Version
+export function VersionList() {
+  return  ['V1','V2','Final']
 }
 export const exportDefault = 'export default '
