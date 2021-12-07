@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-11-17 17:33:57
+ * @LastEditTime: 2021-12-07 11:52:30
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -59,7 +59,7 @@ export const constantRoutes = [
   ...taskManage(),
   ...masterData(),
   ...system(),
-  ...activiti(),
+  
   
 ]
 
@@ -68,7 +68,8 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  
+  //...V0(),
+  ...activiti(),
   // ...meta,
   ...base,
   // 404 page must be placed at the end !!!

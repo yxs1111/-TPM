@@ -1,21 +1,14 @@
 <template>
   <div v-if="!item.hidden">
-    <template
-      v-if="
+    <template v-if="
         hasOneShowingChild(item, item.children) &&
           (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
           !item.alwaysShow
-      "
-    >
+      ">
       <app-link v-if="onlyOneChild.meta&&onlyOneChild.path != 'dashboard'" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item
-          :index="resolvePath(onlyOneChild.path)"
-          :class="{ 'submenu-title-noDropdown': !isNest }"
-        >
-          <item
-            :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
-            :title="generateTitle(onlyOneChild.meta.title)"
-          />
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
+          <item :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" :title="generateTitle(onlyOneChild.meta.title)" />
+          <i class="el-icon-arrow-right" style="font-size: 10px;float: right;margin-top: 20px;margin-right: -32px;"></i>
         </el-menu-item>
 
       </app-link>
@@ -29,27 +22,11 @@
       </div>
     </template>
 
-    <el-submenu
-      v-else
-      ref="subMenu"
-      :index="resolvePath(item.path)"
-      popper-append-to-body
-    >
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
-        <item
-          v-if="item.meta"
-          :icon="item.meta && item.meta.icon"
-          :title="generateTitle(item.meta.title)"
-        />
+        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="generateTitle(item.meta.title)" />
       </template>
-      <sidebar-item
-        v-for="child in item.children"
-        :key="child.path"
-        :is-nest="true"
-        :item="child"
-        :base-path="resolvePath(child.path)"
-        class="nest-menu"
-      />
+      <sidebar-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" />
     </el-submenu>
   </div>
 </template>
@@ -72,33 +49,29 @@ export default {
     // route object
     item: {
       type: Object,
-      required: true
+      required: true,
     },
     isNest: {
       type: Boolean,
-      default: false
+      default: false,
     },
     basePath: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {
-
-    }
+    return {}
   },
   computed: {
-    ...mapGetters([
-      'sidebar'
-    ])
+    ...mapGetters(['sidebar']),
   },
   methods: {
     hasOneShowingChild(parent, children = []) {
-      const showingChildren = children.filter(item => {
+      const showingChildren = children.filter((item) => {
         if (item.hidden) {
           return false
         } else {
@@ -139,15 +112,15 @@ export default {
       this.$router.push('/dashboard')
       this.$store.dispatch('app/hideBreadcrumb') // 进入首页隐藏面包屑
     },
-    generateTitle
-  }
+    generateTitle,
+  },
 }
 </script>
 <style scoped lang="scss">
-@import "@/styles/variables.scss";
+@import '@/styles/variables.scss';
 .el-menu-item.is-active {
   color: #4192d3 !important;
-  background: #EBF0FF !important;
+  background: #ebf0ff !important;
   border-right: 2px solid #4192d3;
 }
 .dashboardBar {
@@ -170,7 +143,7 @@ export default {
     width: 66%;
     height: 30px;
     line-height: 30px;
-    text-align:center;
+    text-align: center;
     background: #4192d3;
     border-radius: 15px;
     color: #fff;

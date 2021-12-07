@@ -3,10 +3,12 @@
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="经销商" prop="name">
-        <el-input v-model="filterObj.name" placeholder="请输入模型名称" />
+        <el-input v-model="filterObj.name" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="状态" prop="name">
-        <el-input v-model="filterObj.key" placeholder="请输入模型关键词" />
+        <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+          <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button  type="primary" class="TpmButtonBG"  :loading="tableLoading" @click="search">查询</el-button>

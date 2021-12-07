@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-06 11:41:51
+ * @LastEditTime: 2021-12-07 10:38:25
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -12,7 +12,7 @@ export default function() {
     {
       path: '/V0',
       component: Layout,
-      code: 'V0',
+      code: 'investCpVZero',
       name: 'V0',
       meta: { title: 'V0 - Pre city plan 预拆分', icon: 'V0' },
       children: [

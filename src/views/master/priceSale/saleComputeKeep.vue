@@ -181,7 +181,7 @@ export default {
             var list = response.data
             let str = ''
             list.forEach((item) => {
-              str += item
+              str += item+'<br>'
             })
             this.$message.error(`${str}`)
             this.dialogLoading = false
@@ -212,14 +212,22 @@ export default {
       var data = {}
       data = { ...this.filterObj }
       API.exportSaleComputeKeep(data).then((res) => {
-        this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        if (res.code == 1000) {
+          this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
+          this.$message.success('导出成功!')
+        } else {
+          this.$message.success('导出失败!')
+        }
       })
     },
     TemplateDownload() {
       API.SaleComputeKeepTemplateDownload().then((res) => {
-        this.downloadFile(res, '价促计算维护模板' + '.xlsx') //自定义Excel文件名
-        this.$message.success('下载成功!')
+        if (res.code == 1000) {
+          this.downloadFile(res, '价促计算维护模板' + '.xlsx') //自定义Excel文件名
+          this.$message.success('下载成功!')
+        } else {
+          this.$message.success('下载失败!')
+        }
       })
     },
     //下载文件

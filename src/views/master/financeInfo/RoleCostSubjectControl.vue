@@ -32,13 +32,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="costItemTypeNumber" label="一级费用类型编码"> </el-table-column>
-      <el-table-column align="center" prop="costItem" label="一级费用类型名称"> </el-table-column>
-      <el-table-column align="center" prop="costItemCsName" label="一级Cost item中文名称"> </el-table-column>
-      <el-table-column align="center" prop="minePackageNumber" label="二级费用类型编码"> </el-table-column>
-      <el-table-column align="center" prop="minePackage" label="二级费用类型名称"> </el-table-column>
-      <el-table-column align="center" prop="costTypeNumber" label="三级费用类型编码"> </el-table-column>
-      <el-table-column align="center" prop="costType" label="三级费用类型名称"> </el-table-column>
+      <el-table-column align="center" prop="costItemTypeNumber" label="费用类型编码"> </el-table-column>
+      <el-table-column align="center" prop="costItem" label="费用类型名称"> </el-table-column>
+      <el-table-column align="center" prop="minePackageNumber" label="minePackageNumber"> </el-table-column>
+      <el-table-column align="center" prop="minePackage" label="minePackage"> </el-table-column>
+      <el-table-column align="center" prop="costTypeNumber" label="费用科目编码"> </el-table-column>
+      <el-table-column align="center" prop="costType" label="费用科目"> </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -48,33 +47,68 @@
     <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '费用科目信息'" :visible="dialogVisible" width="30%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="el-form-row">
-          <el-form-item label="Cost item中文名称" prop="costItemName">
-            <el-input v-model="ruleForm.costItemName" class="my-el-input" placeholder="请输入">
-            </el-input>
-            <!-- <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
-              <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />
-            </el-select> -->
-          </el-form-item>
           <el-form-item label="费用级别">
-            <el-input v-model="ruleForm.costLevel" class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-radio v-model="costlevel" label="1">费用类型</el-radio>
+            <el-radio v-model="costlevel" label="2">Mine Package</el-radio>
+            <el-radio v-model="costlevel" label="3">费用科目</el-radio>
           </el-form-item>
-          <el-form-item label="费用类型">
-            <el-input v-model="ruleForm.costType" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="费用类型编码">
-            <el-input v-model="ruleForm.costTypeNumber" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="城市群编码">
-            <el-input v-model="ruleForm.cityGroupCode" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="父级编码 ">
-            <el-input v-model="ruleForm.parentNumber" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
+          <div v-if="costlevel==='1'">
+            <el-form-item label="费用类型编码" prop="costTypeNumber">
+              <el-input v-model="ruleForm.costTypeNumber" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="费用类型名称" prop="costType">
+              <el-input v-model="ruleForm.costType" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="费用类型中文名称">
+              <el-input v-model="ruleForm.costItemName" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+          </div>
+          <div v-if="costlevel==='2'">
+            <el-form-item label="费用类型">
+              <el-select v-model="ruleForm.parentNumber" class="my-el-input" placeholder="请选择">
+                <el-option v-for="item in costTypeList" :key="item.name" :label="item.costType" :value="item.costTypeNumber" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="Mine Package编码" prop="costTypeNumber">
+              <el-input v-model="ruleForm.costTypeNumber" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="Mine Package名称" prop="costType">
+              <el-input v-model="ruleForm.costType" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="Mine Package中文名称">
+              <el-input v-model="ruleForm.costItemName" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+          </div>
+          <div v-if="costlevel==='3'">
+            <el-form-item label="费用类型">
+              <el-select v-model="ruleForm.costItem" class="my-el-input" @change="changeCostType" placeholder="请选择">
+                <el-option v-for="item in costTypeList" :key="item.name" :label="item.costType" :value="item.costTypeNumber" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="Mine Package ">
+              <el-select v-model="ruleForm.parentNumber" class="my-el-input" placeholder="请选择">
+                <el-option v-for="item in MinePackageList" :key="item.name" :label="item.costType" :value="item.costTypeNumber" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="费用科目" prop="costType">
+              <el-input v-model="ruleForm.costType" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="费用科目中文名称">
+              <el-input v-model="ruleForm.costItemName" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="费用科目编码" prop="costTypeNumber">
+              <el-input v-model="ruleForm.costTypeNumber" class="my-el-input" placeholder="请输入">
+              </el-input>
+            </el-form-item>
+          </div>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
             </el-input>
@@ -113,13 +147,21 @@ export default {
       ruleForm: {
         costItemName: '',
         costLevel: '',
+        costItem: '', //三级选中的费用类型
         costType: '',
         costTypeNumber: '',
         parentNumber: '',
         remark: '',
       },
       rules: {
-        distributorCode: [
+        costType: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        costTypeNumber: [
           {
             required: true,
             message: 'This field is required',
@@ -131,11 +173,31 @@ export default {
       isEditor: '',
       editorId: '',
       checkArr: [], //批量删除,存放选中
+      costlevel: '1',
+      costTypeList: [],
+      MinePackageList: [],
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     this.getTableData()
+  },
+  watch: {
+    costlevel() {
+      if (this.costlevel == '2') {
+        API.getCostTypeList({
+          costLevel: '1',
+        }).then((response) => {
+          this.costTypeList = response.data
+        })
+      } else if (this.costlevel == '3') {
+        API.getCostTypeList({
+          costLevel: '1',
+        }).then((response) => {
+          this.costTypeList = response.data
+        })
+      }
+    },
   },
   computed: {},
   methods: {
@@ -155,6 +217,13 @@ export default {
     },
     add() {
       this.dialogVisible = true
+    },
+    changeCostType() {
+      API.getCostTypeList({
+        costLevel: '2',
+      }).then((response) => {
+        this.MinePackageList = response.data
+      })
     },
     search() {
       this.getTableData()
@@ -190,21 +259,54 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let url = this.isEditor ? API.updateMdCostType : API.insertMdCostType
-          url({
-            id: this.editorId,
-            costItemName: this.ruleForm.costItemName,
-            costLevel: this.ruleForm.costLevel,
-            costType: this.ruleForm.costType,
-            costTypeNumber: this.ruleForm.costTypeNumber,
-            parentNumber: this.ruleForm.parentNumber,
-            remark: this.ruleForm.remark,
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
-              this.resetForm(formName)
-              this.getTableData()
-            }
-          })
+          if (this.costlevel === '1') {
+            url({
+              id: this.editorId,
+              costItemName: this.ruleForm.costItemName,
+              costLevel: '1',
+              costType: this.ruleForm.costType,
+              costTypeNumber: this.ruleForm.costTypeNumber,
+              remark: this.ruleForm.remark,
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+                this.resetForm(formName)
+                this.getTableData()
+              }
+            })
+          } else if (this.costlevel === '2') {
+            url({
+              id: this.editorId,
+              costItemName: this.ruleForm.costItemName,
+              costLevel: '2',
+              costType: this.ruleForm.costType,
+              costTypeNumber: this.ruleForm.costTypeNumber,
+              parentNumber: this.ruleForm.parentNumber,
+              remark: this.ruleForm.remark,
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+                this.resetForm(formName)
+                this.getTableData()
+              }
+            })
+          } else if (this.costlevel === '3') {
+            url({
+              id: this.editorId,
+              costItemName: this.ruleForm.costItemName,
+              costLevel: '3',
+              costType: this.ruleForm.costType,
+              costTypeNumber: this.ruleForm.costTypeNumber,
+              parentNumber: this.ruleForm.parentNumber,
+              remark: this.ruleForm.remark,
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
+                this.resetForm(formName)
+                this.getTableData()
+              }
+            })
+          }
         } else {
           this.$message.error('提交失败')
           return false

@@ -534,6 +534,7 @@ div:focus {
   .dialog-footer {
     display: flex;
     justify-content: center;
+    margin-bottom: 15px;
     .el-button--default {
       width: 122px;
       height: 37px;
@@ -864,4 +865,15 @@ div:focus {
 .el-icon-my-checkData:before{
     content: "\e611";
     font-size: 16px;
+}
+//暂无数据
+.null_content {
+  width: 204px;
+  margin: 100px auto;
+  .null_content_tit{
+		font-size: 16px; 
+		color: #999;
+    text-align: center;
+    letter-spacing: 2px;
+	}
 }

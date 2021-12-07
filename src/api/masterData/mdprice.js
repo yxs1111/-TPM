@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-03 20:10:45
+ * @LastEditTime: 2021-12-07 10:02:14
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -28,7 +28,7 @@ export default {
   importMdprice(params) {
     //return requestApi.request_get('mdprice/import', params)
     return request({
-      url:'/mdm/mdprice/import',
+      url:'/mdm/mdprice/imports',
       method:'get',
       params:params,
       processData : false,
