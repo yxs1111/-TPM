@@ -91,6 +91,10 @@ priceLevelKeep<!--
           </div>
         </div>
       </div>
+      <div class="null_content" v-if="isNoData">
+        <img src="@/assets/images/null_content.jpg" alt="">
+        <div class="null_content_tit">暂无数据</div>
+      </div>
       <!-- 导入 -->
       <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
         <div>
@@ -170,6 +174,7 @@ import {
 } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V0/V0.js'
 export default {
   name: 'V0Approval',
@@ -199,6 +204,7 @@ export default {
         'background:#FEF5F6',
         'background:#F0F6FC',
       ], //价格档位背景色
+      isNoData:false,
     }
   },
   directives: { elDragDialog, permission },
@@ -213,9 +219,14 @@ export default {
       API.getList({
         yearAndMonth: this.filterObj.month,
         dim_product: this.filterObj.SKU,
-      })
-        .then((response) => {
+      }).then((response) => {
+        if (response.code == 1000) {
           this.ContentData = response.data
+          if(Object.keys(this.ContentData).length==0) {
+            this.isNoData=true 
+          } else {
+            this.isNoData=false 
+          }
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
             this.isSubmit = this.ContentData[key][0].isSubmit
@@ -228,8 +239,8 @@ export default {
               })
             }
           }
-        })
-        .catch(() => {})
+        }
+      })
     },
     getQuerySkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
@@ -420,8 +431,12 @@ export default {
       if (columnIndex === 0 && rowIndex != 0) {
         return 'background:#4192d3!important'
       }
-      let num = ((4 + row.priceGearNum)-columnIndex)%3
-      if (4 <= columnIndex && columnIndex < 4 + row.priceGearNum && rowIndex != 0) {
+      let num = (4 + row.priceGearNum - columnIndex) % 3
+      if (
+        4 <= columnIndex &&
+        columnIndex < 4 + row.priceGearNum &&
+        rowIndex != 0
+      ) {
         return this.backgroundList[num]
       }
     },
@@ -444,7 +459,7 @@ export default {
   }
   .ContentWrap {
     width: 100%;
-    min-height: 50vh;
+    // min-height: 50vh;
     .contentli {
       // height: 480px;
       padding: 20px;

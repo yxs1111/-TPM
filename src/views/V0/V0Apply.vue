@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-07 08:48:49
+ * @LastEditTime: 2021-12-07 13:27:57
 -->
 <template>
   <div class="app-container">
@@ -90,6 +90,10 @@
             </el-table>
           </div>
         </div>
+      </div>
+      <div class="null_content" v-if="isNoData">
+        <img src="@/assets/images/null_content.jpg" alt="">
+        <div class="null_content_tit">暂无数据</div>
       </div>
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
         <div class="el-dialogContent">
@@ -265,6 +269,7 @@ export default {
         'background:#FEF5F6',
         'background:#F0F6FC',
       ], //价格档位背景色
+      isNoData:false,
     }
   },
   directives: { elDragDialog, permission },
@@ -289,6 +294,11 @@ export default {
       }).then((response) => {
         if (response.code === 1000) {
           this.ContentData = response.data
+          if(Object.keys(this.ContentData).length==0) {
+            this.isNoData=true 
+          } else {
+            this.isNoData=false 
+          }
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
             this.isSubmit = this.ContentData[key][0].isSubmit
@@ -524,7 +534,7 @@ export default {
   }
   .ContentWrap {
     width: 100%;
-    min-height: 50vh;
+    // min-height: 50vh;
     .contentli {
       // height: 480px;
       padding: 20px;

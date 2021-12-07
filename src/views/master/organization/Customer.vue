@@ -252,6 +252,7 @@ export default {
         .catch((error) => {})
     },
     search() {
+      this.pageNum=1
       this.getTableData()
     },
     Reset() {

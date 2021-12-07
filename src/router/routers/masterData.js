@@ -210,6 +210,7 @@ export default function() {
           name: 'PriceModel',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '财务信息', icon: 'approve' },
+          alwaysShow: true,
           // redirect: '/priceSale/saleComputeKeep',
           children: [
             {
@@ -217,22 +218,8 @@ export default function() {
               code: 'RoleCostSubjectControl',
               name: 'RoleCostSubjectControl',
               component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
-              meta: { title: '费用科目', icon: 'form' }
+              meta: { title: '费用科目', icon: 'apply' }
             },
-            {
-              path: '/RoleCostType',
-              code: 'RoleCostType',
-              name: 'RoleCostType',
-              component: () => import('@/views/master/financeInfo/RoleCostType.vue'),
-              meta: { title: '费用类型', icon: 'form' }
-            },
-            {
-              path: '/MinePackage',
-              code: 'MinePackage',
-              name: 'MinePackage',
-              component: () => import('@/views/master/financeInfo/minePackage.vue'),
-              meta: { title: 'Mine Package', icon: 'form' }
-            }
           ]
         },
         // 规则控制

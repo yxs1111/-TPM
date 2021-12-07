@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-12-06 18:26:24
+ * @LastEditTime: 2021-12-07 14:21:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -135,6 +135,9 @@ export default {
   },
   deleteMdCostType(params) {
     return requestApi.request_delete('/mdm/mdCostType/delete', params)
+  },
+  getCostTypeList(params) {
+    return requestApi.request_get('/mdm/mdCostType/getCostTypeList', params)
   },
   // 品牌信息
   getPageMdBrand(params) {

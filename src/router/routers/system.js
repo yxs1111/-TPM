@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-03 17:29:55
+ * @LastEditTime: 2021-12-07 11:58:37
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -35,8 +35,15 @@ export default function() {
           path: 'role',
           code: 'role',
           name: 'RoleInfo',
-          component: () => import('@/views/system/role/index.vue'),
+          component: () => import('@/views/system/RoleManage.vue'),
           meta: { title: '角色管理', icon: 'user' }
+        },
+        {
+          path: 'permission',
+          code: 'permission',
+          name: 'Permission',
+          component: () => import('@/views/system/permission/index.vue'),
+          meta: { title: '权限信息', icon: 'form' }
         },
         {
           path: 'menu',

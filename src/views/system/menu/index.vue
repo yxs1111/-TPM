@@ -19,7 +19,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="searchLoading" @click="fetchData">刷新</el-button>
+          <el-button  type="primary" icon="el-icon-search" :loading="searchLoading" @click="fetchData">刷新</el-button>
         </el-form-item>
       </el-form>
       <!--搜索框-->
@@ -152,7 +152,7 @@
             <el-form-item>
               <el-button @click="editVisible=false">关闭</el-button>
               <el-button
-                v-permission="permissions['update']"
+              
                 :type="editState === 'update' ? 'primary' : 'success'"
                 :loading="saveLoading"
                 @click="saveOrUpdate"
@@ -180,10 +180,10 @@
               </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="searchLoading" @click="searchPer">搜索</el-button>
+              <el-button  type="primary" icon="el-icon-search" :loading="searchLoading" @click="searchPer">搜索</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button v-permission="permissions['update']" type="primary" @click="toPermissionPage">编辑权限</el-button>
+              <el-button type="primary" @click="toPermissionPage">编辑权限</el-button>
             </el-form-item>
           </el-form>
           <!--查询结果-->

@@ -7,7 +7,7 @@
       </el-form-item>
       <el-form-item label="状态" prop="name">
         <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
-          <el-option v-for="item,index in ['正常','无效']" :key="index" :label="item" :value="item" />
+          <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
         </el-select>
       </el-form-item>
       <el-form-item>
