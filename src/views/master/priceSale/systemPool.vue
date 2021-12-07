@@ -1,41 +1,37 @@
 // 价格主数据
 <template>
   <div class="app-container">
-    <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="渠道：">
-        <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
-          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item label="Mine Package：">
-        <el-select v-model="filterObj.minePackageCode" placeholder="请选择" clearable>
-          <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costType" />
-        </el-select>
-      </el-form-item> -->
-      <el-form-item label="SKU：">
-        <el-select v-model="filterObj.sku" placeholder="请选择" clearable>
-          <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCsName" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="机制类型：">
-        <el-select v-model="filterObj.cdmType" placeholder="请选择" clearable>
-          <el-option v-for="item in cdmTypeOptions" :key="item.code" :label="item.name" :value="item.code" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="机制名称：">
-        <el-input v-model="filterObj.cdmName" placeholder="请输入模型名称" />
-      </el-form-item>
-      <el-form-item>
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道：</span>
+          <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
+            <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">SKU：</span>
+          <el-select v-model="filterObj.sku" placeholder="请选择" clearable>
+            <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCsName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">机制类型：</span>
+          <el-select v-model="filterObj.cdmType" placeholder="请选择" clearable>
+            <el-option v-for="item in cdmTypeOptions" :key="item.code" :label="item.name" :value="item.code" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">机制名称：</span>
+          <el-input v-model="filterObj.cdmName" placeholder="请输入" />
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-      </el-form-item>
-      <el-form-item>
         <div class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-      </el-form-item>
-    </el-form>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
@@ -48,16 +44,8 @@
       <!-- <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">新增</el-button> -->
       <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
-    <el-table
-      v-loading="tableLoading"
-      :data="tableData"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      stripe
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%"
+      @selection-change="handleSelectionChange">
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="320" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="150" align="center" prop="sku" label="SKU" />
@@ -83,15 +71,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 新增 -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
@@ -102,12 +83,7 @@
               <div class="grid-content bg-purple">
                 渠道：
                 <el-select v-model="dialogAdd.channelcode" placeholder="请选择" size="small">
-                  <el-option
-                    v-for="item in channelOptons"
-                    :key="item.channelCode"
-                    :label="item.channelEsName"
-                    :value="item.channelCode"
-                  />
+                  <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
                 </el-select>
               </div>
             </el-col>
@@ -115,12 +91,7 @@
               <div class="grid-content bg-purple">
                 Mine Package：
                 <el-select v-model="dialogAdd.costTypeNumber" placeholder="请选择" size="small">
-                  <el-option
-                    v-for="item in mpOptons"
-                    :key="item.costTypeNumber"
-                    :label="item.costType"
-                    :value="item.costTypeNumber"
-                  />
+                  <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
                 </el-select>
               </div>
             </el-col>
@@ -128,12 +99,7 @@
               <div class="grid-content bg-purple">
                 SKU：
                 <el-select v-model="dialogAdd.productCode" placeholder="请选择" size="small">
-                  <el-option
-                    v-for="item in skuOptons"
-                    :key="item.productCode"
-                    :label="item.productCsName"
-                    :value="item.productCode"
-                  />
+                  <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
                 </el-select>
               </div>
             </el-col>
@@ -147,18 +113,8 @@
         </div>
         <div>
           <el-button plain type="primary" size="mini" icon="el-icon-plus" @click="handleAddDetails">添加一行</el-button>
-          <el-button
-            type="success"
-            icon="el-icon-delete"
-            size="mini"
-            @click="handleDeleteDetails"
-          >删除</el-button>
-          <el-button
-            type="danger"
-            icon="el-icon-delete"
-            size="mini"
-            @click="handleDeleteAllDetails"
-          >清空</el-button>
+          <el-button type="success" icon="el-icon-delete" size="mini" @click="handleDeleteDetails">删除</el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteAllDetails">清空</el-button>
         </div>
         <div style="height:1px;background:#dcdfe6;margin:20px 0px;" />
         <div style="border: 1px solid #dcdfe6;">
@@ -167,23 +123,15 @@
             <el-table-column type="index" label="序号" align="center" width="50" />
             <el-table-column label="机制类型" align="center" prop="cdmType">
               <template slot-scope="scope">
-                <el-select
-                  v-model="systemList[scope.row.xh-1].cdmType"
-                  size="small"
-                  clearable
-                >
-                  <el-option
-                    v-for="dict in cdmTypeOptions"
-                    :key="dict.code"
-                    :label="dict.name"
-                    :value="dict.code"
-                  />
+                <el-select v-model="systemList[scope.row.xh-1].cdmType" size="small" clearable>
+                  <el-option v-for="dict in cdmTypeOptions" :key="dict.code" :label="dict.name" :value="dict.code" />
                 </el-select>
               </template>
             </el-table-column>
             <el-table-column label="机制规则" align="center" prop="fs">
               <template slot-scope="scope">
-                <el-input v-model="systemList[scope.row.xh-1].cdmRuleF" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;margin-right:8px;" size="small" placeholder="请输入" />
+                <el-input v-model="systemList[scope.row.xh-1].cdmRuleF" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;margin-right:8px;" size="small"
+                  placeholder="请输入" />
                 <el-input v-model="systemList[scope.row.xh-1].cdmRuleS" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;" size="small" placeholder="请输入" />
               </template>
             </el-table-column>
@@ -245,13 +193,13 @@ export default {
         minePackageCode: '',
         sku: '',
         cdmType: '',
-        cdmName: ''
+        cdmName: '',
       },
       dialogAdd: {
         channelCode: '',
         costTypeNumber: '',
         productCode: '',
-        remark: ''
+        remark: '',
       },
       tableLoading: '',
       value: '',
@@ -267,16 +215,16 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       },
       rules: {
         channelCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       dialogVisible: false,
       isEditor: '',
@@ -290,24 +238,24 @@ export default {
       cdmTypeOptions: [
         {
           code: 'cdm1',
-          name: '打折'
+          name: '打折',
         },
         {
           code: 'cdm2',
-          name: '特价'
+          name: '特价',
         },
         {
           code: 'cdm3',
-          name: '满减'
-        }
+          name: '满减',
+        },
       ],
-      importVisible: false
+      importVisible: false,
     }
   },
 
   computed: {
     typeVSinfo() {
-      return function(type) {
+      return function (type) {
         switch (type) {
           case '1':
             return '打折'
@@ -328,7 +276,7 @@ export default {
             break
         }
       }
-    }
+    },
   },
   mounted() {
     this.getTableData()
@@ -345,7 +293,7 @@ export default {
         minePackageCode: this.filterObj.minePackageCode,
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
-        cdmName: this.filterObj.cdmName
+        cdmName: this.filterObj.cdmName,
       }
       API.exportExcelSyspool(data).then(
         response => {
@@ -366,22 +314,21 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
-      API.downloadExcelSyspool().then(
-        response => {
-          const fileName = '机制池模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+      API.downloadExcelSyspool().then((response) => {
+        const fileName = '机制池模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 导入数据
     importData() {
@@ -445,7 +392,7 @@ export default {
     handleDeleteDetails() {
       if (this.checkedDetail.length === 0) {
         this.$alert('请先选择要删除的数据', '提示', {
-          confirmButtonText: '确定'
+          confirmButtonText: '确定',
         })
       } else {
         this.systemList.splice(this.checkedDetail[0].xh - 1, 1)
@@ -457,19 +404,28 @@ export default {
 
     // 获取下拉框 渠道
     getQueryChannelSelect() {
-      selectAPI.queryChannelSelect().then(res => {
-        this.channelOptons = res.data
-      }).catch()
+      selectAPI
+        .queryChannelSelect()
+        .then((res) => {
+          this.channelOptons = res.data
+        })
+        .catch()
     },
     getQuerySkuSelect() {
-      selectAPI.querySkuSelect().then(res => {
-        this.skuOptons = res.data
-      }).catch()
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          this.skuOptons = res.data
+        })
+        .catch()
     },
     getQueryMinePackageSelect() {
-      selectAPI.queryMinePackageSelect().then(res => {
-        this.mpOptons = res.data
-      }).catch()
+      selectAPI
+        .queryMinePackageSelect()
+        .then((res) => {
+          this.mpOptons = res.data
+        })
+        .catch()
     },
     // 查询
     search() {
@@ -481,7 +437,7 @@ export default {
         minePackageCode: this.filterObj.minePackageCode,
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
-        cdmName: this.filterObj.cdmName
+        cdmName: this.filterObj.cdmName,
       })
         .then((response) => {
           this.tableLoading = false
@@ -497,7 +453,7 @@ export default {
       this.tableLoading = true
       API.getPageByRequestConfig({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -524,7 +480,7 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       }
     },
     editor(obj) {
@@ -539,7 +495,7 @@ export default {
         gear: obj.gear,
         volMin: obj.volMin,
         yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark
+        remark: obj.remark,
       }
       this.editorId = obj.id
     },
@@ -552,27 +508,32 @@ export default {
           cdmTypeItem: '',
           cdmNameItem: '',
           beginNumItem: '',
-          endNumItem: ''
+          endNumItem: '',
         }
         cdnItem.cdmTypeItem = item.cdmType
-        cdnItem.cdmNameItem = item.cdmType === '5' ? item.cdmName : '满' + item.cdmRuleF + '听' + item.cdmRuleS + '折'
+        cdnItem.cdmNameItem =
+          item.cdmType === '5'
+            ? item.cdmName
+            : '满' + item.cdmRuleF + '听' + item.cdmRuleS + '折'
         cdnItem.beginNumItem = item.cdmRuleF
         cdnItem.endNumItem = item.cdmRuleS
         cdmListLocal.push(cdnItem)
       }
 
       const params = {
-        'channelCode': this.dialogAdd.channelCode,
-        'minePackageCode': this.dialogAdd.costTypeNumber,
-        'sku': this.dialogAdd.productCode,
-        'remark': this.dialogAdd.remark,
-        'cdmList': cdmListLocal
+        channelCode: this.dialogAdd.channelCode,
+        minePackageCode: this.dialogAdd.costTypeNumber,
+        sku: this.dialogAdd.productCode,
+        remark: this.dialogAdd.remark,
+        cdmList: cdmListLocal,
       }
-      API.insertDataConfig(params).then(res => {
-        if (res.code === 1000) {
-          this.closeDialog()
-        }
-      }).catch()
+      API.insertDataConfig(params)
+        .then((res) => {
+          if (res.code === 1000) {
+            this.closeDialog()
+          }
+        })
+        .catch()
       // this.$refs[formName].validate((valid) => {
       //   if (valid) {
       //     const url = this.isEditor
@@ -629,37 +590,37 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-  .el-row {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
-    }
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
   }
-  .el-col {
-    border-radius: 4px;
-  }
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    // background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-    line-height: 36px;
-  }
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
+}
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-dark {
+  background: #99a9bf;
+}
+.bg-purple {
+  // background: #d3dce6;
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+  line-height: 36px;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
 </style>

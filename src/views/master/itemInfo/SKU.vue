@@ -1,25 +1,28 @@
 <template>
   <div class="app-container">
-    <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="产品英文名称" prop="name">
-        <el-input v-model="filterObj.brandEName" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="品牌" prop="name">
-        <el-input v-model="filterObj.brand" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="阶段" prop="name">
-        <el-input v-model="filterObj.step" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="状态" prop="name">
-        <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
-          <el-option v-for="item,index in ['正常','无效']" :key="index" :label="item" :value="item" />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli">
+          <span class="SelectliTitle">产品英文名称</span>
+          <el-input v-model="filterObj.SKUEsName" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">品牌</span>
+          <el-input v-model="filterObj.brandName" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">阶段</span>
+          <el-input v-model="filterObj.step" placeholder="请输入" />
+        </div>
+         <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
+      </div>
+    </div>
     <el-table :data="tableData" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
@@ -91,8 +94,8 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        brandEName: '',
-        brand: '',
+        SKUEsName: '',
+        brandName: '',
         step: '',
         state:'',
       },
