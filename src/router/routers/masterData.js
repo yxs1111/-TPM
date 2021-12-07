@@ -16,7 +16,7 @@ export default function() {
           name: 'NKAEC',
           component: () => import('@/views/master/nkaec/model.vue'),
           meta: { title: 'NKAEC', icon: 'form' },
-          // redirect: '/nkaec/pages/nka',
+          redirect: '/nkaec/pages/nka',
           children: [
             // 组织架构
             {
@@ -25,7 +25,7 @@ export default function() {
               code: 'NKA',
               name: 'NKA',
               component: () => import('@/views/master/nkaec/pages/nka.vue'),
-              meta: { title: 'NKA', icon: 'form' }
+              meta: { title: 'NKA', icon: 'form', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -33,7 +33,7 @@ export default function() {
               code: 'EC',
               name: 'EC',
               component: () => import('@/views/master/nkaec/pages/EC.vue'),
-              meta: { title: 'EC', icon: 'form' }
+              meta: { title: 'EC', icon: 'form', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -41,7 +41,7 @@ export default function() {
               code: 'NKALine',
               name: 'NKALine',
               component: () => import('@/views/master/nkaec/pages/NKALine.vue'),
-              meta: { title: 'NKALine', icon: 'form' }
+              meta: { title: 'NKALine', icon: 'form', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -49,7 +49,7 @@ export default function() {
               code: 'ECLine',
               name: 'ECLine',
               component: () => import('@/views/master/nkaec/pages/ECLine.vue'),
-              meta: { title: 'ECLine', icon: 'form' }
+              meta: { title: 'ECLine', icon: 'form', activeMenu: '/NKAEC' }
             }
           ]
         },
