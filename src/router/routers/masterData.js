@@ -16,7 +16,7 @@ export default function() {
           name: 'NKAEC',
           component: () => import('@/views/master/nkaec/model.vue'),
           meta: { title: 'NKAEC', icon: 'form' },
-          redirect: '/nkaec/pages/nka',
+          // redirect: '/nkaec/pages/nka',
           children: [
             // 组织架构
             {
