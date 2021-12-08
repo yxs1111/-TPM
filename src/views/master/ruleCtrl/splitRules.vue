@@ -12,7 +12,7 @@
         <el-date-picker v-model="filterObj.yeardate" type="month" value-format="yyyyMM" placeholder="请选择" clearable />
       </el-form-item>
       <el-form-item label="版本：">
-        <el-select v-model="filterObj.versions" placeholder="请选择" clearable>
+        <el-select v-model="filterObj.varsionName" placeholder="请选择" clearable>
           <el-option v-for="item in versionsArr" :key="item.code" :label="item.name" :value="item.code" />
         </el-select>
       </el-form-item>
@@ -65,7 +65,7 @@
       <el-table-column width="" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="scope">
-          {{ scope.row.createDate.replace('T', ' ') }}
+          {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
@@ -83,7 +83,6 @@
             </div>
           </div>
         </template>
-      </el-table-column>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -264,7 +263,7 @@ export default {
         costTypeNumber: '',
         remark: '',
         yeardate: '',
-        versions: '',
+        varsionName: '',
         splitType: '',
         minePackageCode: '',
         splitWeight: '',
@@ -278,7 +277,7 @@ export default {
       filterObj: {
         channelCode: '',
         yeardate: '',
-        versions: '',
+        varsionName: '',
         splitType: ''
       },
       tableLoading: '',
@@ -321,8 +320,6 @@ export default {
     },
     numberNo(e, i) {
       const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
-      console.log('%%%%%%%%%sysList%%%%%%%')
-      console.log(this.systemList)
       // debugger
       if (!flag) {
         this.systemList[i].splitRuleF = ''
@@ -340,7 +337,7 @@ export default {
       var data = {
         channelCode: this.filterObj.channelCode,
         yeardate: this.filterObj.yeardate,
-        versions: this.filterObj.versions,
+        versions: this.filterObj.varsionName,
         splitType: this.filterObj.splitType
       }
       API.exportExcelSplitRule(data).then(
@@ -429,7 +426,7 @@ export default {
         costTypeNumber: '',
         remark: '',
         yeardate: '',
-        versions: '',
+        varsionName: '',
         splitType: '',
         minePackageCode: '',
         splitWeight: '',
@@ -462,7 +459,7 @@ export default {
         pageSize: this.pageSize, // 每页条数
         channelCode: this.filterObj.channelCode,
         yeardate: this.filterObj.yeardate,
-        versions: this.filterObj.versions,
+        versions: this.filterObj.varsionName,
         splitType: this.filterObj.splitType
       })
         .then((response) => {
@@ -483,10 +480,24 @@ export default {
       // this.ruleForm = {}
       this.editorId = obj.id
       this.dialogAdd = obj
+      if (obj.splitType === 1) {
+        this.dialogAdd.splitRuleF = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split('')[0]
+        this.dialogAdd.splitRuleS = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split('')[1]
+      } else if (obj.splitType === 2) {
+        const mulSplitRule = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split(',')
+        for (const item of mulSplitRule) {
+          const first = item.split('')[0]
+          const second = item.split('')[1]
+          this.systemList.push({
+            splitRuleF: first,
+            splitRuleS: second
+          })
+        }
+      }
     },
     // 提交form
     submitForm() {
-      if (this.dialogAdd.channelCode == '' || this.dialogAdd.minePackageCode == '' || this.dialogAdd.yeardate == '' || this.dialogAdd.versions == '' || this.dialogAdd.splitType == '') {
+      if (this.dialogAdd.channelCode == '' || this.dialogAdd.minePackageCode == '' || this.dialogAdd.yeardate == '' || this.dialogAdd.varsionName == '' || this.dialogAdd.splitType == '') {
         this.$alert('带*号为必选项', '提示', {
           confirmButtonText: '确定',
           callback: action => {}
@@ -508,7 +519,7 @@ export default {
           'channelCode': this.dialogAdd.channelCode,
           'minePackageCode': this.dialogAdd.minePackageCode,
           'yeardate': this.dialogAdd.yeardate,
-          'versions': this.dialogAdd.versions,
+          'versions': this.dialogAdd.varsionName,
           'splitType': this.dialogAdd.splitType,
           'splitRule': splitRuleThis.slice(0, -1),
           'splitWeight': splitWeightThis.slice(0, -1),

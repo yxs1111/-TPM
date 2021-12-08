@@ -319,7 +319,9 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
-      API.exportTemplate().then(
+      API.exportV3({
+        exportType: 'exportApproveTemplate'
+      }).then(
         response => {
           const fileName = '导入模板' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据

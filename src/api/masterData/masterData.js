@@ -262,7 +262,7 @@ export default {
   downloadExcelSyspool() {
     return request({
       url: '/mdm/mdCdmConfig/downloadExcel',
-      method: 'post',
+      method: 'get',
       responseType: 'blob'
     })
   },

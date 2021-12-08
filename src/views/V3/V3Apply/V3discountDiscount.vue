@@ -201,7 +201,7 @@
     <el-dialog width="66%" class="my-el-dialog" title="补录" :visible="supplementVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar" style="display:flex;">
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModelNext">
             下载模板
           </el-button>
           <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImportComple()">检测数据
@@ -501,7 +501,9 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
-      API.exportTemplate().then(
+      API.exportV3({
+        exportType: 'exportTemplate'
+      }).then(
         response => {
           const fileName = '导入模板' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
@@ -518,11 +520,34 @@ export default {
           document.body.removeChild(link) // 9.移除a链接dom
         })
     },
+    // 下载excel模板 --- 补录
+    downLoadElxModelNext() {
+      API.exportV3({
+        exportType: 'exportMakeUpTemplate'
+      }).then(
+        response => {
+          const fileName = '补录导入模板' + new Date().getTime() + '.xlsx'
+          //   res.data:请求到的二进制数据
+          const blob = new Blob([response], {
+            type: 'application/vnd.ms-excel'
+          }) // 1.创建一个blob
+          const link = document.createElement('a') // 2.创建一个a链接
+          link.download = fileName // 3.设置名称
+          link.style.display = 'none' // 4.默认不显示
+          link.href = URL.createObjectURL(blob) // 5.设置a链接href
+          document.body.appendChild(link) // 6.将a链接dom插入当前html中
+          link.click() // 7.点击事件
+          URL.revokeObjectURL(link.href) // 8.释放url对象
+          document.body.removeChild(link) // 9.移除a链接dom
+        })
+    },
     // 校验excel
     downLoadException() {
-      API.exportException().then(
+      API.exportV3({
+        exportType: 'exportExceptionTemplate'
+      }).then(
         response => {
-          const fileName = '校验' + new Date().getTime() + '.xlsx'
+          const fileName = '下载异常模板' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
           const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'
@@ -554,6 +579,7 @@ export default {
       // 导出数据筛选
       var data = {}
       data = { ...this.filterObj }
+      data.exportType = 'export'
       API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')

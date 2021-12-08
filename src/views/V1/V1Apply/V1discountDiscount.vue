@@ -294,12 +294,14 @@ export default {
       skuArr: [],
       customerArr: [],
       distributorArr: [],
-      submitBtn: 0
+      submitBtn: 0,
+      localDate: '202101'
     }
   },
   computed: {},
   mounted() {
     this.getTableData()
+    // this.getEffectiveDate()
     this.getChannel()
     this.getSKU()
     // this.getMP()
@@ -307,6 +309,17 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    // 获取年月
+    getEffectiveDate() {
+      API.getEffectiveDate().then(res => {
+        if (res.code === 1000) {
+          this.localDate = res.data
+          this.getTableData()
+        } else {
+          this.$message.warning('未查询到年月信息！')
+        }
+      }).catch()
+    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then(res => {
@@ -361,7 +374,9 @@ export default {
     },
     // 导出错误信息
     exportErrorList() {
-      API.exportErrorList().then(
+      API.exportErrorList({
+        mainId: this.mainIdLocal
+      }).then(
         response => {
           const fileName = '错误信息' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
@@ -558,7 +573,8 @@ export default {
         channelCode: this.filterObj.channelCode,
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode
+        productCode: this.filterObj.productCode,
+        yearAndMonth: this.localDate
       })
         .then((response) => {
           this.tableLoading = false

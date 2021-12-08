@@ -58,7 +58,7 @@
         <el-button type="primary" :disabled="warningShow" @click="confirmImport">确 定</el-button>
         <el-button @click="closeImport">取 消</el-button>
       </span>
-      <div v-if="warningShow">
+      <div v-if="warningShow" style="height: 300px;overflow: scroll;overflow-x: hidden;">
         <el-alert
           v-for="(item, index) in warningList"
           :key="index"
@@ -118,11 +118,13 @@ export default {
             this.$message.success(response.data)
             this.closeImport()
           } else {
-            if (response.data === null) {
+            if (typeof (response.data) === 'string') {
               this.$message.error(response.data)
             } else if (response.data.length > 0) {
               this.warningShow = true
               this.warningList = response.data
+            } else if (typeof (response.data) === 'object') {
+              this.$message.error(response.data)
             }
           }
         })
