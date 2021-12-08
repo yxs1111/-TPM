@@ -26,15 +26,15 @@ priceLevelKeep<!--
           </div>
         </div>
         <div class="OpertionBar">
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+          <div class="TpmButtonBG" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
+          <div class="TpmButtonBG" @click="approve(1)">
             <svg-icon icon-class="passApprove" style="font-size: 24px;" />
             <span class="text">通过</span>
           </div>
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
+          <div class="TpmButtonBG" @click="approve(0)">
             <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
             <span class="text">驳回</span>
           </div>
