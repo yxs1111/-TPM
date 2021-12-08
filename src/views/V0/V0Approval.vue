@@ -216,7 +216,7 @@ export default {
   computed: {},
   methods: {
     getList() {
-      API.getList({
+      API.getApproveList({
         yearAndMonth: this.filterObj.month,
         dim_product: this.filterObj.SKU,
       }).then((response) => {

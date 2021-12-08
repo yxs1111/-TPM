@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-03 17:34:42
+ * @LastEditTime: 2021-12-08 11:16:25
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -13,6 +13,10 @@ export default {
   //获取V0数据
   getList(params) {
     return requestApi.request_get(this.url+'/getList', params)
+  },
+  //获取V0 审批数据
+  getApproveList(params) {
+    return requestApi.request_get(this.url+'/getApproveList', params)
   },
   //获取CPT 数据
   getCPTData(params) {
