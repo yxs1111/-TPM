@@ -34,7 +34,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.dim_product" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
@@ -96,8 +96,8 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-      <div>
+    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
+      <div class="importDialog">
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
@@ -126,7 +126,7 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -168,7 +168,6 @@
           </el-table>
         </div>
       </div>
-
     </el-dialog>
   </div>
 </template>
@@ -195,7 +194,7 @@ export default {
         customerCode: '',
         distributorCode: '',
         regionCode: '',
-        productCode: '',
+        dim_product: '',
       },
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -208,6 +207,7 @@ export default {
       importVisible: false, // 导入弹窗
       ImportData: [],
       uploadFileName: '',
+      event: '',
       uploadFile: '',
       isSubmit: 0, // 提交状态  1：已提交，0：未提交
       errorImg: require('@/assets/images/selectError.png'),
@@ -242,7 +242,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        productCode: this.filterObj.productCode,
+        dimProduct: this.filterObj.dim_product,
       })
         .then((response) => {
           if (response.code == 1000) {
@@ -319,41 +319,34 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      if (this.uploadFile != '') {
-        var formData = new FormData()
-        formData.append('file', this.uploadFile)
-        API.importExcel(formData).then((response) => {
-          // 清除input的value ,上传一样的
-          event.target.value = null
-          this.$message.success('导入成功!请点击检测数据')
-        })
-      } else {
-        this.$message.error('请选择文件')
-      }
+      this.event = event
     },
     // 关闭导入
-    closeimportDialog() {
+    closeImportDialog() {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
+      //清除input的value ,上传一样的
+      this.event.target.value = null
     },
     // 校验数据
     checkImport() {
-      if (this.uploadFileName != '') {
-        API.exceptionCheck().then((response) => {
+      let formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importExcel(formData).then((response) => {
+        if (response.code == 1000) {
           this.ImportData = response.data
-          this.saveBtn = response.data[0].judgmentType !== 'Error'
-        })
-      } else {
-        this.$message.error('请先选择文件再检测数据!')
-      }
+          this.saveBtn =
+            response.data[0].judgmentType === 'Error' ? false : true
+        }
+      })
     },
     // 确认导入
     confirmImport() {
       API.exceptionSave().then((res) => {
         this.$message.success('保存成功!')
         this.getTableData()
-        this.closeimportDialog()
+        this.closeImportDialog()
       })
     },
     // 导出异常信息
@@ -373,7 +366,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        productCode: this.filterObj.productCode,
+        dimProduct: this.filterObj.dim_product,
       }).then((res) => {
         const timestamp = Date.parse(new Date())
         this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -482,6 +475,9 @@ export default {
       font-weight: bold;
       color: #ff8912;
     }
+  }
+  .importDialog {
+    height: 600px;
   }
 }
 </style>

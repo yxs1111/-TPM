@@ -34,7 +34,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.dim_product" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
@@ -48,20 +48,20 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG"  @click="importData">
+      <div class="TpmButtonBG" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(1)">
+      <div class="TpmButtonBG" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(0)">
+      <div class="TpmButtonBG" @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
@@ -99,15 +99,15 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-      <div class="el-downloadFileBar">
+    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
+      <div class="importDialog">
+        <div class="el-downloadFileBar">
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
           <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
         </div>
         <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
       </div>
-
       <div class="fileInfo">
         <div class="fileInfo">
           <div class="fileTitle">文件</div>
@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="tableWrap">
-        <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+        <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
@@ -171,6 +171,8 @@
           <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
         </el-table>
       </div>
+      </div>
+      
     </el-dialog>
   </div>
 </template>
@@ -197,7 +199,7 @@ export default {
         customerCode: '',
         distributorCode: '',
         regionCode: '',
-        productCode: '',
+        dim_product: '',
       },
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -212,6 +214,7 @@ export default {
       ImportData: [],
       uploadFileName: '',
       uploadFile: '',
+      event: '',
       isSubmit: 0, // 提交状态  1：已提交，0：未提交
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
@@ -231,7 +234,7 @@ export default {
   watch: {
     'filterObj.channelCode'() {
       this.getCustomerList()
-    }
+    },
   },
   methods: {
     // 获取表格数据
@@ -245,16 +248,15 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        productCode: this.filterObj.productCode,
+        dimProduct: this.filterObj.dim_product,
       })
         .then((response) => {
-          
           this.tableData = response.data.records
           if (this.tableData.length) {
-              this.isSubmit = this.tableData[0].isSubmit
-            } else {
-              this.isSubmit = 0
-            }
+            this.isSubmit = this.tableData[0].isSubmit
+          } else {
+            this.isSubmit = 0
+          }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -324,36 +326,33 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importExcel(formData).then((response) => {
-        // 清除input的value ,上传一样的
-        event.target.value = null
-        this.$message.success('导入成功!请点击检测数据')
-      })
+      this.event = event
     },
     // 关闭导入
-    closeimportDialog() {
+    closeImportDialog() {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
+      //清除input的value ,上传一样的
+      this.event.target.value = null
     },
     // 校验数据
     checkImport() {
-      if (this.uploadFileName != '') {
-        API.exceptionCheck().then((response) => {
+      let formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importExcel(formData).then((response) => {
+        if (response.code == 1000) {
           this.ImportData = response.data
-          this.saveBtn = response.data[0].judgmentType !== 'Error'
-        })
-      } else {
-        this.$message.error('请先选择文件再检测数据!')
-      }
+          this.saveBtn =
+            response.data[0].judgmentType === 'Error' ? false : true
+        }
+      })
     },
     // 导入--保存
     confirmImport() {
       API.exceptionSave().then((res) => {
         this.$message.success('保存成功!')
-        this.closeimportDialog()
+        this.closeImportDialog()
         this.getTableData()
       })
     },
@@ -374,7 +373,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        productCode: this.filterObj.productCode,
+        dimProduct: this.filterObj.dim_product,
       }).then((res) => {
         const timestamp = Date.parse(new Date())
         this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -518,6 +517,9 @@ export default {
       font-weight: bold;
       color: #ff8912;
     }
+  }
+  .importDialog {
+    height: 600px;
   }
 }
 </style>

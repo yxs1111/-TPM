@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-08 10:47:09
+ * @LastEditTime: 2021-12-08 17:07:38
 -->
 <template>
   <div class="app-container">
@@ -112,7 +112,7 @@
                 <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
-            <el-form-item label="渠道"  prop="channelCode">
+            <el-form-item label="渠道" prop="channelCode">
               <el-select v-model="ruleForm.channelCode" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
               </el-select>
@@ -125,8 +125,8 @@
         </span>
       </el-dialog>
       <!-- 导入 -->
-      <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-        <div>
+      <el-dialog width="66%" class="my-el-dialog " title="导入" :visible="importVisible" @close="closeImportDialog">
+        <div class="importDialog">
           <div class="el-downloadFileBar">
             <div>
               <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
@@ -155,7 +155,7 @@
             </div>
           </div>
           <div class="tableWrap">
-            <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+            <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -195,10 +195,7 @@
 </template>
 
 <script>
-import {
-  getDefaultPermissions,
-  yearAndMonthList,VersionList
-} from '@/utils'
+import { getDefaultPermissions, yearAndMonthList, VersionList } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import API from '@/api/V0/V0.js'
@@ -249,6 +246,7 @@ export default {
       ImportData: [],
       uploadFileName: '',
       uploadFile: '',
+      event: '',
       isSubmit: 0,
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
@@ -262,7 +260,7 @@ export default {
         'background:#FEF5F6',
         'background:#F0F6FC',
       ], //价格档位背景色
-      isNoData:false,
+      isNoData: false,
     }
   },
   directives: { elDragDialog, permission },
@@ -281,16 +279,17 @@ export default {
       })
     },
     getList() {
+      //encodeURIComponent
       API.getList({
         yearAndMonth: this.filterObj.month,
-        dim_product: this.filterObj.SKU,
+        dimProduct: this.filterObj.SKU,
       }).then((response) => {
         if (response.code === 1000) {
           this.ContentData = response.data
-          if(Object.keys(this.ContentData).length==0) {
-            this.isNoData=true 
+          if (Object.keys(this.ContentData).length == 0) {
+            this.isNoData = true
           } else {
-            this.isNoData=false 
+            this.isNoData = false
           }
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
@@ -332,10 +331,12 @@ export default {
       this.importVisible = true
     },
     //关闭导入
-    closeimportDialog() {
+    closeImportDialog() {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
+      //清除input的value ,上传一样的
+      this.event.target.value = null
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -345,30 +346,25 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      if (this.uploadFile != '') {
-        var formData = new FormData()
-        formData.append('file', this.uploadFile)
-        API.importExcel(formData).then((response) => {
-          //清除input的value ,上传一样的
-          event.target.value = null
-          this.$message.success('导入成功!请点击检测数据')
-        })
-      } else {
-        this.$message.warning('请选择文件')
-      }
+      this.event = event
     },
     //校验数据
     checkImport() {
-      API.exceptionCheck().then((response) => {
-        this.ImportData = response.data
-        this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
+      let formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importExcel(formData).then((response) => {
+        if (response.code == 1000) {
+          this.ImportData = response.data
+          this.saveBtn =
+            response.data[0].judgmentType === 'Error' ? false : true
+        }
       })
     },
     //确认导入文件
     confirmImport() {
       API.exceptionSave().then((res) => {
         this.$message.success('保存成功!')
-        this.closeimportDialog()
+        this.closeImportDialog()
         this.getList()
       })
     },
@@ -386,7 +382,7 @@ export default {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
-          dim_product: this.filterObj.SKU,
+          dimProduct: encodeURIComponent(this.filterObj.SKU),
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -587,6 +583,9 @@ export default {
   }
   .hide {
     display: none;
+  }
+  .importDialog {
+    height: 600px;
   }
 }
 </style>

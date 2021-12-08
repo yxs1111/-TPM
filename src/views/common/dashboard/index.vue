@@ -1,16 +1,56 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-03 10:33:58
+ * @LastEditTime: 2021-12-08 19:16:25
 -->
 <template>
   <div class="dashboard-container">
     <div class="chartWrap">
-      <div class="box1"></div>
-      <div class="box2"></div>
+      <div class="CityPlan">
+        <div class="CityPlanTop">
+          <span class="V0">V0</span>
+          <span class="V1">V1</span>
+          <span class="V2">V2</span>
+          <span class="V3">V3</span>
+        </div>
+        <div class="PointTipWrap">
+          <div class="PointTip">
+            <img src="@/assets/images/index/point1.png" alt="" class="pointTipImg">
+            <span>已完成</span>
+          </div>
+          <div class="PointTip">
+            <img src="@/assets/images/index/point2.png" alt="" class="pointTipImg">
+            <span>当前节点</span>
+          </div>
+          <div class="PointTip">
+            <img src="@/assets/images/index/point3.png" alt="" class="pointTipImg">
+            <span>延误节点</span>
+          </div>
+          <div class="PointTip">
+            <img src="@/assets/images/index/point4.png" alt="" class="pointTipImg">
+            <span>未开始</span>
+          </div>
+        </div>
+        <!-- 活动月 -->
+        <div class="monthBarWrap">
+          <div class="monthBar">
+            <div class="monthBg">
+              <div class="monthName">7+5</div>
+              <div class="monthName">（202110）</div>
+              <!-- <img src="@/assets/images/index/month (1).png" alt=""> -->
+            </div>
+            <!-- <img src="@/assets/images/index/month (1).png" alt=""> -->
+          </div>
+          <div class="monthBar">
+             <img src="@/assets/images/index/month (2).png" alt="">
+          </div>
+          <div class="monthBar">
+             <img src="@/assets/images/index/month (3).png" alt="">
+          </div>
+        </div>
 
-      <!-- <div class="chartli" id="SalesAmount"></div>
-      <div class="chartli" id="ActualSales"></div> -->
+      </div>
+      <div class="calendarBar"></div>
     </div>
     <div class="BottomBar">
       <div class="MyToDo">
@@ -139,7 +179,6 @@ export default {
     }
   },
   mounted() {
-    // this.createdEchart()
     // window.addEventListener('resize', () => {
     //   this.SalesAmountChart.resize()
     //   this.ActualSalesChart.resize()
@@ -155,142 +194,6 @@ export default {
     },
   },
   methods: {
-    // 创建图表
-    createdEchart() {
-      var SalesAmountChart = echarts.init(
-        document.getElementById('SalesAmount')
-      )
-      SalesAmountChart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-          },
-        },
-        title: {
-          text: '每月促销金额',
-          textStyle: {
-            fontSize: 22,
-            color: '#333',
-          },
-          top: '5%',
-          left: '2%',
-        },
-        grid: {
-          top: '24%',
-          left: '5%',
-          right: '5%',
-          bottom: '10%',
-          containLabel: true,
-        },
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          nameTextStyle: {
-            fontSize: 16,
-            color: '#999999',
-          },
-          axisTick: {
-            show: false,
-          },
-        },
-        yAxis: {
-          type: 'value',
-        },
-        series: [
-          {
-            data: [120, 200, 150, 80, 70, 110, 130],
-            type: 'bar',
-            barWidth: 14,
-            itemStyle: {
-              color: '#4192d3',
-              borderRadius: [7, 7, 0, 0],
-            },
-          },
-        ],
-      })
-      this.SalesAmountChart = SalesAmountChart
-      var ActualSalesChart = echarts.init(
-        document.getElementById('ActualSales')
-      )
-      ActualSalesChart.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-            label: {
-              backgroundColor: '#6a7985',
-            },
-          },
-        },
-        title: {
-          text: '每月实际销量',
-          textStyle: {
-            fontSize: 22,
-            color: '#333',
-          },
-          top: '5%',
-          left: '2%',
-        },
-        grid: {
-          top: '24%',
-          left: '5%',
-          right: '5%',
-          bottom: '10%',
-          containLabel: true,
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          nameTextStyle: {
-            fontSize: 16,
-            color: '#999999',
-          },
-          axisTick: {
-            show: false,
-          },
-        },
-        yAxis: {
-          type: 'value',
-        },
-        series: [
-          {
-            data: [150, 230, 224, 218, 135, 147, 260],
-            type: 'line',
-            // 设置折线上圆点大小
-            symbolSize: 8,
-            symbol: 'circle',
-            itemStyle: {
-              color: '#579cf9',
-              borderWidth: 2,
-              borderColor: '#ffffff',
-            },
-            lineStyle: {
-              color: '#579cf9',
-            },
-
-            areaStyle: {
-              opacity: 0.2,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: '#4c8bfd',
-                },
-                {
-                  offset: 1,
-                  color: '#ffffff',
-                },
-              ]),
-            },
-            smooth: true,
-          },
-        ],
-      })
-      this.ActualSalesChart = ActualSalesChart
-    },
     changeCurrent(index) {
       this.currentIndex = index
     },
@@ -299,23 +202,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.box1{
-  width: 1083px;
-  height: 340px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
-  border-radius: 20px;
-}
-.box2{
-  width: 462px;
-  height: 340px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
-  border-radius: 20px;
-}
 .dashboard-container {
   font-size: 16px;
   width: 100%;
+  height: 100%;
   padding: 10px;
   box-sizing: border-box;
   .TopBar {
@@ -371,14 +261,99 @@ export default {
   }
   .chartWrap {
     width: 100%;
-    height: 310px;
+    height: 520px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 32px 0;
-    .chartli {
-      width: 49%;
-      height: 310px;
+    margin-top: 0;
+    .CityPlan {
+      width: 68%;
+      height: 520px;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
+      .CityPlanTop {
+        width: 100%;
+        height: 52px;
+        padding-left: 220px;
+        box-sizing: border-box;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333333;
+        display: flex;
+        align-items: center;
+        padding-right: 60px;
+        border-bottom: 1px solid #dce1e6;
+        margin-bottom: 10px;
+        .V0 {
+          width: 33%;
+        }
+        .V1 {
+          width: 33%;
+        }
+        .V2 {
+          width: 33%;
+        }
+      }
+      .PointTipWrap {
+        width: 100%;
+        margin: 10px 0;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        .PointTip {
+          margin-right: 40px;
+          font-size: 14px;
+          font-family: Source Han Sans CN;
+          font-weight: 400;
+          color: #333333;
+          display: flex;
+          align-items: center;
+          .pointTipImg {
+            width: 17px;
+            height: 17px;
+            margin-right: 6px;
+          }
+        }
+      }
+      .monthBarWrap {
+        width: 100%;
+        padding: 0 20px;
+        height: calc(100% - 120px);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .monthBar {
+          width: 100%;
+          height: 110px;
+          background: #ffffff;
+          box-shadow: 0px 0px 18px 0px rgba(114, 114, 114, 0.07);
+          border-radius: 20px;
+          .monthBg {
+            width: 170px;
+            height: 110px;
+            display: flex;
+            font-weight: 600;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: url('../../../assets/images/index/month (1).png') no-repeat;
+            background-size: 100% 100%;
+            .monthName {
+              // width: 100%;
+              text-align: left;
+            }
+          }
+        }
+      }
+    }
+    .calendarBar {
+      width: 30%;
+      height: 520px;
       background-color: #fff;
       border-radius: 20px;
       box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
@@ -551,7 +526,7 @@ export default {
 }
 .el-timeline-item__node {
   background-color: #fff !important;
-  border: 2px solid #4192d3!important;
+  border: 2px solid #4192d3 !important;
 }
 /*滚动条的宽度*/
 ::-webkit-scrollbar {

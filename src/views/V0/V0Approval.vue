@@ -96,8 +96,8 @@ priceLevelKeep<!--
         <div class="null_content_tit">暂无数据</div>
       </div>
       <!-- 导入 -->
-      <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
-        <div>
+      <el-dialog width="66%" class="my-el-dialog " title="导入" :visible="importVisible" @close="closeImportDialog">
+        <div class="importDialog">
           <div class="el-downloadFileBar">
             <div>
               <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
@@ -127,7 +127,7 @@ priceLevelKeep<!--
             </div>
           </div>
           <div class="tableWrap">
-            <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+            <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
                 background: '#fff',
                 color: '#333',
                 fontSize: '16px',
@@ -194,6 +194,7 @@ export default {
       mainId: '',
       uploadFileName: '',
       uploadFile: '',
+      event: '',
       isSubmit: 0,
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
@@ -218,7 +219,7 @@ export default {
     getList() {
       API.getApproveList({
         yearAndMonth: this.filterObj.month,
-        dim_product: this.filterObj.SKU,
+        dimProduct: this.filterObj.SKU,
       }).then((response) => {
         if (response.code == 1000) {
           this.ContentData = response.data
@@ -266,10 +267,12 @@ export default {
       this.importVisible = true
     },
     //关闭导入
-    closeimportDialog() {
+    closeImportDialog() {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
+      //清除input的value ,上传一样的
+      this.event.target.value = null
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -279,25 +282,18 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      if (this.uploadFile != '') {
-        var formData = new FormData()
-        formData.append('file', this.uploadFile)
-        API.importExcel(formData).then((response) => {
-          if (response.code === 1000) {
-            //清除input的value ,上传一样的
-            event.target.value = null
-            this.$message.success('导入成功!请点击检测数据')
-          }
-        })
-      } else {
-        this.$message.warning('请选择文件')
-      }
+      this.event = event
     },
     //校验数据
     checkImport() {
-      API.exceptionCheck().then((response) => {
-        this.ImportData = response.data
-        this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
+      let formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importExcel(formData).then((response) => {
+        if (response.code == 1000) {
+          this.ImportData = response.data
+          this.saveBtn =
+            response.data[0].judgmentType === 'Error' ? false : true
+        }
       })
     },
     //确认导入文件
@@ -305,7 +301,7 @@ export default {
       API.exceptionSave().then((res) => {
         if (res.code === 1000) {
           this.$message.success('保存成功!')
-          this.closeimportDialog()
+          this.closeImportDialog()
           this.getList()
         }
       })
@@ -313,11 +309,11 @@ export default {
     //导出异常信息
     exportErrorList() {
       API.exceptionDownExcel().then((res) => {
-        if (res.code === 1000) {
+       
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')
-        }
+        
       })
     },
     //导出数据
@@ -326,7 +322,7 @@ export default {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
-          dim_product: this.filterObj.SKU,
+          dimProduct: encodeURIComponent(this.filterObj.SKU),
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -519,6 +515,9 @@ export default {
         }
       }
     }
+  }
+  .importDialog {
+    height: 600px;
   }
 }
 </style>
