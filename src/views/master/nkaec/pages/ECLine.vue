@@ -1,6 +1,32 @@
 <template>
   <div class="app-container" style="border-radius: 0px;">
     <!-- 查询条件 -->
+    <!-- 查询条件 -->
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli" @keyup.enter="search">
+          <span class="SelectliTitle">SKU:</span>
+          <el-input v-model="filterObj.product" clearable filterable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">scenario</span>
+          <el-input v-model="filterObj.scenario" clearable filterable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">版本:</span>
+          <el-input v-model="filterObj.version" clearable filterable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">顾客:</span>
+          <el-input v-model="filterObj.customer" clearable filterable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">measure:</span>
+          <el-input v-model="filterObj.measure" clearable filterable placeholder="请输入" />
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+      </div>
+    </div>
     <div class="SelectBarWrap">
       <div class="TpmButtonBG" @click="importDataECLine">
         <img src="@/assets/images/import.png" alt="">
@@ -18,18 +44,18 @@
       <el-table-column width="150" align="center" prop="dimCustomer" label="经销商" />
       <el-table-column align="center" prop="dimYear" label="年" />
       <el-table-column width="360" align="center" prop="dimMeasure" label="估量" />
-      <el-table-column width="100" align="center" prop="jan" label="一月" />
-      <el-table-column width="100" align="center" prop="feb" label="二月" />
-      <el-table-column width="100" align="center" prop="mar" label="三月" />
-      <el-table-column width="100" align="center" prop="apr" label="四月" />
-      <el-table-column width="100" align="center" prop="may" label="五月" />
-      <el-table-column width="100" align="center" prop="jun" label="六月" />
-      <el-table-column width="100" align="center" prop="jul" label="七月" />
-      <el-table-column width="100" align="center" prop="aug" label="八月" />
-      <el-table-column width="100" align="center" prop="aug" label="九月" />
-      <el-table-column width="100" align="center" prop="oct" label="十月" />
-      <el-table-column width="100" align="center" prop="nov" label="十一月" />
-      <el-table-column width="100" align="center" prop="dec" label="十二月" />
+      <el-table-column width="160" align="center" prop="jan" label="一月" />
+      <el-table-column width="160" align="center" prop="feb" label="二月" />
+      <el-table-column width="160" align="center" prop="mar" label="三月" />
+      <el-table-column width="160" align="center" prop="apr" label="四月" />
+      <el-table-column width="160" align="center" prop="may" label="五月" />
+      <el-table-column width="160" align="center" prop="jun" label="六月" />
+      <el-table-column width="160" align="center" prop="jul" label="七月" />
+      <el-table-column width="160" align="center" prop="aug" label="八月" />
+      <el-table-column width="160" align="center" prop="aug" label="九月" />
+      <el-table-column width="160" align="center" prop="oct" label="十月" />
+      <el-table-column width="160" align="center" prop="nov" label="十一月" />
+      <el-table-column width="160" align="center" prop="dec" label="十二月" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -44,7 +70,7 @@
       />
     </div>
     <!-- EC导入 -->
-    <el-dialog width="30%" class="my-el-dialog" title="NKA导入" :visible="importVisibleECLine" @close="closeImport">
+    <el-dialog width="30%" class="my-el-dialog" title="ECLine导入" :visible="importVisibleECLine" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
@@ -89,9 +115,11 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        name: '',
-        key: '',
-        category: ''
+        product: '',
+        scenario: '',
+        version: '',
+        customer: '',
+        measure: ''
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
@@ -158,6 +186,11 @@ export default {
     getTableData() {
       this.tableLoading = true
       API.getPageByDtoECL({
+        product: this.filterObj.product,
+        scenario: this.filterObj.scenario,
+        version: this.filterObj.version,
+        customer: this.filterObj.customer,
+        measure: this.filterObj.measure,
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize // 每页条数
       })

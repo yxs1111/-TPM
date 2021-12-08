@@ -1,6 +1,6 @@
 // 检测规则
 <template>
-  <div class="app-container">
+  <div class="app-container" style="border-radius:0px;">
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="渠道：">
@@ -121,7 +121,7 @@ import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import type from '@/views/meta/dict/type'
 export default {
-  name: 'SaleComputeKeep',
+  name: 'TestRules',
   directives: { elDragDialog, permission },
 
   data() {

@@ -10,7 +10,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
-    Microsoft YaHei, Arial, sans-serif;
+    Source Han Sans CN Light, Arial, sans-serif;
 }
 
 label {
@@ -276,7 +276,7 @@ div:focus {
       .SelectliTitle {
         // width: 70px;
         font-size: 14px;
-        font-family: Microsoft YaHei;
+        font-family: Source Han Sans CN Light;
         font-weight: 400;
         color: #4d4d4d;
         margin-right: 10px;
@@ -395,7 +395,7 @@ div:focus {
 // 表格样式
 .el-table {
   font-size: 14px;
-  font-family: Microsoft YaHei;
+  font-family: Source Han Sans CN Light;
   font-weight: 400;
   color: #666;
   // 滚动条的宽度
@@ -471,7 +471,7 @@ div:focus {
   }
   .el-dialog__title {
     font-size: 16px;
-    font-family: Microsoft YaHei;
+    font-family: Source Han Sans CN Light;
     font-weight: bold;
     color: #fff;
     line-height: 50px;
@@ -491,7 +491,7 @@ div:focus {
   .el-tips {
     width: 100%;
     font-size: 14px;
-    font-family: Microsoft YaHei;
+    font-family: Source Han Sans CN Light;
     font-weight: 400;
     color: #808080;
     margin-bottom: 10px;
@@ -508,7 +508,7 @@ div:focus {
         width: 120px;
         text-align: right;
         font-size: 16px;
-        font-family: Microsoft YaHei;
+        font-family: Source Han Sans CN Light;
         font-weight: 400;
         color: #000000;
         margin-right: 20px;
@@ -609,7 +609,7 @@ div:focus {
     }
     .fileTitle {
       font-size: 14px;
-      font-family: Microsoft YaHei;
+      font-family: Source Han Sans CN Light;
       font-weight: 400;
       color: #4d4d4d;
     }
@@ -637,7 +637,7 @@ div:focus {
       display: flex;
       align-items: center;
       font-size: 14px;
-      font-family: Microsoft YaHei;
+      font-family: Source Han Sans CN Light;
       font-weight: 400;
       color: #4192d3;
       .upview_fileicon {
@@ -659,7 +659,7 @@ div:focus {
       .seeDataTitle {
         margin-right: 18px;
         font-size: 14px;
-        font-family: Microsoft YaHei;
+        font-family: Source Han Sans CN Light;
         font-weight: 400;
         color: #4d4d4d;
       }
@@ -697,7 +697,7 @@ div:focus {
       justify-content: center;
       color: #fff;
       font-size: 14px;
-      font-family: Microsoft YaHei;
+      font-family: Source Han Sans CN Light;
       font-weight: 400;
       cursor: pointer;
       .exportError_icon {
@@ -710,7 +710,7 @@ div:focus {
     max-height: 400px;
     margin-top: 20px;
     font-size: 14px;
-    font-family: Microsoft YaHei;
+    font-family: Source Han Sans CN Light;
     font-weight: 400;
     color: #333333;
   }

@@ -292,7 +292,9 @@ export default {
     },
     // 校验excel
     downLoadException() {
-      API.exportException().then(
+      API.exportException({
+        exportType: 'exportExceptionTemplate'
+      }).then(
         response => {
           const fileName = '校验' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
@@ -395,6 +397,7 @@ export default {
       // 导出数据筛选
       var data = {}
       data = { ...this.filterObj }
+      data.exportType = 'export'
       API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')

@@ -199,8 +199,27 @@ export default function() {
               path: '/priceSale/systemPool',
               code: 'SystemPool',
               name: 'SystemPool',
-              component: () => import('@/views/master/priceSale/systemPool.vue'),
-              meta: { title: '机制池', icon: 'apply' }
+              component: () => import('@/views/master/priceSale/model/sysPool.vue'),
+              meta: { title: '机制池', icon: 'apply' },
+              redirect: '/master/priceSale/systemPool',
+              children: [
+                {
+                  hidden: true,
+                  path: '/master/priceSale/systemPool',
+                  code: 'SystemPool',
+                  name: 'SystemPool',
+                  component: () => import('@/views/master/priceSale/systemPool.vue'),
+                  meta: { title: 'Price Promotion', icon: 'form', activeMenu: '/priceSale/systemPool' }
+                },
+                {
+                  hidden: true,
+                  path: '/master/priceSale/systemPoolNew',
+                  code: 'SystemPoolNew',
+                  name: 'SystemPoolNew',
+                  component: () => import('@/views/master/priceSale/systemPoolNew.vue'),
+                  meta: { title: 'New User', icon: 'form', activeMenu: '/priceSale/systemPool' }
+                }
+              ]
             }
           ]
         },
@@ -268,12 +287,31 @@ export default function() {
               name: 'TestRules',
               component: () =>
                 import(
-                  '@/views/master/ruleCtrl/testRules.vue'
+                  '@/views/master/ruleCtrl/model/testRulesM.vue'
                 ),
               meta: {
                 title: '检验规则',
                 icon: 'approve'
-              }
+              },
+              redirect: '/master/ruleCtrl/model/testRules',
+              children: [
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/testRules',
+                  code: 'TestRules',
+                  name: 'TestRules',
+                  component: () => import('@/views/master/ruleCtrl/testRules.vue'),
+                  meta: { title: 'Price Promotion', icon: 'form', activeMenu: '/ruleCtrl/testRules' }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/testRulesNew',
+                  code: 'TestRulesNew',
+                  name: 'TestRulesNew',
+                  component: () => import('@/views/master/ruleCtrl/testRulesNew.vue'),
+                  meta: { title: 'New User', icon: 'form', activeMenu: '/ruleCtrl/testRules' }
+                }
+              ]
             },
             // {
             //   path: '/ruleCtrl/newUserC',

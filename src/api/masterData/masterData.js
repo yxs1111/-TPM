@@ -269,8 +269,8 @@ export default {
   importExcelSyspool(params) {
     return request({
       url: '/mdm/mdCdmConfig/importExcel',
-      method: 'get',
-      get: params,
+      method: 'post',
+      data: params,
       headers: { 'Content-Type': 'multipart/form-data' }
     })
   },

@@ -1,6 +1,6 @@
 // 价格主数据
 <template>
-  <div class="app-container">
+  <div class="app-container" style="border-radius:0px;">
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
@@ -44,8 +44,16 @@
       <!-- <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">新增</el-button> -->
       <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe style="width: 100%"
-      @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="tableLoading"
+      :data="tableData"
+      border
+      :header-cell-style="HeadTable"
+      :row-class-name="tableRowClassName"
+      stripe
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="320" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="150" align="center" prop="sku" label="SKU" />
@@ -57,7 +65,7 @@
       <el-table-column width="200" align="center" prop="cdmName" label="机制名称" />
       <el-table-column width="180" align="center" label="创建时间">
         <template slot-scope="scope">
-          {{ scope.row.createDate.replace('T', ' ') }}
+          {{ scope.row.createDate==null ? '':scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
@@ -71,8 +79,15 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
     <!-- 新增 -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
@@ -130,8 +145,13 @@
             </el-table-column>
             <el-table-column label="机制规则" align="center" prop="fs">
               <template slot-scope="scope">
-                <el-input v-model="systemList[scope.row.xh-1].cdmRuleF" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;margin-right:8px;" size="small"
-                  placeholder="请输入" />
+                <el-input
+                  v-model="systemList[scope.row.xh-1].cdmRuleF"
+                  :disabled="systemList[scope.row.xh-1].cdmType == '5'"
+                  style="width:80px;margin-right:8px;"
+                  size="small"
+                  placeholder="请输入"
+                />
                 <el-input v-model="systemList[scope.row.xh-1].cdmRuleS" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;" size="small" placeholder="请输入" />
               </template>
             </el-table-column>
@@ -193,13 +213,13 @@ export default {
         minePackageCode: '',
         sku: '',
         cdmType: '',
-        cdmName: '',
+        cdmName: ''
       },
       dialogAdd: {
         channelCode: '',
         costTypeNumber: '',
         productCode: '',
-        remark: '',
+        remark: ''
       },
       tableLoading: '',
       value: '',
@@ -215,16 +235,16 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: '',
+        remark: ''
       },
       rules: {
         channelCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
+            trigger: 'blur'
+          }
+        ]
       },
       dialogVisible: false,
       isEditor: '',
@@ -238,24 +258,24 @@ export default {
       cdmTypeOptions: [
         {
           code: 'cdm1',
-          name: '打折',
+          name: '打折'
         },
         {
           code: 'cdm2',
-          name: '特价',
+          name: '特价'
         },
         {
           code: 'cdm3',
-          name: '满减',
-        },
+          name: '满减'
+        }
       ],
-      importVisible: false,
+      importVisible: false
     }
   },
 
   computed: {
     typeVSinfo() {
-      return function (type) {
+      return function(type) {
         switch (type) {
           case '1':
             return '打折'
@@ -266,17 +286,11 @@ export default {
           case '3':
             return '满减'
             break
-          case '4':
-            return '买赠'
-            break
-          case '5':
-            return '其它'
-            break
           default:
             break
         }
       }
-    },
+    }
   },
   mounted() {
     this.getTableData()
@@ -293,7 +307,7 @@ export default {
         minePackageCode: this.filterObj.minePackageCode,
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
-        cdmName: this.filterObj.cdmName,
+        cdmName: this.filterObj.cdmName
       }
       API.exportExcelSyspool(data).then(
         response => {
@@ -318,7 +332,7 @@ export default {
         const fileName = '机制池模板' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel',
+          type: 'application/vnd.ms-excel'
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -340,7 +354,9 @@ export default {
       formData.append('file', this.uploadFile)
       API.importExcelSyspool(formData)
         .then((response) => {
-          this.closeImport()
+          if (response.code === 1000) {
+            this.closeImport()
+          }
         })
         .catch(() => {})
     },
@@ -392,7 +408,7 @@ export default {
     handleDeleteDetails() {
       if (this.checkedDetail.length === 0) {
         this.$alert('请先选择要删除的数据', '提示', {
-          confirmButtonText: '确定',
+          confirmButtonText: '确定'
         })
       } else {
         this.systemList.splice(this.checkedDetail[0].xh - 1, 1)
@@ -437,7 +453,7 @@ export default {
         minePackageCode: this.filterObj.minePackageCode,
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
-        cdmName: this.filterObj.cdmName,
+        cdmName: this.filterObj.cdmName
       })
         .then((response) => {
           this.tableLoading = false
@@ -453,7 +469,7 @@ export default {
       this.tableLoading = true
       API.getPageByRequestConfig({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
+        pageSize: this.pageSize // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -480,7 +496,7 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: '',
+        remark: ''
       }
     },
     editor(obj) {
@@ -495,7 +511,7 @@ export default {
         gear: obj.gear,
         volMin: obj.volMin,
         yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark,
+        remark: obj.remark
       }
       this.editorId = obj.id
     },
@@ -508,7 +524,7 @@ export default {
           cdmTypeItem: '',
           cdmNameItem: '',
           beginNumItem: '',
-          endNumItem: '',
+          endNumItem: ''
         }
         cdnItem.cdmTypeItem = item.cdmType
         cdnItem.cdmNameItem =
@@ -525,7 +541,7 @@ export default {
         minePackageCode: this.dialogAdd.costTypeNumber,
         sku: this.dialogAdd.productCode,
         remark: this.dialogAdd.remark,
-        cdmList: cdmListLocal,
+        cdmList: cdmListLocal
       }
       API.insertDataConfig(params)
         .then((res) => {
@@ -590,8 +606,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 
