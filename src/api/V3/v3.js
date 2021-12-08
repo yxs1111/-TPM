@@ -43,6 +43,14 @@ export default {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
   },
+  importV3MakeUp(formData) {
+    return request({
+      url: '/cityplan/investCpVThreeDetail/makeUp',
+      method: 'post',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
   // 文件检索后保存
   saveImportInfo(params) {
     return requestApi.request_post('/cityplan/investCpVThreeDetail/save', params)
@@ -54,5 +62,9 @@ export default {
   // 审批 通过 驳回
   approve(params) {
     return requestApi.request_post('/cityplan/investCpVThreeDetail/approve', params)
-  }
+  },
+  // 通过与驳回
+  infoByMainId(params) {
+    return requestApi.request_post('/cityplan/investCpV/infoByMainId', params)
+  },
 }

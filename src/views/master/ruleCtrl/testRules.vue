@@ -35,7 +35,7 @@
       <el-table-column width="370" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="{row}">
           <div v-if="row.ruleUnit === '∈'">
-            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" />%&nbsp;]
+            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row)" />%&nbsp;]
           </div>
           <div v-else>
             {{ row.ruleContentAfter }}
@@ -193,6 +193,18 @@ export default {
     // 获取下拉框
   },
   methods: {
+    // 验证input输入框数据
+    number(e, row) {
+      const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(e.target.value)
+      console.log('*****rule******', e, row)
+      if (!flag) {
+        this.$message({
+          showClose: true,
+          message: '需要输入整数！',
+          type: 'warning'
+        })
+      }
+    },
     // 导出excel
     exportExcelInfo() {
       API.excportRuleSave().then(

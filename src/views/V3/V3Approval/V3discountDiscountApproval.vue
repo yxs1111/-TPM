@@ -243,6 +243,12 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
+      }).then().catch()
+    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then(res => {
@@ -449,6 +455,7 @@ export default {
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          this.infoByMainId()
         })
         .catch((error) => {})
     },

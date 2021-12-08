@@ -114,7 +114,7 @@ export default {
       formData.append('type', 'NKA')
       API.importNkaRawData(formData)
         .then((response) => {
-          if (response === 1000) {
+          if (response.code === 1000) {
             this.$message.success(response.data)
             this.closeImport()
           } else {

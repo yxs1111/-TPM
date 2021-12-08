@@ -122,7 +122,7 @@
         <div style="display: flex;">
           <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
           <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
-          <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <input ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
             <span>{{ uploadFileName }}</span>
@@ -200,23 +200,24 @@
     <!-- 补录对话框 -->
     <el-dialog width="66%" class="my-el-dialog" title="补录" :visible="supplementVisible" @close="closeimportDialog">
       <div class="el-downloadFileBar" style="display:flex;">
-        <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">
-          下载模板
-        </el-button>
-        <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
-          <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
-        </el-button> -->
-        <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData">检测数据
-        </el-button>
-        <el-button v-if="saveBtn" type="primary" plain class="my-export" @click="saveImportInfo">保存
-        </el-button>
+        <div>
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">
+            下载模板
+          </el-button>
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImportComple()">检测数据
+          </el-button>
+        </div>
+        <div>
+          <el-button v-if="saveBtn" type="primary" class="my-export" @click="saveImportInfo">保存
+          </el-button>
+        </div>
       </div>
 
       <div class="fileInfo" style="justify-content: space-between;">
         <div style="display: flex;">
           <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
           <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
-          <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <input ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
             <span>{{ uploadFileName }}</span>
@@ -436,6 +437,40 @@ export default {
         })
         .catch(() => {})
     },
+    // 确认导入--补录
+    confirmImportComple() {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      // formData.append('mainId', this.mainIdLocal)
+      // formData.append('isApprove', false)
+      this.dialogTableLoading = true
+      // 添加mainId
+      API.importV3MakeUp(formData)
+        .then((response) => {
+          if (response.code === 1000) {
+            this.event.srcElement.value = '' // 置空
+            this.uploadFileName = ''
+            this.uploadFile = ''
+            this.dialogTableLoading = false
+            this.$message({
+              type: 'success',
+              message: '上传成功'
+            })
+            if (response.data != null) {
+              this.dialogData = response.data
+              this.saveBtn = response.data[0].judgmentType !== 'Error'
+            } else {
+              this.dialogData = []
+            }
+          } else {
+            this.$message({
+              type: 'error',
+              message: '上传失败，请重新上传。'
+            })
+          }
+        })
+        .catch(() => {})
+    },
     // 选择导入文件
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
@@ -510,6 +545,7 @@ export default {
     },
     // 关闭导入
     closeimportDialog() {
+      this.uploadFileName = ''
       this.importVisible = false
       this.supplementVisible = false
     },
