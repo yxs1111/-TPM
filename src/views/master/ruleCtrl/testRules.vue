@@ -196,11 +196,18 @@ export default {
     // 验证input输入框数据
     number(e, row) {
       const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(e.target.value)
-      console.log('*****rule******', e, row)
       if (!flag) {
+        e.target.value = ''
         this.$message({
           showClose: true,
           message: '需要输入整数！',
+          type: 'warning'
+        })
+      } else if (row.startRule > row.endRule && flag) {
+        e.target.value = ''
+        this.$message({
+          showClose: true,
+          message: '区域数值需要前大后小！',
           type: 'warning'
         })
       }

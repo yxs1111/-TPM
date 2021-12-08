@@ -53,5 +53,8 @@ export default {
   // 文件检索后保存
   saveImportInfo(params) {
     return requestApi.request_get('/cityplan/investCpVOneDetail/saveImportInfo', params)
+  },
+  getEffectiveDate(params) {
+    return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)
   }
 }

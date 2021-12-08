@@ -44,15 +44,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="agree">
+      <div class="TpmButtonBG" @click="agree">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="reject">
+      <div class="TpmButtonBG" @click="reject">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -120,7 +120,7 @@
           </el-button>
         </div>
         <div>
-          <el-button type="primary" plain class="my-export" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" plain class="my-export" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -234,7 +234,9 @@ export default {
       channelArr: [],
       skuArr: [],
       customerArr: [],
-      distributorArr: []
+      distributorArr: [],
+      localDate: '202101',
+      saveBtn: false,
     }
   },
   computed: {},
@@ -247,6 +249,17 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    // 获取年月
+    getEffectiveDate() {
+      API.getEffectiveDate().then(res => {
+        if (res.code === 1000) {
+          this.localDate = res.data
+          this.getTableData()
+        } else {
+          this.$message.warning('未查询到年月信息！')
+        }
+      }).catch()
+    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then(res => {
@@ -311,7 +324,9 @@ export default {
     },
     // 导入文件检索后保存
     saveImportInfo() {
-      API.saveImportInfo().then(res => {
+      API.saveImportInfo({
+        mainId: this.mainIdLocal
+      }).then(res => {
         if (res.code === 1000) {
           this.closeimportDialog()
           this.$message.success('保存成功！')
@@ -335,6 +350,7 @@ export default {
             })
             if (response.data != null) {
               this.checkedData = response.data
+              this.saveBtn = response.data[0].judgmentType !== 'Error'
             } else {
               this.checkedData = []
             }
@@ -470,7 +486,8 @@ export default {
         channelCode: this.filterObj.channelCode,
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode
+        productCode: this.filterObj.productCode,
+        yearAndMonth: this.localDate
       })
         .then((response) => {
           this.tableLoading = false
