@@ -9,7 +9,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="年月：">
-        <el-date-picker v-model="filterObj.yeardate" type="month" value-format="yyyyMM" placeholder="请选择" />
+        <el-date-picker v-model="filterObj.yeardate" type="month" value-format="yyyyMM" placeholder="请选择" clearable />
       </el-form-item>
       <el-form-item label="版本：">
         <el-select v-model="filterObj.versions" placeholder="请选择" clearable>
@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="拆分类型：">
-        <el-select v-model="filterObj.splitType" placeholder="请选择">
+        <el-select v-model="filterObj.splitType" placeholder="请选择" clearable>
           <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
         </el-select>
       </el-form-item>
@@ -33,8 +33,16 @@
     </el-form>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button
+        type="danger"
+        class="TpmButtonBG"
+        icon="el-icon-delete"
+        size="small"
+        @click="mutidel"
+      >删除</el-button>
     </div>
     <el-table
+      ref="Tdata"
       v-loading="tableLoading"
       :data="tableData"
       border
@@ -43,9 +51,10 @@
       stripe
       style="width: 100%"
     >
+      <el-table-column type="selection" align="center" />
       <el-table-column width="" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="" align="center" prop="yeardate" label="年月" />
-      <el-table-column width="130" align="center" prop="versions" label="版本" />
+      <el-table-column width="220" align="center" prop="varsionName" label="版本" />
       <el-table-column width="150" align="center" prop="splitType" label="拆分类型">
         <template slot-scope="scope">
           {{ scope.row.splitType === 1 ? '连续拆分':'不连续拆分' }}
@@ -66,6 +75,16 @@
         </template>
       </el-table-column>
       <el-table-column width="" align="center" prop="remark" label="备注" />
+      <el-table-column width="180" align="center" prop="updateDate" label="修改时间">
+        <template slot-scope="scope">
+          <div class="table_operation">
+            <div class="table_operation_detail" @click="editor(scope.row)">
+              <i class="el-icon-edit-outline" />
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -79,43 +98,6 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <!-- <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisibleT" width="48%" @close="closeDialog">
-      <div class="el-dialogContent">
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
-          <el-form-item label="渠道编号" prop="channelCode">
-            <el-input v-model="ruleForm.channelCode" class="my-el-input" placeholder="请输入" />
-            <el-select v-model="ruleForm.productCode" class="my-el-select" clearable placeholder="请选择">
-              <el-option v-for="(item, index) in settingTypeList" :key="index" :label="item" :value="index + 1" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="渠道中文名称">
-            <el-input v-model="ruleForm.channelCsName" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="产品编号">
-            <el-input v-model="ruleForm.productCode" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="产品中文名称">
-            <el-input v-model="ruleForm.productCsName" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="档位">
-            <el-input v-model="ruleForm.gear" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="volMin">
-            <el-input v-model="ruleForm.volMin" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="所属年月">
-            <el-input v-model="ruleForm.yearAndMonth" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入" />
-          </el-form-item>
-        </el-form>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
-      </span>
-    </el-dialog> -->
     <!-- 新增 -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="687px" @close="closeDialog">
       <div class="el-dialogContent">
@@ -158,7 +140,7 @@
             <el-col :span="12">
               <div class="grid-content bg-purple" style="padding-left: 60px;">
                 <span style="color:red;">*</span>版本：
-                <el-select v-model="dialogAdd.versions" placeholder="请选择" clearable>
+                <el-select v-model="dialogAdd.varsionName" placeholder="请选择" clearable>
                   <el-option v-for="item in versionsArr" :key="item.code" :label="item.name" :value="item.code" />
                 </el-select>
               </div>
@@ -313,7 +295,7 @@ export default {
           }
         ]
       },
-      isEditor: '',
+      isEditor: false,
       editorId: ''
     }
   },
@@ -339,8 +321,10 @@ export default {
     },
     numberNo(e, i) {
       const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
+      console.log('%%%%%%%%%sysList%%%%%%%')
+      console.log(this.systemList)
+      // debugger
       if (!flag) {
-        debugger
         this.systemList[i].splitRuleF = ''
         this.systemList[i].splitRuleS = ''
         this.systemList[i].splitWeight = ''
@@ -416,10 +400,9 @@ export default {
         this.systemList = new Array()
       }
       const obj = {}
-      obj.cdmType = '1'
-      obj.cdmRuleF = '0'
-      obj.cdmRuleS = '0'
-      obj.cdmName = ''
+      obj.splitRuleF = ''
+      obj.splitRuleS = ''
+      obj.splitWeight = ''
       this.systemList.push(obj)
     },
     handleDeleteDetails() {
@@ -436,6 +419,7 @@ export default {
     },
     // 新增弹框
     add() {
+      this.isEditor = false
       this.dialogVisible = true
     },
     closeDialog() {
@@ -450,7 +434,8 @@ export default {
         minePackageCode: '',
         splitWeight: '',
         splitRuleF: '',
-        splitRuleS: ''
+        splitRuleS: '',
+        checkArr: [] // 批量删除,存放选中
       }
       this.systemList = []
     },
@@ -495,18 +480,9 @@ export default {
     editor(obj) {
       this.isEditor = true
       this.dialogVisible = true
-      this.ruleForm = {
-        channelCode: obj.channelCode,
-        channelCsName: obj.channelCsName,
-        productCode: obj.productCode,
-        productEsName: obj.productEsName,
-        productCsName: obj.productCsName,
-        gear: obj.gear,
-        volMin: obj.volMin,
-        yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark
-      }
+      // this.ruleForm = {}
       this.editorId = obj.id
+      this.dialogAdd = obj
     },
     // 提交form
     submitForm() {
@@ -548,32 +524,47 @@ export default {
     },
     // 多个删除
     mutidel() {
-      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
-      else {
-        const IdList = []
-        this.checkArr.forEach((item) => {
-          IdList.push(item.id)
-        })
-        this.$confirm('确定要删除数据吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-          .then(() => {
-            API.deleteMdPriceGear(IdList).then((response) => {
-              if (response.code === 1000) {
-                this.getTableData()
-                this.$message.success('删除成功!')
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
+      var that = this
+      var ids = that.$refs.Tdata.selection
+      if (ids.length === 0) {
+        that.$alert('请选择要删除的数据', '提示', {
+          confirmButtonText: '确定'
+        }).then()
+        return
       }
+      var idList = []
+      ids.forEach((item, index) => {
+        idList[index] = item.id
+      })
+      this.$confirm('确定要删除数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        that.loading = true
+        API.deleteSplitRule(idList).then(
+          res => {
+            if (res.code === 1000) {
+              that.getTableData(that.pageNum, that.pageSize)
+              that.$message({
+                type: 'success',
+                message: '删除成功'
+              })
+              that.loading = false
+            }
+            that.loading = false
+          }
+        ).catch(() => {
+          that.loading = false
+        })
+      }).catch(() => {
+        // 取消时清空 selection被选项
+        this.$refs.Tdata.clearSelection()
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     // 取消
     resetForm() {

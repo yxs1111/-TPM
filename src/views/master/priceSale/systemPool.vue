@@ -12,7 +12,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU：</span>
           <el-select v-model="filterObj.sku" placeholder="请选择" clearable>
-            <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCsName" />
+            <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -49,7 +49,7 @@
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="320" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="150" align="center" prop="sku" label="SKU" />
-      <el-table-column width="320" align="center" prop="cdmType" label="机制类型">
+      <el-table-column width="320" align="center" prop="cdmTypeName" label="机制类型">
         <template slot-scope="scope">
           {{ typeVSinfo(scope.row.cdmType) }}
         </template>

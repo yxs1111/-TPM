@@ -253,10 +253,10 @@ export default {
   },
   // 导入测试
   importNkaRawData(params) {
-    return requestApi.request_post('/importData/importNkaRawData', params)
+    return requestApi.request_post('/cityplan/importData/importNkaRawData', params)
   },
   importNkaRawDataGuideline(params) {
-    return requestApi.request_post('/importData/importNkaRawDataGuideline', params)
+    return requestApi.request_post('/cityplan/importData/importNkaRawDataGuideline', params)
   },
   // 机制池
   downloadExcelSyspool() {
@@ -269,8 +269,8 @@ export default {
   importExcelSyspool(params) {
     return request({
       url: '/mdm/mdCdmConfig/importExcel',
-      method: 'post',
-      data: params,
+      method: 'get',
+      get: params,
       headers: { 'Content-Type': 'multipart/form-data' }
     })
   },
@@ -305,16 +305,16 @@ export default {
   },
   // NKAEC
   getPageByDtoNKA(params) {
-    return requestApi.request_get('/importData/nkaRawData/getPageByDto', params)
+    return requestApi.request_get('/cityplan/importData/nkaRawData/getPageByDto', params)
   },
   getPageByDtoEC(params) {
-    return requestApi.request_get('/importData/ecRawData/getPageByDto', params)
+    return requestApi.request_get('/cityplan/importData/ecRawData/getPageByDto', params)
   },
   getPageByDtoNKAL(params) {
-    return requestApi.request_get('/importData/nkaRawDataGuideline/getPageByDto', params)
+    return requestApi.request_get('/cityplan/importData/nkaRawDataGuideline/getPageByDto', params)
   },
   getPageByDtoECL(params) {
-    return requestApi.request_get('/importData/ecRawDataGuideline/getPageByDto', params)
+    return requestApi.request_get('/cityplan/importData/ecRawDataGuideline/getPageByDto', params)
   },
   // 检验规则
   // 保存
