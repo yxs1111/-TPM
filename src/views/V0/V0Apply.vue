@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-07 13:27:57
+ * @LastEditTime: 2021-12-08 09:35:35
 -->
 <template>
   <div class="app-container">
@@ -361,13 +361,12 @@ export default {
           this.$message.success('导入成功!请点击检测数据')
         })
       } else {
-        this.$message.error('请选择文件')
+        this.$message.warning('请选择文件')
       }
     },
     //校验数据
     checkImport() {
       API.exceptionCheck().then((response) => {
-        console.log(response)
         this.ImportData = response.data
         this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
       })
@@ -377,6 +376,7 @@ export default {
       API.exceptionSave().then((res) => {
         this.$message.success('保存成功!')
         this.closeimportDialog()
+        this.getList()
       })
     },
     //导出异常信息
@@ -393,14 +393,14 @@ export default {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
-          productCode: this.filterObj.SKU,
+          dim_product: this.filterObj.SKU,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
-        this.$message.error('请先选择年月')
+        this.$message.warning('请先选择年月')
       }
     },
     //下载文件
@@ -441,7 +441,7 @@ export default {
             })
             .catch(() => {})
         } else {
-          this.$message.error('提交失败')
+          this.$message.warning('提交失败')
           return false
         }
       })
@@ -476,10 +476,11 @@ export default {
             let mainId = this.ContentData[arr[0]][0].mainId
             API.approve({
               mainId: mainId, //主表id
-              approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+              opinion: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success('提交成功')
+                this.getList()
               }
             })
           })
@@ -490,7 +491,7 @@ export default {
             })
           })
       } else {
-        this.$message.error('数据不能为空')
+        this.$message.warning('数据不能为空')
       }
     },
     // 行样式

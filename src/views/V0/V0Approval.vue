@@ -290,7 +290,7 @@ export default {
           }
         })
       } else {
-        this.$message.error('请选择文件')
+        this.$message.warning('请选择文件')
       }
     },
     //校验数据
@@ -306,6 +306,7 @@ export default {
         if (res.code === 1000) {
           this.$message.success('保存成功!')
           this.closeimportDialog()
+          this.getList()
         }
       })
     },
@@ -325,14 +326,14 @@ export default {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
-          productCode: this.filterObj.SKU,
+          dim_product: this.filterObj.SKU,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
-        this.$message.error('请先选择年月')
+        this.$message.warning('请先选择年月')
       }
     },
     //下载文件
@@ -368,13 +369,14 @@ export default {
             .then(() => {
               API.approve({
                 mainId, //主表id
-                approve: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
                     type: 'success',
                     message: '审批成功!',
                   })
+                  this.getList()
                 } else {
                   this.$message({
                     type: 'error',
@@ -398,10 +400,11 @@ export default {
             .then(() => {
               API.approve({
                 mainId, //主表id
-                approve: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回审批成功!')
+                  this.getList()
                 } else {
                   this.$message.error('驳回审批失败!')
                 }
@@ -415,7 +418,7 @@ export default {
             })
         }
       } else {
-        this.$message.error('数据不能为空')
+        this.$message.warning('数据不能为空')
       }
     },
     // 行样式

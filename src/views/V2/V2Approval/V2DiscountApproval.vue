@@ -48,15 +48,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(1)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(0)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -212,6 +212,7 @@ export default {
       ImportData: [],
       uploadFileName: '',
       uploadFile: '',
+      isSubmit: 0, // 提交状态  1：已提交，0：未提交
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -247,7 +248,13 @@ export default {
         productCode: this.filterObj.productCode,
       })
         .then((response) => {
+          
           this.tableData = response.data.records
+          if (this.tableData.length) {
+              this.isSubmit = this.tableData[0].isSubmit
+            } else {
+              this.isSubmit = 0
+            }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -347,6 +354,7 @@ export default {
       API.exceptionSave().then((res) => {
         this.$message.success('保存成功!')
         this.closeimportDialog()
+        this.getTableData()
       })
     },
     // 导出异常信息
@@ -405,13 +413,14 @@ export default {
             .then(() => {
               API.approve({
                 mainId: mainId, // 主表id
-                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
                     type: 'success',
                     message: '审批成功!',
                   })
+                  this.getTableData()
                 } else {
                   this.$message({
                     type: 'error',
@@ -435,10 +444,11 @@ export default {
             .then(() => {
               API.approve({
                 mainId: mainId, // 主表id
-                approve: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回审批成功!')
+                  this.getTableData()
                 } else {
                   this.$message.error('驳回审批失败!')
                 }

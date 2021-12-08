@@ -1,4 +1,3 @@
-
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
@@ -16,27 +15,31 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="@/assets/images/export.png" alt="" />
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="importData">
-        <img src="@/assets/images/import.png" alt="">
+        <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG" @click="exportData">
-        <img src="@/assets/images/export.png" alt="">
-        <span class="text">导出</span>
       </div>
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column width="150" align="center" prop="customerCode" label="客户" />
+      <el-table-column width="250" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column width="150" align="center" prop="ptc" label="零售价(PTC)" />
-      <el-table-column width="320" align="center" prop="ptr" label="平台进货含税价(PTR)" />
-      <el-table-column width="200" align="center" prop="ptw" label="经销商进货含税价(PTW)" />
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间" />
+      <el-table-column width="240" align="center" prop="ptc" label="零售价｜PTC （RMB/Tin）" />
+      <el-table-column width="320" align="center" prop="ptr" label="平台进货含税价｜PTR （RMB/Tin） " />
+      <el-table-column width="320" align="center" prop="ptw" label="经销商进货含税价｜PTW （RMB/Tin) " />
+      <el-table-column width="180" v-slot="{ row }" align="center" prop="createDate" label="创建时间">
+        {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
+      </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" prop="updateDate" label="更新时间" />
+      <el-table-column width="180" v-slot="{ row }" align="center" prop="updateDate" label="更新时间">
+        {{ row.updateDate ? row.updateDate.substring(0, 10) : '' }}
+      </el-table-column>
       <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
@@ -49,13 +52,14 @@
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
-        <el-button size="mini" class="el_user_btn user_portIn" @click="parsingExcelBtn">导入
-          <i class="iconfont icon-piliangdaoru icon_font"></i>
-        </el-button>
-        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div class="fileName" v-if="uploadFileName!=''">
+        <div class="my-search selectFile" @click="parsingExcelBtn">
+          <img src="@/assets/images/selectFile.png" alt="" />
+          <span class="text">选择文件</span>
+        </div>
+        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)" />
+        <div v-if="uploadFileName != ''" class="fileName">
           <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-          <span>{{uploadFileName}}</span>
+          <span>{{ uploadFileName }}</span>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -131,48 +135,36 @@ export default {
     importData() {
       this.importVisible = true
     },
-    //打开文件
-    openFile(file) {
-      console.log(file)
-      this.uploadFileName = file.name
-      this.uploadFile = file.raw
-      this.$refs.upload.clearFiles() //去掉文件列表
-    },
     //确认导入
     confirmImport() {
       var formData = new FormData()
       formData.append('excelFile', this.uploadFile)
-      var that = this
-      $.ajax({
-        url: 'mdprice/import',
-        type: 'GET',
-        async: false,
-        data: formData,
-        // 告诉jQuery不要去处理发送的数据
-        processData: false,
-        // 告诉jQuery不要去设置Content-Type请求头
-        contentType: false,
-        success: function (data) {
-          that.importVisible = false
-          that.getTableData()
-        },
+      API.importMdprice(formData).then((response) => {
+        if (response.code == 1000) {
+          this.closeImport()
+          this.getTableData()
+          this.$message.success(`${response.data}`)
+        } else {
+          this.closeImport()
+          this.$message.warning(`${response.data}`)
+        }
       })
-      // API.importMdprice(formData)
-      //   .then((response) => {
-      //     this.importVisible = false
-      //   })
-      //   .catch(() => {})
     },
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     //导入
     parsingExcel(event) {
+      this.event = event
       this.uploadFile = event.target.files[0]
+      this.uploadFileName = event.target.files[0].name
     },
     //关闭导入
     closeImport() {
       this.importVisible = false
+      this.uploadFile = ''
+      this.uploadFileName = ''
+      this.event.target.value = null
     },
     //导出数据
     exportData() {
@@ -180,6 +172,7 @@ export default {
       data = { ...this.filterObj }
       API.exportMdprice(data).then((res) => {
         this.downloadFile(res, '价格主数据信息' + '.xls') //自定义Excel文件名
+        this.$message.success('导出成功!')
       })
     },
     //下载文件

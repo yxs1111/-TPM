@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-07 10:02:14
+ * @LastEditTime: 2021-12-08 09:04:09
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -26,15 +26,8 @@ export default {
     })
   },
   importMdprice(params) {
-    //return requestApi.request_get('mdprice/import', params)
-    return request({
-      url:'/mdm/mdprice/imports',
-      method:'get',
-      params:params,
-      processData : false,
-      contentType : false,
-      headers: { "Content-Type": "multipart/form-data" }
-    })
+    return requestApi.request_post('/mdm/mdprice/imports', params)
+    
   },
   
 }

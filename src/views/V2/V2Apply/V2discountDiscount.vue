@@ -352,6 +352,7 @@ export default {
     confirmImport() {
       API.exceptionSave().then((res) => {
         this.$message.success('保存成功!')
+        this.getTableData()
         this.closeimportDialog()
       })
     },
@@ -410,10 +411,11 @@ export default {
             const mainId = this.tableData[0].mainId
             API.approve({
               mainId: mainId, // 主表id
-              approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+              opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success('提交成功')
+                this.getTableData()
               }
             })
           })

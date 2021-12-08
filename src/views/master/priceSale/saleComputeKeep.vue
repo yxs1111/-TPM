@@ -13,7 +13,7 @@
           <span class="SelectliTitle">客户</span>
           <el-input v-model="filterObj.customerCsName" placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search" :loading="tableLoading">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -26,14 +26,19 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  style="width: 100%"
-      @selection-change="handleSelectionChange">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column width="150" align="center" prop="grossProfitPoints" label="毛利点数" />
-      <el-table-column width="320" align="center" prop="dealerRebate" label="经销商返利" />
-      <el-table-column width="150" align="center" prop="platformRebate" label="平台返利" />
+      <el-table-column v-slot={row} width="150" align="center" prop="grossProfitPoints" label="毛利点数" >
+        {{(row.grossProfitPoints*100).toFixed(2)}}%
+      </el-table-column>
+      <el-table-column  v-slot={row} width="320" align="center" prop="dealerRebate" label="经销商返利" >
+        {{(row.dealerRebate*100).toFixed(2)}}%
+      </el-table-column>
+      <el-table-column   v-slot={row} width="150" align="center" prop="platformRebate" label="平台返利" >
+        {{(row.platformRebate*100).toFixed(2)}}%
+      </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
           <div>
@@ -59,36 +64,35 @@
     </div>
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div v-loading='dialogLoading' element-loading-text="正在导入">
-        <div class="fileInfo ImportContent">
-          <!-- <el-button type="primary" class="my-search selectFile" @click="TemplateDownload">
+
+      <div class="fileInfo ImportContent">
+        <!-- <el-button type="primary" class="my-search selectFile" @click="TemplateDownload">
             <svg-icon icon-class="download_white" style="font-size: 16px;" />
             下载模板
           </el-button> -->
-          <div class="fileTitle">模板</div>
-          <div class="my-search selectFile" @click="TemplateDownload">
-            <svg-icon icon-class="download_white" style="font-size: 16px;" />
-            <span class="text">下载模板</span>
-          </div>
+        <div class="fileTitle">模板</div>
+        <div class="my-search selectFile" @click="TemplateDownload">
+          <svg-icon icon-class="download_white" style="font-size: 16px;" />
+          <span class="text">下载模板</span>
         </div>
-
-        <div class="fileInfo ImportContent">
-          <div class="fileTitle">文件</div>
-          <div class="my-search selectFile" @click="parsingExcelBtn">
-            <img src="@/assets/images/selectFile.png" alt="" />
-            <span class="text">选择文件</span>
-          </div>
-          <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-          <div class="fileName" v-if="uploadFileName!=''">
-            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-            <span>{{uploadFileName}}</span>
-          </div>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="confirmImport()">确 定</el-button>
-          <el-button @click="closeImport">取 消</el-button>
-        </span>
       </div>
+
+      <div class="fileInfo ImportContent">
+        <div class="fileTitle">文件</div>
+        <div class="my-search selectFile" @click="parsingExcelBtn">
+          <img src="@/assets/images/selectFile.png" alt="" />
+          <span class="text">选择文件</span>
+        </div>
+        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+        <div class="fileName" v-if="uploadFileName!=''">
+          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+          <span>{{uploadFileName}}</span>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmImport()">确 定</el-button>
+        <el-button @click="closeImport">取 消</el-button>
+      </span>
 
     </el-dialog>
   </div>
@@ -113,8 +117,6 @@ export default {
         customerCsName: '',
         productEsName: '',
       },
-      tableLoading: '',
-      dialogLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -132,7 +134,6 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageSaleComputeKeep({
         yearAndMonth: this.filterObj.yearAndMonth,
         customerCsName: this.filterObj.customerCsName,
@@ -141,7 +142,6 @@ export default {
         pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
@@ -166,7 +166,6 @@ export default {
     },
     //确认导入
     confirmImport() {
-      this.dialogLoading = true
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importSaleComputeKeep(formData)
@@ -175,15 +174,13 @@ export default {
             this.$message.success('导入成功!')
             this.closeImport()
             this.getTableData()
-            this.dialogLoading = false
           } else {
             var list = response.data
             let str = ''
             list.forEach((item) => {
-              str += item+'<br>'
+              str += item + '<br>'
             })
             this.$message.error(`${str}`)
-            this.dialogLoading = false
           }
         })
         .catch(() => {})
@@ -211,22 +208,14 @@ export default {
       var data = {}
       data = { ...this.filterObj }
       API.exportSaleComputeKeep(data).then((res) => {
-        if (res.code == 1000) {
-          this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
-          this.$message.success('导出成功!')
-        } else {
-          this.$message.success('导出失败!')
-        }
+        this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
       })
     },
     TemplateDownload() {
       API.SaleComputeKeepTemplateDownload().then((res) => {
-        if (res.code == 1000) {
-          this.downloadFile(res, '价促计算维护模板' + '.xlsx') //自定义Excel文件名
-          this.$message.success('下载成功!')
-        } else {
-          this.$message.success('下载失败!')
-        }
+        this.downloadFile(res, '价促计算维护模板' + '.xlsx') //自定义Excel文件名
+        this.$message.success('下载成功!')
       })
     },
     //下载文件
