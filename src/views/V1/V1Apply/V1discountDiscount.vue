@@ -423,6 +423,7 @@ export default {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('importType', 1)
+       formData.append('mainId', this.mainIdLocal)
       API.importV1(formData)
         .then((response) => {
           if (response.code === 1000) {
