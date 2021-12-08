@@ -105,7 +105,7 @@
             <el-col :span="12">
               <div class="grid-content bg-purple">
                 <span style="color:red;">*</span>渠道：
-                <el-select v-model="dialogAdd.channelCode" placeholder="请选择" size="small">
+                <el-select v-model="dialogAdd.channelCode" placeholder="请选择" size="small" :disabled="isEditor">
                   <el-option
                     v-for="item in channelOptons"
                     :key="item.channelCode"
@@ -118,7 +118,7 @@
             <el-col :span="12">
               <div class="grid-content bg-purple">
                 <span style="color:red;">*</span>Mine Package：
-                <el-select v-model="dialogAdd.minePackageCode" placeholder="请选择" size="small">
+                <el-select v-model="dialogAdd.minePackageCode" placeholder="请选择" size="small" :disabled="isEditor">
                   <el-option
                     v-for="item in mpOptons"
                     :key="item.costTypeNumber"
@@ -133,13 +133,13 @@
             <el-col :span="12">
               <div class="grid-content bg-purple">
                 <span style="color:red;">*</span>年月：
-                <el-date-picker v-model="dialogAdd.yeardate" value-format="yyyyMM" type="month" placeholder="请选择" size="small" />
+                <el-date-picker v-model="dialogAdd.yeardate" value-format="yyyyMM" type="month" placeholder="请选择" size="small" :disabled="isEditor" />
               </div>
             </el-col>
             <el-col :span="12">
               <div class="grid-content bg-purple" style="padding-left: 60px;">
                 <span style="color:red;">*</span>版本：
-                <el-select v-model="dialogAdd.varsionName" placeholder="请选择" clearable>
+                <el-select v-model="dialogAdd.varsionName" placeholder="请选择" clearable :disabled="isEditor" size="small">
                   <el-option v-for="item in versionsArr" :key="item.code" :label="item.name" :value="item.code" />
                 </el-select>
               </div>
@@ -155,7 +155,7 @@
             <el-col :span="12">
               <div class="grid-content bg-purple" style="padding-left: 31px;">
                 <span style="color:red;">*</span>拆分类型：
-                <el-select v-model="dialogAdd.splitType" placeholder="请选择" size="small">
+                <el-select v-model="dialogAdd.splitType" placeholder="请选择" size="small" :disabled="isEditor">
                   <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
               </div>
@@ -183,9 +183,10 @@
           拆分规则：
           P&nbsp;
           <el-input v-model="dialogAdd.splitRuleF" style="width:60px;" size="small" @blur="number($event)" />
-          &nbsp;M —— P&nbsp;
-          <el-input v-model="dialogAdd.splitRuleS" style="width:60px;" size="small" @blur="number($event)" />
           &nbsp;M
+          <!-- —— P&nbsp;
+          <el-input v-model="dialogAdd.splitRuleS" style="width:60px;" size="small" @blur="number($event)" />
+          &nbsp;M -->
         </div>
         <div v-if="dialogAdd.splitType===2" style="border: 1px solid #dcdfe6;">
           <el-table ref="tb" :data="systemList" :row-class-name="rowClassName" @selection-change="handleDetailSelectionChange">
@@ -202,14 +203,15 @@
             </el-table-column>
             <el-table-column label="权重（%）" align="center" prop="cdmName">
               <template slot-scope="scope">
-                <el-input v-model="systemList[scope.row.xh-1].splitWeight" style="width:130px;" size="small" placeholder="请输入数字" @blur="numberNo($event, scope.row.xh-1)" />
+                <el-input v-model="systemList[scope.row.xh-1].splitWeight" style="width:130px;" size="small" placeholder="请输入数字" @blur="numberNoWeight($event, scope.row.xh-1)" />
               </template>
             </el-table-column>
           </el-table>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm()">保 存</el-button>
+        <el-button v-if="!isEditor" type="primary" @click="submitForm()">保 存</el-button>
+        <el-button v-if="isEditor" type="primary" @click="submitFormUpdate()">修 改</el-button>
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
     </el-dialog>
@@ -310,7 +312,7 @@ export default {
       const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
       if (!flag) {
         this.dialogAdd.splitRuleF = ''
-        this.dialogAdd.splitRuleS = ''
+        // this.dialogAdd.splitRuleS = ''
         this.$message({
           showClose: true,
           message: '拆分规则需要输入正整数！',
@@ -324,10 +326,33 @@ export default {
       if (!flag) {
         this.systemList[i].splitRuleF = ''
         this.systemList[i].splitRuleS = ''
+        this.$message({
+          showClose: true,
+          message: '拆分规则、权重需要输入正整数！',
+          type: 'warning'
+        })
+      }
+    },
+    // 权重限制
+    numberNoWeight(e, i) {
+      const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
+      let weightTotal = 0
+      for (const item of this.systemList) {
+        weightTotal += Number(item.splitWeight)
+      }
+      // debugger
+      if (!flag) {
         this.systemList[i].splitWeight = ''
         this.$message({
           showClose: true,
           message: '拆分规则、权重需要输入正整数！',
+          type: 'warning'
+        })
+      } else if (weightTotal > 100) {
+        this.systemList[i].splitWeight = ''
+        this.$message({
+          showClose: true,
+          message: '权重之和应等于100',
           type: 'warning'
         })
       }
@@ -482,15 +507,17 @@ export default {
       this.dialogAdd = obj
       if (obj.splitType === 1) {
         this.dialogAdd.splitRuleF = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split('')[0]
-        this.dialogAdd.splitRuleS = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split('')[1]
+        // this.dialogAdd.splitRuleS = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split('')[1]
       } else if (obj.splitType === 2) {
-        const mulSplitRule = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split(',')
-        for (const item of mulSplitRule) {
-          const first = item.split('')[0]
-          const second = item.split('')[1]
+        const mulSplitRule = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace(/-/g, '').split(',')
+        const mulWeight = obj.splitWeight.split(',')
+        for (let i = 0; i < mulSplitRule.length; i++) {
+          const first = mulSplitRule[i].split('')[0]
+          const second = mulSplitRule[i].split('')[1]
           this.systemList.push({
             splitRuleF: first,
-            splitRuleS: second
+            splitRuleS: second,
+            splitWeight: mulWeight[i]
           })
         }
       }
@@ -506,32 +533,93 @@ export default {
         // 新增接口
         let splitRuleThis = ''
         let splitWeightThis = ''
-        if (this.dialogAdd.splitType === 1) {
-          splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M-P' + this.dialogAdd.splitRuleS + 'M,'
+        let weightTotal = 0
+        if (this.dialogAdd.splitType === 1 && (this.dialogAdd.splitRuleF === '')) {
+          // 判断输入是否为空
+          this.$alert('输入框不能为空', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {}
+          })
+        } else if (this.dialogAdd.splitType === 1 && this.dialogAdd.splitRuleF !== '') {
+          // 非空  -P' + this.dialogAdd.splitRuleS + 'M,'
+          splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M'
           splitWeightThis = this.dialogAdd.splitWeight
+          this.submitFormAPI(splitRuleThis, splitWeightThis)
         } else if (this.dialogAdd.splitType === 2) {
           for (const item of this.systemList) {
-            splitRuleThis += 'P' + item.splitRuleF + 'M-P' + item.splitRuleS + 'M,'
-            splitWeightThis += item.splitWeight + ','
+            if (item.splitRuleF === '' || item.splitRuleS === '' || item.splitWeight === '') {
+              // 判断输入是否为空
+              this.$alert('输入框不能为空', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {}
+              })
+              break
+            } else {
+              splitRuleThis += 'P' + item.splitRuleF + 'M-P' + item.splitRuleS + 'M,'
+              splitWeightThis += item.splitWeight + ','
+              weightTotal += Number(item.splitWeight)
+            }
+          }
+          // 判断权重和小于100时
+          debugger
+          if (Number(weightTotal) < 100) {
+            this.$alert('权重之和应等于100', '提示', {
+              confirmButtonText: '确定',
+              callback: action => {}
+            })
+          } else {
+            this.submitFormAPI(splitRuleThis, splitWeightThis)
           }
         }
-        const params = {
-          'channelCode': this.dialogAdd.channelCode,
-          'minePackageCode': this.dialogAdd.minePackageCode,
-          'yeardate': this.dialogAdd.yeardate,
-          'versions': this.dialogAdd.varsionName,
-          'splitType': this.dialogAdd.splitType,
-          'splitRule': splitRuleThis.slice(0, -1),
-          'splitWeight': splitWeightThis.slice(0, -1),
-          'remark': this.dialogAdd.remark
-        }
-        API.insertSplitRule(params).then(res => {
-          if (res.code === 1000) {
-            this.closeDialog()
-            this.getTableData()
-          }
-        }).catch()
       }
+    },
+    // 保存数据接口
+    submitFormAPI(splitRuleThis, splitWeightThis) {
+      const params = {
+        'channelCode': this.dialogAdd.channelCode,
+        'minePackageCode': this.dialogAdd.minePackageCode,
+        'yeardate': this.dialogAdd.yeardate,
+        'versions': this.dialogAdd.varsionName,
+        'splitType': this.dialogAdd.splitType,
+        'splitRule': splitRuleThis.slice(0, -1),
+        'splitWeight': splitWeightThis.slice(0, -1),
+        'remark': this.dialogAdd.remark
+      }
+      API.insertSplitRule(params).then(res => {
+        if (res.code === 1000) {
+          this.closeDialog()
+          this.getTableData()
+        }
+      }).catch()
+    },
+    // 修改数据
+    submitFormUpdate() {
+      // 新增接口
+      let splitRuleThis = ''
+      let splitWeightThis = ''
+      if (this.dialogAdd.splitType === 1) {
+        // -P' + this.dialogAdd.splitRuleS + 'M,'
+        splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M'
+        splitWeightThis = this.dialogAdd.splitWeight
+      } else if (this.dialogAdd.splitType === 2) {
+        for (const item of this.systemList) {
+          splitRuleThis += 'P' + item.splitRuleF + 'M-P' + item.splitRuleS + 'M,'
+          splitWeightThis += item.splitWeight + ','
+        }
+      }
+      const params = {
+        id: this.editorId,
+        'splitType': this.dialogAdd.splitType,
+        'splitRule': splitRuleThis.slice(0, -1),
+        'splitWeight': splitWeightThis.slice(0, -1),
+        'remark': this.dialogAdd.remark
+      }
+      API.updateSplitRule(params).then(res => {
+        if (res.code === 1000) {
+          this.closeDialog()
+          this.getTableData()
+        }
+      }).catch()
     },
     // 多个删除
     mutidel() {
