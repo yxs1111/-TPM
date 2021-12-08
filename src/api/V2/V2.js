@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-03 20:35:24
+ * @LastEditTime: 2021-12-08 13:32:09
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -30,7 +30,7 @@ export default {
    * @returns request
    */
   importExcel(params) {
-    return requestApi.request_post(this.url+'/import', params)
+    return requestApi.request_get(this.url+'/import', params)
   },
   /**
    * 审批

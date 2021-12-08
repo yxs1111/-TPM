@@ -14,6 +14,10 @@
           <el-input v-model="filterObj.customerCsName" placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="@/assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -21,22 +25,19 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="exportData">
-        <img src="@/assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
+
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column v-slot={row} width="150" align="center" prop="grossProfitPoints" label="毛利点数" >
+      <el-table-column v-slot={row} width="150" align="center" prop="grossProfitPoints" label="毛利点数">
         {{(row.grossProfitPoints*100).toFixed(2)}}%
       </el-table-column>
-      <el-table-column  v-slot={row} width="320" align="center" prop="dealerRebate" label="经销商返利" >
+      <el-table-column v-slot={row} width="320" align="center" prop="dealerRebate" label="经销商返利">
         {{(row.dealerRebate*100).toFixed(2)}}%
       </el-table-column>
-      <el-table-column   v-slot={row} width="150" align="center" prop="platformRebate" label="平台返利" >
+      <el-table-column v-slot={row} width="150" align="center" prop="platformRebate" label="平台返利">
         {{(row.platformRebate*100).toFixed(2)}}%
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="创建时间">
@@ -93,7 +94,9 @@
         <el-button type="primary" @click="confirmImport()">确 定</el-button>
         <el-button @click="closeImport">取 消</el-button>
       </span>
-
+      <div v-if="warningShow">
+        <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -125,6 +128,8 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       event: '',
+      warningList: [],
+       warningShow: false,
     }
   },
   computed: {},
@@ -168,22 +173,20 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      API.importSaleComputeKeep(formData)
-        .then((response) => {
-          if (response.code === 1000) {
-            this.$message.success('导入成功!')
-            this.closeImport()
-            this.getTableData()
-          } else {
-            var list = response.data
-            let str = ''
-            list.forEach((item) => {
-              str += item + '<br>'
-            })
-            this.$message.error(`${str}`)
+      API.importSaleComputeKeep(formData).then((response) => {
+        if (response.code === 1000) {
+          this.$message.success('导入成功!')
+          this.closeImport()
+          this.getTableData()
+        } else {
+          if (response.data === null) {
+            this.$message.error(response.data)
+          } else if (response.data.length > 0) {
+            this.warningShow = true
+            this.warningList = response.data
           }
-        })
-        .catch(() => {})
+        }
+      })
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -207,7 +210,7 @@ export default {
       //导出数据筛选
       var data = {}
       data = { ...this.filterObj }
-      API.exportSaleComputeKeep(data).then((res) => {
+      API.exportSaleComputeKeep().then((res) => {
         this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })

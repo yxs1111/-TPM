@@ -36,7 +36,7 @@
     </div>
     <el-table :data="tableData" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       style="width: 100%" @selection-change="handleSelectionChange">
-      <el-table-column width="250" align="center" prop="productEsName" label="SKU" />
+      <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" label="维护名称信息" />
       <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
         ¥{{row.gear}}
@@ -85,36 +85,35 @@
     </el-dialog> -->
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div>
-        <div class="el-downloadFileBar">
-          <div>
-            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
-          </div>
-          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+      <div class="el-downloadFileBar">
+        <div>
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
         </div>
+        <el-button  type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+      </div>
+      <div class="fileInfo">
         <div class="fileInfo">
-          <div class="fileInfo">
-            <div class="fileTitle">文件</div>
-            <div class="my-search selectFile" @click="parsingExcelBtn">
-              <img src="@/assets/images/selectFile.png" alt="" />
-              <span class="text">选择文件</span>
-            </div>
-            <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-            <div class="fileName" v-if="uploadFileName!=''">
-              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-              <span>{{uploadFileName}}</span>
-            </div>
+          <div class="fileTitle">文件</div>
+          <div class="my-search selectFile" @click="parsingExcelBtn">
+            <img src="@/assets/images/selectFile.png" alt="" />
+            <span class="text">选择文件</span>
           </div>
-          <div class="seeData" style="width: auto;">
-            <div class="exportError" @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
+          <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <div class="fileName" v-if="uploadFileName!=''">
+            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+            <span>{{uploadFileName}}</span>
           </div>
         </div>
-        <div class="tableWrap">
-          <el-table border height="240" :data="ImportData" :span-method="objectSpanMethod_check" style="width: 100%" :header-cell-style="{
+        <!-- <div class="seeData" style="width: auto;">
+          <div class="exportError" @click="exportErrorList">
+            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+            <span>导出错误信息</span>
+          </div>
+        </div> -->
+      </div>
+      <div class="tableWrap">
+        <el-table border height="240" :data="ImportData"  style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -122,44 +121,9 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
-              <template slot-scope="scope">
-                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
-                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
-              </template>
-            </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column width="250" align="center" prop="productEsName" label="SKU" />
-            <el-table-column width="150" align="center" label="维护名称信息" />
-            <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
-              ¥{{row.gear}}
-            </el-table-column>
-            <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">
-              {{row.volMix}}%
-            </el-table-column>
-            <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
-            <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-            <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-            <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
-              {{row.createDate?row.createDate.substring(0,10):""}}
-            </el-table-column>
-            <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
-            <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
-              {{row.updateDate?row.updateDate.substring(0,10):""}}
-            </el-table-column>
-            <el-table-column width="150" align="center" prop="state" label="状态">
-              <template slot-scope="{row}">
-                <div>
-                  {{ row.state?'正常':'无效' }}
-                </div>
-              </template>
-            </el-table-column>
-
-          </el-table>
-        </div>
+          <el-table-column  align="center" prop="judgmentContent" label="错误信息" />
+        </el-table>
       </div>
-
     </el-dialog>
   </div>
 </template>
@@ -191,7 +155,7 @@ export default {
       // 导入
       importVisible: false, // 导入弹窗
       uploadFileName: '',
-      ImportData:[],
+      ImportData: [],
       uploadFile: '',
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
@@ -265,9 +229,7 @@ export default {
       this.uploadFileName = ''
       this.uploadFile = ''
     },
-    exportErrorList() {
-
-    },
+    exportErrorList() {},
     // 导出数据
     exportData() {
       // 导出数据筛选

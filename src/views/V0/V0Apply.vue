@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-08 09:35:35
+ * @LastEditTime: 2021-12-08 10:47:09
 -->
 <template>
   <div class="app-container">
@@ -102,17 +102,17 @@
               <el-date-picker v-model="ruleForm.yearAndMonth" class="my-el-input" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
               </el-date-picker>
             </el-form-item> -->
-            <el-form-item label="Scenario">
+            <el-form-item label="Scenario" prop="dimScenario">
               <el-select v-model="ruleForm.dimScenario" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
-            <el-form-item label="Version">
+            <el-form-item label="Version" prop="dimVersion">
               <el-select v-model="ruleForm.dimVersion" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
-            <el-form-item label="渠道">
+            <el-form-item label="渠道"  prop="channelCode">
               <el-select v-model="ruleForm.channelCode" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
               </el-select>
@@ -221,13 +221,6 @@ export default {
         dimVersion: '',
       },
       rules: {
-        yearAndMonth: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
         channelCode: [
           {
             required: true,
@@ -441,7 +434,7 @@ export default {
             })
             .catch(() => {})
         } else {
-          this.$message.warning('提交失败')
+          this.$message.warning('提交失败,请填写必填项')
           return false
         }
       })
