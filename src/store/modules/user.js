@@ -76,6 +76,7 @@ const actions = {
     const { username, password, code, key } = userInfo
     return new Promise((resolve, reject) => {
       user.login({ username: username, password: password, captcha: code, randomId: key }).then(response => {
+        localStorage.setItem('usernameLocal', username)
         const { data } = response
         initUserInfo(data)
         resetRouter()
