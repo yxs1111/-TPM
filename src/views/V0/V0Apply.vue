@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-09 21:11:14
+ * @LastEditTime: 2021-12-09 21:43:47
 -->
 <template>
   <div class="app-container">
@@ -105,7 +105,7 @@
                     </div>
                     <div class="statusWrap">
                       <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType.indexOf('Exception') > -1">
                       <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
                       <span class="judgmentText">{{row.judgmentType}}</span>
                     </div>
@@ -213,7 +213,7 @@
                     </div>
                     <div class="statusWrap">
                       <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType.indexOf('Exception') > -1">
                       <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
                       <span class="judgmentText">{{row.judgmentType}}</span>
                     </div>
