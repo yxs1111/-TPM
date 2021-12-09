@@ -328,6 +328,7 @@ export default {
       this.uploadFile = ''
       //清除input的value ,上传一样的
       this.event.target.value = null
+      this.ImportData=[]
     },
     // 校验数据
     checkImport() {

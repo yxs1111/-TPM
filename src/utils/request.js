@@ -10,7 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 let unauthorized_state = true
 // 请求头key
 const sourceKey = process.env.VUE_APP_SOURCE_KEY
-// const token = 'Bearer dD1ek05QoYHH7litvLpvR3sOerXj21O2hJBfQnas/UFbPaBa9vNpjydNnxM84mqCZJxiQv7bm1c6My3B4XibGU4wOk99kjh5vHZIEf+asO+Rg8cGh4WPLnhA9RWTqb7OvCY/yMSDnOPQ3mBUTkmK9rCOsPILQh3zGDrsXTNR3+w2JOb/9n5tR4e01kxi36MlVxLvMx4I27yF40bbW2qNTAKiZShMdmxSwMr1I8zEfHhqFxWAvBfnAIz2ipSeCGofMf6nKKiKDyWGB1qb7DXE6mSOmvZdsvl1zu5Jk27FctcCJ76hKZKnNme7d6iMhVy+uDNco534eqvD7YcsiLgOLY5NIcR8NfpExfT41dUXthlIBE+eqmQMGlzFXmplAIGzn6EuxFamnTQdTRC518kTcPiCPK0dXVInmn/8EtNxvShfORKnvSdCv14+XUi/PbpjVCS6+s7Rdbwaox486aC3zYewPt4GeBRu/VD7II6Tu3OSB/zzpGy/XVr1Y6/IZ7qKf1twUpwYO8L96KKiFSSmJXVn8AMoIuOFWhP25ICZ7LLruIsNXD4NVos+nW/cFItBLJOlluBUihdXAHJEyV0dAZ+67KQAt16Jm1yj94SGOMsFW43S+Kgvxo/57SKSvkKpf/voX4yVosDTU/vhb0PnNs8MozQWRUSxxKSNeTR/MZ1RB7T+mszHr0fBV9iGbypbcKkwZQToV7QVe6c8O5SDR1o1vG8aom1EKxtbx/0XjLlFr6X6Cn5xOj0XF4+BFrIyHgIX8ctJbUAi2A2Xv8JZIg9RHsfjMy3AA+sFb+xYynMdqnIP+/1oFoNwIs1sACkg1lgYSZ+UVq0S1R6yD82sRq+q10j0Y+1WPYT0aGfYOUIeVIqToSmg9ccWWXywZ02T'
+// const token = 'Bearer dD1ek05QoYHH7litvLpvR3sOerXj21O2hJBfQnas/UFbPaBa9vNpjydNnxM84mqCZJxiQv7bm1c6My3B4XibGU4wOk99kjh5vHZIEf+asO+Rg8cGh4WPLnhA9RWTqb7OvCY/yMSDnOPQ3mBUTkmK9rCOsPILQh3zGDrsXTNR3+w2JOb/9n5tR4e01kxi36MlVxLvMx4I27yF40bbW2qNTAKiZShMdmxSwMr1I8zEfHhqFxWAvBfnAIz2ipSeCGofMf6nKKiKDyWGB1qb7DXE6mSOmvZdsvl1zu5Jk27FctcCJ76hKZKnNme7d6iMhVy+uDNco534eqvD7YcsiLgOLY5NIcR8NfpExfT41dUXthlIBE+eqmQMGlzFXmplAIGzn6EuxFamnTQdTRC518kTcPiCPK0dXVInmn/8EtNxvShfORKnvSdCv14+XUi/PbpjVCS6+s7Rdbwaox486aC3zYewPt4GeBRu/VD7II6Tu3OSB/zzpGy/XVr1Y6/IZ7qKf1twUpwYO8L96KKiFSSmJXVn8AMoIuOFWhP25ICZ7LKYEAUEuXZkOGBAKS3RrAaN7qHpvFI8iTFARqmfggR0xhFGk8cgcaV80tnDUQAHnS/ZMuOIu1P+6kcNWe877sPS+GUArVfVdMsSV8xS5C+jpyhtkzTs2XrVQl5eX5tKljGq21P+Ujm7nbRCQyYn5++8YVAntAewerqOabTsu6BSLYIaGVuYAR6osv1KmqzgLlZOvacK9YiMtQSYbSZGjObfKCZqFq5sBvuOM1rVLGo39mmW1Bkz8wMgl2gCWaUiy+HZpMbFW5ZS1xQ5okp+1e/GbAKpljHiFAbGnUW5NXsxQ/OOyr50cS4BMl6YBzfcOOan9aE4xn4QygiGaSxaNtql'
 const loginKey = process.env.VUE_APP_LOGIN_KEY
 // 提示框过期时间
 const messageDuration = 10 * 1000
@@ -111,12 +111,12 @@ service.interceptors.response.use(
     if (response.config.responseType === 'arraybuffer' || response.config.responseType === 'blob') {
       return res
     }
-    if (res.code !== 1000) {
-      Message.error({
-        message: res.message,
-        duration: messageDuration
-      })
-    }
+    // if (res.code !== 1000) {
+    //   Message.error({
+    //     message: res.message,
+    //     duration: messageDuration
+    //   })
+    // }
     return res
   },
   error => {

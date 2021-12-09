@@ -9,8 +9,14 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerCode" filterable clearable placeholder="请选择">
+          <span class="SelectliTitle">sku:</span>
+          <el-select v-model="filterObj.sku" filterable clearable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
@@ -29,6 +35,8 @@
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="250" align="center" prop="customerCsName" label="客户名称" />
+      <el-table-column width="250" align="center" prop="channelCode" label="channelCode" />
+      <el-table-column width="250" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column width="240" align="center" prop="ptc" label="零售价｜PTC （RMB/Tin）" />
       <el-table-column width="320" align="center" prop="ptr" label="平台进货含税价｜PTR （RMB/Tin） " />
@@ -140,14 +148,17 @@ export default {
       var formData = new FormData()
       formData.append('excelFile', this.uploadFile)
       API.importMdprice(formData).then((response) => {
-        if (response.code == 1000) {
-          this.closeImport()
+         this.closeImport()
           this.getTableData()
-          this.$message.success(`${response.data}`)
-        } else {
-          this.closeImport()
-          this.$message.warning(`${response.data}`)
-        }
+          this.$message.success(`${response}`)
+        // if (response.code == 1000) {
+        //   this.closeImport()
+        //   this.getTableData()
+        //   this.$message.success(`${response.data}`)
+        // } else {
+        //   this.closeImport()
+        //   this.$message.warning(`${response.data}`)
+        // }
       })
     },
     parsingExcelBtn() {

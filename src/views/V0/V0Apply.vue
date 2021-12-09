@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-08 17:07:38
+ * @LastEditTime: 2021-12-08 21:29:15
 -->
 <template>
   <div class="app-container">
@@ -337,6 +337,7 @@ export default {
       this.uploadFile = ''
       //清除input的value ,上传一样的
       this.event.target.value = null
+      this.ImportData=[]
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -382,7 +383,7 @@ export default {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
-          dimProduct: encodeURIComponent(this.filterObj.SKU),
+          dimProduct: this.filterObj.SKU,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名

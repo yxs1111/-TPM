@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-08 17:15:21
+ * @LastEditTime: 2021-12-08 21:47:41
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -49,6 +49,13 @@ export default {
   },
   //v1数据异常项校验
   exceptionDownExcel(params) {
+    //二进制数据流转blob
+    return request({
+      url:this.ImportUrl+'/downExcel',
+      method:'post',
+      data:params,
+      responseType:'blob'
+    })
     return requestApi.request_get(this.ImportUrl+'/downExcel', params)
   },
   

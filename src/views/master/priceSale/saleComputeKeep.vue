@@ -129,7 +129,7 @@ export default {
       uploadFile: '',
       event: '',
       warningList: [],
-       warningShow: false,
+      warningShow: false,
     }
   },
   computed: {},
@@ -181,9 +181,12 @@ export default {
         } else {
           if (response.data === null) {
             this.$message.error(response.data)
-          } else if (response.data.length > 0) {
+          } else if (typeof(response.data)==Object) {
             this.warningShow = true
             this.warningList = response.data
+          } else if (typeof(response.data)==String) {
+            this.warningShow = false
+            this.warningList.push(response.data)
           }
         }
       })
@@ -204,6 +207,8 @@ export default {
       this.event.srcElement.value = '' //置空
       this.uploadFileName = ''
       this.uploadFile = ''
+      this.warningList=[]
+      this.warningShow=false
     },
     //导出数据
     exportData() {

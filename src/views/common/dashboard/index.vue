@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-08 19:16:25
+ * @LastEditTime: 2021-12-08 21:38:09
 -->
 <template>
   <div class="dashboard-container">
@@ -36,16 +36,20 @@
           <div class="monthBar">
             <div class="monthBg">
               <div class="monthName">7+5</div>
-              <div class="monthName">（202110）</div>
-              <!-- <img src="@/assets/images/index/month (1).png" alt=""> -->
+              <div class="monthName">(202110)</div>
             </div>
-            <!-- <img src="@/assets/images/index/month (1).png" alt=""> -->
           </div>
           <div class="monthBar">
-             <img src="@/assets/images/index/month (2).png" alt="">
+            <div class="monthBg">
+              <div class="monthName">7+5</div>
+              <div class="monthName">(202110)</div>
+            </div>
           </div>
           <div class="monthBar">
-             <img src="@/assets/images/index/month (3).png" alt="">
+            <div class="monthBg">
+              <div class="monthName">7+5</div>
+              <div class="monthName">(202110)</div>
+            </div>
           </div>
         </div>
 
@@ -341,13 +345,34 @@ export default {
             align-items: center;
             justify-content: center;
             color: #fff;
-            background: url('../../../assets/images/index/month (1).png') no-repeat;
+            background: url('../../../assets/images/index/month (1).png')
+              no-repeat;
             background-size: 100% 100%;
+            padding-left: 30px;
+            box-sizing: border-box;
             .monthName {
-              // width: 100%;
+              width: 100%;
+              font-size: 18px;
+              font-family: PingFang SC;
+              font-weight: 500;
               text-align: left;
             }
           }
+        }
+        .monthBar:nth-child(3n +1 ) .monthBg {
+          background: url('../../../assets/images/index/month (1).png')
+            no-repeat;
+          background-size: 100% 100%;
+        }
+        .monthBar:nth-child(3n + 2) .monthBg {
+          background: url('../../../assets/images/index/month (2).png')
+            no-repeat;
+          background-size: 100% 100%;
+        }
+        .monthBar:nth-child(3n + 3) .monthBg {
+          background: url('../../../assets/images/index/month (3).png')
+            no-repeat;
+          background-size: 100% 100%;
         }
       }
     }

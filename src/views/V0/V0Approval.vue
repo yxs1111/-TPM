@@ -185,7 +185,6 @@ export default {
         month: '202101',
         SKU: '',
       },
-      permissions: getDefaultPermissions(),
       ContentData: [],
       skuOptons: [],
       //导入
@@ -273,6 +272,7 @@ export default {
       this.uploadFile = ''
       //清除input的value ,上传一样的
       this.event.target.value = null
+      this.ImportData=[]
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -322,7 +322,7 @@ export default {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
-          dimProduct: encodeURIComponent(this.filterObj.SKU),
+          dimProduct: this.filterObj.SKU,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
