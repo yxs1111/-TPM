@@ -44,15 +44,15 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="approve(1)">
+      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="approve(2)">
+      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="approve(2)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -230,7 +230,9 @@ export default {
       dialogVisible: false,
       dialogTableLoading: false,
       dialogData: [],
-      uploadFileName: ''
+      uploadFileName: '',
+      usernameLocal: '',
+      btnStatus: false
     }
   },
   computed: {},
@@ -239,7 +241,7 @@ export default {
     this.getChannel()
     this.getSKU()
     this.getMP()
-    this.infoByMainId()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getCustomerList()
     this.getDistributorList()
   },
@@ -248,7 +250,17 @@ export default {
     infoByMainId() {
       API.infoByMainId({
         mainId: this.mainIdLocal
-      }).then().catch()
+      }).then(res => {
+        if (res.code === 1000) {
+          debugger
+          console.log('9999', this.usernameLocal)
+          if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal) {
+            this.btnStatus = false
+          } else {
+            this.btnStatus = true
+          }
+        }
+      }).catch()
     },
     // 获取下拉框
     getChannel() {
@@ -458,7 +470,6 @@ export default {
           this.tableLoading = false
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
-          this.submitBtn = response.data.records[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
