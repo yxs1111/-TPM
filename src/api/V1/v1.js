@@ -56,5 +56,9 @@ export default {
   },
   getEffectiveDate(params) {
     return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)
+  },
+  // 通过与驳回按钮状态
+  infoByMainId(params) {
+    return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
   }
 }

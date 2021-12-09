@@ -34,7 +34,7 @@
           </el-select>
         </div>
         <div class="OpertionBar">
-          <el-button type="primary" class="TpmButtonBG" @click="infoByMainId">查询</el-button>
+          <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
           <div class="TpmButtonBG" @click="exportData">
             <img src="../../../assets/images/export.png" alt="">
             <span class="text">导出</span>
@@ -232,7 +232,7 @@ export default {
       dialogData: [],
       uploadFileName: '',
       usernameLocal: '',
-      btnStatus: false
+      btnStatus: true
     }
   },
   computed: {},
@@ -252,8 +252,6 @@ export default {
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
-          debugger
-          console.log('9999', this.usernameLocal)
           if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal) {
             this.btnStatus = false
           } else {

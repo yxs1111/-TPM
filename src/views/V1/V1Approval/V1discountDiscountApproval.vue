@@ -43,15 +43,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="agree">
+      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="agree">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" @click="reject">
+      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="reject">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -235,7 +235,8 @@ export default {
       customerArr: [],
       distributorArr: [],
       localDate: '202101',
-      saveBtn: false
+      saveBtn: false,
+      btnStatus: true
     }
   },
   computed: {},
@@ -248,6 +249,20 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal) {
+            this.btnStatus = false
+          } else {
+            this.btnStatus = true
+          }
+        }
+      }).catch()
+    },
     // 获取年月
     getEffectiveDate() {
       API.getEffectiveDate().then(res => {
@@ -493,7 +508,7 @@ export default {
           this.tableLoading = false
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
-          this.submitBtn = response.data.records[0].isSubmit
+          this.infoByMainId()
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
