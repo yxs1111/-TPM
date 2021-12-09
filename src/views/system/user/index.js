@@ -200,8 +200,6 @@ export default {
       tasks,
       options: options,
       dynamicStyle: {},
-      searchLoading: false,
-      saveLoading: false,
       editDisabled: true,
       multipleSelection: [],
       textMap: getTextMap(),
@@ -267,9 +265,6 @@ export default {
       userRoleDialog: {
         visible: false
       },
-      ganttDialog: {
-        visible: false
-      },
       transferRoleProps: {
         data: [],
         value: [],
@@ -292,7 +287,6 @@ export default {
   methods: {
     // 查询方法
     fetchData() {
-      this.searchLoading = true
       if (this.userQuery.dataRange && this.userQuery.dataRange !== '') {
         this.userQuery.startDate = this.userQuery.dataRange[0]
         this.userQuery.endDate = this.userQuery.dataRange[1]
@@ -308,9 +302,7 @@ export default {
         this.userPageProps.total = data.total
         this.userPageProps.pageNum = data.pageNum
         this.userPageProps.pageSize = data.pageSize
-        this.searchLoading = false
       }).catch(error => {
-        this.searchLoading = false
         console.log(error)
       })
     },
@@ -318,11 +310,9 @@ export default {
     saveOrUpdate() {
       this.$refs['userDataForm'].validate((valid) => {
         if (valid) {
-          this.saveLoading = true
           const params = Object.assign({}, this.userInfoDialog.data)
           if (this.userInfoDialog.state === 'create') {
             requestApi.save(url, params).then((res) => {
-              this.saveLoading = false
               if (res && res.code === 1000) {
                 this.userInfoDialog.visible = false
                 Message.success({
@@ -331,10 +321,9 @@ export default {
                 })
                 this.fetchData()
               }
-            }).catch(() => { this.saveLoading = false })
+            }).catch(() => {  })
           } else {
             requestApi.update(url, params).then((res) => {
-              this.saveLoading = false
               if (res && res.code === 1000) {
                 this.$delete(this.user_org_map, this.userInfoDialog.data.id)
                 if (this.userInfoDialog.data.version) {
@@ -343,13 +332,12 @@ export default {
                 const index = this.userPageProps.records.findIndex(v => v.id === this.userInfoDialog.data.id)
                 this.userPageProps.records.splice(index, 1, this.userInfoDialog.data)
                 this.userInfoDialog.visible = false
-                this.saveLoading = false
                 Message.success({
                   message: '更新成功',
                   duration: 5 * 1000
                 })
               }
-            }).catch(() => { this.saveLoading = false })
+            }).catch(() => {  })
           }
         }
       })
@@ -464,27 +452,6 @@ export default {
       this.userInfoDialog.data.locked = 0
       this.userInfoDialog.visible = true
       this.userInfoDialog.state = 'create'
-    },
-    // 打开甘特图
-    gantt() {
-      const taskList = []
-      for (let j = 0, len = this.userPageProps.records.length; j < len; j++) {
-        const item = this.userPageProps.records[j]
-        const data = {}
-        data.id = item.id
-        data.label = item.name
-        data.type = 'project'
-        data.start = item.createDate
-        if (item.expireAt && item.createDate) {
-          data.duration = new Date(item.expireAt).getTime() - new Date(item.createDate).getTime()
-        } else {
-          data.duration = 0
-        }
-        console.log(new Date(item.expireAt).getTime() - new Date(item.createDate).getTime())
-        taskList[j] = data
-      }
-      this.ganttDialog.visible = true
-      this.tasks = taskList
     },
     // 详情页点击编辑
     changeToEdit() {
@@ -634,7 +601,18 @@ export default {
     },
     styleUpdate(style) {
       this.dynamicStyle = style
-    }
+    },
+    // 行样式
+    tableRowClassName({ row, rowIndex }) {
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
+    },
+    HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
   }
 }
 

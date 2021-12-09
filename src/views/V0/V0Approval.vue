@@ -84,13 +84,13 @@ priceLevelKeep<!--
                 </template>
               </el-table-column>
               <el-table-column align="center" v-slot={row} width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
-                  {{(row.cityPlanAveragePrice*1).toFixed(2)}}
+                {{(row.cityPlanAveragePrice*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="center" v-slot={row} width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
                 {{(row.cityPlanPromotionExpenses*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="center" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-              {{(row.cptAveragePrice*1).toFixed(2)}}
+                {{(row.cptAveragePrice*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="center" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{(row.cptPromotionExpenses*1).toFixed(2)}}
@@ -101,7 +101,20 @@ priceLevelKeep<!--
               <el-table-column align="center" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
                 {{(row.promotionExpensesGapValue*1).toFixed(0)}}
               </el-table-column>
-              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
+              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
+                <template slot-scope="{row}">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                    <div slot="content" v-html="getTip(row)">
+                    </div>
+                    <div class="statusWrap">
+                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
+                      <span class="judgmentText">{{row.judgmentType}}</span>
+                    </div>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
               <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
               <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
               <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
@@ -172,7 +185,20 @@ priceLevelKeep<!--
               <el-table-column align="center" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
               <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
               <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
+              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
+                <template slot-scope="{row}">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                    <div slot="content" v-html="getTip(row)">
+                    </div>
+                    <div class="statusWrap">
+                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
+                      <span class="judgmentText">{{row.judgmentType}}</span>
+                    </div>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
               <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
               <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
               <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
@@ -208,7 +234,7 @@ export default {
         channelCode: '',
       },
       ContentData: [],
-      ChannelList:[],
+      ChannelList: [],
       skuOptons: [],
       //导入
       importVisible: false, //导入弹窗
@@ -227,7 +253,7 @@ export default {
         'background:#FEF5F6',
         'background:#F0F6FC',
       ], //价格档位背景色
-      isNoData:false,
+      isNoData: false,
     }
   },
   directives: { elDragDialog, permission },
@@ -243,13 +269,14 @@ export default {
       API.getApproveList({
         yearAndMonth: this.filterObj.month,
         dimProduct: this.filterObj.SKU,
+        channelCode: this.filterObj.channelCode,
       }).then((response) => {
         if (response.code == 1000) {
           this.ContentData = response.data
-          if(Object.keys(this.ContentData).length==0) {
-            this.isNoData=true 
+          if (Object.keys(this.ContentData).length == 0) {
+            this.isNoData = true
           } else {
-            this.isNoData=false 
+            this.isNoData = false
           }
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
@@ -265,6 +292,9 @@ export default {
           }
         }
       })
+    },
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
     },
     getChannelList() {
       commonAPI.getPageMdChannel().then((res) => {
@@ -301,7 +331,7 @@ export default {
       this.uploadFile = ''
       //清除input的value ,上传一样的
       this.event.target.value = null
-      this.ImportData=[]
+      this.ImportData = []
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -337,28 +367,31 @@ export default {
     },
     //导出异常信息
     exportErrorList() {
-      API.exceptionDownExcel().then((res) => {
-       
+      if (this.ImportData.length) {
+        API.exceptionDownExcel().then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')
-        
-      })
+        })
+      } else {
+        this.$message.info('异常数据为空!')
+      }
     },
     //导出数据
     exportData() {
-      if (this.filterObj.month != '') {
+      if (Object.keys(this.ContentData).length) {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
+          channelCode: this.filterObj.channelCode,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
-        this.$message.warning('请先选择年月')
+        this.$message.warning('数据不能为空')
       }
     },
     //下载文件
@@ -550,3 +583,16 @@ export default {
   }
 }
 </style>
+<style>
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+</style>
+

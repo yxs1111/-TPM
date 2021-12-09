@@ -58,7 +58,7 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
@@ -85,7 +85,20 @@
       <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
       <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）" />
       <el-table-column width="120" align="center" prop="costDifference" label="费用差值" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+            <div slot="content" v-html="getTip(row)">
+            </div>
+            <div class="statusWrap">
+              <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
+              <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+              <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
+              <span class="judgmentText">{{row.judgmentType}}</span>
+            </div>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -161,7 +174,20 @@
             <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
             <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）" />
             <el-table-column width="120" align="center" prop="costDifference" label="费用差值" />
-            <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+            <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                  <div slot="content" v-html="getTip(row)">
+                  </div>
+                  <div class="statusWrap">
+                    <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
+                    <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+                    <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
+                    <span class="judgmentText">{{row.judgmentType}}</span>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
             <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -228,7 +254,7 @@ export default {
   watch: {
     'filterObj.channelCode'() {
       this.getCustomerList()
-    }
+    },
   },
   methods: {
     // 获取表格数据
@@ -259,6 +285,9 @@ export default {
           }
         })
         .catch((error) => {})
+    },
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
     },
     //查询列表 --获取活动年月
     getMonth() {
@@ -328,7 +357,7 @@ export default {
       this.uploadFile = ''
       //清除input的value ,上传一样的
       this.event.target.value = null
-      this.ImportData=[]
+      this.ImportData = []
     },
     // 校验数据
     checkImport() {
@@ -352,27 +381,35 @@ export default {
     },
     // 导出异常信息
     exportErrorList() {
-      API.exceptionDownExcel().then((res) => {
-        const timestamp = Date.parse(new Date())
-        this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
+      if (this.ImportData.length) {
+        API.exceptionDownExcel().then((res) => {
+          const timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success('导出成功!')
+        })
+      } else {
+        this.$message.info('异常数据为空!')
+      }
     },
     // 导出数据
     exportExcel() {
-      // 导出数据筛选
-      API.exportExcel({
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        regionCode: this.filterObj.regionCode,
-        dimProduct: this.filterObj.dim_product,
-      }).then((res) => {
-        const timestamp = Date.parse(new Date())
-        this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
+      if (this.tableData.length) {
+        // 导出数据筛选
+        API.exportExcel({
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          dimProduct: this.filterObj.dim_product,
+        }).then((res) => {
+          const timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success('导出成功!')
+        })
+      } else {
+        this.$message.info('数据为空')
+      }
     },
     // 下载文件
     downloadFile(res, fileName) {
@@ -396,31 +433,36 @@ export default {
     // V0 提交审批
     approve() {
       if (this.tableData.length) {
-        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            const mainId = this.tableData[0].mainId
-            API.approve({
-              mainId: mainId, // 主表id
-              opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-            }).then((response) => {
-              if (response.code === 1000) {
-                this.$message.success('提交成功')
-                this.getTableData()
-              }
-            })
+        let judgmentType = this.tableData[0].judgmentType
+        if (judgmentType != null) {
+          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消提交',
+            .then(() => {
+              const mainId = this.tableData[0].mainId
+              API.approve({
+                mainId: mainId, // 主表id
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+              }).then((response) => {
+                if (response.code === 1000) {
+                  this.$message.success('提交成功')
+                  this.getTableData()
+                }
+              })
             })
-          })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
+        } else {
+          this.$message.info('系统判定不能为空')
+        }
       } else {
-        this.$message.error('数据不能为空')
+        this.$message.warning('数据不能为空')
       }
     },
     // 每页显示页面数变更
@@ -482,3 +524,16 @@ export default {
   }
 }
 </style>
+<style>
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+</style>
+

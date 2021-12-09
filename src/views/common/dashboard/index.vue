@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-09 14:07:03
+ * @LastEditTime: 2021-12-09 15:00:40
 -->
 <template>
   <div class="dashboard-container">
@@ -214,7 +214,7 @@ export default {
         {
           key: 'v0Day',
           // 括号内传递日期可点亮指定日期，如new Date(2019, 6, 1)，也可传递多个日期：如dates: [ new Date(2018, 0, 1), new Date(2018, 0, 15) ]
-          dates: new Date(2021,11,21),
+          dates: new Date(),
           highlight: true,
           dot: true,
           // popover 点亮的日期上出现提示内容
@@ -223,9 +223,22 @@ export default {
           },
         },
         {
-          key: 'today',
-          dot: true,
-          dates: new Date(),
+          key: 'V1Day',
+          dot: {
+            style: {
+              backgroundColor: '#FB5A56',
+            },
+          },
+          dates: new Date(2021, 11, 13),
+        },
+        {
+          key: 'V2Day',
+          dot: {
+            style: {
+              backgroundColor: '#FFAA30',
+            },
+          },
+          dates: new Date(2021, 11, 6),
         },
       ],
     }
@@ -632,7 +645,7 @@ export default {
     }
     .BarTitleWrap {
       font-family: SourceHanSansCN-Medium;
-      font-size: 22px;
+      font-size: 18px;
       color: #333333;
       font-weight: 600;
       display: flex;
@@ -709,7 +722,8 @@ export default {
   position: relative;
   min-height: 32px;
   z-index: 1;
-  margin: 10px 0;
+  margin: 10px auto;
+  color: #333;
 }
 .vc-arrows-container {
   margin-bottom: 10px;
@@ -721,5 +735,24 @@ export default {
   width: 8px !important;
   height: 8px !important;
   border: 1px solid #fff !important;
+}
+.vc-dots {
+  margin-bottom: -4px !important;
+}
+.vc-day-content {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 8px !important;
+}
+.ToDayBg {
+  background-color: #4192d3;
+  color: #fff;
+}
+.vc-highlight[data-v-4420d078] {
+  width: 40px;
+  height: 40px;
+  background-color: #4192d3 !important;
+  border-radius: 10px !important;
+  color: #fff !important;
 }
 </style>

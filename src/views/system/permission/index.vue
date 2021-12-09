@@ -9,87 +9,34 @@
         <el-input v-model="permissionQuery.code" placeholder="权限编码" maxlength="50" />
       </el-form-item>
       <el-form-item label="所属系统" prop="osCode">
-        <el-select
-          v-model="permissionQuery.osCode"
-          filterable
-          clearable
-          placeholder="所属系统"
-          @change="handleOsChange"
-        >
-          <el-option
-            v-for="item in osSelectOption"
-            :key="item.code"
-            :label="item.name"
-            :value="item.code"
-          />
+        <el-select v-model="permissionQuery.osCode" filterable clearable placeholder="所属系统" @change="handleOsChange">
+          <el-option v-for="item in osSelectOption" :key="item.code" :label="item.name" :value="item.code" />
         </el-select>
       </el-form-item>
       <el-form-item label="所属菜单" prop="menuCode">
-        <el-select
-          ref="menuCode"
-          v-model="permissionQuery.menuCode"
-          filterable
-          clearable
-          placeholder="所属菜单"
-        >
-          <el-option
-            v-for="item in menuSelectOption"
-            :key="item.code"
-            :label="item.name"
-            :value="item.code"
-          />
+        <el-select ref="menuCode" v-model="permissionQuery.menuCode" filterable clearable placeholder="所属菜单">
+          <el-option v-for="item in menuSelectOption" :key="item.code" :label="item.name" :value="item.code" />
         </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="dataRange">
-        <el-date-picker
-          v-model="permissionQuery.dataRange"
-          type="daterange"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions"
-          value-format="yyyy-MM-dd HH:mm"
-          format="yyyy-MM-dd"
-          :default-time="['00:00:00','23:59:59']"
-          @change="search"
-        />
+        <el-date-picker v-model="permissionQuery.dataRange" type="daterange" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
+          :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd" :default-time="['00:00:00','23:59:59']" @change="search" />
       </el-form-item>
       <el-form-item>
-        <el-button  type="primary" icon="el-icon-search" :loading="searchLoading" @click="search">搜索</el-button>
+        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button  @click="reset">重置</el-button>
+        <el-button @click="reset" class="TpmButtonBG">重置</el-button>
       </el-form-item>
     </el-form>
-    <div id="buttonDiv" style="margin-bottom: 20px">
-      <el-button  class="filter-item" style="margin-left: 10px;" type="danger" icon="el-icon-delete" @click="showDeleteDialog">
-        删除
-      </el-button>
-      <el-button  class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit" @click="newRowData">
-        新增
-      </el-button>
+    <div class="TpmButtonBGWrap">
+      <el-button type="primary" class="TpmButtonBG"  icon="el-icon-delete" @click="showDeleteDialog">删除</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="newRowData">新增</el-button>
     </div>
     <!--查询结果-->
-    <el-table
-      ref="permissionTable"
-      v-loading="searchLoading"
-      :data="permissionPageProps.records"
-      element-loading-text="正在查询"
-      border
-      fit
-      stripe
-      height="600"
-      highlight-current-row
-      @row-click="handleCurrentRowClick"
-      @row-dblclick="handleCurrentRowDblClick"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        align="center"
-        type="selection"
-        width="55"
-      />
+    <el-table ref="permissionTable"  :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  :data="permissionPageProps.records"  border fit  height="600" highlight-current-row
+      @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
+      <el-table-column align="center" type="selection" width="55" />
       <el-table-column align="center" label="序号" width="95">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -128,38 +75,27 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button  type="primary" size="mini" @click="editRowData(row)">
+          <el-button type="primary" size="mini" @click="editRowData(row)">
             {{ $t('table.edit') }}
           </el-button>
-          <el-button  size="mini" type="danger" @click="handleDelete(row)">
+          <el-button size="mini" type="danger" @click="handleDelete(row)">
             {{ $t('table.delete') }}
           </el-button>
-          <el-button  size="mini" type="default" @click="getRowData(row)">
+          <el-button size="mini" type="default" @click="getRowData(row)">
             {{ $t('table.detail') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--分页-->
-    <el-pagination
-      background
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="permissionPageProps.total"
-      :page-size="permissionPageProps.pageSize"
-      :current-page="permissionPageProps.pageNum"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+    <div class="TpmPaginationWrap">
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="permissionPageProps.total" :page-size="permissionPageProps.pageSize"
+        :current-page="permissionPageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    </div>
+
     <!--信息框-->
     <el-dialog v-el-drag-dialog :title="textMap[permissionDialog.state]" :visible.sync="permissionDialog.visible" @dragDialog="handleDrag">
-      <el-form
-        ref="permissionDataForm"
-        :rules="rules"
-        :model="permissionDialog.data"
-        label-position="left"
-        label-width="120px"
-        style="width: 600px; margin-left:50px;"
-      >
+      <el-form ref="permissionDataForm" :rules="rules" :model="permissionDialog.data" label-position="left" label-width="120px" style="width: 600px; margin-left:50px;">
         <el-form-item label="权限名称" prop="name">
           <span v-if="permissionDialog.state === 'info'">{{ permissionDialog.data.name }}</span>
           <el-input v-else v-model="permissionDialog.data.name" maxlength="50" :clearable="true" placeholder="权限名称" show-word-limit />
@@ -170,37 +106,14 @@
         </el-form-item>
         <el-form-item label="所属系统" prop="osCode">
           <span v-if="permissionDialog.state === 'info'">{{ permissionDialog.data.osName }}</span>
-          <el-select
-            v-else
-            v-model="permissionDialog.data.osCode"
-            filterable
-            clearable
-            placeholder="所属系统"
-            @change="handleOsChange"
-          >
-            <el-option
-              v-for="item in osSelectOption"
-              :key="item.code"
-              :label="item.name"
-              :value="item.code"
-            />
+          <el-select v-else v-model="permissionDialog.data.osCode" filterable clearable placeholder="所属系统" @change="handleOsChange">
+            <el-option v-for="item in osSelectOption" :key="item.code" :label="item.name" :value="item.code" />
           </el-select>
         </el-form-item>
         <el-form-item label="所属菜单" prop="menuCode">
           <span v-if="permissionDialog.state === 'info'">{{ permissionDialog.data.menuName }}</span>
-          <el-select
-            v-else
-            v-model="permissionDialog.data.menuCode"
-            filterable
-            clearable
-            placeholder="所属菜单"
-          >
-            <el-option
-              v-for="item in menuSelectOption"
-              :key="item.code"
-              :label="item.name"
-              :value="item.code"
-            />
+          <el-select v-else v-model="permissionDialog.data.menuCode" filterable clearable placeholder="所属菜单">
+            <el-option v-for="item in menuSelectOption" :key="item.code" :label="item.name" :value="item.code" />
           </el-select>
         </el-form-item>
         <el-form-item label="位移值" prop="bitDigit">
@@ -222,20 +135,13 @@
         <el-button v-if="permissionDialog.state==='info'" type="primary" @click="changeToEdit">
           编辑
         </el-button>
-        <el-button v-else  type="primary" :loading="saveLoading" @click="saveOrUpdate">
+        <el-button v-else type="primary"  @click="saveOrUpdate">
           保存并关闭
         </el-button>
       </div>
     </el-dialog>
     <!--关闭提示框-->
-    <el-dialog
-      v-el-drag-dialog
-      title="提示"
-      :visible.sync="centerDialogVisible"
-      width="30%"
-      center
-      @dragDialog="handleDrag"
-    >
+    <el-dialog v-el-drag-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center @dragDialog="handleDrag">
       <span v-if="multipleSelection && multipleSelection.length>0">确认删除选中的{{ multipleSelection.length }}项？</span>
       <span v-else>未选中任何内容。</span>
       <span slot="footer" class="dialog-footer">
@@ -247,5 +153,4 @@
 </template>
 
 <script src="./index.js">
-
 </script>

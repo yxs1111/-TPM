@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-09 11:14:38
+ * @LastEditTime: 2021-12-09 18:19:04
 -->
 <template>
   <div class="app-container">
@@ -101,19 +101,15 @@
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
-                  <el-tooltip effect="dark"  placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)">
-                    <!-- {{getTip(row)}} -->
-                    <!-- <div class="Tip">不符合（客户均价/渠道均价）-1∈[-X1%,+X2%]</div>
-                    <div class="Tip">不符合（V0价促费用/CPT价促费用）-1∈[-X3%,+X4%]</div> -->
-                  </div>
-                  <div class="statusWrap">
-                    
-                      <img src="@/assets/images/success.png" alt="">
-                      <img src="@/assets/images/warning.png" alt="">
-                      <span class="judgmentText">{{row.judgmentType}}系统判定</span>
-                    
-                  </div>
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                    <div slot="content" v-html="getTip(row)">
+                    </div>
+                    <div class="statusWrap">
+                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
+                      <span class="judgmentText">{{row.judgmentType}}</span>
+                    </div>
                   </el-tooltip>
                 </template>
               </el-table-column>
@@ -192,7 +188,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-              <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+              <el-table-column  fixed align="center" label="是否通过" width="100">
                 <template slot-scope="scope">
                   <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
                   <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
@@ -211,7 +207,20 @@
               <el-table-column align="center" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
               <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
               <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
+              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
+              <template slot-scope="{row}">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                    <div slot="content" v-html="getTip(row)">
+                    </div>
+                    <div class="statusWrap">
+                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType=='Exception'">
+                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
+                      <span class="judgmentText">{{row.judgmentType}}</span>
+                    </div>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
               <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
               <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
               <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
@@ -314,6 +323,7 @@ export default {
       API.getList({
         yearAndMonth: this.filterObj.month,
         dimProduct: this.filterObj.SKU,
+        channelCode: this.filterObj.channelCode,
       }).then((response) => {
         if (response.code === 1000) {
           this.ContentData = response.data
@@ -347,9 +357,7 @@ export default {
       })
     },
     getTip(row) {
-       
-      return `<div class="Tip">不符合（客户均价/渠道均价）-1∈[-X1%,+X2%]</div>
-              <div class="Tip">不符合（V0价促费用/CPT价促费用）-1∈[-X3%,+X4%]</div> `
+      return `<div class="Tip">${row.judgmentContent}</div>`
     },
     //档位列
     columnList(list) {
@@ -407,26 +415,31 @@ export default {
     },
     //导出异常信息
     exportErrorList() {
-      API.exceptionDownExcel().then((res) => {
-        let timestamp = Date.parse(new Date())
-        this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
+      if (this.ImportData.length) {
+        API.exceptionDownExcel().then((res) => {
+          let timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
+          this.$message.success('导出成功!')
+        })
+      } else {
+        this.$message.info('异常数据为空!')
+      }
     },
     //导出数据
     exportData() {
-      if (this.filterObj.month != '') {
+      if (Object.keys(this.ContentData).length) {
         //导出数据筛选
         API.exportExcel({
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
+          channelCode: this.filterObj.channelCode,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
-        this.$message.warning('请先选择年月')
+        this.$message.warning('数据不能为空')
       }
     },
     //下载文件
@@ -493,29 +506,34 @@ export default {
     approve() {
       var arr = Object.keys(this.ContentData)
       if (arr.length) {
-        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            let mainId = this.ContentData[arr[0]][0].mainId
-            API.approve({
-              mainId: mainId, //主表id
-              opinion: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
-            }).then((response) => {
-              if (response.code === 1000) {
-                this.$message.success('提交成功')
-                this.getList()
-              }
-            })
+        let judgmentType = this.ContentData[arr[0]][0].judgmentType
+        if (judgmentType != null) {
+          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消提交',
+            .then(() => {
+              let mainId = this.ContentData[arr[0]][0].mainId
+              API.approve({
+                mainId: mainId, //主表id
+                opinion: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
+              }).then((response) => {
+                if (response.code === 1000) {
+                  this.$message.success('提交成功')
+                  this.getList()
+                }
+              })
             })
-          })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
+        } else {
+          this.$message.info('系统判定不能为空')
+        }
       } else {
         this.$message.warning('数据不能为空')
       }
@@ -631,10 +649,10 @@ export default {
   border-radius: 10px;
 }
 .Tip {
-    text-align: center;
-    font-size: 14px;
-    font-family: Source Han Sans CN;
-    font-weight: 400;
-    margin: 3px 0;
-  }
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
 </style>

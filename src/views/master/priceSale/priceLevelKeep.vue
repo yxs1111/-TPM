@@ -87,10 +87,10 @@
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="el-downloadFileBar">
         <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
+          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportTemplate">下载模板</el-button>
           <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
         </div>
-        <el-button  type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
       </div>
       <div class="fileInfo">
         <div class="fileInfo">
@@ -105,15 +105,15 @@
             <span>{{uploadFileName}}</span>
           </div>
         </div>
-        <!-- <div class="seeData" style="width: auto;">
+        <div class="seeData" style="width: auto;">
           <div class="exportError" @click="exportErrorList">
             <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
             <span>导出错误信息</span>
           </div>
-        </div> -->
+        </div>
       </div>
       <div class="tableWrap">
-        <el-table border height="240" :data="ImportData"  style="width: 100%" :header-cell-style="{
+        <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -121,7 +121,22 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-          <el-table-column  align="center" prop="judgmentContent" label="错误信息" />
+          <el-table-column fixed align="center" label="是否通过" width="100">
+            <template slot-scope="scope">
+              <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+              <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+            </template>
+          </el-table-column>
+          <el-table-column align="center" prop="judgmentContent" label="错误信息" />
+          <el-table-column align="center" prop="yearAndMonth" label="年月" />
+          <el-table-column align="center" prop="channelCode" label="渠道" />
+          <el-table-column align="center" prop="sku" label="SKU" />
+          <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
+            ¥{{row.gear}}
+          </el-table-column>
+          <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">
+            {{row.volMix}}%
+          </el-table-column>
         </el-table>
       </div>
     </el-dialog>
@@ -207,12 +222,7 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importPriceGear(formData).then((response) => {
-        this.closeImport()
-        this.getTableData()
-      })
+      
     },
     // 选择导入文件
     parsingExcelBtn() {
@@ -222,6 +232,11 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importPriceGear(formData).then((response) => {
+        this.$message.success('导入成功,请点击检测数据')
+      })
     },
     // 关闭导入
     closeImport() {
@@ -229,14 +244,32 @@ export default {
       this.uploadFileName = ''
       this.uploadFile = ''
     },
-    exportErrorList() {},
+    //检测数据
+    checkImport() {
+      API.importCheck().then((res) => {
+        this.ImportData = res.data
+      })
+    },
+    exportErrorList() {
+      API.exportPriceGearError().then((res) => {
+        this.downloadFile(res, '价格档位异常信息' + '.xlsx') // 自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
     // 导出数据
     exportData() {
       // 导出数据筛选
       var data = {}
       data = { ...this.filterObj }
-      API.exportPriceGear().then((res) => {
+      API.exportPriceGear(data).then((res) => {
         this.downloadFile(res, '价格档位' + '.xlsx') // 自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
+    // 下载模板
+    exportTemplate() {
+      API.exportTemplate().then((res) => {
+        this.downloadFile(res, '价格档位模板' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },

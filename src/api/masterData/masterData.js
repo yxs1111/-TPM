@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-12-07 14:21:07
+ * @LastEditTime: 2021-12-09 16:49:30
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -67,6 +67,29 @@ export default {
       responseType: 'blob'
     })
   },
+  //下载模板
+  exportTemplate(params) {
+    return request({
+      url: 'mdm/mdPriceGear/exportTemplate',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //检测数据
+  importCheck(params) {
+    return requestApi.request_post('/mdm/mdPriceGear/importCheck', params)
+  },
+  //导出异常信息
+  exportPriceGearError(params) {
+    return request({
+      url: 'mdm/mdPriceGear/exportPriceGearError',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+
   // 渠道列表
   /**
    * @description: 渠道列表

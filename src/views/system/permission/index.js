@@ -13,8 +13,6 @@ export default {
   directives: { elDragDialog, permission },
   data() {
     return {
-      searchLoading: false,
-      saveLoading: false,
       editDisabled: true,
       multipleSelection: [],
       stateMap: {
@@ -92,7 +90,6 @@ export default {
   methods: {
     // 查询方法
     fetchData() {
-      this.searchLoading = true
       if (this.permissionQuery.dataRange && this.permissionQuery.dataRange !== '') {
         this.permissionQuery.startDate = this.permissionQuery.dataRange[0]
         this.permissionQuery.endDate = this.permissionQuery.dataRange[1]
@@ -108,9 +105,7 @@ export default {
         this.permissionPageProps.total = data.total
         this.permissionPageProps.pageNum = data.pageNum
         this.permissionPageProps.pageSize = data.pageSize
-        this.searchLoading = false
       }).catch(error => {
-        this.searchLoading = false
         console.log(error)
       })
     },
@@ -118,11 +113,9 @@ export default {
     saveOrUpdate() {
       this.$refs['permissionDataForm'].validate((valid) => {
         if (valid) {
-          this.saveLoading = true
           const params = Object.assign({}, this.permissionDialog.data)
           if (this.permissionDialog.state === 'create') {
             requestApi.save(url, params).then((res) => {
-              this.saveLoading = false
               if (res && res.code === 1000) {
                 this.permissionDialog.visible = false
                 Message.success({
@@ -134,7 +127,6 @@ export default {
             })
           } else {
             requestApi.update(url, params).then((res) => {
-              this.saveLoading = false
               if (res && res.code === 1000) {
                 if (this.permissionDialog.data.version) {
                   this.permissionDialog.data.version++
@@ -323,6 +315,17 @@ export default {
           this.permissionQuery.menuCode = ''
         }
       }).catch(error => console.log(error))
-    }
+    },
+    // 行样式
+    tableRowClassName({ row, rowIndex }) {
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
+    },
+    HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
   }
 }
