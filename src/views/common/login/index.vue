@@ -1,6 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      autocomplete="on"
+      label-position="left"
+    >
       <div class="title-container">
         <div class="title">欢迎登录</div>
       </div>
@@ -8,7 +15,15 @@
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text" tabindex="1" autocomplete="on" />
+        <el-input
+          ref="username"
+          v-model="loginForm.username"
+          placeholder="Username"
+          name="username"
+          type="text"
+          tabindex="1"
+          autocomplete="on"
+        />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -26,7 +41,9 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
       <div class="VerificationWrap">
@@ -34,24 +51,53 @@
           <span class="svg-container">
             <svg-icon icon-class="password" />
           </span>
-          <el-input ref="code" v-model="loginForm.code" placeholder="请输入验证码" autocomplete="off" name="code" type="text" @keyup.enter.native="handleLogin" />
+          <el-input
+            ref="code"
+            v-model="loginForm.code"
+            placeholder="请输入验证码"
+            autocomplete="off"
+            name="code"
+            type="text"
+            @keyup.enter.native="handleLogin"
+          />
         </el-form-item>
-        <img v-show="imageCode && imageCode.length > 100" :src="imageCode" alt="codeImage" class="code-image" @click="getCodeImage">
+        <img
+          v-show="imageCode && imageCode.length > 100"
+          :src="imageCode"
+          alt="codeImage"
+          class="code-image"
+          @click="getCodeImage"
+        >
       </div>
 
       <div class="rememberPwd">
         <el-checkbox v-model="checked">记住密码</el-checkbox>
       </div>
-      <el-button :loading="loading" class="loginBtn" type="primary" @click.native.prevent="handleLogin">Login
+      <el-button
+        :loading="loading"
+        class="loginBtn"
+        type="primary"
+        @click.native.prevent="handleLogin"
+      >Login
       </el-button>
       <div class="WechatWrap">
         <el-divider>企业微信登录</el-divider>
-        <img src="@/assets/images/login/wechatIcon.png" alt="" class="wechatImg" @click="loginByWechat">
+        <img
+          src="@/assets/images/login/wechatIcon.png"
+          alt=""
+          class="wechatImg"
+          @click="loginByWechat"
+        >
       </div>
     </el-form>
     <div class="niu" />
     <div v-show="isLoginByWechat" class="WechatLogin">
       <div class="WechatBar">
+        <!-- <div class="login-box">
+          <div class="wx-box">
+            <div id="wx_box" />
+          </div>
+        </div> -->
         <!-- <iframe class="wechat" name="wechat"
           src="https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx" frameborder="0"></iframe> -->
         <!-- <div class="loginByWechatText">企业微信登录</div> -->
@@ -61,10 +107,8 @@
         <div class="closeIcon" @click="closeWechat">
           <i class="el-icon-close" />
         </div>
-
       </div>
     </div>
-
   </div>
 </template>
 
@@ -72,6 +116,7 @@
 import { validUsername } from '@/utils/validate'
 import { randomNum } from '@/utils'
 import user from '@/api/system/user'
+import axios from 'axios'
 
 export default {
   name: 'Login',
@@ -91,7 +136,7 @@ export default {
       }
     }
     return {
-      srcUrl: 'https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https%3a%2f%2fwww.baidu.com%2f',
+      srcUrl: 'https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx',
       loginForm: {
         username: 'admin',
         password: '',
@@ -112,7 +157,9 @@ export default {
       randomId: randomNum(24, 16),
       imageCode: '',
       checked: false, // 记住密码
-      isLoginByWechat: false
+      isLoginByWechat: false,
+      closeGetWX: false,
+      secure: ''
     }
   },
   watch: {
@@ -128,6 +175,41 @@ export default {
     this.getCookie()
   },
   methods: {
+    getWXiNFO() {
+      const stop = setInterval(() => {
+        this.getWX()
+        if (this.closeGetWX) {
+          clearInterval(stop)
+        }
+      }, 10000)
+    },
+    // 调用微信登录接口
+    getWX() {
+      axios
+        .get('/Api/Oauth/sendwx')
+        .then(response => {
+          this.secure = response.data.split('<br>')[2].replace('密文：', '')
+          user.getWeChatData({
+            email: this.secure.trim()
+          }).then(res => {
+            if (res.code === 1000) {
+              const formdata = new FormData()
+              formdata.append('email', res.data.email)
+              user.qrcodeEmail(formdata).then(res => {
+                if (res.code === 1000) {
+                  this.closeGetWX = true
+                  this.loading = false
+                  this.isLoginByWechat = false
+                  this.$router.push({ path: this.redirect || '/' })
+                }
+              }).catch()
+            }
+          }).catch()
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -141,10 +223,19 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
+          this.closeGetWX = true
           this.loading = true
           this.loginForm['key'] = this.randomId
           if (this.checked == true) {
-            this.setCookie(this.loginForm.username, this.loginForm.password, 7)
+            this.$store
+              .dispatch('user/login', this.loginForm)
+              .then(() => {
+                this.$router.push({ path: this.redirect || '/' })
+              })
+              .catch(() => {
+                this.$refs['code'].clear()
+                this.getCodeImage()
+              })
           } else {
             this.clearCookie()
           }
@@ -228,7 +319,8 @@ export default {
     // 企业微信登录
     loginByWechat() {
       this.isLoginByWechat = true
-      // window.open('https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx')
+      this.getWXiNFO()
+      // window.open('https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx', '_self')
       // // 1. 先选择iframe
       // var iframe = document.querySelector('.wechat').contentWindow
       // // 2. 选择iframe内的元素
@@ -469,7 +561,7 @@ $light_gray: #eee;
   }
 }
 #content {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 </style>

@@ -84,7 +84,7 @@
         <el-button type="primary" :disabled="warningShow" @click="confirmImport">确 定</el-button>
         <el-button @click="closeImport">取 消</el-button>
       </span>
-      <div v-if="warningShow" style="height: 300px;overflow: scroll;overflow-x: hidden;">
+      <div v-if="warningShow" style="height: 300px;overflow: scroll;overflow-x: hidden;margin-top:15px;">
         <el-alert
           v-for="(item, index) in warningList"
           :key="index"
@@ -178,6 +178,7 @@ export default {
       this.uploadFileName = ''
       this.uploadFile = ''
       this.warningList = []
+      this.warningShow = false
     },
     // 导入数据
     importDataEC() {

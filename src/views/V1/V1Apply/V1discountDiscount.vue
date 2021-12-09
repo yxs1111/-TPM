@@ -423,7 +423,7 @@ export default {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('importType', 1)
-       formData.append('mainId', this.mainIdLocal)
+      formData.append('mainId', this.mainIdLocal)
       API.importV1(formData)
         .then((response) => {
           if (response.code === 1000) {
@@ -479,27 +479,44 @@ export default {
     },
     // 提交
     submitInfo() {
-      this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        API.submitV1({
-          mainId: this.mainIdLocal
-        }).then(res => {
-          if (res.code === 1000) {
-            this.$message({
-              type: 'success',
-              message: '提交成功!'
-            })
-          }
-        }).catch()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消提交'
+      if (this.tableData[0].judgmentType === null) {
+        this.$confirm('系统判定为null,不可提交?', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '好的!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
         })
-      })
+      } else {
+        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          API.submitV1({
+            mainId: this.mainIdLocal
+          }).then(res => {
+            if (res.code === 1000) {
+              this.$message({
+                type: 'success',
+                message: '提交成功!'
+              })
+            }
+          }).catch()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          })
+        })
+      }
     },
     // 下载excel模板
     downLoadElxModel() {
