@@ -375,7 +375,8 @@ export default {
     // 导出错误信息
     exportErrorList() {
       API.exportErrorList({
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
+        channelCode:'NKA'
       }).then(
         response => {
           const fileName = '错误信息' + new Date().getTime() + '.xlsx'
@@ -505,7 +506,8 @@ export default {
     downLoadElxModel() {
       API.downExcelTmpForV1({
         mainId: this.mainIdLocal,
-        importType: 1
+        importType: 1,
+        channelCode:'NKA'
       }).then(
         response => {
           const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'

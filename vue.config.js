@@ -53,10 +53,10 @@ module.exports = {
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
         //target: `http://192.168.40.66:7777`,  //现云
-        //target: `http://192.168.30.107:9012`,  //泽圣
+        // target: `http://192.168.30.107:9012`,  //泽圣
         //target: `http://192.168.40.165:7777`,  //宋佳
         //target: `http://192.168.40.90:7777`,  //宗桂
-        target: `http://10.176.80.242:7777`,  //测试服务器
+        target: `http://127.0.0.1:7777`,  //测试服务器
         //target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`,  //测试服务器
         
         changeOrigin: true,
