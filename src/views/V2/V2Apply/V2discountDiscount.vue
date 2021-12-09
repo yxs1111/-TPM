@@ -373,10 +373,14 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.exceptionSave().then((res) => {
-        this.$message.success('保存成功!')
-        this.getTableData()
-        this.closeImportDialog()
+      API.exceptionSave({
+        mainId: this.tableData[0].mainId,
+      }).then((res) => {
+        if (res.code == 1000) {
+          this.$message.success('保存成功!')
+          this.getTableData()
+          this.closeImportDialog()
+        }
       })
     },
     // 导出异常信息

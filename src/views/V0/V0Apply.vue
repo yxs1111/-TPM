@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-09 18:19:04
+ * @LastEditTime: 2021-12-09 19:52:31
 -->
 <template>
   <div class="app-container">
@@ -188,7 +188,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-              <el-table-column  fixed align="center" label="是否通过" width="100">
+              <el-table-column fixed align="center" label="是否通过" width="100">
                 <template slot-scope="scope">
                   <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
                   <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
@@ -208,7 +208,7 @@
               <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
               <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
-              <template slot-scope="{row}">
+                <template slot-scope="{row}">
                   <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                     <div slot="content" v-html="getTip(row)">
                     </div>
@@ -407,10 +407,14 @@ export default {
     },
     //确认导入文件
     confirmImport() {
-      API.exceptionSave().then((res) => {
-        this.$message.success('保存成功!')
-        this.closeImportDialog()
-        this.getList()
+      API.exceptionSave({
+        mainId: this.ContentData[arr[0]][0].mainId,
+      }).then((res) => {
+        if (res.code == 1000) {
+          this.$message.success('保存成功!')
+          this.closeImportDialog()
+          this.getList()
+        }
       })
     },
     //导出异常信息

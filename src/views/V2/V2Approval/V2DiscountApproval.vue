@@ -380,10 +380,14 @@ export default {
     },
     // 导入--保存
     confirmImport() {
-      API.exceptionSave().then((res) => {
-        this.$message.success('保存成功!')
-        this.closeImportDialog()
-        this.getTableData()
+      API.exceptionSave({
+        mainId: this.tableData[0].mainId,
+      }).then((res) => {
+        if (res.code == 1000) {
+          this.$message.success('保存成功!')
+          this.closeImportDialog()
+          this.getTableData()
+        }
       })
     },
     // 导出异常信息

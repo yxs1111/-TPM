@@ -357,7 +357,9 @@ export default {
     },
     //确认导入文件
     confirmImport() {
-      API.exceptionSave().then((res) => {
+      API.exceptionSave({
+        mainId:this.ContentData[arr[0]][0].mainId
+      }).then((res) => {
         if (res.code === 1000) {
           this.$message.success('保存成功!')
           this.closeImportDialog()
