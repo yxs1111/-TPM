@@ -231,10 +231,10 @@
         <el-button @click="userInfoDialog.visible = false">
           关闭
         </el-button>
-        <el-button v-if="userInfoDialog.state==='info'" v-permission="permissions['update']" type="primary" @click="changeToEdit">
+        <el-button v-if="userInfoDialog.state==='info'"  type="primary" @click="changeToEdit">
           编辑
         </el-button>
-        <el-button v-else v-permission="permissions['update']" type="primary" :loading="saveLoading" @click="saveOrUpdate">
+        <el-button v-else  type="primary" :loading="saveLoading" @click="saveOrUpdate">
           保存并关闭
         </el-button>
       </div>
@@ -274,7 +274,7 @@
         <el-button @click="userRoleDialog.visible = false">
           关闭
         </el-button>
-        <el-button v-permission="permissions['update']" type="primary" @click="saveRoles">
+        <el-button  type="primary" @click="saveRoles">
           保存并关闭
         </el-button>
       </div>

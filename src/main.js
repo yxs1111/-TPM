@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-12-08 19:27:05
+ * @LastEditTime: 2021-12-09 13:13:05
+ */
 import Vue from 'vue'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
@@ -16,7 +21,11 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 import i18n from './lang'
-
+import VCalendar from 'v-calendar'; // 引入日历插件
+ 
+Vue.use(VCalendar, {
+  componentPrefix: 'vc',
+});
 /**
  * 富文本编辑器
  */

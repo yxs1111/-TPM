@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-09 10:18:31
+ * @LastEditTime: 2021-12-09 11:14:38
 -->
 <template>
   <div class="app-container">
@@ -99,7 +99,24 @@
               <el-table-column align="center" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
                 {{(row.promotionExpensesGapValue*1).toFixed(0)}}
               </el-table-column>
-              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
+              <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
+                <template slot-scope="{row}">
+                  <el-tooltip effect="dark"  placement="bottom" popper-class="tooltip">
+                  <div slot="content" v-html="getTip(row)">
+                    <!-- {{getTip(row)}} -->
+                    <!-- <div class="Tip">不符合（客户均价/渠道均价）-1∈[-X1%,+X2%]</div>
+                    <div class="Tip">不符合（V0价促费用/CPT价促费用）-1∈[-X3%,+X4%]</div> -->
+                  </div>
+                  <div class="statusWrap">
+                    
+                      <img src="@/assets/images/success.png" alt="">
+                      <img src="@/assets/images/warning.png" alt="">
+                      <span class="judgmentText">{{row.judgmentType}}系统判定</span>
+                    
+                  </div>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
               <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
               <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
               <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
@@ -328,6 +345,11 @@ export default {
       commonAPI.getPageMdChannel().then((res) => {
         this.ChannelList = res.data.records
       })
+    },
+    getTip(row) {
+       
+      return `<div class="Tip">不符合（客户均价/渠道均价）-1∈[-X1%,+X2%]</div>
+              <div class="Tip">不符合（V0价促费用/CPT价促费用）-1∈[-X3%,+X4%]</div> `
     },
     //档位列
     columnList(list) {
@@ -603,4 +625,16 @@ export default {
     height: 600px;
   }
 }
+</style>
+<style>
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+    text-align: center;
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    margin: 3px 0;
+  }
 </style>

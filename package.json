@@ -37,6 +37,7 @@
     "path-to-regexp": "2.4.0",
     "screenfull": "4.2.0",
     "throttle-debounce": "^2.1.0",
+    "v-calendar": "^2.3.4",
     "vue": "2.6.10",
     "vue-codemirror": "^4.0.6",
     "vue-i18n": "7.3.2",

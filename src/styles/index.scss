@@ -845,35 +845,48 @@ div:focus {
   pointer-events: none;
   background-color: #ccc !important;
 }
-.el-icon-my-down{
+.el-icon-my-down {
   background: url('~@/assets/images/downModel.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-down:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-down:before {
+  content: '\e611';
+  font-size: 16px;
 }
-.el-icon-odometer:before{
-    font-size: 16px;
+.el-icon-odometer:before {
+  font-size: 16px;
 }
-.el-icon-my-checkData{
+.el-icon-my-checkData {
   background: url('~@/assets/images/checkData.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-checkData:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-checkData:before {
+  content: '\e611';
+  font-size: 16px;
 }
 //暂无数据
 .null_content {
   width: 204px;
   margin: 100px auto;
-  .null_content_tit{
-		font-size: 16px; 
-		color: #999;
+  .null_content_tit {
+    font-size: 16px;
+    color: #999;
     text-align: center;
     letter-spacing: 2px;
-	}
+  }
+}
+.el-tooltip__popper.is-dark {
+  background-color: #404243;
+}
+.judgmentType {
+  cursor: pointer;
+  .judgmentText {
+    font-size: 14px;
+    font-family: Source Han Sans CN;
+    font-weight: 400;
+    color: #666666;
+  }
+  
 }

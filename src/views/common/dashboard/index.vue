@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-09 09:43:21
+ * @LastEditTime: 2021-12-09 14:07:03
 -->
 <template>
   <div class="dashboard-container">
@@ -40,8 +40,28 @@
             </div>
             <div class="monthPoint">
               <!-- PP -->
-              <div class="PPBar"></div>
-              <div class="NU"></div>
+              <div class="PPBar">
+                <span class="PointTitle">PP</span>
+                <div class="V0">
+                  <img src="@/assets/images/index/point1_right.png" alt="">
+                  <div class="line"></div>
+                </div>
+                <div class="V1">
+                  <img src="@/assets/images/index/point1_circle.png" alt="">
+                  <div class="lineDark"></div>
+                </div>
+                <div class="V2">
+                  <div class="pointCircle"></div>
+                  <div class="lineDark"></div>
+                </div>
+                <div class="V3">
+                  <div class="pointCircle"></div>
+                </div>
+
+              </div>
+              <div class="NU">
+                <span class="PointTitle">NU</span>
+              </div>
             </div>
 
           </div>
@@ -60,7 +80,10 @@
         </div>
 
       </div>
-      <div class="calendarBar"></div>
+      <div class="calendarBar">
+        <div class="calendarBarTitle">日历</div>
+        <vc-calendar :attributes='attrs' class="calendar"></vc-calendar>
+      </div>
     </div>
     <div class="BottomBar">
       <div class="MyToDo">
@@ -186,6 +209,25 @@ export default {
         { id: 1, title: '已完成' },
       ],
       currentIndex: 0,
+      // 当前日期
+      attrs: [
+        {
+          key: 'v0Day',
+          // 括号内传递日期可点亮指定日期，如new Date(2019, 6, 1)，也可传递多个日期：如dates: [ new Date(2018, 0, 1), new Date(2018, 0, 15) ]
+          dates: new Date(2021,11,21),
+          highlight: true,
+          dot: true,
+          // popover 点亮的日期上出现提示内容
+          popover: {
+            label: '美好的一天！要开心呦！',
+          },
+        },
+        {
+          key: 'today',
+          dot: true,
+          dates: new Date(),
+        },
+      ],
     }
   },
   mounted() {
@@ -346,7 +388,7 @@ export default {
           display: flex;
 
           .monthBg {
-            width: 170px;
+            width: 150px;
             height: 110px;
             display: flex;
             font-weight: 600;
@@ -368,7 +410,7 @@ export default {
             }
           }
           .monthPoint {
-            width: 100%;
+            width: calc(100% - 170px);
             padding: 20px;
             box-sizing: border-box;
             display: flex;
@@ -378,13 +420,67 @@ export default {
               width: 100%;
               display: flex;
               height: 28px;
-              background-color: pink;
+              align-items: center;
+              // background-color: pink;
             }
             .NU {
               width: 100%;
               display: flex;
               height: 28px;
-              background-color: pink;
+              // background-color: pink;
+            }
+            .PointTitle {
+              font-size: 16px;
+              font-family: Source Han Sans CN;
+              font-weight: 500;
+              color: #999999;
+              margin-right: 10px;
+            }
+            .V0 {
+              width: 33%;
+              display: flex;
+              align-items: center;
+              img {
+                width: 28px;
+                height: 28px;
+              }
+            }
+            .V1 {
+              width: 33%;
+              display: flex;
+              align-items: center;
+              img {
+                width: 28px;
+                height: 28px;
+              }
+            }
+            .V2 {
+              width: 33%;
+              display: flex;
+              align-items: center;
+              img {
+                width: 28px;
+                height: 28px;
+              }
+            }
+            .line {
+              width: calc(100% - 28px);
+              height: 10px;
+              background: linear-gradient(90deg, #f9a470 0%, #fb5a56 100%);
+              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
+            }
+            .lineDark {
+              width: calc(100% - 28px);
+              height: 10px;
+              background-color: #fee4e4;
+              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
+            }
+            .pointCircle {
+              width: 27px;
+              height: 27px;
+              background-color: #fee4e4;
+              border: 1px solid #fff;
+              border-radius: 50%;
             }
           }
         }
@@ -410,7 +506,21 @@ export default {
       height: 520px;
       background-color: #fff;
       border-radius: 20px;
+      padding: 20px;
+      box-sizing: border-box;
       box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
+      .calendarBarTitle {
+        font-size: 18px;
+        font-family: Source Han Sans CN;
+        font-weight: 500;
+        color: #333333;
+      }
+      .calendar {
+        border: none;
+        width: 100%;
+        margin-top: 10px;
+        height: 90%;
+      }
     }
   }
   .BottomBar {
@@ -591,5 +701,25 @@ export default {
 ::-webkit-scrollbar-thumb {
   background-color: #d1d1d1;
   border-radius: 3px;
+}
+.vc-day {
+  width: 40px;
+  height: 40px;
+  border-radius: 1px;
+  position: relative;
+  min-height: 32px;
+  z-index: 1;
+  margin: 10px 0;
+}
+.vc-arrows-container {
+  margin-bottom: 10px;
+}
+.vc-weeks {
+  margin-top: 20px;
+}
+.vc-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border: 1px solid #fff !important;
 }
 </style>
