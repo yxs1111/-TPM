@@ -95,8 +95,7 @@ priceLevelKeep<!--
               <el-table-column align="center" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{(row.cptPromotionExpenses*1).toFixed(2)}}
               </el-table-column>
-              <el-table-column align="center" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
-                {{(row.averagePriceRange*1).toFixed(2)}}%
+              <el-table-column align="center"  width="160" prop="averagePriceRange" label="均价差值(%)">
               </el-table-column>
               <el-table-column align="center" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
                 {{(row.promotionExpensesGapValue*1).toFixed(0)}}
@@ -357,6 +356,7 @@ export default {
     },
     //确认导入文件
     confirmImport() {
+      let arr = Object.keys(this.ContentData)
       API.exceptionSave({
         mainId:this.ContentData[arr[0]][0].mainId
       }).then((res) => {
