@@ -33,13 +33,12 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
-
-      </div>
-      <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出</span>
+        <div class="OpertionBar">
+          <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+          <div class="TpmButtonBG" @click="exportExcelInfo">
+            <img src="../../../assets/images/export.png" alt="">
+            <span class="text">导出</span>
+          </div>
         </div>
       </div>
     </div>
@@ -236,7 +235,7 @@ export default {
       customerArr: [],
       distributorArr: [],
       localDate: '202101',
-      saveBtn: false,
+      saveBtn: false
     }
   },
   computed: {},

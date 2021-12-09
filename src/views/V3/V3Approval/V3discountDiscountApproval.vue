@@ -33,15 +33,15 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
-
-      </div>
-      <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出</span>
+        <div class="OpertionBar">
+          <el-button type="primary" class="TpmButtonBG" @click="infoByMainId">查询</el-button>
+          <div class="TpmButtonBG" @click="exportData">
+            <img src="../../../assets/images/export.png" alt="">
+            <span class="text">导出</span>
+          </div>
         </div>
       </div>
+
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
@@ -239,6 +239,7 @@ export default {
     this.getChannel()
     this.getSKU()
     this.getMP()
+    this.infoByMainId()
     // this.getCustomerList()
     this.getDistributorList()
   },
@@ -416,7 +417,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        API.approveV1({
+        debugger
+        API.approve({
           mainId: this.mainIdLocal,
           state: statusLocal,
           opinion: ''

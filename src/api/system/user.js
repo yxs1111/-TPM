@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 import requestApi from '@/api/request-api'
+
 const osCode = process.env.VUE_APP_SOURCE_KEY
 
 export default {
@@ -26,5 +27,17 @@ export default {
   },
   getAuthMenu() {
     return requestApi.request_get('/auth/common/getAuthMenu', { osCode: osCode })
+  },
+  // 企业微信登录
+  getWeChatData(params) {
+    return requestApi.request_get('/auth/qrcode/getWeChatData', params)
+  },
+  qrcodeEmail(data) {
+    return request({
+      url: '/auth/login/qrcode',
+      method: 'post',
+      data: data,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
   }
 }

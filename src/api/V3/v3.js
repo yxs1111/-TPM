@@ -65,6 +65,6 @@ export default {
   },
   // 通过与驳回
   infoByMainId(params) {
-    return requestApi.request_post('/cityplan/investCpV/infoByMainId', params)
-  },
+    return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
+  }
 }

@@ -269,8 +269,8 @@ export default {
         splitType: '',
         minePackageCode: '',
         splitWeight: '',
-        splitRuleF: '',
-        splitRuleS: ''
+        splitRuleF: ''
+        // splitRuleS: ''
       },
       dialogVisible: false,
       total: 1,
@@ -312,7 +312,6 @@ export default {
       const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
       if (!flag) {
         this.dialogAdd.splitRuleF = ''
-        // this.dialogAdd.splitRuleS = ''
         this.$message({
           showClose: true,
           message: '拆分规则需要输入正整数！',
@@ -456,7 +455,6 @@ export default {
         minePackageCode: '',
         splitWeight: '',
         splitRuleF: '',
-        splitRuleS: '',
         checkArr: [] // 批量删除,存放选中
       }
       this.systemList = []
@@ -506,7 +504,19 @@ export default {
       this.editorId = obj.id
       this.dialogAdd = obj
       if (obj.splitType === 1) {
-        this.dialogAdd.splitRuleF = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split('')[0]
+        this.dialogAdd = {}
+        // this.dialogAdd.splitRuleF = obj.splitRule.replace(/P/g, '').replace(/M/g, '')
+        this.dialogAdd = {
+          channelCode: obj.channelCode,
+          costTypeNumber: obj.costTypeNumber,
+          remark: obj.remark,
+          yeardate: obj.yeardate,
+          varsionName: obj.varsionName,
+          splitType: obj.splitType,
+          minePackageCode: obj.minePackageCode,
+          splitWeight: obj.splitWeight,
+          splitRuleF: obj.splitRule.replace(/P/g, '').replace(/M/g, '')
+        }
         // this.dialogAdd.splitRuleS = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace('-', '').split('')[1]
       } else if (obj.splitType === 2) {
         const mulSplitRule = obj.splitRule.replace(/P/g, '').replace(/M/g, '').replace(/-/g, '').split(',')
@@ -542,7 +552,7 @@ export default {
           })
         } else if (this.dialogAdd.splitType === 1 && this.dialogAdd.splitRuleF !== '') {
           // 非空  -P' + this.dialogAdd.splitRuleS + 'M,'
-          splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M'
+          splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M,'
           splitWeightThis = this.dialogAdd.splitWeight
           this.submitFormAPI(splitRuleThis, splitWeightThis)
         } else if (this.dialogAdd.splitType === 2) {
@@ -561,7 +571,6 @@ export default {
             }
           }
           // 判断权重和小于100时
-          debugger
           if (Number(weightTotal) < 100) {
             this.$alert('权重之和应等于100', '提示', {
               confirmButtonText: '确定',
@@ -599,7 +608,7 @@ export default {
       let splitWeightThis = ''
       if (this.dialogAdd.splitType === 1) {
         // -P' + this.dialogAdd.splitRuleS + 'M,'
-        splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M'
+        splitRuleThis = 'P' + this.dialogAdd.splitRuleF + 'M,'
         splitWeightThis = this.dialogAdd.splitWeight
       } else if (this.dialogAdd.splitType === 2) {
         for (const item of this.systemList) {

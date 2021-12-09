@@ -34,16 +34,16 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
-
-      </div>
-      <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出</span>
-        <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
+        <div class="OpertionBar">
+          <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+          <div class="TpmButtonBG" @click="exportData">
+            <img src="../../../assets/images/export.png" alt="">
+            <span class="text">导出</span>
+            <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
+          </div>
         </div>
       </div>
+
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
@@ -89,6 +89,7 @@
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+      <el-table-column width="220" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -155,14 +156,14 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <!-- <el-table-column fixed align="center" label="是否通过" width="100">
+          <el-table-column fixed align="center" label="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
               <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
               <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
               <img v-else :src="errorImg" style="width:25px;height:25px;">
             </template>
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
           <el-table-column align="center" width="400" prop="cpId" label="CPID" />
           <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
@@ -193,6 +194,7 @@
           <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
           <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
           <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+          <el-table-column width="220" align="center" prop="remark" label="备注" />
         </el-table>
       </div>
     </el-dialog>
@@ -298,6 +300,9 @@ export default {
 
   data() {
     return {
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
       submitBtn: 0,
       saveBtn: false,
       // 下拉框
@@ -384,16 +389,56 @@ export default {
     },
     // 提交
     submitApply() {
-      API.submitApply({
-        mainId: this.mainIdLocal
-      }).then().catch()
+      if (this.tableData[0].judgmentType === null) {
+        this.$confirm('系统判定为null,不可提交?', '提示', {
+          confirmButtonText: '确定',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '好的!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
+        })
+      } else {
+        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          API.submitApply({
+            mainId: this.mainIdLocal
+          }).then(res => {
+            if (res.code === 1000) {
+              this.$message({
+                type: 'success',
+                message: '提交成功!'
+              })
+            }
+          }).catch()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          })
+        })
+      }
     },
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
         mainId: this.mainIdLocal
       }).then(res => {
-        console.log('111', res)
+        if (res.code === 1000) {
+          this.$message.success('保存成功')
+          this.getTableData()
+        } else {
+          this.$message.error('保存失败')
+        }
       }).catch()
     },
     // 导入数据
@@ -424,10 +469,10 @@ export default {
               message: '上传成功'
             })
             if (response.data != null) {
-              debugger
+              // debugger
               this.dialogDataF = response.data
               this.$forceUpdate()
-              this.saveBtn = response.data[0].judgmentType !== 'Error'
+              this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.dialogDataF = []
             }
@@ -444,8 +489,7 @@ export default {
     confirmImportComple() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      // formData.append('mainId', this.mainIdLocal)
-      // formData.append('isApprove', false)
+      formData.append('mainId', this.mainIdLocal)
       this.dialogTableLoading = true
       // 添加mainId
       API.importV3MakeUp(formData)
@@ -461,7 +505,7 @@ export default {
             })
             if (response.data != null) {
               this.dialogData = response.data
-              this.saveBtn = response.data[0].judgmentType !== 'Error'
+              this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.dialogData = []
             }
@@ -547,7 +591,8 @@ export default {
     // 校验excel
     downLoadException() {
       API.exportV3({
-        exportType: 'exportExceptionTemplate'
+        exportType: 'exportExceptionTemplate',
+        mainId: this.mainIdLocal
       }).then(
         response => {
           const fileName = '下载异常模板' + new Date().getTime() + '.xlsx'
