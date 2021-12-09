@@ -150,7 +150,7 @@ export default {
       API.importMdprice(formData).then((response) => {
          this.closeImport()
           this.getTableData()
-          this.$message.success(`${response}`)
+          // this.$message.success(`${response}`)
         // if (response.code == 1000) {
         //   this.closeImport()
         //   this.getTableData()

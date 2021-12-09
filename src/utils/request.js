@@ -110,14 +110,17 @@ service.interceptors.response.use(
     const res = response.data
     if (response.config.responseType === 'arraybuffer' || response.config.responseType === 'blob') {
       return res
+    } else if (res.code) {
+      if (res.code !== 1000) {
+        Message.info({
+          message: res.message,
+          duration: messageDuration
+        })
+        return res
+      } 
     }
-    // if (res.code !== 1000) {
-    //   Message.error({
-    //     message: res.message,
-    //     duration: messageDuration
-    //   })
-    // }
     return res
+    
   },
   error => {
     endLoading()

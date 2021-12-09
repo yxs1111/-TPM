@@ -19,6 +19,12 @@ priceLevelKeep<!--
             <el-date-picker disabled v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
             </el-date-picker>
           </div>
+          <div class="Selectli">
+            <span class="SelectliTitle">渠道</span>
+            <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+            </el-select>
+          </div>
           <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
           <div class="TpmButtonBG" @click="exportData">
             <img src="@/assets/images/export.png" alt="" />
@@ -77,12 +83,24 @@ priceLevelKeep<!--
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="center" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
-              <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
+              <el-table-column align="center" v-slot={row} width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
+                  {{(row.cityPlanAveragePrice*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
+                {{(row.cityPlanPromotionExpenses*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
+              {{(row.cptAveragePrice*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
+                {{(row.cptPromotionExpenses*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
+                {{(row.averagePriceRange*1).toFixed(2)}}%
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
+                {{(row.promotionExpensesGapValue*1).toFixed(0)}}
+              </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
               <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
               <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
@@ -143,6 +161,7 @@ priceLevelKeep<!--
                 </template>
               </el-table-column>
               <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+              <el-table-column align="center" width="260" prop="dimProduct" label="SKU"></el-table-column>
               <el-table-column align="center" width="160" prop="dimCustomer" label="客户名称"></el-table-column>
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
@@ -176,6 +195,8 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V0/V0.js'
+import commonAPI from '@/api/masterData/masterData.js'
+
 export default {
   name: 'V0Approval',
   data() {
@@ -184,8 +205,10 @@ export default {
       filterObj: {
         month: '202101',
         SKU: '',
+        channelCode: '',
       },
       ContentData: [],
+      ChannelList:[],
       skuOptons: [],
       //导入
       importVisible: false, //导入弹窗
@@ -211,6 +234,7 @@ export default {
   mounted() {
     this.getList()
     this.getQuerySkuSelect()
+    this.getChannelList()
     // this.getMonth()
   },
   computed: {},
@@ -240,6 +264,11 @@ export default {
             }
           }
         }
+      })
+    },
+    getChannelList() {
+      commonAPI.getPageMdChannel().then((res) => {
+        this.ChannelList = res.data.records
       })
     },
     getQuerySkuSelect() {

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-08 21:38:09
+ * @LastEditTime: 2021-12-09 09:43:21
 -->
 <template>
   <div class="dashboard-container">
@@ -38,6 +38,12 @@
               <div class="monthName">7+5</div>
               <div class="monthName">(202110)</div>
             </div>
+            <div class="monthPoint">
+              <!-- PP -->
+              <div class="PPBar"></div>
+              <div class="NU"></div>
+            </div>
+
           </div>
           <div class="monthBar">
             <div class="monthBg">
@@ -336,6 +342,9 @@ export default {
           background: #ffffff;
           box-shadow: 0px 0px 18px 0px rgba(114, 114, 114, 0.07);
           border-radius: 20px;
+          box-sizing: border-box;
+          display: flex;
+
           .monthBg {
             width: 170px;
             height: 110px;
@@ -358,8 +367,28 @@ export default {
               text-align: left;
             }
           }
+          .monthPoint {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .PPBar {
+              width: 100%;
+              display: flex;
+              height: 28px;
+              background-color: pink;
+            }
+            .NU {
+              width: 100%;
+              display: flex;
+              height: 28px;
+              background-color: pink;
+            }
+          }
         }
-        .monthBar:nth-child(3n +1 ) .monthBg {
+        .monthBar:nth-child(3n + 1) .monthBg {
           background: url('../../../assets/images/index/month (1).png')
             no-repeat;
           background-size: 100% 100%;

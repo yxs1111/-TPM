@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-08 21:29:15
+ * @LastEditTime: 2021-12-09 10:18:31
 -->
 <template>
   <div class="app-container">
@@ -18,6 +18,12 @@
             <span class="SelectliTitle">月份</span>
             <el-date-picker disabled v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
             </el-date-picker>
+          </div>
+          <div class="Selectli">
+            <span class="SelectliTitle">渠道</span>
+            <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+            </el-select>
           </div>
           <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
           <div class="TpmButtonBG" @click="exportData">
@@ -71,18 +77,28 @@
                 </template>
                 <template slot-scope="{row}">
                   <div>
-                    {{row.customGearList[cindex].actualNum}}
+                    {{(row.customGearList[cindex].actualNum*1).toFixed(1)}}
                   </div>
                 </template>
               </el-table-column>
-              <!-- <el-table-column align="center" width="250" prop="number" label="180.00RMB/听 档位销量(箱)"></el-table-column>
-              <el-table-column align="center" width="250" prop="number" label="160.00RMB/听 档位销量(箱)"></el-table-column> -->
-              <el-table-column align="center" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="center" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="center" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
-              <el-table-column align="center" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
+              <el-table-column align="center" v-slot={row} width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
+                {{(row.cityPlanAveragePrice*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
+                {{(row.cityPlanPromotionExpenses*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
+                {{(row.cptAveragePrice*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
+                {{(row.cptPromotionExpenses*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
+                {{(row.averagePriceRange*1).toFixed(2)}}%
+              </el-table-column>
+              <el-table-column align="center" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
+                {{(row.promotionExpensesGapValue*1).toFixed(0)}}
+              </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定"></el-table-column>
               <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
               <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
@@ -98,10 +114,6 @@
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
         <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-            <!-- <el-form-item label="年月">
-              <el-date-picker v-model="ruleForm.yearAndMonth" class="my-el-input" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
-              </el-date-picker>
-            </el-form-item> -->
             <el-form-item label="Scenario" prop="dimScenario">
               <el-select v-model="ruleForm.dimScenario" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
@@ -171,6 +183,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+              <el-table-column align="center" width="260" prop="dimProduct" label="SKU"></el-table-column>
               <el-table-column align="center" width="160" prop="dimCustomer" label="客户名称"></el-table-column>
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
@@ -208,6 +221,7 @@ export default {
       filterObj: {
         month: '202101',
         SKU: '',
+        channelCode: '',
       },
       skuOptons: [],
       ContentData: [],
@@ -337,7 +351,7 @@ export default {
       this.uploadFile = ''
       //清除input的value ,上传一样的
       this.event.target.value = null
-      this.ImportData=[]
+      this.ImportData = []
     },
     //选择导入文件
     parsingExcelBtn() {
