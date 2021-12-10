@@ -144,6 +144,7 @@ export default {
         .then((response) => {
           if (response.code === 1000) {
             this.$message.success(response.data)
+            this.getTableData()
             this.closeImport()
           } else {
             if (typeof (response.data) === 'string') {

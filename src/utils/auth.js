@@ -16,6 +16,8 @@ const rolesKey = encrypt('roles')
 const nameKey = encrypt('name')
 // 登录名
 const loginNameKey = encrypt('loginName')
+// 登录名by email
+const loginNameEmailKey = encrypt('loginNameEmail')
 // 头像
 const avatarKey = encrypt('avatar')
 // 电话号码
@@ -93,6 +95,12 @@ export default {
   },
   setLoginName(loginName) {
     return set(loginNameKey, loginName)
+  },
+  getLoginNameEmail() {
+    return get(loginNameEmailKey)
+  },
+  setLoginNameEmail(loginNameEmail) {
+    return set(loginNameEmailKey, loginNameEmail)
   },
   getAvatar() {
     return get(avatarKey)

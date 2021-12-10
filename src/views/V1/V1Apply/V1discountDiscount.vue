@@ -50,11 +50,11 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" :disabled="submitBtn==1" @click="importData">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" :disabled="submitBtn==0" @click="submitInfo">
+      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -94,7 +94,15 @@
       <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
       <el-table-column width="120" align="center" prop="activityDateStart" label="活动开始时间" />
       <el-table-column width="120" align="center" prop="activityDateEnd" label="活动结束时间" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <div class="statusWrap">
+            <img v-if="row.judgmentType === 'pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="!row.judgmentType" src="../../../assets/images/warning.png" alt="">
+            {{ row.judgmentType }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -250,42 +258,9 @@ export default {
         productCode: ''
       },
       tableLoading: '',
-      categoryArr: [{ label: '选项一', value: '19' }],
+      categoryArr: [],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: 200,
-          channel: 'NKA',
-          amount3: 12,
-          total: 20.0
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: 180,
-          channel: 'NKA',
-          amount3: 9,
-          total: 21.0
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: 160,
-          channel: 'NKA',
-          amount3: 17,
-          total: 68.5
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-          total: 47.0
-        }
-      ],
+      tableData: [],
       dialogVisible: false,
       mainIdLocal: null,
       checkedData: [],
@@ -294,7 +269,7 @@ export default {
       skuArr: [],
       customerArr: [],
       distributorArr: [],
-      submitBtn: 0,
+      submitBtn: 1,
       localDate: '202101'
     }
   },
@@ -368,6 +343,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           this.closeimportDialog()
+          this.getTableData()
           this.$message.success('保存成功！')
         }
       }).catch()

@@ -1,13 +1,39 @@
 // 拆分规则
 <template>
   <div class="app-container" style="border-radius:0px;">
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道：</span>
+          <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
+            <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">年月：</span>
+          <el-date-picker v-model="filterObj.yeardate" type="month" value-format="yyyyMM" placeholder="请选择" clearable />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">版本：</span>
+          <el-select v-model="filterObj.varsionName" placeholder="请选择" clearable>
+            <el-option v-for="item in versionsArr" :key="item.code" :label="item.name" :value="item.code" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">拆分类型：</span>
+          <el-select v-model="filterObj.splitType" placeholder="请选择" clearable>
+            <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </div>
+    </div>
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="渠道：">
-        <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
-          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
-        </el-select>
-      </el-form-item>
+    <!-- <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="年月：">
         <el-date-picker v-model="filterObj.yeardate" type="month" value-format="yyyyMM" placeholder="请选择" clearable />
       </el-form-item>
@@ -30,7 +56,7 @@
           <span class="text">导出</span>
         </div>
       </el-form-item>
-    </el-form>
+    </el-form> -->
     <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="add">新增</el-button>
       <el-button

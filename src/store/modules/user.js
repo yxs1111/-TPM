@@ -36,6 +36,8 @@ const initUserInfo = (data) => {
       auth.setRoles(roles)
       info.roles = roles
     }
+    auth.setLoginNameEmail(usr.user.loginName)
+    console.log('*******emailname*******', usr.user.loginName)
     auth.setLoginName(usr.username)
     auth.setName(usr.user.name)
     auth.setPhone(usr.user.phone)
@@ -84,6 +86,24 @@ const actions = {
         dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
       }).catch(error => {
         console.error(error)
+        reject(error)
+      })
+    })
+  },
+
+  // wx login
+  WXlogin({ dispatch }, formdata) {
+    const localParams = formdata
+    return new Promise((resolve, reject) => {
+      user.qrcodeEmail(localParams).then(response => {
+        const { data } = response
+        initUserInfo(data)
+        console.log('name', auth.getLoginNameEmail())
+        localStorage.setItem('usernameLocal', auth.getLoginNameEmail())
+        resetRouter()
+        resolve()
+        dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
+      }).catch(error => {
         reject(error)
       })
     })

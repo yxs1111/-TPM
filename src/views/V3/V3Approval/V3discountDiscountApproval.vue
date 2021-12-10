@@ -427,7 +427,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        debugger
         API.approve({
           mainId: this.mainIdLocal,
           state: statusLocal,
