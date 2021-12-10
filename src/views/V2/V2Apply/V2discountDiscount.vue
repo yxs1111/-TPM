@@ -5,8 +5,7 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">年月:</span>
-          <el-date-picker disabled v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
-          </el-date-picker>
+          <el-date-picker v-model="filterObj.yearAndMonth" disabled type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM" />
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
@@ -38,15 +37,15 @@
             <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
-
-      </div>
-      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="exportExcel">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
+      <!-- <div class="OpertionBar">
+
+      </div> -->
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
@@ -88,13 +87,12 @@
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-            <div slot="content" v-html="getTip(row)">
-            </div>
+            <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-              <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
-              <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
-              <span class="judgmentText">{{row.judgmentType}}</span>
+              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
+              <span class="judgmentText">{{ row.judgmentType }}</span>
             </div>
           </el-tooltip>
         </template>
@@ -105,8 +103,15 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
@@ -122,7 +127,7 @@
           <div class="fileInfo">
             <div class="fileTitle">文件</div>
             <div class="my-search selectFile" @click="parsingExcelBtn">
-              <img src="@/assets/images/selectFile.png" alt="" />
+              <img src="@/assets/images/selectFile.png" alt="">
               <span class="text">选择文件</span>
             </div>
             <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
@@ -139,14 +144,22 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
+          <el-table
+            border
+            height="400"
+            :data="ImportData"
+            style="width: 100%"
+            :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
               textAlign: 'center',
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
-            }" :row-class-name="tableRowClassName" stripe>
+            }"
+            :row-class-name="tableRowClassName"
+            stripe
+          >
             <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
               <template slot-scope="scope">
                 <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -177,13 +190,12 @@
             <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)">
-                  </div>
+                  <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-                    <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
-                    <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
-                    <span class="judgmentText">{{row.judgmentType}}</span>
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
+                    <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>
               </template>
@@ -220,7 +232,7 @@ export default {
         customerCode: '',
         distributorCode: '',
         regionCode: '',
-        dim_product: '',
+        dim_product: ''
       },
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -239,22 +251,22 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
-      saveBtn: false,
+      saveBtn: false
     }
   },
   computed: {},
+  watch: {
+    'filterObj.channelCode'() {
+      this.getCustomerList()
+    }
+  },
   mounted() {
-    //this.getMonth()
+    // this.getMonth()
     this.getTableData()
     this.getQuerySkuSelect()
     this.getQueryChannelSelect()
     this.getDistributorList()
     this.getCustomerList()
-  },
-  watch: {
-    'filterObj.channelCode'() {
-      this.getCustomerList()
-    },
   },
   methods: {
     // 获取表格数据
@@ -268,7 +280,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        dimProduct: this.filterObj.dim_product,
+        dimProduct: this.filterObj.dim_product
       })
         .then((response) => {
           if (response.code == 1000) {
@@ -289,7 +301,7 @@ export default {
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
-    //查询列表 --获取活动年月
+    // 查询列表 --获取活动年月
     getMonth() {
       selectAPI.getMonth({ version: 'V2' }).then((res) => {
         this.filterObj.yearAndMonth = res.data
@@ -319,7 +331,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode,
+          channelCode: this.filterObj.channelCode
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -355,26 +367,26 @@ export default {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
-      //清除input的value ,上传一样的
+      // 清除input的value ,上传一样的
       this.event.target.value = null
       this.ImportData = []
     },
     // 校验数据
     checkImport() {
-      let formData = new FormData()
+      const formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importExcel(formData).then((response) => {
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn =
-            response.data[0].judgmentType === 'Error' ? false : true
+            response.data[0].judgmentType !== 'Error'
         }
       })
     },
     // 确认导入
     confirmImport() {
       API.exceptionSave({
-        mainId: this.tableData[0].mainId,
+        mainId: this.tableData[0].mainId
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success('保存成功!')
@@ -405,7 +417,7 @@ export default {
           customerCode: this.filterObj.customerCode,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
-          dimProduct: this.filterObj.dim_product,
+          dimProduct: this.filterObj.dim_product
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -437,18 +449,18 @@ export default {
     // V0 提交审批
     approve() {
       if (this.tableData.length) {
-        let judgmentType = this.tableData[0].judgmentType
+        const judgmentType = this.tableData[0].judgmentType
         if (judgmentType != null) {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning',
+            type: 'warning'
           })
             .then(() => {
               const mainId = this.tableData[0].mainId
               API.approve({
                 mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree' // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')
@@ -459,7 +471,7 @@ export default {
             .catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消提交',
+                message: '已取消提交'
               })
             })
         } else {
@@ -489,8 +501,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 

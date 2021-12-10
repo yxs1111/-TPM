@@ -303,7 +303,7 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
-      submitBtn: 0,
+      submitBtn: 1,
       saveBtn: false,
       // 下拉框
       channelArr: [],
