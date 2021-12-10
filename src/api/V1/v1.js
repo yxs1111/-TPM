@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-12-10 08:52:01
+ * @LastEditTime: 2021-12-10 20:18:49
+ */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
@@ -60,5 +65,18 @@ export default {
   // 通过与驳回按钮状态
   infoByMainId(params) {
     return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
+  },
+  //新客--查询 
+  getPageNU(params) {
+    return requestApi.request_get('/cityplan/investCpNuVOneDetail/getPage', params)
+  },
+  //新客--导出  
+  downExcelNU(params) {
+    return request({
+      url: '/cityplan/investCpNuVOneDetail/downExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   }
 }
