@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-10 11:42:01
+ * @LastEditTime: 2021-12-10 19:10:48
 -->
 <template>
   <div class="dashboard-container">
@@ -33,6 +33,7 @@
         </div>
         <!-- 活动月 -->
         <div class="monthBarWrap">
+          <!-- 流程 -->
           <div class="monthBar">
             <div class="monthBg">
               <div class="monthName">7+5</div>
@@ -43,19 +44,33 @@
               <div class="PPBar">
                 <span class="PointTitle">PP</span>
                 <div class="V0">
-                  <div class="passIcon"></div>
-                  <div class="line"></div>
+                  <div class="passIcon" v-if="ActivityObj.version=='V1'||ActivityObj.version=='V2'||ActivityObj.version=='V3'||(ActivityObj.version=='V0'&&ActivityObj.processStatus==2)"></div>
+                  <div class="currentPoint" v-if="ActivityObj.version=='V0'&&ActivityObj.workDateFlag==='0'&&(ActivityObj.version=='V0'&&ActivityObj.processStatus==1)"></div>
+                  <div class="delayPoint" v-if="ActivityObj.version=='V0'&&ActivityObj.workDateFlag!=='0'&&(ActivityObj.version=='V0'&&ActivityObj.processStatus==1)"></div>
+                  <div class="line" v-if="ActivityObj.version=='V1'||ActivityObj.version=='V2'||ActivityObj.version=='V3'"></div>
+                  <div class="lineDark" v-if="(ActivityObj.version!='V1'&&ActivityObj.version!='V2'&&ActivityObj.version!='V3')||ActivityObj.version=='V0'"></div>
                 </div>
                 <div class="V1">
-                  <div class="passIcon"></div>
-                  <div class="lineDark"></div>
+                  <div class="passIcon" v-if="ActivityObj.version=='V2'||ActivityObj.version=='V3'||(ActivityObj.version=='V1'&&ActivityObj.processStatus==2)"></div>
+                  <div class="currentPoint" v-if="ActivityObj.version=='V1'&&ActivityObj.workDateFlag==='0'&&(ActivityObj.version=='V1'&&ActivityObj.processStatus==1)"></div>
+                  <div class="delayPoint" v-if="ActivityObj.version=='V1'&&ActivityObj.workDateFlag!=='0'&&(ActivityObj.version=='V1'&&ActivityObj.processStatus==1)"></div>
+                  <div class="pointCircle" v-if="ActivityObj.version!='V1'&&ActivityObj.version!='V2'&&ActivityObj.version!='V3'"></div>
+                  <div class="line" v-if="ActivityObj.version=='V2'||ActivityObj.version=='V3'"></div>
+                  <div class="lineDark" v-if="(ActivityObj.version=='V0'&&ActivityObj.version!='V2'&&ActivityObj.version!='V3')||ActivityObj.version=='V1'"></div>
                 </div>
                 <div class="V2">
-                  <div class="pointCircle"></div>
-                  <div class="lineDark"></div>
+                  <div class="passIcon" v-if="ActivityObj.version=='V3'||(ActivityObj.version=='V2'&&ActivityObj.processStatus==2)"></div>
+                  <div class="currentPoint" v-if="ActivityObj.version=='V2'&&ActivityObj.workDateFlag=='0'&&(ActivityObj.version=='V2'&&ActivityObj.processStatus==1)"></div>
+                  <div class="delayPoint" v-if="ActivityObj.version=='V2'&&ActivityObj.workDateFlag!=='0'&&(ActivityObj.version=='V2'&&ActivityObj.processStatus==1)"></div>
+                  <div class="pointCircle" v-if="ActivityObj.version!='V2'&&ActivityObj.version!='V3'"></div>
+                  <div class="line" v-if="ActivityObj.version=='V3'"></div>
+                  <div class="lineDark" v-if="(ActivityObj.version=='V0'||ActivityObj.version=='V1')||ActivityObj.version=='V2'"></div>
                 </div>
                 <div class="V3">
-                  <div class="pointCircle"></div>
+                  <div class="passIcon" v-if="ActivityObj.version=='V3'&&ActivityObj.processStatus==2"></div>
+                  <div class="currentPoint" v-if="ActivityObj.version=='V3'&&ActivityObj.workDateFlag=='0'&&(ActivityObj.version=='V3'&&ActivityObj.processStatus==1)"></div>
+                  <div class="delayPoint" v-if="ActivityObj.version=='V3'&&ActivityObj.workDateFlag!=='0'&&(ActivityObj.version=='V3'&&ActivityObj.processStatus==1)"></div>
+                  <div class="pointCircle" v-if="ActivityObj.version!='V3'"></div>
                 </div>
               </div>
               <div class="NU">
@@ -249,30 +264,14 @@
       <div class="Message MyToDo">
         <div class="BarTitleWrap">
           <span>消息</span>
-          <span class="more">更多</span>
+          <span class="more" @click="MoreMsg">更多</span>
         </div>
         <div class="MessgaeWrap">
-          <div class="Messgaeli">
-            <span class="MessageDate">[2019-10-01]</span>
-            <span class="MessageContent">您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！</span>
+          <div class="Messgaeli" v-for="item,index in MessageList" :key="index">
+            <span class="MessageDate">[{{item.time}}]</span>
+            <span class="MessageContent">{{item.msg}}</span>
           </div>
-          <div class="Messgaeli">
-            <span class="MessageDate">[2019-10-01]</span>
-            <span class="MessageContent">您有新的待审批任务。</span>
-          </div>
-          <div class="Messgaeli">
-            <span class="MessageDate">[2019-10-01]</span>
-            <span class="MessageContent">您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！</span>
-          </div>
-          <div class="Messgaeli">
-            <span class="MessageDate">[2019-10-01]</span>
-            <span class="MessageContent">您有新的待审批任务。</span>
-          </div>
-          <div class="Messgaeli">
-            <span class="MessageDate">[2019-10-01]</span>
-            <span class="MessageContent">您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！您有一个新的消息啦！</span>
-          </div>
-          <div class="Messgaeli">
+          <div class="Messgaeli" v-if="MessageList.length==5">
             <span class="MessageDate">……</span>
           </div>
         </div>
@@ -283,7 +282,7 @@
 
 <script>
 import auth from '@/utils/auth'
-
+import API from '@/api/index/index.js'
 export default {
   name: 'Dashboard',
   created() {},
@@ -330,9 +329,14 @@ export default {
           dates: new Date(2021, 11, 6),
         },
       ],
+      MessageList: [], //消息列表
+      ActivityList:[],
+      ActivityObj:{},
     }
   },
   mounted() {
+    this.getMesList()
+    this.getHomePageData()
     // window.addEventListener('resize', () => {
     //   this.SalesAmountChart.resize()
     //   this.ActualSalesChart.resize()
@@ -369,6 +373,31 @@ export default {
                 <span>未办理(延误)</span>
               </div>
       `
+    },
+    // 获取信息列表
+    getMesList() {
+      API.getHomePageMsg().then((res) => {
+        let obj = {
+          time: '',
+          msg: '',
+        }
+        res.data.forEach((item) => {
+          obj.time = item.substring(1, 11)
+          obj.msg = item.substring(13)
+          if (this.MessageList.length < 5) this.MessageList.push(obj)
+        })
+      })
+    },
+    // 查看更多信息
+    MoreMsg() {
+      this.$router.push('/os/MessageManage')
+    },
+    // 日历和流程
+    getHomePageData() {
+      API.getHomePageData().then((res) => {
+        this.ActivityList=res.data.investList
+        this.ActivityObj=this.ActivityList[0]
+      })
     },
   },
 }

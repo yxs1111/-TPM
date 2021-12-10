@@ -5,18 +5,18 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
-          <el-date-picker v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" placeholder="请选择">
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" placeholder="请选择">
+          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
@@ -67,53 +67,37 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <!-- 导入 -->
-    <!-- <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div class="fileInfo ImportContent">
-        <div class="fileTitle">文件</div>
-        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div v-if="uploadFileName!=''" class="fileName">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
-          <span>{{ uploadFileName }}</span>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmImport()">确 定</el-button>
-        <el-button @click="closeImport">取 消</el-button>
-      </span>
-    </el-dialog> -->
-    <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div class="el-downloadFileBar">
-        <div>
-          <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportTemplate">下载模板</el-button>
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+      <div class="importDialog">
+        <div class="el-downloadFileBar">  
+          <div>
+            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportTemplate">下载模板</el-button>
+            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+          </div>
+          <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
-      </div>
-      <div class="fileInfo">
         <div class="fileInfo">
-          <div class="fileTitle">文件</div>
-          <div class="my-search selectFile" @click="parsingExcelBtn">
-            <img src="@/assets/images/selectFile.png" alt="" />
-            <span class="text">选择文件</span>
+          <div class="fileInfo">
+            <div class="fileTitle">文件</div>
+            <div class="my-search selectFile" @click="parsingExcelBtn">
+              <img src="@/assets/images/selectFile.png" alt="" />
+              <span class="text">选择文件</span>
+            </div>
+            <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+            <div class="fileName" v-if="uploadFileName!=''">
+              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+              <span>{{uploadFileName}}</span>
+            </div>
           </div>
-          <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-          <div class="fileName" v-if="uploadFileName!=''">
-            <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-            <span>{{uploadFileName}}</span>
+          <div class="seeData" style="width: auto;">
+            <div class="exportError" @click="exportErrorList">
+              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+              <span>导出错误信息</span>
+            </div>
           </div>
         </div>
-        <div class="seeData" style="width: auto;">
-          <div class="exportError" @click="exportErrorList">
-            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-            <span>导出错误信息</span>
-          </div>
-        </div>
-      </div>
-      <div class="tableWrap">
-        <el-table border height="240" :data="ImportData" style="width: 100%" :header-cell-style="{
+        <div class="tableWrap">
+          <el-table border height="440" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -121,24 +105,26 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-          <el-table-column fixed align="center" label="是否通过" width="100">
-            <template slot-scope="scope">
-              <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-              <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="judgmentContent" label="错误信息" />
-          <el-table-column align="center" prop="yearAndMonth" label="年月" />
-          <el-table-column align="center" prop="channelCode" label="渠道" />
-          <el-table-column align="center" prop="sku" label="SKU" />
-          <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
-            ¥{{row.gear}}
-          </el-table-column>
-          <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">
-            {{row.volMix}}%
-          </el-table-column>
-        </el-table>
+            <el-table-column fixed align="center" label="是否通过" width="100">
+              <template slot-scope="scope">
+                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+              </template>
+            </el-table-column>
+            <el-table-column width="320" align="center" prop="error" label="错误信息" />
+            <el-table-column align="center" prop="yearAndMonth" label="年月" />
+            <el-table-column align="center" prop="channelCode" label="渠道" />
+            <el-table-column align="center" prop="productEsName" label="SKU" />
+            <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
+              ¥{{row.gear}}
+            </el-table-column>
+            <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">
+              {{row.volMix}}%
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
+
     </el-dialog>
   </div>
 </template>
@@ -159,7 +145,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        month: '',
+        yearAndMonth: '',
         channelCode: '',
         productCode: '',
       },
@@ -191,6 +177,8 @@ export default {
       API.getPageMdPriceGear({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
+        yearAndMonth: this.filterObj.yearAndMonth, 
+        channelCode: this.filterObj.channelCode, 
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -222,7 +210,15 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importPriceGear(formData).then((response) => {
+        if (response.code == 1000) {
+          this.closeImport()
+          this.$message.success('保存成功!')
+          this.getTableData()
+        }
+      })
     },
     // 选择导入文件
     parsingExcelBtn() {
@@ -232,11 +228,6 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importPriceGear(formData).then((response) => {
-        this.$message.success('导入成功,请点击检测数据')
-      })
     },
     // 关闭导入
     closeImport() {
@@ -246,7 +237,9 @@ export default {
     },
     //检测数据
     checkImport() {
-      API.importCheck().then((res) => {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importCheck(formData).then((res) => {
         this.ImportData = res.data
       })
     },
@@ -387,4 +380,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.importDialog {
+  height: 600px;
+}
+</style>

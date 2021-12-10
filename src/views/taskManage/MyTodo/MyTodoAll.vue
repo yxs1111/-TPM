@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-06 19:15:35
+ * @LastEditTime: 2021-12-10 13:30:48
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -45,8 +45,9 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
       <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
-      <el-table-column align="center" prop="versionName" label="版本名称"> </el-table-column>
+      <el-table-column align="center" prop="name" label="版本名称"> </el-table-column>
       <el-table-column align="center" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" prop="name" label="名称"> </el-table-column>
       <el-table-column align="center" prop="activityName" label="当前节点"> </el-table-column>
@@ -184,9 +185,10 @@ export default {
   align-items: center;
   justify-content: center;
   color: #4192d3;
+  font-size: 16px;
   cursor: pointer;
   .submit_icon {
-    font-size: 20px;
+    font-size: 26px;
   }
 }
 </style>
