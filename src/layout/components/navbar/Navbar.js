@@ -20,6 +20,7 @@ export default {
       data: {},
       avatar: auth.getAvatar(),
       loginName: auth.getLoginName(),
+      name: auth.getName(),
       visible: false,
       passState: false,
       updateData: {},

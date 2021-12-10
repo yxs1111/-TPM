@@ -10,7 +10,7 @@
         <div class="avatar-wrapper">
           <img src="../../../assets/images/index/avatar.png" class="user-avatar" alt="" />
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar" alt=""> -->
-          <div class="user-name">{{ loginName }}</div>
+          <div class="user-name">{{ name }}</div>
           <div class="verticalline"></div>
           <el-dropdown trigger="click" class="settingBarWrap">
             <img src="../../../assets/images/settingIcon.png" alt="" class="settingBar" />
