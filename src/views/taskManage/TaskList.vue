@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-06 19:49:39
+ * @LastEditTime: 2021-12-10 09:09:14
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -174,9 +174,10 @@ export default {
   align-items: center;
   justify-content: center;
   color: #4192d3;
+  font-size: 16px;
   cursor: pointer;
   .submit_icon {
-    font-size: 20px;
+    font-size: 26px;
   }
 }
 </style>

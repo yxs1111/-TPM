@@ -9,9 +9,15 @@
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
         </div>
-        <div class="Selectli">
+        <!-- <div class="Selectli">
           <span class="SelectliTitle">客户</span>
           <el-input v-model="filterObj.customerCsName" placeholder="请输入" />
+        </div> -->
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道</span>
+          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+          </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportData">
@@ -106,6 +112,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import commonAPI from '@/api/masterData/masterData.js'
 export default {
   name: 'saleComputeKeep',
   directives: { elDragDialog, permission },
@@ -118,11 +125,12 @@ export default {
       filterObj: {
         yearAndMonth: '',
         customerCsName: '',
-        productEsName: '',
+        channelCode: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      ChannelList: [],
       //导入
       importVisible: false, //导入弹窗
       uploadFileName: '',
@@ -135,6 +143,7 @@ export default {
   computed: {},
   mounted() {
     this.getTableData()
+    this.getChannelList()
   },
   methods: {
     // 获取表格数据
@@ -142,7 +151,7 @@ export default {
       API.getPageSaleComputeKeep({
         yearAndMonth: this.filterObj.yearAndMonth,
         customerCsName: this.filterObj.customerCsName,
-        productEsName: this.filterObj.productEsName,
+        channelCode: this.filterObj.channelCode,
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
       })
@@ -154,15 +163,13 @@ export default {
         })
         .catch(() => {})
     },
-    search() {
-      this.getTableData()
+    getChannelList() {
+      commonAPI.getPageMdChannel().then((res) => {
+        this.ChannelList = res.data.records
+      })
     },
-    Reset() {
-      this.filterObj = {
-        yearAndMonth: '',
-        customerCsName: '',
-        productEsName: '',
-      }
+    search() {
+      this.pageNum=1
       this.getTableData()
     },
     //导入数据
@@ -181,10 +188,10 @@ export default {
         } else {
           if (response.data === null) {
             this.$message.error(response.data)
-          } else if (typeof(response.data)==Object) {
+          } else if (typeof response.data == Object) {
             this.warningShow = true
             this.warningList = response.data
-          } else if (typeof(response.data)==String) {
+          } else if (typeof response.data == String) {
             this.warningShow = false
             this.warningList.push(response.data)
           }
@@ -207,8 +214,8 @@ export default {
       this.event.srcElement.value = '' //置空
       this.uploadFileName = ''
       this.uploadFile = ''
-      this.warningList=[]
-      this.warningShow=false
+      this.warningList = []
+      this.warningShow = false
     },
     //导出数据
     exportData() {

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-09 15:00:40
+ * @LastEditTime: 2021-12-10 11:42:01
 -->
 <template>
   <div class="dashboard-container">
@@ -43,11 +43,11 @@
               <div class="PPBar">
                 <span class="PointTitle">PP</span>
                 <div class="V0">
-                  <img src="@/assets/images/index/point1_right.png" alt="">
+                  <div class="passIcon"></div>
                   <div class="line"></div>
                 </div>
                 <div class="V1">
-                  <img src="@/assets/images/index/point1_circle.png" alt="">
+                  <div class="passIcon"></div>
                   <div class="lineDark"></div>
                 </div>
                 <div class="V2">
@@ -57,28 +57,117 @@
                 <div class="V3">
                   <div class="pointCircle"></div>
                 </div>
-
               </div>
               <div class="NU">
                 <span class="PointTitle">NU</span>
+                <div class="NuPoint">
+                  <div class="V1">
+                    <div class="passIcon"></div>
+                    <div class="lineDark"></div>
+                  </div>
+                  <div class="V2">
+                    <div class="pointCircle"></div>
+                    <div class="lineDark"></div>
+                  </div>
+                  <div class="V3">
+                    <div class="pointCircle"></div>
+                  </div>
+                </div>
+
               </div>
             </div>
-
           </div>
           <div class="monthBar">
             <div class="monthBg">
               <div class="monthName">7+5</div>
               <div class="monthName">(202110)</div>
             </div>
+            <div class="monthPoint">
+              <!-- PP -->
+              <div class="PPBar">
+                <span class="PointTitle">PP</span>
+                <div class="V0">
+                  <div class="passIcon"></div>
+                  <div class="line"></div>
+                </div>
+                <div class="V1">
+                  <div class="passIcon"></div>
+                  <div class="line"></div>
+                </div>
+                <div class="V2">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                    <div slot="content" v-html="getTip()"></div>
+                    <div class="delayPoint"></div>
+                  </el-tooltip>
+                  <div class="lineDark"></div>
+                </div>
+                <div class="V3">
+                  <div class="pointCircle"></div>
+                </div>
+              </div>
+              <div class="NU">
+                <span class="PointTitle">NU</span>
+                <div class="NuPoint">
+                  <div class="V1">
+                    <div class="passIcon"></div>
+                    <div class="line"></div>
+                  </div>
+                  <div class="V2">
+                    <div class="currentPoint"></div>
+                    <div class="lineDark"></div>
+                  </div>
+                  <div class="V3">
+                    <div class="pointCircle"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
           </div>
           <div class="monthBar">
             <div class="monthBg">
               <div class="monthName">7+5</div>
               <div class="monthName">(202110)</div>
+            </div>
+            <div class="monthPoint">
+              <!-- PP -->
+              <div class="PPBar">
+                <span class="PointTitle">PP</span>
+                <div class="V0">
+                  <div class="passIcon"></div>
+                  <div class="line"></div>
+                </div>
+                <div class="V1">
+                  <div class="passIcon"></div>
+                  <div class="line"></div>
+                </div>
+                <div class="V2">
+                  <div class="currentPoint"></div>
+                  <div class="lineDark"></div>
+                </div>
+                <div class="V3">
+                  <div class="pointCircle"></div>
+                </div>
+              </div>
+              <div class="NU">
+                <span class="PointTitle">NU</span>
+                <div class="NuPoint">
+                  <div class="V1">
+                    <div class="passIcon"></div>
+                    <div class="lineDark"></div>
+                  </div>
+                  <div class="V2">
+                    <div class="pointCircle"></div>
+                    <div class="lineDark"></div>
+                  </div>
+                  <div class="V3">
+                    <div class="pointCircle"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
       <div class="calendarBar">
         <div class="calendarBarTitle">日历</div>
@@ -229,7 +318,7 @@ export default {
               backgroundColor: '#FB5A56',
             },
           },
-          dates: new Date(2021, 11, 13),
+          dates: new Date(2021, 11, 27),
         },
         {
           key: 'V2Day',
@@ -262,6 +351,25 @@ export default {
     changeCurrent(index) {
       this.currentIndex = index
     },
+    getTip() {
+      return `<div class="Tip">
+                <span class="TipTitle">节点名称: </span>
+                <span>Fin审批</span>
+              </div>
+              <div class="Tip">
+                <span class="TipTitle">办理人: </span>
+                <span>王晓伟</span>
+              </div>
+              <div class="Tip">
+                <span class="TipTitle">办理时间: </span>
+                <span>2021-12-01</span>
+              </div>
+              <div class="Tip">
+                <span class="TipTitle">办理状态: </span>
+                <span>未办理(延误)</span>
+              </div>
+      `
+    },
   },
 }
 </script>
@@ -273,57 +381,6 @@ export default {
   height: 100%;
   padding: 10px;
   box-sizing: border-box;
-  .TopBar {
-    width: 100%;
-    height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    .Topli {
-      // width: 361px;
-      height: 160px;
-      width: 24%;
-      // height: 100%;
-      border-radius: 20px;
-      padding: 36px 45px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: #fafcfd;
-      box-shadow: -2px 0px 29px 0px rgba(57, 172, 253, 0.69);
-      font-size: 20px;
-      color: #fafcfd;
-      background: url('../../../assets/images/index/HomeBG (4).png') no-repeat;
-      // background-position: -30px -30px;
-      background-size: 100% 100%;
-      .TopliNumWrap {
-        .unit {
-          margin-right: 5px;
-        }
-        .TopliNum {
-          font-family: SourceHanSansCN-Regular;
-          font-size: 38px;
-          font-weight: 600;
-        }
-      }
-    }
-    & .Topli:nth-child(4n + 1) {
-      background-image: url('../../../assets/images/index/HomeBG (1).png');
-    }
-    & .Topli:nth-child(4n + 2) {
-      background-image: url('../../../assets/images/index/HomeBG (2).png');
-      box-shadow: -2px 0px 29px 0px rgba(250, 133, 102, 0.69);
-    }
-    & .Topli:nth-child(4n + 3) {
-      background-image: url('../../../assets/images/index/HomeBG (3).png');
-      box-shadow: -2px 0px 29px 0px rgba(58, 218, 202, 0.69);
-    }
-    & .Topli:nth-child(4n + 4) {
-      background-image: url('../../../assets/images/index/HomeBG (4).png');
-      box-shadow: -2px 0px 29px 0px rgba(255, 185, 65, 0.69);
-    }
-  }
   .chartWrap {
     width: 100%;
     height: 520px;
@@ -440,6 +497,15 @@ export default {
               width: 100%;
               display: flex;
               height: 28px;
+              justify-content: space-between;
+              align-items: center;
+              .NuPoint {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                padding-left: 18px;
+              }
               // background-color: pink;
             }
             .PointTitle {
@@ -495,6 +561,40 @@ export default {
               border: 1px solid #fff;
               border-radius: 50%;
             }
+            .passIcon {
+              width: 28px;
+              height: 28px;
+              background: url('../../../assets/images/index/point3_right.png');
+              background-size: 100% 100%;
+              box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+              border-radius: 50%;
+              overflow: hidden;
+            }
+            .currentPoint {
+              width: 28px;
+              height: 28px;
+              background: url('../../../assets/images/index/point3_circle.png');
+              background-size: 100% 100%;
+              box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+              border-radius: 50%;
+              overflow: hidden;
+            }
+            .delayPoint {
+              width: 28px;
+              height: 28px;
+              background: url('../../../assets/images/index/point1_amaze.png');
+              background-size: 100% 100%;
+              box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+              border-radius: 50%;
+              overflow: hidden;
+            }
+            .noStart {
+              width: 27px;
+              height: 27px;
+              background-color: #fee4e4;
+              border: 1px solid #fff;
+              border-radius: 50%;
+            }
           }
         }
         .monthBar:nth-child(3n + 1) .monthBg {
@@ -511,6 +611,96 @@ export default {
           background: url('../../../assets/images/index/month (3).png')
             no-repeat;
           background-size: 100% 100%;
+        }
+        .monthBar:nth-child(3n + 1) {
+          .monthPoint {
+            .line {
+              background: linear-gradient(90deg, #f9a470 0%, #fb5a56 100%);
+              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
+            }
+            .lineDark {
+              background-color: #fee4e4;
+              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
+            }
+            .pointCircle {
+              background-color: #fee4e4;
+            }
+          }
+          .passIcon {
+            background: url('../../../assets/images/index/point1_right.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(251, 91, 86, 0.38);
+          }
+          .currentPoint {
+            background: url('../../../assets/images/index/point1_circle.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(251, 91, 86, 0.38);
+          }
+          .delayPoint {
+            background: url('../../../assets/images/index/point1_amaze.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(251, 91, 86, 0.38);
+          }
+        }
+        .monthBar:nth-child(3n + 2) {
+          .monthPoint {
+            .line {
+              background: linear-gradient(90deg, #3ebcfd 0%, #2c85ff 100%);
+              box-shadow: 0px 2px 6px 0px rgba(44, 133, 255, 0.31);
+            }
+            .lineDark {
+              background-color: #e2eeff;
+              box-shadow: 0px 2px 6px 0px rgba(44, 133, 255, 0.31);
+            }
+            .pointCircle {
+              background-color: #e2eeff;
+            }
+          }
+          .passIcon {
+            background: url('../../../assets/images/index/point2_right.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(47, 142, 255, 0.38);
+          }
+          .currentPoint {
+            background: url('../../../assets/images/index/point2_circle.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(47, 142, 255, 0.38);
+          }
+          .delayPoint {
+            background: url('../../../assets/images/index/point2_amaze.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(47, 142, 255, 0.38);
+          }
+        }
+        .monthBar:nth-child(3n + 3) {
+          .monthPoint {
+            .line {
+              background: linear-gradient(90deg, #ffd35c 0%, #ffaa30 100%);
+              box-shadow: 0px 2px 6px 0px rgba(255, 170, 48, 0.31);
+            }
+            .lineDark {
+              background-color: #fff1de;
+              box-shadow: 0px 2px 6px 0px rgba(255, 170, 48, 0.31);
+            }
+            .pointCircle {
+              background-color: #fff1de;
+            }
+          }
+          .passIcon {
+            background: url('../../../assets/images/index/point3_right.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+          }
+          .currentPoint {
+            background: url('../../../assets/images/index/point3_circle.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+          }
+          .delayPoint {
+            background: url('../../../assets/images/index/point3_amaze.png');
+            background-size: 100% 100%;
+            box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+          }
         }
       }
     }
@@ -754,5 +944,26 @@ export default {
   background-color: #4192d3 !important;
   border-radius: 10px !important;
   color: #fff !important;
+}
+.tooltip {
+  border-radius: 10px;
+  cursor: pointer;
+}
+.Tip {
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+  display: flex;
+  align-items: center;
+}
+.TipTitle {
+  width: 70px;
+  text-align: right;
+  white-space: nowrap;
+  margin-right: 5px;
+  font-family: SourceHanSansCN-Regular;
 }
 </style>

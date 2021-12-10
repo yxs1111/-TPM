@@ -16,7 +16,7 @@
           :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd" :default-time="['00:00:00','23:59:59']" @change="search" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" :loading="searchLoading" @click="search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG"  @click="search">搜索</el-button>
       </el-form-item>
       <el-form-item>
         <el-button @click="reset" class="TpmButtonBG">重置</el-button>
@@ -34,7 +34,7 @@
       </el-button> -->
     </div>
     <!--查询结果-->
-    <el-table ref="roleTable" v-loading="searchLoading" :data="rolePageProps.records" element-loading-text="正在查询" border fit stripe height="600" highlight-current-row
+    <el-table ref="roleTable"  :data="rolePageProps.records" border fit stripe height="600" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
@@ -123,7 +123,7 @@
         <el-button v-if="roleDialog.state==='info'"  type="primary" @click="changeToEdit">
           编辑
         </el-button>
-        <el-button v-else  type="primary" :loading="saveLoading" @click="saveOrUpdate">
+        <el-button v-else  type="primary"  @click="saveOrUpdate">
           保存并关闭
         </el-button>
       </div>
@@ -149,7 +149,7 @@
               </el-select>
             </el-form-item>
             <el-form-item style="margin-bottom: 5px;">
-              <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" :loading="searchLoading" @click="fetchMenuData">刷新</el-button>
+              <el-button type="primary" icon="el-icon-search" class="TpmButtonBG"  @click="fetchMenuData">刷新</el-button>
             </el-form-item>
           </el-form>
           <!--搜索框-->
@@ -183,14 +183,14 @@
                 <el-checkbox v-model="showCheckedOnly">只看已绑定</el-checkbox>
               </el-form-item>
               <el-form-item style="margin-bottom: 5px;">
-                <el-button type="primary" :loading="searchLoading" @click="clickToSearchPer">搜索</el-button>
+                <el-button type="primary"  @click="clickToSearchPer">搜索</el-button>
               </el-form-item>
               <!-- <el-form-item style="margin-bottom: 5px;">
               <el-button type="primary" @click="bindPermission">绑定权限</el-button>
             </el-form-item> -->
             </el-form>
             <!--查询结果-->
-            <el-table ref="perTable" v-loading="searchLoading" :data="filterPerPage()" element-loading-text="正在查询" border fit stripe height="490" highlight-current-row size="mini"
+            <el-table ref="perTable" :data="filterPerPage()"  border fit stripe height="490" highlight-current-row size="mini"
               :row-class-name="perTableRowClassName" @row-click="handleCurrentPerRowClick" @selection-change="handlePerSelectionChange">
               <el-table-column align="center" type="selection" width="55" />
               <el-table-column align="center" label="序号" width="55">
@@ -222,7 +222,7 @@
     </el-dialog>
     <!-- 数据权限绑定 -->
     <el-dialog width="55%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
-      <div class="roleBindWrap" v-loading='bindLoading'>
+      <div class="roleBindWrap" >
         <div class="roleName">{{roleName}}</div>
         <el-input placeholder="输入关键字进行过滤" v-model="RoleTreeFilter">
         </el-input>
@@ -299,8 +299,6 @@ export default {
       currentNodeKey: '',
       currentRoleCode: '',
       osSelectOption: [],
-      searchLoading: false,
-      saveLoading: false,
       editDisabled: true,
       editVisible: true,
       ignore: false,
@@ -395,7 +393,6 @@ export default {
         children: 'children',
         label: 'label',
       },
-      bindLoading: '',
       Role_KAData: {}, //KA 权限数据
       permissionType: '', //角色数据权限类型
       roleCode: '',
@@ -447,7 +444,6 @@ export default {
     },
     // 查询方法
     fetchData() {
-      this.searchLoading = true
       if (this.roleQuery.dataRange && this.roleQuery.dataRange !== '') {
         this.roleQuery.startDate = this.roleQuery.dataRange[0]
         this.roleQuery.endDate = this.roleQuery.dataRange[1]
@@ -470,16 +466,13 @@ export default {
           this.rolePageProps.total = data.total
           this.rolePageProps.pageNum = data.pageNum
           this.rolePageProps.pageSize = data.pageSize
-          this.searchLoading = false
         })
         .catch((error) => {
-          this.searchLoading = false
           console.error(error)
         })
     },
     // 查询菜单信息
     async fetchMenuData() {
-      this.searchLoading = true
       const params = {}
       params.osCode = this.menuQuery.currentOsCode
       this.perPageProps.records = null
@@ -487,7 +480,6 @@ export default {
       this.perPageProps.pageNum = 1
       this.perPageProps.pageSize = 100
       roleApi.getAllMenu(params).then((response) => {
-        this.searchLoading = false
         if (response.data.children) {
           this.treeProps.data = [
             {
@@ -510,7 +502,6 @@ export default {
     // 查询权限信息
     searchPer() {
       if (this.currentNodeKey && this.currentNodeKey !== 'root') {
-        this.searchLoading = true
         this.showCheckedOnly = false
         const params = {}
         params.osCode = this.menuQuery.currentOsCode
@@ -530,10 +521,8 @@ export default {
             this.perPageProps.total = data.total
             this.perPageProps.pageNum = data.pageNum
             this.perPageProps.pageSize = data.pageSize
-            this.searchLoading = false
           })
           .catch((error) => {
-            this.searchLoading = false
             console.error(error)
           })
       }
@@ -542,11 +531,9 @@ export default {
     saveOrUpdate() {
       this.$refs['roleDataForm'].validate((valid) => {
         if (valid) {
-          this.saveLoading = true
           const params = Object.assign({}, this.roleDialog.data)
           if (this.roleDialog.state === 'create') {
             requestApi.save(url, params).then((res) => {
-              this.saveLoading = false
               if (res && res.code === 1000) {
                 this.roleDialog.visible = false
                 Message.success({
@@ -558,7 +545,6 @@ export default {
             })
           } else {
             requestApi.update(url, params).then((res) => {
-              this.saveLoading = false
               if (res && res.code === 1000) {
                 if (this.roleDialog.data.version) {
                   this.roleDialog.data.version++
@@ -840,8 +826,6 @@ export default {
     //数据权限绑定--弹窗显示
     showRoleDialog(obj) {
       this.roleName=obj.name
-      this.searchLoading=true
-      this.bindLoading = true
       if (obj.permissionType == 'KA') {
         this.getKAList()
       } else if (obj.permissionType == 'Mine Package') {
@@ -854,12 +838,9 @@ export default {
         this.getFieldSales()
       }
       this.roleCode = obj.code
-      this.bindLoading = false
-      this.searchLoading=false
     },
     //数据权限绑定--确认
     confirmRoleDialog() {
-      this.bindLoading = true
       let list = this.$refs.RoleTree.getCheckedNodes()
       console.log(list)
       let dataList = []
@@ -877,7 +858,6 @@ export default {
         .bindDataPermissions({ roleCode: this.roleCode, dataList })
         .then((res) => {
           console.log(res)
-          this.bindLoading = false
           this.$message.success('权限绑定成功')
           this.closeRoleDialog()
         })

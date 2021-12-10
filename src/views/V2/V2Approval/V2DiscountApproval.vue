@@ -95,7 +95,7 @@
             </div>
             <div class="statusWrap">
               <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-              <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType.indexOf('Exception') > -1">
+              <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
               <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
               <span class="judgmentText">{{row.judgmentType}}</span>
             </div>
@@ -185,7 +185,7 @@
                   </div>
                   <div class="statusWrap">
                     <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-                    <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType.indexOf('Exception') > -1">
+                    <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
                     <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
                     <span class="judgmentText">{{row.judgmentType}}</span>
                   </div>

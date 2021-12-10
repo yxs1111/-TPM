@@ -35,7 +35,7 @@
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="250" align="center" prop="customerCsName" label="客户名称" />
-      <el-table-column width="250" align="center" prop="channelCode" label="channelCode" />
+      <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column width="240" align="center" prop="ptc" label="零售价｜PTC （RMB/Tin）" />
@@ -69,6 +69,9 @@
           <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
           <span>{{ uploadFileName }}</span>
         </div>
+      </div>
+      <div v-if="warningShow" class="warningWrap">
+        <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmImport()">确 定</el-button>
@@ -104,6 +107,9 @@ export default {
       importVisible: false, //导入弹窗
       uploadFileName: '',
       uploadFile: '',
+      message:'', 
+      warningList: [],
+      warningShow: false,
     }
   },
   computed: {},
@@ -148,17 +154,14 @@ export default {
       var formData = new FormData()
       formData.append('excelFile', this.uploadFile)
       API.importMdprice(formData).then((response) => {
-         this.closeImport()
+        if (response.code == 1000) {
+          //this.closeImport()
           this.getTableData()
-          // this.$message.success(`${response}`)
-        // if (response.code == 1000) {
-        //   this.closeImport()
-        //   this.getTableData()
-        //   this.$message.success(`${response.data}`)
-        // } else {
-        //   this.closeImport()
-        //   this.$message.warning(`${response.data}`)
-        // }
+          this.warningShow = true
+          this.warningList = response.data
+          console.log(typeof(this.warningList));
+          // this.$message.success(`${response.data}`)
+        }
       })
     },
     parsingExcelBtn() {
@@ -176,6 +179,8 @@ export default {
       this.uploadFile = ''
       this.uploadFileName = ''
       this.event.target.value = null
+      this.warningList = []
+      this.warningShow = false
     },
     //导出数据
     exportData() {
@@ -233,4 +238,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.message {
+  color: #EB4F48;
+  text-align: center;
+  margin: 10px 0;
+  white-space: normal;
+}
+.warningWrap {
+  width: 100%;
+  height: 100px;
+  overflow-y: scroll;
+}
+  </style>
