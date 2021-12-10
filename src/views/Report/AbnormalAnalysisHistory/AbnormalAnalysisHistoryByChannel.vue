@@ -141,78 +141,7 @@ export default {
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          id: '12987122',
-          name: '王小虎',
-          number: '234',
-          channel: 'NKA',
-          amount3: 10
-        },
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: '165',
-          channel: 'NKA',
-          amount3: 12
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: '324',
-          channel: 'NKA',
-          amount3: 9
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: '621',
-          channel: 'NKA',
-          amount3: 17
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15
-        }
-      ],
+      tableData: [],
       checkList: ['0', '1']
     }
   },

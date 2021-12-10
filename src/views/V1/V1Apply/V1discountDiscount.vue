@@ -97,8 +97,8 @@
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <div class="statusWrap">
-            <img v-if="row.judgmentType === 'pass'" src="../../../assets/images/success.png" alt="">
-            <img v-if="!row.judgmentType" src="../../../assets/images/warning.png" alt="">
+            <img v-if="row.judgmentType === 'Pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
             {{ row.judgmentType }}
           </div>
         </template>
@@ -270,7 +270,7 @@ export default {
       customerArr: [],
       distributorArr: [],
       submitBtn: 1,
-      localDate: '202101'
+      localDate: ''
     }
   },
   computed: {},

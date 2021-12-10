@@ -4,11 +4,12 @@
     <!-- 查询条件 -->
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="渠道：">
-        <el-input v-model="filterObj.channel" placeholder="请输入渠道" />
+        <el-input v-model="filterObj.channel" clearable placeholder="请输入渠道" />
       </el-form-item>
       <el-form-item label="年月：">
         <el-date-picker
           v-model="filterObj.date"
+          clearable
           type="month"
           value-format="yyyyMM"
           format="yyyyMM"
