@@ -12,7 +12,7 @@
         :to="item.path"
         tag="div"
         class="tabli"
-        :class="index === currentIndex ? 'currentTabli' : ''"
+        :class="index === currentIndex ? '' : 'currentTabli'"
         @click.native="changeTab(index)"
       >{{ item.name }}</router-link>
     </div>
