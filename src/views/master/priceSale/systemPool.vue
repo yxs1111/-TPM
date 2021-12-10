@@ -368,11 +368,13 @@ export default {
         .then((response) => {
           if (response.code === 1000) {
             this.$message.success(response.data)
+            this.getTableData()
             this.closeImport()
           } else {
             if (typeof (response.data) === 'string') {
               this.$message.error(response.data)
             } else if (response.data.length > 0) {
+              this.warningList = []
               this.warningShow = true
               this.warningList = response.data
             } else if (typeof (response.data) === 'object') {
@@ -384,6 +386,8 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.warningShow = false
+      this.warningList = []
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     // 导入
