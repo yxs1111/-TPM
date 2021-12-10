@@ -115,13 +115,13 @@
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
+          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" @click="confirmImport()">导入
           </el-button>
         </div>
-        <div>
+        <!-- <div>
           <el-button v-if="saveBtn" type="primary" plain class="my-export" @click="saveImportInfo">保存
           </el-button>
-        </div>
+        </div> -->
       </div>
 
       <div class="fileInfo" style="justify-content: space-between;">

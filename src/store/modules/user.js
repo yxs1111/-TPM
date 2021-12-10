@@ -89,6 +89,27 @@ const actions = {
     })
   },
 
+  // wx login
+  WXlogin({ dispatch }, formdata) {
+    const localParams = formdata
+    return new Promise((resolve, reject) => {
+      user.qrcodeEmail(localParams).then(response => {
+        // debugger
+        localStorage.setItem('usernameLocal', localParams.email)
+        const { data } = response
+        initUserInfo(data)
+
+        // debugger
+        resetRouter()
+        resolve()
+        dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
+      }).catch(error => {
+        console.error(error)
+        reject(error)
+      })
+    })
+  },
+
   // getAuthMenu
   getAuthMenu({ commit, state }) {
     return new Promise((resolve, reject) => {

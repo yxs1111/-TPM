@@ -195,14 +195,18 @@ export default {
             if (res.code === 1000) {
               const formdata = new FormData()
               formdata.append('email', res.data.email)
-              user.qrcodeEmail(formdata).then(res => {
-                if (res.code === 1000) {
-                  this.closeGetWX = true
-                  this.loading = false
-                  this.isLoginByWechat = false
+              this.closeGetWX = true
+              this.loading = false
+              this.isLoginByWechat = false
+              this.$store
+                .dispatch('user/WXlogin', formdata)
+                .then(() => {
                   this.$router.push({ path: this.redirect || '/' })
-                }
-              }).catch()
+                })
+                .catch(() => {
+                  this.$refs['code'].clear()
+                  this.getCodeImage()
+                })
             }
           }).catch()
         })
