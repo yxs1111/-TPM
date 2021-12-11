@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-12-11 13:40:29
+ * @LastEditTime: 2021-12-11 20:34:09
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -23,7 +23,7 @@ import masterData from '@/router/routers/masterData'
 import Report from '@/router/routers/Report'
 import taskManage from '@/router/routers/taskManage'
 import store from "@/store";
-
+import Layout from '@/layout/index'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -49,15 +49,14 @@ import store from "@/store";
  * all roles can be accessed
  */
 export const constantRoutes = [
-  ...common,
-  //...sample,
-  ...V0(),
-  ...V1(),
-  ...V2(),
-  ...V3(),
+   ...common,
+  // ...V0(),
+  // ...V1(),
+  // ...V2(),
+  // ...V3(),
   ...Report(),
   ...taskManage(),
-  ...masterData(),
+  // ...masterData(),
   ...system(),
   ...activiti(),
   
@@ -68,8 +67,12 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  //...V0(),
   
+  ...V0(),
+  ...V1(),
+  ...V2(),
+  ...V3(),
+  ...masterData(),
   // ...meta,
   ...base,
   // 404 page must be placed at the end !!!

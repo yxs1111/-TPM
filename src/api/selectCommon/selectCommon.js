@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2021-12-11 14:16:38
+ * @LastEditTime: 2021-12-11 20:30:42
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -9,23 +9,23 @@ import requestApi from '@/api/request-api'
 export default {
   // 渠道下拉框
   queryChannelSelect(params) {
-    return requestApi.request_get('/mdm/mdSplitRuleConfig/queryChannelSelect', params)
+    return requestApi.request_get('/mdm/common/queryChannelSelect', params)
   },
   // SKU下拉框
   querySkuSelect(params) {
-    return requestApi.request_get('/mdm/mdCdmConfig/querySkuSelect', params)
+    return requestApi.request_get('/mdm/common/querySkuSelect', params)
   },
   // MinePackage下拉框
   queryMinePackageSelect(params) {
-    return requestApi.request_get('/mdm/mdSplitRuleConfig/queryMinePackageSelect', params)
+    return requestApi.request_get('/mdm/common/queryMinePackageSelect', params)
   },
   // 客户
   queryCustomerList(params) {
-    return requestApi.request_get('/mdm/mdCustomer/getCustomerList', params)
+    return requestApi.request_get('/mdm/common/getCustomerList', params)
   },
   // 经销商
   queryDistributorList(params) {
-    return requestApi.request_get('/mdm/mdDistributor/getDistributorList', params)
+    return requestApi.request_get('/mdm/common/getDistributorList', params)
   },
   // 版本
   getDictInfoByType(params) {
@@ -34,7 +34,12 @@ export default {
   getMonth(params) {
     return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)
   },
+  //品牌
   getBrand(params) {
-    return requestApi.request_get('/mdm/mdBrand/getPage', params)
+    return requestApi.request_get('/mdm/common/getPage', params)
+  },
+  //区域
+  getRegionList(params) {
+    return requestApi.request_get('auth/common2/regionList', params)
   },
 }

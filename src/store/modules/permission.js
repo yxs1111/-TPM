@@ -1,5 +1,11 @@
+/*
+ * @Description: 
+ * @Date: 2021-09-02 13:27:44
+ * @LastEditTime: 2021-12-11 18:15:40
+ */
 import { asyncRoutes, constantRoutes } from '@/router'
-
+import  common  from "@/router/routers/common.js";
+import Layout from '@/layout/index'
 const enable_super_admin = process.env.VUE_APP_ENABLE_SUPER_ADMIN
 const super_admin_name = process.env.VUE_APP_SUPER_ADMIN_NAME
 
@@ -47,13 +53,28 @@ export function filterAsyncRoutes(routes, menus) {
 
 const state = {
   routes: [],
-  addRoutes: []
+  addRoutes: [],
+  common:common,
 }
 
 const mutations = {
   SET_ROUTES: (state, routes) => {
+  
+    
     state.addRoutes = routes
-    state.routes = constantRoutes.concat(routes)
+    routes.unshift({
+      path: '/',
+      component: Layout,
+      redirect: '/dashboard',
+      children: [{
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/common/dashboard/index'),
+        meta: { title: '首页', icon: 'dashboard' }
+      }]
+    },)
+    // state.routes = constantRoutes.concat(routes)
+    state.routes = routes.concat(constantRoutes)
   }
 }
 

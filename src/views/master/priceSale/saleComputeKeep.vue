@@ -221,8 +221,8 @@ export default {
     //导出数据
     exportData() {
       //导出数据筛选
-      var data = {}
-      data = { ...this.filterObj }
+      // var data = {}
+      // data = { ...this.filterObj }
       API.exportSaleComputeKeep().then((res) => {
         this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')

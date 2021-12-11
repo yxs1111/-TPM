@@ -22,13 +22,13 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -267,6 +267,7 @@ export default {
     this.getQueryChannelSelect()
     this.getDistributorList()
     this.getCustomerList()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -326,6 +327,13 @@ export default {
           }
         })
         .catch()
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     // 客户
     getCustomerList() {

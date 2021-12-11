@@ -7,13 +7,14 @@ export default function() {
     {
       path: '/master',
       component: Layout,
-      code: 'master',
+      code: 'mdm',
       name: 'master',
       meta: { title: '主数据管理', icon: 'mainData' },
       children: [
         {
           path: '/NKAEC',
           name: 'NKAEC',
+          code: 'mdm_NKAEC',
           component: () => import('@/views/master/nkaec/model.vue'),
           meta: { title: 'NKAEC', icon: 'apply' },
           redirect: '/nkaec/pages/nka',
@@ -22,7 +23,7 @@ export default function() {
             {
               hidden: true,
               path: '/nkaec/pages/nka',
-              code: 'NKA',
+              code: 'mdm_NKAEC',
               name: 'NKA',
               component: () => import('@/views/master/nkaec/pages/nka.vue'),
               meta: { title: 'NKA', icon: 'apply', activeMenu: '/NKAEC' }
@@ -30,7 +31,7 @@ export default function() {
             {
               hidden: true,
               path: '/nkaec/pages/EC',
-              code: 'EC',
+              code: 'mdm_NKAEC',
               name: 'EC',
               component: () => import('@/views/master/nkaec/pages/EC.vue'),
               meta: { title: 'EC', icon: 'apply', activeMenu: '/NKAEC' }
@@ -38,7 +39,7 @@ export default function() {
             {
               hidden: true,
               path: '/nkaec/pages/NKALine',
-              code: 'NKALine',
+              code: 'mdm_NKAEC',
               name: 'NKALine',
               component: () => import('@/views/master/nkaec/pages/NKALine.vue'),
               meta: { title: 'NKALine', icon: 'apply', activeMenu: '/NKAEC' }
@@ -46,7 +47,7 @@ export default function() {
             {
               hidden: true,
               path: '/nkaec/pages/ECLine',
-              code: 'ECLine',
+              code: 'mdm_NKAEC',
               name: 'ECLine',
               component: () => import('@/views/master/nkaec/pages/ECLine.vue'),
               meta: { title: 'ECLine', icon: 'apply', activeMenu: '/NKAEC' }
@@ -55,7 +56,8 @@ export default function() {
         },
         {
           path: '/organization',
-          name: 'PriceModel',
+          name: 'organization',
+          code: 'mdm_organization',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '组织架构', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
@@ -63,58 +65,64 @@ export default function() {
             // 组织架构
             {
               path: '/organization/Channel',
-              code: 'Channel',
+              code: 'mdm_channel',
               name: 'Channel',
-              component: () => import('@/views/master/organization/Channel.vue'),
+              component: () =>
+                import('@/views/master/organization/Channel.vue'),
               meta: { title: '渠道', icon: 'apply' }
             },
             {
               path: '/organization/Customer',
-              code: 'Customer',
+              code: 'mdm_customer',
               name: 'Customer',
-              component: () => import('@/views/master/organization/Customer.vue'),
+              component: () =>
+                import('@/views/master/organization/Customer.vue'),
               meta: { title: '客户', icon: 'apply' }
             },
             {
               path: '/organization/CustomerTeam',
-              code: 'CustomerTeam',
+              code: 'mdm_customer_group',
               name: 'CustomerTeam',
-              component: () => import('@/views/master/organization/CustomerTeam.vue'),
+              component: () =>
+                import('@/views/master/organization/CustomerTeam.vue'),
               meta: { title: '客户组', icon: 'apply' }
             },
             {
               path: '/organization/Store',
-              code: 'Store',
+              code: 'mdm_store',
               name: 'Store',
               component: () => import('@/views/master/organization/Store.vue'),
               meta: { title: '门店', icon: 'apply' }
             },
             {
               path: '/organization/Dealers',
-              code: 'Dealers',
+              code: 'mdm_Dealer',
               name: 'Dealers',
-              component: () => import('@/views/master/organization/Dealers.vue'),
+              component: () =>
+                import('@/views/master/organization/Dealers.vue'),
               meta: { title: '经销商', icon: 'apply' }
             },
             {
               path: '/organization/Supplier',
-              code: 'Supplier',
+              code: 'mdm_supplier',
               name: 'Supplier',
-              component: () => import('@/views/master/organization/Supplier.vue'),
+              component: () =>
+                import('@/views/master/organization/Supplier.vue'),
               meta: { title: '供应商', icon: 'apply' }
             },
             {
               path: '/organization/SaleKJ',
-              code: 'SaleKJ',
+              code: 'mdm_Sales_structure',
               name: 'SaleKJ',
               component: () => import('@/views/master/organization/saleKJ.vue'),
               meta: { title: '销售架构', icon: 'apply' }
             },
             {
               path: '/organization/CityVstore',
-              code: 'CityVstore',
+              code: 'mdm_City_Stor',
               name: 'CityVstore',
-              component: () => import('@/views/master/organization/cityVStore.vue'),
+              component: () =>
+                import('@/views/master/organization/cityVStore.vue'),
               meta: { title: '城市&门店对应关系', icon: 'apply' }
             }
           ]
@@ -122,30 +130,33 @@ export default function() {
         // 产品信息
         {
           path: '/itemInfo',
-          name: 'PriceModel',
+          name: 'itemInfo',
+          code: 'mdm_product_information',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '产品信息', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
           children: [
             {
               path: '/itemInfo/Brand',
-              code: 'Brand',
+              code: 'mdm_brand',
               name: 'Brand',
               component: () => import('@/views/master/itemInfo/Brand.vue'),
               meta: { title: '品牌', icon: 'apply' }
             },
             {
               path: '/itemInfo/SKU',
-              code: 'SKU',
+              code: 'mdm_product',
               name: 'SKU',
               component: () => import('@/views/master/itemInfo/SKU.vue'),
               meta: { title: '产品', icon: 'apply' }
             }
           ]
         },
+        // 价格促销
         {
           path: '/priceSale',
-          name: 'PriceModel',
+          name: 'priceSale',
+          code: 'mdm_Prices_and_promotions',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '价格和促销', icon: 'approve' },
           // redirect: '/priceSale/saleComputeKeep',
@@ -154,22 +165,21 @@ export default function() {
             {
               path: '/priceSale/priceMasterData',
               name: 'PriceMasterData',
+              code: 'mdm_Prices_mdm',
               component: () =>
-                import(
-                  '@/views/master/priceSale/priceMasterData.vue'
-                ),
+                import('@/views/master/priceSale/priceMasterData.vue'),
               meta: {
                 title: '价格主数据',
                 icon: 'apply'
               }
             },
-            { // 价格档位维护
+            {
+              // 价格档位维护
               path: '/priceSale/priceLevelKeep',
               name: 'PriceLevelKeep',
+              code: 'mdm_Price stall_maintenance',
               component: () =>
-                import(
-                  '@/views/master/priceSale/priceLevelKeep.vue'
-                ),
+                import('@/views/master/priceSale/priceLevelKeep.vue'),
               meta: {
                 title: '价格档位维护',
                 icon: 'apply'
@@ -179,10 +189,9 @@ export default function() {
             {
               path: '/priceSale/saleComputeKeep',
               name: 'SaleComputeKeep',
+              code: 'mdm_ calculation_maintenance',
               component: () =>
-                import(
-                  '@/views/master/priceSale/saleComputeKeep.vue'
-                ),
+                import('@/views/master/priceSale/saleComputeKeep.vue'),
               meta: {
                 title: '价促计算维护',
                 icon: 'apply'
@@ -197,27 +206,38 @@ export default function() {
             // },
             {
               path: '/priceSale/systemPool',
-              code: 'SystemPool',
+              code: 'mdm_Mechanism_pool',
               name: 'SystemPool',
-              component: () => import('@/views/master/priceSale/model/sysPool.vue'),
+              component: () =>
+                import('@/views/master/priceSale/model/sysPool.vue'),
               meta: { title: '机制池', icon: 'apply' },
               redirect: '/master/priceSale/systemPool',
               children: [
                 {
                   hidden: true,
                   path: '/master/priceSale/systemPool',
-                  code: 'SystemPool',
-                  name: 'SystemPool',
-                  component: () => import('@/views/master/priceSale/systemPool.vue'),
-                  meta: { title: 'Price Promotion', icon: 'apply', activeMenu: '/priceSale/systemPool' }
+                  code: 'mdm_Mechanism_pool',
+                  name: 'systemPool1',
+                  component: () =>
+                    import('@/views/master/priceSale/systemPool.vue'),
+                  meta: {
+                    title: 'Price Promotion',
+                    icon: 'apply',
+                    activeMenu: '/priceSale/systemPool'
+                  }
                 },
                 {
                   hidden: true,
                   path: '/master/priceSale/systemPoolNew',
-                  code: 'SystemPoolNew',
+                  code: 'mdm_Mechanism_pool',
                   name: 'SystemPoolNew',
-                  component: () => import('@/views/master/priceSale/systemPoolNew.vue'),
-                  meta: { title: 'New User', icon: 'apply', activeMenu: '/priceSale/systemPool' }
+                  component: () =>
+                    import('@/views/master/priceSale/systemPoolNew.vue'),
+                  meta: {
+                    title: 'New User',
+                    icon: 'apply',
+                    activeMenu: '/priceSale/systemPool'
+                  }
                 }
               ]
             }
@@ -226,7 +246,8 @@ export default function() {
         // 财务信息
         {
           path: '/financeInfo/priceSale',
-          name: 'PriceModel',
+          name: 'financeInfo',
+          code: 'mdm_Financial_Information',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '财务信息', icon: 'approve' },
           alwaysShow: true,
@@ -234,17 +255,19 @@ export default function() {
           children: [
             {
               path: '/RoleCostSubjectControl',
-              code: 'RoleCostSubjectControl',
+              code: 'mdm_Expense_Account',
               name: 'RoleCostSubjectControl',
-              component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
+              component: () =>
+                import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
               meta: { title: '费用科目', icon: 'apply' }
-            },
+            }
           ]
         },
         // 规则控制
         {
           path: '/ruleCtrl',
-          name: 'PriceModel',
+          name: 'ruleCtrl',
+          code: 'mdm_Rule_control',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '规则控制', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
@@ -253,10 +276,9 @@ export default function() {
             {
               path: '/ruleCtrl/splitRules',
               name: 'SplitRules',
+              code: 'mdm_Split_rules',
               component: () =>
-                import(
-                  '@/views/master/ruleCtrl/model/splitRulesM.vue'
-                ),
+                import('@/views/master/ruleCtrl/model/splitRulesM.vue'),
               meta: {
                 title: '拆分规则',
                 icon: 'approve'
@@ -266,29 +288,38 @@ export default function() {
                 {
                   hidden: true,
                   path: '/master/ruleCtrl/model/splitRules',
-                  code: 'splitRules',
+                  code: 'mdm_Split_rules',
                   name: 'splitRules',
-                  component: () => import('@/views/master/ruleCtrl/splitRules.vue'),
-                  meta: { title: 'Price Promotion', icon: 'form', activeMenu: '/ruleCtrl/splitRules' }
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRules.vue'),
+                  meta: {
+                    title: 'Price Promotion',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/splitRules'
+                  }
                 },
                 {
                   hidden: true,
                   path: '/master/ruleCtrl/model/splitRulesNew',
-                  code: 'splitRulesNew',
+                  code: 'mdm_Split_rules',
                   name: 'splitRulesNew',
-                  component: () => import('@/views/master/ruleCtrl/splitRulesNew.vue'),
-                  meta: { title: 'New User', icon: 'form', activeMenu: '/ruleCtrl/splitRules' }
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesNew.vue'),
+                  meta: {
+                    title: 'New User',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/splitRules'
+                  }
                 }
               ]
             },
             // 价格主数据
             {
               path: '/ruleCtrl/testRules',
+              code: 'mdm_testing_regulations',
               name: 'TestRules',
               component: () =>
-                import(
-                  '@/views/master/ruleCtrl/model/testRulesM.vue'
-                ),
+                import('@/views/master/ruleCtrl/model/testRulesM.vue'),
               meta: {
                 title: '检验规则',
                 icon: 'approve'
@@ -298,21 +329,31 @@ export default function() {
                 {
                   hidden: true,
                   path: '/master/ruleCtrl/model/testRules',
-                  code: 'TestRules',
-                  name: 'TestRules',
-                  component: () => import('@/views/master/ruleCtrl/testRules.vue'),
-                  meta: { title: 'Price Promotion', icon: 'form', activeMenu: '/ruleCtrl/testRules' }
+                  code: 'mdm_testing_regulations',
+                  name: 'TestRules1',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/testRules.vue'),
+                  meta: {
+                    title: 'Price Promotion',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
                 },
                 {
                   hidden: true,
                   path: '/master/ruleCtrl/model/testRulesNew',
-                  code: 'TestRulesNew',
+                  code: 'mdm_testing_regulations',
                   name: 'TestRulesNew',
-                  component: () => import('@/views/master/ruleCtrl/testRulesNew.vue'),
-                  meta: { title: 'New User', icon: 'form', activeMenu: '/ruleCtrl/testRules' }
+                  component: () =>
+                    import('@/views/master/ruleCtrl/testRulesNew.vue'),
+                  meta: {
+                    title: 'New User',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
                 }
               ]
-            },
+            }
             // {
             //   path: '/ruleCtrl/newUserC',
             //   name: 'NewUserC',
@@ -327,131 +368,6 @@ export default function() {
             // }
           ]
         }
-
-        // {
-        //   path: '/CoastType',
-        //   code: 'CoastType',
-        //   name: 'CoastType',
-        //   component: () => import('@/views/master/CoastType.vue'),
-        //   meta: { title: '费用类型', icon: 'form' }
-        // },
-
-        // {
-        //   path: '/Supplier',
-        //   code: 'Supplier',
-        //   name: 'Supplier',
-        //   component: () => import('@/views/master/Supplier.vue'),
-        //   meta: { title: '供应商', icon: 'form' }
-        // },
-
-        // {
-        //   path: '/zone',
-        //   code: 'zone',
-        //   name: 'zone',
-        //   component: () => import('@/views/master/Zone.vue'),
-        //   meta: { title: 'Zone', icon: 'form' }
-        // },
-        // {
-        //   path: '/Region',
-        //   code: 'Region',
-        //   name: 'Region',
-        //   component: () => import('@/views/master/Region.vue'),
-        //   meta: { title: 'Region', icon: 'form' }
-        // },
-        // {
-        //   path: '/CityGroup',
-        //   code: 'CityGroup',
-        //   name: 'CityGroup',
-        //   component: () => import('@/views/master/CityGroup.vue'),
-        //   meta: { title: 'CityGroup', icon: 'form' }
-        // },
-        // {
-        //   path: '/City',
-        //   code: 'City',
-        //   name: 'City',
-        //   component: () => import('@/views/master/City.vue'),
-        //   meta: { title: 'City', icon: 'form' }
-        // },
-        // {
-        //   path: '/Stores',
-        //   code: 'Stores',
-        //   name: 'Stores',
-        //   component: () => import('@/views/master/Stores.vue'),
-        //   meta: { title: '门店', icon: 'form' }
-        // },
-
-        // {
-        //   path: '/Personnel',
-        //   code: 'Personnel',
-        //   name: 'Personnel',
-        //   component: () => import('@/views/master/Personnel.vue'),
-        //   meta: { title: '人员', icon: 'form' }
-        // },
-        // {
-        //   path: '/Role',
-        //   code: 'Role',
-        //   name: 'Role',
-        //   component: () => import('@/views/master/Role.vue'),
-        //   meta: { title: '角色', icon: 'form' }
-        // },
-        // {
-        //   path: '/Jobs',
-        //   code: 'Jobs',
-        //   name: 'Jobs',
-        //   component: () => import('@/views/master/Jobs.vue'),
-        //   meta: { title: '岗位', icon: 'form' }
-        // },
-        // {
-        //   path: '/HistoricalSales',
-        //   code: 'HistoricalSales',
-        //   name: 'HistoricalSales',
-        //   component: () => import('@/views/master/HistoricalSales.vue'),
-        //   meta: { title: '历史销量', icon: 'form' }
-        // },
-        // {
-        //   path: '/SalesTarget',
-        //   code: 'SalesTarget',
-        //   name: 'SalesTarget',
-        //   component: () => import('@/views/master/SalesTarget.vue'),
-        //   meta: { title: '目标销量', icon: 'form' }
-        // },
-        // {
-        //   path: '/PriceMasterData',
-        //   code: 'PriceMasterData',
-        //   name: 'PriceMasterData',
-        //   component: () => import('@/views/master/PriceMasterData.vue'),
-        //   meta: { title: '价格主数据', icon: 'form' }
-        // },
-        // {
-        //   path: '/CityplanSplitRule',
-        //   code: 'CityplanSplitRule',
-        //   name: 'CityplanSplitRule',
-        //   component: () => import('@/views/master/CityplanSplitRule.vue'),
-        //   meta: { title: 'Cityplan拆分规则', icon: 'form' }
-        // },
-        // {
-        //   path: '/GuidePriceVerification',
-        //   code: 'GuidePriceVerification',
-        //   name: 'GuidePriceVerification',
-        //   component: () => import('@/views/master/GuidePriceVerification.vue'),
-        //   meta: { title: '指导价格验证配置', icon: 'form' }
-        // },
-        // {
-        //   path: '/AuthenticationRuleConfig',
-        //   code: 'AuthenticationRuleConfig',
-        //   name: 'AuthenticationRuleConfig',
-        //   component: () =>
-        //     import('@/views/master/AuthenticationRuleConfig.vue'),
-        //   meta: { title: '验证规则配置', icon: 'form' }
-        // },
-
-        // {
-        //   path: '/MechanismPool',
-        //   code: 'MechanismPool',
-        //   name: 'MechanismPool',
-        //   component: () => import('@/views/master/MechanismPool.vue'),
-        //   meta: { title: '机制池', icon: 'form' }
-        // }
       ]
     }
   ]

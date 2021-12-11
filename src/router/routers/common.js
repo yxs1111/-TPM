@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-08-30 10:38:43
+ * @LastEditTime: 2021-12-11 18:16:16
+ */
 import Layout from '@/layout/index'
 
 export default [
@@ -19,15 +24,15 @@ export default [
     hidden: true
   },
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/common/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
-    }]
-  }
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [{
+  //     path: 'dashboard',
+  //     name: 'Dashboard',
+  //     component: () => import('@/views/common/dashboard/index'),
+  //     meta: { title: '首页', icon: 'dashboard' }
+  //   }]
+  // }
 ]

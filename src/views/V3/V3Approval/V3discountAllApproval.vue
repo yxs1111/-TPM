@@ -19,7 +19,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -35,7 +35,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="">
+        <div class="TpmButtonBG">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>

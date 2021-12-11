@@ -19,13 +19,13 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -35,7 +35,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="">
+        <div class="TpmButtonBG">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
@@ -101,15 +101,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
@@ -134,7 +127,7 @@ export default {
         customerCode: '',
         channelCode: '',
         distributorCode: '',
-        productCode: ''
+        productCode: '',
       },
       tableLoading: '',
       categoryArr: [],
@@ -145,6 +138,7 @@ export default {
       skuArr: [],
       customerArr: [],
       distributorArr: [],
+      RegionList: [],
     }
   },
   computed: {},
@@ -152,48 +146,63 @@ export default {
     this.getChannel()
     this.getSKU()
     this.getDistributorList()
+    this.getRegionList()
     this.getTableData()
   },
   methods: {
     // 获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
+      selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
         }
-      }).catch()
+      })
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     getSKU() {
-      selectAPI.querySkuSelect().then(res => {
+      selectAPI.querySkuSelect().then((res) => {
         if (res.code === 1000) {
           this.skuArr = res.data
         }
-      }).catch()
+      })
     },
     // 客户
     getCustomerList() {
       this.filterObj.customerCode = ''
-      selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelCode
-      }).then(res => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList().then(res => {
-        if (res.code === 1000) {
-          this.distributorArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryDistributorList()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
     },
     // 获取表格数据
     getTableData() {
       this.tableLoading = true
       let that = this
-      setTimeout(function() { that.tableLoading = false }, 5000)
+      setTimeout(function () {
+        that.tableLoading = false
+      }, 5000)
       this.tableData = []
       // API.getPageMdBrand({
       //   pageNum: this.pageNum, // 当前页
@@ -232,8 +241,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 

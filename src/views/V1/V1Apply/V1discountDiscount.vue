@@ -19,13 +19,13 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="item.distributorCode+index" :label="item.distributorName" :value="item.distributorCode" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -111,15 +111,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
@@ -155,22 +148,14 @@
       </div>
 
       <div class="tableWrap">
-        <el-table
-          border
-          height="400"
-          :data="checkedData"
-          style="width: 100%"
-          :header-cell-style="{
+        <el-table border height="400" :data="checkedData" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }"
-          :row-class-name="tableRowClassName"
-          stripe
-        >
+          }" :row-class-name="tableRowClassName" stripe>
           <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -257,7 +242,7 @@ export default {
         customerCode: '',
         channelCode: '',
         distributorCode: '',
-        productCode: ''
+        productCode: '',
       },
       tableLoading: '',
       categoryArr: [],
@@ -272,7 +257,7 @@ export default {
       customerArr: [],
       distributorArr: [],
       submitBtn: 1,
-      localDate: '202101'
+      localDate: '202101',
     }
   },
   computed: {},
@@ -281,117 +266,117 @@ export default {
     // this.getEffectiveDate()
     this.getChannel()
     this.getSKU()
-    // this.getMP()
-    // this.getCustomerList()
+    this.getRegionList()
+    this.getCustomerList()
     this.getDistributorList()
   },
   methods: {
     // 获取年月
     getEffectiveDate() {
-      API.getEffectiveDate().then(res => {
+      API.getEffectiveDate().then((res) => {
         if (res.code === 1000) {
           this.localDate = res.data
           this.getTableData()
         } else {
           this.$message.warning('未查询到年月信息！')
         }
-      }).catch()
+      })
     },
     // 获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
+      selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
         }
-      }).catch()
+      })
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     getSKU() {
-      selectAPI.querySkuSelect().then(res => {
+      selectAPI.querySkuSelect().then((res) => {
         if (res.code === 1000) {
           this.skuArr = res.data
         }
-      }).catch()
-    },
-    getMP() {
-      selectAPI.queryMinePackageSelect().then(res => {
-        if (res.code === 1000) {
-          // this.channelArr = res.data
-        }
-      }).catch()
+      })
     },
     // 客户
     getCustomerList() {
       this.filterObj.customerCode = ''
-      selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelCode
-      }).then(res => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList().then(res => {
+      selectAPI.queryDistributorList().then((res) => {
         if (res.code === 1000) {
           this.distributorArr = res.data
         }
-      }).catch()
+      })
     },
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
-        mainId: this.mainIdLocal
-      }).then(res => {
+        mainId: this.mainIdLocal,
+      }).then((res) => {
         if (res.code === 1000) {
           this.closeimportDialog()
           this.getTableData()
           this.$message.success('保存成功！')
         }
-      }).catch()
+      })
     },
     // 导出错误信息
     exportErrorList() {
       API.exportErrorList({
         mainId: this.mainIdLocal,
-        channelCode: 'NKA'
-      }).then(
-        response => {
-          const fileName = '错误信息' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        channelCode: 'NKA',
+      }).then((response) => {
+        const fileName = '错误信息' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 导出excel
     exportExcelInfo() {
       API.exportExcel({
-        mainId: this.mainIdLocal
-      }).then(
-        response => {
-          const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        mainId: this.mainIdLocal,
+      }).then((response) => {
+        const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 导入数据
     importData() {
@@ -411,7 +396,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '上传成功'
+              message: '上传成功',
             })
             if (response.data != null) {
               this.checkedData = response.data
@@ -422,7 +407,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '上传失败，请重新上传。'
+              message: '上传失败，请重新上传。',
             })
           }
         })
@@ -461,40 +446,46 @@ export default {
       if (this.tableData[0].judgmentType === null) {
         this.$confirm('系统判定为null,不可提交?', '提示', {
           confirmButtonText: '确定',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '好的!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'warning',
         })
+          .then(() => {
+            this.$message({
+              type: 'success',
+              message: '好的!',
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
       } else {
         this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          API.submitV1({
-            mainId: this.mainIdLocal
-          }).then(res => {
-            if (res.code === 1000) {
-              this.$message({
-                type: 'success',
-                message: '提交成功!'
-              })
-            }
-          }).catch()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消提交'
-          })
+          type: 'warning',
         })
+          .then(() => {
+            API.submitV1({
+              mainId: this.mainIdLocal,
+            })
+              .then((res) => {
+                if (res.code === 1000) {
+                  this.$message({
+                    type: 'success',
+                    message: '提交成功!',
+                  })
+                }
+              })
+              .catch()
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消提交',
+            })
+          })
       }
     },
     // 下载excel模板
@@ -502,23 +493,22 @@ export default {
       API.downExcelTmpForV1({
         mainId: this.mainIdLocal,
         importType: 1,
-        channelCode: 'NKA'
-      }).then(
-        response => {
-          const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        channelCode: 'NKA',
+      }).then((response) => {
+        const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 打开文件
     openFile(file) {
@@ -572,7 +562,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         productCode: this.filterObj.productCode,
-        yearAndMonth: this.localDate
+        yearAndMonth: this.localDate,
       })
         .then((response) => {
           this.tableLoading = false
@@ -586,8 +576,7 @@ export default {
         .catch((error) => {})
     },
     search() {
-      console.log('hh')
-      // this.getTableData()
+      this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -609,40 +598,40 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-.el-icon-my-file{
+.el-icon-my-file {
   background: url('~@/assets/images/selFile.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-file:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-file:before {
+  content: '\e611';
+  font-size: 16px;
 }
 </style>
 
 <style>
-.el-icon-my-down{
+.el-icon-my-down {
   background: url('~@/assets/images/downModel.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-down:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-down:before {
+  content: '\e611';
+  font-size: 16px;
 }
 </style>
 <style lang="scss" scoped>
 ::v-deep.my-el-dialog .upload-demo {
-    display: flex;
-    margin-top: 0px;
+  display: flex;
+  margin-top: 0px;
 }
-::v-deep.el-table td{
+::v-deep.el-table td {
   padding: 6px 0;
 }
 ::v-deep.el-upload-list__item:first-child {
