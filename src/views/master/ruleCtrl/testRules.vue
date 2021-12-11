@@ -36,7 +36,7 @@
       <el-table-column width="370" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="{row}">
           <div v-if="row.ruleUnit === '∈'">
-            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row)" />%&nbsp;]
+            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row, row.startRule)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
           </div>
           <div v-else>
             {{ row.ruleContentAfter }}
@@ -120,7 +120,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-import type from '@/views/meta/dict/type'
+
 export default {
   name: 'TestRules',
   directives: { elDragDialog, permission },
@@ -195,22 +195,28 @@ export default {
   },
   methods: {
     // 验证input输入框数据
-    number(e, row) {
+    number(e, row, itemRow) {
       const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(e.target.value)
-      if (!flag) {
-        e.target.value = ''
-        this.$message({
-          showClose: true,
-          message: '需要输入整数！',
-          type: 'warning'
-        })
-      } else if (row.startRule > row.endRule && flag) {
-        e.target.value = ''
-        this.$message({
-          showClose: true,
-          message: '区域数值需要前大后小！',
-          type: 'warning'
-        })
+      console.log('8888888', itemRow)
+      if (row.endRule === '') {
+        return
+      } else {
+        // debugger
+        if (!flag) {
+          e.target.value = ''
+          this.$message({
+            showClose: true,
+            message: '需要输入整数！',
+            type: 'warning'
+          })
+        } else if (Number(row.startRule) >= Number(row.endRule) && flag) {
+          e.target.value = ''
+          this.$message({
+            showClose: true,
+            message: '区域数值需要前小后大！',
+            type: 'warning'
+          })
+        }
       }
     },
     // 导出excel
@@ -339,12 +345,11 @@ export default {
       this.ErrorType = val
       this.$refs['refSelect'].$el.children[0].children[0].setAttribute(
         'style',
-        `background: url(${optionsImg[i].valueImg}) no-repeat; 
-         background-position: 10px center; 
-				background-size: 20px 20px!important;
-				text-indent: 30px;
-          
-          `
+        `background: url(${optionsImg[i].valueImg}) no-repeat;
+         background-position: 10px center;
+    		background-size: 20px 20px!important;
+    		text-indent: 30px;
+        `
       )
       this.$forceUpdate()
     },

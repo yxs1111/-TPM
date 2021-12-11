@@ -199,7 +199,7 @@ export default {
         brandCode: ''
       },
       tableLoading: '',
-      categoryArr: [{ label: '选项一', value: '19' }],
+      categoryArr: [],
       permissions: getDefaultPermissions(),
       tableData: [],
       dialogVisible: false,
@@ -213,7 +213,7 @@ export default {
       saveBtn: false,
       dialogTableLoading: false,
       dialogData: [],
-      btnStatus: false
+      btnStatus: true
     }
   },
   computed: {},
