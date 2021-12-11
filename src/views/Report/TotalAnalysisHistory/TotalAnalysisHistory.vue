@@ -126,51 +126,7 @@ export default {
         { label: '价格执行率1# V3谈判后  VS  V1' },
       ],
       tableData: [
-        {
-          id: '12987122',
-          name: 'Total',
-          number: '234',
-          channel: 'NKA',
-          amount3: 10,
-          tableOption: [
-            { value: 74 },
-            { value: 21 },
-            { value: 42 },
-            { value: 31 },
-            { value: 56 },
-            { value: 75 },
-          ],
-        },
-        {
-          id: '12987122',
-          name: '王小虎',
-          number: '234',
-          channel: 'NKA',
-          amount3: 10,
-          tableOption: [
-            { value: 74 },
-            { value: 21 },
-            { value: 42 },
-            { value: 31 },
-            { value: 56 },
-            { value: 75 },
-          ],
-        },
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: '165',
-          channel: 'NKA',
-          amount3: 12,
-          tableOption: [
-            { value: 86 },
-            { value: 91 },
-            { value: 92 },
-            { value: 89 },
-            { value: 80 },
-            { value: 94 },
-          ],
-        },
+        
       ],
       checkList: ['0', '1'],
     }

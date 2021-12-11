@@ -36,6 +36,7 @@
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
+      <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot={row} width="150" align="center" prop="grossProfitPoints" label="毛利点数">
         {{(row.grossProfitPoints*100).toFixed(2)}}%

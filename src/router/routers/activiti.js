@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-12-06 08:33:29
+ * @LastEditTime: 2021-12-11 13:37:46
+ */
 import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
@@ -55,13 +60,13 @@ export default function() {
         // }
       ]
     },
-    {
-      path: '/taskDetail',
-      code: 'taskDetail',
-      meta: { title: '任务详情', icon: 'user' },
-      component: () => import('@/views/activiti/tasks/TaskDetail'),
-      hidden: true
-    },
+    // {
+    //   path: '/taskDetail',
+    //   code: 'taskDetail',
+    //   meta: { title: '任务详情', icon: 'user' },
+    //   component: () => import('@/views/activiti/tasks/TaskDetail'),
+    //   hidden: true
+    // },
     {
       path: '/modeler',
       code: 'modeler',

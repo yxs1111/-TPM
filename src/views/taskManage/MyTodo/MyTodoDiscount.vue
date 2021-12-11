@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-06 19:38:36
+ * @LastEditTime: 2021-12-11 13:41:33
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -61,9 +61,9 @@
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
-        <template>
+        <template slot-scope="{row}">
           <div class="operation">
-            <svg-icon icon-class="submit_l" class="submit_icon" />
+            <svg-icon icon-class="submit_l" class="submit_icon" @click="operateProcess(row)" />
             办理
           </div>
         </template>
@@ -136,6 +136,9 @@ export default {
     search() {
       this.getTableData()
     },
+    operateProcess: function (currentRow) {
+      this.$router.push({ path: '/taskDetail', query: currentRow })
+    },
     //查看流程
     openFlowDiagram(row) {
       this.flowDiagram.businessId = row.businessKey
@@ -184,9 +187,10 @@ export default {
   align-items: center;
   justify-content: center;
   color: #4192d3;
+  font-size: 16px;
   cursor: pointer;
   .submit_icon {
-    font-size: 20px;
+    font-size: 26px;
   }
 }
 </style>

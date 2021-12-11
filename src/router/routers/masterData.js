@@ -15,7 +15,7 @@ export default function() {
           path: '/NKAEC',
           name: 'NKAEC',
           component: () => import('@/views/master/nkaec/model.vue'),
-          meta: { title: 'NKAEC', icon: 'form' },
+          meta: { title: 'NKAEC', icon: 'apply' },
           redirect: '/nkaec/pages/nka',
           children: [
             // 组织架构
@@ -25,7 +25,7 @@ export default function() {
               code: 'NKA',
               name: 'NKA',
               component: () => import('@/views/master/nkaec/pages/nka.vue'),
-              meta: { title: 'NKA', icon: 'form', activeMenu: '/NKAEC' }
+              meta: { title: 'NKA', icon: 'apply', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -33,7 +33,7 @@ export default function() {
               code: 'EC',
               name: 'EC',
               component: () => import('@/views/master/nkaec/pages/EC.vue'),
-              meta: { title: 'EC', icon: 'form', activeMenu: '/NKAEC' }
+              meta: { title: 'EC', icon: 'apply', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -41,7 +41,7 @@ export default function() {
               code: 'NKALine',
               name: 'NKALine',
               component: () => import('@/views/master/nkaec/pages/NKALine.vue'),
-              meta: { title: 'NKALine', icon: 'form', activeMenu: '/NKAEC' }
+              meta: { title: 'NKALine', icon: 'apply', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -49,7 +49,7 @@ export default function() {
               code: 'ECLine',
               name: 'ECLine',
               component: () => import('@/views/master/nkaec/pages/ECLine.vue'),
-              meta: { title: 'ECLine', icon: 'form', activeMenu: '/NKAEC' }
+              meta: { title: 'ECLine', icon: 'apply', activeMenu: '/NKAEC' }
             }
           ]
         },
@@ -66,56 +66,56 @@ export default function() {
               code: 'Channel',
               name: 'Channel',
               component: () => import('@/views/master/organization/Channel.vue'),
-              meta: { title: '渠道', icon: 'form' }
+              meta: { title: '渠道', icon: 'apply' }
             },
             {
               path: '/organization/Customer',
               code: 'Customer',
               name: 'Customer',
               component: () => import('@/views/master/organization/Customer.vue'),
-              meta: { title: '客户', icon: 'form' }
+              meta: { title: '客户', icon: 'apply' }
             },
             {
               path: '/organization/CustomerTeam',
               code: 'CustomerTeam',
               name: 'CustomerTeam',
               component: () => import('@/views/master/organization/CustomerTeam.vue'),
-              meta: { title: '客户组', icon: 'form' }
+              meta: { title: '客户组', icon: 'apply' }
             },
             {
               path: '/organization/Store',
               code: 'Store',
               name: 'Store',
               component: () => import('@/views/master/organization/Store.vue'),
-              meta: { title: '门店', icon: 'form' }
+              meta: { title: '门店', icon: 'apply' }
             },
             {
               path: '/organization/Dealers',
               code: 'Dealers',
               name: 'Dealers',
               component: () => import('@/views/master/organization/Dealers.vue'),
-              meta: { title: '经销商', icon: 'form' }
+              meta: { title: '经销商', icon: 'apply' }
             },
             {
               path: '/organization/Supplier',
               code: 'Supplier',
               name: 'Supplier',
               component: () => import('@/views/master/organization/Supplier.vue'),
-              meta: { title: '供应商', icon: 'form' }
+              meta: { title: '供应商', icon: 'apply' }
             },
             {
               path: '/organization/SaleKJ',
               code: 'SaleKJ',
               name: 'SaleKJ',
               component: () => import('@/views/master/organization/saleKJ.vue'),
-              meta: { title: '销售架构', icon: 'form' }
+              meta: { title: '销售架构', icon: 'apply' }
             },
             {
               path: '/organization/CityVstore',
               code: 'CityVstore',
               name: 'CityVstore',
               component: () => import('@/views/master/organization/cityVStore.vue'),
-              meta: { title: '城市&门店对应关系', icon: 'form' }
+              meta: { title: '城市&门店对应关系', icon: 'apply' }
             }
           ]
         },
@@ -132,14 +132,14 @@ export default function() {
               code: 'Brand',
               name: 'Brand',
               component: () => import('@/views/master/itemInfo/Brand.vue'),
-              meta: { title: '品牌', icon: 'form' }
+              meta: { title: '品牌', icon: 'apply' }
             },
             {
               path: '/itemInfo/SKU',
               code: 'SKU',
               name: 'SKU',
               component: () => import('@/views/master/itemInfo/SKU.vue'),
-              meta: { title: '产品', icon: 'form' }
+              meta: { title: '产品', icon: 'apply' }
             }
           ]
         },
@@ -209,7 +209,7 @@ export default function() {
                   code: 'SystemPool',
                   name: 'SystemPool',
                   component: () => import('@/views/master/priceSale/systemPool.vue'),
-                  meta: { title: 'Price Promotion', icon: 'form', activeMenu: '/priceSale/systemPool' }
+                  meta: { title: 'Price Promotion', icon: 'apply', activeMenu: '/priceSale/systemPool' }
                 },
                 {
                   hidden: true,
@@ -217,7 +217,7 @@ export default function() {
                   code: 'SystemPoolNew',
                   name: 'SystemPoolNew',
                   component: () => import('@/views/master/priceSale/systemPoolNew.vue'),
-                  meta: { title: 'New User', icon: 'form', activeMenu: '/priceSale/systemPool' }
+                  meta: { title: 'New User', icon: 'apply', activeMenu: '/priceSale/systemPool' }
                 }
               ]
             }
