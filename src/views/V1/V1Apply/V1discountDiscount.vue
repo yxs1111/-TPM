@@ -69,6 +69,7 @@
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="160" align="center" prop="productName" label="SKU" />
+      <el-table-column width="160" align="center" prop="activityLevel" label="活动级别" />
       <el-table-column width="190" align="center" prop="priceGearAmount" label="价格档位（RMB/Tin）">
         <template slot-scope="scope">
           <div class="priceLevelWrap">
@@ -96,11 +97,12 @@
       <el-table-column width="120" align="center" prop="activityDateEnd" label="活动结束时间" />
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
-          <div class="statusWrap">
+          <div v-if="row.judgmentType!== null" class="statusWrap">
             <img v-if="row.judgmentType === 'Pass'" src="../../../assets/images/success.png" alt="">
             <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
             {{ row.judgmentType }}
           </div>
+          <div v-else>{{ row.judgmentType }}</div>
         </template>
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
@@ -270,7 +272,7 @@ export default {
       customerArr: [],
       distributorArr: [],
       submitBtn: 1,
-      localDate: ''
+      localDate: '202101'
     }
   },
   computed: {},
@@ -352,7 +354,7 @@ export default {
     exportErrorList() {
       API.exportErrorList({
         mainId: this.mainIdLocal,
-        channelCode:'NKA'
+        channelCode: 'NKA'
       }).then(
         response => {
           const fileName = '错误信息' + new Date().getTime() + '.xlsx'
@@ -500,7 +502,7 @@ export default {
       API.downExcelTmpForV1({
         mainId: this.mainIdLocal,
         importType: 1,
-        channelCode:'NKA'
+        channelCode: 'NKA'
       }).then(
         response => {
           const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'
