@@ -246,6 +246,25 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    // 下载文件
+    downloadFile(res, fileName) {
+      const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
+    },
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainId({
@@ -303,8 +322,9 @@ export default {
     },
     // 校验excel
     downLoadException() {
-      API.exportException({
-        exportType: 'exportExceptionTemplate'
+      API.importV3NU({
+        exportType: 'exportExceptionTemplate',
+        mainId: this.mainIdLocal
       }).then(
         response => {
           const fileName = '校验' + new Date().getTime() + '.xlsx'
@@ -327,7 +347,9 @@ export default {
       API.saveImportInfo({
         mainId: this.mainIdLocal
       }).then(res => {
-        console.log('111', res)
+        if (res.code === 1000) {
+          this.closeimportDialog()
+        }
       }).catch()
     },
     // 下载excel模板
@@ -354,6 +376,9 @@ export default {
     // 关闭导入
     closeimportDialog() {
       this.importVisible = false
+      this.uploadFileName = ''
+      this.uploadFile = ''
+      this.dialogData = []
     },
     // 导入数据
     importData() {

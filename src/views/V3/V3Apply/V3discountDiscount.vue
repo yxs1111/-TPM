@@ -333,7 +333,8 @@ export default {
       supplementVisible: false,
       customerArr: [],
       distributorArr: [],
-      dialogDataF: []
+      dialogDataF: [],
+      uploadFile: '',
     }
   },
   computed: {},

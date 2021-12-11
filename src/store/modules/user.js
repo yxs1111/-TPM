@@ -26,7 +26,6 @@ const initUserInfo = (data) => {
     const authorities = decryptStr(data.authorities)
     const token = decryptStr(data.token)
     const info = {}
-
     auth.clear()
     if (authorities) {
       const roles = []

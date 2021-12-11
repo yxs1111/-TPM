@@ -66,5 +66,67 @@ export default {
   // 通过与驳回按钮状态
   infoByMainId(params) {
     return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
+  },
+
+  // ********NU*********
+  // 分页查询接口
+  getPageV3NU(params) {
+    return requestApi.request_get('/cityplan/investCpNuVThreeDetail/getPage', params)
+  },
+  exportV3NU(params) {
+    return request({
+      url: '/cityplan/investCpNuVThreeDetail/export',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  exportTemplateNU(params) {
+    return request({
+      url: '/cityplan/investCpNuVThreeDetail/exportTemplate',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  exportExceptionNU(params) {
+    return request({
+      url: '/cityplan/investCpNuVThreeDetail/exportException',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  importV3NU(formData) {
+    return request({
+      url: '/cityplan/investCpNuVThreeDetail/import',
+      method: 'post',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  importV3MakeUpNU(formData) {
+    return request({
+      url: '/cityplan/investCpNuVThreeDetail/makeUp',
+      method: 'post',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  // 文件检索后保存
+  saveImportInfoNU(params) {
+    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/save', params)
+  },
+  // 提交
+  submitApplyNU(params) {
+    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/submit', params)
+  },
+  // 审批 通过 驳回
+  approveNU(params) {
+    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/approve', params)
+  },
+  // 通过与驳回按钮状态
+  infoByMainIdNU(params) {
+    return requestApi.request_get('/cityplan/investCpNuVThreeDetail/infoByMainId', params)
   }
 }
