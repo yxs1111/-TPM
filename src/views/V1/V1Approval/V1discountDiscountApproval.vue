@@ -222,7 +222,7 @@ export default {
         productCode: ''
       },
       tableLoading: '',
-      categoryArr: [{ label: '选项一', value: '19' }],
+      categoryArr: [],
       permissions: getDefaultPermissions(),
       tableData: [],
       dialogVisible: false,
