@@ -270,7 +270,7 @@ export default {
       customerArr: [],
       distributorArr: [],
       submitBtn: 1,
-      localDate: ''
+      localDate: '202101'
     }
   },
   computed: {},
