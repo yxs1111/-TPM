@@ -125,9 +125,9 @@ export default {
       })
     },
     getPlanCost(num) {
-      // let money=num.toFixed(2)
+      let money=Number(num.toFixed(2))
       //let money=num.toLocaleString() //百分数
-      return num.toFixed(2)  //二位小数
+      return money.toLocaleString()  //二位小数
     },
     search() {
       this.getTableData()
