@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2021-12-07 09:16:46
+ * @LastEditTime: 2021-12-11 14:16:38
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -33,5 +33,8 @@ export default {
   },
   getMonth(params) {
     return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)
+  },
+  getBrand(params) {
+    return requestApi.request_get('/mdm/mdBrand/getPage', params)
   },
 }

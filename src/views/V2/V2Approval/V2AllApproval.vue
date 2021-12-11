@@ -36,6 +36,10 @@
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG">查询</el-button>
+        <div class="TpmButtonBG">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -43,50 +47,49 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG">
-        <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
+
       <div class="TpmButtonBG">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
     </div>
     <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="number" label="CPID" fixed> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动月"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="客户系统名称"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="品牌"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="SKU"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="价格档位（RMB/Tin）">
-        <template slot-scope="scope">
-          <div class="priceLevelWrap">
-            <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{scope.row.number}}</div>
-          </div>
+      <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+      <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
+      <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
+      <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="120" align="center" prop="brandName" label="品牌" />
+      <el-table-column width="220" align="center" prop="productName" label="SKU" />
+      <el-table-column width="240" align="center" prop="distributorName" label="经销商" />
+      <el-table-column width="120" align="center" prop="regionName" label="区域" />
+      <el-table-column width="220" align="center" prop="planSales" label="V1计划销量（CTN）" />
+      <el-table-column width="220" align="center" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
+      <el-table-column width="220" align="center" prop="planCost" label="V1计划费用（RMB）" />
+      <el-table-column width="220" align="center" prop="forecastSales" label="V2预测销量（CTN）" />
+      <el-table-column width="220" align="center" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
+      <el-table-column width="220" align="center" prop="adjustedCost" label="V2调整后费用（RMB）" />
+      <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
+      <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）" />
+      <el-table-column width="120" align="center" prop="costDifference" label="费用差值" />
+      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+            <div slot="content" v-html="getTip(row)">
+            </div>
+            <div class="statusWrap">
+              <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
+              <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
+              <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
+              <span class="judgmentText">{{row.judgmentType}}</span>
+            </div>
+          </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="total" label="价格档位销量总计（CTN）">
-        <template slot-scope="scope">
-          <div class="priceLevelWrap">
-            <div class="TotalNum">{{scope.row.total.toFixed(1)}}</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="经销商"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="区域"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="系统拆分销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="调整后销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="销量差值（%）"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制名称"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动开始时间"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动结束时间"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="系统判定"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="申请人备注"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="Package Owner审批意见"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="Finance审批意见"> </el-table-column>
+      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -117,40 +120,7 @@ export default {
       tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          id: '12987123',
-          name: '王小虎',
-          number: 200,
-          channel: 'NKA',
-          amount3: 12,
-          total: 20.0,
-        },
-        {
-          id: '12987124',
-          name: '王小虎',
-          number: 180,
-          channel: 'NKA',
-          amount3: 9,
-          total: 21.0,
-        },
-        {
-          id: '12987125',
-          name: '王小虎',
-          number: 160,
-          channel: 'NKA',
-          amount3: 17,
-          total: 68.5,
-        },
-        {
-          id: '12987126',
-          name: '王小虎',
-          number: '539',
-          channel: 'NKA',
-          amount3: 15,
-          total: 47.0,
-        },
-      ],
+      tableData: [],
       dialogVisible: false,
     }
   },

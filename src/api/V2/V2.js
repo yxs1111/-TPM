@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-08 21:47:41
+ * @LastEditTime: 2021-12-11 14:52:19
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -10,6 +10,7 @@ export default {
   //url: '/cityplan/investCpVTwoDetail',
   url: '/cityplan/investCpVTwoDetail',
   ImportUrl: '/cityplan/investCpVTwoEb',
+  NUUrl: '/cityplan/investCpNuVTwoDetail',
   getPage(params) {
     return requestApi.request_post(this.url+'/getPage', params)
   },
@@ -56,7 +57,10 @@ export default {
       data:params,
       responseType:'blob'
     })
-    return requestApi.request_get(this.ImportUrl+'/downExcel', params)
+  },
+  //NU
+  getPageNU(params) {
+    return requestApi.request_get(this.NUUrl+'/getPage', params)
   },
   
 }

@@ -3,11 +3,11 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
-        <div class="Selectli" @keyup.enter="search">
+        <!-- <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker disabled v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
-        </div>
+        </div> -->
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
@@ -62,13 +62,6 @@
       </div>
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" fixed type="index" label="序号" width="80">
-        <template slot-scope="scope">
-          <div>
-            {{ (pageNum - 1) * pageSize + 1 + scope.$index }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />

@@ -82,7 +82,7 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getTableData()
+    // this.getTableData()
     this.getChannel()
     this.getCustomerList()
   },
