@@ -113,7 +113,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-import commonAPI from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'saleComputeKeep',
   directives: { elDragDialog, permission },
@@ -165,8 +165,8 @@ export default {
         .catch(() => {})
     },
     getChannelList() {
-      commonAPI.getPageMdChannel().then((res) => {
-        this.ChannelList = res.data.records
+      selectAPI.queryChannelSelect().then((res) => {
+        this.ChannelList = res.data
       })
     },
     search() {

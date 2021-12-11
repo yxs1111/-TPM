@@ -244,6 +244,7 @@ export default {
         distributorCode: '',
         productCode: '',
       },
+      RegionList:[],
       tableLoading: '',
       categoryArr: [],
       permissions: getDefaultPermissions(),

@@ -1,7 +1,7 @@
-priceLevelKeep<!--
+<!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-03 17:08:02
+ * @LastEditTime: 2021-12-11 22:09:04
 -->
 <template>
   <div class="app-container">
@@ -220,7 +220,6 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V0/V0.js'
-import commonAPI from '@/api/masterData/masterData.js'
 
 export default {
   name: 'V0Approval',
@@ -296,8 +295,8 @@ export default {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
     getChannelList() {
-      commonAPI.getPageMdChannel().then((res) => {
-        this.ChannelList = res.data.records
+      selectAPI.queryChannelSelect().then((res) => {
+        this.ChannelList = res.data
       })
     },
     getQuerySkuSelect() {

@@ -234,7 +234,6 @@ export default {
         regionCode: '',
         dim_product: ''
       },
-      categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       skuOptons: [],
@@ -244,6 +243,7 @@ export default {
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
+      RegionList:[],
       uploadFileName: '',
       event: '',
       uploadFile: '',

@@ -17,7 +17,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -109,6 +109,7 @@ export default {
       uploadFile: '',
       message:'', 
       warningList: [],
+      ChannelList: [],
       warningShow: false,
     }
   },
@@ -116,6 +117,7 @@ export default {
   mounted() {
     this.getTableData()
     this.getCustomerList()
+     this.getChannelList()
   },
   methods: {
     // 获取表格数据
@@ -133,6 +135,11 @@ export default {
           this.total = response.data.total
         })
         .catch(() => {})
+    },
+    getChannelList() {
+      selectAPI.queryChannelSelect().then((res) => {
+        this.ChannelList = res.data
+      })
     },
     // 客户
     getCustomerList() {

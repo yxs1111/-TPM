@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-10 10:49:49
+ * @LastEditTime: 2021-12-11 22:08:35
 -->
 <template>
   <div class="app-container">
@@ -36,12 +36,16 @@
             <img src="@/assets/images/huoqu.png" alt="" />
             <span class="text">获取CPT数据</span>
           </div>
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+          <!-- 提交 有数据  正常 暗 -->
+          
+          <!-- 没有提交 有数据  正常点击 -->
+          <!-- 没有提交 无数据  正常 暗 -->
+          <div class="TpmButtonBG" :class="!isSubmit&&isNoData?'':'noClick'" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
 
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve">
+          <div class="TpmButtonBG" :class="!isSubmit&&isNoData?'':'noClick'" @click="approve">
             <svg-icon icon-class="passLocal" style="font-size: 22px;" />
             <span class="text">提交</span>
           </div>
@@ -238,7 +242,6 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import API from '@/api/V0/V0.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import commonAPI from '@/api/masterData/masterData.js'
 export default {
   data() {
     return {
@@ -328,6 +331,7 @@ export default {
           this.ContentData = response.data
           if (Object.keys(this.ContentData).length == 0) {
             this.isNoData = true
+            // this.isSubmit=1
           } else {
             this.isNoData = false
           }
@@ -351,8 +355,8 @@ export default {
       })
     },
     getChannelList() {
-      commonAPI.getPageMdChannel().then((res) => {
-        this.ChannelList = res.data.records
+      selectAPI.queryChannelSelect().then((res) => {
+        this.ChannelList = res.data
       })
     },
     getTip(row) {
