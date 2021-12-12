@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -227,6 +227,7 @@ export default {
       channelOptons: [],
       customerArr: [],
       distributorArr: [],
+      RegionList:[],
       dialogVisible: false,
       // 导入
       importVisible: false, // 导入弹窗
@@ -243,15 +244,17 @@ export default {
   },
   computed: {},
   mounted() {
-     this.getMonth()
+    this.getMonth()
     // this.getTableData()
     this.getQuerySkuSelect()
     this.getQueryChannelSelect()
     this.getDistributorList()
     this.getCustomerList()
+    this.getRegionList()
   },
   watch: {
     'filterObj.channelCode'() {
+      this.filterObj.customerCode=''
       this.getCustomerList()
     },
   },
@@ -331,6 +334,13 @@ export default {
           this.skuOptons = res.data
         })
         .catch()
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     search() {
       this.pageNum = 1

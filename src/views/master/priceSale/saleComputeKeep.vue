@@ -101,7 +101,7 @@
         <el-button type="primary" @click="confirmImport()">确 定</el-button>
         <el-button @click="closeImport">取 消</el-button>
       </span>
-      <div v-if="warningShow">
+      <div v-if="warningShow" style="height: 300px;overflow: scroll;overflow-x: hidden;margin-top:15px;">
         <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
       </div>
     </el-dialog>
@@ -170,7 +170,7 @@ export default {
       })
     },
     search() {
-      this.pageNum=1
+      this.pageNum = 1
       this.getTableData()
     },
     //导入数据
@@ -187,14 +187,13 @@ export default {
           this.closeImport()
           this.getTableData()
         } else {
-          if (response.data === null) {
-            this.$message.error(response.data)
-          } else if (typeof response.data == Object) {
+          if (typeof response.data === 'string') {
+            this.$message.warning(response.data)
+          } else if (response.data.length > 0) {
             this.warningShow = true
             this.warningList = response.data
-          } else if (typeof response.data == String) {
-            this.warningShow = false
-            this.warningList.push(response.data)
+          } else if (typeof response.data === 'object') {
+            this.$message.error(response.data)
           }
         }
       })

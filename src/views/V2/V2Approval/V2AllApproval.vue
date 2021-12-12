@@ -5,31 +5,32 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户</span>
-          <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择">
-          </el-date-picker>
+          <span class="SelectliTitle">客户:</span>
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.dim_product" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
 
@@ -53,7 +54,7 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData"  border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
@@ -104,6 +105,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'V2AllApproval',
@@ -117,35 +119,110 @@ export default {
         sku: '',
         month: '',
       },
-      tableLoading: '',
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      skuOptons: [],
+      channelOptons: [],
+      customerArr: [],
+      distributorArr: [],
+      RegionList: [],
       dialogVisible: false,
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
-    //this.getTableData()
+    // this.getMonth()
+    // this.getTableData()
+    this.getQuerySkuSelect()
+    this.getQueryChannelSelect()
+    this.getDistributorList()
+    this.getCustomerList()
+    this.getRegionList()
   },
   computed: {},
   methods: {
-    //获取表格数据
+    // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       this.tableData = []
-      API.getPageMdBrand({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
+      API.getPage({
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelCode: this.filterObj.channelCode,
+        customerCode: this.filterObj.customerCode,
+        distributorCode: this.filterObj.distributorCode,
+        regionCode: this.filterObj.regionCode,
+        dimProduct: this.filterObj.dim_product
       })
         .then((response) => {
-          this.tableLoading = false
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
+          if (response.code == 1000) {
+            this.tableData = response.data.records
+            if (this.tableData.length) {
+              this.isSubmit = this.tableData[0].isSubmit
+            } else {
+              this.isSubmit = 0
+            }
+
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          }
         })
         .catch((error) => {})
+    },
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
+    },
+    // 查询列表 --获取活动年月
+    getMonth() {
+      selectAPI.getMonth({ version: 'V2' }).then((res) => {
+        this.filterObj.yearAndMonth = res.data
+        this.getTableData()
+      })
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
+    },
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code == 1000) {
+          this.channelOptons = res.data
+        }
+      })
+    },
+    // 经销商
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+    },
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptons = res.data
+      })
     },
     search() {
       console.log('hh')
@@ -205,5 +282,17 @@ export default {
       color: #ff8912;
     }
   }
+}
+</style>
+<style>
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
 }
 </style>

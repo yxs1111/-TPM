@@ -28,7 +28,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -234,6 +234,7 @@ export default {
       channelOptons: [],
       customerArr: [],
       distributorArr: [],
+      RegionList: [],
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
@@ -250,16 +251,18 @@ export default {
   computed: {},
   watch: {
     'filterObj.channelCode'() {
+      this.filterObj.customerCode=''
       this.getCustomerList()
     }
   },
   mounted() {
-    // this.getMonth()
+    this.getMonth()
     // this.getTableData()
     this.getQuerySkuSelect()
     this.getQueryChannelSelect()
     this.getDistributorList()
     this.getCustomerList()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -299,6 +302,13 @@ export default {
       selectAPI.getMonth({ version: 'V2' }).then((res) => {
         this.filterObj.yearAndMonth = res.data
         this.getTableData()
+      })
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
       })
     },
     // 获取下拉框 渠道

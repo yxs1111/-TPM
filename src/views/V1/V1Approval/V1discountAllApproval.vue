@@ -52,7 +52,7 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData"  border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="number" label="CPID" fixed> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="活动月"> </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
@@ -115,7 +115,6 @@ export default {
         sku: '',
         month: '',
       },
-      tableLoading: '',
       categoryArr: [],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -171,9 +170,6 @@ export default {
     },
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
-      let that = this
-      setTimeout(function() { that.tableLoading = false }, 5000)
       this.tableData = []
       // this.tableLoading = true
       // this.tableData = []

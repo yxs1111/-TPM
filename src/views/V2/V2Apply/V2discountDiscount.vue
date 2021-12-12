@@ -70,6 +70,7 @@
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="250" align="center" prop="channelName" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" align="center" prop="productName" label="SKU" />
@@ -257,6 +258,7 @@ export default {
   computed: {},
   watch: {
     'filterObj.channelCode'() {
+      this.filterObj.channelCode=''
       this.getCustomerList()
     }
   },

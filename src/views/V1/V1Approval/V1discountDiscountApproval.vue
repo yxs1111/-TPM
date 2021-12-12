@@ -56,7 +56,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -221,7 +221,6 @@ export default {
         distributorCode: '',
         productCode: ''
       },
-      tableLoading: '',
       categoryArr: [],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -494,7 +493,6 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       this.tableData = []
       API.getApprovePageV1({
         pageNum: this.pageNum, // 当前页
@@ -506,7 +504,6 @@ export default {
         yearAndMonth: this.localDate
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
           this.infoByMainId()

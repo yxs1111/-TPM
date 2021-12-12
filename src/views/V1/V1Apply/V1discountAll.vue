@@ -25,7 +25,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -63,7 +63,7 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="number" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="name" label="活动月" />
       <el-table-column width="120" align="center" prop="name" label="费用类型" />
@@ -129,7 +129,6 @@ export default {
         distributorCode: '',
         productCode: '',
       },
-      tableLoading: '',
       categoryArr: [],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -198,11 +197,6 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
-      let that = this
-      setTimeout(function () {
-        that.tableLoading = false
-      }, 5000)
       this.tableData = []
       // API.getPageMdBrand({
       //   pageNum: this.pageNum, // 当前页

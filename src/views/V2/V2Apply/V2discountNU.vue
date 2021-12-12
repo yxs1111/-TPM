@@ -238,7 +238,7 @@ export default {
   },
   mounted() {
     this.getMonth()
-    this.getTableData()
+    // this.getTableData()
     this.getQuerySkuSelect()
     this.getQueryChannelSelect()
     this.getDistributorList()
