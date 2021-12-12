@@ -35,9 +35,10 @@ const initUserInfo = (data) => {
       auth.setRoles(roles)
       info.roles = roles
     }
+    // console.log('*****user****', usr.userProfile.email)
     auth.setLoginNameEmail(usr.user.loginName)
-    console.log('*******emailname*******', usr.user.loginName)
     auth.setLoginName(usr.username)
+    auth.setLoginNameCheck(usr.userProfile.email)
     auth.setName(usr.user.name)
     auth.setPhone(usr.user.phone)
     auth.setAvatar('https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
@@ -77,9 +78,10 @@ const actions = {
     const { username, password, code, key } = userInfo
     return new Promise((resolve, reject) => {
       user.login({ username: username, password: password, captcha: code, randomId: key }).then(response => {
-        localStorage.setItem('usernameLocal', username)
         const { data } = response
         initUserInfo(data)
+        // console.log('****authuser*****', auth.getLoginNameCheck())
+        localStorage.setItem('usernameLocal', auth.getLoginNameCheck())
         resetRouter()
         resolve()
         dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
@@ -97,8 +99,8 @@ const actions = {
       user.qrcodeEmail(localParams).then(response => {
         const { data } = response
         initUserInfo(data)
-        console.log('name', auth.getLoginNameEmail())
-        localStorage.setItem('usernameLocal', auth.getLoginNameEmail())
+        // console.log('name', auth.getLoginNameCheck())
+        localStorage.setItem('usernameLocal', auth.getLoginNameCheck())
         resetRouter()
         resolve()
         dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
