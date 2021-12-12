@@ -6,13 +6,13 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -23,14 +23,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="OpertionBar">
@@ -211,6 +211,7 @@ export default {
 
   data() {
     return {
+      RegionList:[],
       submitBtn: 0,
       total: 1,
       pageSize: 10,
@@ -219,6 +220,7 @@ export default {
         customerCode: '',
         channelCode: '',
         distributorCode: '',
+        regionName: '',
         productCode: ''
       },
       categoryArr: [],
@@ -248,9 +250,17 @@ export default {
     // this.getMP()
     // this.getCustomerList()
     this.getDistributorList()
+    this.getRegionList()
     this.usernameLocal = localStorage.getItem('usernameLocal')
   },
   methods: {
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
+    },
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainId({
@@ -499,10 +509,11 @@ export default {
       API.getApprovePageV1({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode,
+        channelName: this.filterObj.channelCode,
+        customerName: this.filterObj.customerCode,
+        distributorName: this.filterObj.distributorCode,
+        productName: this.filterObj.productCode,
+        regionName: this.filterObj.regionName,
         yearAndMonth: this.localDate
       })
         .then((response) => {

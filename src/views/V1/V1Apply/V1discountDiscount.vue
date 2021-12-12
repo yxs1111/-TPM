@@ -6,7 +6,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -24,14 +24,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
@@ -248,6 +248,7 @@ export default {
         channelCode: '',
         distributorCode: '',
         productCode: '',
+        regionName: ''
       },
       RegionList:[],
       categoryArr: [],
@@ -563,10 +564,11 @@ export default {
       API.getPageV1({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode,
+        channelName: this.filterObj.channelCode,
+        customerName: this.filterObj.customerCode,
+        distributorName: this.filterObj.distributorCode,
+        productName: this.filterObj.productCode,
+        regionName: this.filterObj.regionName,
         yearAndMonth: this.localDate,
       })
         .then((response) => {
