@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-11 22:09:04
+ * @LastEditTime: 2021-12-12 11:39:08
 -->
 <template>
   <div class="app-container">
@@ -256,10 +256,10 @@ export default {
   },
   directives: { elDragDialog, permission },
   mounted() {
-    this.getList()
+    // this.getList()
     this.getQuerySkuSelect()
     this.getChannelList()
-    // this.getMonth()
+    this.getMonth()
   },
   computed: {},
   methods: {

@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-11 16:36:42
+ * @LastEditTime: 2021-12-12 11:53:14
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -15,6 +15,7 @@ export default function() {
       component: Layout,
       code: 'price_nka_v3',
       name: 'V3',
+      alwaysShow: true,
       meta: { title: 'V3 - Actual 实际入账', icon: 'V3' },
       children: [
         {

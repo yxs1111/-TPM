@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-12-06 08:33:29
- * @LastEditTime: 2021-12-07 09:17:30
+ * @LastEditTime: 2021-12-12 13:36:23
 -->
 <template>
   <div class="app-container" @keyup.enter="search">
@@ -15,6 +15,12 @@
         <div class="Selectli">
           <span class="SelectliTitle">模型关键词:</span>
           <el-input v-model="queryParams.key" placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">分类:</span>
+          <el-select v-model="filterObj.type" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in []" :key="index" :label="item" :value="item" />
+          </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>

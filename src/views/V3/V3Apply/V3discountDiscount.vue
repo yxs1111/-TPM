@@ -335,11 +335,13 @@ export default {
       distributorArr: [],
       dialogDataF: [],
       uploadFile: '',
+      localDate: '',
     }
   },
   computed: {},
   mounted() {
-    this.getTableData()
+    this.getEffectiveDate()
+    // this.getTableData()
     this.getChannel()
     this.getSKU()
     this.getMP()
@@ -347,6 +349,17 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    // 获取年月
+    getEffectiveDate() {
+      selectAPI.getMonth({ version: 'V3' }).then((res) => {
+        if (res.code === 1000) {
+          this.localDate = res.data
+          this.getTableData()
+        } else {
+          this.$message.warning('未查询到年月信息！')
+        }
+      })
+    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then(res => {
@@ -664,7 +677,8 @@ export default {
         channelCode: this.filterObj.channelCode,
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode
+        productCode: this.filterObj.productCode,
+         yearAndMonth: this.localDate,
       })
         .then((response) => {
           this.tableLoading = false

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-10 09:09:14
+ * @LastEditTime: 2021-12-12 13:48:49
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import API from '@/api/taskManage/MyTodo.js'
+import API from '@/api/taskManage/taskManage.js'
 import { getDefaultPermissions, getTextMap, parseTime } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'

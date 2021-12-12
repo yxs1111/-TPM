@@ -10,9 +10,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">sku:</span>
-          <el-select v-model="filterObj.sku" filterable clearable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
-          </el-select>
+          <el-input v-model="filterObj.sku" placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
@@ -59,6 +57,13 @@
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
+        <div class="fileTitle">模板</div>
+        <div class="my-search selectFile" @click="exportData">
+          <svg-icon icon-class="download_white" style="font-size: 16px;" />
+          <span class="text">下载模板</span>
+        </div>
+      </div>
+      <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <div class="my-search selectFile" @click="parsingExcelBtn">
           <img src="@/assets/images/selectFile.png" alt="" />
@@ -99,6 +104,8 @@ export default {
       filterObj: {
         customerCode: '',
         yearAndMonth: '',
+        sku: '',
+        channelCode: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -127,6 +134,8 @@ export default {
         pageSize: this.pageSize, // 每页条数
         customerCode: this.filterObj.customerCode,
         yearAndMonth: this.filterObj.yearAndMonth,
+        sku: this.filterObj.sku,
+        channelCode: this.filterObj.channelCode,
       })
         .then((response) => {
           this.tableData = response.data.records

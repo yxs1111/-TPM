@@ -232,12 +232,14 @@ export default {
       dialogData: [],
       uploadFileName: '',
       usernameLocal: '',
-      btnStatus: true
+      btnStatus: true,
+      localDate: '',
     }
   },
   computed: {},
   mounted() {
-    this.getTableData()
+    this.getEffectiveDate()
+    // this.getTableData()
     this.getChannel()
     this.getSKU()
     this.getMP()
@@ -246,6 +248,17 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    // 获取年月
+    getEffectiveDate() {
+      selectAPI.getMonth({ version: 'V3' }).then((res) => {
+        if (res.code === 1000) {
+          this.localDate = res.data
+          this.getTableData()
+        } else {
+          this.$message.warning('未查询到年月信息！')
+        }
+      })
+    },
     // 下载文件
     downloadFile(res, fileName) {
       const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
@@ -486,7 +499,8 @@ export default {
         channelCode: this.filterObj.channelCode,
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode
+        productCode: this.filterObj.productCode,
+         yearAndMonth: this.localDate,
       })
         .then((response) => {
           this.tableLoading = false
@@ -500,8 +514,7 @@ export default {
         .catch((error) => {})
     },
     search() {
-      console.log('hh')
-      // this.getTableData()
+       this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

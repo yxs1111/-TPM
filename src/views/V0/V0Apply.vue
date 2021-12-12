@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-11 22:08:35
+ * @LastEditTime: 2021-12-12 11:38:40
 -->
 <template>
   <div class="app-container">
@@ -247,7 +247,7 @@ export default {
     return {
       permissions: getDefaultPermissions(),
       filterObj: {
-        month: '202101',
+        month: '',
         SKU: '',
         channelCode: '',
       },
@@ -307,8 +307,8 @@ export default {
   },
   directives: { elDragDialog, permission },
   mounted() {
-    // this.getMonth()
-    this.getList()
+    this.getMonth()
+    // this.getList()
     this.getQuerySkuSelect()
     this.getChannelList()
   },

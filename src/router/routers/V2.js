@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-11 16:36:15
+ * @LastEditTime: 2021-12-12 11:53:09
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -15,6 +15,7 @@ export default function() {
       component: Layout,
       code: 'price_nka_v2',
       name: 'V2',
+      alwaysShow: true,
       meta: { title: 'V2 - Accrual 预提调整', icon: 'V2' },
       children: [
         {

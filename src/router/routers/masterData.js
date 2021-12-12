@@ -10,6 +10,7 @@ export default function() {
       code: 'mdm',
       name: 'master',
       meta: { title: '主数据管理', icon: 'mainData' },
+      alwaysShow: true,
       children: [
         {
           path: '/NKAEC',
@@ -58,6 +59,7 @@ export default function() {
           path: '/organization',
           name: 'organization',
           code: 'mdm_organization',
+          alwaysShow: true,
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '组织架构', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
@@ -131,6 +133,7 @@ export default function() {
         {
           path: '/itemInfo',
           name: 'itemInfo',
+          alwaysShow: true,
           code: 'mdm_product_information',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '产品信息', icon: 'apply' },
@@ -156,6 +159,7 @@ export default function() {
         {
           path: '/priceSale',
           name: 'priceSale',
+          alwaysShow: true,
           code: 'mdm_Prices_and_promotions',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '价格和促销', icon: 'approve' },
@@ -247,6 +251,7 @@ export default function() {
         {
           path: '/financeInfo/priceSale',
           name: 'financeInfo',
+          alwaysShow: true,
           code: 'mdm_Financial_Information',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '财务信息', icon: 'approve' },
@@ -267,6 +272,7 @@ export default function() {
         {
           path: '/ruleCtrl',
           name: 'ruleCtrl',
+          alwaysShow: true,
           code: 'mdm_Rule_control',
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '规则控制', icon: 'apply' },

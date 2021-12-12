@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-11 13:41:33
+ * @LastEditTime: 2021-12-12 13:48:44
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -45,14 +45,16 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
       <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
-      <el-table-column align="center" prop="versionName" label="版本名称"> </el-table-column>
+      <el-table-column width="240" v-slot={row} align="center" prop="versionName" label="版本名称">
+        {{versionNameList[row.version]}}
+      </el-table-column>
       <el-table-column align="center" prop="minePackageName" label="Mine Package"> </el-table-column>
-      <el-table-column align="center" prop="name" label="名称"> </el-table-column>
       <el-table-column align="center" prop="activityName" label="当前节点"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="提交人"> </el-table-column>
       <el-table-column align="center" prop="createTime" label="提交时间"> </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="备注"> </el-table-column>
+      <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
@@ -63,7 +65,7 @@
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
           <div class="operation">
-            <svg-icon icon-class="submit_l" class="submit_icon" @click="operateProcess(row)" />
+            <svg-icon icon-class="submit_l" class="submit_icon" @click="operateProcess(row.version,row.activityName)" />
             办理
           </div>
         </template>
@@ -82,7 +84,7 @@
 </template>
 
 <script>
-import API from '@/api/taskManage/MyTodo.js'
+import API from '@/api/taskManage/taskManage.js'
 import { getDefaultPermissions, getTextMap, parseTime } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -109,6 +111,12 @@ export default {
         businessId: null,
         processId: null,
       },
+      versionNameList:{
+        V0:'V0 - Pre city plan 预拆分',
+        V1:'V1 - City plan 详细拆分',
+        V2:'V2 - Accrual 预提调整',
+        V3:'V3 - Actual 实际入账',
+      }
     }
   },
   mounted() {
@@ -136,8 +144,48 @@ export default {
     search() {
       this.getTableData()
     },
-    operateProcess: function (currentRow) {
-      this.$router.push({ path: '/taskDetail', query: currentRow })
+    getVersionName(key) {
+      return this.versionNameList[key]
+    },
+    operateProcess(version,name) {
+
+      if(version=="V0") {
+        // console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V0/V0Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V0/V0Approval')
+        }
+      }
+      if(version=="V1") {
+        // console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V1/V1Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V1/V1Approval')
+        }
+      }
+      if(version=="V2") {
+        // console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V2/V2Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V2/V2Approval')
+        }
+      }
+      if(version=="V3") {
+        // console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V3/V3Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V3/V3Approval')
+        }
+      }
+      //this.$router.push({ path: '/process', query: currentRow })
     },
     //查看流程
     openFlowDiagram(row) {

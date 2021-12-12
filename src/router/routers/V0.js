@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-11 16:22:14
+ * @LastEditTime: 2021-12-12 11:52:53
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -14,6 +14,7 @@ export default function() {
       component: Layout,
       code: 'price_nka_v0',
       name: 'V0',
+      alwaysShow: true,
       meta: { title: 'V0 - Pre city plan 预拆分', icon: 'V0' },
       children: [
         {

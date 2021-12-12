@@ -86,8 +86,12 @@
       </el-table-column>
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" align="center" prop="systemRecommendedVol" label="系统拆分销量（CTN）" />
-      <el-table-column width="220" align="center" prop="adjustedVol" label="调整后销量（CTN）" />
+      <el-table-column width="220" v-slot={row} align="center" prop="systemRecommendedVol" label="系统拆分销量（CTN）" >
+         {{(row.systemRecommendedVol*1).toFixed(2)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="center" prop="adjustedVol" label="调整后销量（CTN）" >
+        {{(row.adjustedVol*1).toFixed(2)}}
+      </el-table-column>
       <el-table-column width="220" align="center" prop="volDifference" label="销量差值（%）" />
       <el-table-column width="220" align="center" prop="adjustedAmount" label="调整后费用（RMB）" />
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
@@ -258,13 +262,13 @@ export default {
       customerArr: [],
       distributorArr: [],
       submitBtn: 1,
-      localDate: '202101',
+      localDate: '',
     }
   },
   computed: {},
   mounted() {
-    this.getTableData()
-    // this.getEffectiveDate()
+    // this.getTableData()
+    this.getEffectiveDate()
     this.getChannel()
     this.getSKU()
     this.getRegionList()
@@ -274,7 +278,7 @@ export default {
   methods: {
     // 获取年月
     getEffectiveDate() {
-      API.getEffectiveDate().then((res) => {
+      API.getEffectiveDate({ version: 'V1' }).then((res) => {
         if (res.code === 1000) {
           this.localDate = res.data
           this.getTableData()

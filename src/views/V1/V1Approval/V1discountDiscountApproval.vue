@@ -241,7 +241,8 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getTableData()
+    // this.getTableData()
+    this.getEffectiveDate()
     this.getChannel()
     this.getSKU()
     // this.getMP()
@@ -265,7 +266,7 @@ export default {
     },
     // 获取年月
     getEffectiveDate() {
-      API.getEffectiveDate().then(res => {
+      API.getEffectiveDate({ version: 'V1' }).then(res => {
         if (res.code === 1000) {
           this.localDate = res.data
           this.getTableData()

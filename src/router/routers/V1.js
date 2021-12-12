@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-11 16:34:55
+ * @LastEditTime: 2021-12-12 11:53:04
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -14,6 +14,7 @@ export default function() {
       component: Layout,
       code: 'price_nka_v1',
       name: 'V1',
+      alwaysShow: true,
       meta: { title: 'V1 - City plan 详细拆分', icon: 'V1' },
       children: [
         {
