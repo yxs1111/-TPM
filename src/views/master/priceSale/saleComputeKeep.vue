@@ -16,7 +16,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道</span>
           <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelEsName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -125,7 +125,6 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
-        customerCsName: '',
         channelCode: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
@@ -151,7 +150,6 @@ export default {
     getTableData() {
       API.getPageSaleComputeKeep({
         yearAndMonth: this.filterObj.yearAndMonth,
-        customerCsName: this.filterObj.customerCsName,
         channelCode: this.filterObj.channelCode,
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
@@ -220,9 +218,10 @@ export default {
     //导出数据
     exportData() {
       //导出数据筛选
-      // var data = {}
-      // data = { ...this.filterObj }
-      API.exportSaleComputeKeep().then((res) => {
+      API.exportSaleComputeKeep({
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelCode: this.filterObj.channelCode,
+      }).then((res) => {
         this.downloadFile(res, '价促计算维护' + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })

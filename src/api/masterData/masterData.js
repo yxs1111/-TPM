@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-12-09 16:49:30
+ * @LastEditTime: 2021-12-12 16:07:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -63,7 +63,7 @@ export default {
     return request({
       url: 'mdm/mdPriceGear/exportPriceGear',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },
@@ -72,7 +72,7 @@ export default {
     return request({
       url: 'mdm/mdPriceGear/exportTemplate',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },
@@ -85,7 +85,7 @@ export default {
     return request({
       url: 'mdm/mdPriceGear/exportPriceGearError',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },

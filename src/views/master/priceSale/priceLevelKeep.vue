@@ -69,7 +69,7 @@
     </div>
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="importDialog">
-        <div class="el-downloadFileBar">  
+        <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportTemplate">下载模板</el-button>
             <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
@@ -145,9 +145,9 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonth: '',
-        channelCode: '',
-        productCode: '',
+        yearAndMonth: null,
+        channelCode: null,
+        productCode: null,
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -177,8 +177,9 @@ export default {
       API.getPageMdPriceGear({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth, 
-        channelCode: this.filterObj.channelCode, 
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelCode: this.filterObj.channelCode,
+        productCode: this.filterObj.productCode,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -252,9 +253,11 @@ export default {
     // 导出数据
     exportData() {
       // 导出数据筛选
-      var data = {}
-      data = { ...this.filterObj }
-      API.exportPriceGear(data).then((res) => {
+      API.exportPriceGear({
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelCode: this.filterObj.channelCode,
+        productCode: this.filterObj.productCode,
+      }).then((res) => {
         this.downloadFile(res, '价格档位' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
