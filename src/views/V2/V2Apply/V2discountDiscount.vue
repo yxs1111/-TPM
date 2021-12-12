@@ -38,7 +38,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG"  @click="exportExcel">
+        <div class="TpmButtonBG" @click="exportExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
@@ -104,15 +104,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
@@ -145,22 +138,14 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table
-            border
-            height="400"
-            :data="ImportData"
-            style="width: 100%"
-            :header-cell-style="{
+          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
               textAlign: 'center',
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
-            }"
-            :row-class-name="tableRowClassName"
-            stripe
-          >
+            }" :row-class-name="tableRowClassName" stripe>
             <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
               <template slot-scope="scope">
                 <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -233,7 +218,7 @@ export default {
         customerCode: '',
         distributorCode: '',
         regionCode: '',
-        dim_product: ''
+        dim_product: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -244,7 +229,7 @@ export default {
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
-      RegionList:[],
+      RegionList: [],
       uploadFileName: '',
       event: '',
       uploadFile: '',
@@ -252,15 +237,15 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
-      saveBtn: false
+      saveBtn: false,
     }
   },
   computed: {},
   watch: {
     'filterObj.channelCode'() {
-      this.filterObj.channelCode=''
+      this.filterObj.channelCode = ''
       this.getCustomerList()
-    }
+    },
   },
   mounted() {
     this.getMonth()
@@ -283,7 +268,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        dimProduct: this.filterObj.dim_product
+        dimProduct: this.filterObj.dim_product,
       })
         .then((response) => {
           if (response.code == 1000) {
@@ -341,7 +326,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -388,15 +373,14 @@ export default {
       API.importExcel(formData).then((response) => {
         if (response.code == 1000) {
           this.ImportData = response.data
-          this.saveBtn =
-            response.data[0].judgmentType !== 'Error'
+          this.saveBtn = response.data[0].judgmentType !== 'Error'
         }
       })
     },
     // 确认导入
     confirmImport() {
       API.exceptionSave({
-        mainId: this.tableData[0].mainId
+        mainId: this.tableData[0].mainId,
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success('保存成功!')
@@ -408,7 +392,14 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exceptionDownExcel().then((res) => {
+        API.exceptionDownExcel({
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          dimProduct: this.filterObj.dim_product,
+        }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
@@ -427,7 +418,7 @@ export default {
           customerCode: this.filterObj.customerCode,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
-          dimProduct: this.filterObj.dim_product
+          dimProduct: this.filterObj.dim_product,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -464,13 +455,13 @@ export default {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning'
+            type: 'warning',
           })
             .then(() => {
               const mainId = this.tableData[0].mainId
               API.approve({
                 mainId: mainId, // 主表id
-                opinion: 'agree' // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')
@@ -481,7 +472,7 @@ export default {
             .catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消提交'
+                message: '已取消提交',
               })
             })
         } else {
@@ -511,8 +502,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 

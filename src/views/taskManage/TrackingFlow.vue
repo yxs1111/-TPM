@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-12 13:55:43
+ * @LastEditTime: 2021-12-12 15:40:55
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -47,8 +47,12 @@
         {{row.processStatus===2?'已完成':'进行中'}}
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="发起人"> </el-table-column>
-      <el-table-column align="center" prop="createDate" label="发起时间"> </el-table-column>
-      <el-table-column width="150" align="center" prop="createDate" label="查看">
+      <el-table-column align="center" prop="createDate" label="发起时间">
+        <template slot-scope="scope">
+          {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center"  label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程

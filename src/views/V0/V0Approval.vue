@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-12 11:39:08
+ * @LastEditTime: 2021-12-12 15:45:06
 -->
 <template>
   <div class="app-container">
@@ -369,7 +369,11 @@ export default {
     //导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exceptionDownExcel().then((res) => {
+        API.exceptionDownExcel({
+          yearAndMonth: this.filterObj.month,
+          dimProduct: this.filterObj.SKU,
+          channelCode: this.filterObj.channelCode,
+        }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')

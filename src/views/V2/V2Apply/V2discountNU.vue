@@ -370,7 +370,11 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exceptionDownExcel().then((res) => {
+        API.exceptionDownExcel({
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+        }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
@@ -387,9 +391,6 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
-          dimProduct: this.filterObj.dim_product
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名

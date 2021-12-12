@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-12 15:13:16
+ * @LastEditTime: 2021-12-12 15:38:40
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -36,7 +36,7 @@ export default function() {
             {
               hidden: true,
               path: '/taskManage/MyTodo/MyTodoAll',
-              code: 'MyTodoAll',
+              code: 'resource-task_wddb',
               name: 'MyTodoAll',
               component: () => import('@/views/taskManage/MyTodo/MyTodoAll.vue'),
               meta: { title: '汇总', icon: 'form' ,activeMenu: '/taskManage/MyTodo'},
@@ -44,7 +44,7 @@ export default function() {
             {
               hidden: true,
               path: '/taskManage/MyTodo/MyTodoDiscount',
-              code: 'MyTodoDiscount',
+              code: 'resource-task_wddb',
               name: 'MyTodoDiscount',
               component: () => import('@/views/taskManage/MyTodo/MyTodoDiscount.vue'),
               meta: { title: '折扣项', icon: 'form' ,activeMenu: '/taskManage/MyTodo'},

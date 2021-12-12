@@ -227,7 +227,7 @@ export default {
       channelOptons: [],
       customerArr: [],
       distributorArr: [],
-      RegionList:[],
+      RegionList: [],
       dialogVisible: false,
       // 导入
       importVisible: false, // 导入弹窗
@@ -254,7 +254,7 @@ export default {
   },
   watch: {
     'filterObj.channelCode'() {
-      this.filterObj.customerCode=''
+      this.filterObj.customerCode = ''
       this.getCustomerList()
     },
   },
@@ -396,7 +396,14 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exceptionDownExcel().then((res) => {
+        API.exceptionDownExcel({
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          dimProduct: this.filterObj.dim_product,
+        }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
