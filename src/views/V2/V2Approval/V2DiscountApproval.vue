@@ -48,15 +48,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(1)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(0)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -235,11 +235,13 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       event: '',
-      isSubmit: 0, // 提交状态  1：已提交，0：未提交
+      isSubmit: 1, // 提交状态  1：已提交，0：未提交
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
+      usernameLocal: '',
+      mainId: '',
     }
   },
   computed: {},
@@ -251,6 +253,8 @@ export default {
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
+    console.log(this.usernameLocal);
   },
   watch: {
     'filterObj.channelCode'() {
@@ -274,16 +278,31 @@ export default {
       })
         .then((response) => {
           this.tableData = response.data.records
-          if (this.tableData.length) {
-            this.isSubmit = this.tableData[0].isSubmit
-          } else {
-            this.isSubmit = 0
-          }
+          this.mainId=this.tableData[0].mainId
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          //获取提交权限
+          this.infoByMainId()
         })
         .catch((error) => {})
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      console.log(this.mainId);
+      selectAPI.infoByMainId({
+        mainId: this.mainId
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V2' && res.data.assignee === this.usernameLocal) {
+            //本人可以提交
+            this.isSubmit = false
+          } else {
+            //其他人禁用
+            this.isSubmit = true
+          }
+        }
+      }).catch()
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`

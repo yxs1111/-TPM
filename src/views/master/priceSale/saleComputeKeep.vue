@@ -16,7 +16,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道</span>
           <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelEsName" />
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -36,7 +36,7 @@
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
-      <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot={row} width="150" align="center" prop="grossProfitPoints" label="毛利点数">
         {{(row.grossProfitPoints*100).toFixed(2)}}%

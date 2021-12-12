@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-12 15:45:06
+ * @LastEditTime: 2021-12-12 17:36:47
 -->
 <template>
   <div class="app-container">
@@ -32,15 +32,15 @@
           </div>
         </div>
         <div class="OpertionBar">
-          <div class="TpmButtonBG" @click="importData">
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
-          <div class="TpmButtonBG" @click="approve(1)">
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
             <svg-icon icon-class="passApprove" style="font-size: 24px;" />
             <span class="text">通过</span>
           </div>
-          <div class="TpmButtonBG" @click="approve(0)">
+          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
             <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
             <span class="text">驳回</span>
           </div>
@@ -241,7 +241,7 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       event: '',
-      isSubmit: 0,
+      isSubmit: 1,
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -252,6 +252,7 @@ export default {
         'background:#F0F6FC',
       ], //价格档位背景色
       isNoData: false,
+      usernameLocal: '',
     }
   },
   directives: { elDragDialog, permission },
@@ -260,6 +261,7 @@ export default {
     this.getQuerySkuSelect()
     this.getChannelList()
     this.getMonth()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
   },
   computed: {},
   methods: {
@@ -278,7 +280,6 @@ export default {
           }
           for (const key in this.ContentData) {
             let list = this.ContentData[key]
-            this.isSubmit = this.ContentData[key][0].isSubmit
             this.mainId = this.ContentData[key][0].mainId
             for (let i = 0; i < list.length; i++) {
               list[i].customGearList = JSON.parse(list[i].customGear)
@@ -288,8 +289,25 @@ export default {
               })
             }
           }
+          this.infoByMainId()
         }
       })
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      selectAPI.infoByMainId({
+        mainId: this.mainId
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V0' && res.data.assignee === this.usernameLocal) {
+            //本人可以提交
+            this.isSubmit = false
+          } else {
+            //其他人禁用
+            this.isSubmit = true
+          }
+        }
+      }).catch()
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
