@@ -235,7 +235,8 @@ export default {
       distributorArr: [],
       localDate: '202101',
       saveBtn: false,
-      btnStatus: true
+      btnStatus: true,
+      usernameLocal: ''
     }
   },
   computed: {},
@@ -247,6 +248,7 @@ export default {
     // this.getMP()
     // this.getCustomerList()
     this.getDistributorList()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
   },
   methods: {
     // 通过与审批按钮控制
