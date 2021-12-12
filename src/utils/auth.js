@@ -18,6 +18,8 @@ const nameKey = encrypt('name')
 const loginNameKey = encrypt('loginName')
 // 登录名by email
 const loginNameEmailKey = encrypt('loginNameEmail')
+// 登录名 根据邮箱
+const loginNameCheckKey = encrypt('loginNameCheck')
 // 头像
 const avatarKey = encrypt('avatar')
 // 电话号码
@@ -95,6 +97,12 @@ export default {
   },
   setLoginName(loginName) {
     return set(loginNameKey, loginName)
+  },
+  getLoginNameCheck() {
+    return get(loginNameCheckKey)
+  },
+  setLoginNameCheck(loginNameCheck) {
+    return set(loginNameCheckKey, loginNameCheck)
   },
   getLoginNameEmail() {
     return get(loginNameEmailKey)

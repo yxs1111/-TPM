@@ -109,6 +109,7 @@
           <div v-else>{{ row.judgmentType }}</div>
         </template>
       </el-table-column>
+      <el-table-column width="400" align="center" prop="judgmentContent" label="审批判定内容" />
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -476,6 +477,7 @@ export default {
             })
               .then((res) => {
                 if (res.code === 1000) {
+                  this.getTableData()
                   this.$message({
                     type: 'success',
                     message: '提交成功!',
@@ -516,7 +518,7 @@ export default {
     },
     // 打开文件
     openFile(file) {
-      console.log(file)
+      // console.log(file)
       this.uploadFileName = file.name
       this.$refs.upload.clearFiles() // 去掉文件列表
     },
