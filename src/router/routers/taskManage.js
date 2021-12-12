@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-06 15:42:29
+ * @LastEditTime: 2021-12-12 15:13:16
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -13,20 +13,21 @@ export default function() {
     {
       path: '/taskManage',
       component: Layout,
-      code: 'taskManage',
+      code: 'resource-task',
+      alwaysShow: true,
       name: 'taskManage',
       meta: { title: '任务管理', icon: 'missionMana' },
       children: [
         {
           path: '/taskManage/TrackingFlow',
-          code: 'TrackingFlow',
+          code: 'resource-task_lcgz',
           name: 'TrackingFlow',
           component: () => import('@/views/taskManage/TrackingFlow.vue'),
           meta: { title: '流程跟踪', icon: 'approve' },
         },
         {
           path: '/taskManage/MyTodo',
-          code: 'MyTodo',
+          code: 'resource-task_wddb',
           name: 'MyTodo',
           component: () => import('@/views/taskManage/MyTodo.vue'),
           meta: { title: '我的待办', icon: 'apply' },
@@ -59,7 +60,7 @@ export default function() {
         },
         {
           path: '/taskManage/TaskList',
-          code: 'TaskList',
+          code: 'resource-task_rwlb',
           name: 'TaskList',
           component: () => import('@/views/taskManage/TaskList.vue'),
           meta: { title: '任务列表', icon: 'approve' },

@@ -42,7 +42,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -125,7 +125,6 @@
 
       <div class="tableWrap">
         <el-table
-          v-loading="dialogTableLoading"
           border
           height="400"
           :data="dialogData"
@@ -198,7 +197,6 @@ export default {
         customerCode: '',
         brandCode: ''
       },
-      tableLoading: '',
       categoryArr: [],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -211,7 +209,6 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       saveBtn: false,
-      dialogTableLoading: false,
       dialogData: [],
       btnStatus: true
     }
@@ -347,7 +344,6 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('mainId', this.mainIdLocal)
       formData.append('isApprove', true)
-      this.dialogTableLoading = true
       // 添加mainId
       API.importV3NU(formData)
         .then((response) => {
@@ -355,7 +351,6 @@ export default {
             this.event.srcElement.value = '' // 置空
             this.uploadFileName = ''
             this.uploadFile = ''
-            this.dialogTableLoading = false
             this.$message({
               type: 'success',
               message: '上传成功'
@@ -454,7 +449,6 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       this.tableData = []
       API.getPageV3NU({
         pageNum: this.pageNum, // 当前页
@@ -463,7 +457,6 @@ export default {
         customerCode: this.filterObj.customerCode,
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
           this.pageNum = response.data.pageNum

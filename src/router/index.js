@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-12-11 20:34:09
+ * @LastEditTime: 2021-12-12 15:15:24
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -54,11 +54,11 @@ export const constantRoutes = [
   // ...V1(),
   // ...V2(),
   // ...V3(),
-  ...Report(),
-  ...taskManage(),
+  // ...Report(),
+  // ...taskManage(),
   // ...masterData(),
-  ...system(),
-  ...activiti(),
+  // ...system(),
+  // ...activiti(),
   
 ]
 
@@ -73,6 +73,10 @@ export const asyncRoutes = [
   ...V2(),
   ...V3(),
   ...masterData(),
+  ...Report(),
+  ...taskManage(),
+  ...system(),
+  ...activiti(),
   // ...meta,
   ...base,
   // 404 page must be placed at the end !!!

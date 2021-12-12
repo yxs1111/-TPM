@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-02 13:27:44
- * @LastEditTime: 2021-12-11 18:15:40
+ * @LastEditTime: 2021-12-12 15:22:50
  */
 import { asyncRoutes, constantRoutes } from '@/router'
 import  common  from "@/router/routers/common.js";
@@ -62,19 +62,19 @@ const mutations = {
   
     
     state.addRoutes = routes
-    routes.unshift({
-      path: '/',
-      component: Layout,
-      redirect: '/dashboard',
-      children: [{
-        path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/common/dashboard/index'),
-        meta: { title: '首页', icon: 'dashboard' }
-      }]
-    },)
-    // state.routes = constantRoutes.concat(routes)
-    state.routes = routes.concat(constantRoutes)
+    // routes.unshift({
+    //   path: '/',
+    //   component: Layout,
+    //   redirect: '/dashboard',
+    //   children: [{
+    //     path: 'dashboard',
+    //     name: 'Dashboard',
+    //     component: () => import('@/views/common/dashboard/index'),
+    //     meta: { title: '首页', icon: 'dashboard' }
+    //   }]
+    // },)
+    state.routes = constantRoutes.concat(routes)
+    // state.routes = routes.concat(constantRoutes)
   }
 }
 

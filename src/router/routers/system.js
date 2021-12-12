@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-07 11:58:37
+ * @LastEditTime: 2021-12-12 15:14:27
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -13,7 +13,8 @@ export default function() {
       path: '/os',
       component: Layout,
       redirect: '/os/os',
-      code: 'osPage',
+      code: 'authPage',
+      alwaysShow: true,
       name: 'OsPage',
       meta: { title: '系统管理', icon: 'sysManage' },
       children: [
@@ -26,7 +27,7 @@ export default function() {
         // },
         {
           path: 'user',
-          code: 'user',
+          code: 'authPage_user',
           name: 'UserInfo',
           component: () => import('@/views/system/user/index.vue'),
           meta: { title: '用户管理', icon: 'user' }
@@ -54,14 +55,14 @@ export default function() {
         },
         {
           path: 'InterfaceManage',
-          code: 'InterfaceManage',
+          code: 'authPage_interface',
           name: 'InterfaceManage',
           component: () => import('@/views/system/InterfaceManage.vue'),
           meta: { title: '接口管理', icon: 'tree' }
         },
         {
           path: 'MessageManage',
-          code: 'MessageManage',
+          code: 'authPage_message',
           name: 'MessageManage',
           component: () => import('@/views/system/MessageManage.vue'),
           meta: { title: '通知管理', icon: 'tree' }

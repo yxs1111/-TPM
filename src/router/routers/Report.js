@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2021-11-17 14:49:30
+ * @LastEditTime: 2021-12-12 15:20:48
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -12,13 +12,14 @@ export default function() {
     {
       path: '/Report',
       component: Layout,
-      code: 'Report',
+      code: 'resource-report',
       name: 'Report',
+      alwaysShow: true,
       meta: { title: '报表', icon: 'report' },
       children: [
         {
           path: '/AbnormalAnalysisMonth',
-          code: 'AbnormalAnalysisMonth',
+          code: 'resource-report-ycfxbg-dy',
           name: 'AbnormalAnalysisMonth',
           component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonth.vue'),
           meta: { title: '异常分析报告-当月', icon: 'apply' },
@@ -26,28 +27,28 @@ export default function() {
           children: [
             {
               path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
-              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
+              code: 'resource-report-ycfxbg-dy',
               name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
               component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel.vue'),
               meta: { title: 'by Channel', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
-              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
+              code: 'resource-report-ycfxbg-dy',
               name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
               component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA.vue'),
               meta: { title: 'by kA', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist',
-              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist',
+              code: 'resource-report-ycfxbg-dy',
               name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthAbnormalAnalysisMonthTop10Dist',
               component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist.vue'),
               meta: { title: 'Top 10 Dist', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
-              code: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
+              code: 'resource-report-ycfxbg-dy',
               name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
               component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone.vue'),
               meta: { title: 'by Zone', icon: 'approve' }
@@ -56,7 +57,7 @@ export default function() {
         },
         {
           path: '/AbnormalAnalysisHistory',
-          code: 'AbnormalAnalysisHistory',
+          code: 'resource-report_ycfxbg-ls',
           name: 'AbnormalAnalysisHistory',
           component: () => import('@/views/Report/AbnormalAnalysisHistory/AbnormalAnalysisHistory.vue'),
           redirect: '/AbnormalAnalysisHistory/AbnormalAnalysisHistoryByChannel',
@@ -64,28 +65,28 @@ export default function() {
           children: [
             {
               path: '/AbnormalAnalysisHistory/AbnormalAnalysisHistoryByChannel',
-              code: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryByChannel',
+              code: 'resource-report_ycfxbg-ls',
               name: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryByChannel',
               component: () => import('@/views/Report/AbnormalAnalysisHistory/AbnormalAnalysisHistoryByChannel.vue'),
               meta: { title: 'by Channel', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisHistory/AbnormalAnalysisHistoryBykA',
-              code: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryBykA',
+              code: 'resource-report_ycfxbg-ls',
               name: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryBykA',
               component: () => import('@/views/Report/AbnormalAnalysisHistory/AbnormalAnalysisHistoryBykA.vue'),
               meta: { title: 'by kA', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisHistory/AbnormalAnalysisHistoryTop10Dist',
-              code: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryTop10Dist',
+              code: 'resource-report_ycfxbg-ls',
               name: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryAbnormalAnalysisHistoryTop10Dist',
               component: () => import('@/views/Report/AbnormalAnalysisHistory/AbnormalAnalysisHistoryTop10Dist.vue'),
               meta: { title: 'Top 10 Dist', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisHistory/AbnormalAnalysisHistoryByZone',
-              code: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryByZone',
+              code: 'resource-report_ycfxbg-ls',
               name: 'AbnormalAnalysisHistory/AbnormalAnalysisHistoryByZone',
               component: () => import('@/views/Report/AbnormalAnalysisHistory/AbnormalAnalysisHistoryByZone.vue'),
               meta: { title: 'by Zone', icon: 'approve' }
