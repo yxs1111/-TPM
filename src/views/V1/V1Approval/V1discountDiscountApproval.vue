@@ -455,6 +455,7 @@ export default {
           mainId: this.mainIdLocal,
           opinion: 'agree'
         }).then(res => {
+          this.getTableData()
           if (res.code === 1000) {
             this.$message({
               type: 'success',
@@ -485,6 +486,7 @@ export default {
           opinion: 'reject'
         }).then(res => {
           if (res.code === 1000) {
+            this.getTableData()
             this.$message({
               type: 'success',
               message: '审批成功!'

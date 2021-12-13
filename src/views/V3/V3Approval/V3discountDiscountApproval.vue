@@ -230,12 +230,12 @@ export default {
       uploadFileName: '',
       usernameLocal: '',
       btnStatus: true,
-      localDate: '',
+      localDate: '202101',
     }
   },
   computed: {},
   mounted() {
-    this.getEffectiveDate()
+    // this.getEffectiveDate()
     // this.getTableData()
     this.getChannel()
     this.getSKU()
@@ -465,6 +465,7 @@ export default {
           state: statusLocal,
           opinion: ''
         }).then(res => {
+          this.getTableData()
           if (res.code === 1000) {
             this.$message({
               type: 'success',
@@ -494,7 +495,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         productCode: this.filterObj.productCode,
-         yearAndMonth: this.localDate,
+        yearAndMonth: this.localDate,
       })
         .then((response) => {
           this.tableData = response.data.records
