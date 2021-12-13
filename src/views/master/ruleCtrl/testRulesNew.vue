@@ -226,7 +226,11 @@ export default {
     },
     // 导出excel
     exportExcelInfo() {
-      API.excportRuleSave().then(
+      API.excportRuleSave({
+        channelCode: this.filterObj.channel,
+        minePackage: 'N',
+        yearAndMonth: this.filterObj.date
+      }).then(
         response => {
           const fileName = '检验数据Excel' + new Date().getTime() + '.xls'
           //   res.data:请求到的二进制数据

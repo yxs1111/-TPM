@@ -235,7 +235,7 @@ export default {
     exportExcelInfo() {
       API.excportRuleSave({
         channelCode: this.filterObj.channel,
-        // minePackage: this.filterObj.minePackage,
+        minePackage: 'L',
         yearAndMonth: this.filterObj.date
       }).then(
         response => {
