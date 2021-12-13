@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-12 13:48:44
+ * @LastEditTime: 2021-12-12 20:58:29
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -64,8 +64,8 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
-          <div class="operation">
-            <svg-icon icon-class="submit_l" class="submit_icon" @click="operateProcess(row.version,row.activityName)" />
+          <div class="operation" @click="operateProcess(row.version,row.activityName)">
+            <svg-icon icon-class="submit_l" class="submit_icon"  />
             办理
           </div>
         </template>
@@ -150,7 +150,7 @@ export default {
     operateProcess(version,name) {
 
       if(version=="V0") {
-        // console.log(version,name);
+        console.log(version,name);
         if(name.indexOf('调整')!=-1){
           console.log(name);
           this.$router.push('/V0/V0Apply')
