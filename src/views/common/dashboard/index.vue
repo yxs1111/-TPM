@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-10 19:10:48
+ * @LastEditTime: 2021-12-13 11:31:47
 -->
 <template>
   <div class="dashboard-container">
@@ -407,7 +407,7 @@ export default {
 .dashboard-container {
   font-size: 16px;
   width: 100%;
-  height: 100%;
+  // height: 100%;
   padding: 10px;
   box-sizing: border-box;
   .chartWrap {

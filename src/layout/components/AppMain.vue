@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-11-16 09:52:15
+ * @LastEditTime: 2021-12-13 11:34:43
 -->
 <template>
   <section class="app-main">
@@ -37,7 +37,7 @@ export default {
     overflow: auto;
     padding: 21px 20px;
     box-sizing: border-box;
-    padding-bottom: 150px;
+    padding-bottom: 50px;
     background-color: #EFF3FA;
   }
 
