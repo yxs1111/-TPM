@@ -10,12 +10,12 @@
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <!-- <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in minePackage" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
-        </div>
+        </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker
@@ -75,7 +75,7 @@
       <el-table-column width="150" align="left" prop="yearAndMonth" label="年月" />
     </el-table>
     <!-- 分页 -->
-    <div class="TpmPaginationWrap">
+    <!-- <div class="TpmPaginationWrap">
       <el-pagination
         :current-page="pageNum"
         :page-sizes="[5, 10, 50, 100]"
@@ -85,7 +85,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-    </div>
+    </div> -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
       <div class="el-dialogContent">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
@@ -145,7 +145,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        minePackage: '',
+        // minePackage: '',
         channel: '',
         date: ''
       },
@@ -201,7 +201,7 @@ export default {
   computed: {},
   mounted() {
     this.getChannel()
-    this.getCostTypeList()
+    // this.getCostTypeList()
     this.getTableData()
     // 获取下拉框
   },
@@ -235,7 +235,7 @@ export default {
     exportExcelInfo() {
       API.excportRuleSave({
         channelCode: this.filterObj.channel,
-        minePackage: this.filterObj.minePackage,
+        // minePackage: this.filterObj.minePackage,
         yearAndMonth: this.filterObj.date
       }).then(
         response => {
@@ -374,12 +374,12 @@ export default {
       this.tableLoading = true
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: this.filterObj.minePackage,
-        yearAndMonth: this.filterObj.date,
+        minePackage: 'L',
+        yearAndMonth: this.filterObj.date
       })
         .then((response) => {
           this.tableLoading = false
-          this.tableData = response.data.records
+          this.tableData = response.data
           this.total = response.data.total
           // 验证内容字段修改
           for (let i = 0; i < this.tableData.length; i++) {

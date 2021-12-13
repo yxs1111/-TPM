@@ -10,12 +10,12 @@
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <!-- <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in minePackage" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
-        </div>
+        </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker
@@ -39,8 +39,8 @@
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="objectSpanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="220" align="center" prop="version" label="版本" />
-      <el-table-column width="350" align="left" prop="ruleContentFront" label="验证规则" />
-      <el-table-column width="250" align="left" prop="ruleUnit" label="" />
+      <el-table-column width="460" align="left" prop="ruleContentFront" label="验证规则" />
+      <el-table-column width="100" align="left" prop="ruleUnit" label="" />
       <el-table-column width="370" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="{row}">
           <div v-if="row.ruleUnit === '∈'">
@@ -70,9 +70,12 @@
           </el-select>
         </template>
       </el-table-column> -->
+      <el-table-column width="" align="left" prop="channelEsName" label="渠道" />
+      <!-- <el-table-column width="180" align="left" prop="costType" label="Mine Package" /> -->
+      <el-table-column width="150" align="left" prop="yearAndMonth" label="年月" />
     </el-table>
     <!-- 分页 -->
-    <div class="TpmPaginationWrap">
+    <!-- <div class="TpmPaginationWrap">
       <el-pagination
         :current-page="pageNum"
         :page-sizes="[5, 10, 50, 100]"
@@ -82,7 +85,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-    </div>
+    </div> -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
       <div class="el-dialogContent">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
@@ -128,7 +131,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-import type from '@/views/meta/dict/type'
+// import type from '@/views/meta/dict/type'
 export default {
   name: 'TestRulesNew',
   directives: { elDragDialog, permission },
@@ -361,10 +364,8 @@ export default {
       this.tableLoading = true
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: this.filterObj.minePackage,
-        yearAndMonth: this.filterObj.date,
-        pageNum: this.pageNum,
-        pageSize: this.pageSize
+        minePackage: 'N',
+        yearAndMonth: this.filterObj.date
       })
         .then((response) => {
           this.tableLoading = false
