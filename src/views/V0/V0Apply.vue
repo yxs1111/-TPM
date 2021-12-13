@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-12 15:45:10
+ * @LastEditTime: 2021-12-13 11:50:47
 -->
 <template>
   <div class="app-container">
@@ -544,7 +544,7 @@ export default {
               })
             })
         } else {
-          this.$message.info('系统判定不能为空')
+          this.$message.info('数据未校验，请先进行导入验证')
         }
       } else {
         this.$message.warning('数据不能为空')

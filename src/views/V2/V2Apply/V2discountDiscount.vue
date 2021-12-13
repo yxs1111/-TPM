@@ -476,7 +476,7 @@ export default {
               })
             })
         } else {
-          this.$message.info('系统判定不能为空')
+          this.$message.info('数据未校验，请先进行导入验证')
         }
       } else {
         this.$message.warning('数据不能为空')
