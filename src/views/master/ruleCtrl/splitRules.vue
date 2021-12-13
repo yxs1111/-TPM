@@ -79,7 +79,7 @@
     >
       <el-table-column type="selection" align="center" />
       <el-table-column width="" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="" align="center" prop="yeardate" label="年月" />
+      <el-table-column width="100" align="center" prop="yeardate" label="年月" />
       <el-table-column width="220" align="center" prop="varsionName" label="版本" />
       <el-table-column width="200" align="center" prop="costType" label="Mine Package" />
       <el-table-column width="150" align="center" prop="splitType" label="拆分类型">
@@ -88,8 +88,8 @@
         </template>
       </el-table-column>
       <el-table-column width="300" align="center" prop="splitRule" label="拆分规则" />
-      <el-table-column width="" align="center" prop="splitWeight" label="权重" />
-      <el-table-column width="" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="120" align="center" prop="splitWeight" label="权重" />
+      <el-table-column width="180" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="scope">
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}

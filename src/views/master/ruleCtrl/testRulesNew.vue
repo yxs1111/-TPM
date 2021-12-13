@@ -51,13 +51,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="" align="left" prop="checkType" label="验证类型">
-        <!-- <template>
+      <!-- <el-table-column width="" align="left" prop="checkType" label="验证类型">
+        <template>
           <el-select v-model="filterObj.category" placeholder="请选择" size="small">
             <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
           </el-select>
-        </template> -->
-      </el-table-column>
+        </template> 
+      </el-table-column>-->
       <!-- <el-table-column width="" align="left" prop="exceptionType" label="异常类型">
         <template slot-scope="{row}">
           <el-select ref="refSelect" v-model="row.ErrorType" style="width: 100%" placeholder="请选择图标" @change="changeSelection">

@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
@@ -417,23 +417,24 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
-      API.getPageByRequestSplitRule({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        channelCode: this.filterObj.channelCode,
-        yeardate: this.filterObj.yeardate,
-        versions: this.filterObj.versions,
-        splitType: this.filterObj.splitType
-      })
-        .then((response) => {
-          this.tableLoading = false
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch(() => {})
+      this.tableData = []
+      // this.tableLoading = true
+      // API.getPageByRequestSplitRule({
+      //   pageNum: this.pageNum, // 当前页
+      //   pageSize: this.pageSize, // 每页条数
+      //   channelCode: this.filterObj.channelCode,
+      //   yeardate: this.filterObj.yeardate,
+      //   versions: this.filterObj.versions,
+      //   splitType: this.filterObj.splitType
+      // })
+      //   .then((response) => {
+      //     this.tableLoading = false
+      //     this.tableData = response.data.records
+      //     this.pageNum = response.data.pageNum
+      //     this.pageSize = response.data.pageSize
+      //     this.total = response.data.total
+      //   })
+      //   .catch(() => {})
     },
     search() {
       this.getTableData()
