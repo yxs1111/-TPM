@@ -450,7 +450,7 @@ export default {
     // 提交
     submitInfo() {
       if (this.tableData[0].judgmentType === null) {
-        this.$confirm('系统判定为null,不可提交?', '提示', {
+        this.$confirm('数据未校验，请先进行导入验证', '提示', {
           confirmButtonText: '确定',
           type: 'warning',
         })
