@@ -87,9 +87,9 @@
       </el-table-column>
       <el-table-column width="120" align="center" prop="name" label="经销商" />
       <el-table-column width="120" align="center" prop="name" label="区域" />
-      <el-table-column width="220" align="center" prop="name" label="系统拆分销量（CTN）" />
-      <el-table-column width="220" align="center" prop="name" label="调整后销量（CTN）" />
-      <el-table-column width="220" align="center" prop="name" label="销量差值（%）" />
+      <el-table-column width="220" align="right" prop="name" label="系统拆分销量（CTN）" />
+      <el-table-column width="220" align="right" prop="name" label="调整后销量（CTN）" />
+      <el-table-column width="220" align="right" prop="name" label="销量差值（%）" />
       <el-table-column width="120" align="center" prop="name" label="机制类型" />
       <el-table-column width="120" align="center" prop="name" label="机制名称" />
       <el-table-column width="120" align="center" prop="name" label="活动开始时间" />
@@ -245,7 +245,7 @@ export default {
   .priceLevelWrap {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     .priceLevel {
       width: 88px;

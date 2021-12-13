@@ -86,14 +86,14 @@
       </el-table-column>
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" v-slot={row} align="center" prop="systemRecommendedVol" label="系统拆分销量（CTN）" >
+      <el-table-column width="220" v-slot={row} align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）" >
          {{(row.systemRecommendedVol*1).toFixed(2)}}
       </el-table-column>
-      <el-table-column width="220" v-slot={row} align="center" prop="adjustedVol" label="调整后销量（CTN）" >
+      <el-table-column width="220" v-slot={row} align="right" prop="adjustedVol" label="调整后销量（CTN）" >
         {{(row.adjustedVol*1).toFixed(2)}}
       </el-table-column>
-      <el-table-column width="220" align="center" prop="volDifference" label="销量差值（%）" />
-      <el-table-column width="220" align="center" prop="adjustedAmount" label="调整后费用（RMB）" />
+      <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
+      <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
       <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
@@ -194,10 +194,10 @@
           </el-table-column>
           <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
           <el-table-column width="120" align="center" prop="regionName" label="区域" />
-          <el-table-column width="220" align="center" prop="systemRecommendedVol" label="系统拆分销量（CTN）" />
-          <el-table-column width="220" align="center" prop="adjustedVol" label="调整后销量（CTN）" />
-          <el-table-column width="220" align="center" prop="volDifference" label="销量差值（%）" />
-          <el-table-column width="220" align="center" prop="adjustedAmount" label="调整后费用（RMB）" />
+          <el-table-column width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）" />
+          <el-table-column width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）" />
+          <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
+          <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
           <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
           <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
           <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
@@ -647,7 +647,7 @@ export default {
   .priceLevelWrap {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     .priceLevel {
       width: 60px;

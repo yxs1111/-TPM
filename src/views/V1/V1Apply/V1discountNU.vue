@@ -37,9 +37,9 @@
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="220" align="center" prop="brandName" label="品牌" />
-      <el-table-column width="220" align="center" prop="planVol" label="V1计划总销量(CTN)" />
-      <el-table-column width="120" align="center" prop="planNewUserNum" label="目标新客数量" />
-      <el-table-column width="220" v-slot={row} align="center" prop="planCost" label="V1计划费用(RMB)" >
+      <el-table-column width="220" align="right" prop="planVol" label="V1计划总销量(CTN)" />
+      <el-table-column width="120" align="right" prop="planNewUserNum" label="目标新客数量" />
+      <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用(RMB)" >
         <!-- {{row.planCost.toLocaleString()}} -->
         {{getPlanCost(row.planCost)}}
       </el-table-column>

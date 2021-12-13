@@ -227,7 +227,7 @@ export default {
   .priceLevelWrap {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     .priceLevel {
       width: 88px;

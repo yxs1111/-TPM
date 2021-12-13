@@ -59,15 +59,15 @@
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
-      <el-table-column width="220" align="center" prop="planSales" label="V1计划总销量（CTN）" />
-      <el-table-column width="220" align="center" prop="planPriceAve" label="目标新客数量" />
-      <el-table-column width="220" align="center" prop="planCost" label="V1计划费用（RMB）" />
-      <el-table-column width="220" align="center" prop="forecastSales" label="V2预测总销量（CTN）" />
-      <el-table-column width="220" align="center" prop="adjustedPriceAve" label="目标新客数量" />
-      <el-table-column width="220" align="center" prop="adjustedCost" label="V2调整后费用（RMB）" />
-      <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
-      <el-table-column width="160" align="center" prop="salesDifference" label="达成率 (%)" />
-      <el-table-column width="150" align="center" prop="costDifference" label="费用差值(RMB)" />
+      <el-table-column width="220" align="right" prop="planSales" label="V1计划总销量（CTN）" />
+      <el-table-column width="220" align="right" prop="planPriceAve" label="目标新客数量" />
+      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
+      <el-table-column width="220" align="right" prop="forecastSales" label="V2预测总销量（CTN）" />
+      <el-table-column width="220" align="right" prop="adjustedPriceAve" label="目标新客数量" />
+      <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
+      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
+      <el-table-column width="160" align="right" prop="salesDifference" label="达成率 (%)" />
+      <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -149,15 +149,15 @@
             <el-table-column width="220" align="center" prop="productName" label="SKU" />
             <el-table-column width="240" align="center" prop="distributorName" label="经销商" />
             <el-table-column width="120" align="center" prop="regionName" label="区域" />
-            <el-table-column width="220" align="center" prop="planSales" label="V1计划销量（CTN）" />
-            <el-table-column width="220" align="center" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-            <el-table-column width="220" align="center" prop="planCost" label="V1计划费用（RMB）" />
-            <el-table-column width="220" align="center" prop="forecastSales" label="V2预测销量（CTN）" />
-            <el-table-column width="220" align="center" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-            <el-table-column width="220" align="center" prop="adjustedCost" label="V2调整后费用（RMB）" />
-            <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
-            <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）" />
-            <el-table-column width="120" align="center" prop="costDifference" label="费用差值" />
+            <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
+            <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
+            <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
+            <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
+            <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
+            <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
+            <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
+            <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
+            <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
             <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
