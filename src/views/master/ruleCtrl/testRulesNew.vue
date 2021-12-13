@@ -2,29 +2,38 @@
 <template>
   <div class="app-container" style="border-radius:0px;">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="渠道：">
-        <el-input v-model="filterObj.channel" placeholder="请输入渠道" />
-      </el-form-item>
-      <el-form-item label="年月：">
-        <el-date-picker
-          v-model="filterObj.date"
-          type="month"
-          value-format="yyyyMM"
-          format="yyyyMM"
-          placeholder="选择月"
-        />
-      </el-form-item>
-      <el-form-item>
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Mine Package:</span>
+          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in minePackage" :key="index" :label="item.costType" :value="item.costType" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">年月:</span>
+          <el-date-picker
+            v-model="filterObj.date"
+            clearable
+            type="month"
+            value-format="yyyyMM"
+            format="yyyyMM"
+            placeholder="选择月"
+          />
+        </div>
         <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
-      </el-form-item>
-      <el-form-item>
         <div class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-      </el-form-item>
-    </el-form>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
     </div>
