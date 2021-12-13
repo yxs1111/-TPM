@@ -10,6 +10,12 @@
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
+        <!-- <div class="Selectli">
+          <span class="SelectliTitle">Mine Package:</span>
+          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in minePackage" :key="index" :label="item.costType" :value="item.costType" />
+          </el-select>
+        </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker
@@ -33,9 +39,9 @@
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="objectSpanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="220" align="center" prop="version" label="版本" />
-      <el-table-column width="350" align="left" prop="ruleContentFront" label="验证规则" />
-      <el-table-column width="250" align="left" prop="ruleUnit" label="" />
-      <el-table-column width="370" align="left" prop="ruleContentAfter" label="">
+      <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
+      <el-table-column width="100" align="left" prop="ruleUnit" label="" />
+      <el-table-column width="340" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="{row}">
           <div v-if="row.ruleUnit === '∈'">
             [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row, row.startRule)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
@@ -45,7 +51,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="" align="left" prop="checkType" label="验证类型">
+      <el-table-column width="200" align="left" prop="checkType" label="验证类型">
         <!-- <template>
           <el-select v-model="filterObj.category" placeholder="请选择" size="small">
             <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
@@ -64,9 +70,12 @@
           </el-select>
         </template>
       </el-table-column> -->
+      <el-table-column width="" align="left" prop="channelEsName" label="渠道" />
+      <!-- <el-table-column width="180" align="left" prop="costType" label="Mine Package" /> -->
+      <el-table-column width="150" align="left" prop="yearAndMonth" label="年月" />
     </el-table>
     <!-- 分页 -->
-    <div class="TpmPaginationWrap">
+    <!-- <div class="TpmPaginationWrap">
       <el-pagination
         :current-page="pageNum"
         :page-sizes="[5, 10, 50, 100]"
@@ -76,7 +85,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
-    </div>
+    </div> -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
       <div class="el-dialogContent">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
@@ -136,7 +145,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        minePackage: '',
+        // minePackage: '',
         channel: '',
         date: ''
       },
@@ -192,7 +201,7 @@ export default {
   computed: {},
   mounted() {
     this.getChannel()
-    this.getCostTypeList()
+    // this.getCostTypeList()
     this.getTableData()
     // 获取下拉框
   },
@@ -224,7 +233,11 @@ export default {
     },
     // 导出excel
     exportExcelInfo() {
-      API.excportRuleSave().then(
+      API.excportRuleSave({
+        channelCode: this.filterObj.channel,
+        // minePackage: this.filterObj.minePackage,
+        yearAndMonth: this.filterObj.date
+      }).then(
         response => {
           const fileName = '检验数据Excel' + new Date().getTime() + '.xls'
           //   res.data:请求到的二进制数据
@@ -361,14 +374,12 @@ export default {
       this.tableLoading = true
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        // minePackage: this.filterObj.minePackage,
-        yearAndMonth: this.filterObj.date,
-        pageNum: this.pageNum,
-        pageSize: this.pageSize
+        minePackage: 'L',
+        yearAndMonth: this.filterObj.date
       })
         .then((response) => {
           this.tableLoading = false
-          this.tableData = response.data.records
+          this.tableData = response.data
           this.total = response.data.total
           // 验证内容字段修改
           for (let i = 0; i < this.tableData.length; i++) {

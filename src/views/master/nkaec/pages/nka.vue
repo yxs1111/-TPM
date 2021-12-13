@@ -3,9 +3,11 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
-        <div class="Selectli" @keyup.enter="search">
+        <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-input v-model="filterObj.product" clearable filterable placeholder="请输入" />
+          <el-select v-model="filterObj.product" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">scenario</span>
@@ -102,6 +104,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'NKA',
@@ -109,6 +112,7 @@ export default {
 
   data() {
     return {
+      skuArr: [],
       warningShow: false,
       importVisibleNKA: false,
       total: 1,
@@ -131,9 +135,17 @@ export default {
   },
   computed: {},
   mounted() {
+    this.getSKU()
     this.getTableData()
   },
   methods: {
+    getSKU() {
+      selectAPI.querySkuSelect().then(res => {
+        if (res.code === 1000) {
+          this.skuArr = res.data
+        }
+      }).catch()
+    },
     // 确认导入
     confirmImport() {
       var formData = new FormData()
