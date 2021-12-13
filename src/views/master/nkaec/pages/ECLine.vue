@@ -5,10 +5,8 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-          <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.product" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
-          </el-select>
+          <span class="SelectliTitle">Product:</span>
+          <el-input v-model="filterObj.product" clearable filterable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">scenario</span>
@@ -37,7 +35,7 @@
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="280" align="center" prop="itemName" label="名称" />
-      <el-table-column width="230" align="center" prop="dimProduct" label="SKU" />
+      <el-table-column width="230" align="center" prop="dimProduct" label="Product" />
       <el-table-column width="260" align="center" prop="dimShopperType" label="销售商类型" />
       <el-table-column width="150" align="center" prop="dimUvType" label="UV类型" />
       <el-table-column width="190" align="center" prop="dimBudgetOwner" label="渠道" />
