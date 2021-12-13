@@ -81,7 +81,7 @@
       <el-table-column width="" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="100" align="center" prop="yeardate" label="年月" />
       <el-table-column width="220" align="center" prop="varsionName" label="版本" />
-      <el-table-column width="200" align="center" prop="costType" label="Mine Package" />
+      <!-- <el-table-column width="200" align="center" prop="costType" label="Mine Package" /> -->
       <el-table-column width="150" align="center" prop="splitType" label="拆分类型">
         <template slot-scope="scope">
           {{ scope.row.splitType === 1 ? '连续拆分':'不连续拆分' }}
@@ -510,7 +510,8 @@ export default {
         channelCode: this.filterObj.channelCode,
         yeardate: this.filterObj.yeardate,
         versions: this.filterObj.varsionName,
-        splitType: this.filterObj.splitType
+        splitType: this.filterObj.splitType,
+        minePackageCode: 'L'
       })
         .then((response) => {
           this.tableLoading = false
