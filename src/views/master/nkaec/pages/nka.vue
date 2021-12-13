@@ -37,13 +37,13 @@
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="230" align="center" prop="item" label="名称" />
       <el-table-column width="230" align="center" prop="dimProduct" label="SKU" />
-      <el-table-column width="150" align="center" prop="dimShopperType" label="销售商类型" />
+      <el-table-column width="260" align="center" prop="dimShopperType" label="销售商类型" />
       <el-table-column width="150" align="center" prop="dimUvType" label="UV类型" />
       <el-table-column width="190" align="center" prop="dimBudgetOwner" label="渠道" />
       <el-table-column width="200" align="center" prop="dimScenario" label="周期" />
-      <el-table-column align="center" prop="dimVersion" label="版本" />
+      <el-table-column width="100" align="center" prop="dimVersion" label="版本" />
       <el-table-column width="150" align="center" prop="dimCustomer" label="经销商" />
-      <el-table-column align="center" prop="dimYear" label="年" />
+      <el-table-column width="100" align="center" prop="dimYear" label="年" />
       <el-table-column width="360" align="center" prop="dimMeasure" label="估量" />
       <el-table-column width="160" align="center" prop="jan" label="一月" />
       <el-table-column width="160" align="center" prop="feb" label="二月" />
