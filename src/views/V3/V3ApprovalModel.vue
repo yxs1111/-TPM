@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-13 09:48:36
+ * @LastEditTime: 2021-12-13 13:34:59
 -->
 <template>
-  <div>
+  <div class="tabViewsWrap">
     <div class="tabViews">
       <router-link :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" v-for="(item, index) in routerList" :key="index"
         @click.native="changeTab(index)">

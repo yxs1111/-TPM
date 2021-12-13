@@ -70,7 +70,7 @@ div:focus {
   overflow-y: auto;
 }
 .MainContent {
-  // height: 100vh;
+  height: 100%;
   background-color: #fff;
   padding: 20px;
   overflow-y: auto;
@@ -890,4 +890,7 @@ div:focus {
     color: #666666;
   }
   
+}
+.tabViewsWrap {
+  padding-bottom: 80px;
 }
