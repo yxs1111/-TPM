@@ -2,30 +2,32 @@
 <template>
   <div class="app-container" style="border-radius:0px;">
     <!-- 查询条件 -->
-    <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
-      <el-form-item label="渠道：">
-        <el-input v-model="filterObj.channel" clearable placeholder="请输入渠道" />
-      </el-form-item>
-      <el-form-item label="年月：">
-        <el-date-picker
-          v-model="filterObj.date"
-          clearable
-          type="month"
-          value-format="yyyyMM"
-          format="yyyyMM"
-          placeholder="选择月"
-        />
-      </el-form-item>
-      <el-form-item>
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">年月:</span>
+          <el-date-picker
+            v-model="filterObj.date"
+            clearable
+            type="month"
+            value-format="yyyyMM"
+            format="yyyyMM"
+            placeholder="选择月"
+          />
+        </div>
         <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
-      </el-form-item>
-      <el-form-item>
         <div class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-      </el-form-item>
-    </el-form>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
     </div>
@@ -120,6 +122,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'TestRules',
@@ -128,6 +131,7 @@ export default {
   data() {
     return {
       url: '@/assets/images/selectError.png',
+      channelArr: [],
       total: 1,
       pageSize: 10,
       pageNum: 1,
@@ -179,7 +183,6 @@ export default {
       ],
       ErrorType: '', // 异常类型
       minePackage: [],
-      channelArr: [],
       V0Total: 0,
       V1Total: 0,
       V2Total: 0,
@@ -332,7 +335,7 @@ export default {
     },
     // 渠道
     getChannel() {
-      API.getMdChannelList().then(res => {
+      selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
         }
@@ -358,7 +361,7 @@ export default {
       this.tableLoading = true
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: this.filterObj.minePackage,
+        // minePackage: this.filterObj.minePackage,
         yearAndMonth: this.filterObj.date,
         pageNum: this.pageNum,
         pageSize: this.pageSize
