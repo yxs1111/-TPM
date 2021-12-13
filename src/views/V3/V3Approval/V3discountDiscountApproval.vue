@@ -235,7 +235,7 @@ export default {
   },
   computed: {},
   mounted() {
-    // this.getEffectiveDate()
+    this.getEffectiveDate()
     // this.getTableData()
     this.getChannel()
     this.getSKU()
