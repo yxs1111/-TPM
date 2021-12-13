@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-03 16:19:44
+ * @LastEditTime: 2021-12-13 09:47:14
 -->
 <template>
   <div>
@@ -45,9 +45,12 @@ export default {
   mounted() {
     if (sessionStorage.getItem('currentIndex')) {
       this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+
     } else {
       this.currentIndex = 0
     }
+    //我的待办跳转
+    this.$router.push(this.routerList[this.currentIndex].path)
   },
   computed: {},
   methods: {

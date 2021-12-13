@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-12 13:48:37
+ * @LastEditTime: 2021-12-13 09:52:32
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -62,8 +62,8 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
-          <div class="operation">
-            <svg-icon icon-class="submit_l" class="submit_icon" @click="operateProcess(row)" />
+          <div class="operation" @click="operateProcess(row.version,row.activityName)">
+            <svg-icon icon-class="submit_l" class="submit_icon"  />
             办理
           </div>
         </template>
@@ -136,7 +136,44 @@ export default {
     search() {
       this.getTableData()
     },
-    operateProcess: function (currentRow) {
+    operateProcess(version,name) {
+
+      if(version=="V0") {
+        console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V0/V0Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V0/V0Approval')
+        }
+      }
+      if(version=="V1") {
+        // console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V1/V1Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V1/V1Approval')
+        }
+      }
+      if(version=="V2") {
+        // console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V2/V2Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V2/V2Approval')
+        }
+      }
+      if(version=="V3") {
+        // console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          console.log(name);
+          this.$router.push('/V3/V3Apply')
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push('/V3/V3Approval')
+        }
+      }
       //this.$router.push({ path: '/process', query: currentRow })
     },
     //查看流程

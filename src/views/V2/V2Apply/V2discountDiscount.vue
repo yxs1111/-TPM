@@ -276,7 +276,7 @@ export default {
             if (this.tableData.length) {
               this.isSubmit = this.tableData[0].isSubmit
             } else {
-              this.isSubmit = 0
+              this.isSubmit = 1
             }
 
             this.pageNum = response.data.pageNum

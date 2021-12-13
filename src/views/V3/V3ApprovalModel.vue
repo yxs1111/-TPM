@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-03 16:20:02
+ * @LastEditTime: 2021-12-13 09:48:36
 -->
 <template>
   <div>
@@ -48,6 +48,8 @@ export default {
     } else {
       this.currentIndex = 0
     }
+    //我的待办跳转
+    this.$router.push(this.routerList[this.currentIndex].path)
   },
   computed: {},
   methods: {
