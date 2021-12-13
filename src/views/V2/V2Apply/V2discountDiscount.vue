@@ -243,7 +243,7 @@ export default {
   computed: {},
   watch: {
     'filterObj.channelCode'() {
-      this.filterObj.channelCode = ''
+      this.filterObj.customerCode = ''
       this.getCustomerList()
     },
   },

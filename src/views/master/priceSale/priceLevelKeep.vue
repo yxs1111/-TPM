@@ -37,7 +37,7 @@
     <el-table :data="tableData" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
-      <el-table-column width="150" align="center" label="维护名称信息" />
+      <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
       <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
         ¥{{row.gear}}
       </el-table-column>

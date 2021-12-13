@@ -15,20 +15,26 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
+          <el-select v-model="filterObj.brandCode" placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">区域：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <span class="SelectliTitle">区域:</span>
+          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">SKU：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <span class="SelectliTitle">SKU:</span>
+          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Mine package：</span>
+          <el-select v-model="filterObj.minePackage" placeholder="请选择">
+            <el-option v-for="item in minePackageList" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
 
@@ -105,15 +111,8 @@
 
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
@@ -123,7 +122,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'AbnormalAnalysisMonthByChannel',
   directives: { elDragDialog, permission },
@@ -136,18 +135,26 @@ export default {
       filterObj: {
         type: '',
         month: '',
-        category: ''
+        regionCode: '',
+        brandCode: '',
+        minePackage: '',
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      checkList: ['0', '1']
+      minePackageList: [],
+      skuList: [],
+      RegionList: [],
+      checkList: ['0', '1'],
     }
   },
   computed: {},
   mounted() {
     // this.getTableData()
+    this.getMinePackageList()
+    this.getSkuSelect()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -156,7 +163,7 @@ export default {
       this.tableData = []
       API.getPageMdBrand({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -166,6 +173,23 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    getMinePackageList() {
+      selectAPI.queryMinePackageSelect().then((res) => {
+        this.minePackageList = res.data
+      })
+    },
+    getSkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuList = res.data
+      })
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     search() {
       this.getTableData()
@@ -199,8 +223,8 @@ export default {
       if (rowIndex === 0 || rowIndex === 1) {
         return 'headerStyle'
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -212,8 +236,8 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
     .checkBox {
-       display: flex;
-    align-items: center;
+      display: flex;
+      align-items: center;
     }
     .checkBoxTitle {
       font-family: MicrosoftYaHei;

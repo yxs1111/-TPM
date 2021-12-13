@@ -9,8 +9,10 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">sku:</span>
-          <el-input v-model="filterObj.sku" placeholder="请输入" />
+          <span class="SelectliTitle">SKU</span>
+            <el-select v-model="filterObj.sku" filterable clearable placeholder="请选择">
+              <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
+            </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
@@ -110,6 +112,7 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       customerArr: [],
+      skuOptons: [],
       //导入
       importVisible: false, //导入弹窗
       uploadFileName: '',
@@ -125,6 +128,7 @@ export default {
     this.getTableData()
     this.getCustomerList()
      this.getChannelList()
+     this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -132,7 +136,6 @@ export default {
       API.getPageMdprice({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        customerCode: this.filterObj.customerCode,
         yearAndMonth: this.filterObj.yearAndMonth,
         sku: this.filterObj.sku,
         channelCode: this.filterObj.channelCode,
@@ -144,6 +147,11 @@ export default {
           this.total = response.data.total
         })
         .catch(() => {})
+    },
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptons = res.data
+      })
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -203,7 +211,7 @@ export default {
       var data = {}
       data = { ...this.filterObj }
       API.exportMdprice(data).then((res) => {
-        this.downloadFile(res, '价格主数据信息' + '.xls') //自定义Excel文件名
+        this.downloadFile(res, '价格主数据信息' + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
