@@ -57,7 +57,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -155,7 +155,14 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <el-table-column prop="date" align="center" label="是否通过" width="180" fixed />
+          <el-table-column fixed align="center" label="是否通过" width="100">
+            <template slot-scope="scope">
+              <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+              <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+              <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+              <img v-else :src="errorImg" style="width:25px;height:25px;">
+            </template>
+          </el-table-column>
           <el-table-column align="center" width="400" prop="cpId" label="CPID" />
           <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
           <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
