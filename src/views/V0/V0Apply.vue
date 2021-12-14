@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 09:00:02
+ * @LastEditTime: 2021-12-14 16:31:45
 -->
 <template>
   <div class="app-container">
@@ -37,7 +37,7 @@
             <span class="text">获取CPT数据</span>
           </div>
           <!-- 提交 有数据  正常 暗 -->
-          
+
           <!-- 没有提交 有数据  正常点击 -->
           <!-- 没有提交 无数据  正常 暗 -->
           <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
@@ -97,7 +97,7 @@
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{(row.cptPromotionExpenses*1).toFixed(2)}}
               </el-table-column>
-              <el-table-column align="right"  width="160" prop="averagePriceRange" label="均价差值(%)">
+              <el-table-column align="right" width="160" prop="averagePriceRange" label="均价差值(%)">
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
                 {{(row.promotionExpensesGapValue*1).toFixed(2)}}
@@ -289,7 +289,7 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       event: '',
-      isSubmit: 0,
+      isSubmit: 1,
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -307,10 +307,11 @@ export default {
   },
   directives: { elDragDialog, permission },
   mounted() {
+    this.getChannelList()
     this.getMonth()
     // this.getList()
     this.getQuerySkuSelect()
-    this.getChannelList()
+    
   },
   computed: {},
   methods: {
@@ -331,19 +332,19 @@ export default {
           this.ContentData = response.data
           if (Object.keys(this.ContentData).length == 0) {
             this.isNoData = true
-            // this.isSubmit=1
+            this.isSubmit = 0
           } else {
             this.isNoData = false
-          }
-          for (const key in this.ContentData) {
-            let list = this.ContentData[key]
-            this.isSubmit = this.ContentData[key][0].isSubmit
-            for (let i = 0; i < list.length; i++) {
-              list[i].customGearList = JSON.parse(list[i].customGear)
-              //价格档位降序排序
-              list[i].customGearList.sort(function (a, b) {
-                return b.gear - a.gear
-              })
+            for (const key in this.ContentData) {
+              let list = this.ContentData[key]
+              this.isSubmit = this.ContentData[key][0].isSubmit
+              for (let i = 0; i < list.length; i++) {
+                list[i].customGearList = JSON.parse(list[i].customGear)
+                //价格档位降序排序
+                list[i].customGearList.sort(function (a, b) {
+                  return b.gear - a.gear
+                })
+              }
             }
           }
         }
@@ -357,6 +358,7 @@ export default {
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
+        this.filterObj.channelCode=this.ChannelList[0].channelCode
       })
     },
     getTip(row) {

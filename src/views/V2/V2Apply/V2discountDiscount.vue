@@ -233,7 +233,7 @@ export default {
       uploadFileName: '',
       event: '',
       uploadFile: '',
-      isSubmit: 0, // 提交状态  1：已提交，0：未提交
+      isSubmit: 1, // 提交状态  1：已提交，0：未提交
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -248,10 +248,11 @@ export default {
     },
   },
   mounted() {
+    this.getQueryChannelSelect()
     this.getMonth()
     // this.getTableData()
     this.getQuerySkuSelect()
-    this.getQueryChannelSelect()
+    
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
@@ -301,6 +302,7 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
           this.channelOptons = res.data
+          this.filterObj.channelCode=this.channelOptons[0].channelCode
         }
       })
     },

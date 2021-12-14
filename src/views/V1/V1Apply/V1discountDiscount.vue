@@ -268,9 +268,10 @@ export default {
   },
   computed: {},
   mounted() {
+    this.getChannel()
     // this.getTableData()
     this.getEffectiveDate()
-    this.getChannel()
+    
     this.getSKU()
     this.getRegionList()
     this.getCustomerList()
@@ -293,6 +294,7 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          this.filterObj.channelCode=this.channelArr[0].channelCode
         }
       })
     },
