@@ -258,7 +258,7 @@ export default {
     // this.getTableData()
     this.getChannel()
     this.getSKU()
-    this.getMP()
+    // this.getMP()
     this.getRegionList()
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getCustomerList()

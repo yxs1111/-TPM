@@ -353,7 +353,7 @@ export default {
     // this.getTableData()
     this.getRegionList()
     this.getSKU()
-    this.getMP()
+    // this.getMP()
     // this.getCustomerList()
     this.getDistributorList()
   },
