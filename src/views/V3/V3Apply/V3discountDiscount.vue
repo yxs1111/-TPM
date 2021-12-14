@@ -470,6 +470,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           this.$message.success('保存成功')
+          this.closeimportDialog()
           this.saveDialog = true
           this.getTableData()
         } else {
@@ -479,10 +480,12 @@ export default {
     },
     // 导入数据
     importData() {
+      this.saveDialog = false
       this.importVisible = true
     },
     // 补录
     supplement() {
+      this.saveDialog = false
       this.supplementVisible = true
     },
     // 确认导入
@@ -650,9 +653,11 @@ export default {
     },
     // 关闭导入
     closeimportDialog() {
+      this.dialogDataF = []
       this.uploadFileName = ''
       this.importVisible = false
       this.supplementVisible = false
+      this.dialogData = []
     },
     // 导出数据
     exportData() {

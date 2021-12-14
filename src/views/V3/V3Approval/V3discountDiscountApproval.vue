@@ -386,6 +386,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           this.$message.success('保存成功')
+          this.closeimportDialog()
           this.saveDialog = true
           this.getTableData()
         } else {
@@ -423,6 +424,7 @@ export default {
     },
     // 导入数据
     importData() {
+      this.saveDialog = false
       this.importVisible = true
     },
     // 确认导入
