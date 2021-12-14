@@ -344,7 +344,7 @@ export default {
     getCustomerList() {
       this.filterObj.customerCode = ''
       selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelCode
+        channelCode: this.filterObj.channelName
       }).then(res => {
         if (res.code === 1000) {
           this.customerArr = res.data
