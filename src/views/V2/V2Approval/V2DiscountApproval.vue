@@ -320,6 +320,7 @@ export default {
         .queryChannelSelect()
         .then((res) => {
           this.channelOptons = res.data
+          this.filterObj.channelCode=this.channelOptons[0].channelCode
         })
         .catch()
     },

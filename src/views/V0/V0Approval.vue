@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 22:41:51
+ * @LastEditTime: 2021-12-15 00:04:39
 -->
 <template>
   <div class="app-container">
@@ -322,6 +322,7 @@ export default {
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
+        this.filterObj.channelCode=this.ChannelList[0].channelCode
       })
     },
     getQuerySkuSelect() {
