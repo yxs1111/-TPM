@@ -294,7 +294,8 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.filterObj.channelCode=this.channelArr[0].channelCode
+          this.filterObj.channelCode = this.channelArr[0].channelEsName
+          this.getCustomerList(this.filterObj.channelCode)
         }
       })
     },

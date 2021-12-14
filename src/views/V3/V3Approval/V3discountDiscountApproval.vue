@@ -83,7 +83,7 @@
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
       <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
       <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+      <el-table-column width="160" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <div v-if="row.judgmentType!== null" class="statusWrap">
             <img v-if="row.judgmentType === 'pass'" src="../../../assets/images/success.png" alt="">
@@ -309,9 +309,9 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal) {
-            this.btnStatus = false
-          } else {
             this.btnStatus = true
+          } else {
+            this.btnStatus = false
           }
         }
       }).catch()
@@ -321,6 +321,8 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          this.filterObj.channelName = this.channelArr[0].channelCode
+          this.getCustomerList(this.filterObj.channelName)
         }
       }).catch()
     },
