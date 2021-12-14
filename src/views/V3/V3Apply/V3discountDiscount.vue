@@ -6,32 +6,32 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
+          <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.distributorName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="OpertionBar">
@@ -85,7 +85,16 @@
       <el-table-column width="160" align="center" prop="avePriceDifference" label="均价差值（%）" />
       <el-table-column width="160" align="center" prop="salesDifference" label="销量差值（%）" />
       <el-table-column width="120" align="center" prop="costDifference" label="费用差值" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+      <el-table-column width="160" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <div v-if="row.judgmentType!== null" class="statusWrap">
+            <img v-if="row.judgmentType === 'pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
+            {{ row.judgmentType }}
+          </div>
+          <div v-else>{{ row.judgmentType }}</div>
+        </template>
+      </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -114,7 +123,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" class="my-export" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="my-export" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -209,7 +218,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" class="my-export" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="my-export" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -298,6 +307,7 @@ export default {
 
   data() {
     return {
+      RegionList: [],
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -316,10 +326,11 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        channelCode: '',
-        customerCode: '',
-        distributorCode: '',
-        productCode: ''
+        channelName: '',
+        customerName: '',
+        distributorName: '',
+        productName: '',
+        regionName: ''
       },
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -332,6 +343,7 @@ export default {
       dialogDataF: [],
       uploadFile: '',
       localDate: '',
+      saveDialog: false
     }
   },
   computed: {},
@@ -339,13 +351,23 @@ export default {
     this.getChannel()
     this.getEffectiveDate()
     // this.getTableData()
-    
+    this.getRegionList()
     this.getSKU()
     this.getMP()
     // this.getCustomerList()
     this.getDistributorList()
   },
   methods: {
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
+    },
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
+    },
     // 获取年月
     getEffectiveDate() {
       selectAPI.getMonth({ version: 'V3' }).then((res) => {
@@ -448,6 +470,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           this.$message.success('保存成功')
+          this.saveDialog = true
           this.getTableData()
         } else {
           this.$message.error('保存失败')
@@ -667,11 +690,12 @@ export default {
       API.getPageV3({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode,
+        channelName: this.filterObj.channelName,
+        customerName: this.filterObj.customerName,
+        distributorName: this.filterObj.distributorName,
+        productName: this.filterObj.productName,
         yearAndMonth: this.localDate,
+        regionName: this.filterObj.regionName
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -724,6 +748,13 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
 .MainContent {
   .priceLevelWrap {
     width: 100%;

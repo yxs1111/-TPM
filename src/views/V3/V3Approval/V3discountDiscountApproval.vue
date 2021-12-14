@@ -5,32 +5,32 @@
       <div class="SelectBar">
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
+          <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.distributorName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="OpertionBar">
@@ -57,7 +57,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -83,7 +83,16 @@
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
       <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
       <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <div v-if="row.judgmentType!== null" class="statusWrap">
+            <img v-if="row.judgmentType === 'pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
+            {{ row.judgmentType }}
+          </div>
+          <div v-else>{{ row.judgmentType }}</div>
+        </template>
+      </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -114,7 +123,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -155,7 +164,14 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <el-table-column prop="date" align="center" label="是否通过" width="180" fixed />
+          <el-table-column fixed align="center" label="是否通过" width="100">
+            <template slot-scope="scope">
+              <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+              <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+              <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+              <img v-else :src="errorImg" style="width:25px;height:25px;">
+            </template>
+          </el-table-column>
           <el-table-column align="center" width="400" prop="cpId" label="CPID" />
           <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
           <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -204,6 +220,7 @@ export default {
 
   data() {
     return {
+      RegionList: [],
       submitBtn: 0,
       // 下拉框
       channelArr: [],
@@ -217,10 +234,11 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        channelCode: '',
-        customerCode: '',
-        distributorCode: '',
-        productCode: ''
+        channelName: '',
+        customerName: '',
+        distributorName: '',
+        productName: '',
+        regionName: ''
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -231,6 +249,7 @@ export default {
       usernameLocal: '',
       btnStatus: true,
       localDate: '202101',
+      saveDialog: false
     }
   },
   computed: {},
@@ -240,11 +259,19 @@ export default {
     this.getChannel()
     this.getSKU()
     this.getMP()
+    this.getRegionList()
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getCustomerList()
     this.getDistributorList()
   },
   methods: {
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
+    },
     // 获取年月
     getEffectiveDate() {
       selectAPI.getMonth({ version: 'V3' }).then((res) => {
@@ -358,7 +385,11 @@ export default {
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
-          this.closeimportDialog()
+          this.$message.success('保存成功')
+          this.saveDialog = true
+          this.getTableData()
+        } else {
+          this.$message.error('保存失败')
         }
       }).catch()
     },
@@ -491,11 +522,12 @@ export default {
       API.getPageV3({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        productCode: this.filterObj.productCode,
+        channelName: this.filterObj.channelName,
+        customerName: this.filterObj.customerName,
+        distributorName: this.filterObj.distributorName,
+        productName: this.filterObj.productName,
         yearAndMonth: this.localDate,
+        regionName: this.filterObj.regionName
       })
         .then((response) => {
           this.tableData = response.data.records
