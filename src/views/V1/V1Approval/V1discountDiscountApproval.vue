@@ -303,13 +303,13 @@ export default {
         }
       }).catch()
     },
-    getMP() {
-      selectAPI.queryMinePackageSelect().then(res => {
-        if (res.code === 1000) {
-          // this.channelArr = res.data
-        }
-      }).catch()
-    },
+    // getMP() {
+    //   selectAPI.queryMinePackageSelect().then(res => {
+    //     if (res.code === 1000) {
+    //       // this.channelArr = res.data
+    //     }
+    //   }).catch()
+    // },
     // 客户
     getCustomerList() {
       this.filterObj.customerCode = ''

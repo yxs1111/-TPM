@@ -3,7 +3,7 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
-        <div class="Selectli" @keyup.enter="search">
+        <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
@@ -333,16 +333,16 @@ export default {
         }
       }).catch()
     },
-    getMP() {
-      selectAPI.queryMinePackageSelect().then(res => {
-        if (res.code === 1000) {
-          this.channelArr = res.data
-        }
-      }).catch()
-    },
+    // getMP() {
+    //   selectAPI.queryMinePackageSelect().then(res => {
+    //     if (res.code === 1000) {
+    //       this.channelArr = res.data
+    //     }
+    //   }).catch()
+    // },
     // 客户
     getCustomerList() {
-      this.filterObj.customerCode = ''
+      this.filterObj.customerName = ''
       selectAPI.queryCustomerList({
         channelCode: this.filterObj.channelName
       }).then(res => {
