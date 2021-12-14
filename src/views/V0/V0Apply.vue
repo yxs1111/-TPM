@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 16:31:45
+ * @LastEditTime: 2021-12-14 18:33:16
 -->
 <template>
   <div class="app-container">
@@ -520,7 +520,7 @@ export default {
     approve() {
       var arr = Object.keys(this.ContentData)
       if (arr.length) {
-        let judgmentType = this.ContentData[arr[0]][0].judgmentType
+        let judgmentType = this.ContentData[arr[0]][1].judgmentType
         if (judgmentType != null) {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
