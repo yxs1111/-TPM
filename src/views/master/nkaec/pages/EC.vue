@@ -150,7 +150,7 @@ export default {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('type', 'EC')
-      API.importNkaRawData(formData)
+      API.importEcRawData(formData)
         .then((response) => {
           if (response.code === 1000) {
             this.$message.success(response.data)

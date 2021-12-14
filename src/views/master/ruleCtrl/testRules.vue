@@ -239,7 +239,7 @@ export default {
         yearAndMonth: this.filterObj.date
       }).then(
         response => {
-          const fileName = '检验数据Excel' + new Date().getTime() + '.xls'
+          const fileName = '检验数据Excel' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
           const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'

@@ -274,12 +274,18 @@ export default {
     })
     //return requestApi.request_get('/mdm/mdPricepromotionCalculationandmaintenance/templateDownload', params)
   },
-  // 导入测试
+  // NKAEC 导入测试
   importNkaRawData(params) {
     return requestApi.request_post('/cityplan/importData/importNkaRawData', params)
   },
+  importEcRawData(params) {
+    return requestApi.request_post('/cityplan/importData/importEcRawData', params)
+  },
   importNkaRawDataGuideline(params) {
     return requestApi.request_post('/cityplan/importData/importNkaRawDataGuideline', params)
+  },
+  importEcRawDataGuideline(params) {
+    return requestApi.request_post('/cityplan/importData/importEcRawDataGuideline', params)
   },
   // 机制池
   downloadExcelSyspool() {
