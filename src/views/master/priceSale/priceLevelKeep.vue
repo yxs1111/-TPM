@@ -46,11 +46,11 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
         {{row.createDate?row.createDate.substring(0,10):""}}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
+      <el-table-column width="280" align="center" prop="updateBy" label="修改人" />
       <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
         {{row.updateDate?row.updateDate.substring(0,10):""}}
       </el-table-column>

@@ -34,7 +34,7 @@
 
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" align="center" />
+      
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
@@ -54,7 +54,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="150" align="center" prop="updateDate" label="更新时间">
         <template slot-scope="{row}">
           <div>
@@ -62,7 +62,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="280" align="center" prop="updateBy" label="更新人" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->

@@ -44,7 +44,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="用户名" align="center">
+      <el-table-column label="用户名" width="150" align="center">
         <template slot-scope="{row}">
           {{ row.name }}
         </template>
@@ -59,7 +59,7 @@
           {{ row.createBy }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_date" label="创建时间">
+      <el-table-column  width="280" align="center" prop="created_date" label="创建时间">
         <template slot-scope="{row}">
           <em class="el-icon-time" />
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
@@ -79,7 +79,7 @@
           <el-tag :type="row.locked | lockedStatusFilter">{{ row.locked | lockedWordFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="350" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="editRowData(row)">
             {{ $t('table.edit') }}
