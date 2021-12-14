@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 22:36:54
+ * @LastEditTime: 2021-12-14 22:53:41
 -->
 <template>
   <div class="app-container">
@@ -379,6 +379,7 @@ export default {
     },
     getCPTData() {
       this.dialogVisible = true
+      this.ruleForm.channelCode=this.filterObj.channelCode
     },
     //导入数据弹窗显示
     importData() {
