@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-13 20:43:12
+ * @LastEditTime: 2021-12-14 09:00:02
 -->
 <template>
   <div class="app-container">
@@ -97,8 +97,7 @@
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{(row.cptPromotionExpenses*1).toFixed(2)}}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
-                {{(row.averagePriceRange*1).toFixed(2)}}
+              <el-table-column align="right"  width="160" prop="averagePriceRange" label="均价差值(%)">
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
                 {{(row.promotionExpensesGapValue*1).toFixed(2)}}
