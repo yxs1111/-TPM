@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-13 09:54:02
+ * @LastEditTime: 2021-12-14 22:09:18
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -50,12 +50,14 @@
       <el-table-column width="240" v-slot={row} align="center" prop="versionName" label="版本名称">
         {{versionNameList[row.version]}}
       </el-table-column>
-      <el-table-column align="center" prop="minePackageName" label="Mine Package"> </el-table-column>
-      <el-table-column align="center" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column align="center" prop="channelEsName" label="提交人"> </el-table-column>
-      <el-table-column align="center" prop="createTime" label="提交时间"> </el-table-column>
+      <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
+      <el-table-column align="center" width="240" prop="channelEsName" label="提交人"> </el-table-column>
+      <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
+        {{row.createTime?row.createTime.substring(0,10):""}}
+      </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column>
-      <el-table-column width="150" align="center" prop="createDate" label="查看">
+      <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程
@@ -143,9 +145,6 @@ export default {
     },
     search() {
       this.getTableData()
-    },
-    getVersionName(key) {
-      return this.versionNameList[key]
     },
     operateProcess(version,name) {
 

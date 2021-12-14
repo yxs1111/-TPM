@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 09:01:18
+ * @LastEditTime: 2021-12-14 22:41:51
 -->
 <template>
   <div class="app-container">
@@ -95,7 +95,7 @@
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{(row.cptPromotionExpenses*1).toFixed(2)}}
               </el-table-column>
-              <el-table-column align="right"  width="160" prop="averagePriceRange" label="均价差值(%)">
+              <el-table-column align="right" width="160" prop="averagePriceRange" label="均价差值(%)">
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
                 {{(row.promotionExpensesGapValue*1).toFixed(2)}}
@@ -277,37 +277,44 @@ export default {
             this.isNoData = true
           } else {
             this.isNoData = false
-          }
-          for (const key in this.ContentData) {
-            let list = this.ContentData[key]
-            this.mainId = this.ContentData[key][0].mainId
-            for (let i = 0; i < list.length; i++) {
-              list[i].customGearList = JSON.parse(list[i].customGear)
-              //价格档位降序排序
-              list[i].customGearList.sort(function (a, b) {
-                return b.gear - a.gear
-              })
+            for (const key in this.ContentData) {
+              let list = this.ContentData[key]
+              this.mainId = this.ContentData[key][0].mainId
+              for (let i = 0; i < list.length; i++) {
+                list[i].customGearList = JSON.parse(list[i].customGear)
+                //价格档位降序排序
+                list[i].customGearList.sort(function (a, b) {
+                  return b.gear - a.gear
+                })
+              }
             }
+            //审批人匹配
+            this.infoByMainId()
           }
-          this.infoByMainId()
         }
       })
     },
     // 通过与审批按钮控制
     infoByMainId() {
-      selectAPI.infoByMainId({
-        mainId: this.mainId
-      }).then(res => {
-        if (res.code === 1000) {
-          if (res.data.version === 'V0' && res.data.assignee === this.usernameLocal) {
-            //本人可以提交
-            this.isSubmit = false
-          } else {
-            //其他人禁用
-            this.isSubmit = true
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V0' &&
+              res.data.assignee === this.usernameLocal
+            ) {
+              //本人可以提交
+              this.isSubmit = false
+            } else {
+              //其他人禁用
+              this.isSubmit = true
+            }
           }
-        }
-      }).catch()
+        })
+        .catch()
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
@@ -375,7 +382,7 @@ export default {
     confirmImport() {
       let arr = Object.keys(this.ContentData)
       API.exceptionSave({
-        mainId:this.ContentData[arr[0]][0].mainId
+        mainId: this.ContentData[arr[0]][0].mainId,
       }).then((res) => {
         if (res.code === 1000) {
           this.$message.success('保存成功!')

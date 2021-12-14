@@ -147,7 +147,7 @@
             <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="120" align="center" prop="brandName" label="品牌" />
             <el-table-column width="220" align="center" prop="productName" label="SKU" />
-            <el-table-column width="240" align="center" prop="distributorName" label="经销商" />
+            <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
             <el-table-column width="120" align="center" prop="regionName" label="区域" />
             <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
             <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 18:33:16
+ * @LastEditTime: 2021-12-14 22:36:54
 -->
 <template>
   <div class="app-container">
@@ -40,12 +40,12 @@
 
           <!-- 没有提交 有数据  正常点击 -->
           <!-- 没有提交 无数据  正常 暗 -->
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData?'':'noClick'" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
 
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve">
+          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData?'':'noClick'" @click="approve">
             <svg-icon icon-class="passLocal" style="font-size: 22px;" />
             <span class="text">提交</span>
           </div>
@@ -141,7 +141,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="渠道" prop="channelCode">
-              <el-select v-model="ruleForm.channelCode" placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.channelCode" disabled   placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
               </el-select>
             </el-form-item>
@@ -312,6 +312,11 @@ export default {
     // this.getList()
     this.getQuerySkuSelect()
     
+  },
+  watch: {
+    'filterObj.channelCode'() {
+      this.ruleForm.channelCode=this.filterObj.channelCode
+    }
   },
   computed: {},
   methods: {
