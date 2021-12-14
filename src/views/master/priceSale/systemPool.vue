@@ -58,9 +58,9 @@
       <el-table-column width="320" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="150" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="cdmTypeName" label="机制类型">
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           {{ typeVSinfo(scope.row.cdmType) }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column width="200" align="center" prop="cdmName" label="机制名称" />
       <el-table-column width="180" align="center" label="创建时间">

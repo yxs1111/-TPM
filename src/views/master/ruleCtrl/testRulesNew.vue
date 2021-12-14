@@ -373,7 +373,7 @@ export default {
       })
         .then((response) => {
           this.tableLoading = false
-          this.tableData = response.data.records
+          this.tableData = response.data
           this.total = response.data.total
           // 验证内容字段修改
           for (let i = 0; i < this.tableData.length; i++) {
