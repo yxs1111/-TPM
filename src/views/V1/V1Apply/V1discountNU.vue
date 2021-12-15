@@ -11,7 +11,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-select v-model="filterObj.customerCsName" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
@@ -70,7 +70,7 @@ export default {
       filterObj: {
         channelCode: '',
         brandCode: '',
-        customerCsName: '',
+        customerName: '',
         month: '',
       },
       categoryArr: [],
@@ -130,7 +130,7 @@ export default {
       API.getPageNU({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        customerCsName: this.filterObj.customerCsName,
+        customerName: this.filterObj.customerName,
         channelCode: this.filterObj.channelCode,
         brandCode: this.filterObj.brandCode,
         yearAndMonth: this.filterObj.month,
@@ -152,7 +152,12 @@ export default {
     //导出
     downExcel() {
       if (this.tableData.length) {
-        API.downExcelNU().then((res) => {
+        API.downExcelNU({
+          customerName: this.filterObj.customerName,
+          channelCode: this.filterObj.channelCode,
+          brandCode: this.filterObj.brandCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V1新客信息 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success('导出成功!')
