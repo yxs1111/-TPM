@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-12 15:40:55
+ * @LastEditTime: 2021-12-15 19:02:42
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -35,7 +35,7 @@
       </div>
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" label="序号" width="55">
+      <el-table-column align="center" label="序号" width="80">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -43,7 +43,7 @@
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
       <el-table-column align="center" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
-      <el-table-column align="center" v-slot={row} prop="processStatus" label="流程状态"> 
+      <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态"> 
         {{row.processStatus===2?'已完成':'进行中'}}
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="发起人"> </el-table-column>
@@ -52,7 +52,8 @@
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center"  label="查看">
+      <el-table-column width="280" align="center" prop="assignee" label="办理人"> </el-table-column>
+      <el-table-column width="150" align="center"  label="查看" fixed="right">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 22:53:41
+ * @LastEditTime: 2021-12-15 18:54:52
 -->
 <template>
   <div class="app-container">
@@ -40,12 +40,12 @@
 
           <!-- 没有提交 有数据  正常点击 -->
           <!-- 没有提交 无数据  正常 暗 -->
-          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData?'':'noClick'" @click="importData">
+          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData&&isSelf?'':'noClick'" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
 
-          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData?'':'noClick'" @click="approve">
+          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData&&isSelf?'':'noClick'" @click="approve">
             <svg-icon icon-class="passLocal" style="font-size: 22px;" />
             <span class="text">提交</span>
           </div>
@@ -290,6 +290,7 @@ export default {
       uploadFile: '',
       event: '',
       isSubmit: 1,
+      isSelf: 0, //是否是当前审批人
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -303,14 +304,17 @@ export default {
         'background:#F0F6FC',
       ], //价格档位背景色
       isNoData: false,
+      usernameLocal: '',
+      mainId:'',
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     this.getChannelList()
-    this.getMonth()
+    
     // this.getList()
     this.getQuerySkuSelect()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     
   },
   watch: {
@@ -327,6 +331,7 @@ export default {
       })
     },
     getList() {
+      this.filterObj.channelCode=this.ChannelList[0].channelCode
       //encodeURIComponent
       API.getList({
         yearAndMonth: this.filterObj.month,
@@ -334,6 +339,7 @@ export default {
         channelCode: this.filterObj.channelCode,
       }).then((response) => {
         if (response.code === 1000) {
+
           this.ContentData = response.data
           if (Object.keys(this.ContentData).length == 0) {
             this.isNoData = true
@@ -343,6 +349,7 @@ export default {
             for (const key in this.ContentData) {
               let list = this.ContentData[key]
               this.isSubmit = this.ContentData[key][0].isSubmit
+              this.mainId = this.ContentData[key][0].mainId
               for (let i = 0; i < list.length; i++) {
                 list[i].customGearList = JSON.parse(list[i].customGear)
                 //价格档位降序排序
@@ -350,7 +357,10 @@ export default {
                   return b.gear - a.gear
                 })
               }
+              
             }
+            //审批人匹配
+            this.infoByMainId()
           }
         }
       })
@@ -362,9 +372,34 @@ export default {
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
-        this.ChannelList = res.data
-        this.filterObj.channelCode=this.ChannelList[0].channelCode
+        if(res.code==1000) {
+          this.ChannelList = res.data
+        this.getMonth()
+        }
+        
       })
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V0' &&
+              res.data.assignee === this.usernameLocal
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
+            }
+          }
+        })
+        .catch()
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
