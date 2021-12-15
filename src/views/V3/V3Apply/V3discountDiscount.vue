@@ -46,15 +46,15 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="supplement">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="supplement">
         <svg-icon icon-class="nextSave" style="font-size: 20px;" />
         <span class="text">补录</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="submitApply">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="submitApply">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -343,7 +343,8 @@ export default {
       dialogDataF: [],
       uploadFile: '',
       localDate: '',
-      saveDialog: false
+      saveDialog: false,
+      btnStatus: true
     }
   },
   computed: {},
@@ -663,7 +664,7 @@ export default {
     // 导出数据
     exportData() {
       // 导出数据筛选
-      let data = {
+      const data = {
         channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
         customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
         distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
@@ -713,11 +714,26 @@ export default {
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
           this.submitBtn = response.data.records[0].isSubmit
+          this.infoByMainId()
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+            this.btnStatus = true
+          } else {
+            this.btnStatus = false
+          }
+        }
+      }).catch()
     },
     search() {
       console.log('hh')

@@ -50,11 +50,11 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="submitInfo">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -278,7 +278,8 @@ export default {
       customerArr: [],
       distributorArr: [],
       submitBtn: 1,
-      localDate: ''
+      localDate: '',
+      btnStatus: true
     }
   },
   computed: {},
@@ -593,11 +594,26 @@ export default {
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
           this.submitBtn = response.data.records[0].isSubmit
+          this.infoByMainId()
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+            this.btnStatus = true
+          } else {
+            this.btnStatus = false
+          }
+        }
+      }).catch()
     },
     search() {
       this.getTableData()
