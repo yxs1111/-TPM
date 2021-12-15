@@ -245,7 +245,9 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
-      saveBtn: false
+      saveBtn: false,
+      isSelf: 0, //是否是当前审批人
+      usernameLocal: '',
     }
   },
   computed: {},
@@ -256,10 +258,11 @@ export default {
     }
   },
   mounted() {
+    this.getQueryChannelSelect()
     this.getMonth()
     // this.getTableData()
     this.getQuerySkuSelect()
-    this.getQueryChannelSelect()
+    
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
@@ -316,6 +319,7 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
           this.channelOptons = res.data
+          this.filterObj.channelCode = this.channelOptons[0].channelCode
         }
       })
     },

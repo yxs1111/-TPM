@@ -246,15 +246,14 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getMonth()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getTableData()
     this.getQuerySkuSelect()
     this.getQueryChannelSelect()
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
-    this.usernameLocal = localStorage.getItem('usernameLocal')
-    console.log(this.usernameLocal);
+    
   },
   watch: {
     'filterObj.channelCode'() {
@@ -321,6 +320,7 @@ export default {
         .then((res) => {
           this.channelOptons = res.data
           this.filterObj.channelCode=this.channelOptons[0].channelCode
+          this.getMonth()
         })
         .catch()
     },

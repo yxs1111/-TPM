@@ -48,11 +48,11 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -234,10 +234,13 @@ export default {
       event: '',
       uploadFile: '',
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSelf: 0, //是否是当前审批人
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
+      mainId: '',
+      usernameLocal: '',
     }
   },
   computed: {},
@@ -248,11 +251,11 @@ export default {
     },
   },
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getQueryChannelSelect()
-    this.getMonth()
+    
     // this.getTableData()
     this.getQuerySkuSelect()
-    
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
@@ -270,25 +273,46 @@ export default {
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
         dimProduct: this.filterObj.dim_product,
-      })
-        .then((response) => {
-          if (response.code == 1000) {
-            this.tableData = response.data.records
-            if (this.tableData.length) {
-              this.isSubmit = this.tableData[0].isSubmit
-            } else {
-              this.isSubmit = 1
-            }
-
-            this.pageNum = response.data.pageNum
-            this.pageSize = response.data.pageSize
-            this.total = response.data.total
+      }).then((response) => {
+        if (response.code == 1000) {
+          this.tableData = response.data.records
+          if (this.tableData.length) {
+            this.isSubmit = this.tableData[0].isSubmit
+            this.mainId = this.tableData[0].mainId
+            this.infoByMainId()
+          } else {
+            this.isSubmit = 1
           }
-        })
-        .catch((error) => {})
+
+          this.pageNum = response.data.pageNum
+          this.pageSize = response.data.pageSize
+          this.total = response.data.total
+        }
+      })
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V2' &&
+              res.data.assignee === this.usernameLocal
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
+            }
+          }
+        })
     },
     // 查询列表 --获取活动年月
     getMonth() {
@@ -302,7 +326,8 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
           this.channelOptons = res.data
-          this.filterObj.channelCode=this.channelOptons[0].channelCode
+          this.filterObj.channelCode = this.channelOptons[0].channelCode
+          this.getMonth()
         }
       })
     },

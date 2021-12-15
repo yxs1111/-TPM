@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-15 00:04:39
+ * @LastEditTime: 2021-12-15 19:54:26
 -->
 <template>
   <div class="app-container">
@@ -257,15 +257,16 @@ export default {
   },
   directives: { elDragDialog, permission },
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getList()
     this.getQuerySkuSelect()
     this.getChannelList()
-    this.getMonth()
-    this.usernameLocal = localStorage.getItem('usernameLocal')
+    //this.getMonth()
+    
   },
   computed: {},
   methods: {
-    getList() {
+    getList() { 
       API.getApproveList({
         yearAndMonth: this.filterObj.month,
         dimProduct: this.filterObj.SKU,
@@ -321,8 +322,11 @@ export default {
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
-        this.ChannelList = res.data
-        this.filterObj.channelCode=this.ChannelList[0].channelCode
+        if (res.code == 1000) {
+          this.ChannelList = res.data
+          this.filterObj.channelCode=this.ChannelList[0].channelCode
+          this.getMonth()
+        }
       })
     },
     getQuerySkuSelect() {

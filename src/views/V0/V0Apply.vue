@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-15 18:54:52
+ * @LastEditTime: 2021-12-15 19:32:05
 -->
 <template>
   <div class="app-container">
@@ -141,7 +141,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="渠道" prop="channelCode">
-              <el-select v-model="ruleForm.channelCode" disabled   placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.channelCode" disabled placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
               </el-select>
             </el-form-item>
@@ -305,22 +305,21 @@ export default {
       ], //价格档位背景色
       isNoData: false,
       usernameLocal: '',
-      mainId:'',
+      mainId: '',
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannelList()
-    
     // this.getList()
     this.getQuerySkuSelect()
-    this.usernameLocal = localStorage.getItem('usernameLocal')
     
   },
   watch: {
     'filterObj.channelCode'() {
-      this.ruleForm.channelCode=this.filterObj.channelCode
-    }
+      this.ruleForm.channelCode = this.filterObj.channelCode
+    },
   },
   computed: {},
   methods: {
@@ -331,7 +330,7 @@ export default {
       })
     },
     getList() {
-      this.filterObj.channelCode=this.ChannelList[0].channelCode
+      
       //encodeURIComponent
       API.getList({
         yearAndMonth: this.filterObj.month,
@@ -339,7 +338,6 @@ export default {
         channelCode: this.filterObj.channelCode,
       }).then((response) => {
         if (response.code === 1000) {
-
           this.ContentData = response.data
           if (Object.keys(this.ContentData).length == 0) {
             this.isNoData = true
@@ -357,7 +355,6 @@ export default {
                   return b.gear - a.gear
                 })
               }
-              
             }
             //审批人匹配
             this.infoByMainId()
@@ -372,11 +369,11 @@ export default {
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
-        if(res.code==1000) {
+        if (res.code == 1000) {
           this.ChannelList = res.data
-        this.getMonth()
+          this.filterObj.channelCode = this.ChannelList[0].channelCode
+          this.getMonth()
         }
-        
       })
     },
     // 通过与审批按钮控制
@@ -414,7 +411,7 @@ export default {
     },
     getCPTData() {
       this.dialogVisible = true
-      this.ruleForm.channelCode=this.filterObj.channelCode
+      this.ruleForm.channelCode = this.filterObj.channelCode
     },
     //导入数据弹窗显示
     importData() {
