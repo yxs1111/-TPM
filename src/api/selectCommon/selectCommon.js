@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2021-12-12 16:44:00
+ * @LastEditTime: 2021-12-15 13:19:54
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -36,7 +36,7 @@ export default {
   },
   //品牌
   getBrand(params) {
-    return requestApi.request_get('/mdm/common/getPage', params)
+    return requestApi.request_get('/mdm/mdBrand/getMdProductList', params)
   },
   //区域
   getRegionList(params) {
