@@ -244,8 +244,8 @@ export default {
   computed: {},
   mounted() {
     // this.getTableData()
-    this.getEffectiveDate()
     this.getChannel()
+    this.getEffectiveDate()
     this.getSKU()
     // this.getMP()
     // this.getCustomerList()

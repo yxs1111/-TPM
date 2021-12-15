@@ -59,7 +59,7 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -86,11 +86,11 @@
       </el-table-column>
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" v-slot={row} align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）" >
-         {{(row.systemRecommendedVol*1).toFixed(2)}}
+      <el-table-column v-slot="{row}" width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）">
+        {{ (row.systemRecommendedVol*1).toFixed(2) }}
       </el-table-column>
-      <el-table-column width="220" v-slot={row} align="right" prop="adjustedVol" label="调整后销量（CTN）" >
-        {{(row.adjustedVol*1).toFixed(2)}}
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）">
+        {{ (row.adjustedVol*1).toFixed(2) }}
       </el-table-column>
       <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
       <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
@@ -116,8 +116,15 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
@@ -153,14 +160,22 @@
       </div>
 
       <div class="tableWrap">
-        <el-table border height="400" :data="checkedData" style="width: 100%" :header-cell-style="{
+        <el-table
+          border
+          height="400"
+          :data="checkedData"
+          style="width: 100%"
+          :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }" :row-class-name="tableRowClassName" stripe>
+          }"
+          :row-class-name="tableRowClassName"
+          stripe
+        >
           <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -250,7 +265,7 @@ export default {
         productCode: '',
         regionName: ''
       },
-      RegionList:[],
+      RegionList: [],
       categoryArr: [],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -263,7 +278,7 @@ export default {
       customerArr: [],
       distributorArr: [],
       submitBtn: 1,
-      localDate: '',
+      localDate: ''
     }
   },
   computed: {},
@@ -271,10 +286,10 @@ export default {
     this.getChannel()
     // this.getTableData()
     this.getEffectiveDate()
-    
+
     this.getSKU()
     this.getRegionList()
-    this.getCustomerList()
+    // this.getCustomerList()
     this.getDistributorList()
   },
   methods: {
@@ -318,7 +333,7 @@ export default {
       this.filterObj.customerCode = ''
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode,
+          channelCode: this.filterObj.channelCode
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -337,7 +352,7 @@ export default {
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
-        mainId: this.mainIdLocal,
+        mainId: this.mainIdLocal
       }).then((res) => {
         if (res.code === 1000) {
           this.closeimportDialog()
@@ -350,12 +365,12 @@ export default {
     exportErrorList() {
       API.exportErrorList({
         mainId: this.mainIdLocal,
-        channelCode: 'NKA',
+        channelCode: 'NKA'
       }).then((response) => {
         const fileName = '错误信息' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel',
+          type: 'application/vnd.ms-excel'
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -370,12 +385,12 @@ export default {
     // 导出excel
     exportExcelInfo() {
       API.exportExcel({
-        mainId: this.mainIdLocal,
+        mainId: this.mainIdLocal
       }).then((response) => {
         const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel',
+          type: 'application/vnd.ms-excel'
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -405,7 +420,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '上传成功',
+              message: '上传成功'
             })
             if (response.data != null) {
               this.checkedData = response.data
@@ -416,7 +431,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '上传失败，请重新上传。',
+              message: '上传失败，请重新上传。'
             })
           }
         })
@@ -455,36 +470,36 @@ export default {
       if (this.tableData[0].judgmentType === null) {
         this.$confirm('数据未校验，请先进行导入验证', '提示', {
           confirmButtonText: '确定',
-          type: 'warning',
+          type: 'warning'
         })
           .then(() => {
             this.$message({
               type: 'success',
-              message: '好的!',
+              message: '好的!'
             })
           })
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消',
+              message: '已取消'
             })
           })
       } else {
         this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning',
+          type: 'warning'
         })
           .then(() => {
             API.submitV1({
-              mainId: this.mainIdLocal,
+              mainId: this.mainIdLocal
             })
               .then((res) => {
                 if (res.code === 1000) {
                   this.getTableData()
                   this.$message({
                     type: 'success',
-                    message: '提交成功!',
+                    message: '提交成功!'
                   })
                 }
               })
@@ -493,7 +508,7 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消提交',
+              message: '已取消提交'
             })
           })
       }
@@ -503,12 +518,12 @@ export default {
       API.downExcelTmpForV1({
         mainId: this.mainIdLocal,
         importType: 1,
-        channelCode: 'NKA',
+        channelCode: 'NKA'
       }).then((response) => {
         const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel',
+          type: 'application/vnd.ms-excel'
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -572,7 +587,7 @@ export default {
         distributorName: this.filterObj.distributorCode,
         productName: this.filterObj.productCode,
         regionName: this.filterObj.regionName,
-        yearAndMonth: this.localDate,
+        yearAndMonth: this.localDate
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -607,8 +622,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 
