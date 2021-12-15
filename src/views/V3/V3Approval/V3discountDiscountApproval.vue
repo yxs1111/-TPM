@@ -6,7 +6,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -86,7 +86,7 @@
       <el-table-column width="160" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <div v-if="row.judgmentType!== null" class="statusWrap">
-            <img v-if="row.judgmentType === 'pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="row.judgmentType === 'Pass'" src="../../../assets/images/success.png" alt="">
             <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
             {{ row.judgmentType }}
           </div>
@@ -234,11 +234,11 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        channelName: '',
-        customerName: '',
-        distributorName: '',
-        productName: '',
-        regionName: ''
+        channelName: null,
+        customerName: null,
+        distributorName: null,
+        productName: null,
+        regionName: null
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -254,6 +254,7 @@ export default {
   },
   computed: {},
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getEffectiveDate()
     // this.getTableData()
     this.getChannel()
@@ -321,7 +322,7 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.filterObj.channelName = this.channelArr[0].channelCode
+          this.filterObj.channelName = this.channelArr[0].channelEsName
           this.getCustomerList(this.filterObj.channelName)
         }
       }).catch()
@@ -342,7 +343,7 @@ export default {
     // },
     // 客户
     getCustomerList() {
-      this.filterObj.customerName = ''
+      this.filterObj.customerName = null
       selectAPI.queryCustomerList({
         channelCode: this.filterObj.channelName
       }).then(res => {
@@ -474,9 +475,15 @@ export default {
     // 导出数据
     exportData() {
       // 导出数据筛选
-      var data = {}
-      data = { ...this.filterObj }
-      data.exportType = 'export'
+      let data = {
+        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+        customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
+        distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
+        productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
+        yearAndMonth: this.localDate,
+        regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+        exportType: 'export'
+      }
       API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
@@ -526,12 +533,12 @@ export default {
       API.getPageV3({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelName: this.filterObj.channelName,
-        customerName: this.filterObj.customerName,
-        distributorName: this.filterObj.distributorName,
-        productName: this.filterObj.productName,
+        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+        customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
+        distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
+        productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
         yearAndMonth: this.localDate,
-        regionName: this.filterObj.regionName
+        regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName
       })
         .then((response) => {
           this.tableData = response.data.records
