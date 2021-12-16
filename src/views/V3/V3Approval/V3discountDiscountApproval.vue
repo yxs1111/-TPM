@@ -256,7 +256,7 @@ export default {
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    this.getEffectiveDate()
+    // this.getEffectiveDate()
     // this.getTableData()
     this.getSKU()
     // this.getMP()
@@ -326,6 +326,7 @@ export default {
           this.channelArr = res.data
           this.filterObj.channelName = this.channelArr[0].channelEsName
           this.getCustomerList(this.filterObj.channelName)
+          this.getEffectiveDate()
         }
       }).catch()
     },
@@ -544,7 +545,6 @@ export default {
       })
         .then((response) => {
           if (response.data.records.length > 0) {
-            debugger
             if (response.data.records[0].isSubmit === 0) {
               this.tableData = []
             } else if (response.data.records[0].isSubmit === 1) {

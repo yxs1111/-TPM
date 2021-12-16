@@ -352,7 +352,7 @@ export default {
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    this.getEffectiveDate()
+    // this.getEffectiveDate()
     // this.getTableData()
     this.getRegionList()
     this.getSKU()
@@ -389,6 +389,7 @@ export default {
           this.channelArr = res.data
           this.filterObj.channelName = this.channelArr[0].channelCode
           this.getCustomerList(this.filterObj.channelName)
+          this.getEffectiveDate()
         }
       }).catch()
     },

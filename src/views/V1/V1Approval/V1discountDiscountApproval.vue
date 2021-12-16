@@ -247,7 +247,7 @@ export default {
     this.getSKU()
     this.getDistributorList()
     this.getRegionList()
-    this.getEffectiveDate()
+    // this.getEffectiveDate()
     this.usernameLocal = localStorage.getItem('usernameLocal')
   },
   methods: {
@@ -292,7 +292,7 @@ export default {
           this.channelArr = res.data
           this.filterObj.channelCode = this.channelArr[0].channelEsName
           this.getCustomerList(this.filterObj.channelCode)
-          this.$forceUpdate()
+          this.getEffectiveDate()
         }
       }).catch()
     },

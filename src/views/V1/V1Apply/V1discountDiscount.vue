@@ -288,7 +288,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     // this.getTableData()
-    this.getEffectiveDate()
+    // this.getEffectiveDate()
 
     this.getSKU()
     this.getRegionList()
@@ -314,7 +314,7 @@ export default {
           this.channelArr = res.data
           this.filterObj.channelCode = this.channelArr[0].channelEsName
           this.getCustomerList(this.filterObj.channelCode)
-          this.$forceUpdate()
+          this.getEffectiveDate()
         }
       })
     },
