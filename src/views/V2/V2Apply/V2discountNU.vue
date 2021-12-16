@@ -357,7 +357,7 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.exceptionSave({
+      API.exceptionNUSave({
         mainId: this.tableData[0].mainId
       }).then((res) => {
         if (res.code == 1000) {
@@ -370,7 +370,7 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.getExceptionNUList({
+        API.exportNUExceptionExcel({
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
