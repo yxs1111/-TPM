@@ -261,7 +261,7 @@ export default {
             if (this.tableData.length) {
               this.isSubmit = this.tableData[0].isSubmit
             } else {
-              this.isSubmit = 0
+              this.isSubmit = 1
             }
             this.pageNum = response.data.pageNum
             this.pageSize = response.data.pageSize
@@ -347,7 +347,7 @@ export default {
     checkImport() {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
-      API.importExcel(formData).then((response) => {
+      API.importNUExcel(formData).then((response) => {
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn =
@@ -370,13 +370,13 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exceptionDownExcel({
+        API.getExceptionNUList({
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(res, 'V2-NU异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
@@ -387,13 +387,13 @@ export default {
     exportExcel() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportExcel({
+        API.exportNUExcel({
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(res, 'V2-NU-' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
@@ -431,7 +431,7 @@ export default {
           })
             .then(() => {
               const mainId = this.tableData[0].mainId
-              API.approve({
+              API.approveNU({
                 mainId: mainId, // 主表id
                 opinion: 'agree' // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {

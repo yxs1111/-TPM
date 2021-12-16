@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-11 14:52:19
+ * @LastEditTime: 2021-12-15 21:51:58
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -61,6 +61,40 @@ export default {
   //NU
   getPageNU(params) {
     return requestApi.request_get(this.NUUrl+'/getPage', params)
+  },
+  //downExcel
+  exportNUExcel(params) {
+    //二进制数据流转blob
+    return request({
+      url:this.NUUrl+'/downExcel',
+      method:'post',
+      data:params,
+      responseType:'blob'
+    })
+  },
+  /**
+   * 导入excel
+   * @param {params} params 
+   * @returns request
+   */
+  importNUExcel(params) {
+    return requestApi.request_post(this.NUUrl+'/import', params)
+  },
+  /**
+   * 审批
+   * @returns 
+   */
+  approveNU(params) {
+    return requestApi.request_post(this.NUUrl+'/approve', params)
+  },
+  //获取NU 异常信息列表
+  getExceptionNUList(params) {
+    return request({
+      url:this.NUUrl+'/getApproveList',
+      method:'post',
+      data:params,
+      responseType:'blob'
+    })
   },
   
 }
