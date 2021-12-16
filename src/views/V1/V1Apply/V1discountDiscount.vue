@@ -279,11 +279,13 @@ export default {
       distributorArr: [],
       submitBtn: 1,
       localDate: '',
-      btnStatus: true
+      btnStatus: true,
+      usernameLocal: ''
     }
   },
   computed: {},
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     // this.getTableData()
     this.getEffectiveDate()

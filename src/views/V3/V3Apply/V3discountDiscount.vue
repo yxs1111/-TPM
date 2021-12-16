@@ -344,11 +344,13 @@ export default {
       uploadFile: '',
       localDate: '',
       saveDialog: false,
-      btnStatus: true
+      btnStatus: true,
+      usernameLocal: ''
     }
   },
   computed: {},
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getEffectiveDate()
     // this.getTableData()
@@ -733,7 +735,6 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
-            debugger
             this.btnStatus = true
           } else {
             this.btnStatus = false

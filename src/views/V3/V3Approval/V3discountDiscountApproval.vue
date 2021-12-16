@@ -261,7 +261,7 @@ export default {
     this.getSKU()
     // this.getMP()
     this.getRegionList()
-    this.usernameLocal = localStorage.getItem('usernameLocal')
+    // this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getCustomerList()
     this.getDistributorList()
   },
