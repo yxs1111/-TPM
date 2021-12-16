@@ -255,9 +255,9 @@ export default {
   computed: {},
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
+    this.getChannel()
     this.getEffectiveDate()
     // this.getTableData()
-    this.getChannel()
     this.getSKU()
     // this.getMP()
     this.getRegionList()
