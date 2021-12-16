@@ -711,10 +711,15 @@ export default {
         regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName
       })
         .then((response) => {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
-          this.submitBtn = response.data.records[0].isSubmit
-          this.infoByMainId()
+          if (response.data.records.length > 0) {
+            this.tableData = response.data.records
+            this.mainIdLocal = response.data.records[0].mainId
+            this.submitBtn = response.data.records[0].isSubmit
+            this.infoByMainId()
+          } else {
+            this.mainIdLocal = null
+            this.btnStatus = false
+          }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -728,10 +733,13 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+            debugger
             this.btnStatus = true
           } else {
             this.btnStatus = false
           }
+        } else {
+          this.btnStatus = false
         }
       }).catch()
     },

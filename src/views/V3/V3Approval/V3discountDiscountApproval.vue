@@ -44,15 +44,15 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="approve(1)">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="approve(2)">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="approve(2)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -64,7 +64,7 @@
       <el-table-column width="180" align="center" prop="minePackageName" label="Mine Package" />
       <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelName" label="渠道" />
-      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="200" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="180" align="center" prop="productName" label="SKU" />
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
@@ -314,6 +314,8 @@ export default {
           } else {
             this.btnStatus = false
           }
+        } else {
+          this.btnStatus = false
         }
       }).catch()
     },
@@ -475,7 +477,7 @@ export default {
     // 导出数据
     exportData() {
       // 导出数据筛选
-      let data = {
+      const data = {
         channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
         customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
         distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
@@ -541,17 +543,22 @@ export default {
         regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName
       })
         .then((response) => {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
+          if (response.data.records.length > 0) {
+            this.tableData = response.data.records
+            this.mainIdLocal = response.data.records[0].mainId
+            this.infoByMainId()
+          } else {
+            this.mainIdLocal = null
+            this.btnStatus = false
+          }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          this.infoByMainId()
         })
         .catch((error) => {})
     },
     search() {
-       this.getTableData()
+      this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

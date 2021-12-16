@@ -312,6 +312,7 @@ export default {
           this.channelArr = res.data
           this.filterObj.channelCode = this.channelArr[0].channelEsName
           this.getCustomerList(this.filterObj.channelCode)
+          this.$forceUpdate()
         }
       })
     },
@@ -359,6 +360,8 @@ export default {
           this.closeimportDialog()
           this.getTableData()
           this.$message.success('保存成功！')
+        } else {
+          this.$message.error('保存失败！')
         }
       })
     },
@@ -591,10 +594,15 @@ export default {
         yearAndMonth: this.localDate
       })
         .then((response) => {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
-          this.submitBtn = response.data.records[0].isSubmit
-          this.infoByMainId()
+          if (response.data.records.length > 0) {
+            this.tableData = response.data.records
+            this.mainIdLocal = response.data.records[0].mainId
+            this.submitBtn = response.data.records[0].isSubmit
+            this.infoByMainId()
+          } else {
+            this.mainIdLocal = null
+            this.btnStatus = false
+          }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -612,6 +620,8 @@ export default {
           } else {
             this.btnStatus = false
           }
+        } else {
+          this.btnStatus = false
         }
       }).catch()
     },
