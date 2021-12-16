@@ -549,7 +549,6 @@ export default {
             this.infoByMainId()
           } else {
             this.mainIdLocal = null
-            this.submitBtn = 1
             this.btnStatus = false
           }
           this.pageNum = response.data.pageNum

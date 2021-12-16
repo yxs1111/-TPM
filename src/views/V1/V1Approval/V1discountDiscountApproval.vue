@@ -43,15 +43,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="agree">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="agree">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="reject">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="reject">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -160,7 +160,7 @@
           <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
           <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
           <el-table-column width="120" align="center" prop="channelName" label="渠道" />
-          <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+          <el-table-column width="200" align="center" prop="customerName" label="客户系统名称" />
           <el-table-column width="120" align="center" prop="brandName" label="品牌" />
           <el-table-column width="160" align="center" prop="productName" label="SKU" />
           <el-table-column width="190" align="center" prop="priceGearAmount" label="价格档位（RMB/Tin）">
@@ -243,14 +243,11 @@ export default {
   },
   computed: {},
   mounted() {
-    // this.getTableData()
     this.getChannel()
-    this.getEffectiveDate()
     this.getSKU()
-    // this.getMP()
-    // this.getCustomerList()
     this.getDistributorList()
     this.getRegionList()
+    this.getEffectiveDate()
     this.usernameLocal = localStorage.getItem('usernameLocal')
   },
   methods: {
@@ -272,6 +269,8 @@ export default {
           } else {
             this.btnStatus = true
           }
+        } else {
+          this.btnStatus = false
         }
       }).catch()
     },
@@ -293,6 +292,7 @@ export default {
           this.channelArr = res.data
           this.filterObj.channelCode = this.channelArr[0].channelEsName
           this.getCustomerList(this.filterObj.channelCode)
+          this.$forceUpdate()
         }
       }).catch()
     },
@@ -521,9 +521,14 @@ export default {
         yearAndMonth: this.localDate
       })
         .then((response) => {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
-          this.infoByMainId()
+          if (response.data.records.length > 0) {
+            this.tableData = response.data.records
+            this.mainIdLocal = response.data.records[0].mainId
+            this.infoByMainId()
+          } else {
+            this.mainIdLocal = null
+            this.btnStatus = false
+          }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
