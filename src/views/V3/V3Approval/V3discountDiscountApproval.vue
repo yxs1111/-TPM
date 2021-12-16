@@ -544,7 +544,14 @@ export default {
       })
         .then((response) => {
           if (response.data.records.length > 0) {
-            this.tableData = response.data.records
+            debugger
+            if (response.data.records[0].isSubmit === 0) {
+              this.tableData = []
+            } else if (response.data.records[0].isSubmit === 1) {
+              this.tableData = response.data.records
+            } else {
+              this.tableData = []
+            }
             this.mainIdLocal = response.data.records[0].mainId
             this.infoByMainId()
           } else {
