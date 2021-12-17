@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-16 11:52:55
+ * @LastEditTime: 2021-12-17 11:23:03
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -61,7 +61,7 @@ export default {
   },
   //NU
   getPageNU(params) {
-    return requestApi.request_get(this.NUUrl+'/getPage', params)
+    return requestApi.request_post(this.NUUrl+'/getPage', params)
   },
   //downExcel
   exportNUExcel(params) {
