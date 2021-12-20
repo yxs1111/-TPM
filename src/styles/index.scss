@@ -399,6 +399,9 @@ div:focus {
   font-family: Source Han Sans CN Light;
   font-weight: 400;
   color: #666;
+  .el-table__body-wrapper {
+    z-index: 2;
+  }
   // 滚动条的宽度
   .el-table__body-wrapper::-webkit-scrollbar {
     width: 16px; // 横向滚动条
