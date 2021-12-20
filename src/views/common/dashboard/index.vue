@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-20 10:38:07
+ * @LastEditTime: 2021-12-20 11:21:17
 -->
 <template>
   <div class="dashboard-container">
@@ -44,13 +44,14 @@
               <div class="PPBar">
                 <span class="PointTitle">PP</span>
                 <div class="V0">
-                  <div class="passIcon"
-                    v-if="value[0].version=='V1'||value[0].version=='V2'||value[0].version=='V3'||(value[0].version=='V0'&&value[0].processStatus==2)"></div>
-                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V0'&&value[0].workDateFlag==='0'&&(value[0].version=='V0'&&value[0].processStatus==1)">
+                  <div class="passIcon" v-if="value[0].version=='V1'||value[0].version=='V2'||value[0].version=='V3'||(value[0].version=='V0'&&value[0].processStatus==2)"></div>
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V0'&&value[0].workDateFlag==='0'&&(value[0].version=='V0'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="currentPoint" v-if="value[0].version=='V0'&&value[0].workDateFlag==='0'&&(value[0].version=='V0'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
-                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V0'&&value[0].workDateFlag!=='0'&&(value[0].version=='V0'&&value[0].processStatus==1)">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V0'&&value[0].workDateFlag!=='0'&&(value[0].version=='V0'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="delayPoint" v-if="value[0].version=='V0'&&value[0].workDateFlag!=='0'&&(value[0].version=='V0'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
@@ -59,11 +60,13 @@
                 </div>
                 <div class="V1">
                   <div class="passIcon" v-if="value[0].version=='V2'||value[0].version=='V3'||(value[0].version=='V1'&&value[0].processStatus==2)"></div>
-                   <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V1'&&value[0].workDateFlag==='0'&&(value[0].version=='V1'&&value[0].processStatus==1)">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V1'&&value[0].workDateFlag==='0'&&(value[0].version=='V1'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="currentPoint" v-if="value[0].version=='V1'&&value[0].workDateFlag==='0'&&(value[0].version=='V1'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
-                   <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V1'&&value[0].workDateFlag!=='0'&&(value[0].version=='V1'&&value[0].processStatus==1)">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V1'&&value[0].workDateFlag!=='0'&&(value[0].version=='V1'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="delayPoint" v-if="value[0].version=='V1'&&value[0].workDateFlag!=='0'&&(value[0].version=='V1'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
@@ -73,11 +76,13 @@
                 </div>
                 <div class="V2">
                   <div class="passIcon" v-if="value[0].version=='V3'||(value[0].version=='V2'&&value[0].processStatus==2)"></div>
-                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V2'&&value[0].workDateFlag=='0'&&(value[0].version=='V2'&&value[0].processStatus==1)">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V2'&&value[0].workDateFlag=='0'&&(value[0].version=='V2'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="currentPoint" v-if="value[0].version=='V2'&&value[0].workDateFlag=='0'&&(value[0].version=='V2'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
-                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V2'&&value[0].workDateFlag!=='0'&&(value[0].version=='V2'&&value[0].processStatus==1)">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V2'&&value[0].workDateFlag!=='0'&&(value[0].version=='V2'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="delayPoint" v-if="value[0].version=='V2'&&value[0].workDateFlag!=='0'&&(value[0].version=='V2'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
@@ -87,11 +92,13 @@
                 </div>
                 <div class="V3">
                   <div class="passIcon" v-if="value[0].version=='V3'&&value[0].processStatus==2"></div>
-                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V3'&&value[0].workDateFlag=='0'&&(value[0].version=='V3'&&value[0].processStatus==1)">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V3'&&value[0].workDateFlag=='0'&&(value[0].version=='V3'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="currentPoint" v-if="value[0].version=='V3'&&value[0].workDateFlag=='0'&&(value[0].version=='V3'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
-                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="value[0].version=='V3'&&value[0].workDateFlag!=='0'&&(value[0].version=='V3'&&value[0].processStatus==1)">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                    v-if="value[0].version=='V3'&&value[0].workDateFlag!=='0'&&(value[0].version=='V3'&&value[0].processStatus==1)">
                     <div slot="content" v-html="getTip(value[0])"></div>
                     <div class="delayPoint" v-if="value[0].version=='V3'&&value[0].workDateFlag!=='0'&&(value[0].version=='V3'&&value[0].processStatus==1)"></div>
                   </el-tooltip>
@@ -103,118 +110,31 @@
               <div class="NU">
                 <span class="PointTitle">NU</span>
                 <div class="NuPoint">
-                  
-                  <div class="V1">
-                  <div class="passIcon" v-if="value[1].version=='V2'||value[1].version=='V3'||(value[1].version=='V1'&&value[1].processStatus==2)"></div>
-                  <div class="currentPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag==='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
-                  <div class="delayPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag!=='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
-                  <div class="pointCircle" v-if="value[1].version!='V1'&&value[1].version!='V2'&&value[1].version!='V3'"></div>
-                  <div class="line" v-if="value[1].version=='V2'||value[1].version=='V3'"></div>
-                  <div class="lineDark" v-if="(value[1].version=='V0'&&value[1].version!='V2'&&value[1].version!='V3')||value[1].version=='V1'"></div>
-                </div>
-                <div class="V2">
-                  <div class="passIcon" v-if="value[1].version=='V3'||(value[1].version=='V2'&&value[1].processStatus==2)"></div>
-                  <div class="currentPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
-                  <div class="delayPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag!=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
-                  <div class="pointCircle" v-if="value[1].version!='V2'&&value[1].version!='V3'"></div>
-                  <div class="line" v-if="value[1].version=='V3'"></div>
-                  <div class="lineDark" v-if="(value[1].version=='V0'||value[1].version=='V1')||value[1].version=='V2'"></div>
-                </div>
-                <div class="V3">
-                  <div class="passIcon" v-if="value[1].version=='V3'&&value[1].processStatus==2"></div>
-                  <div class="currentPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
-                  <div class="delayPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag!=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
-                  <div class="pointCircle" v-if="value[1].version!='V3'"></div>
-                </div>
-                </div>
 
-              </div>
-            </div>
-          </div>
-          <div class="monthBar">
-            <div class="monthBg">
-              <div class="monthName">7+5</div>
-              <div class="monthName">(202110)</div>
-            </div>
-            <div class="monthPoint">
-              <!-- PP -->
-              <div class="PPBar">
-                <span class="PointTitle">PP</span>
-                <div class="V0">
-                  <div class="passIcon"></div>
-                  <div class="line"></div>
-                </div>
-                <div class="V1">
-                  <div class="passIcon"></div>
-                  <div class="line"></div>
-                </div>
-                <div class="V2">
-                  <div class="delayPoint"></div>
-                  <div class="lineDark"></div>
-                </div>
-                <div class="V3">
-                  <div class="pointCircle"></div>
-                </div>
-              </div>
-              <div class="NU">
-                <span class="PointTitle">NU</span>
-                <div class="NuPoint">
                   <div class="V1">
-                    <div class="passIcon"></div>
-                    <div class="line"></div>
+                    <div class="passIcon" v-if="value[1].version=='V2'||value[1].version=='V3'||(value[1].version=='V1'&&value[1].processStatus==2)"></div>
+                    <div class="currentPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag==='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
+                    <div class="delayPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag!=='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
+                    <div class="pointCircle" v-if="value[1].version!='V1'&&value[1].version!='V2'&&value[1].version!='V3'"></div>
+                    <div class="line" v-if="value[1].version=='V2'||value[1].version=='V3'"></div>
+                    <div class="lineDark" v-if="(value[1].version=='V0'&&value[1].version!='V2'&&value[1].version!='V3')||value[1].version=='V1'"></div>
                   </div>
                   <div class="V2">
-                    <div class="currentPoint"></div>
-                    <div class="lineDark"></div>
+                    <div class="passIcon" v-if="value[1].version=='V3'||(value[1].version=='V2'&&value[1].processStatus==2)"></div>
+                    <div class="currentPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
+                    <div class="delayPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag!=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
+                    <div class="pointCircle" v-if="value[1].version!='V2'&&value[1].version!='V3'"></div>
+                    <div class="line" v-if="value[1].version=='V3'"></div>
+                    <div class="lineDark" v-if="(value[1].version=='V0'||value[1].version=='V1')||value[1].version=='V2'"></div>
                   </div>
                   <div class="V3">
-                    <div class="pointCircle"></div>
+                    <div class="passIcon" v-if="value[1].version=='V3'&&value[1].processStatus==2"></div>
+                    <div class="currentPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
+                    <div class="delayPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag!=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
+                    <div class="pointCircle" v-if="value[1].version!='V3'"></div>
                   </div>
                 </div>
 
-              </div>
-            </div>
-          </div>
-          <div class="monthBar">
-            <div class="monthBg">
-              <div class="monthName">7+5</div>
-              <div class="monthName">(202110)</div>
-            </div>
-            <div class="monthPoint">
-              <!-- PP -->
-              <div class="PPBar">
-                <span class="PointTitle">PP</span>
-                <div class="V0">
-                  <div class="passIcon"></div>
-                  <div class="line"></div>
-                </div>
-                <div class="V1">
-                  <div class="passIcon"></div>
-                  <div class="line"></div>
-                </div>
-                <div class="V2">
-                  <div class="currentPoint"></div>
-                  <div class="lineDark"></div>
-                </div>
-                <div class="V3">
-                  <div class="pointCircle"></div>
-                </div>
-              </div>
-              <div class="NU">
-                <span class="PointTitle">NU</span>
-                <div class="NuPoint">
-                  <div class="V1">
-                    <div class="passIcon"></div>
-                    <div class="lineDark"></div>
-                  </div>
-                  <div class="V2">
-                    <div class="pointCircle"></div>
-                    <div class="lineDark"></div>
-                  </div>
-                  <div class="V3">
-                    <div class="pointCircle"></div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -340,7 +260,6 @@ export default {
           // 括号内传递日期可点亮指定日期，如new Date(2019, 6, 1)，也可传递多个日期：如dates: [ new Date(2018, 0, 1), new Date(2018, 0, 15) ]
           dates: new Date(),
           highlight: true,
-          dot: true,
           // popover 点亮的日期上出现提示内容
           popover: {
             label: '美好的一天！要开心呦！',
@@ -353,7 +272,7 @@ export default {
               backgroundColor: '#FB5A56',
             },
           },
-          dates: new Date(2021, 11, 27),
+          dates: new Date('Sun Nov 07 2021 00:00:00'),
         },
         {
           key: 'V2Day',
@@ -367,12 +286,16 @@ export default {
       ],
       MessageList: [], //消息列表
       ActivityList: [],
-      ActivityObj: {},
     }
   },
   mounted() {
     this.getMesList()
     this.getHomePageData()
+    // var dateString="20211107";
+    // var pattern = /(\d{4})(\d{2})(\d{2})/;
+    // var formatedDate = dateString.replace(pattern, '$1/$2/$3');
+    // var date = new Date(formatedDate);
+    // console.log(date);
     // window.addEventListener('resize', () => {
     //   this.SalesAmountChart.resize()
     //   this.ActualSalesChart.resize()
@@ -431,9 +354,8 @@ export default {
     // 日历和流程
     getHomePageData() {
       API.getHomePageData().then((res) => {
-       
         let array = res.data.investList
-        this.ActivityObj = array[0]
+        //流程处理
         let data = {}
         for (let m = 0; m < array.length; m++) {
           //对date 进行分组
@@ -453,11 +375,25 @@ export default {
             data[array[m].yearAndMonth].push(array[m])
             //PP、NU 排序
             data[array[m].yearAndMonth].sort(function (a, b) {
-               return b.sortCode - a.sortCode
+              return b.sortCode - a.sortCode
             })
           }
         }
         this.ActivityList = data
+        //日期处理
+        // let DateArray = res.data.calendar
+        // let DateData = {}
+        // for (let m = 0; m < DateArray.length; m++) {
+        //   //对date 进行分组
+        //   if (!DateData[DateArray[m].date]) {
+        //     var arr = []
+        //     arr.push(DateArray[m])
+        //     DateData[DateArray[m].date] = arr
+        //   } else {
+        //     DateData[DateArray[m].date].push(DateArray[m])
+        //   }
+        // }
+        // console.log(DateData)
       })
     },
     getCPTMonth(value) {
@@ -553,7 +489,6 @@ export default {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
         .monthBar {
           width: 100%;
           height: 110px;
@@ -562,6 +497,7 @@ export default {
           border-radius: 20px;
           box-sizing: border-box;
           display: flex;
+          margin-bottom: 20px;
 
           .monthBg {
             width: 150px;
