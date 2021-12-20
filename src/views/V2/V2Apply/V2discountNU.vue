@@ -26,7 +26,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG"  @click="exportExcel">
+        <div class="TpmButtonBG" @click="exportExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
@@ -51,14 +51,14 @@
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
-      <el-table-column width="220" align="right" prop="planSales" label="V1计划总销量（CTN）" />
-      <el-table-column width="220" align="right" prop="planPriceAve" label="目标新客数量" />
+      <el-table-column width="220" align="right" prop="planVol" label="V1计划总销量（CTN）" />
+      <el-table-column width="220" align="right" prop="planNewUserNum" label="目标新客数量" />
       <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-      <el-table-column width="220" align="right" prop="forecastSales" label="V2预测总销量（CTN）" />
-      <el-table-column width="220" align="right" prop="adjustedPriceAve" label="目标新客数量" />
+      <el-table-column width="220" align="right" prop="adjustedVol" label="V2预测总销量（CTN）" />
+      <el-table-column width="220" align="right" prop="adjustedNewUserNum" label="目标新客数量" />
       <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-      <el-table-column width="160" align="right" prop="salesDifference" label="达成率 (%)" />
+      <el-table-column width="160" align="right" prop="averageDifferenceValue" label="均价差值（%）" />
+      <el-table-column width="160" align="right" prop="achievementRate" label="达成率 (%)" />
       <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
@@ -80,15 +80,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
@@ -121,22 +114,14 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table
-            border
-            height="400"
-            :data="ImportData"
-            style="width: 100%"
-            :header-cell-style="{
+          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
               textAlign: 'center',
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
-            }"
-            :row-class-name="tableRowClassName"
-            stripe
-          >
+            }" :row-class-name="tableRowClassName" stripe>
             <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
               <template slot-scope="scope">
                 <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -152,18 +137,15 @@
             <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
             <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="120" align="center" prop="brandName" label="品牌" />
-            <el-table-column width="220" align="center" prop="productName" label="SKU" />
-            <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
-            <el-table-column width="120" align="center" prop="regionName" label="区域" />
-            <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-            <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
+            <el-table-column width="220" align="right" prop="planVol" label="V1计划总销量（CTN）" />
+            <el-table-column width="220" align="right" prop="planNewUserNum" label="目标新客数量" />
             <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-            <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-            <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
+            <el-table-column width="220" align="right" prop="adjustedVol" label="V2预测总销量（CTN）" />
+            <el-table-column width="220" align="right" prop="adjustedNewUserNum" label="目标新客数量" />
             <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-            <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-            <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-            <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
+            <el-table-column width="160" align="right" prop="averageDifferenceValue" label="均价差值（%）" />
+            <el-table-column width="160" align="right" prop="achievementRate" label="达成率 (%)" />
+            <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
             <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -209,7 +191,7 @@ export default {
         customerCode: '',
         distributorCode: '',
         regionCode: '',
-        dim_product: ''
+        dim_product: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -227,14 +209,14 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
-      saveBtn: false
+      saveBtn: false,
     }
   },
   computed: {},
   watch: {
     'filterObj.channelCode'() {
       this.getCustomerList()
-    }
+    },
   },
   mounted() {
     this.getMonth()
@@ -303,7 +285,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -350,15 +332,14 @@ export default {
       API.importNUExcel(formData).then((response) => {
         if (response.code == 1000) {
           this.ImportData = response.data
-          this.saveBtn =
-            response.data[0].judgmentType !== 'Error'
+          this.saveBtn = response.data[0].judgmentType !== 'Error'
         }
       })
     },
     // 确认导入
     confirmImport() {
       API.exceptionNUSave({
-        mainId: this.tableData[0].mainId
+        mainId: this.tableData[0].mainId,
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success('保存成功!')
@@ -427,13 +408,13 @@ export default {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning'
+            type: 'warning',
           })
             .then(() => {
               const mainId = this.tableData[0].mainId
               API.approveNU({
                 mainId: mainId, // 主表id
-                opinion: 'agree' // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')
@@ -444,7 +425,7 @@ export default {
             .catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消提交'
+                message: '已取消提交',
               })
             })
         } else {
@@ -474,8 +455,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-20 11:21:17
+ * @LastEditTime: 2021-12-20 15:50:17
 -->
 <template>
   <div class="dashboard-container">
@@ -265,36 +265,44 @@ export default {
             label: '美好的一天！要开心呦！',
           },
         },
-        {
-          key: 'V1Day',
-          dot: {
-            style: {
-              backgroundColor: '#FB5A56',
-            },
-          },
-          dates: new Date('Sun Nov 07 2021 00:00:00'),
-        },
-        {
-          key: 'V2Day',
-          dot: {
-            style: {
-              backgroundColor: '#FFAA30',
-            },
-          },
-          dates: new Date(2021, 11, 6),
-        },
+        // {
+        //   key: 'V1Day',
+        //   dot: {
+        //     style: {
+        //       backgroundColor: '#FB5A56',
+        //     },
+        //   },
+        //   dates: new Date('Sun Nov 07 2021 00:00:00'),
+        // },
+        // {
+        //   key: 'V0Day1',
+        //   dot: {
+        //     style: {
+        //       backgroundColor: '#FB5A56',
+        //     },
+        //   },
+        //   dates: new Date(2021, 12, 20),
+        // },
+        // {
+        //   key: 'V2Day',
+        //   dot: {
+        //     style: {
+        //       backgroundColor: '#FFAA30',
+        //     },
+        //   },
+        //   dates: new Date(2021, 11, 6),
+        // },
       ],
       MessageList: [], //消息列表
       ActivityList: [],
+      BackGroundColorList: ['#FB5A56', '#2C85FF', '#FFAA30'],
     }
   },
   mounted() {
     this.getMesList()
     this.getHomePageData()
-    // var dateString="20211107";
-    // var pattern = /(\d{4})(\d{2})(\d{2})/;
-    // var formatedDate = dateString.replace(pattern, '$1/$2/$3');
-    // var date = new Date(formatedDate);
+    // var strTime="2021-12-20";    //字符串日期格式           
+    // var date= new Date(Date.parse(strTime.replace(/-/g,  "/")));      //转换成Data();
     // console.log(date);
     // window.addEventListener('resize', () => {
     //   this.SalesAmountChart.resize()
@@ -325,11 +333,11 @@ export default {
               </div>
               <div class="Tip">
                 <span class="TipTitle">办理时间: </span>
-                <span>2021-12-01</span>
+                <span>${value.updateDate?value.updateDate.substring(0,10):''}</span>
               </div>
               <div class="Tip">
                 <span class="TipTitle">办理状态: </span>
-                <span>未办理(延误)</span>
+                <span>${value.processStatus==2?'已办理':value.workDateFlag=='1'?'未办理(延误)':'未办理'}</span>
               </div>
       `
     },
@@ -381,21 +389,31 @@ export default {
         }
         this.ActivityList = data
         //日期处理
-        // let DateArray = res.data.calendar
-        // let DateData = {}
-        // for (let m = 0; m < DateArray.length; m++) {
-        //   //对date 进行分组
-        //   if (!DateData[DateArray[m].date]) {
-        //     var arr = []
-        //     arr.push(DateArray[m])
-        //     DateData[DateArray[m].date] = arr
-        //   } else {
-        //     DateData[DateArray[m].date].push(DateArray[m])
-        //   }
-        // }
-        // console.log(DateData)
+        let DateArray = res.data.calendar
+        let DateData = {}
+        for (let m = 0; m < DateArray.length; m++) {
+          // DateArray[m].dateObj = this.createDate(DateArray[m].date)
+          //对date 进行分组
+          if (!DateData[DateArray[m].yearMonth]) {
+            var arr = []
+            arr.push(DateArray[m])
+            DateData[DateArray[m].yearMonth] = arr
+          } else {
+            DateData[DateArray[m].yearMonth].push(DateArray[m])
+          }
+        }
+        console.log(DateData)
       })
     },
+    //获取date 日期对象
+    createDate(value) {
+      let dateString = value.replace('-','')
+      let pattern = /(\d{4})(\d{2})(\d{2})/
+      let formatDate = dateString.replace(pattern, '$1/$2/$3')
+      let date = new Date(formatDate)
+      return date
+    },
+    //获取活动月
     getCPTMonth(value) {
       let dateStr = value.substring(0, 4) + '-' + value.substring(4, 6)
       let date = new Date(dateStr)
