@@ -36,6 +36,7 @@
     </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
+      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="objectSpanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="220" align="center" prop="version" label="版本" />
@@ -123,6 +124,25 @@
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
     </el-dialog>
+    <!-- 新增 -->
+    <el-dialog width="30%" class="my-el-dialog" title="新增" :visible="visibleAdd" @close="closeAdd">
+      <el-form ref="ruleFormAdd" :model="ruleFormAdd" :rules="rulesAdd" label-width="200px">
+        <el-form-item label="目标月份" prop="targetYear">
+          <el-date-picker v-model="ruleFormAdd.targetYear" type="month" value-format="yyyyMM" placeholder="请选择" clearable />
+        </el-form-item>
+        <el-form-item label="新月份" prop="newYear">
+          <el-select v-model="ruleFormAdd.newYear" placeholder="请选择" clearable>
+            <el-option v-for="item in yearArr" :key="item" :label="item" :value="item" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <div style="display:flex;">
+            <el-button class="TpmButtonBG" @click="submitFormAdd('ruleFormAdd')">新增</el-button>
+            <el-button class="TpmButtonBG" @click="resetFormAdd('ruleFormAdd')">重置</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -138,6 +158,20 @@ export default {
 
   data() {
     return {
+      yearArr: [],
+      visibleAdd: false,
+      ruleFormAdd: {
+        targetYear: '',
+        newYear: ''
+      },
+      rulesAdd: {
+        targetYear: [
+          { required: true, message: '请输入目标年月', trigger: 'blur' }
+        ],
+        newYear: [
+          { required: true, message: '请输入新年月', trigger: 'blur' }
+        ]
+      },
       url: '@/assets/images/selectError.png',
       total: 1,
       pageSize: 10,
@@ -205,6 +239,46 @@ export default {
     // 获取下拉框
   },
   methods: {
+    // 新增弹框
+    // 获取新月份
+    queryYearAndMonth() {
+      API.queryYearAndMonth().then(res => {
+        if (res.data) {
+          this.yearArr = res.data
+        }
+      }).catch()
+    },
+    submitFormAdd(formName) {
+      const params = {
+        minePackage: 'N',
+        targetYearMonth: this.ruleFormAdd.targetYear,
+        newYearMonth: this.ruleFormAdd.newYear
+      }
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          API.saveNewExeRule(params).then(res => {
+            if (res.code === 1000) {
+              this.$message.success('添加成功')
+              this.closeAdd()
+              this.getTableData()
+            }
+          }).catch()
+        } else {
+          return false
+        }
+      })
+    },
+    resetFormAdd(formName) {
+      this.$refs[formName].resetFields()
+    },
+    addYear() {
+      this.visibleAdd = true
+      this.queryYearAndMonth()
+    },
+    closeAdd() {
+      this.visibleAdd = false
+      this.resetFormAdd('ruleFormAdd')
+    },
     // 验证input输入框数据
     number(e, row) {
       const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(e.target.value)

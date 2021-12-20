@@ -101,7 +101,7 @@
         <!-- <iframe class="wechat" name="wechat"
           src="https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx" frameborder="0"></iframe> -->
         <!-- <div class="loginByWechatText">企业微信登录</div> -->
-        <iframe id="content" sandbox="allow-presentation allow-popups-to-escape-sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-top-navigation" referrerpolicy="unsafe-url" :src="srcUrl" frameborder="0" />
+        <!-- <iframe id="content" sandbox="allow-presentation allow-popups-to-escape-sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-top-navigation" referrerpolicy="unsafe-url" :src="srcUrl" frameborder="0" /> -->
         <!-- <div class="Ercode"></div> -->
         <!-- <div class="loginByWechat">请使用企业微信扫码登录</div> -->
         <div class="closeIcon" @click="closeWechat">
@@ -159,7 +159,8 @@ export default {
       checked: false, // 记住密码
       isLoginByWechat: false,
       closeGetWX: false,
-      secure: ''
+      secure: '',
+      finalEmail: ''
     }
   },
   watch: {
@@ -173,8 +174,23 @@ export default {
   mounted() {
     this.getCodeImage()
     this.getCookie()
+    // 获取地址
+    this.getUrl()
   },
   methods: {
+    getUrl() {
+      const url = window.location.href
+      if (url.indexOf('email') === -1) {
+        return
+      } else {
+        const emailInfo = url.split('?')[1]
+        const reg = new RegExp('email=')
+        const nextEmail = emailInfo.replace(reg, '')
+        const regNew = new RegExp('#/login')
+        this.finalEmail = nextEmail.replace(regNew, '')
+        this.getWX()
+      }
+    },
     getWXiNFO() {
       const stop = setInterval(() => {
         this.getWX()
@@ -185,34 +201,54 @@ export default {
     },
     // 调用微信登录接口
     getWX() {
-      axios
-        .get('/Api/Oauth/sendwx')
-        .then(response => {
-          this.secure = response.data.split('<br>')[2].replace('密文：', '')
-          user.getWeChatData({
-            email: this.secure.trim()
-          }).then(res => {
-            if (res.code === 1000) {
-              const formdata = new FormData()
-              formdata.append('email', res.data.email)
-              this.closeGetWX = true
-              this.loading = false
-              this.isLoginByWechat = false
-              this.$store
-                .dispatch('user/WXlogin', formdata)
-                .then(() => {
-                  this.$router.push({ path: this.redirect || '/' })
-                })
-                .catch(() => {
-                  this.$refs['code'].clear()
-                  this.getCodeImage()
-                })
-            }
-          }).catch()
-        })
-        .catch(error => {
-          console.log(error)
-        })
+      // 调用getWeChatData进行email解密
+      user.getWeChatData({
+        email: this.finalEmail
+      }).then(res => {
+        if (res.code === 1000) {
+          // 解密成功 根据返回email明文 登录
+          const formdata = new FormData()
+          formdata.append('email', res.data.email)
+          this.$store
+            .dispatch('user/WXlogin', formdata)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/' })
+            })
+            .catch(() => {
+              this.$refs['code'].clear()
+              this.getCodeImage()
+            })
+        }
+      }).catch()
+
+      // axios
+      //   .get('/Api/Oauth/sendwx')
+      //   .then(response => {
+      //     // this.secure = response.data.split('<br>')[2].replace('密文：', '')
+      //     user.getWeChatData({
+      //       email: this.finalEmail
+      //     }).then(res => {
+      //       if (res.code === 1000) {
+      //         const formdata = new FormData()
+      //         formdata.append('email', res.data.email)
+      //         // this.closeGetWX = true
+      //         // this.loading = false
+      //         // this.isLoginByWechat = false
+      //         this.$store
+      //           .dispatch('user/WXlogin', formdata)
+      //           .then(() => {
+      //             this.$router.push({ path: this.redirect || '/' })
+      //           })
+      //           .catch(() => {
+      //             this.$refs['code'].clear()
+      //             this.getCodeImage()
+      //           })
+      //       }
+      //     }).catch()
+      //   })
+      //   .catch(error => {
+      //     console.log(error)
+      //   })
     },
     showPwd() {
       if (this.passwordType === 'password') {
@@ -322,9 +358,11 @@ export default {
     },
     // 企业微信登录
     loginByWechat() {
-      this.isLoginByWechat = true
-      this.getWXiNFO()
-      // window.open('https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://corpwechat-test.rfc-friso.com/Api/Oauth/sendwx', '_self')
+      // 1
+      // this.isLoginByWechat = true
+      // this.getWXiNFO()
+      // 2
+      window.open('https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=http://localhost:8080/#/login', '_self')
       // // 1. 先选择iframe
       // var iframe = document.querySelector('.wechat').contentWindow
       // // 2. 选择iframe内的元素

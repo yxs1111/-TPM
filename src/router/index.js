@@ -50,15 +50,15 @@ import Layout from '@/layout/index'
  */
 export const constantRoutes = [
    ...common,
-  // ...V0(),
-  // ...V1(),
-  // ...V2(),
-  // ...V3(),
-  // ...Report(),
-  // ...taskManage(),
-  // ...masterData(),
-  // ...system(),
-  // ...activiti(),
+  ...V0(),
+  ...V1(),
+  ...V2(),
+  ...V3(),
+  ...Report(),
+  ...taskManage(),
+  ...masterData(),
+  ...system(),
+  ...activiti(),
   
 ]
 
@@ -68,15 +68,15 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   
-  ...V0(),
-  ...V1(),
-  ...V2(),
-  ...V3(),
-  ...masterData(),
-  ...Report(),
-  ...taskManage(),
-  ...system(),
-  ...activiti(),
+  // ...V0(),
+  // ...V1(),
+  // ...V2(),
+  // ...V3(),
+  // ...masterData(),
+  // ...Report(),
+  // ...taskManage(),
+  // ...system(),
+  // ...activiti(),
   // ...meta,
   ...base,
   // 404 page must be placed at the end !!!

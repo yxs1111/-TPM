@@ -192,11 +192,17 @@ export default {
   getPageByDto(params) {
     return requestApi.request_get('/mdm/mdExceptionRule/getPageByDto', params)
   },
-  getCostTypeList(params) {
-    return requestApi.request_get('/mdm/mdCostType/getCostTypeList', params)
-  },
+  // getCostTypeList(params) {
+  //   return requestApi.request_get('/mdm/mdCostType/getCostTypeList', params)
+  // },
   getMdChannelList(params) {
     return requestApi.request_get('/mdm/mdChannel/getMdChannelList', params)
+  },
+  queryYearAndMonth(params) {
+    return requestApi.request_get('/mdm/mdExceptionRule/queryYearAndMonth', params)
+  },
+  saveNewExeRule(params) {
+    return requestApi.request_get('/mdm/mdExceptionRule/saveNewExeRule', params)
   },
 
   // 供应商信息
