@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-15 19:54:26
+ * @LastEditTime: 2021-12-20 09:55:24
 -->
 <template>
   <div class="app-container">
@@ -95,7 +95,8 @@
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{(row.cptPromotionExpenses*1).toFixed(2)}}
               </el-table-column>
-              <el-table-column align="right" width="160" prop="averagePriceRange" label="均价差值(%)">
+              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRangeValue" label="均价差值(%)">
+                {{(row.averagePriceRangeValue*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
                 {{(row.promotionExpensesGapValue*1).toFixed(2)}}
@@ -182,7 +183,7 @@
               <el-table-column align="right" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
               <el-table-column align="right" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
               <el-table-column align="right" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="right" width="160" prop="averagePriceRange" label="均价差值(%)"></el-table-column>
+              <el-table-column align="right" width="160" prop="averagePriceRangeValue" label="均价差值(%)"></el-table-column>
               <el-table-column align="right" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
