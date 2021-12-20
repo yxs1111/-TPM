@@ -125,7 +125,7 @@
       />
     </div>
     <!-- 新增 -->
-    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="687px" @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="695px" @close="closeDialog">
       <div class="el-dialogContent">
         <div style="margin-bottom:15px;">
           <el-row :gutter="20" style="margin-bottom:8px;">
@@ -143,11 +143,32 @@
               </div>
             </el-col>
             <el-col :span="12">
+              <div class="grid-content bg-purple" style="padding-left: 60px;">
+                <span style="color:red;">*</span>年月：
+                <el-date-picker v-model="dialogAdd.yeardate" value-format="yyyyMM" type="month" placeholder="请选择" size="small" :disabled="isEditor" />
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20" style="margin-bottom:8px;">
+            <el-col :span="12">
+              <div class="grid-content bg-purple">
+                <span style="color:red;">*</span>父Mine Package：
+                <el-select v-model="dialogAdd.minePackageCodeP" placeholder="请选择" size="small" :disabled="isEditor" @change="getQueryMinePackageSelectDialog">
+                  <el-option
+                    v-for="item in MPA"
+                    :key="item.costType"
+                    :label="item.costTypeNumber"
+                    :value="item.costTypeNumber"
+                  />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="12">
               <div class="grid-content bg-purple">
                 <span style="color:red;">*</span>Mine Package：
                 <el-select v-model="dialogAdd.minePackageCode" placeholder="请选择" size="small" :disabled="isEditor">
                   <el-option
-                    v-for="item in mpOptons"
+                    v-for="item in mpOptonsDialog"
                     :key="item.costTypeNumber"
                     :label="item.costType"
                     :value="item.costTypeNumber"
@@ -159,15 +180,17 @@
           <el-row :gutter="20" style="margin-bottom:8px;">
             <el-col :span="12">
               <div class="grid-content bg-purple">
-                <span style="color:red;">*</span>年月：
-                <el-date-picker v-model="dialogAdd.yeardate" value-format="yyyyMM" type="month" placeholder="请选择" size="small" :disabled="isEditor" />
-              </div>
-            </el-col>
-            <el-col :span="12">
-              <div class="grid-content bg-purple" style="padding-left: 60px;">
                 <span style="color:red;">*</span>版本：
                 <el-select v-model="dialogAdd.varsionName" placeholder="请选择" clearable :disabled="isEditor" size="small">
                   <el-option v-for="item in versionsArr" :key="item.code" :label="item.name" :value="item.code" />
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="grid-content bg-purple" style="padding-left: 31px;">
+                <span style="color:red;">*</span>拆分类型：
+                <el-select v-model="dialogAdd.splitType" placeholder="请选择" size="small" :disabled="isEditor">
+                  <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
               </div>
             </el-col>
@@ -177,14 +200,6 @@
               <div class="grid-content bg-purple" style="padding-left:5px;">
                 备注：
                 <el-input v-model="dialogAdd.remark" style="width: 190px;" placeholder="请输入内容" size="small" />
-              </div>
-            </el-col>
-            <el-col :span="12">
-              <div class="grid-content bg-purple" style="padding-left: 31px;">
-                <span style="color:red;">*</span>拆分类型：
-                <el-select v-model="dialogAdd.splitType" placeholder="请选择" size="small" :disabled="isEditor">
-                  <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
-                </el-select>
               </div>
             </el-col>
           </el-row>
@@ -257,6 +272,8 @@ export default {
 
   data() {
     return {
+      mpOptonsDialog: [],
+      MPA: [],
       dialogVisibleT: false,
       versionsArr: [],
       splitTypeArr: [{
@@ -294,6 +311,7 @@ export default {
         yeardate: '',
         varsionName: '',
         splitType: '',
+        minePackageCodeP: '',
         minePackageCode: '',
         splitWeight: '',
         splitRuleF: ''
@@ -331,7 +349,7 @@ export default {
   mounted() {
     this.getTableData()
     this.getQueryChannelSelect()
-    this.getQueryMinePackageSelect()
+    // this.getQueryMinePackageSelect()
     this.getDictInfoByType()
   },
   methods: {
@@ -419,6 +437,14 @@ export default {
         this.mpOptons = res.data
       }).catch()
     },
+    getQueryMinePackageSelectDialog() {
+      this.dialogAdd.minePackageCode = ''
+      selectAPI.queryMinePackageSelect({
+        parentId: this.dialogAdd.minePackageCodeP
+      }).then(res => {
+        this.mpOptonsDialog = res.data
+      }).catch()
+    },
     // 版本
     getDictInfoByType() {
       selectAPI.getDictInfoByType({
@@ -469,6 +495,15 @@ export default {
     add() {
       this.isEditor = false
       this.dialogVisible = true
+      this.queryParentMinePackage()
+    },
+    // 获取父类MP
+    queryParentMinePackage() {
+      API.queryParentMinePackage().then(res => {
+        if (res.code === 1000) {
+          this.MPA = res.data
+        }
+      }).catch()
     },
     closeDialog() {
       this.dialogVisible = false
@@ -479,6 +514,7 @@ export default {
         yeardate: '',
         varsionName: '',
         splitType: '',
+        minePackageCodeP: '',
         minePackageCode: '',
         splitWeight: '',
         splitRuleF: '',
@@ -562,7 +598,7 @@ export default {
     },
     // 提交form
     submitForm() {
-      if (this.dialogAdd.channelCode == '' || this.dialogAdd.minePackageCode == '' || this.dialogAdd.yeardate == '' || this.dialogAdd.varsionName == '' || this.dialogAdd.splitType == '') {
+      if (this.dialogAdd.channelCode == '' || this.dialogAdd.minePackageCodeP == '' || this.dialogAdd.yeardate == '' || this.dialogAdd.varsionName == '' || this.dialogAdd.splitType == '') {
         this.$alert('带*号为必选项', '提示', {
           confirmButtonText: '确定',
           callback: action => {}

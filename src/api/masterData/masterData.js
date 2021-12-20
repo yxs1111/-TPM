@@ -321,6 +321,9 @@ export default {
   getPageByRequestSplitRule(params) {
     return requestApi.request_get('/mdm/mdSplitRuleConfig/getPageByRequest', params)
   },
+  queryParentMinePackage(params) {
+    return requestApi.request_get('/mdm/mdSplitRuleConfig/queryParentMinePackage', params)
+  },
   insertSplitRule(params) {
     return requestApi.request_post('/mdm/mdSplitRuleConfig/insertData', params)
   },
