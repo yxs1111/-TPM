@@ -23,7 +23,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
           <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
         <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
@@ -81,7 +81,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容" />
+      <el-table-column width="840" align="center" prop="judgmentContent" label="系统判定内容" />
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -197,12 +197,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonth: '202101',
+        yearAndMonth: '',
         channelCode: '',
         customerCode: '',
-        distributorCode: '',
-        regionCode: '',
-        dim_product: '',
+        brandCode: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -214,6 +212,7 @@ export default {
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
+      BrandList: [],
       uploadFileName: '',
       uploadFile: '',
       event: '',
@@ -227,9 +226,10 @@ export default {
   computed: {},
   mounted() {
     // this.getMonth()
-    this.getTableData()
+    // this.getTableData()
     this.getQueryChannelSelect()
     this.getCustomerList()
+    this.getBrandList()
   },
   watch: {
     'filterObj.channelCode'() {
@@ -247,9 +247,7 @@ export default {
         yearAndMonth: this.filterObj.yearAndMonth,
         channelCode: this.filterObj.channelCode,
         customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        regionCode: this.filterObj.regionCode,
-        dimProduct: this.filterObj.dim_product,
+        brandCode: this.filterObj.brandCode,
       }).then((response) => {
         this.tableData = response.data.records
         if (this.tableData.length) {
@@ -278,8 +276,17 @@ export default {
         .queryChannelSelect()
         .then((res) => {
           this.channelOptons = res.data
+          this.filterObj.channelCode=this.channelOptons[0].channelCode
+          this.getMonth()
         })
         .catch()
+    },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
     },
     // 经销商
     getDistributorList() {
@@ -383,9 +390,7 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
-          dimProduct: this.filterObj.dim_product,
+          brandCode: this.filterObj.brandCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名

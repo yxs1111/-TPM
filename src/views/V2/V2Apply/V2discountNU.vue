@@ -186,7 +186,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonth: '202101',
+        yearAndMonth: '',
         channelCode: '',
         customerCode: '',
         distributorCode: '',
@@ -220,12 +220,13 @@ export default {
     },
   },
   mounted() {
-    this.getMonth()
+    //this.getMonth()
     // this.getTableData()
     this.getQuerySkuSelect()
     this.getQueryChannelSelect()
     this.getDistributorList()
     this.getCustomerList()
+    this.getBrandList()
   },
   methods: {
     // 获取表格数据
@@ -253,6 +254,13 @@ export default {
         })
         .catch((error) => {})
     },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
+    },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
@@ -268,6 +276,8 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
           this.channelOptons = res.data
+          this.filterObj.channelCode=this.channelOptons[0].channelCode
+          this.getMonth()
         }
       })
     },
