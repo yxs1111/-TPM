@@ -173,7 +173,7 @@
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
               <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
               <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
-              <img v-else :src="errorImg" style="width:25px;height:25px;">
+              <img v-else :src="passImg" style="width:25px;height:25px;">
             </template>
           </el-table-column>
           <el-table-column align="center" width="400" prop="cpId" label="CPID" />
@@ -228,6 +228,9 @@ export default {
 
   data() {
     return {
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
       RegionList: [],
       submitBtn: 0,
       // 下拉框
