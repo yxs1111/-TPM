@@ -12,13 +12,13 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
-          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.brandName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
@@ -29,11 +29,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(submitBtn==1)?'':'noClick'" @click="submitApply">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="submitApply">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -190,13 +190,15 @@ export default {
 
   data() {
     return {
+      BrandList: [],
+      btnStatus: true,
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
         channelCode: '',
         customerCode: '',
-        brandCode: ''
+        brandName: '',
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -210,15 +212,26 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       saveBtn: false,
-      dialogDataF: []
+      dialogDataF: [],
+      usernameLocal: '',
+      localDate: ''
     }
   },
   computed: {},
   mounted() {
-    this.getTableData()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
+    // this.getTableData()
     this.getChannel()
+    this.getBrandList()
   },
   methods: {
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
+    },
     // 提交
     submitApply() {
       if (this.tableData[0].judgmentType === null) {
@@ -392,8 +405,22 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          this.filterObj.channelCode = this.channelArr[0].channelCode
+          this.getCustomerList()
+          this.getEffectiveDate()
         }
       }).catch()
+    },
+    // 获取年月
+    getEffectiveDate() {
+      selectAPI.getMonth({ version: 'V3' }).then((res) => {
+        if (res.code === 1000) {
+          this.localDate = res.data
+          this.getTableData()
+        } else {
+          this.$message.warning('未查询到年月信息！')
+        }
+      })
     },
     // 客户
     getCustomerList() {
@@ -413,17 +440,41 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode
+        customerCode: this.filterObj.customerCode,
+        yearAndMonth: this.localDate,
+        brandName: this.filterObj.brandName
       })
         .then((response) => {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
-          this.submitBtn = response.data.records[0].isSubmit
+          if (response.data.records.length > 0) {
+            this.tableData = response.data.records
+            this.mainIdLocal = response.data.records[0].mainId
+            this.submitBtn = response.data.records[0].isSubmit
+            this.infoByMainId()
+          } else {
+            this.mainIdLocal = null
+            this.btnStatus = false
+          }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+            this.btnStatus = true
+          } else {
+            this.btnStatus = false
+          }
+        } else {
+          this.btnStatus = false
+        }
+      }).catch()
     },
     search() {
       console.log('hh')

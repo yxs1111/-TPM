@@ -284,6 +284,16 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    'filterObj.customerCode'() {
+      this.filterObj.distributorCode = ''
+      this.getDistributorList()
+    },
+    'filterObj.distributorCode'() {
+      this.filterObj.regionName = ''
+      this.getRegionList()
+    }
+  },
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
@@ -294,16 +304,6 @@ export default {
     this.getRegionList()
     // this.getCustomerList()
     this.getDistributorList()
-  },
-  watch: {
-    'filterObj.customerCode'() {
-      this.filterObj.distributorCode=''
-      this.getDistributorList()
-    },
-    'filterObj.distributorCode'() {
-      this.filterObj.regionName=''
-      this.getRegionList()
-    },
   },
   methods: {
     // 获取年月
@@ -330,7 +330,7 @@ export default {
     },
     getRegionList() {
       selectAPI.getRegionList({
-         distributorName:this.filterObj.distributorCode
+        distributorName: this.filterObj.distributorCode
       }).then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
@@ -360,7 +360,7 @@ export default {
     // 经销商
     getDistributorList() {
       selectAPI.queryDistributorList({
-        customerCsName:this.filterObj.customerCode
+        customerCsName: this.filterObj.customerCode
       }).then((res) => {
         if (res.code === 1000) {
           this.distributorArr = res.data
@@ -464,6 +464,7 @@ export default {
     // 导入
     parsingExcel(event) {
       this.event = event
+      // this.event.srcElement.value = ''
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
     },
