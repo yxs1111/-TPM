@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-21 17:15:19
+ * @LastEditTime: 2021-12-21 20:03:52
 -->
 <template>
   <div class="app-container">
@@ -413,31 +413,33 @@ export default {
       this.getList()
     },
     getCPTData() {
-      API.isExist({
-        yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
-      }).then((res) => {
-        if (res.data) {
-          this.$confirm('此操作将覆盖CPT数据, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'info',
-          })
-            .then(() => {
-              this.dialogVisible = true
-              this.ruleForm.channelCode = this.filterObj.channelCode
-            })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消',
-              })
-            })
-        } else {
-          this.dialogVisible = true
-          this.ruleForm.channelCode = this.filterObj.channelCode
-        }
-      })
+      this.dialogVisible = true
+      this.ruleForm.channelCode = this.filterObj.channelCode
+      // API.isExist({
+      //   yearAndMonth: this.filterObj.month,
+      //   channelCode: this.filterObj.channelCode,
+      // }).then((res) => {
+      //   if (res.data) {
+      //     this.$confirm('此操作将覆盖CPT数据, 是否继续?', '提示', {
+      //       confirmButtonText: '确定',
+      //       cancelButtonText: '取消',
+      //       type: 'info',
+      //     })
+      //       .then(() => {
+      //         this.dialogVisible = true
+      //         this.ruleForm.channelCode = this.filterObj.channelCode
+      //       })
+      //       .catch(() => {
+      //         this.$message({
+      //           type: 'info',
+      //           message: '已取消',
+      //         })
+      //       })
+      //   } else {
+      //     this.dialogVisible = true
+      //     this.ruleForm.channelCode = this.filterObj.channelCode
+      //   }
+      // })
     },
     //导入数据弹窗显示
     importData() {
@@ -451,6 +453,7 @@ export default {
       //清除input的value ,上传一样的
       this.event.target.value = null
       this.ImportData = []
+      this.saveBtn=''
     },
     //选择导入文件
     parsingExcelBtn() {
@@ -579,6 +582,7 @@ export default {
         dimScenario: '',
         dimVersion: '',
       }
+      
     },
     //V0 提交审批
     approve() {

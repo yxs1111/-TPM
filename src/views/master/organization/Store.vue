@@ -86,6 +86,8 @@ export default {
       API.getPageMdStore({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        StoreName: this.filterObj.StoreName,
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records

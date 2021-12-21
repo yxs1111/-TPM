@@ -12,7 +12,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">阶段</span>
-          <el-input v-model="filterObj.step" placeholder="请输入" />
+          <el-input v-model="filterObj.stage" placeholder="请输入" />
         </div>
          <div class="Selectli">
           <span class="SelectliTitle">状态</span>
@@ -96,7 +96,7 @@ export default {
       filterObj: {
         SKUEsName: '',
         brandName: '',
-        step: '',
+        stage: '',
         state:'',
       },
       permissions: getDefaultPermissions(),
@@ -114,6 +114,10 @@ export default {
       API.getPageMdProduct({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        productEsName: this.filterObj.SKUEsName,
+        brand: this.filterObj.brandName,
+        stage: this.filterObj.stage,
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records

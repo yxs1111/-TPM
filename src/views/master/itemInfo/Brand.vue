@@ -125,6 +125,8 @@ export default {
       API.getPageMdBrand({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        brandCode: this.filterObj.brandCode,
+        brandName: this.filterObj.brandName,
       })
         .then((response) => {
           this.tableData = response.data.records

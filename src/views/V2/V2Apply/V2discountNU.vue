@@ -33,11 +33,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -205,11 +205,14 @@ export default {
       uploadFileName: '',
       event: '',
       uploadFile: '',
-      isSubmit: 0, // 提交状态  1：已提交，0：未提交
+      isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSelf: 0, //是否是当前审批人
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
+      mainId: '',
+      usernameLocal: '',
     }
   },
   computed: {},
@@ -220,6 +223,7 @@ export default {
     },
   },
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     //this.getMonth()
     // this.getTableData()
     this.getQuerySkuSelect()

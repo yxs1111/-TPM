@@ -70,6 +70,8 @@ export default {
       API.getPageMdDistributor({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        distributorName: this.filterObj.Distributor,
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records

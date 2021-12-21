@@ -73,6 +73,8 @@ export default {
       API.getPageMdChannel({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        channelCode: this.filterObj.channelCode,
+        state: this.filterObj.state
       })
         .then((response) => {
           this.tableData = response.data.records

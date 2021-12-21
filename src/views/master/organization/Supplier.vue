@@ -11,7 +11,7 @@
           <span class="SelectliTitle">供应商名称</span>
           <el-input v-model="filterObj.supplierName" placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -24,15 +24,7 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table
-      v-loading="tableLoading"
-      :data="tableData"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
@@ -47,10 +39,10 @@
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间" />
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间" >
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
           <div>
-              {{row.createDate.replace("T"," ")}}
+            {{row.createDate.replace("T"," ")}}
           </div>
         </template>
       </el-table-column>
@@ -64,15 +56,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '供应商信息'" :visible="dialogVisible" width="25%" @close="closeDialog">
       <div class="el-dialogContent">
@@ -135,9 +120,8 @@ export default {
       filterObj: {
         supplierCode: '',
         supplierName: '',
-        category: ''
+        category: '',
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -145,16 +129,16 @@ export default {
         supplierCode: '',
         supplierName: '',
         country: '',
-        remark: ''
+        remark: '',
       },
       rules: {
         supplierCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       dialogVisible: false,
       isEditor: '',
@@ -164,7 +148,7 @@ export default {
       importVisible: false, // 导入弹窗
       uploadFileName: '',
       uploadFile: '',
-      event: ''
+      event: '',
     }
   },
   computed: {},
@@ -174,14 +158,13 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageMdSupplier({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        supplierName: this.filterObj.supplierName
+        supplierCode: this.filterObj.supplierCode,
+        supplierName: this.filterObj.supplierName,
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
@@ -198,7 +181,7 @@ export default {
     Reset() {
       this.filterObj = {
         supplierCode: '',
-        supplierName: ''
+        supplierName: '',
       }
       this.getTableData()
     },
@@ -210,7 +193,7 @@ export default {
         supplierCode: '',
         supplierName: '',
         country: '',
-        remark: ''
+        remark: '',
       }
     },
     editor(obj) {
@@ -220,7 +203,7 @@ export default {
         supplierCode: obj.supplierCode,
         supplierName: obj.supplierName,
         country: obj.country,
-        remark: obj.remark
+        remark: obj.remark,
       }
       this.editorId = obj.id
     },
@@ -228,13 +211,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const url = this.isEditor ? API.updateMdSupplier : API.insertMdSupplier
+          const url = this.isEditor
+            ? API.updateMdSupplier
+            : API.insertMdSupplier
           url({
             id: this.editorId,
             supplierCode: this.ruleForm.supplierCode,
             supplierName: this.ruleForm.supplierName,
             country: this.ruleForm.country,
-            remark: this.ruleForm.remark
+            remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
@@ -259,7 +244,7 @@ export default {
         this.$confirm('确定要删除数据吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
         })
           .then(() => {
             API.deleteMdSupplier(IdList).then((response) => {
@@ -272,7 +257,7 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消'
+              message: '已取消',
             })
           })
       }
@@ -367,8 +352,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 

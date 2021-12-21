@@ -76,6 +76,7 @@ export default {
       API.getPageMdCustomerGroup({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        groupName: this.filterObj.groupName
       })
         .then((response) => {
           this.tableData = response.data.records
