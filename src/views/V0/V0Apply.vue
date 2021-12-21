@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-21 20:03:52
+ * @LastEditTime: 2021-12-21 20:18:05
 -->
 <template>
   <div class="app-container">
@@ -453,7 +453,7 @@ export default {
       //清除input的value ,上传一样的
       this.event.target.value = null
       this.ImportData = []
-      this.saveBtn=''
+      this.saveBtn=false
     },
     //选择导入文件
     parsingExcelBtn() {

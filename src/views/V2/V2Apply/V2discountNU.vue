@@ -248,6 +248,8 @@ export default {
             this.tableData = response.data.records
             if (this.tableData.length) {
               this.isSubmit = this.tableData[0].isSubmit
+              this.mainId = this.tableData[0].mainId
+              this.infoByMainId()
             } else {
               this.isSubmit = 1
             }
@@ -257,6 +259,27 @@ export default {
           }
         })
         .catch((error) => {})
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V2' &&
+              res.data.assignee === this.usernameLocal
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
+            }
+          }
+        })
     },
     getBrandList() {
       selectAPI.getBrand({}).then((res) => {
@@ -339,6 +362,7 @@ export default {
       // 清除input的value ,上传一样的
       this.event.target.value = null
       this.ImportData = []
+      this.saveBtn=false
     },
     // 校验数据
     checkImport() {

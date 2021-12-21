@@ -74,7 +74,7 @@
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportTemplate">下载模板</el-button>
             <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
-          <el-button type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
         <div class="fileInfo">
           <div class="fileInfo">
@@ -235,13 +235,20 @@ export default {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
+      //清除input的value ,上传一样的
+      this.event.target.value = null
+      this.ImportData = []
+      this.saveBtn=''
     },
     //检测数据
     checkImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importCheck(formData).then((res) => {
-        this.ImportData = res.data
+        if (response.code == 1000) {
+          this.ImportData = response.data
+          this.saveBtn = response.data[0].judgmentType !== 'Error'
+        }
       })
     },
     exportErrorList() {
