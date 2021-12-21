@@ -101,6 +101,7 @@ const actions = {
         initUserInfo(data)
         // console.log('name', auth.getLoginNameCheck())
         localStorage.setItem('usernameLocal', auth.getLoginNameCheck())
+        window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/dashboard'
         resetRouter()
         resolve()
         dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏

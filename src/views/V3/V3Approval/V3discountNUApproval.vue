@@ -412,8 +412,12 @@ export default {
     exportData() {
       // 导出数据筛选
       var data = {}
-      data = { ...this.filterObj }
-      data.exportType = 'export'
+      data = {
+        channelCode: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+        customerCode: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
+        brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName,
+        exportType: 'export'
+      }
       API.exportV3NU(data).then((res) => {
         this.downloadFile(res, 'V3-NU-Approv' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
@@ -482,10 +486,10 @@ export default {
       API.getPageV3NU({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
+        channelCode: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+        customerCode: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
         yearAndMonth: this.localDate,
-        brandName: this.filterObj.brandName
+        brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName
       })
         .then((response) => {
           if (response.data.records.length > 0) {
