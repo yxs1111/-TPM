@@ -243,12 +243,12 @@ export default {
   },
   computed: {},
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getSKU()
     this.getDistributorList()
     this.getRegionList()
     // this.getEffectiveDate()
-    this.usernameLocal = localStorage.getItem('usernameLocal')
   },
   watch: {
     'filterObj.customerCode'() {

@@ -39,15 +39,22 @@
       <el-table-column width="220" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" align="right" prop="planVol" label="V1计划总销量(CTN)" />
       <el-table-column width="120" align="right" prop="planNewUserNum" label="目标新客数量" />
-      <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用(RMB)">
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
         <!-- {{row.planCost.toLocaleString()}} -->
-        {{getPlanCost(row.planCost)}}
+        {{ getPlanCost(row.planCost) }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -71,7 +78,7 @@ export default {
         channelCode: '',
         brandCode: '',
         customerName: '',
-        month: '',
+        month: ''
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -81,20 +88,25 @@ export default {
       tableData: [],
       BrandList: [],
       dialogVisible: false,
+      mainIdLocal: null,
+      submitBtn: 1,
+      btnStatus: true,
+      usernameLocal: ''
     }
   },
   computed: {},
-  mounted() {
-    this.getEffectiveDate()
-    this.getChannel()
-    this.getCustomerList()
-    this.getBrandList()
-  },
   watch: {
     'filterObj.channelCode'() {
       this.filterObj.customerName = ''
       this.getCustomerList()
-    },
+    }
+  },
+  mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
+    // this.getEffectiveDate()
+    this.getChannel()
+    // this.getCustomerList()
+    this.getBrandList()
   },
   methods: {
     getEffectiveDate() {
@@ -108,6 +120,9 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          this.filterObj.channelCode = this.channelArr[0].channelEsName
+          this.getCustomerList()
+          this.getEffectiveDate()
         }
       })
     },
@@ -115,7 +130,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode,
+          channelCode: this.filterObj.channelCode
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -138,42 +153,66 @@ export default {
         customerName: this.filterObj.customerName,
         channelCode: this.filterObj.channelCode,
         brandCode: this.filterObj.brandCode,
-        yearAndMonth: this.filterObj.month,
+        yearAndMonth: this.filterObj.month
       }).then((response) => {
-        this.tableData = response.data.records
+        if (response.data.records.length > 0) {
+          this.tableData = response.data.records
+          this.mainIdLocal = response.data.records[0].mainId
+          this.submitBtn = response.data.records[0].isSubmit
+          this.infoByMainId()
+        } else {
+          this.mainIdLocal = null
+          this.btnStatus = false
+        }
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
       })
     },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+            this.btnStatus = true
+          } else {
+            this.btnStatus = false
+          }
+        } else {
+          this.btnStatus = false
+        }
+      }).catch()
+    },
     getPlanCost(num) {
-      let money = Number(num.toFixed(2))
-      //let money=num.toLocaleString() //百分数
-      return money.toLocaleString() //二位小数
+      const money = Number(num.toFixed(2))
+      // let money=num.toLocaleString() //百分数
+      return money.toLocaleString() // 二位小数
     },
     search() {
       this.getTableData()
     },
-    //导出
+    // 导出
     downExcel() {
       if (this.tableData.length) {
         API.downExcelNU({
           customerName: this.filterObj.customerName,
           channelCode: this.filterObj.channelCode,
           brandCode: this.filterObj.brandCode,
-          yearAndMonth: this.filterObj.month,
+          yearAndMonth: this.filterObj.month
         }).then((res) => {
-          let timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V1新客信息 -' + timestamp + '.xlsx') //自定义Excel文件名
+          const timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V1新客信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
         this.$message.info('数据为空')
       }
     },
-    //下载文件
+    // 下载文件
     downloadFile(res, fileName) {
-      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
       if (!fileName) {
         fileName = res.headers['content-disposition'].split('filename=').pop()
       }
@@ -210,8 +249,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 
