@@ -259,6 +259,7 @@ export default {
             mainId: this.mainIdLocal
           }).then(res => {
             if (res.code === 1000) {
+              this.getTableData()
               this.$message({
                 type: 'success',
                 message: '提交成功!'

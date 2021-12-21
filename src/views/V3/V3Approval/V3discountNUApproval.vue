@@ -456,6 +456,7 @@ export default {
           opinion: ''
         }).then(res => {
           if (res.code === 1000) {
+            this.getTableData()
             this.$message({
               type: 'success',
               message: '审批成功!'
