@@ -237,7 +237,7 @@ export default {
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
-          if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal) {
+          if (res.data.version === 'NUV3' && res.data.assignee === this.usernameLocal) {
             this.btnStatus = false
           } else {
             this.btnStatus = true

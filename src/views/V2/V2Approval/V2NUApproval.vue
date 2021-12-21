@@ -268,7 +268,7 @@ export default {
         mainId: this.mainId
       }).then(res => {
         if (res.code === 1000) {
-          if (res.data.version === 'V2' && res.data.assignee === this.usernameLocal) {
+          if (res.data.version === 'NUV2' && res.data.assignee === this.usernameLocal) {
             //本人可以提交
             this.isSubmit = false
           } else {
