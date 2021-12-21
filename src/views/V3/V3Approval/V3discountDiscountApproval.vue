@@ -69,13 +69,19 @@
       <el-table-column width="180" align="center" prop="productName" label="SKU" />
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划销量（CTN）">
+        {{ (row.planSales*1).toFixed(2) }}
+      </el-table-column>
       <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
       <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-      <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
+        {{ (row.forecastSales*1).toFixed(2) }}
+      </el-table-column>
       <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
       <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-      <el-table-column width="220" align="right" prop="actualSales" label="V3实际销量（CTN）" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
+        {{ (row.actualSales*1).toFixed(2) }}
+      </el-table-column>
       <el-table-column width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）" />
       <el-table-column width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）" />
       <el-table-column width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）" />
