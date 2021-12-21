@@ -90,11 +90,16 @@ export default {
     this.getCustomerList()
     this.getBrandList()
   },
+  watch: {
+    'filterObj.channelCode'() {
+      this.filterObj.customerName = ''
+      this.getCustomerList()
+    },
+  },
   methods: {
     getEffectiveDate() {
       API.getEffectiveDate({ version: 'V1' }).then((res) => {
-        // this.filterObj.month = res.data
-        this.filterObj.month = '202101'
+        this.filterObj.month = res.data
         this.getTableData()
       })
     },

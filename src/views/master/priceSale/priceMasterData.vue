@@ -38,9 +38,9 @@
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column width="240" align="center" prop="ptc" label="零售价｜PTC （RMB/Tin）" />
-      <el-table-column width="320" align="center" prop="ptr" label="平台进货含税价｜PTR （RMB/Tin） " />
-      <el-table-column width="320" align="center" prop="ptw" label="经销商进货含税价｜PTW （RMB/Tin) " />
+      <el-table-column width="240" align="right" prop="ptc" label="零售价｜PTC （RMB/Tin）" />
+      <el-table-column width="320" align="right" prop="ptr" label="平台进货含税价｜PTR （RMB/Tin） " />
+      <el-table-column width="320" align="right" prop="ptw" label="经销商进货含税价｜PTW （RMB/Tin) " />
       <el-table-column width="180" v-slot="{ row }" align="center" prop="createDate" label="创建时间">
         {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
       </el-table-column>

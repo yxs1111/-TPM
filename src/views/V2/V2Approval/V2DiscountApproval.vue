@@ -260,6 +260,10 @@ export default {
       this.filterObj.customerCode = ''
       this.getCustomerList()
     },
+    'filterObj.customerCode'() {
+      this.filterObj.distributorCode=''
+      this.getDistributorList()
+    },
   },
   methods: {
     // 获取表格数据
@@ -327,7 +331,11 @@ export default {
     // 经销商
     getDistributorList() {
       selectAPI
-        .queryDistributorList()
+        .queryDistributorList(
+          {
+            customerCsName:this.filterObj.customerCode
+          }
+        )
         .then((res) => {
           if (res.code === 1000) {
             this.distributorArr = res.data

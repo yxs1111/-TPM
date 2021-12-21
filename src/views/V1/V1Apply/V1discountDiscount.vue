@@ -295,6 +295,12 @@ export default {
     // this.getCustomerList()
     this.getDistributorList()
   },
+  watch: {
+    'filterObj.customerCode'() {
+      this.filterObj.distributorCode=''
+      this.getDistributorList()
+    },
+  },
   methods: {
     // 获取年月
     getEffectiveDate() {
@@ -347,7 +353,9 @@ export default {
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList().then((res) => {
+      selectAPI.queryDistributorList({
+        customerCsName:this.filterObj.customerCode
+      }).then((res) => {
         if (res.code === 1000) {
           this.distributorArr = res.data
         }
