@@ -84,7 +84,9 @@
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）" />
       <el-table-column width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）" />
-      <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
+      <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）">
+        <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
+      </el-table-column>
       <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />

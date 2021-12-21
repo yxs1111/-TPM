@@ -92,7 +92,9 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）">
         {{ (row.adjustedVol*1).toFixed(2) }}
       </el-table-column>
-      <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
+      <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）">
+        <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
+      </el-table-column>
       <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
@@ -464,7 +466,6 @@ export default {
     // 导入
     parsingExcel(event) {
       this.event = event
-      // this.event.srcElement.value = ''
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
     },

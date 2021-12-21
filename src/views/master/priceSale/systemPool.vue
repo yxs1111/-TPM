@@ -383,6 +383,7 @@ export default {
               this.$message.error(response.data)
             }
           }
+          this.event.srcElement.value = ''
         })
         .catch(() => {})
     },
