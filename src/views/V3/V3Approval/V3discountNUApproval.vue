@@ -330,6 +330,7 @@ export default {
         if (res.code === 1000) {
           this.closeimportDialog()
         }
+        this.getTableData()
       }).catch()
     },
     // 下载excel模板
