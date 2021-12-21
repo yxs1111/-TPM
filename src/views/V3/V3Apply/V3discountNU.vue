@@ -225,6 +225,21 @@ export default {
     this.getBrandList()
   },
   methods: {
+    // 导入文件检索后保存
+    saveImportInfo() {
+      API.saveImportInfo({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          this.$message.success('保存成功')
+          this.closeimportDialog()
+          this.saveDialog = true
+          this.getTableData()
+        } else {
+          this.$message.error('保存失败')
+        }
+      }).catch()
+    },
     getBrandList() {
       selectAPI.getBrand({}).then((res) => {
         if (res.code === 1000) {
