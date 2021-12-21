@@ -345,7 +345,7 @@ export default {
         if (res.code === 1000) {
           this.channelArr = res.data
           this.filterObj.channelName = this.channelArr[0].channelEsName
-          this.getCustomerList(this.filterObj.channelName)
+          this.getCustomerList()
           this.getEffectiveDate()
         }
       }).catch()
