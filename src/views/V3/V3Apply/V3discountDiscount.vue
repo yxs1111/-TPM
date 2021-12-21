@@ -550,8 +550,8 @@ export default {
               message: '上传失败，请重新上传。'
             })
           }
-          //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
+          // 清除input的value ,上传一样的
+          this.event.srcElement.value = '' // 置空
         })
         .catch(() => {})
     },
@@ -583,6 +583,7 @@ export default {
               message: '上传失败，请重新上传。'
             })
           }
+          this.event.srcElement.value = ''
         })
         .catch(() => {})
     },
