@@ -250,9 +250,21 @@ export default {
     // this.getEffectiveDate()
     this.usernameLocal = localStorage.getItem('usernameLocal')
   },
+  watch: {
+    'filterObj.customerCode'() {
+      this.filterObj.distributorCode=''
+      this.getDistributorList()
+    },
+    'filterObj.distributorCode'() {
+      this.filterObj.regionName=''
+      this.getRegionList()
+    },
+  },
   methods: {
     getRegionList() {
-      selectAPI.getRegionList().then((res) => {
+      selectAPI.getRegionList({
+         distributorName:this.filterObj.distributorCode
+      }).then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
         }
@@ -323,8 +335,10 @@ export default {
       }).catch()
     },
     // 经销商
-    getDistributorList() {
-      selectAPI.queryDistributorList().then(res => {
+    getDistributorList({}) {
+      selectAPI.queryDistributorList({
+         customerCsName:this.filterObj.customerCode
+      }).then(res => {
         if (res.code === 1000) {
           this.distributorArr = res.data
         }

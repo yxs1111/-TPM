@@ -300,6 +300,10 @@ export default {
       this.filterObj.distributorCode=''
       this.getDistributorList()
     },
+    'filterObj.distributorCode'() {
+      this.filterObj.regionName=''
+      this.getRegionList()
+    },
   },
   methods: {
     // 获取年月
@@ -325,7 +329,9 @@ export default {
       })
     },
     getRegionList() {
-      selectAPI.getRegionList().then((res) => {
+      selectAPI.getRegionList({
+         distributorName:this.filterObj.distributorCode
+      }).then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
         }

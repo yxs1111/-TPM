@@ -253,6 +253,10 @@ export default {
       this.filterObj.distributorCode=''
       this.getDistributorList()
     },
+    'filterObj.distributorCode'() {
+      this.filterObj.regionCode=''
+      this.getRegionList()
+    },
   },
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
@@ -349,7 +353,9 @@ export default {
         .catch()
     },
     getRegionList() {
-      selectAPI.getRegionList().then((res) => {
+      selectAPI.getRegionList({
+        distributorName:this.filterObj.distributorCode
+      }).then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
         }
