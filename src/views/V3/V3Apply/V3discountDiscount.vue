@@ -368,7 +368,7 @@ export default {
     this.getSKU()
     // this.getMP()
     // this.getCustomerList()
-    this.getDistributorList()
+    // this.getDistributorList()
   },
   methods: {
     getTip(row) {

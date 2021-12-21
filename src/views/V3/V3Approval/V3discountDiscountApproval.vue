@@ -270,10 +270,10 @@ export default {
     // this.getTableData()
     this.getSKU()
     // this.getMP()
-    this.getRegionList()
+    // this.getRegionList()
     // this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getCustomerList()
-    this.getDistributorList()
+    // this.getDistributorList()
   },
   methods: {
     getRegionList() {
