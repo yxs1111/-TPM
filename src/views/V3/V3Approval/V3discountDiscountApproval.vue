@@ -569,7 +569,7 @@ export default {
         .then((response) => {
           if (response.data.records.length > 0) {
             if (response.data.records[0].isSubmit === 0) {
-              this.tableData = []
+              this.tableData = response.data.records
             } else if (response.data.records[0].isSubmit === 1) {
               this.tableData = response.data.records
             } else {
