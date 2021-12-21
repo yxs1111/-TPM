@@ -248,7 +248,7 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
-        channelName: this.filterObj.channelCode,
+        channelCode: this.filterObj.channelCode,
         customerName: this.filterObj.customerCode,
         brandName: this.filterObj.brandCode,
       }).then((response) => {
@@ -409,7 +409,7 @@ export default {
         // 导出数据筛选
         API.exportNUExcel({
           yearAndMonth: this.filterObj.yearAndMonth,
-          channelName: this.filterObj.channelCode,
+          channelCode: this.filterObj.channelCode,
           customerName: this.filterObj.customerCode,
           brandName: this.filterObj.brandCode,
         }).then((res) => {
