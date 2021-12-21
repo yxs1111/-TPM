@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-21 20:18:09
+ * @LastEditTime: 2021-12-21 21:57:43
 -->
 <template>
   <div class="app-container">
@@ -384,6 +384,8 @@ export default {
           this.ImportData = response.data
           this.saveBtn =
             response.data[0].judgmentType === 'Error' ? false : true
+          //清除input的value ,上传一样的
+          this.event.srcElement.value = '' // 置空
         }
       })
     },
@@ -398,6 +400,7 @@ export default {
           this.closeImportDialog()
           this.getList()
         }
+        
       })
     },
     //导出异常信息

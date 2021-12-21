@@ -148,7 +148,7 @@ export default {
       API.getPageNU({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        customerCsName: this.filterObj.customerCsName,
+        customerName: this.filterObj.customerCsName,
         channelCode: this.filterObj.channelCode,
         brandCode: this.filterObj.brandCode,
         yearAndMonth: this.localDate

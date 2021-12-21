@@ -248,6 +248,7 @@ export default {
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn = response.data[0].judgmentType !== 'Error'
+          this.event.srcElement.value = '' // 置空
         }
       })
     },

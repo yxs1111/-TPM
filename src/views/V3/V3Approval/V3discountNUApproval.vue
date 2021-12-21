@@ -393,6 +393,7 @@ export default {
               message: '上传失败，请重新上传。'
             })
           }
+          this.event.srcElement.value = '' // 置空
         })
         .catch(() => {})
     },

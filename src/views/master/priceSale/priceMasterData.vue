@@ -186,6 +186,7 @@ export default {
           console.log(typeof(this.warningList));
           // this.$message.success(`${response.data}`)
         }
+        this.event.srcElement.value = '' // 置空
       })
     },
     parsingExcelBtn() {

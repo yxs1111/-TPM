@@ -59,7 +59,7 @@
       <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
       <el-table-column width="160" align="right" prop="averageDifferenceValue" label="均价差值（%）" />
       <el-table-column width="160" align="right" prop="achievementRate" label="达成率 (%)" />
-      <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
+      <el-table-column width="150" align="right" prop="costDifferenceValue" label="费用差值(RMB)" />
       <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -189,9 +189,7 @@ export default {
         yearAndMonth: '',
         channelCode: '',
         customerCode: '',
-        distributorCode: '',
-        regionCode: '',
-        dim_product: '',
+        brandCode: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -240,8 +238,9 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
+        channelName: this.filterObj.channelCode,
+        customerName: this.filterObj.customerCode,
+        brandName: this.filterObj.brandCode,
       })
         .then((response) => {
           if (response.code == 1000) {
@@ -372,6 +371,8 @@ export default {
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn = response.data[0].judgmentType !== 'Error'
+          //清除input的value ,上传一样的
+        this.event.srcElement.value = '' // 置空
         }
       })
     },

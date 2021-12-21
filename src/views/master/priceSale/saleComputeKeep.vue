@@ -177,6 +177,8 @@ export default {
     },
     //确认导入
     confirmImport() {
+      this.warningShow = false
+      this.warningList=[]
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importSaleComputeKeep(formData).then((response) => {
@@ -194,6 +196,7 @@ export default {
             this.$message.error(response.data)
           }
         }
+        this.event.srcElement.value = '' // 置空
       })
     },
     //选择导入文件
@@ -202,6 +205,7 @@ export default {
     },
     //导入
     parsingExcel(event) {
+      console.log(event);
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]

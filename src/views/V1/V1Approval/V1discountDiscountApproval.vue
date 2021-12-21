@@ -405,7 +405,10 @@ export default {
               type: 'error',
               message: '上传失败，请重新上传。'
             })
+
           }
+          //清除input的value ,上传一样的
+          this.event.srcElement.value = '' // 置空
         })
         .catch(() => {})
     },

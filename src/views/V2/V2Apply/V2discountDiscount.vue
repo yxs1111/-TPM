@@ -414,6 +414,8 @@ export default {
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn = response.data[0].judgmentType !== 'Error'
+          //清除input的value ,上传一样的
+          this.event.srcElement.value = '' // 置空
         }
       })
     },

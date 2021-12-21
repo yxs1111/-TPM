@@ -413,6 +413,8 @@ export default {
           this.ImportData = response.data
           this.saveBtn =
             response.data[0].judgmentType === 'Error' ? false : true
+          //清除input的value ,上传一样的
+        this.event.srcElement.value = '' // 置空
         }
       })
     },
