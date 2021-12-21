@@ -10,7 +10,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -22,7 +22,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
           <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandCode" :value="item.brandCode" />
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandCode" :value="item.brandName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
