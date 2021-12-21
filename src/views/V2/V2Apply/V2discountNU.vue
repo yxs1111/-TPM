@@ -410,8 +410,9 @@ export default {
         // 导出数据筛选
         API.exportNUExcel({
           yearAndMonth: this.filterObj.yearAndMonth,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
+          channelName: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          brandName: this.filterObj.brandCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-NU-' + timestamp + '.xlsx') // 自定义Excel文件名
