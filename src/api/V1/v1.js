@@ -9,11 +9,11 @@ import request from '@/utils/request'
 export default {
   // 分页查询接口
   getPageV1(params) {
-    return requestApi.request_get('/cityplan/investCpVOneDetail/getPage', params)
+    return requestApi.request_post('/cityplan/investCpVOneDetail/getPage', params)
   },
   // 审批分页查询
   getApprovePageV1(params) {
-    return requestApi.request_get('/cityplan/investCpVOneDetail/getApprovePage', params)
+    return requestApi.request_post('/cityplan/investCpVOneDetail/getApprovePage', params)
   },
   approveV1(params) {
     return requestApi.request_post('/cityplan/investCpVOneDetail/approve', params)
