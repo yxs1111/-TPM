@@ -111,10 +111,10 @@
           <div v-else>{{ row.judgmentType }}</div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
-      <el-table-column width="220" align="center" prop="remark" label="备注" />
+      <!-- <el-table-column width="220" align="center" prop="remark" label="备注" /> -->
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
