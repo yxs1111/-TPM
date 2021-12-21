@@ -17,8 +17,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
-          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.brandName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
@@ -29,20 +29,20 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="approve(1)">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" :class="!(btnStatus==true)?'':'noClick'" @click="approve(2)">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="approve(2)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -195,7 +195,7 @@ export default {
       filterObj: {
         channelCode: '',
         customerCode: '',
-        brandCode: ''
+        brandName: ''
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -210,15 +210,27 @@ export default {
       uploadFile: '',
       saveBtn: false,
       dialogData: [],
-      btnStatus: true
+      btnStatus: true,
+      usernameLocal: '',
+      localDate: '',
+      BrandList: []
     }
   },
   computed: {},
   mounted() {
-    this.getTableData()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
+    // this.getTableData()
     this.getChannel()
+    this.getBrandList()
   },
   methods: {
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
+    },
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainIdNU({
@@ -238,8 +250,22 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          this.filterObj.channelCode = this.channelArr[0].channelCode
+          this.getCustomerList()
+          this.getEffectiveDate()
         }
       }).catch()
+    },
+    // 获取年月
+    getEffectiveDate() {
+      selectAPI.getMonth({ version: 'V3' }).then((res) => {
+        if (res.code === 1000) {
+          this.localDate = res.data
+          this.getTableData()
+        } else {
+          this.$message.warning('未查询到年月信息！')
+        }
+      })
     },
     getSKU() {
       selectAPI.querySkuSelect().then(res => {
@@ -455,14 +481,27 @@ export default {
         pageSize: this.pageSize, // 每页条数
         channelCode: this.filterObj.channelCode,
         customerCode: this.filterObj.customerCode,
+        yearAndMonth: this.localDate,
+        brandName: this.filterObj.brandName
       })
         .then((response) => {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
+          if (response.data.records.length > 0) {
+            if (response.data.records[0].isSubmit === 0) {
+              this.tableData = []
+            } else if (response.data.records[0].isSubmit === 1) {
+              this.tableData = response.data.records
+            } else {
+              this.tableData = []
+            }
+            this.mainIdLocal = response.data.records[0].mainId
+            this.infoByMainId()
+          } else {
+            this.mainIdLocal = null
+            this.btnStatus = false
+          }
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          this.infoByMainId()
         })
         .catch((error) => {})
     },
