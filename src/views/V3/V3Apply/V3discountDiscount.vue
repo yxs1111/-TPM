@@ -183,7 +183,7 @@
           <el-table-column fixed align="center" label="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-              <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+              <img v-else-if="scope.row.judgmentType===null? false:(scope.row.judgmentType.indexOf('Exception') > -1)" :src="excepImg" style="width:25px;height:25px;">
               <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
               <img v-else :src="errorImg" style="width:25px;height:25px;">
             </template>
