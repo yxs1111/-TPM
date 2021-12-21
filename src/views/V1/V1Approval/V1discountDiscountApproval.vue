@@ -264,10 +264,11 @@ export default {
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
+          debugger
           if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal) {
-            this.btnStatus = false
-          } else {
             this.btnStatus = true
+          } else {
+            this.btnStatus = false
           }
         } else {
           this.btnStatus = false
