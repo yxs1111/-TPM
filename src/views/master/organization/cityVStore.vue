@@ -13,7 +13,7 @@
         </div>
         <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
-        <div class="TpmButtonBG" @click="importDataNKA">
+        <!-- <div class="TpmButtonBG" @click="importDataNKA">
           <img src="@/assets/images/import.png" alt="">
           <span class="text">NKA导入</span>
         </div>
@@ -26,7 +26,7 @@
         </div><div class="TpmButtonBG" @click="importDataECLine">
           <img src="@/assets/images/import.png" alt="">
           <span class="text">ECLine导入</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
