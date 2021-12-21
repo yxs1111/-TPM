@@ -252,8 +252,8 @@ export default {
     submitFormAdd(formName) {
       const params = {
         minePackage: 'L',
-        targetYearMonth: this.ruleFormAdd.targetYear,
-        newYearMonth: this.ruleFormAdd.newYear
+        targetYearMonth: this.ruleFormAdd.newYear,
+        newYearMonth: this.ruleFormAdd.targetYear,
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
