@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-20 11:42:08
+ * @LastEditTime: 2021-12-21 17:15:19
 -->
 <template>
   <div class="app-container">
@@ -101,7 +101,7 @@
                 {{(row.averagePriceRangeValue*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                 {{Math.abs((row.promotionExpensesGapValue*1).toFixed(2))}}
+                {{Math.abs((row.promotionExpensesGapValue*1).toFixed(2))}}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -213,7 +213,7 @@
                 {{(row.averagePriceRangeValue*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                   {{Math.abs((row.promotionExpensesGapValue*1).toFixed(2))}}
+                {{Math.abs((row.promotionExpensesGapValue*1).toFixed(2))}}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -319,7 +319,6 @@ export default {
     this.getChannelList()
     // this.getList()
     this.getQuerySkuSelect()
-    
   },
   watch: {
     'filterObj.channelCode'() {
@@ -335,7 +334,6 @@ export default {
       })
     },
     getList() {
-      
       //encodeURIComponent
       API.getList({
         yearAndMonth: this.filterObj.month,
@@ -415,8 +413,31 @@ export default {
       this.getList()
     },
     getCPTData() {
-      this.dialogVisible = true
-      this.ruleForm.channelCode = this.filterObj.channelCode
+      API.isExist({
+        yearAndMonth: this.filterObj.month,
+        channelCode: this.filterObj.channelCode,
+      }).then((res) => {
+        if (res.data) {
+          this.$confirm('此操作将覆盖CPT数据, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'info',
+          })
+            .then(() => {
+              this.dialogVisible = true
+              this.ruleForm.channelCode = this.filterObj.channelCode
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消',
+              })
+            })
+        } else {
+          this.dialogVisible = true
+          this.ruleForm.channelCode = this.filterObj.channelCode
+        }
+      })
     },
     //导入数据弹窗显示
     importData() {

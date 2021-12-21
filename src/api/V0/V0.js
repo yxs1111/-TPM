@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-09 09:00:20
+ * @LastEditTime: 2021-12-21 17:05:04
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -62,6 +62,10 @@ export default {
   },
   getMonth(params) {
     return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)
+  },
+  //获取CPT 数据是否存在
+  isExist(params) {
+    return requestApi.request_post(this.url+'/isExist', params)
   },
   
 }

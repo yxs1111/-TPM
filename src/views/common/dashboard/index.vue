@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-20 16:19:33
+ * @LastEditTime: 2021-12-21 17:00:21
 -->
 <template>
   <div class="dashboard-container">
@@ -113,24 +113,48 @@
 
                   <div class="V1">
                     <div class="passIcon" v-if="value[1].version=='V2'||value[1].version=='V3'||(value[1].version=='V1'&&value[1].processStatus==2)"></div>
-                    <div class="currentPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag==='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
-                    <div class="delayPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag!=='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
+                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                      v-if="value[1].version=='V1'&&value[1].workDateFlag==='0'&&(value[1].version=='V1'&&value[1].processStatus==1)">
+                      <div slot="content" v-html="getTip(value[1])"></div>
+                      <div class="currentPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag==='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
+                    </el-tooltip>
+                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                      v-if="value[1].version=='V1'&&value[1].workDateFlag!=='0'&&(value[1].version=='V1'&&value[1].processStatus==1)">
+                      <div slot="content" v-html="getTip(value[1])"></div>
+                      <div class="delayPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag!=='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
+                    </el-tooltip>
                     <div class="pointCircle" v-if="value[1].version!='V1'&&value[1].version!='V2'&&value[1].version!='V3'"></div>
                     <div class="line" v-if="value[1].version=='V2'||value[1].version=='V3'"></div>
                     <div class="lineDark" v-if="(value[1].version=='V0'&&value[1].version!='V2'&&value[1].version!='V3')||value[1].version=='V1'"></div>
                   </div>
                   <div class="V2">
                     <div class="passIcon" v-if="value[1].version=='V3'||(value[1].version=='V2'&&value[1].processStatus==2)"></div>
-                    <div class="currentPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
-                    <div class="delayPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag!=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
+                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                      v-if="value[1].version=='V2'&&value[1].workDateFlag=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)">
+                      <div slot="content" v-html="getTip(value[1])"></div>
+                      <div class="currentPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
+                    </el-tooltip>
+                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                      v-if="value[1].version=='V2'&&value[1].workDateFlag!=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)">
+                      <div slot="content" v-html="getTip(value[1])"></div>
+                      <div class="delayPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag!=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
+                    </el-tooltip>
                     <div class="pointCircle" v-if="value[1].version!='V2'&&value[1].version!='V3'"></div>
                     <div class="line" v-if="value[1].version=='V3'"></div>
                     <div class="lineDark" v-if="(value[1].version=='V0'||value[1].version=='V1')||value[1].version=='V2'"></div>
                   </div>
                   <div class="V3">
                     <div class="passIcon" v-if="value[1].version=='V3'&&value[1].processStatus==2"></div>
-                    <div class="currentPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
-                    <div class="delayPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag!=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
+                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                      v-if="value[1].version=='V3'&&value[1].workDateFlag=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)">
+                      <div slot="content" v-html="getTip(value[1])"></div>
+                      <div class="currentPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
+                    </el-tooltip>
+                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                      v-if="value[1].version=='V3'&&value[1].workDateFlag!=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)">
+                      <div slot="content" v-html="getTip(value[1])"></div>
+                      <div class="delayPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag!=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
+                    </el-tooltip>
                     <div class="pointCircle" v-if="value[1].version!='V3'"></div>
                   </div>
                 </div>
@@ -265,33 +289,6 @@ export default {
             label: '美好的一天！要开心呦！',
           },
         },
-        // {
-        //   key: 'V1Day',
-        //   dot: {
-        //     style: {
-        //       backgroundColor: '#FB5A56',
-        //     },
-        //   },
-        //   dates: new Date('Sun Nov 07 2021 00:00:00'),
-        // },
-        // {
-        //   key: 'V0Day1',
-        //   dot: {
-        //     style: {
-        //       backgroundColor: '#FB5A56',
-        //     },
-        //   },
-        //   dates: new Date(2021, 12, 20),
-        // },
-        // {
-        //   key: 'V2Day',
-        //   dot: {
-        //     style: {
-        //       backgroundColor: '#FFAA30',
-        //     },
-        //   },
-        //   dates: new Date(2021, 11, 6),
-        // },
       ],
       MessageList: [], //消息列表
       ActivityList: [],
@@ -301,13 +298,6 @@ export default {
   mounted() {
     this.getMesList()
     this.getHomePageData()
-    // var strTime="2021-12-20";    //字符串日期格式           
-    // var date= new Date(Date.parse(strTime.replace(/-/g,  "/")));      //转换成Data();
-    // console.log(date);
-    // window.addEventListener('resize', () => {
-    //   this.SalesAmountChart.resize()
-    //   this.ActualSalesChart.resize()
-    // })
   },
   watch: {
     '$store.state.app.sidebar.opened'() {
@@ -333,11 +323,19 @@ export default {
               </div>
               <div class="Tip">
                 <span class="TipTitle">办理时间: </span>
-                <span>${value.updateDate?value.updateDate.substring(0,10):''}</span>
+                <span>${
+                  value.updateDate ? value.updateDate.substring(0, 10) : ''
+                }</span>
               </div>
               <div class="Tip">
                 <span class="TipTitle">办理状态: </span>
-                <span>${value.processStatus==2?'已办理':value.workDateFlag=='1'?'未办理(延误)':'未办理'}</span>
+                <span>${
+                  value.processStatus == 2
+                    ? '已办理'
+                    : value.workDateFlag == '1'
+                    ? '未办理(延误)'
+                    : '未办理'
+                }</span>
               </div>
       `
     },
@@ -392,7 +390,7 @@ export default {
         let DateArray = res.data.calendar
         let DateData = {}
         for (let m = 0; m < DateArray.length; m++) {
-          // DateArray[m].dateObj = this.createDate(DateArray[m].date)
+          DateArray[m].dateObj = this.createDate(DateArray[m].date)
           //对date 进行分组
           if (!DateData[DateArray[m].yearMonth]) {
             var arr = []
@@ -402,16 +400,34 @@ export default {
             DateData[DateArray[m].yearMonth].push(DateArray[m])
           }
         }
-        console.log(DateData)
+        let ColorIndex = 0 //颜色初始值
+        //日历格式化
+        for (const key in DateData) {
+          let pointList = DateData[key]
+          for (let index = 0; index < pointList.length; index++) {
+            let obj = {
+              key: pointList[index].yearMonth + '-' + pointList[index].version,
+              dot: {
+                style: {
+                  //dot 样式设置
+                  backgroundColor: this.BackGroundColorList[ColorIndex % 3],
+                },
+              },
+              dates: pointList[index].dateObj,
+              popover: {
+                label:
+                  pointList[index].yearMonth + '-' + pointList[index].version,
+              },
+            }
+            this.attrs.push(obj)
+          }
+          ColorIndex++
+        }
       })
     },
     //获取date 日期对象
     createDate(value) {
-      let dateString = value.replace('-','')
-      let pattern = /(\d{4})(\d{2})(\d{2})/
-      let formatDate = dateString.replace(pattern, '$1/$2/$3')
-      let date = new Date(formatDate)
-      return date
+      return new Date(Date.parse(value.replace(/-/g, '/'))) //转换成Data();
     },
     //获取活动月
     getCPTMonth(value) {

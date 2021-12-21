@@ -60,7 +60,7 @@
       <el-table-column width="160" align="right" prop="averageDifferenceValue" label="均价差值（%）" />
       <el-table-column width="160" align="right" prop="achievementRate" label="达成率 (%)" />
       <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+      <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
@@ -73,7 +73,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="costDifference" label="系统判定内容" />
+      <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容" />
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -215,6 +215,7 @@ export default {
   computed: {},
   watch: {
     'filterObj.channelCode'() {
+      this.filterObj.customerCode=''
       this.getCustomerList()
     },
   },
