@@ -501,7 +501,7 @@ export default {
           .then(() => {
             this.$message({
               type: 'success',
-              message: '好的!'
+              message: '以确认提交'
             })
           })
           .catch(() => {

@@ -233,7 +233,7 @@ export default {
     },
     // 通过与审批按钮控制
     infoByMainId() {
-      API.infoByMainIdNU({
+      API.infoByMainId({
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
