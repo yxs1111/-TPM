@@ -328,6 +328,7 @@ export default {
     },
     // 关闭导入
     closeimportDialog() {
+      this.dialogDataF = []
       this.uploadFileName = ''
       this.importVisible = false
       this.supplementVisible = false
