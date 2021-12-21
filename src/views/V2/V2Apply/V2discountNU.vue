@@ -268,7 +268,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version === 'NUV2' &&
               res.data.assignee === this.usernameLocal
             ) {
               //本人可以提交
