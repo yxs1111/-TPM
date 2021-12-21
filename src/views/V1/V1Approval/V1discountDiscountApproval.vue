@@ -56,7 +56,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -183,7 +183,9 @@
           <el-table-column width="120" align="center" prop="regionName" label="区域" />
           <el-table-column width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）" />
           <el-table-column width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）" />
-          <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
+          <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）">
+            <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
+          </el-table-column>
           <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
           <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
           <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
@@ -213,7 +215,7 @@ export default {
 
   data() {
     return {
-      RegionList:[],
+      RegionList: [],
       submitBtn: 0,
       total: 1,
       pageSize: 10,
@@ -244,6 +246,16 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    'filterObj.customerCode'() {
+      this.filterObj.distributorCode = ''
+      this.getDistributorList()
+    },
+    'filterObj.distributorCode'() {
+      this.filterObj.regionName = ''
+      this.getRegionList()
+    }
+  },
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
@@ -252,20 +264,10 @@ export default {
     this.getRegionList()
     // this.getEffectiveDate()
   },
-  watch: {
-    'filterObj.customerCode'() {
-      this.filterObj.distributorCode=''
-      this.getDistributorList()
-    },
-    'filterObj.distributorCode'() {
-      this.filterObj.regionName=''
-      this.getRegionList()
-    }
-  },
   methods: {
     getRegionList() {
       selectAPI.getRegionList({
-         distributorName:this.filterObj.distributorCode
+        distributorName: this.filterObj.distributorCode
       }).then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
@@ -339,7 +341,7 @@ export default {
     // 经销商
     getDistributorList() {
       selectAPI.queryDistributorList({
-         customerCsName:this.filterObj.customerCode
+        customerCsName: this.filterObj.customerCode
       }).then(res => {
         if (res.code === 1000) {
           this.distributorArr = res.data
