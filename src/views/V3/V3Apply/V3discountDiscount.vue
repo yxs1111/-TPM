@@ -349,12 +349,22 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    'filterObj.customerName'() {
+      this.filterObj.distributorName = ''
+      this.getDistributorList()
+    },
+    'filterObj.distributorName'() {
+      this.filterObj.regionName = ''
+      this.getRegionList()
+    }
+  },
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     // this.getEffectiveDate()
     // this.getTableData()
-    this.getRegionList()
+    // this.getRegionList()
     this.getSKU()
     // this.getMP()
     // this.getCustomerList()
@@ -365,7 +375,9 @@ export default {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
     getRegionList() {
-      selectAPI.getRegionList().then((res) => {
+      selectAPI.getRegionList({
+        distributorName: this.filterObj.distributorName
+      }).then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
         }
@@ -420,7 +432,9 @@ export default {
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList().then(res => {
+      selectAPI.queryDistributorList({
+        customerCsName: this.filterObj.customerName
+      }).then(res => {
         if (res.code === 1000) {
           this.distributorArr = res.data
         }

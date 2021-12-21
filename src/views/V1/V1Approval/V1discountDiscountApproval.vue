@@ -258,7 +258,7 @@ export default {
     'filterObj.distributorCode'() {
       this.filterObj.regionName=''
       this.getRegionList()
-    },
+    }
   },
   methods: {
     getRegionList() {
@@ -335,7 +335,7 @@ export default {
       }).catch()
     },
     // 经销商
-    getDistributorList({}) {
+    getDistributorList() {
       selectAPI.queryDistributorList({
          customerCsName:this.filterObj.customerCode
       }).then(res => {
