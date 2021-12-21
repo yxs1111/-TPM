@@ -30,7 +30,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
+            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
           </el-select>
         </div>
         <div class="OpertionBar">
