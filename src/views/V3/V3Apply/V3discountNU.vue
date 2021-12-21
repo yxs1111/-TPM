@@ -190,6 +190,9 @@ export default {
 
   data() {
     return {
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
       BrandList: [],
       btnStatus: true,
       total: 1,
@@ -223,11 +226,12 @@ export default {
     // this.getTableData()
     this.getChannel()
     this.getBrandList()
+    // this.getTableData()
   },
   methods: {
     // 导入文件检索后保存
     saveImportInfo() {
-      API.saveImportInfo({
+      API.saveImportInfoNU({
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
@@ -329,6 +333,7 @@ export default {
     },
     // 确认导入
     confirmImport() {
+      this.dialogDataF = []
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('mainId', this.mainIdLocal)
@@ -342,9 +347,9 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '上传成功'
+              message: '检测数据成功'
             })
-            if (response.data != null) {
+            if (response.data.length > 0) {
               // debugger
               this.dialogDataF = response.data
               this.$forceUpdate()
@@ -355,7 +360,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '上传失败，请重新上传。'
+              message: '检测数据失败，请重新上传。'
             })
           }
           this.event.srcElement.value = '' // 置空
@@ -385,6 +390,7 @@ export default {
     },
     // 导入数据
     importData() {
+      this.saveBtn = false
       this.importVisible = true
     },
     // 导出数据
