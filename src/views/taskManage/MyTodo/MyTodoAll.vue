@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-14 22:09:25
+ * @LastEditTime: 2021-12-22 16:52:46
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
-          <div class="operation" @click="operateProcess(row.version,row.activityName)">
+          <div class="operation" @click="operateProcess(row.version,row.activityName,row.channelCode)">
             <svg-icon icon-class="submit_l" class="submit_icon"  />
             办理
           </div>
@@ -146,42 +146,59 @@ export default {
     search() {
       this.getTableData()
     },
-    operateProcess(version,name) {
-
+    operateProcess(version,name,channelCode) {
+      // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})
+      // sessionStorage.setItem('currentIndex',2)
+      // return
       if(version=="V0") {
         console.log(version,name);
         if(name.indexOf('调整')!=-1){
-          console.log(name);
-          this.$router.push('/V0/V0Apply')
+          this.$router.push({path:'/V0/V0Apply',params:{channelCode}})
         } else if(name.indexOf('审批')!=-1) {
-          this.$router.push('/V0/V0Approval')
+          this.$router.push({path:'/V0/V0Approval',params:{channelCode}})
         }
       }
       if(version=="V1") {
-        // console.log(version,name);
         if(name.indexOf('调整')!=-1){
-          console.log(name);
-          this.$router.push('/V1/V1Apply')
+          this.$router.push({path:'/V1/V1Apply',params:{channelCode}})
         } else if(name.indexOf('审批')!=-1) {
-          this.$router.push('/V1/V1Approval')
+          this.$router.push({path:'/V1/V1Approval',params:{channelCode}})
         }
       }
-      if(version=="V2") {
-        // console.log(version,name);
+      if(version=="NUV1") {
         if(name.indexOf('调整')!=-1){
-          console.log(name);
-          this.$router.push('/V2/V2Apply')
+          this.$router.push({path:'/V1/V1Apply/V1discountNU',params:{channelCode}})
+          sessionStorage.setItem('currentIndex',2)
+        } 
+      }
+      if(version=="V2") {
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V2/V2Apply',params:{channelCode}})
         } else if(name.indexOf('审批')!=-1) {
-          this.$router.push('/V2/V2Approval')
+          this.$router.push({path:'/V2/V2Approval',params:{channelCode}})
+        }
+      }
+      if(version=="NUV2") {
+        sessionStorage.setItem('currentIndex',2)
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V2/V2Apply/V2discountNU',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V2/V2Approval/V2NUApproval',params:{channelCode}})
         }
       }
       if(version=="V3") {
-        // console.log(version,name);
         if(name.indexOf('调整')!=-1){
-          console.log(name);
-          this.$router.push('/V3/V3Apply')
+          this.$router.push({path:'/V3/V3Apply',params:{channelCode}})
         } else if(name.indexOf('审批')!=-1) {
-          this.$router.push('/V3/V3Approval')
+          this.$router.push({path:'/V3/V3Approval',params:{channelCode}})
+        }
+      }
+      if(version=="NUV3") {
+        sessionStorage.setItem('currentIndex',2)
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V3/V3Apply/V3discountNU',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V3/V3Approval/V3discountNUApproval',params:{channelCode}})
         }
       }
       //this.$router.push({ path: '/process', query: currentRow })

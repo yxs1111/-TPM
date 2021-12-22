@@ -327,7 +327,11 @@ export default {
         .queryChannelSelect()
         .then((res) => {
           this.channelOptons = res.data
-          this.filterObj.channelCode=this.channelOptons[0].channelCode
+          if(!this.$route.query.channelCode) {
+            this.filterObj.channelCode=this.channelOptons[0].channelCode
+          }else {
+            this.filterObj.channelCode=this.$route.query.channelCode
+          }
           this.getMonth()
         })
         .catch()

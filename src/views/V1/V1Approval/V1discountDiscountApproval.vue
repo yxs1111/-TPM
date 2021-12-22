@@ -280,7 +280,7 @@ export default {
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
-          debugger
+          // debugger
           if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal) {
             this.btnStatus = true
           } else {
@@ -307,7 +307,12 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.filterObj.channelCode = this.channelArr[0].channelEsName
+          if(!this.$route.query.channelCode) {
+            this.filterObj.channelCode = this.channelArr[0].channelEsName
+          }else {
+            this.filterObj.channelCode=this.$route.query.channelCode
+          }
+          
           this.getCustomerList(this.filterObj.channelCode)
           this.getEffectiveDate()
         }

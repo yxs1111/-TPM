@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-13 13:34:36
+ * @LastEditTime: 2021-12-22 16:20:09
 -->
 <template>
   <div class="tabViewsWrap">
@@ -49,8 +49,15 @@ export default {
     } else {
       this.currentIndex = 0
     }
-    //我的待办跳转
-    this.$router.push(this.routerList[this.currentIndex].path)
+    if (!this.$route.query.channelCode) {
+      //我的待办跳转
+      this.$router.push(this.routerList[this.currentIndex].path)
+    } else {
+      this.$router.push({
+        path: this.routerList[this.currentIndex].path,
+        query: { channelCode: this.$route.query.channelCode },
+      })
+    }
   },
   computed: {},
   methods: {

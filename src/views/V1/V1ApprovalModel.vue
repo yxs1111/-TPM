@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-13 13:34:43
+ * @LastEditTime: 2021-12-22 16:16:26
 -->
 <template>
   <div class="tabViewsWrap">
@@ -9,7 +9,7 @@
       <router-link :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" v-for="(item, index) in routerList" :key="index"
         @click.native="changeTab(index)">
         <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
-        <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex"> 
+        <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex">
         {{ item.name }}
       </router-link>
     </div>
@@ -52,8 +52,17 @@ export default {
     } else {
       this.currentIndex = 0
     }
-    //我的待办跳转
-    this.$router.push(this.routerList[this.currentIndex].path)
+    console.log(this.$route.query);
+    //待办 渠道参数
+    if (!this.$route.query.channelCode) {
+      //我的待办跳转
+      this.$router.push(this.routerList[this.currentIndex].path)
+    } else {
+      this.$router.push({
+        path: this.routerList[this.currentIndex].path,
+        query: { channelCode: this.$route.query.channelCode },
+      })
+    }
   },
   computed: {},
   methods: {

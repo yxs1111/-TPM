@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-21 21:57:43
+ * @LastEditTime: 2021-12-22 16:17:30
 -->
 <template>
   <div class="app-container">
@@ -260,6 +260,8 @@ export default {
   },
   directives: { elDragDialog, permission },
   mounted() {
+    
+    console.log(this.$route.query.channelCode)
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getList()
     this.getQuerySkuSelect()
@@ -327,7 +329,12 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
           this.ChannelList = res.data
-          this.filterObj.channelCode=this.ChannelList[0].channelCode
+          if(!this.$route.query.channelCode) {
+            this.filterObj.channelCode=this.ChannelList[0].channelCode
+          }else {
+            this.filterObj.channelCode=this.$route.query.channelCode
+          }
+          
           this.getMonth()
         }
       })
