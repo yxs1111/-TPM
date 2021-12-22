@@ -17,7 +17,7 @@ export default function() {
           name: 'NKAEC',
           code: 'mdm_NKAEC',
           component: () => import('@/views/master/nkaec/model.vue'),
-          meta: { title: 'NKAEC', icon: 'apply' },
+          meta: { title: 'CPT数据', icon: 'apply' },
           redirect: '/nkaec/pages/nka',
           children: [
             // 组织架构
@@ -27,7 +27,7 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'NKA',
               component: () => import('@/views/master/nkaec/pages/nka.vue'),
-              meta: { title: 'NKA', icon: 'apply', activeMenu: '/NKAEC' }
+              meta: { title: 'NKA Rawdata', icon: 'apply', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -35,7 +35,7 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'EC',
               component: () => import('@/views/master/nkaec/pages/EC.vue'),
-              meta: { title: 'EC', icon: 'apply', activeMenu: '/NKAEC' }
+              meta: { title: 'EC Rawdata', icon: 'apply', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -43,7 +43,7 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'NKALine',
               component: () => import('@/views/master/nkaec/pages/NKALine.vue'),
-              meta: { title: 'NKALine', icon: 'apply', activeMenu: '/NKAEC' }
+              meta: { title: 'NKA Guideline', icon: 'apply', activeMenu: '/NKAEC' }
             },
             {
               hidden: true,
@@ -51,7 +51,7 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'ECLine',
               component: () => import('@/views/master/nkaec/pages/ECLine.vue'),
-              meta: { title: 'ECLine', icon: 'apply', activeMenu: '/NKAEC' }
+              meta: { title: 'EC Guideline', icon: 'apply', activeMenu: '/NKAEC' }
             }
           ]
         },

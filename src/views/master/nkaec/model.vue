@@ -27,10 +27,10 @@ export default {
   data() {
     return {
       routerList: [
-        { name: 'NKA', path: '/nkaec/pages/nka' },
-        { name: 'EC', path: '/nkaec/pages/EC' },
-        { name: 'NKALine', path: '/nkaec/pages/NKALine' },
-        { name: 'ECLine', path: '/nkaec/pages/ECLine' }
+        { name: 'NKA Rawdata', path: '/nkaec/pages/nka' },
+        { name: 'EC Rawdata', path: '/nkaec/pages/EC' },
+        { name: 'NKA Guideline', path: '/nkaec/pages/NKALine' },
+        { name: 'EC Guideline', path: '/nkaec/pages/ECLine' }
       ],
       currentIndex: 0,
       imgSrcList: [

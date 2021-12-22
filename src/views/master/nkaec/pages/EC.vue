@@ -9,19 +9,19 @@
           <el-input v-model="filterObj.product" clearable filterable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">scenario</span>
+          <span class="SelectliTitle">Scenario</span>
           <el-input v-model="filterObj.scenario" clearable filterable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">版本:</span>
+          <span class="SelectliTitle">Version:</span>
           <el-input v-model="filterObj.version" clearable filterable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">顾客:</span>
+          <span class="SelectliTitle">Customer:</span>
           <el-input v-model="filterObj.customer" clearable filterable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">measure:</span>
+          <span class="SelectliTitle">Measure:</span>
           <el-input v-model="filterObj.measure" clearable filterable placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
@@ -30,32 +30,52 @@
     <div class="SelectBarWrap">
       <div class="TpmButtonBG" @click="importDataEC">
         <img src="@/assets/images/import.png" alt="">
-        <span class="text">EC导入</span>
+        <span class="text">EC Rawdata导入</span>
       </div>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column width="230" align="center" prop="item" label="名称" />
-      <el-table-column width="230" align="center" prop="dimProduct" label="Product" />
-      <el-table-column width="260" align="center" prop="dimShopperType" label="销售商类型" />
-      <el-table-column width="150" align="center" prop="dimUvType" label="UV类型" />
-      <el-table-column width="190" align="center" prop="dimBudgetOwner" label="渠道" />
-      <el-table-column width="200" align="center" prop="dimScenario" label="周期" />
-      <el-table-column width="100" align="center" prop="dimVersion" label="版本" />
-      <el-table-column width="150" align="center" prop="dimCustomer" label="经销商" />
-      <el-table-column width="100" align="center" prop="dimYear" label="年" />
-      <el-table-column width="360" align="center" prop="dimMeasure" label="估量" />
-      <el-table-column width="160" align="center" prop="jan" label="一月" />
-      <el-table-column width="160" align="center" prop="feb" label="二月" />
-      <el-table-column width="160" align="center" prop="mar" label="三月" />
-      <el-table-column width="160" align="center" prop="apr" label="四月" />
-      <el-table-column width="160" align="center" prop="may" label="五月" />
-      <el-table-column width="160" align="center" prop="jun" label="六月" />
-      <el-table-column width="160" align="center" prop="jul" label="七月" />
-      <el-table-column width="160" align="center" prop="aug" label="八月" />
-      <el-table-column width="160" align="center" prop="aug" label="九月" />
-      <el-table-column width="160" align="center" prop="oct" label="十月" />
-      <el-table-column width="160" align="center" prop="nov" label="十一月" />
-      <el-table-column width="160" align="center" prop="dec" label="十二月" />
+      <el-table-column width="230" align="center" prop="item" label="Item" />
+      <el-table-column width="230" align="center" prop="dimProduct" label="Dim_Product" />
+      <el-table-column width="260" align="center" prop="dimShopperType" label="Dim_Shopper_Type" />
+      <el-table-column width="150" align="center" prop="dimUvType" label="Dim_UV_Type" />
+      <el-table-column width="190" align="center" prop="dimBudgetOwner" label="Dim_Budget_Owner" />
+      <el-table-column width="200" align="center" prop="dimScenario" label="Dim_Scenario" />
+      <el-table-column width="130" align="center" prop="dimVersion" label="Dim_Version" />
+      <el-table-column width="150" align="center" prop="dimCustomer" label="Dim_Customer" />
+      <el-table-column width="100" align="center" prop="dimYear" label="Dim_Year" />
+      <el-table-column width="360" align="center" prop="dimMeasure" label="Dim_Measure" />
+      <el-table-column width="160" align="center" prop="jan" label="Jan" />
+      <el-table-column width="160" align="center" prop="feb" label="Feb" />
+      <el-table-column v-slot="{row}" width="160" align="center" prop="mar" label="Mar">
+        {{ (row.mar*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="apr" label="Apr">
+        {{ (row.apr*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="may" label="May">
+        {{ (row.may*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="jun" label="Jun">
+        {{ (row.jun*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="jul" label="Jul">
+        {{ (row.jul*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="aug" label="Aug">
+        {{ (row.aug*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="sep" label="Sep">
+        {{ (row.sep*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="oct" label="Oct">
+        {{ (row.oct*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="nov" label="Nov">
+        {{ (row.nov*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="dec" label="Dec">
+        {{ (row.dec*1).toFixed(2) }}
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -70,7 +90,7 @@
       />
     </div>
     <!-- EC导入 -->
-    <el-dialog width="30%" class="my-el-dialog" title="EC导入" :visible="importVisibleEC" @close="closeImport">
+    <el-dialog width="30%" class="my-el-dialog" title="EC Rawdata导入" :visible="importVisibleEC" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
