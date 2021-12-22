@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-22 16:19:01
+ * @LastEditTime: 2021-12-22 21:34:49
 -->
 <template>
   <div class="app-container">
@@ -75,7 +75,7 @@
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
               <el-table-column align="right" width="150" prop="cptVolBox" label="CPT VOL(CTN)"></el-table-column>
-              <el-table-column align="right" width="250" v-for="(citem,cindex) in tableData[0].priceGearNum" :key="cindex">
+              <el-table-column align="right" width="250" v-for="(citem,cindex) in Number(tableData[0].priceGearNum)" :key="cindex">
                 <template slot="header">
                   {{ tableData[0].customGearList[cindex].gear }}RMB/Tin 档位销量(CTN)
                 </template>
@@ -640,10 +640,10 @@ export default {
       if (columnIndex === 0 && rowIndex != 0) {
         return 'background:#4192d3!important'
       }
-      let num = (4 + row.priceGearNum - columnIndex) % 3
+      let num = (4 + Number(row.priceGearNum) - columnIndex) % 3
       if (
         4 <= columnIndex &&
-        columnIndex < 4 + row.priceGearNum &&
+        columnIndex < 4 + Number(row.priceGearNum) &&
         rowIndex != 0
       ) {
         return this.backgroundList[num]

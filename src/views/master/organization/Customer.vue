@@ -11,7 +11,7 @@
           <span class="SelectliTitle">客户中文名称</span>
           <el-input v-model="filterObj.customerCsName" clearable placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <!-- <div class="TpmButtonBG" @click="importDataNKA">
           <img src="@/assets/images/import.png" alt="">
@@ -29,11 +29,10 @@
         </div> -->
       </div>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" type="selection" />
-      <el-table-column align="center" prop="customerCode" label="客户编号" />
+    <el-table :data="tableData" border  :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column  align="center" prop="customerCode" label="客户编号" />
       <el-table-column align="center" prop="customerCsName" label="客户中文名称" />
-      <el-table-column align="center" prop="customerCsName" label="客户英文名称" />
+      <el-table-column width="220" align="center" prop="customerCsName" label="客户英文名称" />
       <el-table-column align="center" prop="customerType" label="客户类型" />
       <el-table-column align="center" prop="channelCode" label="渠道" />
       <el-table-column width="150" align="center" prop="state" label="状态">
@@ -148,7 +147,6 @@ export default {
         customerCode: '',
         customerCsName: ''
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -235,7 +233,6 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageMdCustomer({
         customerCode: this.filterObj.customerCode,
         customerCsName: this.filterObj.customerCsName,
@@ -243,7 +240,6 @@ export default {
         pageSize: this.pageSize // 每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
