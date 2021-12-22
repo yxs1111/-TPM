@@ -482,7 +482,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              API.approveNU({
                 mainId: mainId, // 主表id
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
