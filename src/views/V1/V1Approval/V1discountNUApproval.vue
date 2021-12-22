@@ -11,7 +11,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-select v-model="filterObj.customerCsName" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
@@ -77,7 +77,8 @@ export default {
       filterObj: {
         channelCode: '',
         brandCode: '',
-        customerCsName: ''
+        customerName: '',
+        month: ''
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -87,45 +88,51 @@ export default {
       tableData: [],
       BrandList: [],
       dialogVisible: false,
-      usernameLocal: '',
-      localDate: '',
       mainIdLocal: null,
+      submitBtn: 1,
+      btnStatus: true,
+      usernameLocal: ''
     }
   },
   computed: {},
+  watch: {
+    'filterObj.channelCode'() {
+      this.filterObj.customerName = ''
+      this.getCustomerList()
+    }
+  },
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
-    // this.getTableData()
+    // this.getEffectiveDate()
     this.getChannel()
-    this.getCustomerList()
+    // this.getCustomerList()
     this.getBrandList()
   },
   methods: {
+    getEffectiveDate() {
+      API.getEffectiveDate({ version: 'V1' }).then((res) => {
+        this.filterObj.month = res.data
+        this.getTableData()
+      })
+    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.filterObj.channelCode = this.channelArr[0].channelEsName
+          if(!this.$route.query.channelCode) {
+            this.filterObj.channelCode = this.channelArr[0].channelEsName
+          }else {
+            this.filterObj.channelCode=this.$route.query.channelCode
+          }
+         
           this.getCustomerList()
           this.getEffectiveDate()
         }
       })
     },
-    // 获取年月
-    getEffectiveDate() {
-      API.getEffectiveDate({ version: 'V1' }).then(res => {
-        if (res.code === 1000) {
-          this.localDate = res.data
-          this.getTableData()
-        } else {
-          this.$message.warning('未查询到年月信息！')
-        }
-      }).catch()
-    },
     // 客户
     getCustomerList() {
-      this.filterObj.customerCsName = ''
       selectAPI
         .queryCustomerList({
           channelCode: this.filterObj.channelCode
@@ -148,15 +155,16 @@ export default {
       API.getPageNU({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        customerName: this.filterObj.customerCsName,
+        customerName: this.filterObj.customerName,
         channelCode: this.filterObj.channelCode,
         brandCode: this.filterObj.brandCode,
-        yearAndMonth: this.localDate
+        yearAndMonth: this.filterObj.month
       }).then((response) => {
         if (response.data.records.length > 0) {
           this.tableData = response.data.records
           this.mainIdLocal = response.data.records[0].mainId
-          // this.infoByMainId()
+          this.submitBtn = response.data.records[0].isSubmit
+          this.infoByMainId()
         } else {
           this.mainIdLocal = null
           this.btnStatus = false
@@ -165,6 +173,22 @@ export default {
         this.pageSize = response.data.pageSize
         this.total = response.data.total
       })
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+            this.btnStatus = true
+          } else {
+            this.btnStatus = false
+          }
+        } else {
+          this.btnStatus = false
+        }
+      }).catch()
     },
     getPlanCost(num) {
       const money = Number(num.toFixed(2))
@@ -177,7 +201,12 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.downExcelNU().then((res) => {
+        API.downExcelNU({
+          customerName: this.filterObj.customerName,
+          channelCode: this.filterObj.channelCode,
+          brandCode: this.filterObj.brandCode,
+          yearAndMonth: this.filterObj.month
+        }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V1新客信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
