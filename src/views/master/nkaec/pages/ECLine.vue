@@ -34,7 +34,7 @@
       </div>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column width="230" align="center" prop="item" label="Item" />
+      <el-table-column width="230" align="center" prop="itemName" label="Item" />
       <el-table-column width="230" align="center" prop="dimProduct" label="Dim_Product" />
       <el-table-column width="260" align="center" prop="dimShopperType" label="Dim_Shopper_Type" />
       <el-table-column width="150" align="center" prop="dimUvType" label="Dim_UV_Type" />

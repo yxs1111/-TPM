@@ -46,16 +46,36 @@
       <el-table-column width="360" align="center" prop="dimMeasure" label="Dim_Measure" />
       <el-table-column width="160" align="center" prop="jan" label="Jan" />
       <el-table-column width="160" align="center" prop="feb" label="Feb" />
-      <el-table-column width="160" align="center" prop="mar" label="Mar" />
-      <el-table-column width="160" align="center" prop="apr" label="Apr" />
-      <el-table-column width="160" align="center" prop="may" label="May" />
-      <el-table-column width="160" align="center" prop="jun" label="Jun" />
-      <el-table-column width="160" align="center" prop="jul" label="Jul" />
-      <el-table-column width="160" align="center" prop="aug" label="Aug" />
-      <el-table-column width="160" align="center" prop="sep" label="Sep" />
-      <el-table-column width="160" align="center" prop="oct" label="Oct" />
-      <el-table-column width="160" align="center" prop="nov" label="Nov" />
-      <el-table-column width="160" align="center" prop="dec" label="Dec" />
+      <el-table-column v-slot="{row}" width="160" align="center" prop="mar" label="Mar">
+        {{ (row.mar*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="apr" label="Apr">
+        {{ (row.apr*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="may" label="May">
+        {{ (row.may*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="jun" label="Jun">
+        {{ (row.jun*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="jul" label="Jul">
+        {{ (row.jul*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="aug" label="Aug">
+        {{ (row.aug*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="sep" label="Sep">
+        {{ (row.sep*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="oct" label="Oct">
+        {{ (row.oct*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="nov" label="Nov">
+        {{ (row.nov*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="center" prop="dec" label="Dec">
+        {{ (row.dec*1).toFixed(2) }}
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
