@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-22 16:46:44
+ * @LastEditTime: 2021-12-22 17:01:24
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="operateProcess">
+      <div class="TpmButtonBG">
         <svg-icon icon-class="task" />
         <span class="text">任务转办</span>
       </div>
