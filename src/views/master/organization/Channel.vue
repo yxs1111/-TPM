@@ -5,7 +5,7 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">渠道编码</span>
-          <el-input v-model="filterObj.channelCode" placeholder="请输入" />
+          <el-input v-model="filterObj.channelCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>

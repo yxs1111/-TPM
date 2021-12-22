@@ -5,11 +5,11 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">客户编号</span>
-          <el-input v-model="filterObj.customerCode" placeholder="请输入" />
+          <el-input v-model="filterObj.customerCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户中文名称</span>
-          <el-input v-model="filterObj.customerCsName" placeholder="请输入" />
+          <el-input v-model="filterObj.customerCsName" clearable placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="search">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>

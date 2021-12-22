@@ -5,7 +5,7 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">门店名称</span>
-          <el-input v-model="filterObj.StoreName" placeholder="请输入" />
+          <el-input v-model="filterObj.StoreName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
@@ -16,7 +16,7 @@
         <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border max-height="800" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>

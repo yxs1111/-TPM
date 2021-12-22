@@ -5,7 +5,7 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">客户组名称</span>
-          <el-input v-model="filterObj.groupName" placeholder="请输入" />
+          <el-input v-model="filterObj.groupName" clearable placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       
