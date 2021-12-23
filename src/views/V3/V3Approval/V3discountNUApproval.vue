@@ -501,8 +501,8 @@ export default {
       API.getPageV3NU({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        channelCode: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
+        channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
         yearAndMonth: this.localDate,
         brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName
       })
