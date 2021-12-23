@@ -392,8 +392,7 @@ export default {
     // 导出错误信息
     exportErrorList() {
       API.exportErrorList({
-        mainId: this.mainIdLocal,
-        channelCode: 'NKA'
+        mainId: this.mainIdLocal
       }).then((response) => {
         const fileName = '错误信息' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
@@ -413,7 +412,13 @@ export default {
     // 导出excel
     exportExcelInfo() {
       API.exportExcel({
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
+        channelName: this.filterObj.channelCode,
+        customerName: this.filterObj.customerCode,
+        distributorName: this.filterObj.distributorCode,
+        productName: this.filterObj.productCode,
+        regionName: this.filterObj.regionName,
+        yearAndMonth: this.localDate
       }).then((response) => {
         const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
