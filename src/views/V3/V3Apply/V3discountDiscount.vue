@@ -424,12 +424,11 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          if(!this.$route.query.channelCode) {
-           this.filterObj.channelName = this.channelArr[0].channelCode
-          }else {
-            this.filterObj.channelName=this.$route.query.channelCode
+          if (!this.$route.query.channelCode) {
+            this.filterObj.channelName = this.channelArr[0].channelCode
+          } else {
+            this.filterObj.channelName = this.$route.query.channelCode
           }
-          
           this.getEffectiveDate()
           this.getCustomerList()
         }

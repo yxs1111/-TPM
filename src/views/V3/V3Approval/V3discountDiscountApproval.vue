@@ -551,12 +551,12 @@ export default {
           if (res.code === 1000) {
             this.$message({
               type: 'success',
-              message: '审批成功!'
+              message: statusLocal === 'agree' ? '审批提交成功' : '驳回提交成功'
             })
           } else {
             this.$message({
               type: 'error',
-              message: '审批失败!'
+              message: statusLocal === 'agree' ? '审批提交失败' : '驳回提交失败'
             })
           }
         }).catch()
