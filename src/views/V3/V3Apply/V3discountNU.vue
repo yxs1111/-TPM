@@ -429,8 +429,8 @@ export default {
       // 导出数据筛选
       var data = {}
       data = {
-        channelCode: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
+        channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
         brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName,
         exportType: 'export'
       }
