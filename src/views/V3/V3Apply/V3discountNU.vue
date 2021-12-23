@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -50,19 +50,45 @@
       <el-table-column width="180" align="center" prop="productName" label="SKU" />
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-      <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-      <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-      <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-      <el-table-column width="220" align="right" prop="actualSales" label="V3实际销量（CTN）" />
-      <el-table-column width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）" />
-      <el-table-column width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）" />
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划销量（CTN）">
+        {{ (row.planSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+        {{ row.planPriceAve===undefined?'':(row.planPriceAve*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
+        {{ (row.planCost*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
+        {{ (row.forecastSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+        {{ row.adjustedPriceAve===undefined?'':(row.adjustedPriceAve*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+        {{ (row.adjustedCost*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
+        {{ (row.actualSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）">
+        {{ (row.beforeNegotiationPriceAve*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
+        {{ (row.beforeNegotiationCost*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
+        {{ (row.afterNegotiationPriceAve*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
+        {{ (row.afterNegotiationCost*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+        {{ row.avePriceDifference + '%' }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="right" prop="salesDifference" label="销量差值（%）">
+        {{ row.salesDifference + '%' }}
+      </el-table-column>
       <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
       <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
@@ -227,7 +253,10 @@ export default {
     // this.getTableData()
     this.getChannel()
     this.getBrandList()
+
     // this.getTableData()
+    // this.getCustomerList()
+    // this.getEffectiveDate()
   },
   methods: {
     // 导入文件检索后保存
@@ -473,9 +502,13 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+        // channelName: 'EC',
         customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
-        yearAndMonth: this.localDate,
+        // customerName: '京东网-POP',
+        // yearAndMonth: this.localDate,
+        yearAndMonth: '202108',
         brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName
+        // brandName: 'Prestige'
       })
         .then((response) => {
           if (response.data.records.length > 0) {
