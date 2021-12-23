@@ -308,12 +308,12 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          if(!this.$route.query.channelCode) {
+          if (!this.$route.query.channelCode) {
             this.filterObj.channelCode = this.channelArr[0].channelEsName
-          }else {
-            this.filterObj.channelCode=this.$route.query.channelCode
+          } else {
+            this.filterObj.channelCode = this.$route.query.channelCode
           }
-          
+
           this.getCustomerList(this.filterObj.channelCode)
           this.getEffectiveDate()
         }
@@ -413,9 +413,8 @@ export default {
               type: 'error',
               message: '文件上传失败，请重新上传。'
             })
-
           }
-          //清除input的value ,上传一样的
+          // 清除input的value ,上传一样的
           this.event.srcElement.value = '' // 置空
         })
         .catch(() => {})
@@ -513,6 +512,12 @@ export default {
       }).then(() => {
         API.approveV1({
           mainId: this.mainIdLocal,
+          channelName: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          distributorName: this.filterObj.distributorCode,
+          productName: this.filterObj.productCode,
+          regionName: this.filterObj.regionName,
+          yearAndMonth: this.localDate,
           opinion: 'reject'
         }).then(res => {
           if (res.code === 1000) {
