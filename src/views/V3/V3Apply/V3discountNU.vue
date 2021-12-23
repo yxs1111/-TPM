@@ -326,7 +326,7 @@ export default {
     },
     // 校验excel
     downLoadException() {
-      API.importV3NU({
+      API.exportV3({
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal
       }).then(
