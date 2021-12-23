@@ -61,7 +61,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
@@ -72,15 +72,33 @@
       <el-table-column width="220" align="center" prop="productName" label="SKU" />
       <el-table-column width="360" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-      <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-      <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-      <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-      <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
+      <el-table-column width="220" v-slot={row} align="right" prop="planSales" label="V1计划销量（CTN）">
+        {{(row.planSales*1).toFixed(2)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+        {{(row.planPriceAve*1).toFixed(2)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用（RMB）">
+        {{(row.planCost*1).toFixed(2)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="forecastSales" label="V2预测销量（CTN）">
+        {{(row.forecastSales*1).toFixed(2)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+        {{(row.adjustedPriceAve*1).toFixed(2)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+        {{(row.adjustedCost*1).toFixed(2)}}
+      </el-table-column>
+      <el-table-column width="160" v-slot={row} align="right" prop="avePriceDifference" label="均价差值（%）">
+        {{(row.avePriceDifference*1).toFixed(2)}}%
+      </el-table-column>
+      <el-table-column width="160" v-slot={row} align="right" prop="salesDifference" label="销量差值（%）">
+        {{(row.salesDifference*1).toFixed(2)}}%
+      </el-table-column>
+      <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
+        {{(row.costDifference*1).toFixed(2)}}
+      </el-table-column>
       <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -162,15 +180,33 @@
             <el-table-column width="220" align="center" prop="productName" label="SKU" />
             <el-table-column width="360" align="center" prop="distributorName" label="经销商" />
             <el-table-column width="120" align="center" prop="regionName" label="区域" />
-            <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-            <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-            <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-            <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-            <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-            <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-            <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-            <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-            <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
+            <el-table-column width="220" v-slot={row} align="right" prop="planSales" label="V1计划销量（CTN）">
+              {{(row.planSales*1).toFixed(2)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+              {{(row.planPriceAve*1).toFixed(2)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用（RMB）">
+              {{(row.planCost*1).toFixed(2)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="forecastSales" label="V2预测销量（CTN）">
+              {{(row.forecastSales*1).toFixed(2)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+              {{(row.adjustedPriceAve*1).toFixed(2)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+              {{(row.adjustedCost*1).toFixed(2)}}
+            </el-table-column>
+            <el-table-column width="160" v-slot={row} align="right" prop="avePriceDifference" label="均价差值（%）">
+              {{(row.avePriceDifference*1).toFixed(2)}}%
+            </el-table-column>
+            <el-table-column width="160" v-slot={row} align="right" prop="salesDifference" label="销量差值（%）">
+              {{(row.salesDifference*1).toFixed(2)}}%
+            </el-table-column>
+            <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
+              {{(row.costDifference*1).toFixed(2)}}
+            </el-table-column>
             <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -253,7 +289,6 @@ export default {
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
-    
   },
   watch: {
     'filterObj.channelCode'() {
@@ -261,11 +296,11 @@ export default {
       this.getCustomerList()
     },
     'filterObj.customerCode'() {
-      this.filterObj.distributorCode=''
+      this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
     'filterObj.distributorCode'() {
-      this.filterObj.regionCode=''
+      this.filterObj.regionCode = ''
       this.getRegionList()
     },
   },
@@ -285,7 +320,7 @@ export default {
       })
         .then((response) => {
           this.tableData = response.data.records
-          this.mainId=this.tableData[0].mainId
+          this.mainId = this.tableData[0].mainId
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -296,20 +331,26 @@ export default {
     },
     // 通过与审批按钮控制
     infoByMainId() {
-      console.log(this.mainId);
-      selectAPI.infoByMainId({
-        mainId: this.mainId
-      }).then(res => {
-        if (res.code === 1000) {
-          if (res.data.version === 'V2' && res.data.assignee === this.usernameLocal) {
-            //本人可以提交
-            this.isSubmit = false
-          } else {
-            //其他人禁用
-            this.isSubmit = true
+      console.log(this.mainId)
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V2' &&
+              res.data.assignee === this.usernameLocal
+            ) {
+              //本人可以提交
+              this.isSubmit = false
+            } else {
+              //其他人禁用
+              this.isSubmit = true
+            }
           }
-        }
-      }).catch()
+        })
+        .catch()
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
@@ -327,10 +368,10 @@ export default {
         .queryChannelSelect()
         .then((res) => {
           this.channelOptons = res.data
-          if(!this.$route.query.channelCode) {
-            this.filterObj.channelCode=this.channelOptons[0].channelCode
-          }else {
-            this.filterObj.channelCode=this.$route.query.channelCode
+          if (!this.$route.query.channelCode) {
+            this.filterObj.channelCode = this.channelOptons[0].channelCode
+          } else {
+            this.filterObj.channelCode = this.$route.query.channelCode
           }
           this.getMonth()
         })
@@ -339,11 +380,9 @@ export default {
     // 经销商
     getDistributorList() {
       selectAPI
-        .queryDistributorList(
-          {
-            customerCsName:this.filterObj.customerCode
-          }
-        )
+        .queryDistributorList({
+          customerCsName: this.filterObj.customerCode,
+        })
         .then((res) => {
           if (res.code === 1000) {
             this.distributorArr = res.data
@@ -372,13 +411,15 @@ export default {
         .catch()
     },
     getRegionList() {
-      selectAPI.getRegionList({
-         distributorName:this.filterObj.distributorCode
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
     },
     search() {
       this.pageNum = 1
@@ -406,7 +447,7 @@ export default {
       //清除input的value ,上传一样的
       this.event.target.value = null
       this.ImportData = []
-      this.saveBtn=false
+      this.saveBtn = false
     },
     // 校验数据
     checkImport() {
@@ -418,7 +459,7 @@ export default {
           this.saveBtn =
             response.data[0].judgmentType === 'Error' ? false : true
           //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
+          this.event.srcElement.value = '' // 置空
         }
       })
     },
