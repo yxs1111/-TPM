@@ -242,7 +242,8 @@ export default {
       localDate: '202101',
       saveBtn: false,
       btnStatus: true,
-      usernameLocal: ''
+      usernameLocal: '',
+      uploadFile: ''
     }
   },
   computed: {},
@@ -399,9 +400,9 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '上传成功'
+              message: '文件上传成功'
             })
-            if (response.data != null) {
+            if (response.data.length > 0) {
               this.checkedData = response.data
               this.saveBtn = response.data[0].judgmentType !== 'Error'
             } else {
@@ -410,7 +411,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '上传失败，请重新上传。'
+              message: '文件上传失败，请重新上传。'
             })
 
           }
