@@ -523,7 +523,8 @@ export default {
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
+        isMakeUp: true
       }).then(res => {
         if (res.code === 1000) {
           this.$message.success('保存成功')
