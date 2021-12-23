@@ -11,8 +11,20 @@
           <span class="SelectliTitle">客户中文名称</span>
           <el-input v-model="filterObj.customerCsName" clearable placeholder="请输入" />
         </div>
+        <div class="Selectli">
+            <span class="SelectliTitle">渠道</span>
+            <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+            </el-select>
+          </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <!-- <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button> -->
         <!-- <div class="TpmButtonBG" @click="importDataNKA">
           <img src="@/assets/images/import.png" alt="">
           <span class="text">NKA导入</span>
@@ -29,7 +41,7 @@
         </div> -->
       </div>
     </div>
-    <el-table :data="tableData" border  :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" max-height="600" border  :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column  align="center" prop="customerCode" label="客户编号" />
       <el-table-column align="center" prop="customerCsName" label="客户中文名称" />
       <el-table-column width="220" align="center" prop="customerCsName" label="客户英文名称" />
@@ -127,7 +139,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'Customer',
   directives: { elDragDialog, permission },
@@ -145,19 +157,30 @@ export default {
       pageNum: 1,
       filterObj: {
         customerCode: '',
-        customerCsName: ''
+        customerCsName: '',
+        channelCode: '',
+        state: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      checkArr: [] // 批量删除,存放选中
+      ChannelList: [],
+      checkArr: [], // 批量删除,存放选中
     }
   },
   computed: {},
   mounted() {
     this.getTableData()
+    this.getChannelList()
   },
   methods: {
+    getChannelList() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code == 1000) {
+          this.ChannelList = res.data
+        }
+      })
+    },
     // 确认导入
     confirmImport(val) {
       if (val === 1) {
@@ -236,6 +259,8 @@ export default {
       API.getPageMdCustomer({
         customerCode: this.filterObj.customerCode,
         customerCsName: this.filterObj.customerCsName,
+        channelCode: this.filterObj.channelCode,
+        state: this.filterObj.state,
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize // 每页条数
       })

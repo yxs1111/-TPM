@@ -45,12 +45,12 @@
       <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
     <el-table
-      v-loading="tableLoading"
       :data="tableData"
       border
       :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName"
       stripe
+      max-height="600"
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
@@ -235,7 +235,6 @@ export default {
         productCode: '',
         remark: ''
       },
-      tableLoading: '',
       value: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -475,7 +474,6 @@ export default {
     },
     // 查询
     search() {
-      this.tableLoading = true
       API.getPageByRequestConfig({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
@@ -486,7 +484,6 @@ export default {
         cdmName: this.filterObj.cdmName
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
@@ -496,13 +493,11 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageByRequestConfig({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize // 每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-22 21:49:45
+ * @LastEditTime: 2021-12-23 08:40:56
 -->
 <template>
   <div class="app-container">
@@ -98,8 +98,8 @@
               <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRangeValue" label="均价差值(%)">
                 {{(row.averagePriceRange*1).toFixed(2)}}%
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                 {{Math.abs((row.promotionExpensesGapValue*1).toFixed(2))}}
+              <el-table-column align="right"  width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
+                
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -186,9 +186,7 @@
               <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRangeValue" label="均价差值(%)">
                 {{(row.averagePriceRange*1).toFixed(2)}}%
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                 {{Math.abs((row.promotionExpensesGapValue*1).toFixed(2))}}
-              </el-table-column>
+              <el-table-column align="right"  width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
                   <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">

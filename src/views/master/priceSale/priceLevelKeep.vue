@@ -34,7 +34,7 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+    <el-table :data="tableData" max-height="500" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
@@ -244,7 +244,7 @@ export default {
     checkImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      API.importCheck(formData).then((res) => {
+      API.importCheck(formData).then((response) => {
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn = response.data[0].judgmentType !== 'Error'

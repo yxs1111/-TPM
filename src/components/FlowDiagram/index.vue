@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-el-drag-dialog v-bind="$attrs" @open="getFlowSVG" v-on="$listeners">
+  <el-dialog  v-bind="$attrs" @open="getFlowSVG" v-on="$listeners">
     <div v-if="svgType === 'instance'" @click="event => showTaskHistory(event)" v-html="svg" />
     <div v-else v-html="svg" />
     <!--  活动历史  -->

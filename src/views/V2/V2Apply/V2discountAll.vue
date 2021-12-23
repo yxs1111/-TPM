@@ -38,7 +38,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="exportExcel">
+        <div class="TpmButtonBG" @click="exportExcel">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>

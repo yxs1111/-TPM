@@ -33,9 +33,9 @@
       </div>
 
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       
-      <el-table-column width="150" align="center" prop="customerCsName" label="客户名称" />
+      <el-table-column width="150" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot={row} width="150" align="center" prop="grossProfitPoints" label="毛利点数">

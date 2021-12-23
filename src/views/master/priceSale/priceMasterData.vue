@@ -33,8 +33,8 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column width="250" align="center" prop="customerCsName" label="客户名称" />
+    <el-table :data="tableData" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column width="250" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
