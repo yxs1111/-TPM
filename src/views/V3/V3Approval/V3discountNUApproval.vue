@@ -249,9 +249,9 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           if (res.data.version === 'NUV3' && res.data.assignee === this.usernameLocal) {
-            this.btnStatus = false
-          } else {
             this.btnStatus = true
+          } else {
+            this.btnStatus = false
           }
         }
       }).catch()
@@ -428,8 +428,8 @@ export default {
       // 导出数据筛选
       var data = {}
       data = {
-        channelCode: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
+        channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
         brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName,
         exportType: 'export'
       }
