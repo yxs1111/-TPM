@@ -6,7 +6,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -261,10 +261,10 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
-           if(!this.$route.query.channelCode) {
-           this.filterObj.channelCode = this.channelArr[0].channelCode
-          }else {
-            this.filterObj.channelCode=this.$route.query.channelCode
+          if (!this.$route.query.channelCode) {
+            this.filterObj.channelCode = this.channelArr[0].channelCode
+          } else {
+            this.filterObj.channelCode = this.$route.query.channelCode
           }
           this.getCustomerList()
           this.getEffectiveDate()
@@ -351,7 +351,8 @@ export default {
     // 下载excel模板
     downLoadElxModel() {
       API.exportV3NU({
-        exportType: 'exportApproveTemplate'
+        exportType: 'exportApproveTemplate',
+        channelName: this.filterObj.channelCode
       }).then(
         response => {
           const fileName = 'V3-NU导入模板' + new Date().getTime() + '.xlsx'

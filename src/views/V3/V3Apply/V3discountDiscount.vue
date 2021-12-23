@@ -239,7 +239,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="my-export" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="my-export" @click="saveImportInfoCpm">保存
           </el-button>
         </div>
       </div>
@@ -522,6 +522,21 @@ export default {
     },
     // 导入文件检索后保存
     saveImportInfo() {
+      API.saveImportInfo({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          this.$message.success('保存成功')
+          this.closeimportDialog()
+          this.saveDialog = true
+          this.getTableData()
+        } else {
+          this.$message.error('保存失败')
+        }
+      }).catch()
+    },
+    // 导入文件检索后保存  补录
+    saveImportInfoCpm() {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
         isMakeUp: true

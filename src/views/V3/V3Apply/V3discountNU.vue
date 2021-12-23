@@ -254,9 +254,9 @@ export default {
     this.getChannel()
     this.getBrandList()
 
-    this.getTableData()
-    this.getCustomerList()
-    this.getEffectiveDate()
+    // this.getTableData()
+    // this.getCustomerList()
+    // this.getEffectiveDate()
   },
   methods: {
     // 导入文件检索后保存
@@ -401,7 +401,8 @@ export default {
     // 下载excel模板
     downLoadElxModel() {
       API.exportV3NU({
-        exportType: 'exportTemplate'
+        exportType: 'exportTemplate',
+        channelName: this.filterObj.channelCode
       }).then(
         response => {
           const fileName = 'V3-NU导入模板' + new Date().getTime() + '.xlsx'
