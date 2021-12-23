@@ -561,7 +561,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '上传成功'
+              message: '检测文件上传成功'
             })
             if (response.data != null) {
               // debugger
@@ -574,7 +574,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '上传失败，请重新上传。'
+              message: '检测文件上传失败，请重新上传。'
             })
           }
           // 清除input的value ,上传一样的

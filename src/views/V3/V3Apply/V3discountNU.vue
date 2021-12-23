@@ -378,7 +378,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '检测数据成功'
+              message: '检测文件上传成功'
             })
             if (response.data.length > 0) {
               // debugger
@@ -391,7 +391,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '检测数据失败，请重新上传。'
+              message: '检测文件上传失败，请重新上传。'
             })
           }
           this.event.srcElement.value = '' // 置空
