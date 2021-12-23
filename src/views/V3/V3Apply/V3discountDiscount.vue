@@ -46,11 +46,11 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="supplement">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="supplement">
         <svg-icon icon-class="nextSave" style="font-size: 20px;" />
         <span class="text">补录</span>
       </div>
@@ -595,7 +595,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '上传成功'
+              message: '检测文件上传成功'
             })
             if (response.data != null) {
               this.dialogData = response.data
@@ -606,7 +606,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '上传失败，请重新上传。'
+              message: '检测文件上传失败，请重新上传。'
             })
           }
           this.event.srcElement.value = ''
