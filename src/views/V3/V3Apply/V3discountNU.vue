@@ -254,9 +254,9 @@ export default {
     this.getChannel()
     this.getBrandList()
 
-    // this.getTableData()
-    // this.getCustomerList()
-    // this.getEffectiveDate()
+    this.getTableData()
+    this.getCustomerList()
+    this.getEffectiveDate()
   },
   methods: {
     // 导入文件检索后保存
@@ -267,7 +267,7 @@ export default {
         if (res.code === 1000) {
           this.$message.success('保存成功')
           this.closeimportDialog()
-          this.saveDialog = true
+          // this.saveDialog = true
           this.getTableData()
         } else {
           this.$message.error('保存失败')
