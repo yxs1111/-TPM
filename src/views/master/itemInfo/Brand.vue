@@ -18,7 +18,7 @@
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border max-height="600" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">
         <template slot-scope="{ row }">

@@ -16,7 +16,7 @@
         <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="channelCode" label="渠道编码"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="中文名称"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="英文名称"> </el-table-column>

@@ -24,7 +24,7 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">

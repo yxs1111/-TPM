@@ -15,7 +15,7 @@
         <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData"  border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData"  max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="distributorCode" label="经销商编号"> </el-table-column>
       <el-table-column width="320" align="center" prop="distributorName" label="经销商中文名称"> </el-table-column>
       <el-table-column align="center" prop="zoneCode" label="大区"> </el-table-column>

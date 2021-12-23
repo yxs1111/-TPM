@@ -23,7 +23,7 @@
         <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" max-height="600" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
