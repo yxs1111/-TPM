@@ -518,12 +518,12 @@ export default {
             this.getTableData()
             this.$message({
               type: 'success',
-              message: '审批成功!'
+              message: '驳回成功!'
             })
           } else {
             this.$message({
               type: 'error',
-              message: '审批失败!'
+              message: '驳回失败!'
             })
           }
         }).catch()
