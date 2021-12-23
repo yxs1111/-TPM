@@ -9,7 +9,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>

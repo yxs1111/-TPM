@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-12-22 20:35:05
+ * @LastEditTime: 2021-12-23 19:57:15
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -50,15 +50,15 @@ import Layout from '@/layout/index'
  */
 export const constantRoutes = [
    ...common,
-  // ...V0(),
-  // ...V1(),
-  // ...V2(),
-  // ...V3(),
-  // ...Report(),
-  // ...taskManage(),
-  // ...masterData(),
-  // ...system(),
-  // ...activiti(),
+  ...V0(),
+  ...V1(),
+  ...V2(),
+  ...V3(),
+  ...Report(),
+  ...taskManage(),
+  ...masterData(),
+  ...system(),
+  ...activiti(),
   
 ]
 
@@ -68,15 +68,15 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   
-  ...V0(),
-  ...V1(),
-  ...V2(),
-  ...V3(),
-  ...masterData(),
-  ...Report(),
-  ...taskManage(),
-  ...system(),
-  ...activiti(),
+  // ...V0(),
+  // ...V1(),
+  // ...V2(),
+  // ...V3(),
+  // ...masterData(),
+  // ...Report(),
+  // ...taskManage(),
+  // ...system(),
+  // ...activiti(),
   // ...meta,
   ...base,
   // 404 page must be placed at the end !!!
