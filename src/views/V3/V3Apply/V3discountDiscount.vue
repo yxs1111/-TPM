@@ -46,7 +46,7 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -635,7 +635,8 @@ export default {
     // 下载excel模板
     downLoadElxModel() {
       API.exportV3({
-        exportType: 'exportTemplate'
+        exportType: 'exportTemplate',
+        channelName: this.filterObj.channelName
       }).then(
         response => {
           const fileName = '导入模板' + new Date().getTime() + '.xlsx'
@@ -656,7 +657,8 @@ export default {
     // 下载excel模板 --- 补录
     downLoadElxModelNext() {
       API.exportV3({
-        exportType: 'exportMakeUpTemplate'
+        exportType: 'exportMakeUpTemplate',
+        channelName: this.filterObj.channelName
       }).then(
         response => {
           const fileName = '补录导入模板' + new Date().getTime() + '.xlsx'

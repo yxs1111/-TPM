@@ -439,7 +439,8 @@ export default {
     // 下载excel模板
     downLoadElxModel() {
       API.exportV3({
-        exportType: 'exportApproveTemplate'
+        exportType: 'exportApproveTemplate',
+        channelName: this.filterObj.channelName
       }).then(
         response => {
           const fileName = '导入模板' + new Date().getTime() + '.xlsx'
