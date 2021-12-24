@@ -158,6 +158,7 @@ export default {
       uploadFileName: '',
       ImportData: [],
       uploadFile: '',
+      event: '',
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -229,6 +230,7 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
+      this.event = event
     },
     // 关闭导入
     closeImport() {
