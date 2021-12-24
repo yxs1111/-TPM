@@ -11,6 +11,9 @@
       <el-table-column v-slot="{row}" label="审核人" align="center">
         {{ row.assignee }}
       </el-table-column>
+      <el-table-column v-slot="{row}" label="审核节点" align="center">
+        {{ row.activityName }}
+      </el-table-column>
       <el-table-column v-slot="{row}" label="审核时间" align="center">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.endTime, '{y}-{m}-{d} {h}:{i}') }}</span>
@@ -43,6 +46,12 @@ export default {
       default: '',
       required: false,
     },
+    // 流程ID
+    processId: {
+      type: String,
+      default: '',
+      required: false
+    },
     // 查看SVG的类型
     svgType: {
       required: true,
@@ -62,6 +71,7 @@ export default {
   },
   mounted() {
     this.getFlowSVG()
+    this.getHistory()
   },
   methods: {
     /**
@@ -160,6 +170,18 @@ export default {
         return ''
       }
       return parseTime(time, cFormat)
+    },
+    getHistory() {
+      historyApi.getAllHis(this.processId).then(res => {
+        this.activityHistory.loading = false
+        if (res && res.code === 1000) {
+          this.handleActivityHistory(res.data)
+        } else {
+          if (res) {
+            this.$message.error(`获取活动历史出错，错误信息:${res.message}`)
+          }
+        }
+      })
     },
   },
 }
