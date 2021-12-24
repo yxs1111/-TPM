@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-06 08:33:29
- * @LastEditTime: 2021-12-11 13:37:46
+ * @LastEditTime: 2021-12-24 17:04:03
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -30,34 +30,6 @@ export default function() {
           component: () => import('@/views/activiti/process'),
           meta: { title: '流程管理', icon: 'approve' }
         },
-        // {
-        //   path: '/task',
-        //   code: 'task',
-        //   name: 'task',
-        //   component: () => import('@/views/activiti/tasks'),
-        //   meta: { title: '待办事项', icon: 'user' }
-        // },
-        // {
-        //   path: '/form',
-        //   code: 'form',
-        //   name: 'Form',
-        //   component: () => import('@/views/activiti/form'),
-        //   meta: { title: '表单管理', icon: 'user' }
-        // },
-        // {
-        //   path: '/businessTable',
-        //   code: 'businessTable',
-        //   name: 'BusinessTable',
-        //   component: () => import('@/views/activiti/table'),
-        //   meta: { title: '业务表管理', icon: 'user' }
-        // },
-        // {
-        //   path: '/detainCar',
-        //   code: 'detainCar',
-        //   name: 'detainCar',
-        //   component: () => import('@/views/business/DetainCar'),
-        //   meta: { title: '扣车管理', icon: 'form' }
-        // }
       ]
     },
     // {
@@ -75,14 +47,6 @@ export default function() {
       meta: { title: '模型设计', icon: 'form' },
       hidden: true
     },
-    {
-      path: '/formDesign',
-      code: 'formDesign',
-      name: 'formDesign',
-      component: () => import('@/components/FormDesigner'),
-      meta: { title: '表单设计器', icon: 'form' },
-      hidden: true
-    }
   ]
   if (showRouter([settings.stageKey])) {
     return []

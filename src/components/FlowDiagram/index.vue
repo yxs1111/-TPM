@@ -1,5 +1,5 @@
 <template>
-  <el-dialog  v-bind="$attrs" @open="getFlowSVG" v-on="$listeners">
+  <el-dialog v-bind="$attrs" @open="getFlowSVG" v-on="$listeners">
     <div v-if="svgType === 'instance'" @click="event => showTaskHistory(event)" v-html="svg" />
     <div v-else v-html="svg" />
     <!--  活动历史  -->
@@ -8,18 +8,15 @@
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
         {{ scopeProps.$index + 1 }}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="审核结果" align="center">
-        {{ row.result }}
-      </el-table-column>
       <el-table-column v-slot="{row}" label="审核人" align="center">
-        {{ row.approver }}
+        {{ row.assignee }}
       </el-table-column>
       <el-table-column v-slot="{row}" label="审核时间" align="center">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.endTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>
-      <el-table-column v-slot="{row}" label="审核意见" align="center">
-        {{ row.idea }}
+      <el-table-column v-slot="{row}" label="审核结果" align="center">
+        {{ row.result }}
       </el-table-column>
     </el-table>
   </el-dialog>

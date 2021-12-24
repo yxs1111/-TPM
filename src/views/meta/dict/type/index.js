@@ -5,13 +5,12 @@ import { Message } from 'element-ui'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 
-import dynamicForm from '@/components/DynamicForm'
+// import dynamicForm from '@/components/DynamicForm'
 const url = dictTypeApi.url
 
 export default {
   name: 'DictType',
   directives: { elDragDialog, permission },
-  components: { dynamicForm },
   filters: {
     // 锁定状态样式
     lockedStatusFilter(status) {

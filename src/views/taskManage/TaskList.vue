@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-12 13:48:49
+ * @LastEditTime: 2021-12-24 16:49:05
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -26,6 +26,16 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcel">
+          <img src="@/assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </div>
+    </div>
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG">
+        <svg-icon icon-class="task" />
+        <span class="text">任务转办</span>
       </div>
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -35,26 +45,22 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
       <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
-      <el-table-column align="center" prop="versionName" label="版本名称"> </el-table-column>
-      <el-table-column align="center" prop="minePackageName" label="Mine Package"> </el-table-column>
-      <el-table-column align="center" prop="name" label="名称"> </el-table-column>
-      <el-table-column align="center" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column align="center" prop="channelEsName" label="提交人"> </el-table-column>
-      <el-table-column align="center" prop="createTime" label="提交时间"> </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="备注"> </el-table-column>
-      <el-table-column width="150" align="center" prop="createDate" label="查看">
+      <el-table-column width="240" v-slot={row} align="center" prop="versionName" label="版本名称">
+        {{versionNameList[row.version]}}
+      </el-table-column>
+      <el-table-column align="center"  prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" width="180" prop="activityName" label="审批节点"> </el-table-column>
+      <el-table-column align="center" width="240" prop="assignee" label="办理人"> </el-table-column>
+      <el-table-column v-slot={row} align="center" width="240" label="办理时间">
+        {{row.dueDate?row.dueDate.substring(0,10):""}}
+      </el-table-column>
+      <el-table-column width="150" align="center"  fixed='right' label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
-        <template>
-          <div class="operation">
-            <svg-icon icon-class="submit_l" class="submit_icon" />
-            办理
           </div>
         </template>
       </el-table-column>
@@ -99,6 +105,12 @@ export default {
         businessId: null,
         processId: null,
       },
+      versionNameList:{
+        V0:'V0 - Pre city plan 预拆分',
+        V1:'V1 - City plan 详细拆分',
+        V2:'V2 - Accrual 预提调整',
+        V3:'V3 - Actual 实际入账',
+      }
     }
   },
   mounted() {
@@ -111,7 +123,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      API.getList({
+      API.getMyHandleList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
@@ -125,6 +137,63 @@ export default {
     },
     search() {
       this.getTableData()
+    },
+    operateProcess(version,name,channelCode) {
+      // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})
+      // sessionStorage.setItem('currentIndex',2)
+      // return
+      if(version=="V0") {
+        console.log(version,name);
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V0/V0Apply',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V0/V0Approval',params:{channelCode}})
+        }
+      }
+      if(version=="V1") {
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V1/V1Apply',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V1/V1Approval',params:{channelCode}})
+        }
+      }
+      if(version=="NUV1") {
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V1/V1Apply/V1discountNU',params:{channelCode}})
+          sessionStorage.setItem('currentIndex',2)
+        } 
+      }
+      if(version=="V2") {
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V2/V2Apply',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V2/V2Approval',params:{channelCode}})
+        }
+      }
+      if(version=="NUV2") {
+        sessionStorage.setItem('currentIndex',2)
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V2/V2Apply/V2discountNU',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V2/V2Approval/V2NUApproval',params:{channelCode}})
+        }
+      }
+      if(version=="V3") {
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V3/V3Apply',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V3/V3Approval',params:{channelCode}})
+        }
+      }
+      if(version=="NUV3") {
+        sessionStorage.setItem('currentIndex',2)
+        if(name.indexOf('调整')!=-1){
+          this.$router.push({path:'/V3/V3Apply/V3discountNU',params:{channelCode}})
+        } else if(name.indexOf('审批')!=-1) {
+          this.$router.push({path:'/V3/V3Approval/V3discountNUApproval',params:{channelCode}})
+        }
+      }
+      //this.$router.push({ path: '/process', query: currentRow })
     },
     //查看流程
     openFlowDiagram(row) {

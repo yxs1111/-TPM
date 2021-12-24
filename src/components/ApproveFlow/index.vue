@@ -69,7 +69,7 @@ import processApi from '@/api/activiti/processApi'
 import {
   formConf
 } from '@/components/activiti/form/generator/config'
-import DynamicFormItem from '@/components/DynamicFormItem'
+// import DynamicFormItem from '@/components/DynamicFormItem'
 import { Message } from 'element-ui'
 import auth from '@/utils/auth'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -77,7 +77,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 export default {
   name: 'ApproveFlow',
   components: {
-    DynamicFormItem
+    // DynamicFormItem
   },
   directives: { elDragDialog },
   props: {

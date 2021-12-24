@@ -36,12 +36,6 @@ module.exports = {
       filename: 'index.html',
       chunks: ['chunk-vendors', 'chunk-commons', 'chunk-libs', 'chunk-elementUI', 'runtime', 'index']
     },
-    preview: {
-      entry: 'src/components/FormDesigner/preview.js',
-      template: 'public/preview.html',
-      filename: 'preview.html',
-      chunks: ['chunk-vendors', 'chunk-commons', 'chunk-libs', 'chunk-elementUI', 'runtime', 'preview']
-    }
   },
   devServer: {
     port: port,
@@ -61,19 +55,19 @@ module.exports = {
       },
       [process.env.VUE_APP_BASE_API]: {
       // target: `http://192.168.50.38:7777`,  //现云
-      // target: `http://192.168.30.107:9012`,  //泽圣
+        //target: `http://192.168.30.107:7777`,  //泽圣
       // target: `http://192.168.40.165:9012`,  //宋佳
-      // target: `http://192.168.40.90:7777`,  //宗桂
-      // target: `http://10.176.80.242:7777`, // 测试服务器
-        // target: `http://192.168.50.156:7788`, // 张淼
-        // target: `http://192.168.40.146:7777`, // 王宝兴
+        //target: `http://192.168.40.141:7777`,  //宗桂
+        //target: `http://10.176.80.242:7777`, // 测试服务器
+         //target: `http://192.168.50.156:7788`, // 张淼
+        //target: `http://192.168.40.146:7777`, // 王宝兴
         // target: `http://192.168.50.25:7777`, // 樊鹏伟
         target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`,  //测试服务器
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         },
-        timeout: 3600 * 1000
+        // timeout: 3600 * 1000
       }
     }
   },
