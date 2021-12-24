@@ -453,9 +453,7 @@ export default {
           callback: action => {}
         })
       } else {
-        API.exportExcel({
-          mainId: this.mainIdLocal
-        }).then(
+        API.exportExcel().then(
           response => {
             const fileName = '导出审批Excel' + new Date().getTime() + '.xlsx'
             //   res.data:请求到的二进制数据

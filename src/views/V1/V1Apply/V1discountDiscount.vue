@@ -412,7 +412,7 @@ export default {
     // 导出excel
     exportExcelInfo() {
       API.exportExcel({
-        mainId: this.mainIdLocal,
+        // mainId: this.mainIdLocal,
         channelName: this.filterObj.channelCode,
         customerName: this.filterObj.customerCode,
         distributorName: this.filterObj.distributorCode,
