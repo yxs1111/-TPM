@@ -378,7 +378,9 @@ export default {
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
-        mainId: this.mainIdLocal
+        // mainId: this.mainIdLocal
+        channelName: this.filterObj.channelCode,
+        yearAndMonth: this.localDate
       }).then((res) => {
         if (res.code === 1000) {
           this.closeimportDialog()
@@ -392,7 +394,9 @@ export default {
     // 导出错误信息
     exportErrorList() {
       API.exportErrorList({
-        mainId: this.mainIdLocal
+        // mainId: this.mainIdLocal
+        channelName: this.filterObj.channelCode,
+        yearAndMonth: this.localDate
       }).then((response) => {
         const fileName = '错误信息' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
@@ -443,8 +447,10 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      formData.append('importType', 1)
-      formData.append('mainId', this.mainIdLocal)
+      // formData.append('importType', 1)
+      // formData.append('mainId', this.mainIdLocal)
+      formData.append('channelName', this.filterObj.channelCode)
+      formData.append('yearAndMonth', this.localDate)
       API.importV1(formData)
         .then((response) => {
           if (response.code === 1000) {
@@ -551,9 +557,10 @@ export default {
     // 下载excel模板
     downLoadElxModel() {
       API.downExcelTmpForV1({
-        mainId: this.mainIdLocal,
-        importType: 1,
-        channelCode: 'NKA'
+        // mainId: this.mainIdLocal,
+        ImportType: 1,
+        channelName: this.filterObj.channelCode,
+        yearAndMonth: this.localDate
       }).then((response) => {
         const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
