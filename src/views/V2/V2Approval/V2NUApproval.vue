@@ -434,7 +434,12 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exportNUExceptionExcel().then((res) => {
+        API.exportNUExceptionExcel({
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          brandName: this.filterObj.brandCode,
+        }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-NU异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')

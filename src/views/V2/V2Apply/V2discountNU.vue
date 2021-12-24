@@ -429,6 +429,7 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
+          brandName: this.filterObj.brandCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-NU异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
