@@ -8,6 +8,20 @@
           <el-input v-model="filterObj.StoreName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">客户名称</span>
+          <el-input v-model="filterObj.customerName" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商名称</span>
+          <el-input v-model="filterObj.distributorName" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in channelList" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
@@ -57,6 +71,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'Store',
@@ -68,15 +83,20 @@ export default {
       pageNum: 1,
       filterObj: {
         StoreName: '',
+        customerName: '',
+        distributorName: '',
+        channelCode: '',
         state: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
+      channelList: [],
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     this.getTableData()
+    this.getQueryChannelSelect()
   },
   computed: {},
   methods: {
@@ -87,6 +107,9 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         StoreName: this.filterObj.StoreName,
+        customerName: this.filterObj.customerName,
+        distributorName: this.filterObj.distributorName,
+        channelCode: this.filterObj.channelCode,
         state: this.filterObj.state,
       })
         .then((response) => {
@@ -96,6 +119,12 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        this.channelList = res.data
+      })
     },
     search() {
       this.getTableData()

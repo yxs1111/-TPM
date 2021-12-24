@@ -11,6 +11,12 @@
           <span class="SelectliTitle">供应商名称</span>
           <el-input v-model="filterObj.supplierName" clearable placeholder="请输入" />
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
@@ -24,8 +30,9 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" align="center" />
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
+      @selection-change="handleSelectionChange">
+     
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
@@ -34,15 +41,21 @@
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="supplierCode" label="供应商编码" />
-      <el-table-column width="320" align="center" prop="supplierName" label="供应商名称" />
+      <el-table-column width="360" align="center" prop="supplierName" label="供应商名称" />
       <el-table-column width="150" align="center" prop="country" label="country" />
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间" />
-      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间">
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间" >
         <template slot-scope="{row}">
           <div>
-            {{row.createDate.replace("T"," ")}}
+           {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="180" align="center" prop="updateDate" label="更新时间">
+        <template slot-scope="{row}">
+          <div>
+            {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
           </div>
         </template>
       </el-table-column>
@@ -120,9 +133,8 @@ export default {
       filterObj: {
         supplierCode: '',
         supplierName: '',
-        category: '',
+        state: '',
       },
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       ruleForm: {
@@ -162,7 +174,7 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         supplierCode: this.filterObj.supplierCode,
-        supplierName: this.filterObj.supplierName,
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records

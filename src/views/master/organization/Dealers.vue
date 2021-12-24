@@ -7,6 +7,14 @@
           <el-input v-model="filterObj.Distributor" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">大区</span>
+          <el-input v-model="filterObj.zoneName" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">区域</span>
+          <el-input v-model="filterObj.regionName" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
@@ -53,6 +61,8 @@ export default {
       pageNum: 1,
       filterObj: {
         Distributor: '',
+        zoneName: '',
+        regionName: '',
         state: '',
       },
       permissions: getDefaultPermissions(),

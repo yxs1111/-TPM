@@ -436,8 +436,6 @@ export default {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
-      // 清除input的value ,上传一样的
-      this.event.target.value = null
       this.ImportData = []
       this.saveBtn = false
     },

@@ -35,9 +35,12 @@
       <el-table-column width="150" align="center" prop="volMix" label="Vol Mix"> </el-table-column>
       <el-table-column width="150" align="center" prop="actualNum" label="计划销量"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间"> </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
+        {{ row.createDate ? row.createDate.replace("T"," ") : '' }} </el-table-column>
       <el-table-column width="150" align="center" prop="updateBy" label="修改人"> </el-table-column>
-      <el-table-column width="180" align="center" prop="updateDate" label="修改时间"> </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
+        {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
+      </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{row}">
           <div>

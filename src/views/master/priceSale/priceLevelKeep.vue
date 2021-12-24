@@ -39,7 +39,7 @@
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
       <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
-        ¥{{row.gear}}
+        {{row.gear}}
       </el-table-column>
       <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">
         {{row.volMix}}%
@@ -236,7 +236,7 @@ export default {
       this.uploadFileName = ''
       this.uploadFile = ''
       //清除input的value ,上传一样的
-      this.event.target.value = null
+      // this.event.target.value = null
       this.ImportData = []
       this.saveBtn=''
     },

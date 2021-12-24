@@ -28,7 +28,9 @@
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间"> </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
+           {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">

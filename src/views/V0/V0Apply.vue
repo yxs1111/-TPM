@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-23 08:40:03
+ * @LastEditTime: 2021-12-24 10:09:42
 -->
 <template>
   <div class="app-container">
@@ -452,8 +452,6 @@ export default {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
-      //清除input的value ,上传一样的
-      this.event.target.value = null
       this.ImportData = []
       this.saveBtn=false
     },
