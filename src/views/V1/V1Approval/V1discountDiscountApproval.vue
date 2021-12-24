@@ -239,7 +239,7 @@ export default {
       skuArr: [],
       customerArr: [],
       distributorArr: [],
-      localDate: '202101',
+      localDate: '',
       saveBtn: false,
       btnStatus: true,
       usernameLocal: '',
