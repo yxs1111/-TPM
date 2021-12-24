@@ -390,8 +390,10 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      formData.append('importType', 2)
-      formData.append('mainId', this.mainIdLocal)
+      // formData.append('importType', 2)
+      // formData.append('mainId', this.mainIdLocal)
+      formData.append('channelName', this.filterObj.channelCode)
+      formData.append('yearAndMonth', this.localDate)
       API.importV1(formData)
         .then((response) => {
           if (response.code === 1000) {
@@ -422,8 +424,10 @@ export default {
     // 下载excel模板
     downLoadElxModel() {
       API.downExcelTmpForV1({
-        mainId: this.mainIdLocal,
-        importType: 2
+        // mainId: this.mainIdLocal,
+        ImportType: 2,
+        channelName: this.filterObj.channelCode,
+        yearAndMonth: this.localDate
       }).then(
         response => {
           const fileName = 'V1审批模板' + new Date().getTime() + '.xlsx'
@@ -444,6 +448,10 @@ export default {
     // 关闭导入
     closeimportDialog() {
       this.importVisible = false
+      this.checkedData = []
+      this.event.srcElement.value = '' // 置空
+      this.uploadFileName = ''
+      this.uploadFile = ''
     },
     // 导出excel
     exportExcelInfo() {
