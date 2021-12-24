@@ -441,6 +441,7 @@ export default {
     downLoadElxModel() {
       API.exportV3({
         exportType: 'exportApproveTemplate',
+        mainId: this.mainIdLocal,
         channelName: this.filterObj.channelName
       }).then(
         response => {
@@ -524,7 +525,8 @@ export default {
         productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
         yearAndMonth: this.localDate,
         regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName,
-        exportType: 'export'
+        exportType: 'export',
+        mainId: this.mainIdLocal
       }
       API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名

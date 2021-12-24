@@ -353,6 +353,7 @@ export default {
     downLoadElxModel() {
       API.exportV3NU({
         exportType: 'exportApproveTemplate',
+        mainId: this.mainIdLocal,
         channelName: this.filterObj.channelCode
       }).then(
         response => {
@@ -433,7 +434,8 @@ export default {
         channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
         customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
         brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName,
-        exportType: 'export'
+        exportType: 'export',
+        mainId: this.mainIdLocal
       }
       API.exportV3NU(data).then((res) => {
         this.downloadFile(res, 'V3-NU-Approv' + '.xlsx') // 自定义Excel文件名

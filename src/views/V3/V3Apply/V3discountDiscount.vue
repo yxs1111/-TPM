@@ -662,7 +662,8 @@ export default {
     downLoadElxModel() {
       API.exportV3({
         exportType: 'exportTemplate',
-        channelName: this.filterObj.channelName
+        channelName: this.filterObj.channelName,
+        mainId: this.mainIdLocal
       }).then(
         response => {
           const fileName = '导入模板' + new Date().getTime() + '.xlsx'
@@ -684,7 +685,8 @@ export default {
     downLoadElxModelNext() {
       API.exportV3({
         exportType: 'exportMakeUpTemplate',
-        channelName: this.filterObj.channelName
+        channelName: this.filterObj.channelName,
+        mainId: this.mainIdLocal
       }).then(
         response => {
           const fileName = '补录导入模板' + new Date().getTime() + '.xlsx'
@@ -748,7 +750,8 @@ export default {
         productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
         yearAndMonth: this.localDate,
         regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName,
-        exportType: 'export'
+        exportType: 'export',
+        mainId: this.mainIdLocal
       }
       API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
