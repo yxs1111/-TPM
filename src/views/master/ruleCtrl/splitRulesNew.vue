@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="拆分类型：">
-        <el-select v-model="filterObj.splitType" placeholder="请选择">
+        <el-select v-model="filterObj.splitType" placeholder="请选择" clearable>
           <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
         </el-select>
       </el-form-item>

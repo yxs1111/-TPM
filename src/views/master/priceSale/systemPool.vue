@@ -23,7 +23,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">机制名称：</span>
-          <el-input v-model="filterObj.cdmName" placeholder="请输入" />
+          <el-input v-model="filterObj.cdmName" placeholder="请输入" clearable />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo">

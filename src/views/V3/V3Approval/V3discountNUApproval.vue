@@ -42,7 +42,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" max-height="500">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -317,7 +317,7 @@ export default {
     },
     // 校验excel
     downLoadException() {
-      API.exportV3({
+      API.exportV3NU({
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal
       }).then(
