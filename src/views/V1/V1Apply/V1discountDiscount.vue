@@ -447,7 +447,7 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      // formData.append('importType', 1)
+      formData.append('importType', 1)
       // formData.append('mainId', this.mainIdLocal)
       formData.append('channelName', this.filterObj.channelCode)
       formData.append('yearAndMonth', this.localDate)
