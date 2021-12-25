@@ -127,6 +127,7 @@ export default {
       })
     },
     search() {
+      this.pageNum = 1
       this.getTableData()
     },
     handleSelectionChange(val) {

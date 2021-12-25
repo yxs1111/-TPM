@@ -53,10 +53,10 @@
                 inactive-color="#13ce66" />
             </el-form-item>
             <el-form-item>
-              <el-button @click="editVisible=false"  >关闭</el-button>
+              <!-- <el-button @click="editVisible=false"  >关闭</el-button>
               <el-button :type="editState === 'update' ? 'primary' : 'success'" @click="saveOrUpdate" >
                 {{ textMap[editState] }}
-              </el-button>
+              </el-button> -->
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -106,8 +106,8 @@
     <el-dialog v-el-drag-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center @dragDialog="handleDrag">
       <span>{{ removeWarn }}</span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">关 闭</el-button>
-        <el-button type="primary" @click="remove">确 定</el-button>
+        <!-- <el-button @click="centerDialogVisible = false">关 闭</el-button>
+        <el-button type="primary" @click="remove">确 定</el-button> -->
       </span>
     </el-dialog>
   </div>
