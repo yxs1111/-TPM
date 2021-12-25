@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-24 17:30:23
+ * @LastEditTime: 2021-12-25 16:35:00
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -147,6 +147,7 @@ export default {
         .catch((error) => {})
     },
     search() {
+      this.pageNum = 1
       this.getTableData()
     },
     operateProcess(version,name,channelCode) {

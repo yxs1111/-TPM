@@ -81,6 +81,8 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         distributorName: this.filterObj.Distributor,
+        regionCode: this.filterObj.regionName,
+        zoneCode: this.filterObj.zoneName,
         state: this.filterObj.state,
       })
         .then((response) => {
@@ -92,6 +94,7 @@ export default {
         .catch((error) => {})
     },
     search() {
+      this.pageNum = 1
       this.getTableData()
     },
     // 每页显示页面数变更

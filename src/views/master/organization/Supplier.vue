@@ -188,6 +188,7 @@ export default {
       this.dialogVisible = true
     },
     search() {
+      this.pageNum = 1
       this.getTableData()
     },
     Reset() {
