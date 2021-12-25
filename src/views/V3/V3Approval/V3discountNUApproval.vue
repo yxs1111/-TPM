@@ -399,7 +399,7 @@ export default {
         channelName: this.filterObj.channelCode
       }).then(
         response => {
-          const fileName = 'V3-NU导入模板' + new Date().getTime() + '.xlsx'
+          const fileName = 'V3-NU审批导入模板' + new Date().getTime() + '.xlsx'
           //   res.data:请求到的二进制数据
           const blob = new Blob([response], {
             type: 'application/vnd.ms-excel'
