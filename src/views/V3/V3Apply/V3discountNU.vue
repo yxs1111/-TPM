@@ -479,11 +479,11 @@ export default {
         mainId: this.mainIdLocal
       }
       API.exportV3NU(data).then((res) => {
-        if (res === 1000) {
+        if (res.code) {
+          this.$message.warning('NU-V3导出失败!')
+        } else {
           this.downloadFile(res, 'V3-NU-申请Excel' + '.xlsx') // 自定义Excel文件名
           this.$message.success('NU-V3导出成功!')
-        } else {
-          this.$message.warning('NU-V3导出失败!')
         }
       })
     },
