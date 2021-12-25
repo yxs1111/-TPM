@@ -37,6 +37,13 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
+      <el-button
+        type="danger"
+        class="TpmButtonBG"
+        icon="el-icon-delete"
+        size="small"
+        @click="mutidel"
+      >删除</el-button>
       <!-- <div class="TpmButtonBG" @click="add">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
@@ -45,6 +52,8 @@
       <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
     <el-table
+      ref="Tdata"
+      v-loading="loading"
       :data="tableData"
       border
       :header-cell-style="HeadTable"
@@ -54,6 +63,7 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
+      <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="200" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="150" align="center" prop="sku" label="SKU" />
@@ -282,7 +292,8 @@ export default {
           name: '满减'
         }
       ],
-      importVisible: false
+      importVisible: false,
+      loading: false
     }
   },
 
@@ -313,6 +324,50 @@ export default {
     // this.getQueryMinePackageSelect()
   },
   methods: {
+    // 多个删除
+    mutidel() {
+      var that = this
+      var ids = that.$refs.Tdata.selection
+      if (ids.length === 0) {
+        that.$alert('请选择要删除的数据', '提示', {
+          confirmButtonText: '确定'
+        }).then()
+        return
+      }
+      var idList = []
+      ids.forEach((item, index) => {
+        idList[index] = item.id
+      })
+      this.$confirm('确定要删除数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        that.loading = true
+        API.deleteConfig(idList).then(
+          res => {
+            if (res.code === 1000) {
+              that.getTableData(that.pageNum, that.pageSize)
+              that.$message({
+                type: 'success',
+                message: '删除成功'
+              })
+              that.loading = false
+            }
+            that.loading = false
+          }
+        ).catch(() => {
+          that.loading = false
+        })
+      }).catch(() => {
+        // 取消时清空 selection被选项
+        this.$refs.Tdata.clearSelection()
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
     // 导出excel
     exportExcelInfo() {
       var data = {

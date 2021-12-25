@@ -283,10 +283,15 @@ export default {
     // 验证input输入框数据
     number(e, row, itemRow) {
       const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(e.target.value)
-      console.log('8888888', itemRow)
-      if (row.endRule === '') {
+      // debugger
+      if (row.endRule === '' || row.startRule === '') {
+        // console.log('qqq')
         return
-      } else {
+      } 
+      // else if (row.startRule === '') {
+      //   return
+      // } 
+      else {
         // debugger
         if (!flag) {
           e.target.value = ''
