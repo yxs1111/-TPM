@@ -439,7 +439,7 @@ export default {
       }
       API.exportV3NU(data).then((res) => {
         if (res.code === 1000) {
-          this.downloadFile(res, 'V3-NU-Approv' + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(res, 'V3-NU-审批Excel' + '.xlsx') // 自定义Excel文件名
           this.$message.success('导出成功!')
         } else {
           this.$message.warning('导出失败!')

@@ -458,8 +458,12 @@ export default {
         mainId: this.mainIdLocal
       }
       API.exportV3NU(data).then((res) => {
-        this.downloadFile(res, 'V3NU-Excel' + '.xlsx') // 自定义Excel文件名
-        this.$message.success('NU导出成功!')
+        if (res === 1000) {
+          this.downloadFile(res, 'V3-NU-申请Excel' + '.xlsx') // 自定义Excel文件名
+          this.$message.success('NU-V3导出成功!')
+        } else {
+          this.$message.warning('NU-V3导出失败!')
+        }
       })
     },
     // 下载文件
@@ -486,10 +490,10 @@ export default {
       selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          if(!this.$route.query.channelCode) {
-           this.filterObj.channelCode = this.channelArr[0].channelCode
-          }else {
-            this.filterObj.channelCode=this.$route.query.channelCode
+          if (!this.$route.query.channelCode) {
+            this.filterObj.channelCode = this.channelArr[0].channelCode
+          } else {
+            this.filterObj.channelCode = this.$route.query.channelCode
           }
           this.getCustomerList()
           this.getEffectiveDate()
