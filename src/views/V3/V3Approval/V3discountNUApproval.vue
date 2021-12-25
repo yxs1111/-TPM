@@ -480,12 +480,12 @@ export default {
         mainId: this.mainIdLocal
       }
       API.exportV3NU(data).then((res) => {
-        if (res.code) {
-          this.$message.warning('导出失败!')
-        } else {
-          this.downloadFile(res, 'V3-NU-审批Excel' + '.xlsx') // 自定义Excel文件名
-          this.$message.success('导出成功!')
-        }
+        // if (res.code) {
+        //   this.$message.warning('导出失败!')
+        // } else {
+        this.downloadFile(res, 'V3-NU-审批Excel' + '.xlsx') // 自定义Excel文件名
+        this.$message.success('导出成功!')
+        // }
       })
     },
     // 下载文件

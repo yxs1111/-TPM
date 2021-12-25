@@ -478,14 +478,16 @@ export default {
         exportType: 'export',
         mainId: this.mainIdLocal
       }
-      API.exportV3NU(data).then((res) => {
-        if (res.code) {
+      API.exportV3NU(data).then(res => {
+        debugger
+        res
+        if (res === undefined) {
           this.$message.warning('NU-V3导出失败!')
         } else {
           this.downloadFile(res, 'V3-NU-申请Excel' + '.xlsx') // 自定义Excel文件名
           this.$message.success('NU-V3导出成功!')
         }
-      })
+      }).catch()
     },
     // 下载文件
     downloadFile(res, fileName) {
