@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-22 16:52:46
+ * @LastEditTime: 2021-12-24 17:29:20
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -32,13 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG">
-        <svg-icon icon-class="task" />
-        <span class="text">任务转办</span>
-      </div>
-    </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" type="selection" />
       <el-table-column align="center" label="序号" width="55">
         <template slot-scope="scope">
@@ -118,6 +112,8 @@ export default {
         V1:'V1 - City plan 详细拆分',
         V2:'V2 - Accrual 预提调整',
         V3:'V3 - Actual 实际入账',
+        NUV2:'V2 - Accrual 预提调整',
+        NUV3:'V3 - Actual 实际入账',
       }
     }
   },

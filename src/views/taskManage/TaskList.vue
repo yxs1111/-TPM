@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-24 16:49:05
+ * @LastEditTime: 2021-12-24 17:30:37
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -32,13 +32,13 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
+    <!-- <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG">
         <svg-icon icon-class="task" />
         <span class="text">任务转办</span>
       </div>
-    </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    </div> -->
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" type="selection" />
       <el-table-column align="center" label="序号" width="55">
         <template slot-scope="scope">
@@ -53,11 +53,11 @@
       <el-table-column align="center"  prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="审批节点"> </el-table-column>
-      <el-table-column align="center" width="240" prop="assignee" label="办理人"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="240" label="办理时间">
+      <el-table-column align="center" width="280" prop="assignee" label="办理人"> </el-table-column>
+      <el-table-column v-slot={row} align="center" width="280"  label="办理时间">
         {{row.dueDate?row.dueDate.substring(0,10):""}}
       </el-table-column>
-      <el-table-column width="150" align="center"  fixed='right' label="查看">
+      <el-table-column width="150" align="center"  label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程
@@ -110,6 +110,8 @@ export default {
         V1:'V1 - City plan 详细拆分',
         V2:'V2 - Accrual 预提调整',
         V3:'V3 - Actual 实际入账',
+        NUV2:'V2 - Accrual 预提调整',
+        NUV3:'V3 - Actual 实际入账',
       }
     }
   },
