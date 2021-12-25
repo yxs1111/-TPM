@@ -54,21 +54,42 @@
       <el-table-column width="180" align="center" prop="productName" label="SKU" />
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-      <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-      <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-      <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-      <el-table-column width="220" align="right" prop="actualSales" label="V3实际销量（CTN）" />
-      <el-table-column width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）" />
-      <el-table-column width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）" />
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-      <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划总销量（CTN）">
+        {{ (row.planSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planNewUserNum" label="目标新客数量">
+        {{ (row.planSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
+        {{ (row.planCost*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测总销量(CTN)">
+        {{ (row.forecastSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedNewUserNum" label="目标新客数量">
+        {{ (row.forecastSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+        {{ (row.adjustedCost*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
+        {{ (row.actualSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="actualNewUserNum" label="实际新客数量">
+        {{ (row.actualSales*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
+        {{ (row.beforeNegotiationCost*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+        {{ row.avePriceDifference + '%' }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="right" prop="achievementRate" label="达成率（%）">
+        {{ row.salesDifference + '%' }}
+      </el-table-column>
+      <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+      <el-table-column width="120" align="center" prop="judgmentContent" label="系统判定内容" />
       <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -160,21 +181,42 @@
           <el-table-column width="180" align="center" prop="productName" label="SKU" />
           <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
           <el-table-column width="220" align="center" prop="regionName" label="区域" />
-          <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-          <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-          <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-          <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-          <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-          <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-          <el-table-column width="220" align="right" prop="actualSales" label="V3实际销量（CTN）" />
-          <el-table-column width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）" />
-          <el-table-column width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）" />
-          <el-table-column width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）" />
-          <el-table-column width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）" />
-          <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-          <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-          <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
+          <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划总销量（CTN）">
+            {{ (row.planSales*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="planNewUserNum" label="目标新客数量">
+            {{ (row.planSales*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
+            {{ (row.planCost*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测总销量(CTN)">
+            {{ (row.forecastSales*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedNewUserNum" label="目标新客数量">
+            {{ (row.forecastSales*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+            {{ (row.adjustedCost*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
+            {{ (row.actualSales*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="actualNewUserNum" label="实际新客数量">
+            {{ (row.actualSales*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
+            {{ (row.beforeNegotiationCost*1).toFixed(2) }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+            {{ row.avePriceDifference + '%' }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" width="160" align="right" prop="achievementRate" label="达成率（%）">
+            {{ row.salesDifference + '%' }}
+          </el-table-column>
+          <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
           <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+          <el-table-column width="120" align="center" prop="judgmentContent" label="系统判定内容" />
           <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
           <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
           <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -438,8 +480,12 @@ export default {
         mainId: this.mainIdLocal
       }
       API.exportV3NU(data).then((res) => {
-        this.downloadFile(res, 'V3-NU-Approv' + '.xlsx') // 自定义Excel文件名
+        // if (res.code) {
+        //   this.$message.warning('导出失败!')
+        // } else {
+        this.downloadFile(res, 'V3-NU-审批Excel' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
+        // }
       })
     },
     // 下载文件
