@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-25 16:35:00
+ * @LastEditTime: 2021-12-25 17:50:03
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -15,8 +15,14 @@
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">版本名称:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.version" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道</span>
+          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -50,7 +56,7 @@
       <el-table-column width="240" v-slot={row} align="center" prop="versionName" label="版本名称">
         {{versionNameList[row.version]}}
       </el-table-column>
-      <el-table-column align="center"  prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
       <el-table-column align="center" width="240" prop="channelEsName" label="提交人"> </el-table-column>
@@ -68,7 +74,7 @@
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
           <div class="operation" @click="operateProcess(row.version,row.activityName,row.channelCode)">
-            <svg-icon icon-class="submit_l" class="submit_icon"  />
+            <svg-icon icon-class="submit_l" class="submit_icon" />
             办理
           </div>
         </template>
@@ -81,7 +87,7 @@
     </div>
     <!--  流程图  -->
     <div v-if="flowDiagram.visible">
-      <flow-diagram svg-type="instance"  :business-id="flowDiagram.businessId" :process-id="flowDiagram.processId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
+      <flow-diagram svg-type="instance" :business-id="flowDiagram.businessId" :process-id="flowDiagram.processId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
     </div>
   </div>
 </template>
@@ -93,6 +99,8 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
 import FlowDiagram from '@/components/FlowDiagram'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
+
 export default {
   data() {
     return {
@@ -100,6 +108,8 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        yearAndMonth: '',
+        version: '',
         channelCode: '',
         state: '',
         category: '',
@@ -107,6 +117,7 @@ export default {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      ChannelList: [],
       versionList: ['Final'],
       flowDiagram: {
         visible: false,
@@ -114,18 +125,19 @@ export default {
         businessId: null,
         processId: null,
       },
-      versionNameList:{
-        V0:'V0 - Pre city plan 预拆分',
-        V1:'V1 - City plan 详细拆分',
-        V2:'V2 - Accrual 预提调整',
-        V3:'V3 - Actual 实际入账',
-        NUV2:'V2 - Accrual 预提调整',
-        NUV3:'V3 - Actual 实际入账',
-      }
+      versionNameList: {
+        V0: 'V0 - Pre city plan 预拆分',
+        V1: 'V1 - City plan 详细拆分',
+        V2: 'V2 - Accrual 预提调整',
+        V3: 'V3 - Actual 实际入账',
+        NUV2: 'V2 - Accrual 预提调整',
+        NUV3: 'V3 - Actual 实际入账',
+      },
     }
   },
   mounted() {
     this.getTableData()
+    this.getChannelList()
   },
   components: {
     FlowDiagram,
@@ -137,6 +149,10 @@ export default {
       API.getList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        yearAndMonth: this.filterObj.yearAndMonth,
+        version: this.filterObj.version,
+        channelCode: this.filterObj.channelCode,
+        category: this.filterObj.category,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -144,65 +160,86 @@ export default {
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
-        .catch((error) => {})
+    },
+    getChannelList() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code == 1000) {
+          this.ChannelList = res.data
+        }
+      })
     },
     search() {
       this.pageNum = 1
       this.getTableData()
     },
-    operateProcess(version,name,channelCode) {
+    operateProcess(version, name, channelCode) {
       // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})
       // sessionStorage.setItem('currentIndex',2)
       // return
-      if(version=="V0") {
-        console.log(version,name);
-        if(name.indexOf('调整')!=-1){
-          this.$router.push({path:'/V0/V0Apply',params:{channelCode}})
-        } else if(name.indexOf('审批')!=-1) {
-          this.$router.push({path:'/V0/V0Approval',params:{channelCode}})
+      if (version == 'V0') {
+        console.log(version, name)
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({ path: '/V0/V0Apply', params: { channelCode } })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({ path: '/V0/V0Approval', params: { channelCode } })
         }
       }
-      if(version=="V1") {
-        if(name.indexOf('调整')!=-1){
-          this.$router.push({path:'/V1/V1Apply',params:{channelCode}})
-        } else if(name.indexOf('审批')!=-1) {
-          this.$router.push({path:'/V1/V1Approval',params:{channelCode}})
+      if (version == 'V1') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({ path: '/V1/V1Apply', params: { channelCode } })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({ path: '/V1/V1Approval', params: { channelCode } })
         }
       }
-      if(version=="NUV1") {
-        if(name.indexOf('调整')!=-1){
-          this.$router.push({path:'/V1/V1Apply/V1discountNU',params:{channelCode}})
-          sessionStorage.setItem('currentIndex',2)
-        } 
-      }
-      if(version=="V2") {
-        if(name.indexOf('调整')!=-1){
-          this.$router.push({path:'/V2/V2Apply',params:{channelCode}})
-        } else if(name.indexOf('审批')!=-1) {
-          this.$router.push({path:'/V2/V2Approval',params:{channelCode}})
+      if (version == 'NUV1') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({
+            path: '/V1/V1Apply/V1discountNU',
+            params: { channelCode },
+          })
+          sessionStorage.setItem('currentIndex', 2)
         }
       }
-      if(version=="NUV2") {
-        sessionStorage.setItem('currentIndex',2)
-        if(name.indexOf('调整')!=-1){
-          this.$router.push({path:'/V2/V2Apply/V2discountNU',params:{channelCode}})
-        } else if(name.indexOf('审批')!=-1) {
-          this.$router.push({path:'/V2/V2Approval/V2NUApproval',params:{channelCode}})
+      if (version == 'V2') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({ path: '/V2/V2Apply', params: { channelCode } })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({ path: '/V2/V2Approval', params: { channelCode } })
         }
       }
-      if(version=="V3") {
-        if(name.indexOf('调整')!=-1){
-          this.$router.push({path:'/V3/V3Apply',params:{channelCode}})
-        } else if(name.indexOf('审批')!=-1) {
-          this.$router.push({path:'/V3/V3Approval',params:{channelCode}})
+      if (version == 'NUV2') {
+        sessionStorage.setItem('currentIndex', 2)
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({
+            path: '/V2/V2Apply/V2discountNU',
+            params: { channelCode },
+          })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({
+            path: '/V2/V2Approval/V2NUApproval',
+            params: { channelCode },
+          })
         }
       }
-      if(version=="NUV3") {
-        sessionStorage.setItem('currentIndex',2)
-        if(name.indexOf('调整')!=-1){
-          this.$router.push({path:'/V3/V3Apply/V3discountNU',params:{channelCode}})
-        } else if(name.indexOf('审批')!=-1) {
-          this.$router.push({path:'/V3/V3Approval/V3discountNUApproval',params:{channelCode}})
+      if (version == 'V3') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({ path: '/V3/V3Apply', params: { channelCode } })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({ path: '/V3/V3Approval', params: { channelCode } })
+        }
+      }
+      if (version == 'NUV3') {
+        sessionStorage.setItem('currentIndex', 2)
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({
+            path: '/V3/V3Apply/V3discountNU',
+            params: { channelCode },
+          })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({
+            path: '/V3/V3Approval/V3discountNUApproval',
+            params: { channelCode },
+          })
         }
       }
       //this.$router.push({ path: '/process', query: currentRow })
