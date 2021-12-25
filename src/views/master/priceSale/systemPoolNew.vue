@@ -180,7 +180,14 @@
     </el-dialog>
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div style="color:#4192d3;text-align:center;cursor:pointer;" @click="downLoadElxModel">下 载 模 板</div>
+      <!-- <div style="color:#4192d3;text-align:center;cursor:pointer;" @click="downLoadElxModel">下 载 模 板</div> -->
+      <div class="fileInfo ImportContent">
+        <div class="fileTitle">模板</div>
+        <div class="my-search selectFile" @click="downLoadElxModel">
+          <svg-icon icon-class="download_white" />
+          <span class="text">下载模板</span>
+        </div>
+      </div>
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
