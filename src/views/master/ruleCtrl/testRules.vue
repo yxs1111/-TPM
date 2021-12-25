@@ -286,6 +286,8 @@ export default {
       console.log('8888888', itemRow)
       if (row.endRule === '') {
         return
+      } else if (row.startRule === '') {
+        return
       } else {
         // debugger
         if (!flag) {
