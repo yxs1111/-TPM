@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-23 11:36:50
+ * @LastEditTime: 2021-12-25 16:34:55
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -34,7 +34,7 @@
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" label="序号" width="80">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -149,6 +149,7 @@ export default {
       })
     },
     search() {
+      this.pageNum = 1
       this.getTableData()
     },
     //查看流程

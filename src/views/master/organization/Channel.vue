@@ -87,6 +87,7 @@ export default {
         .catch((error) => {})
     },
     search() {
+      this.pageNum = 1
       this.getTableData()
     },
     // 每页显示页面数变更

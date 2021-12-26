@@ -18,10 +18,11 @@
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
-    <!-- <div class="TpmButtonBGWrap">
+    <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-    </div> -->
+    </div>
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" style="width: 100%">
+      <el-table-column type="selection" align="center" />
       <el-table-column align="center" prop="costTypeNumber" label="费用类型编码"> </el-table-column>
       <el-table-column align="center" prop="costType" label="费用类型"> </el-table-column>
       <el-table-column align="center" prop="minePackageNumber" label="minePackageNumber"> </el-table-column>
@@ -77,6 +78,9 @@ export default {
       API.getPageMdCostType({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        costType: this.filterObj.costType,
+        minePackage: this.filterObj.minePackage,
+        costItem: this.filterObj.costItem,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -85,6 +89,35 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    //多个删除
+    mutidel() {
+      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
+      else {
+        const costItemIdLList = []
+        this.checkArr.forEach((item) => {
+          costItemIdLList.push(item.costItemId)
+        })
+        this.$confirm('确定要删除数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.deleteMdCostType(costItemIdLList).then((response) => {
+              if (response.code === 1000) {
+                this.getTableData()
+                this.$message.success('删除成功!')
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
+      }
     },
     add() {
       this.dialogVisible = true
