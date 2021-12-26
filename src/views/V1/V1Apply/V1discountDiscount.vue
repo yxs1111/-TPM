@@ -509,22 +509,23 @@ export default {
     // 提交
     submitInfo() {
       if (this.tableData[0].judgmentType === null) {
-        this.$confirm('数据未校验，请先进行导入验证', '提示', {
-          confirmButtonText: '确定',
-          type: 'warning'
-        })
-          .then(() => {
-            this.$message({
-              type: 'success',
-              message: '已取消'
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消'
-            })
-          })
+         this.$message({type: 'info',message: '数据未校验，请先进行导入验证'})
+        // this.$confirm('数据未校验，请先进行导入验证', '提示', {
+        //   confirmButtonText: '确定',
+        //   type: 'warning'
+        // })
+        //   .then(() => {
+        //     this.$message({
+        //       type: 'success',
+        //       message: '已确定'
+        //     })
+        //   })
+        //   .catch(() => {
+        //     this.$message({
+        //       type: 'info',
+        //       message: '已取消'
+        //     })
+        //   })
       } else {
         this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -664,6 +665,7 @@ export default {
       }).catch()
     },
     search() {
+      this.pageNum=1
       this.getTableData()
     },
     // 每页显示页面数变更
