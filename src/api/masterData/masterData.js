@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2021-12-12 16:07:36
+ * @LastEditTime: 2021-12-26 17:40:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -368,6 +368,9 @@ export default {
       responseType: 'blob'
     })
   },
-  //
+  // 销售架构
+  getOrgPage(params) {
+    return requestApi.request_get('/auth/organization/getOrgPage', params)
+  },
 
 }
