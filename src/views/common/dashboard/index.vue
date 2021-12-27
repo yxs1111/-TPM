@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-21 17:00:21
+ * @LastEditTime: 2021-12-27 10:41:58
 -->
 <template>
   <div class="dashboard-container">
@@ -112,50 +112,50 @@
                 <div class="NuPoint">
 
                   <div class="V1">
-                    <div class="passIcon" v-if="value[1].version=='V2'||value[1].version=='V3'||(value[1].version=='V1'&&value[1].processStatus==2)"></div>
+                    <div class="passIcon" v-if="value[1].version=='NUV2'||value[1].version=='NUV3'||(value[1].version=='NUV1'&&value[1].processStatus==2)"></div>
                     <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="value[1].version=='V1'&&value[1].workDateFlag==='0'&&(value[1].version=='V1'&&value[1].processStatus==1)">
+                      v-if="value[1].version=='NUV1'&&value[1].workDateFlag==='0'&&(value[1].version=='NUV1'&&value[1].processStatus==1)">
                       <div slot="content" v-html="getTip(value[1])"></div>
-                      <div class="currentPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag==='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
+                      <div class="currentPoint" v-if="value[1].version=='NUV1'&&value[1].workDateFlag==='0'&&(value[1].version=='NUV1'&&value[1].processStatus==1)"></div>
                     </el-tooltip>
                     <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="value[1].version=='V1'&&value[1].workDateFlag!=='0'&&(value[1].version=='V1'&&value[1].processStatus==1)">
+                      v-if="value[1].version=='NUV1'&&value[1].workDateFlag!=='0'&&(value[1].version=='NUV1'&&value[1].processStatus==1)">
                       <div slot="content" v-html="getTip(value[1])"></div>
-                      <div class="delayPoint" v-if="value[1].version=='V1'&&value[1].workDateFlag!=='0'&&(value[1].version=='V1'&&value[1].processStatus==1)"></div>
+                      <div class="delayPoint" v-if="value[1].version=='NUV1'&&value[1].workDateFlag!=='0'&&(value[1].version=='NUV1'&&value[1].processStatus==1)"></div>
                     </el-tooltip>
-                    <div class="pointCircle" v-if="value[1].version!='V1'&&value[1].version!='V2'&&value[1].version!='V3'"></div>
-                    <div class="line" v-if="value[1].version=='V2'||value[1].version=='V3'"></div>
-                    <div class="lineDark" v-if="(value[1].version=='V0'&&value[1].version!='V2'&&value[1].version!='V3')||value[1].version=='V1'"></div>
+                    <div class="pointCircle" v-if="value[1].version!='NUV1'&&value[1].version!='NUV2'&&value[1].version!='NUV3'"></div>
+                    <div class="line" v-if="value[1].version=='NUV2'||value[1].version=='NUV3'"></div>
+                    <div class="lineDark" v-if="(value[1].version!='NUV2'&&value[1].version!='NUV3')||value[1].version=='NUV1'"></div>
                   </div>
                   <div class="V2">
-                    <div class="passIcon" v-if="value[1].version=='V3'||(value[1].version=='V2'&&value[1].processStatus==2)"></div>
+                    <div class="passIcon" v-if="value[1].version=='NUV3'||(value[1].version=='NUV2'&&value[1].processStatus==2)"></div>
                     <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="value[1].version=='V2'&&value[1].workDateFlag=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)">
+                      v-if="value[1].version=='NUV2'&&value[1].workDateFlag=='0'&&(value[1].version=='NUV2'&&value[1].processStatus==1)">
                       <div slot="content" v-html="getTip(value[1])"></div>
-                      <div class="currentPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
+                      <div class="currentPoint" v-if="value[1].version=='NUV2'&&value[1].workDateFlag=='0'&&(value[1].version=='NUV2'&&value[1].processStatus==1)"></div>
                     </el-tooltip>
                     <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="value[1].version=='V2'&&value[1].workDateFlag!=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)">
+                      v-if="value[1].version=='NUV2'&&value[1].workDateFlag!=='0'&&(value[1].version=='NUV2'&&value[1].processStatus==1)">
                       <div slot="content" v-html="getTip(value[1])"></div>
-                      <div class="delayPoint" v-if="value[1].version=='V2'&&value[1].workDateFlag!=='0'&&(value[1].version=='V2'&&value[1].processStatus==1)"></div>
+                      <div class="delayPoint" v-if="value[1].version=='NUV2'&&value[1].workDateFlag!=='0'&&(value[1].version=='NUV2'&&value[1].processStatus==1)"></div>
                     </el-tooltip>
-                    <div class="pointCircle" v-if="value[1].version!='V2'&&value[1].version!='V3'"></div>
-                    <div class="line" v-if="value[1].version=='V3'"></div>
-                    <div class="lineDark" v-if="(value[1].version=='V0'||value[1].version=='V1')||value[1].version=='V2'"></div>
+                    <div class="pointCircle" v-if="value[1].version!='NUV2'&&value[1].version!='NUV3'"></div>
+                    <div class="line" v-if="value[1].version=='NUV3'"></div>
+                    <div class="lineDark" v-if="(value[1].version=='NUV1')||value[1].version=='NUV2'"></div>
                   </div>
                   <div class="V3">
-                    <div class="passIcon" v-if="value[1].version=='V3'&&value[1].processStatus==2"></div>
+                    <div class="passIcon" v-if="value[1].version=='NUV3'&&value[1].processStatus==2"></div>
                     <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="value[1].version=='V3'&&value[1].workDateFlag=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)">
+                      v-if="value[1].version=='NUV3'&&value[1].workDateFlag=='0'&&(value[1].version=='NUV3'&&value[1].processStatus==1)">
                       <div slot="content" v-html="getTip(value[1])"></div>
-                      <div class="currentPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
+                      <div class="currentPoint" v-if="value[1].version=='NUV3'&&value[1].workDateFlag=='0'&&(value[1].version=='NUV3'&&value[1].processStatus==1)"></div>
                     </el-tooltip>
                     <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="value[1].version=='V3'&&value[1].workDateFlag!=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)">
+                      v-if="value[1].version=='NUV3'&&value[1].workDateFlag!=='0'&&(value[1].version=='NUV3'&&value[1].processStatus==1)">
                       <div slot="content" v-html="getTip(value[1])"></div>
-                      <div class="delayPoint" v-if="value[1].version=='V3'&&value[1].workDateFlag!=='0'&&(value[1].version=='V3'&&value[1].processStatus==1)"></div>
+                      <div class="delayPoint" v-if="value[1].version=='NUV3'&&value[1].workDateFlag!=='0'&&(value[1].version=='NUV3'&&value[1].processStatus==1)"></div>
                     </el-tooltip>
-                    <div class="pointCircle" v-if="value[1].version!='V3'"></div>
+                    <div class="pointCircle" v-if="value[1].version!='NUV3'"></div>
                   </div>
                 </div>
 

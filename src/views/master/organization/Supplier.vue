@@ -174,6 +174,7 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         supplierCode: this.filterObj.supplierCode,
+        supplierName: this.filterObj.supplierName,
         state: this.filterObj.state,
       })
         .then((response) => {

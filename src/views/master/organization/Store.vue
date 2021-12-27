@@ -44,7 +44,7 @@
       <el-table-column width="150" align="center" prop="customerCode" label="客户编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="distributorCode" label="经销商编码"> </el-table-column>
       <el-table-column width="250" align="center" prop="customerCode" label="客户中文名称"> </el-table-column>
-      <el-table-column width="250" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
+      <el-table-column width="360" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -107,7 +107,7 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         StoreName: this.filterObj.StoreName,
-        customerName: this.filterObj.customerName,
+        customerCsName: this.filterObj.customerName,
         distributorName: this.filterObj.distributorName,
         channelCode: this.filterObj.channelCode,
         state: this.filterObj.state,
