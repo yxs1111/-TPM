@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-25 17:50:03
+ * @LastEditTime: 2021-12-27 16:53:51
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -59,7 +59,7 @@
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column align="center" width="240" prop="channelEsName" label="提交人"> </el-table-column>
+      <el-table-column align="center" width="240" prop="assignee" label="提交人"> </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
         {{row.createTime?row.createTime.substring(0,10):""}}
       </el-table-column>
