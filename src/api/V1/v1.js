@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-12-10 08:52:01
  * @LastEditTime: 2021-12-10 20:18:49
  */
@@ -37,6 +37,15 @@ export default {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
   },
+  // 第一次检测数据
+  routineCheck(params) {
+    return request({
+      url: '/cityplan/investCpVOneDetail/routineCheck',
+      method: 'post',
+      data: params,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
   // 导出excel模板
   exportExcel(params) {
     return request({
@@ -66,11 +75,11 @@ export default {
   infoByMainId(params) {
     return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
   },
-  //新客--查询 
+  // 新客--查询
   getPageNU(params) {
     return requestApi.request_get('/cityplan/investCpNuVOneDetail/getPage', params)
   },
-  //新客--导出  
+  // 新客--导出
   downExcelNU(params) {
     return request({
       url: '/cityplan/investCpNuVOneDetail/downExcel',

@@ -67,7 +67,7 @@
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="200" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="150" align="center" prop="sku" label="SKU" />
-      <el-table-column width="180" align="center" prop="grepLevel" label="活动级别" />
+      <el-table-column width="180" align="center" prop="grepLevel" label="价格档位" />
       <!-- <el-table-column width="180" align="center" prop="sku" label="价格档位描述" /> -->
       <el-table-column width="220" align="center" prop="cdmTypeName" label="机制类型">
         <!-- <template slot-scope="scope">

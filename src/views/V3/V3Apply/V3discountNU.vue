@@ -110,7 +110,7 @@
       <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
       <el-table-column width="120" align="center" prop="judgmentContent" label="系统判定内容" />
-      <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
+      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>
@@ -235,7 +235,7 @@
           <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
           <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
           <el-table-column width="120" align="center" prop="judgmentContent" label="系统判定内容" />
-          <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
+          <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
           <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
           <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
         </el-table>

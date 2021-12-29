@@ -128,5 +128,18 @@ export default {
   // 通过与驳回按钮状态
   infoByMainIdNU(params) {
     return requestApi.request_get('/cityplan/investCpNuVThreeDetail/infoByMainId', params)
+  },
+  // 第一次校验数据
+  formatCheck(formData) {
+    return request({
+      url: '/cityplan/investCpVThreeDetail/formatCheck',
+      method: 'post',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  // 第二次校验数据
+  exceptionCheck(params) {
+    return requestApi.request_post('/cityplan/investCpVThreeDetail/exceptionCheck', params)
   }
 }

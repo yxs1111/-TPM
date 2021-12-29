@@ -123,7 +123,7 @@
           <div v-else>{{ row.judgmentType }}</div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
+      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
       <!-- <el-table-column width="220" align="center" prop="remark" label="备注" /> -->
@@ -147,7 +147,7 @@
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">
             下载模板
           </el-button>
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
+          <el-button v-if="firstIsPass" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
           </el-button>
         </div>
         <div>
@@ -160,7 +160,7 @@
         <div style="display: flex;">
           <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
           <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
-          <input ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <input ref="filElem" type="file" style="display: none" @change="parsingExcel($event, false)">
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
             <span>{{ uploadFileName }}</span>
@@ -269,7 +269,7 @@
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModelNext">
             下载模板
           </el-button>
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImportComple()">检测数据
+          <el-button v-if="firstIsPassComple" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheckComple()">检测数据
           </el-button>
         </div>
         <div>
@@ -282,7 +282,7 @@
         <div style="display: flex;">
           <div class="fileTitle" style="width:35px;line-height:40px;">文件</div>
           <el-button size="mini" class="my-search selectFile" icon="el-icon-my-file" @click="parsingExcelBtn">选择文件</el-button>
-          <input ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+          <input ref="filElem" type="file" style="display: none" @change="parsingExcel($event, true)">
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
             <span>{{ uploadFileName }}</span>
@@ -375,7 +375,7 @@
           </el-table-column>
           <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
           <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
-          <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
+          <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
           <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
           <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
         </el-table>
@@ -397,6 +397,8 @@ export default {
 
   data() {
     return {
+      firstIsPassComple: false,
+      firstIsPass: false,
       RegionList: [],
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
@@ -456,6 +458,7 @@ export default {
     // this.getTableData()
     // this.getRegionList()
     this.getSKU()
+    this.getTableData()
     // this.getMP()
     // this.getCustomerList()
     // this.getDistributorList()
@@ -612,11 +615,42 @@ export default {
     importData() {
       this.saveDialog = false
       this.importVisible = true
+      this.firstIsPass = false
     },
     // 补录
     supplement() {
       this.saveDialog = false
       this.supplementVisible = true
+    },
+    // 第二次检测数据
+    exceptionCheck() {
+      API.exceptionCheck({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          this.uploadFileName = ''
+          this.firstIsPass = false
+          this.firstIsPassComple = false
+          this.$message({
+            type: 'success',
+            message: '第二次检测文件上传成功'
+          })
+          if (res.data != null) {
+            this.dialogDataF = res.data
+            this.$forceUpdate()
+            this.saveBtn = (res.data[0].judgmentType !== 'Error' && res.data[0].judgmentType !== '')
+          } else {
+            this.dialogDataF = []
+          }
+        } else {
+          this.uploadFileName = ''
+          this.dialogDataF = []
+          this.$message({
+            type: 'error',
+            message: '第二次检测文件上传失败，请重新上传。'
+          })
+        }
+      }).catch()
     },
     // 确认导入
     confirmImport() {
@@ -654,6 +688,33 @@ export default {
         })
         .catch(() => {})
     },
+    // 第二次检测数据---补录
+    exceptionCheckComple() {
+      API.exceptionCheck({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          this.uploadFileName = ''
+          this.$message({
+            type: 'success',
+            message: '第二次检测文件上传成功'
+          })
+          if (res.data != null) {
+            this.dialogData = res.data
+            this.saveBtn = (res.data[0].judgmentType !== 'Error' && res.data[0].judgmentType !== '')
+          } else {
+            this.dialogData = []
+          }
+        } else {
+          this.uploadFileName = ''
+          this.dialogData = []
+          this.$message({
+            type: 'error',
+            message: '第二次检测文件上传失败，请重新上传。'
+          })
+        }
+      }).catch()
+    },
     // 确认导入--补录
     confirmImportComple() {
       var formData = new FormData()
@@ -688,13 +749,55 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.firstIsPass = false
+      this.firstIsPassComple = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     // 导入
-    parsingExcel(event) {
+    parsingExcel(event, isMakeUp) {
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
+      // 第一次检验数据
+      this.formatCheck(this.uploadFile, isMakeUp)
+    },
+    // 第一次检验数据
+    formatCheck(file, isMakeUp) {
+      var formData = new FormData()
+      formData.append('file', file)
+      formData.append('mainId', this.mainIdLocal)
+      formData.append('isMakeUp', isMakeUp)
+      formData.append('isApprove', false)
+      API.formatCheck(formData)
+        .then((response) => {
+          if (response.code === 1000) {
+            this.event.srcElement.value = '' // 置空
+            this.uploadFile = ''
+            this.$message({
+              type: 'success',
+              message: '第一次检测文件上传成功'
+            })
+            if (response.data != null) {
+              if (isMakeUp === true) {
+                this.dialogData = response.data
+                this.firstIsPassComple = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              } else {
+                this.dialogDataF = response.data
+                this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              }
+            } else {
+              this.dialogDataF = []
+              this.dialogData = []
+            }
+          } else {
+            this.$message({
+              type: 'error',
+              message: '第一次检测文件上传失败，请重新上传。'
+            })
+          }
+          this.event.srcElement.value = ''
+        })
+        .catch(() => {})
     },
     // 关闭导入
     closeImport() {

@@ -32,7 +32,7 @@ export default {
     return {
       routerList: [
         { name: 'Price Promotion', path: '/master/priceSale/systemPool' },
-        { name: 'New User', path: '/master/priceSale/systemPoolNew' }
+        // { name: 'New User', path: '/master/priceSale/systemPoolNew' }
       ],
       currentIndex: 0
     }

@@ -50,7 +50,7 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -138,7 +138,7 @@
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
+          <el-button v-if="firstIsPass" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
           </el-button>
         </div>
         <div>
@@ -185,8 +185,10 @@
           <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-              <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+              <img v-else-if="scope.row.judgmentType===null? false:(scope.row.judgmentType.indexOf('Exception') > -1)" :src="excepImg" style="width:25px;height:25px;">
               <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+              <img v-else-if="scope.row.judgmentType===null" :src="passImg" style="width:25px;height:25px;">
+              <img v-else :src="errorImg" style="width:25px;height:25px;">
             </template>
           </el-table-column>
           <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
@@ -288,7 +290,8 @@ export default {
       submitBtn: 1,
       localDate: '',
       btnStatus: true,
-      usernameLocal: ''
+      usernameLocal: '',
+      firstIsPass: false
     }
   },
   computed: {},
@@ -454,27 +457,32 @@ export default {
       formData.append('importType', 1)
       // formData.append('mainId', this.mainIdLocal)
       formData.append('channelName', this.filterObj.channelCode)
-      formData.append('yearAndMonth', this.localDate)
+      formData.append('yearAndMonth', '202109')
       API.importV1(formData)
         .then((response) => {
           if (response.code === 1000) {
             this.event.srcElement.value = '' // 置空
             this.uploadFileName = ''
             this.uploadFile = ''
-            this.$message({
-              type: 'success',
-              message: '上传成功'
-            })
-            if (response.data != null) {
+            this.firstIsPass = false
+            if (response.data.length > 0 && typeof (response.data) !== 'string') {
+              this.$message({
+                type: 'success',
+                message: '第二次检验数据文件导入成功--V1申请'
+              })
               this.checkedData = response.data
               this.saveBtn = response.data[0].judgmentType !== 'Error'
             } else {
               this.checkedData = []
+              this.$message({
+                type: 'error',
+                message: '第二次检验数据文件导入失败，请重新上传--V1申请。'
+              })
             }
           } else {
             this.$message({
               type: 'error',
-              message: '上传失败，请重新上传。'
+              message: '第二次检验数据文件上传失败，请重新上传--V1申请。'
             })
           }
           // 清除input的value ,上传一样的
@@ -484,6 +492,7 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.firstIsPass = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     // 导入
@@ -491,6 +500,39 @@ export default {
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
+      this.routineCheck(this.uploadFile)
+    },
+    // 第一次检测数据
+    routineCheck(file) {
+      var formData = new FormData()
+      formData.append('file', file)
+      formData.append('importType', 1)
+      formData.append('yearAndMonth', '202109')
+      formData.append('channelName', this.filterObj.channelCode)
+      API.routineCheck(formData)
+        .then((response) => {
+          if (response.code === 1000) {
+            // this.event.srcElement.value = '' // 置空
+            // this.uploadFile = ''
+            this.$message({
+              type: 'success',
+              message: '第一次检测文件上传成功--V1申请'
+            })
+            if (response.data != null) {
+              this.checkedData = response.data
+              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+            } else {
+              this.checkedData = []
+            }
+          } else {
+            this.$message({
+              type: 'error',
+              message: '第一次检测文件上传失败，请重新上传--V1申请。'
+            })
+          }
+          // this.event.srcElement.value = ''
+        })
+        .catch(() => {})
     },
     // 关闭导入
     closeImport() {
