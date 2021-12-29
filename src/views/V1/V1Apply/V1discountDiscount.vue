@@ -99,9 +99,13 @@
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
       <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
-      <el-table-column width="120" align="center" prop="activityDateStart" label="活动开始时间" />
-      <el-table-column width="120" align="center" prop="activityDateEnd" label="活动结束时间" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
+      <el-table-column v-slot="{row}" width="180" align="center" prop="activityDateStart" label="活动开始时间">
+        {{ row.activityDateStart===null?'':row.activityDateStart.replace('T',' ') }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="180" align="center" prop="activityDateEnd" label="活动结束时间">
+        {{ row.activityDateEnd===null?'':row.activityDateEnd.replace('T',' ') }}
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <div v-if="row.judgmentType!== null" class="statusWrap">
             <img v-if="row.judgmentType === 'Pass'" src="../../../assets/images/success.png" alt="">
@@ -326,10 +330,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          if(!this.$route.query.channelCode) {
+          if (!this.$route.query.channelCode) {
             this.filterObj.channelCode = this.channelArr[0].channelEsName
-          }else {
-            this.filterObj.channelCode=this.$route.query.channelCode
+          } else {
+            this.filterObj.channelCode = this.$route.query.channelCode
           }
           this.getCustomerList(this.filterObj.channelCode)
           this.getEffectiveDate()
@@ -473,7 +477,7 @@ export default {
               message: '上传失败，请重新上传。'
             })
           }
-          //清除input的value ,上传一样的
+          // 清除input的value ,上传一样的
           this.event.srcElement.value = '' // 置空
         })
         .catch(() => {})
@@ -509,7 +513,7 @@ export default {
     // 提交
     submitInfo() {
       if (this.tableData[0].judgmentType === null) {
-         this.$message({type: 'info',message: '数据未校验，请先进行导入验证'})
+        this.$message({ type: 'info', message: '数据未校验，请先进行导入验证' })
         // this.$confirm('数据未校验，请先进行导入验证', '提示', {
         //   confirmButtonText: '确定',
         //   type: 'warning'
@@ -665,7 +669,7 @@ export default {
       }).catch()
     },
     search() {
-      this.pageNum=1
+      this.pageNum = 1
       this.getTableData()
     },
     // 每页显示页面数变更
