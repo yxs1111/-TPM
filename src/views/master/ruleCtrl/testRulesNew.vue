@@ -38,7 +38,7 @@
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" :span-method="objectSpanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="220" align="center" prop="version" label="版本" />
       <el-table-column width="460" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="100" align="left" prop="ruleUnit" label="" />
@@ -158,6 +158,10 @@ export default {
 
   data() {
     return {
+      spanAll: [],
+      titleData: [{
+        name: 'version'
+      }],
       yearArr: [],
       visibleAdd: false,
       ruleFormAdd: {
@@ -239,6 +243,46 @@ export default {
     // 获取下拉框
   },
   methods: {
+    // 合并相同列 根据相同名称判断
+    spanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        const rowNum = this.spanAll[rowIndex]
+        if (rowNum !== 0) {
+          return {
+            rowspan: rowNum,
+            colspan: 1
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+    },
+    getSpanNum(curName) {
+      const data = this.tableData
+      const spanArry = []
+      let pos = 0
+      data.forEach((val, i) => {
+        if (i === 0) {
+          spanArry.push(1)
+          pos = 0
+        } else {
+          // 判断当前列数据与下一行的该列数据是否相同
+          if (data[i][curName] === data[i - 1][curName]) {
+            // 每一列每一行的合并数量
+            spanArry[pos] += 1
+            spanArry.push(0)
+          } else {
+            spanArry.push(1)
+            pos = i
+          }
+        }
+      })
+      // 赋值panAll
+      this.spanAll = spanArry
+    },
     // 新增弹框
     // 获取新月份
     queryYearAndMonth() {
@@ -458,7 +502,10 @@ export default {
             }
           }
           this.$forceUpdate()
-          this.computerColspan(this.tableData)
+          // this.computerColspan(this.tableData)
+          this.titleData.forEach(val => {
+            this.getSpanNum(val.name)
+          })
         })
         .catch(() => {})
     },

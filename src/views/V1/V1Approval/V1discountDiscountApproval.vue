@@ -400,7 +400,7 @@ export default {
             })
             if (response.data != null) {
               this.checkedData = response.data
-              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              // this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.checkedData = []
             }
@@ -410,7 +410,7 @@ export default {
               message: '第一次检测文件上传失败，请重新上传--V1审批。'
             })
           }
-          // this.event.srcElement.value = ''
+          this.event.srcElement.value = ''
         })
         .catch(() => {})
     },

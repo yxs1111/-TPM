@@ -456,12 +456,12 @@ export default {
     this.getChannel()
     // this.getEffectiveDate()
     // this.getTableData()
-    // this.getRegionList()
+    this.getRegionList()
     this.getSKU()
     this.getTableData()
     // this.getMP()
     // this.getCustomerList()
-    // this.getDistributorList()
+    this.getDistributorList()
   },
   methods: {
     getTip(row) {
