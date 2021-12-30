@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-27 17:04:06
+ * @LastEditTime: 2021-12-28 10:16:44
 -->
 <template>
   <div class="dashboard-container">
@@ -252,7 +252,7 @@ export default {
       // 当前日期
       attrs: [
         {
-          key: 'v0Day',
+          key: 'today',
           // 括号内传递日期可点亮指定日期，如new Date(2019, 6, 1)，也可传递多个日期：如dates: [ new Date(2018, 0, 1), new Date(2018, 0, 15) ]
           dates: new Date(),
           highlight: true,
@@ -289,6 +289,10 @@ export default {
       return `<div class="Tip">
                 <span class="TipTitle">节点名称: </span>
                 <span>${value.activityName}</span>
+              </div>
+              <div class="Tip">
+                <span class="TipTitle">渠道: </span>
+                <span>${value.channelName}</span>
               </div>
               <div class="Tip">
                 <span class="TipTitle">办理人: </span>

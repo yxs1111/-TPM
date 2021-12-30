@@ -11,7 +11,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -236,8 +236,7 @@ export default {
       },
       permissions: getDefaultPermissions(),
       tableData: [],
-      skuOptons: [],
-      channelOptons: [],
+      channelOptions: [],
       customerArr: [],
       BrandList: [],
       dialogVisible: false,
@@ -331,9 +330,9 @@ export default {
       selectAPI
         .queryChannelSelect()
         .then((res) => {
-          this.channelOptons = res.data
+          this.channelOptions = res.data
           if (!this.$route.query.channelCode) {
-            this.filterObj.channelCode = this.channelOptons[0].channelCode
+            this.filterObj.channelCode = this.channelOptions[0].channelCode
           } else {
             this.filterObj.channelCode = this.$route.query.channelCode
           }
@@ -370,14 +369,6 @@ export default {
             this.customerArr = res.data
           }
         })
-    },
-    getQuerySkuSelect() {
-      selectAPI
-        .querySkuSelect()
-        .then((res) => {
-          this.skuOptons = res.data
-        })
-        .catch()
     },
     search() {
       this.pageNum = 1
