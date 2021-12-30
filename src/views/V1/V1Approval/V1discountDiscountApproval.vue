@@ -387,7 +387,7 @@ export default {
       var formData = new FormData()
       formData.append('file', file)
       formData.append('importType', 2)
-      formData.append('yearAndMonth', '202109')
+      formData.append('yearAndMonth', this.localDate)
       formData.append('channelName', this.filterObj.channelCode)
       API.routineCheck(formData)
         .then((response) => {
