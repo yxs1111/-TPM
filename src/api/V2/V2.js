@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-17 11:23:03
+ * @LastEditTime: 2021-12-30 18:44:31
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -45,6 +45,10 @@ export default {
   exceptionCheck(params) {
     return requestApi.request_post(this.ImportUrl+'/exceptionCheck', params)
   },
+  //二步校验
+  exceptionCheckTwo(params) {
+    return requestApi.request_post(this.url+'/importExceptionCheck', params)
+  },
   //v1数据异常项保存
   exceptionSave(params) {
     return requestApi.request_post(this.ImportUrl+'/save', params)
@@ -80,6 +84,10 @@ export default {
    */
   importNUExcel(params) {
     return requestApi.request_post(this.NUUrl+'/import', params)
+  },
+  //二次校验
+  exceptionNUCheckTwo(params) {
+    return requestApi.request_post(this.NUUrl+'/importExcelCheck', params)
   },
   /**
    * v2-NU审批
