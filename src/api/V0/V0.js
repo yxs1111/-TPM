@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-21 17:05:04
+ * @LastEditTime: 2021-12-30 20:45:48
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -36,6 +36,14 @@ export default {
   //导入excel
   importExcel(params) {
     return requestApi.request_post(this.url+'/import', params)
+  },
+  //常规项校验 导入
+  conventionImport(params) {
+    return requestApi.request_post(this.url+'/conventionImport', params)
+  },
+  //异常项校验 导入
+  exceptionImport(params) {
+    return requestApi.request_post(this.url+'/exceptionImport', params)
   },
   //审批提交,审批驳回
   approve(params) {
