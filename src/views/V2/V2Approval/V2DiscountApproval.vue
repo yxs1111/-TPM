@@ -11,7 +11,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -35,7 +35,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.dim_product" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
+            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
       </div>
@@ -259,8 +259,8 @@ export default {
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      skuOptons: [],
-      channelOptons: [],
+      skuOptions: [],
+      channelOptions: [],
       customerArr: [],
       distributorArr: [],
       RegionList: [],
@@ -316,7 +316,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        dimProduct: this.filterObj.dim_product,
+        productName: this.filterObj.dim_product,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -367,9 +367,9 @@ export default {
       selectAPI
         .queryChannelSelect()
         .then((res) => {
-          this.channelOptons = res.data
+          this.channelOptions = res.data
           if (!this.$route.query.channelCode) {
-            this.filterObj.channelCode = this.channelOptons[0].channelCode
+            this.filterObj.channelCode = this.channelOptions[0].channelCode
           } else {
             this.filterObj.channelCode = this.$route.query.channelCode
           }
@@ -406,7 +406,7 @@ export default {
       selectAPI
         .querySkuSelect()
         .then((res) => {
-          this.skuOptons = res.data
+          this.skuOptions = res.data
         })
         .catch()
     },

@@ -42,7 +42,7 @@
       </div>
     </div>
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="customerCode" label="客户编号" />
+      <el-table-column align="center" prop="customerCode" label="客户CP编码" />
       <el-table-column align="center" prop="customerMdmCode" label="MDM客户编号" />
       <el-table-column align="center" prop="customerCsName" label="客户中文名称" />
       <el-table-column width="220" align="center" prop="customerCsName" label="客户英文名称" />

@@ -18,8 +18,8 @@
     </div>
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="channelCode" label="渠道编码"> </el-table-column>
-      <el-table-column align="center" prop="channelEsName" label="中文名称"> </el-table-column>
-      <el-table-column align="center" prop="channelEsName" label="英文名称"> </el-table-column>
+      <el-table-column align="center" prop="channelEsName" label="渠道中文名称"> </el-table-column>
+      <el-table-column align="center" prop="channelEsName" label="渠道英文名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -27,9 +27,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
-      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
-           {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+      <el-table-column width="150" align="center" prop="updateBy" label="更新人"> </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="更新时间">
+           {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
