@@ -139,8 +139,14 @@ export default {
     })
   },
   // 第二次校验数据
-  exceptionCheck(params) {
-    return requestApi.request_post('/cityplan/investCpVThreeDetail/exceptionCheck', params)
+  exceptionCheck(formData) {
+    // return requestApi.request_post('/cityplan/investCpVThreeDetail/exceptionCheck', params)
+    return request({
+      url: '/cityplan/investCpVThreeDetail/exceptionCheck',
+      method: 'post',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
   // 第一次校验数据  NU
   formatCheckNU(formData) {
@@ -152,7 +158,13 @@ export default {
     })
   },
   // 第二次校验数据  NU
-  exceptionCheckNU(params) {
-    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/exceptionCheck', params)
+  exceptionCheckNU(formData) {
+    // return requestApi.request_post('/cityplan/investCpNuVThreeDetail/exceptionCheck', params)
+    return request({
+      url: '/cityplan/investCpNuVThreeDetail/exceptionCheck',
+      method: 'post',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   }
 }
