@@ -44,7 +44,7 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -102,12 +102,12 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
         {{ (row.afterNegotiationCost*1).toFixed(2) }}
       </el-table-column>
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
-        <template slot-scope="scope">{{ scope.row.avePriceDifference + '%' }}</template>
-      </el-table-column>
-      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
-        <template slot-scope="scope">{{ scope.row.salesDifference + '%' }}</template>
-      </el-table-column>
+      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
+        <!-- <template slot-scope="scope">{{ scope.row.avePriceDifference + '%' }}</template>
+      </el-table-column> -->
+      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
+        <!-- <template slot-scope="scope">{{ scope.row.salesDifference + '%' }}</template>
+      </el-table-column> -->
       <el-table-column v-slot="{row}" width="120" align="right" prop="costDifference" label="费用差值">
         {{ (row.costDifference*1).toFixed(2) }}
       </el-table-column>
@@ -245,12 +245,12 @@
           <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
             {{ (row.afterNegotiationCost*1).toFixed(2) }}
           </el-table-column>
-          <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
-            <template slot-scope="scope">{{ scope.row.avePriceDifference + '%' }}</template>
-          </el-table-column>
-          <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
-            <template slot-scope="scope">{{ scope.row.salesDifference + '%' }}</template>
-          </el-table-column>
+          <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
+            <!-- <template slot-scope="scope">{{ scope.row.avePriceDifference + '%' }}</template>
+          </el-table-column> -->
+          <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
+            <!-- <template slot-scope="scope">{{ scope.row.salesDifference + '%' }}</template>
+          </el-table-column> -->
           <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
           <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
           <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
@@ -265,7 +265,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions, messageMap } from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -523,7 +523,7 @@ export default {
           this.firstIsPass = false
           this.$message({
             type: 'success',
-            message: '第二次检测文件上传成功--审批'
+            message: messageMap().checkSuccess
           })
           if (res.data != null) {
             this.dialogData = res.data
@@ -537,7 +537,7 @@ export default {
           this.dialogData = []
           this.$message({
             type: 'error',
-            message: '第二次检测文件上传失败，请重新上传--审批。'
+            message: messageMap().checkError
           })
         }
       }).catch()
@@ -601,7 +601,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '第一次检测文件上传成功--审批'
+              message: messageMap().importSuccess
             })
             if (response.data != null) {
               this.dialogData = response.data
@@ -612,7 +612,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '第一次检测文件上传失败，请重新上传--审批。'
+              message: messageMap().importError
             })
           }
           this.event.srcElement.value = ''

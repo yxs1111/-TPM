@@ -92,9 +92,9 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）">
         {{ (row.adjustedVol*1).toFixed(2) }}
       </el-table-column>
-      <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）">
-        <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
-      </el-table-column>
+      <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
+        <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
+      </el-table-column> -->
       <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
@@ -219,9 +219,9 @@
           <el-table-column width="120" align="center" prop="regionName" label="区域" />
           <el-table-column width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）" />
           <el-table-column width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）" />
-          <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）">
-            <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
-          </el-table-column>
+          <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
+            <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
+          </el-table-column> -->
           <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
           <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
           <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
@@ -242,7 +242,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions, messageMap } from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -457,7 +457,7 @@ export default {
       formData.append('importType', 1)
       // formData.append('mainId', this.mainIdLocal)
       formData.append('channelName', this.filterObj.channelCode)
-      formData.append('yearAndMonth', '202109')
+      formData.append('yearAndMonth', this.localDate)
       API.importV1(formData)
         .then((response) => {
           if (response.code === 1000) {
@@ -468,7 +468,7 @@ export default {
             if (response.data.length > 0 && typeof (response.data) !== 'string') {
               this.$message({
                 type: 'success',
-                message: '第二次检验数据文件导入成功--V1申请'
+                message: messageMap().checkSuccess
               })
               this.checkedData = response.data
               this.saveBtn = response.data[0].judgmentType !== 'Error'
@@ -476,13 +476,13 @@ export default {
               this.checkedData = []
               this.$message({
                 type: 'error',
-                message: '第二次检验数据文件导入失败，请重新上传--V1申请。'
+                message: messageMap().checkError
               })
             }
           } else {
             this.$message({
               type: 'error',
-              message: '第二次检验数据文件上传失败，请重新上传--V1申请。'
+              message: messageMap().checkError
             })
           }
           // 清除input的value ,上传一样的
@@ -507,7 +507,7 @@ export default {
       var formData = new FormData()
       formData.append('file', file)
       formData.append('importType', 1)
-      formData.append('yearAndMonth', '202109')
+      formData.append('yearAndMonth', this.localDate)
       formData.append('channelName', this.filterObj.channelCode)
       API.routineCheck(formData)
         .then((response) => {
@@ -516,7 +516,7 @@ export default {
             // this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '第一次检测文件上传成功--V1申请'
+              message: messageMap().importSuccess
             })
             if (response.data != null) {
               this.checkedData = response.data
@@ -527,7 +527,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '第一次检测文件上传失败，请重新上传--V1申请。'
+              message: messageMap().importError
             })
           }
           // this.event.srcElement.value = ''
@@ -630,7 +630,7 @@ export default {
       this.uploadFileName = file.name
       this.$refs.upload.clearFiles() // 去掉文件列表
     },
-    // 关闭导入
+    // 关闭导入exportSuccess
     closeimportDialog() {
       this.importVisible = false
       this.checkedData = []
@@ -643,7 +643,7 @@ export default {
       data = { ...this.filterObj }
       API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
-        this.$message.success('导出成功!')
+        this.$message.success(messageMap().exportSuccess)
       })
     },
     // 下载文件

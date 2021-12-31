@@ -141,5 +141,18 @@ export default {
   // 第二次校验数据
   exceptionCheck(params) {
     return requestApi.request_post('/cityplan/investCpVThreeDetail/exceptionCheck', params)
+  },
+  // 第一次校验数据  NU
+  formatCheckNU(formData) {
+    return request({
+      url: '/cityplan/investCpNuVThreeDetail/formatCheck',
+      method: 'post',
+      data: formData,
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+  // 第二次校验数据  NU
+  exceptionCheckNU(params) {
+    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/exceptionCheck', params)
   }
 }
