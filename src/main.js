@@ -34,12 +34,12 @@ import 'codemirror/lib/codemirror.css'
 Vue.use(VueCodeMirror)
 
 import 'xe-utils'
-// import VXETable from 'vxe-table'
-// import 'vxe-table/lib/style.css'
-// import VXETablePluginElement from 'vxe-table-plugin-element'
-// import 'vxe-table-plugin-element/dist/style.css'
-// VXETable.use(VXETablePluginElement)
-// Vue.use(VXETable)
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+import VXETablePluginElement from 'vxe-table-plugin-element'
+import 'vxe-table-plugin-element/dist/style.css'
+VXETable.use(VXETablePluginElement)
+Vue.use(VXETable)
 
 // 设置所有Dialog，在点击空白处时不关闭
 ElementUI.Dialog.props.closeOnClickModal = false
