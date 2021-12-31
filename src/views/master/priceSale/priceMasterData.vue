@@ -10,9 +10,9 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU</span>
-            <el-select v-model="filterObj.sku" filterable clearable placeholder="请选择">
-              <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
-            </el-select>
+          <el-select v-model="filterObj.sku" filterable clearable placeholder="请选择">
+            <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
@@ -38,9 +38,15 @@
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column width="240" align="right" prop="ptc" label="零售价｜PTC （RMB/Tin）" />
-      <el-table-column width="320" align="right" prop="ptr" label="平台进货含税价｜PTR （RMB/Tin） " />
-      <el-table-column width="320" align="right" prop="ptw" label="经销商进货含税价｜PTW （RMB/Tin) " />
+      <el-table-column v-slot="{ row }" width="240" align="right" prop="ptc" label="零售价｜PTC （RMB/Tin）">
+        {{ FormateNum(row.ptc)}}
+      </el-table-column>
+      <el-table-column v-slot="{ row }" width="320" align="right" prop="ptr" label="平台进货含税价｜PTR （RMB/Tin） ">
+        {{ FormateNum(row.ptr)}}
+      </el-table-column>
+      <el-table-column v-slot="{ row }" width="320" align="right" prop="ptw" label="经销商进货含税价｜PTW （RMB/Tin) ">
+        {{ FormateNum(row.ptw)}}
+      </el-table-column>
       <el-table-column width="180" v-slot="{ row }" align="center" prop="createDate" label="创建时间">
         {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
       </el-table-column>
@@ -91,7 +97,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions,FormateThousandNum } from '@/utils'
 import API from '@/api/masterData/mdprice.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -117,7 +123,7 @@ export default {
       importVisible: false, //导入弹窗
       uploadFileName: '',
       uploadFile: '',
-      message:'', 
+      message: '',
       warningList: [],
       ChannelList: [],
       warningShow: false,
@@ -127,8 +133,8 @@ export default {
   mounted() {
     this.getTableData()
     this.getCustomerList()
-     this.getChannelList()
-     this.getQuerySkuSelect()
+    this.getChannelList()
+    this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -183,7 +189,7 @@ export default {
           this.getTableData()
           this.warningShow = true
           this.warningList = response.data
-          console.log(typeof(this.warningList));
+          console.log(typeof this.warningList)
           // this.$message.success(`${response.data}`)
         }
         this.event.srcElement.value = '' // 置空
@@ -235,6 +241,10 @@ export default {
         document.body.removeChild(elink)
       }
     },
+    //格式化--千位分隔符、两位小数 
+    FormateNum(num) {
+     return FormateThousandNum(num)
+    },
     handleSelectionChange(val) {
       this.checkArr = val
     },
@@ -265,7 +275,7 @@ export default {
 
 <style lang="scss" scoped>
 .message {
-  color: #EB4F48;
+  color: #eb4f48;
   text-align: center;
   margin: 10px 0;
   white-space: normal;
@@ -275,4 +285,4 @@ export default {
   height: 100px;
   overflow-y: scroll;
 }
-  </style>
+</style>

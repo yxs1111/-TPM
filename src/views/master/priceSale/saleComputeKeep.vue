@@ -38,13 +38,13 @@
       <el-table-column width="150" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column v-slot={row} width="150" align="center" prop="grossProfitPoints" label="毛利点数">
+      <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数">
         {{(row.grossProfitPoints*100).toFixed(2)}}%
       </el-table-column>
-      <el-table-column v-slot={row} width="320" align="center" prop="dealerRebate" label="经销商返利">
+      <el-table-column v-slot={row} width="320" align="right" prop="dealerRebate" label="经销商返利">
         {{(row.dealerRebate*100).toFixed(2)}}%
       </el-table-column>
-      <el-table-column v-slot={row} width="150" align="center" prop="platformRebate" label="平台返利">
+      <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
         {{(row.platformRebate*100).toFixed(2)}}%
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="创建时间">

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-31 08:48:01
+ * @LastEditTime: 2021-12-31 13:53:05
 -->
 <template>
   <div class="app-container">
@@ -71,7 +71,9 @@
               </el-table-column>
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
-              <el-table-column align="right" width="150" prop="cptVolBox" label="CPT VOL(CTN)"></el-table-column>
+              <el-table-column v-slot="{ row }" align="right" width="150" prop="cptVolBox" label="CPT VOL(CTN)">
+                {{FormateNum(row.cptVolBox)}}
+              </el-table-column>
               <el-table-column align="right" width="250" prop="number" v-for="(citem, cindex) in Number(tableData[0].priceGearNum)" :key="cindex">
                 <template slot="header">
                   {{ tableData[0].customGearList[cindex].gear }}RMB/Tin
@@ -79,27 +81,27 @@
                 </template>
                 <template slot-scope="{ row }">
                   <div>
-                    {{(row.customGearList[cindex].actualNum*1).toFixed(2)}}
+                    {{FormateNum(row.customGearList[cindex].actualNum)}}
                   </div>
                 </template>
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
-                {{(row.cityPlanAveragePrice*1).toFixed(2)}}
+                {{FormateNum(row.cityPlanAveragePrice)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
-                {{(row.cityPlanPromotionExpenses*1).toFixed(2)}}
+                {{FormateNum(row.cityPlanPromotionExpenses)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-                {{(row.cptAveragePrice*1).toFixed(2)}}
+              {{FormateNum(row.cptAveragePrice)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
-                {{(row.cptPromotionExpenses*1).toFixed(2)}}
+                {{FormateNum(row.cptPromotionExpenses)}}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRangeValue" label="均价差值(%)">
-                {{(row.averagePriceRange*1).toFixed(2)}}%
+              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
+                {{(row.averagePriceRange*1).toFixed(2)}}
               </el-table-column>
-              <el-table-column align="right" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-
+              <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
+                 {{FormateNum(row.promotionExpensesGapValue)}}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -178,15 +180,27 @@
               <el-table-column align="center" width="160" prop="dimCustomer" label="客户名称"></el-table-column>
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
-              <el-table-column align="right" width="120" prop="cptVolBox" label="CPT VOL(箱)"></el-table-column>
-              <el-table-column align="right" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="right" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)"></el-table-column>
-              <el-table-column align="right" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)"></el-table-column>
-              <el-table-column align="right" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)"></el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRangeValue" label="均价差值(%)">
-                {{(row.averagePriceRange*1).toFixed(2)}}%
+              <el-table-column v-slot="{ row }" align="right" width="150" prop="cptVolBox" label="CPT VOL(CTN)">
+                {{FormateNum(row.cptVolBox)}}
               </el-table-column>
-              <el-table-column align="right" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)"></el-table-column>
+              <el-table-column align="right" v-slot={row} width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
+                {{FormateNum(row.cityPlanAveragePrice)}}
+              </el-table-column>
+              <el-table-column align="right" v-slot={row} width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
+                {{FormateNum(row.cityPlanPromotionExpenses)}}
+              </el-table-column>
+              <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
+              {{FormateNum(row.cptAveragePrice)}}
+              </el-table-column>
+              <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
+                {{FormateNum(row.cptPromotionExpenses)}}
+              </el-table-column>
+              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
+                {{(row.averagePriceRange*1).toFixed(2)}}
+              </el-table-column>
+              <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
+                 {{FormateNum(row.promotionExpensesGapValue)}}
+              </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
                   <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -219,6 +233,7 @@ import {
   getCPTMonth,
   parseTime,
   getTextMap,
+  FormateThousandNum
 } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -566,6 +581,10 @@ export default {
       ) {
         return this.backgroundList[num]
       }
+    },
+     //格式化--千位分隔符、两位小数 
+    FormateNum(num) {
+     return FormateThousandNum(num)
     },
   },
 }
