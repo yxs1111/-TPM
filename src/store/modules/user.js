@@ -74,7 +74,7 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit,dispatch }, userInfo) {
+  login({ commit, dispatch }, userInfo) {
     const { username, password, code, key } = userInfo
     return new Promise((resolve, reject) => {
       user.login({ username: username, password: password, captcha: code, randomId: key }).then(response => {
@@ -84,7 +84,7 @@ const actions = {
         localStorage.setItem('usernameLocal', auth.getLoginNameCheck())
         resetRouter()
         resolve()
-        dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
+        dispatch('app/hideBreadcrumb', {}, { root: true }) // 登录之后进首页,默认首页面包屑隐藏
       }).catch(error => {
         console.error(error)
         reject(error)
@@ -101,10 +101,11 @@ const actions = {
         initUserInfo(data)
         // console.log('name', auth.getLoginNameCheck())
         localStorage.setItem('usernameLocal', auth.getLoginNameCheck())
+        localStorage.setItem('WXemail', 'WXemail')
         // window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/dashboard'
         resetRouter()
         resolve()
-        dispatch("app/hideBreadcrumb", {}, { root: true }) //登录之后进首页,默认首页面包屑隐藏
+        dispatch('app/hideBreadcrumb', {}, { root: true }) // 登录之后进首页,默认首页面包屑隐藏
       }).catch(error => {
         reject(error)
       })
@@ -130,6 +131,11 @@ const actions = {
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       auth.clear()
+      // 微信登录时 重新打开网页
+      if (localStorage.getItem('WXemail') === 'WXemail') {
+        window.open('https://uat-iinvest.rfc-friso.com/#/login', '_self')
+      }
+      localStorage.setItem('WXemail', null)
       commit('RESET_STATE')
       dispatch('tagsView/delAllViews', null, { root: true })
       resolve()

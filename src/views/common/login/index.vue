@@ -171,6 +171,7 @@ export default {
       immediate: true
     }
   },
+
   mounted() {
     this.getCodeImage()
     this.getCookie()
@@ -362,7 +363,7 @@ export default {
       // this.isLoginByWechat = true
       // this.getWXiNFO()
       // 2
-      window.open('https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://uat-iinvest.rfc-friso.com:8080/#/login', '_self')
+      window.open('https://corpwechat-test.rfc-friso.com/Api/Oauth/Qrcode?configid=9&redirect_uri=https://uat-iinvest.rfc-friso.com/#/login', '_self')
       // // 1. 先选择iframe
       // var iframe = document.querySelector('.wechat').contentWindow
       // // 2. 选择iframe内的元素
