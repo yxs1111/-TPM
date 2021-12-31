@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-30 20:54:12
+ * @LastEditTime: 2021-12-31 08:48:01
 -->
 <template>
   <div class="app-container">
@@ -215,6 +215,7 @@
 <script>
 import {
   getDefaultPermissions,
+  messageMap,
   getCPTMonth,
   parseTime,
   getTextMap,
@@ -257,6 +258,7 @@ export default {
       ], //价格档位背景色
       isNoData: false,
       usernameLocal: '',
+      messageMap: messageMap(),
     }
   },
   directives: { elDragDialog, permission },
@@ -384,9 +386,12 @@ export default {
       formData.append('file', this.uploadFile)
       API.conventionImport(formData).then((response) => {
         if (response.code == 1000) {
+          this.$message.success(this.messageMap.importSuccess)
           this.ImportData = response.data
           this.isCheck =
             response.data[0].judgmentType === 'Error' ? false : true
+        } else {
+          this.$message.info(this.messageMap.importError)
         }
         //清除input的value ,上传一样的
         this.event.srcElement.value = '' // 置空
@@ -398,9 +403,12 @@ export default {
       formData.append('file', this.uploadFile)
       API.exceptionImport(formData).then((response) => {
         if (response.code == 1000) {
+          this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
           this.saveBtn =
             response.data[0].judgmentType === 'Error' ? false : true
+        } else {
+          this.$message.info(this.messageMap.checkError)
         }
       })
     },
@@ -411,9 +419,11 @@ export default {
         mainId: this.ContentData[arr[0]][0].mainId,
       }).then((res) => {
         if (res.code === 1000) {
-          this.$message.success('保存成功!')
+          this.$message.success(this.messageMap.saveSuccess)
           this.closeImportDialog()
           this.getList()
+        } else {
+          this.$message.info(this.messageMap.saveError)
         }
       })
     },
@@ -425,9 +435,9 @@ export default {
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
+          this.$message.success(this.messageMap.exportErrorSuccess)
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
-          this.$message.success('导出成功!')
         })
       } else {
         this.$message.info('异常数据为空!')
@@ -444,7 +454,7 @@ export default {
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
-          this.$message.success('导出成功!')
+          this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
         this.$message.warning('数据不能为空')
@@ -517,10 +527,10 @@ export default {
                 opinion: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
-                  this.$message.success('驳回审批成功!')
+                  this.$message.success('驳回成功!')
                   this.getList()
                 } else {
-                  this.$message.error('驳回审批失败!')
+                  this.$message.error('驳回失败!')
                 }
               })
             })

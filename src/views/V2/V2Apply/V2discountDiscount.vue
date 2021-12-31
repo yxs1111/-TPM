@@ -228,7 +228,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,messageMap} from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -271,6 +271,7 @@ export default {
       isCheck: false, //检测数据按钮显示或隐藏
       mainId: '',
       usernameLocal: '',
+      messageMap: messageMap(),
     }
   },
   computed: {},
@@ -436,8 +437,11 @@ export default {
       formData.append('file', this.uploadFile)
       API.importExcel(formData).then((response) => {
         if (response.code == 1000) {
+          this.$message.success(this.messageMap.importSuccess)
           this.ImportData = response.data
           this.isCheck = response.data[0].judgmentType !== 'Error'
+        } else {
+          this.$message.info(this.messageMap.importError)
         }
         //清除input的value ,上传一样的
         this.event.srcElement.value = '' // 置空
@@ -458,8 +462,11 @@ export default {
       formData.append('file', this.uploadFile)
       API.exceptionCheckTwo(formData).then((response) => {
         if (response.code == 1000) {
+          this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
           this.saveBtn = response.data[0].judgmentType !== 'Error'
+        } else {
+          this.$message.info(this.messageMap.checkError)
         }
       })
     },
@@ -469,9 +476,11 @@ export default {
         mainId: this.tableData[0].mainId,
       }).then((res) => {
         if (res.code == 1000) {
-          this.$message.success('保存成功!')
+          this.$message.success(this.messageMap.saveSuccess)
           this.getTableData()
           this.closeImportDialog()
+        } else {
+          this.$message.info(this.messageMap.saveError)
         }
       })
     },
@@ -488,7 +497,7 @@ export default {
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success('导出成功!')
+          this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
         this.$message.info('异常数据为空!')
@@ -508,10 +517,10 @@ export default {
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success('导出成功!')
+          this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
-        this.$message.info('数据为空')
+        this.$message.info('数据不能为空')
       }
     },
     // 下载文件

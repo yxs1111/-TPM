@@ -422,4 +422,21 @@ export function yearAndMonthList() {
 export function VersionList() {
   return  ['V1','V2','Final']
 }
+//message map
+export function messageMap() {
+  return {
+    importSuccess:'常规项校验成功',
+    importError:'常规项校验失败',
+    checkSuccess:'异常项校验成功',
+    checkError:'异常项校验失败',
+    downloadSuccess:'下载模板成功',
+    downloadError:'下载模板失败',
+    exportSuccess:'导出成功',
+    exportError:'导出失败',
+    exportErrorSuccess:'导出错误信息成功',
+    exportErrorError:'导出错误信息失败',
+    saveSuccess:'保存成功',
+    saveError:'保存失败',
+  }
+}
 export const exportDefault = 'export default '

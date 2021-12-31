@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-30 20:48:49
+ * @LastEditTime: 2021-12-31 08:47:56
 -->
 <template>
   <div class="app-container">
@@ -240,7 +240,12 @@
 </template>
 
 <script>
-import { getDefaultPermissions, yearAndMonthList, VersionList } from '@/utils'
+import {
+  getDefaultPermissions,
+  yearAndMonthList,
+  VersionList,
+  messageMap,
+} from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import API from '@/api/V0/V0.js'
@@ -310,6 +315,7 @@ export default {
       isNoData: false,
       usernameLocal: '',
       mainId: '',
+      messageMap: messageMap(),
     }
   },
   directives: { elDragDialog, permission },
@@ -471,9 +477,12 @@ export default {
       formData.append('file', this.uploadFile)
       API.conventionImport(formData).then((response) => {
         if (response.code == 1000) {
+          this.$message.success(this.messageMap.importSuccess)
           this.ImportData = response.data
           this.isCheck =
             response.data[0].judgmentType === 'Error' ? false : true
+        } else {
+          this.$message.info(this.messageMap.importError)
         }
         //清除input的value ,上传一样的
         this.event.srcElement.value = '' // 置空
@@ -485,9 +494,12 @@ export default {
       formData.append('file', this.uploadFile)
       API.exceptionImport(formData).then((response) => {
         if (response.code == 1000) {
+          this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
           this.saveBtn =
             response.data[0].judgmentType === 'Error' ? false : true
+        } else {
+          this.$message.info(this.messageMap.checkError)
         }
       })
     },
@@ -498,9 +510,11 @@ export default {
         mainId: this.ContentData[arr[0]][0].mainId,
       }).then((res) => {
         if (res.code == 1000) {
-          this.$message.success('保存成功!')
+          this.$message.success(this.messageMap.saveSuccess)
           this.closeImportDialog()
           this.getList()
+        } else {
+          this.$message.info(this.messageMap.saveError)
         }
       })
     },
@@ -514,7 +528,7 @@ export default {
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
-          this.$message.success('导出成功!')
+          this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
         this.$message.info('异常数据为空!')
@@ -531,7 +545,7 @@ export default {
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
-          this.$message.success('导出成功!')
+          this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
         this.$message.warning('数据不能为空')
@@ -568,7 +582,7 @@ export default {
           })
             .then((response) => {
               if (response.code == 1000) {
-                this.$message.success('获取成功!')
+                this.$message.success('成功获取CPT数据!')
                 this.getList()
                 this.resetForm(formName)
               }
