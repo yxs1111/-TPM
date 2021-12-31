@@ -81,12 +81,12 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
         {{ (row.beforeNegotiationCost*1).toFixed(2) }}
       </el-table-column>
-      <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
-        {{ row.avePriceDifference + '%' }}
-      </el-table-column>
-      <el-table-column v-slot="{row}" width="160" align="right" prop="achievementRate" label="达成率（%）">
-        {{ row.salesDifference + '%' }}
-      </el-table-column>
+      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
+        <!-- {{ row.avePriceDifference + '%' }}
+      </el-table-column> -->
+      <el-table-column width="160" align="right" prop="achievementRate" label="达成率（%）" />
+        <!-- {{ row.salesDifference + '%' }}
+      </el-table-column> -->
       <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
       <el-table-column width="120" align="center" prop="judgmentContent" label="系统判定内容" />
@@ -116,7 +116,7 @@
           <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
           <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
         </el-button> -->
-          <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
+          <el-button v-if="firstIsPass" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
           </el-button>
         </div>
         <div>
@@ -208,12 +208,12 @@
           <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
             {{ (row.beforeNegotiationCost*1).toFixed(2) }}
           </el-table-column>
-          <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
-            {{ row.avePriceDifference + '%' }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="160" align="right" prop="achievementRate" label="达成率（%）">
-            {{ row.salesDifference + '%' }}
-          </el-table-column>
+          <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
+            <!-- {{ row.avePriceDifference + '%' }}
+          </el-table-column> -->
+          <el-table-column width="160" align="right" prop="achievementRate" label="达成率（%）" />
+            <!-- {{ row.salesDifference + '%' }}
+          </el-table-column> -->
           <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)" />
           <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
           <el-table-column width="120" align="center" prop="judgmentContent" label="系统判定内容" />
@@ -229,7 +229,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions, messageMap } from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -266,7 +266,8 @@ export default {
       btnStatus: true,
       usernameLocal: '',
       localDate: '',
-      BrandList: []
+      BrandList: [],
+      firstIsPass: false
     }
   },
   computed: {},
@@ -460,6 +461,7 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.firstIsPass = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     // 导入
@@ -467,6 +469,72 @@ export default {
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
+      this.formatCheck(this.uploadFile)
+    },
+    // 第一次检验数据
+    formatCheck(file) {
+      var formData = new FormData()
+      formData.append('file', file)
+      formData.append('mainId', this.mainIdLocal)
+      formData.append('isApprove', true)
+      API.formatCheckNU(formData)
+        .then((response) => {
+          if (response.code === 1000) {
+            this.event.srcElement.value = '' // 置空
+            this.uploadFile = ''
+            this.$message({
+              type: 'success',
+              message: messageMap().importSuccess
+            })
+            if (response.data != null) {
+              this.dialogData = response.data
+              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+            } else {
+              this.dialogData = []
+            }
+          } else {
+            this.$message({
+              type: 'error',
+              message: messageMap().importError
+            })
+          }
+          this.event.srcElement.value = ''
+          this.uploadFile = ''
+        })
+        .catch(() => {
+          this.event.srcElement.value = ''
+          this.uploadFile = ''
+          this.uploadFileName = ''
+        })
+    },
+    // 第二次检测数据
+    exceptionCheck() {
+      API.exceptionCheckNU({
+        mainId: this.mainIdLocal
+      }).then(res => {
+        if (res.code === 1000) {
+          this.uploadFileName = ''
+          this.firstIsPass = false
+          this.$message({
+            type: 'success',
+            message: messageMap().checkSuccess
+          })
+          if (res.data != null) {
+            this.dialogData = res.data
+            this.$forceUpdate()
+            this.saveBtn = (res.data[0].judgmentType !== 'Error' && res.data[0].judgmentType !== '')
+          } else {
+            this.dialogData = []
+          }
+        } else {
+          this.uploadFileName = ''
+          this.dialogData = []
+          this.$message({
+            type: 'error',
+            message: messageMap().checkError
+          })
+        }
+      }).catch()
     },
     // 导出数据
     exportData() {
