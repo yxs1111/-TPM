@@ -480,6 +480,8 @@ export default {
               })
             }
           } else {
+            this.uploadFileName = ''
+            this.uploadFile = ''
             this.$message({
               type: 'error',
               message: messageMap().checkError
@@ -512,7 +514,7 @@ export default {
       API.routineCheck(formData)
         .then((response) => {
           if (response.code === 1000) {
-            // this.event.srcElement.value = '' // 置空
+            this.event.srcElement.value = '' // 置空
             // this.uploadFile = ''
             this.$message({
               type: 'success',
@@ -529,10 +531,16 @@ export default {
               type: 'error',
               message: messageMap().importError
             })
+            this.checkedData = []
           }
-          // this.event.srcElement.value = ''
+          this.event.srcElement.value = ''
         })
-        .catch(() => {})
+        .catch(() => {
+          this.event.srcElement.value = ''
+          this.uploadFile = ''
+          this.uploadFileName = ''
+          this.checkedData = []
+        })
     },
     // 关闭导入
     closeImport() {

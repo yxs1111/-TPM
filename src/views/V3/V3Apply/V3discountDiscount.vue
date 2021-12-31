@@ -794,10 +794,16 @@ export default {
               type: 'error',
               message: messageMap().importError
             })
+            this.uploadFile = ''
           }
           this.event.srcElement.value = ''
+          this.uploadFile = ''
         })
-        .catch(() => {})
+        .catch(() => {
+          this.event.srcElement.value = ''
+          this.uploadFile = ''
+          this.uploadFileName = ''
+        })
     },
     // 关闭导入
     closeImport() {

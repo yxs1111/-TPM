@@ -44,7 +44,7 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -605,7 +605,7 @@ export default {
             })
             if (response.data != null) {
               this.dialogData = response.data
-              this.firstIsPass = true
+              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.dialogData = []
             }
@@ -614,10 +614,16 @@ export default {
               type: 'error',
               message: messageMap().importError
             })
+            this.uploadFile = ''
           }
           this.event.srcElement.value = ''
+          this.uploadFile = ''
         })
-        .catch(() => {})
+        .catch(() => {
+          this.event.srcElement.value = ''
+          this.uploadFile = ''
+          this.uploadFileName = ''
+        })
     },
     // 导出数据
     exportData() {
