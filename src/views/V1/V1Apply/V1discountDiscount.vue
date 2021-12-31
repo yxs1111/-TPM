@@ -73,29 +73,31 @@
       <el-table-column width="190" align="center" prop="priceGearAmount" label="价格档位（RMB/Tin）">
         <template slot-scope="scope">
           <div class="priceLevelWrap">
-            <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{ scope.row.priceGearAmount }}</div>
+            <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{ FormateNum(scope.row.priceGearAmount) }}</div>
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="totalPriceGearVol" label="价格档位销量总计（CTN）">
         <template slot-scope="scope">
           <div class="priceLevelWrap">
-            <div class="TotalNum">{{ scope.row.totalPriceGearVol }}</div>
+            <div class="TotalNum">{{ FormateNum(scope.row.totalPriceGearVol) }}</div>
           </div>
         </template>
       </el-table-column>
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
       <el-table-column v-slot="{row}" width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）">
-        {{ (row.systemRecommendedVol*1).toFixed(2) }}
+        {{ FormateNum((row.systemRecommendedVol*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）">
-        {{ (row.adjustedVol*1).toFixed(2) }}
+        {{ FormateNum((row.adjustedVol*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
         <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
       </el-table-column> -->
-      <el-table-column width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）">
+        {{ FormateNum(row.adjustedAmount) }}
+      </el-table-column>
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
       <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
@@ -244,7 +246,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap } from '@/utils'
+import { getDefaultPermissions, messageMap, FormateThousandNum } from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -319,6 +321,10 @@ export default {
     this.getDistributorList()
   },
   methods: {
+    //格式化--千位分隔符、两位小数 
+    FormateNum(num) {
+     return FormateThousandNum(num)
+    },
     // 获取年月
     getEffectiveDate() {
       API.getEffectiveDate({ version: 'V1' }).then((res) => {

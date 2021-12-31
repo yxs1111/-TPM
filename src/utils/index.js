@@ -425,10 +425,10 @@ export function VersionList() {
 //message map
 export function messageMap() {
   return {
-    importSuccess:'常规项校验成功',
-    importError:'常规项校验失败',
-    checkSuccess:'异常项校验成功',
-    checkError:'异常项校验失败',
+    importSuccess:'常规项校验导入成功',
+    importError:'常规项校验导入失败',
+    checkSuccess:'异常项校验导入成功',
+    checkError:'异常项校验导入失败',
     downloadSuccess:'下载模板成功',
     downloadError:'下载模板失败',
     exportSuccess:'导出成功',
