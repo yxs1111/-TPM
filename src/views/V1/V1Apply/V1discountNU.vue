@@ -190,10 +190,10 @@ export default {
         }
       }).catch()
     },
+    //千分位分隔符+两位小数
     getPlanCost(num) {
-      const money = Number(num.toFixed(2))
-      // let money=num.toLocaleString() //百分数
-      return money.toLocaleString() // 二位小数
+      const money = num*1
+      return money.toLocaleString('zh', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
     },
     search() {
       this.getTableData()

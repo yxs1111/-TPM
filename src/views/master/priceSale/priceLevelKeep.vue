@@ -38,10 +38,10 @@
       style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
-      <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
-        {{row.gear}}
+      <el-table-column v-slot={row} width="150" align="right" prop="gear" label="档位（箱/Tin）">
+        {{FormateNum(row.gear*1)}}
       </el-table-column>
-      <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">
+      <el-table-column v-slot={row} width="150" align="right" prop="volMix" label="Vol Mix">
         {{row.volMix}}%
       </el-table-column>
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
@@ -132,7 +132,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions,FormateThousandNum } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -388,6 +388,10 @@ export default {
           }
         }
       }
+    },
+    //格式化--千位分隔符、两位小数 
+    FormateNum(num) {
+     return FormateThousandNum(num)
     },
   },
 }

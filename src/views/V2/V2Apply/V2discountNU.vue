@@ -52,29 +52,28 @@
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" v-slot={row} align="right" prop="planVol" label="V1计划总销量（CTN）">
-        {{(row.planVol*1).toFixed(2)}}
+        {{FormateNum(row.planVol)}}
       </el-table-column>
       <el-table-column width="220" v-slot={row} align="right" prop="planNewUserNum" label="目标新客数量">
-        {{(row.planNewUserNum*1).toFixed(2)}}
+        {{FormateNum(row.planNewUserNum)}}
       </el-table-column>
       <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用（RMB）">
-        {{(row.planCost*1).toFixed(2)}}
+        {{FormateNum(row.planCost)}}
       </el-table-column>
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedVol" label="V2预测总销量（CTN）">
-        {{(row.adjustedVol*1).toFixed(2)}}
+        {{FormateNum(row.adjustedVol)}}
       </el-table-column>
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedNewUserNum" label="目标新客数量">
-        {{(row.adjustedNewUserNum*1).toFixed(2)}}
+        {{FormateNum(row.adjustedNewUserNum)}}
       </el-table-column>
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
-        {{(row.adjustedCost*1).toFixed(2)}}
+        {{FormateNum(row.adjustedCost)}}
       </el-table-column>
-      <el-table-column width="160" v-slot={row} align="right" prop="averageDifferenceValue" label="均价差值（%）">
-        {{(row.averageDifference*1).toFixed(2)}}%
+      <el-table-column width="160" align="right" prop="averageDifference" label="均价差值（%）">
       </el-table-column>
       <el-table-column width="160" align="right" prop="achievementRate" label="达成率 (%)" />
       <el-table-column width="150" v-slot={row} align="right" prop="costDifferenceValue" label="费用差值(RMB)">
-        {{(row.costDifferenceValue*1).toFixed(2)}}
+        {{FormateNum(row.costDifferenceValue)}}
       </el-table-column>
       <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
@@ -154,29 +153,28 @@
             <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="120" align="center" prop="brandName" label="品牌" />
             <el-table-column width="220" v-slot={row} align="right" prop="planVol" label="V1计划总销量（CTN）">
-              {{(row.planVol*1).toFixed(2)}}
+              {{FormateNum(row.planVol)}}
             </el-table-column>
             <el-table-column width="220" v-slot={row} align="right" prop="planNewUserNum" label="目标新客数量">
-              {{(row.planNewUserNum*1).toFixed(2)}}
+              {{FormateNum(row.planNewUserNum)}}
             </el-table-column>
             <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用（RMB）">
-              {{(row.planCost*1).toFixed(2)}}
+              {{FormateNum(row.planCost)}}
             </el-table-column>
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedVol" label="V2预测总销量（CTN）">
-              {{(row.adjustedVol*1).toFixed(2)}}
+              {{FormateNum(row.adjustedVol)}}
             </el-table-column>
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedNewUserNum" label="目标新客数量">
-              {{(row.adjustedNewUserNum*1).toFixed(2)}}
+              {{FormateNum(row.adjustedNewUserNum)}}
             </el-table-column>
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
-              {{(row.adjustedCost*1).toFixed(2)}}
+              {{FormateNum(row.adjustedCost)}}
             </el-table-column>
-            <el-table-column width="160" v-slot={row} align="right" prop="averageDifferenceValue" label="均价差值（%）">
-              {{(row.averageDifference*1).toFixed(2)}}%
+            <el-table-column width="160" align="right" prop="averageDifference" label="均价差值（%）">
             </el-table-column>
             <el-table-column width="160" align="right" prop="achievementRate" label="达成率 (%)" />
             <el-table-column width="150" v-slot={row} align="right" prop="costDifferenceValue" label="费用差值(RMB)">
-              {{(row.costDifferenceValue*1).toFixed(2)}}
+              {{FormateNum(row.costDifferenceValue)}}
             </el-table-column>
             <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
               <template slot-scope="{row}">
@@ -204,7 +202,13 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap,messageMap } from '@/utils'
+import {
+  getDefaultPermissions,
+  parseTime,
+  getTextMap,
+  messageMap,
+  FormateThousandNum,
+} from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -542,6 +546,10 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
+    //格式化--千位分隔符、两位小数
+    FormateNum(num) {
+      return FormateThousandNum(num)
     },
   },
 }
