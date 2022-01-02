@@ -186,7 +186,7 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <vxe-table-column  fixed="left" align="center" title="是否通过" width="100">
+          <vxe-table-column prop="date" fixed="left" align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
               <img v-else-if="scope.row.judgmentType===null? false:(scope.row.judgmentType.indexOf('Exception') > -1)" :src="excepImg" style="width:25px;height:25px;">
@@ -208,13 +208,13 @@
           <vxe-table-column width="190" align="center" field="priceGearAmount" title="价格档位（RMB/Tin）">
             <template slot-scope="scope">
               <div class="priceLevelWrap">
-                <div class="priceLevel">{{ scope.row.priceGearAmount }}</div>
+                <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{ scope.row.priceGearAmount }}</div>
               </div>
             </template>
           </vxe-table-column>
-          <vxe-table-column width="220" align="center" field="totalPriceGearVol" title="价格档位销量总计（CTN）">
+          <vxe-table-column width="220" align="center" prop="totalPriceGearVol" title="价格档位销量总计（CTN）">
             <template slot-scope="scope">
-              <div>
+              <div class="priceLevelWrap">
                 <div class="TotalNum">{{ scope.row.totalPriceGearVol }}</div>
               </div>
             </template>
