@@ -408,7 +408,7 @@ export function replaceUnderLine(val, char = '_') {
 // 获取Scenario
 export function yearAndMonthList() {
   const date=new Date()
-  let year=date.getFullYear()
+  let year=date.getFullYear()-1
   let yearAndMonthList=[]
   for (let i = 1; i <= 12; i++) {
     let str=year+' '+i+'+'+(12-i)

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-02 13:14:17
+ * @LastEditTime: 2022-01-02 16:22:34
 -->
 <template>
   <div class="app-container">
@@ -134,7 +134,7 @@
         <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Scenario" prop="dimScenario">
-              <el-select v-model="ruleForm.dimScenario" disabled placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.dimScenario"  placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -279,7 +279,7 @@ export default {
       ruleForm: {
         yearAndMonth: '',
         channelCode: '',
-        dimScenario: '2021 8+4',
+        dimScenario: '',
         dimVersion: '',
       },
       rules: {
