@@ -208,25 +208,31 @@
           <vxe-table-column width="190" align="center" field="priceGearAmount" title="价格档位（RMB/Tin）">
             <template slot-scope="scope">
               <div class="priceLevelWrap">
-                <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{ scope.row.priceGearAmount }}</div>
+                <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{ FormateNum(scope.row.priceGearAmount) }}</div>
               </div>
             </template>
           </vxe-table-column>
           <vxe-table-column width="220" align="center" prop="totalPriceGearVol" title="价格档位销量总计（CTN）">
             <template slot-scope="scope">
               <div class="priceLevelWrap">
-                <div class="TotalNum">{{ scope.row.totalPriceGearVol }}</div>
+                <div class="TotalNum">{{ FormateNum(scope.row.totalPriceGearVol) }}</div>
               </div>
             </template>
           </vxe-table-column>
           <vxe-table-column width="400" align="center" field="distributorName" title="经销商" />
           <vxe-table-column width="120" align="center" field="regionName" title="区域" />
-          <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）" />
-          <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）" />
-          <vxe-table-column width="220" align="right" field="volDifference" title="销量差值（%）">
-            <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
+          <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）" >
+              <template slot-scope="scope">  {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
           </vxe-table-column>
-          <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）" />
+          <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）" >
+            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedVol) }}</template>
+          </vxe-table-column>
+          <vxe-table-column width="220" align="right" field="volDifference" title="销量差值（%）">
+            <template slot-scope="scope">{{ scope.row.volDifference}}</template>
+          </vxe-table-column>
+          <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）" >
+            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedAmount) }}</template>
+          </vxe-table-column>
           <vxe-table-column width="120" align="center" field="mechanismType" title="机制类型" />
           <vxe-table-column width="120" align="center" field="mechanismName" title="机制名称" />
           <vxe-table-column width="120" align="center" field="activityTheme" title="活动主题窗口" />

@@ -145,9 +145,11 @@
       </div>
 
       <div class="tableWrap">
-        <el-table
+        <vxe-table
+          ref="sampleTable"
           border
-          height="240"
+          fit
+          height="400"
           :data="checkedData"
           style="width: 100%"
           :header-cell-style="{
@@ -161,7 +163,7 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+          <vxe-table-column prop="date" fixed="left" align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
               <img v-else-if="scope.row.judgmentType===null? false:(scope.row.judgmentType.indexOf('Exception') > -1)" :src="excepImg" style="width:25px;height:25px;">
@@ -169,54 +171,55 @@
               <img v-else-if="scope.row.judgmentType===null" :src="passImg" style="width:25px;height:25px;">
               <img v-else :src="errorImg" style="width:25px;height:25px;">
             </template>
-          </el-table-column>
-          <el-table-column width="400" align="center" prop="cpId" label="CPID" />
-          <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-          <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-          <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
-          <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
-          <el-table-column width="120" align="center" prop="channelName" label="渠道" />
-          <el-table-column width="200" align="center" prop="customerName" label="客户系统名称" />
-          <el-table-column width="120" align="center" prop="brandName" label="品牌" />
-          <el-table-column width="160" align="center" prop="productName" label="SKU" />
-          <el-table-column width="190" align="center" prop="priceGearAmount" label="价格档位（RMB/Tin）">
+          </vxe-table-column>
+          <vxe-table-column width="400" align="center" field="judgmentContent" title="验证信息" />
+          <vxe-table-column width="420" align="center" field="cpId" title="CPID" />
+          <vxe-table-column width="120" align="center" field="yearAndMonth" title="活动月" />
+          <vxe-table-column width="120" align="center" field="costTypeName" title="费用类型" />
+          <vxe-table-column width="150" align="center" field="minePackageName" title="Mine Package" />
+          <vxe-table-column width="260" align="center" field="costItemName" title="费用科目" />
+          <vxe-table-column width="120" align="center" field="channelName" title="渠道" />
+          <vxe-table-column width="120" align="center" field="customerName" title="客户系统名称" />
+          <vxe-table-column width="120" align="center" field="brandName" title="品牌" />
+          <vxe-table-column width="160" align="center" field="productName" title="SKU" />
+          <vxe-table-column width="190" align="center" field="priceGearAmount" title="价格档位（RMB/Tin）">
             <template slot-scope="scope">
               <div class="priceLevelWrap">
                 <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{ FormateNum(scope.row.priceGearAmount) }}</div>
               </div>
             </template>
-          </el-table-column>
-          <el-table-column width="220" align="center" prop="totalPriceGearVol" label="价格档位销量总计（CTN）">
+          </vxe-table-column>
+          <vxe-table-column width="220" align="center" prop="totalPriceGearVol" title="价格档位销量总计（CTN）">
             <template slot-scope="scope">
               <div class="priceLevelWrap">
                 <div class="TotalNum">{{ FormateNum(scope.row.totalPriceGearVol) }}</div>
               </div>
             </template>
-          </el-table-column>
-          <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
-          <el-table-column width="120" align="center" prop="regionName" label="区域" />
-          <el-table-column v-slot="{row}" width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）">
-            {{ FormateNum(row.systemRecommendedVol) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）">
-            {{ FormateNum(row.adjustedVol) }}
-          </el-table-column>
-          <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
-          <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
-          </el-table-column> -->
-          <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）">
-            {{ FormateNum(row.adjustedAmount) }}
-          </el-table-column>
-          <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
-          <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
-          <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
-          <el-table-column width="120" align="center" prop="activityDateStart" label="活动开始时间" />
-          <el-table-column width="120" align="center" prop="activityDateEnd" label="活动结束时间" />
-          <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
-          <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
-          <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
-          <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
-        </el-table>
+          </vxe-table-column>
+          <vxe-table-column width="400" align="center" field="distributorName" title="经销商" />
+          <vxe-table-column width="120" align="center" field="regionName" title="区域" />
+          <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）" >
+              <template slot-scope="scope">  {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
+          </vxe-table-column>
+          <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）" >
+            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedVol) }}</template>
+          </vxe-table-column>
+          <vxe-table-column width="220" align="right" field="volDifference" title="销量差值（%）">
+            <template slot-scope="scope">{{ scope.row.volDifference}}</template>
+          </vxe-table-column>
+          <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）" >
+            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedAmount) }}</template>
+          </vxe-table-column>
+          <vxe-table-column width="120" align="center" field="mechanismType" title="机制类型" />
+          <vxe-table-column width="120" align="center" field="mechanismName" title="机制名称" />
+          <vxe-table-column width="120" align="center" field="activityTheme" title="活动主题窗口" />
+          <vxe-table-column width="120" align="center" field="activityDateStart" title="活动开始时间" />
+          <vxe-table-column width="120" align="center" field="activityDateEnd" title="活动结束时间" />
+          <vxe-table-column width="120" align="center" field="judgmentType" title="系统判定" />
+          <vxe-table-column width="120" align="center" field="applyRemarks" title="申请人备注" />
+          <vxe-table-column width="220" align="center" field="poApprovalComments" title="Package Owner审批意见" />
+          <vxe-table-column width="220" align="center" field="finApprovalComments" title="Finance审批意见" />
+        </vxe-table>
       </div>
     </el-dialog>
   </div>
