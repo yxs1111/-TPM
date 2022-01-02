@@ -488,6 +488,7 @@ export default {
         exportType: 'exportApproveTemplate',
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelName
+        // channelName: 'NKA'
       }).then(
         response => {
           const fileName = '导入模板' + new Date().getTime() + '.xlsx'

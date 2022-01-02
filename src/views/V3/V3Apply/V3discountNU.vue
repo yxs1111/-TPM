@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -107,7 +107,7 @@
       <el-table-column width="160" align="right" prop="achievementRate" label="达成率（%）" />
         <!-- {{ row.salesDifference + '%' }}
       </el-table-column> -->
-      <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)">
+      <el-table-column v-slot="{row}" width="150" align="right" prop="costDifference" label="费用差值(RMB)">
         {{ FormateNum((row.costDifference*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
@@ -234,7 +234,7 @@
           <el-table-column width="160" align="right" prop="achievementRate" label="达成率（%）" />
             <!-- {{ row.salesDifference + '%' }}
           </el-table-column> -->
-          <el-table-column width="150" align="right" prop="costDifference" label="费用差值(RMB)">
+          <el-table-column v-slot="{row}" width="150" align="right" prop="costDifference" label="费用差值(RMB)">
             {{ FormateNum((row.costDifference*1).toFixed(2)) }}
           </el-table-column>
           <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
@@ -299,7 +299,7 @@ export default {
     this.getChannel()
     this.getBrandList()
 
-    // this.getTableData()
+    this.getTableData()
     // this.getCustomerList()
     // this.getEffectiveDate()
   },

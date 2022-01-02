@@ -832,6 +832,7 @@ export default {
       API.exportV3({
         exportType: 'exportTemplate',
         channelName: this.filterObj.channelName,
+        // channelName: 'NKA',
         mainId: this.mainIdLocal
       }).then(
         response => {
@@ -855,6 +856,7 @@ export default {
       API.exportV3({
         exportType: 'exportMakeUpTemplate',
         channelName: this.filterObj.channelName,
+        // channelName: 'NKA',
         mainId: this.mainIdLocal
       }).then(
         response => {
@@ -914,6 +916,7 @@ export default {
       // 导出数据筛选
       const data = {
         channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+        // channelName: 'NKA',
         customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
         distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
         productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
