@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-03 16:04:04
+ * @LastEditTime: 2022-01-03 16:10:30
 -->
 <template>
   <div class="app-container">
@@ -631,6 +631,7 @@ export default {
         channelCode: '',
         dimScenario: '',
         dimVersion: '',
+        Minepackage: '',
       }
     },
     //V0 提交审批
