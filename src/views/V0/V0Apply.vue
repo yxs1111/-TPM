@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-03 17:34:56
+ * @LastEditTime: 2022-01-03 18:57:56
 -->
 <template>
   <div class="app-container">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="OpertionBar">
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="getCPTData">
+          <div class="TpmButtonBG"  @click="getCPTData">
             <img src="@/assets/images/huoqu.png" alt="" />
             <span class="text">获取CPT数据</span>
           </div>
