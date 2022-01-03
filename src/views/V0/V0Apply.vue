@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-02 16:22:34
+ * @LastEditTime: 2022-01-03 15:16:08
 -->
 <template>
   <div class="app-container">
@@ -133,6 +133,11 @@
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
         <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
+            <el-form-item label="Mine package">
+              <el-select v-model="ruleForm.Minepackage"  placeholder="请选择" class="my-el-select">
+                <el-option v-for="item,index in ['Price Promotion','New User']" :key="index" :label="item" :value="item" />
+              </el-select>
+            </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
               <el-select v-model="ruleForm.dimScenario"  placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
@@ -281,6 +286,7 @@ export default {
         channelCode: '',
         dimScenario: '',
         dimVersion: '',
+        Minepackage: '',
       },
       rules: {
         channelCode: [
@@ -589,7 +595,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          API.getCPTData({
+          let url = this.ruleForm.Minepackage=='Price Promotion' ? API.getCPTData : API.getNuData
+          url({
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,

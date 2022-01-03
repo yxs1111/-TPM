@@ -1,13 +1,14 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-30 20:45:48
+ * @LastEditTime: 2022-01-03 15:13:49
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
   url: '/cityplan/investCpVZero',
+  nuUrl: '/cityplan/investCpNuVOneDetail',
   // url: '/investCpVZero',
   ImportUrl: '/cityplan/investCpVZeroEb',
   // ImportUrl: '/investCpVZeroEb',
@@ -22,6 +23,10 @@ export default {
   //获取CPT 数据
   getCPTData(params) {
     return requestApi.request_post(this.url+'/createCPT', params)
+  },
+  //获取Nu数据
+  getNuData(params) {
+    return requestApi.request_post(this.nuUrl+'/createCPT', params)
   },
   //excel 导出
   exportExcel(params) {

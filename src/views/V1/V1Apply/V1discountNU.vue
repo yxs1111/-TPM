@@ -196,6 +196,7 @@ export default {
       return money.toLocaleString('zh', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
     },
     search() {
+      this.pageNum=1
       this.getTableData()
     },
     // 导出
