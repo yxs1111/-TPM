@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-03 15:16:08
+ * @LastEditTime: 2022-01-03 16:04:04
 -->
 <template>
   <div class="app-container">
@@ -604,7 +604,7 @@ export default {
           })
             .then((response) => {
               if (response.code == 1000) {
-                this.$message.success('成功获取CPT数据!')
+                this.$message.success('成功获取数据!')
                 this.getList()
                 this.resetForm(formName)
               }
