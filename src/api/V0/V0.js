@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-01-03 15:50:03
+ * @LastEditTime: 2022-01-03 17:34:43
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -21,7 +21,7 @@ export default {
   },
   //获取CPT 数据
   getCPTData(params) {
-    return requestApi.request_post(this.url+'/createCPT', params)
+    return requestApi.request_post('/cityplan/investCpVZero/createCPT', params)
   },
   //获取Nu数据
   getNuData(params) {

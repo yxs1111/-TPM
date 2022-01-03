@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-03 16:10:30
+ * @LastEditTime: 2022-01-03 17:34:56
 -->
 <template>
   <div class="app-container">
@@ -595,7 +595,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = this.ruleForm.Minepackage=='Price Promotion' ? API.getCPTData : API.getNuData
+          var url = this.ruleForm.Minepackage=='Price Promotion' ? API.getCPTData : API.getNuData
           url({
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
@@ -609,7 +609,6 @@ export default {
                 this.resetForm(formName)
               }
             })
-            .catch(() => {})
         } else {
           this.$message.warning('提交失败,请填写必填项')
           return false
