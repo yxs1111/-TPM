@@ -31,12 +31,6 @@
             <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">Mine package：</span>
-          <el-select v-model="filterObj.minePackage" placeholder="请选择">
-            <el-option v-for="item in minePackageList" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
-          </el-select>
-        </div>
 
       </div>
     </div>
@@ -44,14 +38,14 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox label="0">Pass数量</el-checkbox>
-          <el-checkbox label="1">Exception1数量</el-checkbox>
-          <el-checkbox label="2">Exception2数量</el-checkbox>
-          <el-checkbox label="3">Exception3数量 </el-checkbox>
-          <el-checkbox label="4">Pass占比</el-checkbox>
-          <el-checkbox label="5">Exception1占比</el-checkbox>
-          <el-checkbox label="6">Exception2占比</el-checkbox>
-          <el-checkbox label="7">Exception3占比 </el-checkbox>
+          <el-checkbox label="PassNum">Pass数量</el-checkbox>
+          <el-checkbox label="Exception1Num">Exception1数量</el-checkbox>
+          <el-checkbox label="Exception2Num">Exception2数量</el-checkbox>
+          <el-checkbox label="Exception3Num">Exception3数量 </el-checkbox>
+          <el-checkbox label="PassRange">Pass占比</el-checkbox>
+          <el-checkbox label="Exception1Range">Exception1占比</el-checkbox>
+          <el-checkbox label="Exception2Range">Exception2占比</el-checkbox>
+          <el-checkbox label="Exception3Range">Exception3占比 </el-checkbox>
         </el-checkbox-group>
       </div>
 
@@ -85,16 +79,18 @@
     </div>
     <div class="tableContentWrap">
       <el-table v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" height="550" :row-class-name="tableRowClassName" style="width: 100%">
-        <el-table-column align="center" width="150" fixed prop="channel" label="数据维度" />
+        <el-table-column align="center" width="150"  prop="name" label="数据维度" />
         <el-table-column align="center" prop="name" label="202010">
-          <el-table-column align="center" width="150" prop="name" label="Pass数量" />
-          <el-table-column align="center" width="150" prop="name" label="Exception1数量" />
-          <el-table-column align="center" width="150" prop="name" label="Exception2数量" />
-          <el-table-column align="center" width="150" prop="name" label="Exception3数量" />
-          <el-table-column align="center" width="150" prop="name" label="Pass占比" />
-          <el-table-column align="center" width="150" prop="name" label="Exception1占比" />
-          <el-table-column align="center" width="150" prop="name" label="Exception2占比" />
-          <el-table-column align="center" width="150" prop="name" label="Exception3占比" />
+          <el-table-column align="center" width="250" v-for="(item) in tableColumnList" :key="item.sortCode">
+            <template v-slot:header>
+              {{ item.title }}  
+            </template>
+            <template slot-scope="{row}">
+              <div>
+                {{row[item.value]}}
+              </div>
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column align="center" prop="name" label="202011">
           <el-table-column align="center" width="150" prop="name" label="Pass数量" />
@@ -120,7 +116,12 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import {
+  getDefaultPermissions,
+  parseTime,
+  getTextMap,
+  dynamicColumn,
+} from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -142,19 +143,56 @@ export default {
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [],
+      tableData: [{
+        name:'ww',
+        PassNum:'PassNum',
+        Exception1Num:'Exception1Num',
+        Exception2Num:'Exception2Num',
+        Exception3Num:'Exception3Num',
+        PassRange:'PassRange',
+        Exception1Range:'Exception1Range',
+        Exception2Range:'Exception2Range',
+        Exception3Range:'Exception3Range',
+      }],
       minePackageList: [],
       skuList: [],
       RegionList: [],
-      checkList: ['0', '1'],
+      checkList: [],
+      tableColumnList: [], //动态列
+      dynamicColumn: dynamicColumn(), //动态列表头
     }
   },
   computed: {},
   mounted() {
+    this.checkList=['PassNum','Exception1Num','Exception2Num','Exception3Num','PassRange','Exception1Range','Exception2Range','Exception3Range',]
     // this.getTableData()
     this.getMinePackageList()
     this.getSkuSelect()
     this.getRegionList()
+  },
+  watch: {
+    checkList() {
+      this.tableColumnList=[]
+      let list=[]
+      this.checkList.forEach((item, index) => {
+        let obj={
+          title:'',
+          value:'',
+          sortCode:'',
+        }
+        obj.title=this.dynamicColumn[item].title
+        obj.sortCode=this.dynamicColumn[item].sortCode
+        obj.value=item
+        list.push(obj)
+        // this.tableColumnList[item] = this.dynamicColumn[item]
+        // console.log(this.tableColumnList)
+      })
+      list.sort(function(a,b){
+        return a.sortCode-b.sortCode
+      })
+      this.tableColumnList=list
+      console.log(this.tableColumnList);
+    },
   },
   methods: {
     // 获取表格数据

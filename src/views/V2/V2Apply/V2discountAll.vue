@@ -10,13 +10,13 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -34,12 +34,12 @@
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
           <el-select v-model="filterObj.dim_product" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
+            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcel">
-          <img src="../../../assets/images/export.png" alt="">
+          <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
@@ -48,11 +48,11 @@
       </div> -->
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
-        <img src="../../../assets/images/import.png" alt="">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
+        <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -63,20 +63,39 @@
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="250" align="center" prop="channelName" label="渠道" />
       <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" align="center" prop="productName" label="SKU" />
-      <el-table-column width="360" align="center" prop="distributorName" label="经销商" />
+      <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-      <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-      <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-      <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-      <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-      <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
+      <el-table-column width="220" v-slot={row} align="right" prop="planSales" label="V1计划销量（CTN）">
+        {{FormateNum(row.planSales)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+        {{FormateNum(row.planPriceAve)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用（RMB）">
+        {{FormateNum(row.planCost)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="forecastSales" label="V2预测销量（CTN）">
+        {{FormateNum(row.forecastSales)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+        {{FormateNum(row.adjustedPriceAve)}}
+      </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+        {{FormateNum(row.adjustedCost)}}
+      </el-table-column>
+      <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
+      
+      </el-table-column>
+      <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
+     
+      </el-table-column>
+      <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
+        {{FormateNum(row.costDifference)}}
+      </el-table-column>
       <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -96,15 +115,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
@@ -112,7 +124,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -137,22 +149,14 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table
-            border
-            height="400"
-            :data="ImportData"
-            style="width: 100%"
-            :header-cell-style="{
+          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
               textAlign: 'center',
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
-            }"
-            :row-class-name="tableRowClassName"
-            stripe
-          >
+            }" :row-class-name="tableRowClassName" stripe>
             <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
               <template slot-scope="scope">
                 <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -171,15 +175,33 @@
             <el-table-column width="220" align="center" prop="productName" label="SKU" />
             <el-table-column width="360" align="center" prop="distributorName" label="经销商" />
             <el-table-column width="120" align="center" prop="regionName" label="区域" />
-            <el-table-column width="220" align="right" prop="planSales" label="V1计划销量（CTN）" />
-            <el-table-column width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）" />
-            <el-table-column width="220" align="right" prop="planCost" label="V1计划费用（RMB）" />
-            <el-table-column width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）" />
-            <el-table-column width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）" />
-            <el-table-column width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）" />
-            <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-            <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-            <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
+            <el-table-column width="220" v-slot={row} align="right" prop="planSales" label="V1计划销量（CTN）">
+              {{FormateNum(row.planSales)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+              {{FormateNum(row.planPriceAve)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用（RMB）">
+              {{FormateNum(row.planCost)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="forecastSales" label="V2预测销量（CTN）">
+              {{FormateNum(row.forecastSales)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+              {{FormateNum(row.adjustedPriceAve)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+              {{FormateNum(row.adjustedCost)}}
+            </el-table-column>
+            <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
+         
+            </el-table-column>
+            <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
+        
+            </el-table-column>
+            <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
+              {{FormateNum(row.costDifference)}}
+            </el-table-column>
             <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -206,7 +228,13 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import {
+  getDefaultPermissions,
+  parseTime,
+  getTextMap,
+  messageMap,
+  FormateThousandNum,
+} from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -225,44 +253,54 @@ export default {
         customerCode: '',
         distributorCode: '',
         regionCode: '',
-        dim_product: ''
+        dim_product: '',
       },
-      categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      skuOptons: [],
-      channelOptons: [],
+      skuOptions: [],
+      channelOptions: [],
       customerArr: [],
       distributorArr: [],
-      RegionList: [],
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
+      RegionList: [],
       uploadFileName: '',
       event: '',
       uploadFile: '',
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSelf: 0, //是否是当前审批人
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
-      isSelf: 0, //是否是当前审批人
+      isCheck: false, //检测数据按钮显示或隐藏
+      mainId: '',
       usernameLocal: '',
+      messageMap: messageMap(),
     }
   },
   computed: {},
   watch: {
     'filterObj.channelCode'() {
-      this.filterObj.customerCode=''
+      this.filterObj.customerCode = ''
       this.getCustomerList()
-    }
+    },
+    'filterObj.customerCode'() {
+      this.filterObj.distributorCode = ''
+      this.getDistributorList()
+    },
+    'filterObj.distributorCode'() {
+      this.filterObj.regionCode = ''
+      this.getRegionList()
+    },
   },
   mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getQueryChannelSelect()
-    this.getMonth()
+
     // this.getTableData()
     this.getQuerySkuSelect()
-    
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
@@ -279,26 +317,47 @@ export default {
         customerCode: this.filterObj.customerCode,
         distributorCode: this.filterObj.distributorCode,
         regionCode: this.filterObj.regionCode,
-        dimProduct: this.filterObj.dim_product
-      })
-        .then((response) => {
-          if (response.code == 1000) {
-            this.tableData = response.data.records
-            if (this.tableData.length) {
-              this.isSubmit = this.tableData[0].isSubmit
-            } else {
-              this.isSubmit = 1
-            }
-
-            this.pageNum = response.data.pageNum
-            this.pageSize = response.data.pageSize
-            this.total = response.data.total
+        productName: this.filterObj.dim_product,
+      }).then((response) => {
+        if (response.code == 1000) {
+          this.tableData = response.data.records
+          if (this.tableData.length) {
+            this.isSubmit = this.tableData[0].isSubmit
+            this.mainId = this.tableData[0].mainId
+            this.infoByMainId()
+          } else {
+            this.isSubmit = 1
           }
-        })
-        .catch((error) => {})
+
+          this.pageNum = response.data.pageNum
+          this.pageSize = response.data.pageSize
+          this.total = response.data.total
+        }
+      })
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V2' &&
+              res.data.assignee === this.usernameLocal
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
+            }
+          }
+        })
     },
     // 查询列表 --获取活动年月
     getMonth() {
@@ -307,26 +366,26 @@ export default {
         this.getTableData()
       })
     },
-    getRegionList() {
-      selectAPI.getRegionList().then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
-    },
     // 获取下拉框 渠道
     getQueryChannelSelect() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
-          this.channelOptons = res.data
-          this.filterObj.channelCode = this.channelOptons[0].channelCode
+          this.channelOptions = res.data
+          if (!this.$route.query.channelCode) {
+            this.filterObj.channelCode = this.channelOptions[0].channelCode
+          } else {
+            this.filterObj.channelCode = this.$route.query.channelCode
+          }
+          this.getMonth()
         }
       })
     },
     // 经销商
     getDistributorList() {
       selectAPI
-        .queryDistributorList()
+        .queryDistributorList({
+          customerCsName: this.filterObj.customerCode,
+        })
         .then((res) => {
           if (res.code === 1000) {
             this.distributorArr = res.data
@@ -334,11 +393,22 @@ export default {
         })
         .catch()
     },
+    getRegionList() {
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
+    },
     // 客户
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -348,7 +418,7 @@ export default {
     },
     getQuerySkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
-        this.skuOptons = res.data
+        this.skuOptions = res.data
       })
     },
     search() {
@@ -365,50 +435,75 @@ export default {
     },
     // 导入
     parsingExcel(event) {
+      this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event = event
+      const formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.importExcel(formData).then((response) => {
+        if (response.code == 1000) {
+          this.$message.success(this.messageMap.importSuccess)
+          this.ImportData = response.data
+          this.isCheck = response.data[0].judgmentType !== 'Error'
+        } else {
+          this.$message.info(this.messageMap.importError)
+        }
+        //清除input的value ,上传一样的
+        this.event.srcElement.value = '' // 置空
+      })
     },
     // 关闭导入
     closeImportDialog() {
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
-      // 清除input的value ,上传一样的
-      this.event.target.value = null
       this.ImportData = []
+      this.saveBtn = false
+      this.isCheck = false
     },
     // 校验数据
     checkImport() {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
-      API.importExcel(formData).then((response) => {
+      API.exceptionCheckTwo(formData).then((response) => {
         if (response.code == 1000) {
+          this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
-          this.saveBtn =
-            response.data[0].judgmentType !== 'Error'
+          this.saveBtn = response.data[0].judgmentType !== 'Error'
+        } else {
+          this.$message.info(this.messageMap.checkError)
         }
       })
     },
     // 确认导入
     confirmImport() {
       API.exceptionSave({
-        mainId: this.tableData[0].mainId
+        mainId: this.tableData[0].mainId,
       }).then((res) => {
         if (res.code == 1000) {
-          this.$message.success('保存成功!')
+          this.$message.success(this.messageMap.saveSuccess)
           this.getTableData()
           this.closeImportDialog()
+        } else {
+          this.$message.info(this.messageMap.saveError)
         }
       })
     },
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exceptionDownExcel().then((res) => {
+        API.exceptionDownExcel({
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          dimProduct: this.filterObj.dim_product,
+        }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success('导出成功!')
+          this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
         this.$message.info('异常数据为空!')
@@ -424,14 +519,14 @@ export default {
           customerCode: this.filterObj.customerCode,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
-          dimProduct: this.filterObj.dim_product
+          dimProduct: this.filterObj.dim_product,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success('导出成功!')
+          this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
-        this.$message.info('数据为空')
+        this.$message.info('数据不能为空')
       }
     },
     // 下载文件
@@ -461,13 +556,13 @@ export default {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning'
+            type: 'warning',
           })
             .then(() => {
               const mainId = this.tableData[0].mainId
               API.approve({
                 mainId: mainId, // 主表id
-                opinion: 'agree' // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')
@@ -478,11 +573,11 @@ export default {
             .catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消提交'
+                message: '已取消提交',
               })
             })
         } else {
-          this.$message.info('系统判定不能为空')
+          this.$message.info('数据未校验，请先进行导入验证')
         }
       } else {
         this.$message.warning('数据不能为空')
@@ -508,8 +603,12 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+    //格式化--千位分隔符、两位小数
+    FormateNum(num) {
+      return FormateThousandNum(num)
+    },
+  },
 }
 </script>
 

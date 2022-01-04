@@ -439,6 +439,19 @@ export function messageMap() {
     saveError:'保存失败',
   }
 }
+//报表动态列
+export function dynamicColumn() {
+  return {
+    PassNum:{title:'Pass数量',sortCode:0},
+    Exception1Num:{title:'Exception1数量',sortCode:1},
+    Exception2Num:{title:'Exception2数量',sortCode:2},
+    Exception3Num:{title:'Exception3数量',sortCode:3},
+    PassRange:{title:'Pass占比',sortCode:4},
+    Exception1Range:{title:'Exception1占比',sortCode:5},
+    Exception2Range:{title:'Exception2占比',sortCode:6},
+    Exception3Range:{title:'Exception3占比',sortCode:7},
+  }
+}
 export function FormateThousandNum(num) {
  //千分位分隔符+两位小数
   const money = num*1
