@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -37,8 +37,12 @@
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="220" align="center" prop="brandName" label="品牌" />
-      <el-table-column width="220" align="right" prop="planVol" label="V1计划总销量(CTN)" />
-      <el-table-column width="120" align="right" prop="planNewUserNum" label="目标新客数量" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planVol" label="V1计划总销量(CTN)" >
+        {{ getPlanCost(row.planVol) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="120" align="right" prop="planNewUserNum" label="目标新客数量" >
+          {{ getPlanCost(row.planNewUserNum) }}
+      </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
         <!-- {{row.planCost.toLocaleString()}} -->
         {{ getPlanCost(row.planCost) }}

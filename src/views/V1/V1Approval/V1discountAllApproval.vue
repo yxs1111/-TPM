@@ -11,87 +11,54 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
+          <span class="SelectliTitle">品牌:</span>
+          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.channel" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
-          </el-select>
-        </div>
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG">
-          <img src="../../../assets/images/export.png" alt="">
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG" @click="downExcel">
+          <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG">
-        <svg-icon icon-class="passLocal" style="font-size: 22px;" />
-        <span class="text">提交</span>
-      </div>
-    </div>
-    <el-table :data="tableData"  border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="number" label="CPID" fixed> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动月"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="费用类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="客户系统名称"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="品牌"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="SKU"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="价格档位（RMB/Tin）">
-        <template slot-scope="scope">
-          <div class="priceLevelWrap">
-            <div class="priceLevel" :class="scope.$index%3===0?'':scope.$index%3===1?'priceCenter':'priceLow'">{{scope.row.number}}</div>
-          </div>
-        </template>
+    <el-table :data="tableData" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
+      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
+      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="220" align="center" prop="brandName" label="品牌" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planVol" label="V1计划总销量(CTN)" >
+        {{ getPlanCost(row.planVol) }}
       </el-table-column>
-      <el-table-column width="220" align="center" prop="total" label="价格档位销量总计（CTN）">
-        <template slot-scope="scope">
-          <div class="priceLevelWrap">
-            <div class="TotalNum">{{scope.row.total.toFixed(1)}}</div>
-          </div>
-        </template>
+      <el-table-column v-slot="{row}" width="120" align="right" prop="planNewUserNum" label="目标新客数量" >
+          {{ getPlanCost(row.planNewUserNum) }}
       </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="经销商"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="区域"> </el-table-column>
-      <el-table-column width="220" align="right" prop="name" label="系统拆分销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="right" prop="name" label="调整后销量（CTN）"> </el-table-column>
-      <el-table-column width="220" align="right" prop="name" label="销量差值（%）"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制类型"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="机制名称"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动开始时间"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="活动结束时间"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="系统判定"> </el-table-column>
-      <el-table-column width="120" align="center" prop="name" label="申请人备注"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="Package Owner审批意见"> </el-table-column>
-      <el-table-column width="220" align="center" prop="name" label="Finance审批意见"> </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+        <!-- {{row.planCost.toLocaleString()}} -->
+        {{ getPlanCost(row.planCost) }}
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -100,11 +67,11 @@
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
-import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
+import API from '@/api/V1/v1.js'
 export default {
-  name: 'V1discountAllApproval',
+  name: 'V1discountNU',
+  directives: { elDragDialog, permission },
 
   data() {
     return {
@@ -112,83 +79,165 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        sku: '',
-        month: '',
+        channelCode: '',
+        brandCode: '',
+        customerName: '',
+        month: ''
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
-      tableData: [],
-      dialogVisible: false,
       channelArr: [],
       skuArr: [],
       customerArr: [],
-      distributorArr: [],
+      tableData: [],
+      BrandList: [],
+      dialogVisible: false,
+      mainIdLocal: null,
+      submitBtn: 1,
+      btnStatus: true,
+      usernameLocal: ''
     }
   },
-  directives: { elDragDialog, permission },
-  mounted() {
-    this.getChannel()
-    this.getSKU()
-    this.getDistributorList()
-    this.getTableData()
-  },
   computed: {},
+  watch: {
+    'filterObj.channelCode'() {
+      this.filterObj.customerName = ''
+      this.getCustomerList()
+    }
+  },
+  mounted() {
+    this.usernameLocal = localStorage.getItem('usernameLocal')
+    // this.getEffectiveDate()
+    this.getChannel()
+    // this.getCustomerList()
+    this.getBrandList()
+  },
   methods: {
+    getEffectiveDate() {
+      API.getEffectiveDate({ version: 'V1' }).then((res) => {
+        this.filterObj.month = res.data
+        this.getTableData()
+      })
+    },
     // 获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
+      selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          if(!this.$route.query.channelCode) {
+            this.filterObj.channelCode = this.channelArr[0].channelEsName
+          }else {
+            this.filterObj.channelCode=this.$route.query.channelCode
+          }
+         
+          this.getCustomerList()
+          this.getEffectiveDate()
         }
-      }).catch()
-    },
-    getSKU() {
-      selectAPI.querySkuSelect().then(res => {
-        if (res.code === 1000) {
-          this.skuArr = res.data
-        }
-      }).catch()
+      })
     },
     // 客户
     getCustomerList() {
-      this.filterObj.customerCode = ''
-      selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelCode
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+    },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
+    },
+    // 获取表格数据
+    getTableData() {
+      API.getPageNU({
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        customerName: this.filterObj.customerName,
+        channelCode: this.filterObj.channelCode,
+        brandCode: this.filterObj.brandCode,
+        yearAndMonth: this.filterObj.month
+      }).then((response) => {
+        if (response.data.records.length > 0) {
+          this.tableData = response.data.records
+          this.mainIdLocal = response.data.records[0].mainId
+          this.submitBtn = response.data.records[0].isSubmit
+          this.infoByMainId()
+        } else {
+          this.mainIdLocal = null
+          this.btnStatus = false
+        }
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+      })
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      API.infoByMainId({
+        mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
-          this.customerArr = res.data
+          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+            this.btnStatus = true
+          } else {
+            this.btnStatus = false
+          }
+        } else {
+          this.btnStatus = false
         }
       }).catch()
     },
-    // 经销商
-    getDistributorList() {
-      selectAPI.queryDistributorList().then(res => {
-        if (res.code === 1000) {
-          this.distributorArr = res.data
-        }
-      }).catch()
-    },
-    //获取表格数据
-    getTableData() {
-      this.tableData = []
-      // this.tableLoading = true
-      // this.tableData = []
-      // API.getPageMdBrand({
-      //   pageNum: this.pageNum, //当前页
-      //   pageSize: this.pageSize, //每页条数
-      // })
-      //   .then((response) => {
-      //     this.tableLoading = false
-      //     this.tableData = response.data.records
-      //     this.pageNum = response.data.pageNum
-      //     this.pageSize = response.data.pageSize
-      //     this.total = response.data.total
-      //   })
-      //   .catch((error) => {})
+    //千分位分隔符+两位小数
+    getPlanCost(num) {
+      const money = num*1
+      return money.toLocaleString('zh', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
     },
     search() {
-      console.log('hh')
-      // this.getTableData()
+      this.pageNum=1
+      this.getTableData()
+    },
+    // 导出
+    downExcel() {
+      if (this.tableData.length) {
+        API.downExcelNU({
+          customerName: this.filterObj.customerName,
+          channelCode: this.filterObj.channelCode,
+          brandCode: this.filterObj.brandCode,
+          yearAndMonth: this.filterObj.month
+        }).then((res) => {
+          const timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V1新客信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success('导出成功!')
+        })
+      } else {
+        this.$message.info('数据为空')
+      }
+    },
+    // 下载文件
+    downloadFile(res, fileName) {
+      const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -210,39 +259,10 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.MainContent {
-  .priceLevelWrap {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    .priceLevel {
-      width: 88px;
-      height: 34px;
-      line-height: 34px;
-      border-radius: 17px;
-      background: #f2e9ea;
-      color: #e87071 !important;
-      text-align: center;
-    }
-    .priceCenter {
-      background: #ebfbf8;
-      color: #38d7b7 !important;
-    }
-    .priceLow {
-      background: #e1edf4;
-      color: #4192d3 !important;
-    }
-    .TotalNum {
-      font-weight: bold;
-      color: #ff8912;
-    }
-  }
-}
 </style>
