@@ -5,29 +5,32 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">异常类别：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.exception" placeholder="请选择">
+            <el-option v-for="(item, index) in ExceptionList" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" type="month" placeholder="选择月" />
+          <el-date-picker v-model="filterObj.month" type="monthrange" disabled format='yyyy-MM' value-format='yyyy-MM' range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份">
+          </el-date-picker>
+
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
-          <el-select v-model="filterObj.brandCode" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.brandCode" clearable multiple collapse-tags filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.regionCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
@@ -78,12 +81,12 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" height="550" :row-class-name="tableRowClassName" style="width: 100%">
-        <el-table-column align="center" width="150"  prop="name" label="数据维度" />
+      <el-table :data="tableData" ref="multipleTable" border :header-cell-class-name="headerStyle" height="550" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
         <el-table-column align="center" prop="name" label="202010">
           <el-table-column align="center" width="250" v-for="(item) in tableColumnList" :key="item.sortCode">
             <template v-slot:header>
-              {{ item.title }}  
+              {{ item.title }}
             </template>
             <template slot-scope="{row}">
               <div>
@@ -91,16 +94,6 @@
               </div>
             </template>
           </el-table-column>
-        </el-table-column>
-        <el-table-column align="center" prop="name" label="202011">
-          <el-table-column align="center" width="150" prop="name" label="Pass数量" />
-          <el-table-column align="center" width="150" prop="name" label="Exception1数量" />
-          <el-table-column align="center" width="150" prop="name" label="Exception2数量" />
-          <el-table-column align="center" width="150" prop="name" label="Exception3数量" />
-          <el-table-column align="center" width="150" prop="name" label="Pass占比" />
-          <el-table-column align="center" width="150" prop="name" label="Exception1占比" />
-          <el-table-column align="center" width="150" prop="name" label="Exception2占比" />
-          <el-table-column align="center" width="150" prop="name" label="Exception3占比" />
         </el-table-column>
       </el-table>
     </div>
@@ -121,6 +114,8 @@ import {
   parseTime,
   getTextMap,
   dynamicColumn,
+  getCurrentMonth,
+  ReportBgColorMap,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -134,88 +129,119 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        type: '',
-        month: '',
+        exception: '',
+        month: getCurrentMonth(),
         regionCode: '',
         brandCode: '',
-        minePackage: '',
+        productCode:''
       },
-      tableLoading: '',
-      categoryArr: [{ label: 'test', value: '19' }],
+      BrandList: [],
       permissions: getDefaultPermissions(),
-      tableData: [{
-        name:'ww',
-        PassNum:'PassNum',
-        Exception1Num:'Exception1Num',
-        Exception2Num:'Exception2Num',
-        Exception3Num:'Exception3Num',
-        PassRange:'PassRange',
-        Exception1Range:'Exception1Range',
-        Exception2Range:'Exception2Range',
-        Exception3Range:'Exception3Range',
-      }],
-      minePackageList: [],
+      tableData: [
+        {
+          version: 'V1',
+          name: 'V1',
+          PassNum: 'PassNum',
+          Exception1Num: 'Exception1Num',
+          Exception2Num: 'Exception2Num',
+          Exception3Num: 'Exception3Num',
+          PassRange: 'PassRange',
+          Exception1Range: 'Exception1Range',
+          Exception2Range: 'Exception2Range',
+          Exception3Range: 'Exception3Range',
+        },
+        {
+          version: 'V2',
+          name: 'V2',
+          PassNum: 'PassNum',
+          Exception1Num: 'Exception1Num',
+          Exception2Num: 'Exception2Num',
+          Exception3Num: 'Exception3Num',
+          PassRange: 'PassRange',
+          Exception1Range: 'Exception1Range',
+          Exception2Range: 'Exception2Range',
+          Exception3Range: 'Exception3Range',
+        },
+        {
+          version: 'V3',
+          name: 'V3',
+          PassNum: 'PassNum',
+          Exception1Num: 'Exception1Num',
+          Exception2Num: 'Exception2Num',
+          Exception3Num: 'Exception3Num',
+          PassRange: 'PassRange',
+          Exception1Range: 'Exception1Range',
+          Exception2Range: 'Exception2Range',
+          Exception3Range: 'Exception3Range',
+        },
+      ],
       skuList: [],
       RegionList: [],
       checkList: [],
+      ExceptionList: [],
       tableColumnList: [], //动态列
       dynamicColumn: dynamicColumn(), //动态列表头
+      ReportBgColorMap: ReportBgColorMap(), //动态列表头
     }
   },
   computed: {},
   mounted() {
-    this.checkList=['PassNum','Exception1Num','Exception2Num','Exception3Num','PassRange','Exception1Range','Exception2Range','Exception3Range',]
+    this.checkList = [
+      'PassNum',
+      'Exception1Num',
+      'Exception2Num',
+      'Exception3Num',
+      'PassRange',
+      'Exception1Range',
+      'Exception2Range',
+      'Exception3Range',
+    ]
     // this.getTableData()
-    this.getMinePackageList()
     this.getSkuSelect()
     this.getRegionList()
+    this.getBrandList()
   },
   watch: {
+    //动态列渲染
     checkList() {
-      this.tableColumnList=[]
-      let list=[]
+      this.tableColumnList = []
+      let list = []
       this.checkList.forEach((item, index) => {
-        let obj={
-          title:'',
-          value:'',
-          sortCode:'',
+        let obj = {
+          title: '',
+          value: '',
+          sortCode: '',
         }
-        obj.title=this.dynamicColumn[item].title
-        obj.sortCode=this.dynamicColumn[item].sortCode
-        obj.value=item
+        obj.title = this.dynamicColumn[item].title
+        obj.sortCode = this.dynamicColumn[item].sortCode
+        obj.value = item
         list.push(obj)
-        // this.tableColumnList[item] = this.dynamicColumn[item]
-        // console.log(this.tableColumnList)
       })
-      list.sort(function(a,b){
-        return a.sortCode-b.sortCode
+      list.sort(function (a, b) {
+        return a.sortCode - b.sortCode
       })
-      this.tableColumnList=list
-      console.log(this.tableColumnList);
+      this.tableColumnList = list
+      //解决每次动态列渲染fixed 错位问题
+      this.$nextTick(() => {
+        this.$refs.multipleTable.doLayout();
+      });
     },
   },
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       this.tableData = []
       API.getPageMdBrand({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
         .catch((error) => {})
-    },
-    getMinePackageList() {
-      selectAPI.queryMinePackageSelect().then((res) => {
-        this.minePackageList = res.data
-      })
     },
     getSkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
@@ -226,6 +252,13 @@ export default {
       selectAPI.getRegionList().then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
+        }
+      })
+    },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
         }
       })
     },
@@ -242,17 +275,8 @@ export default {
       this.pageNum = num
       this.getTableData()
     },
-    // 行样式
-    tableRowClassName({ row, rowIndex }) {
-      if (rowIndex % 6 < 2) {
-        return 'rowStyle1'
-      }
-      if (rowIndex % 6 < 4) {
-        return 'rowStyle2'
-      }
-      if (rowIndex % 6 < 6) {
-        return 'rowStyle3'
-      }
+    columnStyle({ row, column, rowIndex, columnIndex }) {
+      return this.ReportBgColorMap[row.version]
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
@@ -280,6 +304,7 @@ export default {
     .checkBoxTitle {
       font-family: MicrosoftYaHei;
       font-size: 14px;
+      white-space: nowrap;
       color: #4d4d4d;
       margin-right: 20px;
     }

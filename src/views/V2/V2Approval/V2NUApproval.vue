@@ -22,7 +22,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
-          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.brandCode" clearable  filterable placeholder="请选择">
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
@@ -242,7 +242,6 @@ export default {
       tableData: [],
       channelOptions: [],
       customerArr: [],
-      BrandList: [],
       dialogVisible: false,
       // 导入
       importVisible: false, // 导入弹窗

@@ -273,6 +273,7 @@ div:focus {
       margin-bottom: 10px;
       display: flex;
       flex-wrap: nowrap;
+      white-space: nowrap;
       align-items: center;
       .SelectliTitle {
         // width: 70px;
@@ -285,6 +286,12 @@ div:focus {
       }
       .el-input__inner {
         background-color: #f0f2fa;
+      }
+      .el-range-input {
+        background-color: #f0f2fa;
+      }
+      .el-select__tags {
+        max-width: 220px !important;
       }
       .el-icon-arrow-up:before {
         content: '\e78f';
@@ -332,6 +339,7 @@ div:focus {
   color: #fff;
   .text {
     font-size: 14px;
+    white-space: nowrap;
     font-family: Source Han Sans CN;
     font-weight: 400;
     color: #ffffff;

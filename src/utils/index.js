@@ -405,6 +405,22 @@ export function replaceUnderLine(val, char = '_') {
   month = month < 10 ? "0" + month : month;
   return year+''+month
 }
+/**
+ * 获取当前月
+ * @returns yyyy-mm
+ */
+ export function getCurrentMonth() {
+  const date=new Date()
+  let month=date.getMonth()+1
+  let year=date.getFullYear()
+  month = month < 10 ? "0" + month : month
+  let currentMonth=year+'-'+month
+  let list=[]
+  list.push(currentMonth)
+  list.push(currentMonth)
+  return list
+}
+
 // 获取Scenario
 export function yearAndMonthList() {
   const date=new Date()
@@ -421,6 +437,14 @@ export function yearAndMonthList() {
 //Version
 export function VersionList() {
   return  ['V1','V2','Final']
+}
+//报表背景色
+export function ReportBgColorMap() {
+  return  {
+    V1:'background:#fdf0f1!important',
+    V2:'background:#ebfbf8!important',
+    V3:'background:#fff6e5!important',
+  }
 }
 //message map
 export function messageMap() {
