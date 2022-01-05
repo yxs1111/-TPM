@@ -5,8 +5,15 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" type="month" placeholder="选择月">
-          </el-date-picker>
+          <el-date-picker
+            v-model="filterObj.month"
+            type="monthrange"
+            format="yyyy-MM"
+            value-format="yyyy-MM"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
+          />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>

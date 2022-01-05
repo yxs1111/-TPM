@@ -5,8 +5,15 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" type="month" placeholder="选择月">
-          </el-date-picker>
+          <el-date-picker
+            v-model="filterObj.month"
+            type="monthrange"
+            format="yyyy-MM"
+            value-format="yyyy-MM"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
+          />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
@@ -22,8 +29,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.regionCode" clearable multiple collapse-tags filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -33,7 +40,7 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <el-button type="primary" class="TpmButtonBG my-search">查询</el-button>
+          <el-button type="primary" class="TpmButtonBG my-search" style="margin-bottom:0px;">查询</el-button>
         </div>
       </div>
     </div>
@@ -54,26 +61,26 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
-              <el-table-column align="center" width="150" fixed prop="channel" label="数据维度"> </el-table-column>
+            <el-table v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
+              <el-table-column align="center" width="150" fixed prop="channel" label="数据维度" />
               <el-table-column align="center" prop="name" label="Total">
-                <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
-                <el-table-column align="center" width="150" prop="name" label="V1"></el-table-column>
-                <el-table-column align="center" width="150" prop="name" label="V2"></el-table-column>
-                <el-table-column align="center" width="150" prop="name" label="V3"></el-table-column>
+                <el-table-column align="center" width="150" prop="name" label="CPT" />
+                <el-table-column align="center" width="150" prop="name" label="V1" />
+                <el-table-column align="center" width="150" prop="name" label="V2" />
+                <el-table-column align="center" width="150" prop="name" label="V3" />
               </el-table-column>
               <el-table-column align="center" prop="name" label="NKA">
                 <el-table-column align="center" width="150" prop="name" label="孩子王">
-                  <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V1"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V2"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V3"></el-table-column>
+                  <el-table-column align="center" width="150" prop="name" label="CPT" />
+                  <el-table-column align="center" width="150" prop="name" label="V1" />
+                  <el-table-column align="center" width="150" prop="name" label="V2" />
+                  <el-table-column align="center" width="150" prop="name" label="V3" />
                 </el-table-column>
                 <el-table-column align="center" width="150" prop="name" label="沃尔玛">
-                  <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V1"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V2"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V3"></el-table-column>
+                  <el-table-column align="center" width="150" prop="name" label="CPT" />
+                  <el-table-column align="center" width="150" prop="name" label="V1" />
+                  <el-table-column align="center" width="150" prop="name" label="V2" />
+                  <el-table-column align="center" width="150" prop="name" label="V3" />
                 </el-table-column>
               </el-table-column>
             </el-table>
@@ -86,26 +93,26 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
-              <el-table-column align="center" width="150" fixed prop="channel" label="数据维度"> </el-table-column>
+            <el-table v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
+              <el-table-column align="center" width="150" fixed prop="channel" label="数据维度" />
               <el-table-column align="center" prop="name" label="Total">
-                <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
-                <el-table-column align="center" width="150" prop="name" label="V1"></el-table-column>
-                <el-table-column align="center" width="150" prop="name" label="V2"></el-table-column>
-                <el-table-column align="center" width="150" prop="name" label="V3"></el-table-column>
+                <el-table-column align="center" width="150" prop="name" label="CPT" />
+                <el-table-column align="center" width="150" prop="name" label="V1" />
+                <el-table-column align="center" width="150" prop="name" label="V2" />
+                <el-table-column align="center" width="150" prop="name" label="V3" />
               </el-table-column>
               <el-table-column align="center" prop="name" label="NKA">
                 <el-table-column align="center" width="150" prop="name" label="孩子王">
-                  <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V1"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V2"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V3"></el-table-column>
+                  <el-table-column align="center" width="150" prop="name" label="CPT" />
+                  <el-table-column align="center" width="150" prop="name" label="V1" />
+                  <el-table-column align="center" width="150" prop="name" label="V2" />
+                  <el-table-column align="center" width="150" prop="name" label="V3" />
                 </el-table-column>
                 <el-table-column align="center" width="150" prop="name" label="沃尔玛">
-                  <el-table-column align="center" width="150" prop="name" label="CPT"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V1"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V2"></el-table-column>
-                  <el-table-column align="center" width="150" prop="name" label="V3"></el-table-column>
+                  <el-table-column align="center" width="150" prop="name" label="CPT" />
+                  <el-table-column align="center" width="150" prop="name" label="V1" />
+                  <el-table-column align="center" width="150" prop="name" label="V2" />
+                  <el-table-column align="center" width="150" prop="name" label="V3" />
                 </el-table-column>
               </el-table-column>
             </el-table>
@@ -121,40 +128,52 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   name: 'LossAnalysisHistory',
+  directives: { elDragDialog, permission },
 
   data() {
     return {
+      RegionList: [],
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
         type: '',
+        regionCode: '',
         month: '',
-        category: '',
+        category: ''
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      checkList: ['0', '1'],
+      checkList: ['0', '1']
     }
   },
-  directives: { elDragDialog, permission },
+  computed: {},
   mounted() {
     // this.getTableData()
+    this.getRegionList()
   },
-  computed: {},
   methods: {
-    //获取表格数据
+    // 下拉框
+    getRegionList() {
+      selectAPI.getRegionList().then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
+    },
+    // 获取表格数据
     getTableData() {
       this.tableLoading = true
       this.tableData = []
       API.getPageMdBrand({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -193,8 +212,8 @@ export default {
       if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) {
         return 'headerStyle'
       }
-    },
-  },
+    }
+  }
 }
 </script>
 
