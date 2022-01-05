@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2021-12-12 15:20:48
+ * @LastEditTime: 2022-01-05 11:59:23
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -120,6 +120,13 @@ export default function() {
           name: 'TotalAnalysisHistory',
           component: () => import('@/views/Report/TotalAnalysisHistory/TotalAnalysisHistory.vue'),
           meta: { title: '汇总分析报告-历史', icon: 'approve' }
+        },
+        {
+          path: '/ActingMatNotice',
+          code: 'ActingMatNotice',
+          name: 'ActingMatNotice',
+          component: () => import('@/views/Report/ActingMatNotice/ActingMatNotice.vue'),
+          meta: { title: '代垫通知报表', icon: 'approve' }
         },
       ]
     }

@@ -4,24 +4,18 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-          <span class="SelectliTitle">异常类别：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
-          </el-select>
-        </div>
-        <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
           <el-date-picker v-model="filterObj.month" type="month" placeholder="选择月">
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">品牌：</span>
+          <span class="SelectliTitle">渠道：</span>
           <el-select v-model="filterObj.type" placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">区域：</span>
+          <span class="SelectliTitle">客户名称：</span>
           <el-select v-model="filterObj.type" placeholder="请选择">
             <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
           </el-select>
@@ -39,67 +33,55 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox label="0">Pass数量</el-checkbox>
-          <el-checkbox label="1">Exception1数量</el-checkbox>
-          <el-checkbox label="2">Exception2数量</el-checkbox>
-          <el-checkbox label="3">Exception3数量 </el-checkbox>
-          <el-checkbox label="4">Pass占比</el-checkbox>
-          <el-checkbox label="5">Exception1占比</el-checkbox>
-          <el-checkbox label="6">Exception2占比</el-checkbox>
-          <el-checkbox label="7">Exception3占比 </el-checkbox>
+          <el-checkbox label="0">V1</el-checkbox>
+          <el-checkbox label="1">V2</el-checkbox>
+          <el-checkbox label="2">V3谈判前</el-checkbox>
+          <el-checkbox label="3">V3谈判后 </el-checkbox>
+          <el-checkbox label="4">价格执行率1#V3谈判前 VS V1</el-checkbox>
+          <el-checkbox label="5">价格执行率2#V3谈判后 VS V1</el-checkbox>
         </el-checkbox-group>
       </div>
 
       <el-button type="primary" class="TpmButtonBG my-search">查询</el-button>
     </div>
-    <div class="colorWrap">
-      <div class="TpmButtonBGWrap">
-        <div class="TpmButtonBG">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出Raw Date</span>
-        </div>
-        <div class="TpmButtonBG">
-          <img src="../../../assets/images/downloadIcon.png" alt="">
-          <span class="text">下载报表</span>
-        </div>
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG">
+        <img src="../../../assets/images/export.png" alt="">
+        <span class="text">导出Raw Date</span>
       </div>
-      <div class="colorBar">
-        <div class="colorli">
-          <div class="color"></div>
-          <span>V1</span>
-        </div>
-        <div class="colorli">
-          <div class="color v2color"></div>
-          <span>V2</span>
-        </div>
-        <div class="colorli">
-          <div class="color v3color"></div>
-          <span>V3</span>
-        </div>
+      <div class="TpmButtonBG">
+        <img src="../../../assets/images/downloadIcon.png" alt="">
+        <span class="text">下载报表</span>
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" height="550" :row-class-name="tableRowClassName" style="width: 100%">
-        <el-table-column align="center" width="150" fixed prop="channel" label="数据维度"> </el-table-column>
-        <el-table-column align="center" prop="name" label="202010">
-          <el-table-column align="center" width="150" prop="name" label="Pass数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Pass占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3占比"></el-table-column>
+      <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
+        style="width: 100%">
+        <el-table-column width="150" fixed>
+          <template slot="header">
+            <div class="filstColumn">RMB/tin</div>
+          </template>
+          <template slot-scope="scope">
+            <div class="filstColumn">
+              <span>{{ scope.row.name }}</span>
+            </div>
+          </template>
         </el-table-column>
-        <el-table-column align="center" prop="name" label="202011">
-          <el-table-column align="center" width="150" prop="name" label="Pass数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3数量"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Pass占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception1占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception2占比"></el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="Exception3占比"></el-table-column>
+        <el-table-column align="center" prop="name" label="202010">
+          <el-table-column align="center" width="150" prop="name" label="Total">
+            <el-table-column v-for="(item, index) in tableOption" width="250" :key="index" :label="item.label" align="center">
+              <template slot-scope="scope">
+                <span>{{scope.row.tableOption[index].value}}</span>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column align="center" width="150" prop="name" label="孩子王">
+            <el-table-column v-for="(item, index) in tableOption" width="250" :key="index" :label="item.label" align="center">
+              <template slot-scope="scope">
+                <span>{{scope.row.tableOption[index].value}}</span>
+              </template>
+            </el-table-column>
+          </el-table-column>
         </el-table-column>
       </el-table>
     </div>
@@ -119,7 +101,7 @@ import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
-  name: 'TotalAnalysisMonth',
+  name: 'AbnormalAnalysisHistoryByChannel',
 
   data() {
     return {
@@ -134,7 +116,18 @@ export default {
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [],
+      //表格列
+      tableOption: [
+        { label: 'V1' },
+        { label: 'V2' },
+        { label: 'V3谈判前' },
+        { label: 'V3谈判后' },
+        { label: '价格执行率1# V3谈判前  VS  V1' },
+        { label: '价格执行率1# V3谈判后  VS  V1' },
+      ],
+      tableData: [
+        
+      ],
       checkList: ['0', '1'],
     }
   },
@@ -162,7 +155,7 @@ export default {
         .catch((error) => {})
     },
     search() {
-      this.getTableData()
+      // this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -176,22 +169,20 @@ export default {
     },
     // 行样式
     tableRowClassName({ row, rowIndex }) {
-      if (rowIndex % 6 < 2) {
-        return 'rowStyle1'
-      }
-      if (rowIndex % 6 < 4) {
-        return 'rowStyle2'
-      }
-      if (rowIndex % 6 < 6) {
-        return 'rowStyle3'
+      if (rowIndex == 0) {
+        return 'TotalRow'
       }
     },
-    HeadTable() {
-      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
+    //表格头样式
     headerStyle({ column, rowIndex, columnIndex }) {
-      if (rowIndex === 0 || rowIndex === 1) {
+      if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) {
         return 'headerStyle'
+      }
+    },
+    //列样式
+    columnStyle({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0 && rowIndex !== 0) {
+        return 'background:#4192d3;color: #fff'
       }
     },
   },
@@ -206,8 +197,8 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
     .checkBox {
-       display: flex;
-    align-items: center;
+      display: flex;
+      align-items: center;
     }
     .checkBoxTitle {
       font-family: MicrosoftYaHei;
@@ -223,38 +214,19 @@ export default {
     border-radius: 10px 10px 0px 0px;
     overflow: hidden;
   }
-  .colorWrap {
+  .TopBar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    .colorBar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .colorli {
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        color: #4d4d4d;
-        display: flex;
-        margin-right: 30px;
-        align-items: center;
-        .color {
-          width: 19px;
-          height: 9px;
-          margin-right: 5px;
-          background-color: #fae2e3;
-          border: solid 1px #e87071;
-        }
-        .v2color {
-          background-color: #d7f7f1;
-          border: solid 1px #38d7b7;
-        }
-        .v3color {
-          background-color: #ffeecc;
-          border: solid 1px #ffaa00;
-        }
-      }
+    .viewTitle {
+      font-size: 14px;
+      font-family: Microsoft YaHei;
+      font-weight: bold;
+      color: #4192d3;
+      margin-left: 14px;
     }
+  }
+  .filstColumn {
+    text-align: center;
   }
 }
 </style>
@@ -265,22 +237,12 @@ export default {
   font-weight: 400;
   font-size: 16px;
 }
-.rowStyle1 {
-  background-color: #fdf0f1 !important;
+.TotalRow {
+  background-color: #f3f7f8 !important;
   color: #666;
-  font-weight: 400;
-  font-size: 14px;
-}
-.rowStyle2 {
-  background-color: #ebfbf8 !important;
-  color: #666;
-  font-weight: 400;
-  font-size: 14px;
-}
-.rowStyle3 {
-  background-color: #fff6e5 !important;
-  color: #666;
-  font-weight: 400;
   font-size: 14px;
 }
 </style>
+
+
+
