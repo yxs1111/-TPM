@@ -464,17 +464,30 @@ export function messageMap() {
   }
 }
 //报表动态列
+export function ReportCheckList() {
+  return [
+    'PassNum',
+    'Exception1Num',
+    'Exception2Num',
+    'Exception3Num',
+    'PassRange',
+    'Exception1Range',
+    'Exception2Range',
+    'Exception3Range',
+  ]
+}
+//报表动态列
 export function dynamicColumn() {
-  return {
-    PassNum:{title:'Pass数量',sortCode:0},
-    Exception1Num:{title:'Exception1数量',sortCode:1},
-    Exception2Num:{title:'Exception2数量',sortCode:2},
-    Exception3Num:{title:'Exception3数量',sortCode:3},
-    PassRange:{title:'Pass占比',sortCode:4},
-    Exception1Range:{title:'Exception1占比',sortCode:5},
-    Exception2Range:{title:'Exception2占比',sortCode:6},
-    Exception3Range:{title:'Exception3占比',sortCode:7},
-  }
+  return [
+    {title:'Pass数量',value:'PassNum'},
+    {title:'Exception1数量',value:'Exception1Num'},
+    {title:'Exception2数量',value:'Exception2Num'},
+    {title:'Exception3数量',value:'Exception3Num'},
+    {title:'Pass占比',value:'PassRange'},
+    {title:'Exception1占比',value:'Exception1Range'},
+    {title:'Exception2占比',value:'Exception2Range'},
+    {title:'Exception3占比',value:'Exception3Range'},
+  ]
 }
 export function FormateThousandNum(num) {
  //千分位分隔符+两位小数

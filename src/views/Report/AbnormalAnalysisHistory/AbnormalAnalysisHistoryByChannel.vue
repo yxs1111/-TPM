@@ -6,14 +6,20 @@
         <div class="Selectli">
           <span class="SelectliTitle">异常类别：</span>
           <el-select v-model="filterObj.exception" placeholder="请选择">
-            <el-option v-for="(item, index) in ExceptionList" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="(item, index) in ['数量','费用']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" type="monthrange" format='yyyy-MM' value-format='yyyy-MM' range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
+          <el-date-picker v-model="filterObj.month" type="monthrange"  format='yyyy-MM' value-format='yyyy-MM' range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份">
           </el-date-picker>
-
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Mine package:</span>
+          <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in ['Price Promotion','New User']" :key="index" :label="item" :value="item" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
@@ -40,14 +46,7 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox label="PassNum">Pass数量</el-checkbox>
-          <el-checkbox label="Exception1Num">Exception1数量</el-checkbox>
-          <el-checkbox label="Exception2Num">Exception2数量</el-checkbox>
-          <el-checkbox label="Exception3Num">Exception3数量 </el-checkbox>
-          <el-checkbox label="PassRange">Pass占比</el-checkbox>
-          <el-checkbox label="Exception1Range">Exception1占比</el-checkbox>
-          <el-checkbox label="Exception2Range">Exception2占比</el-checkbox>
-          <el-checkbox label="Exception3Range">Exception3占比 </el-checkbox>
+          <el-checkbox :label="item.value" v-for="item,index in dynamicColumn" :key="index">{{item.title}}</el-checkbox>
         </el-checkbox-group>
       </div>
 
@@ -80,35 +79,48 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="tableData" ref="multipleTable" border :header-cell-class-name="headerStyle" height="550" :cell-style="columnStyle" style="width: 100%">
+      <el-table :data="tableData" :key="tableKey" ref="multipleTable" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
         <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-        <el-table-column align="center" prop="name" label="202010">
-          <el-table-column align="center" width="250" v-for="(item) in tableColumnList" :key="item.sortCode">
-            <template v-slot:header>
-              {{ item.title }}
-            </template>
-            <template slot-scope="{row}">
-              <div>
-                {{row[item.value]}}
-              </div>
-            </template>
-          </el-table-column>
+        <el-table-column align="center" prop="name" v-for="item,key in tableData[0].month" :key="key">
+          <template v-slot:header>
+            {{ key }}
+          </template>
+          <template>
+            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template>
+                <div>
+                  {{item[titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
+
         </el-table-column>
       </el-table>
     </div>
-
     <!-- 分页 -->
-    <div class="TpmPaginationWrap">
+    <!-- <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, dynamicColumn, ReportBgColorMap } from '@/utils'
+import {
+  getDefaultPermissions,
+  parseTime,
+  getTextMap,
+  ReportCheckList,
+  dynamicColumn,
+  getCurrentMonth,
+  ReportBgColorMap,
+} from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -122,7 +134,8 @@ export default {
       pageNum: 1,
       filterObj: {
         exception: '',
-        month: '',
+        month: getCurrentMonth(),
+        MinePackage: '',
         regionCode: '',
         brandCode: '',
         productCode: '',
@@ -132,62 +145,173 @@ export default {
       tableData: [
         {
           version: 'V1',
-          name: 'V1',
-          PassNum: 'PassNum',
-          Exception1Num: 'Exception1Num',
-          Exception2Num: 'Exception2Num',
-          Exception3Num: 'Exception3Num',
-          PassRange: 'PassRange',
-          Exception1Range: 'Exception1Range',
-          Exception2Range: 'Exception2Range',
-          Exception3Range: 'Exception3Range',
+          name: 'EC',
+          month: {
+            202102: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+            202103: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+          },
+        },
+        {
+          version: 'V1',
+          name: 'NKA',
+          month: {
+            202102: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+            202103: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+          },
         },
         {
           version: 'V2',
-          name: 'V2',
-          PassNum: 'PassNum',
-          Exception1Num: 'Exception1Num',
-          Exception2Num: 'Exception2Num',
-          Exception3Num: 'Exception3Num',
-          PassRange: 'PassRange',
-          Exception1Range: 'Exception1Range',
-          Exception2Range: 'Exception2Range',
-          Exception3Range: 'Exception3Range',
+          name: 'EC',
+          month: {
+            202102: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+            202103: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+          },
+        },
+        {
+          version: 'V2',
+          name: 'NKA',
+          month: {
+            202102: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+            202103: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+          },
         },
         {
           version: 'V3',
-          name: 'V3',
-          PassNum: 'PassNum',
-          Exception1Num: 'Exception1Num',
-          Exception2Num: 'Exception2Num',
-          Exception3Num: 'Exception3Num',
-          PassRange: 'PassRange',
-          Exception1Range: 'Exception1Range',
-          Exception2Range: 'Exception2Range',
-          Exception3Range: 'Exception3Range',
+          name: 'EC',
+          month: {
+            202102: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+            202103: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+          },
+        },
+        {
+          version: 'V3',
+          name: 'NKA',
+          month: {
+            202102: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+            202103: {
+              PassNum: 'PassNum',
+              Exception1Num: 'Exception1Num',
+              Exception2Num: 'Exception2Num',
+              Exception3Num: 'Exception3Num',
+              PassRange: 'PassRange',
+              Exception1Range: 'Exception1Range',
+              Exception2Range: 'Exception2Range',
+              Exception3Range: 'Exception3Range',
+            },
+          },
         },
       ],
       skuList: [],
       RegionList: [],
-      checkList: [],
-      ExceptionList: [],
+      checkList: [], //已选中的列
       tableColumnList: [], //动态列
-      dynamicColumn: dynamicColumn(), //动态列表头
-      ReportBgColorMap: ReportBgColorMap(), //动态列表头
+      dynamicColumn: dynamicColumn(), //展示列选项框
+      ReportBgColorMap: ReportBgColorMap(), //动态列背景色
+      tableKey: 0, //el-table key
     }
   },
   computed: {},
   mounted() {
-    this.checkList = [
-      'PassNum',
-      'Exception1Num',
-      'Exception2Num',
-      'Exception3Num',
-      'PassRange',
-      'Exception1Range',
-      'Exception2Range',
-      'Exception3Range',
-    ]
+    this.checkList=ReportCheckList()
     // this.getTableData()
     this.getSkuSelect()
     this.getRegionList()
@@ -195,28 +319,11 @@ export default {
   },
   watch: {
     //动态列渲染
-    checkList() {
-      this.tableColumnList = []
-      let list = []
-      this.checkList.forEach((item, index) => {
-        let obj = {
-          title: '',
-          value: '',
-          sortCode: '',
-        }
-        obj.title = this.dynamicColumn[item].title
-        obj.sortCode = this.dynamicColumn[item].sortCode
-        obj.value = item
-        list.push(obj)
-      })
-      list.sort(function (a, b) {
-        return a.sortCode - b.sortCode
-      })
-      this.tableColumnList = list
-      //解决每次动态列渲染fixed 错位问题
-      this.$nextTick(() => {
-        this.$refs.multipleTable.doLayout()
-      })
+    checkList(checkedList) {
+      this.tableColumnList = this.dynamicColumn.filter(
+        (item) => checkedList.indexOf(item.value) != -1
+      )
+      this.tableKey++
     },
   },
   methods: {

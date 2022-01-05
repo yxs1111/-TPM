@@ -34,7 +34,7 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" max-height="500" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+    <el-table :data="tableData" max-height="600" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
@@ -49,10 +49,6 @@
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
         {{row.createDate?row.createDate.substring(0,10):""}}
-      </el-table-column>
-      <el-table-column width="280" align="center" prop="updateBy" label="修改人" />
-      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
-        {{row.updateDate?row.updateDate.substring(0,10):""}}
       </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{row}">

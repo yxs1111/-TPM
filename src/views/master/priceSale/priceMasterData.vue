@@ -47,14 +47,10 @@
       <el-table-column v-slot="{ row }" width="320" align="right" prop="ptw" label="经销商进货含税价｜PTW （RMB/Tin) ">
         {{ FormateNum(row.ptw)}}
       </el-table-column>
+      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" v-slot="{ row }" align="center" prop="createDate" label="创建时间">
         {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
       </el-table-column>
-      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" v-slot="{ row }" align="center" prop="updateDate" label="更新时间">
-        {{ row.updateDate ? row.updateDate.substring(0, 10) : '' }}
-      </el-table-column>
-      <el-table-column width="280" align="center" prop="updateBy" label="更新人" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
@@ -173,6 +169,7 @@ export default {
       })
     },
     search() {
+      this.pageNum=1
       this.getTableData()
     },
     //导入数据

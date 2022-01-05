@@ -47,6 +47,7 @@
       <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
         {{(row.platformRebate*100).toFixed(2)}}%
       </el-table-column>
+      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="150" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
           <div>
@@ -54,15 +55,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="150" align="center" prop="updateDate" label="更新时间">
-        <template slot-scope="{row}">
-          <div>
-            {{row.updateDate?row.updateDate.slice(0,10):''}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="280" align="center" prop="updateBy" label="更新人" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
