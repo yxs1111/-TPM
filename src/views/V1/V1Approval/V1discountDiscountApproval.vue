@@ -391,6 +391,7 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.saveBtn = false
       this.firstIsPass = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
@@ -524,6 +525,7 @@ export default {
     },
     // 关闭导入
     closeimportDialog() {
+      this.saveBtn = false
       this.importVisible = false
       this.checkedData = []
       this.event.srcElement.value = '' // 置空

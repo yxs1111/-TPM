@@ -508,6 +508,7 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.saveBtn = false
       this.firstIsPass = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
@@ -656,6 +657,7 @@ export default {
     closeimportDialog() {
       this.importVisible = false
       this.checkedData = []
+      this.saveBtn = false
     },
 
     // 导出数据
