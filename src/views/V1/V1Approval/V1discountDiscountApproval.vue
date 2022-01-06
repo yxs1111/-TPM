@@ -540,7 +540,14 @@ export default {
           callback: action => {}
         })
       } else {
-        API.exportExcel().then(
+        API.exportExcel({
+          channelName: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          distributorName: this.filterObj.distributorCode,
+          productName: this.filterObj.productCode,
+          regionName: this.filterObj.regionName,
+          yearAndMonth: this.localDate
+        }).then(
           response => {
             const fileName = '导出审批Excel' + new Date().getTime() + '.xlsx'
             //   res.data:请求到的二进制数据
