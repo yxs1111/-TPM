@@ -1,16 +1,19 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-22 16:20:09
+ * @LastEditTime: 2022-01-06 13:33:55
 -->
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
       <router-link :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" v-for="(item, index) in routerList" :key="index"
         @click.native="changeTab(index)">
-        <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
-        <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex"> 
-        {{ item.name }}</router-link>
+        <img :src="item.img.light" alt="" v-if="index != currentIndex">
+        <img :src="item.img.dark" alt="" v-if="index == currentIndex">
+        <!-- <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
+        <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex"> -->
+        {{ item.name }}
+      </router-link>
     </div>
     <div>
       <router-view />
@@ -26,26 +29,38 @@ export default {
   data() {
     return {
       routerList: [
-        {name:'折扣项-汇总',path:'/V1/V1Apply/V1discountAll'},
-        {name:'折扣项-价促',path:'/V1/V1Apply/V1discountDiscount'},
-        {name:'折扣项-新客',path:'/V1/V1Apply/V1discountNU'},
+        {
+          name: '折扣项-汇总',
+          path: '/V1/V1Apply/V1discountAll',
+          img: {
+            dark: require('@/assets/images/tab/tab1.png'),
+            light: require('@/assets/images/tab/tab1_l.png'),
+          },
+        },
+        {
+          name: '折扣项-价促',
+          path: '/V1/V1Apply/V1discountDiscount',
+          img: {
+            dark: require('@/assets/images/tab/tab2.png'),
+            light: require('@/assets/images/tab/tab2_l.png'),
+          },
+        },
+        {
+          name: '折扣项-新客',
+          path: '/V1/V1Apply/V1discountNU',
+          img: {
+            dark: require('@/assets/images/tab/tab3.png'),
+            light: require('@/assets/images/tab/tab3_l.png'),
+          },
+        },
       ],
       currentIndex: 0,
-      imgSrcList: [
-        require('@/assets/images/tab/tab1_l.png'),
-        require('@/assets/images/tab/tab2_l.png'),
-        require('@/assets/images/tab/tab3_l.png'),
-        require('@/assets/images/tab/tab1.png'),
-        require('@/assets/images/tab/tab2.png'),
-        require('@/assets/images/tab/tab3.png'),
-      ],
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     if (sessionStorage.getItem('currentIndex')) {
       this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
-
     } else {
       this.currentIndex = 0
     }
@@ -65,7 +80,7 @@ export default {
     changeTab(index) {
       this.currentIndex = index
       sessionStorage.setItem('currentIndex', index)
-    }
+    },
   },
 }
 </script>
