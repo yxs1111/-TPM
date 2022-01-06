@@ -426,11 +426,13 @@ export default {
       this.getTableData()
     },
     importData() {
+      this.saveBtn = false
       this.importVisible = true
     },
 
     // 选择导入文件
     parsingExcelBtn() {
+      this.saveBtn = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     // 导入
