@@ -5,15 +5,7 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker
-            v-model="filterObj.month"
-            type="monthrange"
-            format="yyyy-MM"
-            value-format="yyyy-MM"
-            range-separator="至"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份"
-          />
+          <el-date-picker v-model="filterObj.month" type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
@@ -40,12 +32,7 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox label="0">V1</el-checkbox>
-          <el-checkbox label="1">V2</el-checkbox>
-          <el-checkbox label="2">V3谈判前</el-checkbox>
-          <el-checkbox label="3">V3谈判后 </el-checkbox>
-          <el-checkbox label="4">价格执行率1#V3谈判前 VS V1</el-checkbox>
-          <el-checkbox label="5">价格执行率2#V3谈判后 VS V1</el-checkbox>
+          <el-checkbox :label="item.value" v-for="item,index in dynamicColumn" :key="index">{{item.title}}</el-checkbox>
         </el-checkbox-group>
       </div>
 
@@ -62,7 +49,7 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="tableData" v-loading="tableLoading" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
+      <el-table :data="tableData" :key="tableKey" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
         style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
@@ -74,7 +61,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="name" label="202010">
+        <!-- <el-table-column align="center" prop="name" label="202010">
           <el-table-column align="center" width="150" prop="name" label="Total">
             <el-table-column v-for="(item, index) in tableOption" width="250" :key="index" :label="item.label" align="center">
               <template slot-scope="scope">
@@ -89,6 +76,32 @@
               </template>
             </el-table-column>
           </el-table-column>
+        </el-table-column> -->
+        <el-table-column align="center" prop="name" v-for="item,key in tableData[0].month" :key="key">
+          <template v-slot:header>
+            {{ key }}
+          </template>
+          <template>
+            <el-table-column align="center" width="250" v-for="(cvalue,ckey) in item" :key="ckey">
+              <template v-slot:header>
+                {{ ckey }}
+              </template>
+              <template>
+                <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="index">
+                  <template v-slot:header>
+                    {{ titleItem.title }}
+                  </template>
+                  <template>
+                    <div>
+                      {{cvalue[titleItem.value]}}
+                    </div>
+                  </template>
+                </el-table-column>
+              </template>
+
+            </el-table-column>
+          </template>
+
         </el-table-column>
       </el-table>
     </div>
@@ -104,7 +117,15 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import {
+  getDefaultPermissions,
+  parseTime,
+  getTextMap,
+  ReportCheckList,
+  dynamicColumn,
+  getCurrentMonth,
+  ReportBgColorMap,
+} from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
@@ -120,7 +141,6 @@ export default {
         month: '',
         category: '',
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       //表格列
@@ -133,27 +153,100 @@ export default {
         { label: '价格执行率1# V3谈判后  VS  V1' },
       ],
       tableData: [
-        
+        {
+          version: 'V1',
+          name: 'EC',
+          month: {
+            202102: {
+              total: {
+                V1: 'V1',
+                V2: 'V2',
+                V3BeforeNegotiations: 'V3BeforeNegotiations',
+                V3AfterNegotiations: 'V3AfterNegotiations',
+                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
+              },
+              孩子王: {
+                V1: 'V1',
+                V2: 'V2',
+                V3BeforeNegotiations: 'V3BeforeNegotiations',
+                V3AfterNegotiations: 'V3AfterNegotiations',
+                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
+              },
+            },
+            202103: {
+              total: {
+                V1: 'V1',
+                V2: 'V2',
+                V3BeforeNegotiations: 'V3BeforeNegotiations',
+                V3AfterNegotiations: 'V3AfterNegotiations',
+                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
+              },
+              孩子王: {
+                V1: 'V1',
+                V2: 'V2',
+                V3BeforeNegotiations: 'V3BeforeNegotiations',
+                V3AfterNegotiations: 'V3AfterNegotiations',
+                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
+              },
+            },
+          },
+        },
       ],
-      checkList: ['0', '1'],
+      checkList: [], //已选中的列
+      tableColumnList: [], //动态列
+      dynamicColumn: [
+        { title: 'V1', value: 'V1' },
+        { title: 'V2', value: 'V2' },
+        { title: 'V3谈判前', value: 'V3BeforeNegotiations' },
+        { title: 'V3谈判后', value: 'V3AfterNegotiations' },
+        {
+          title: '价格执行率1# V3谈判前  VS  V1',
+          value: 'V3BeforeNegotiationsVsV1',
+        },
+        {
+          title: '价格执行率1# V3谈判后  VS  V1',
+          value: 'V3AfterNegotiationsVsV1',
+        },
+      ], //展示列选项框
+      ReportBgColorMap: ReportBgColorMap(), //动态列背景色
+      tableKey: 0, //el-table key
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    this.checkList = [
+      'V1',
+      'V2',
+      'V3BeforeNegotiations',
+      'V3AfterNegotiations',
+      'V3BeforeNegotiationsVsV1',
+      'V3AfterNegotiationsVsV1',
+    ]
     // this.getTableData()
+  },
+  watch: {
+    //动态列渲染
+    checkList(checkedList) {
+      this.tableColumnList = this.dynamicColumn.filter(
+        (item) => checkedList.indexOf(item.value) != -1
+      )
+      this.tableKey++
+    },
   },
   computed: {},
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableLoading = true
       this.tableData = []
       API.getPageMdBrand({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
