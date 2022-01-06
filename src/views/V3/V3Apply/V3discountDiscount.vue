@@ -458,7 +458,7 @@ export default {
     // this.getTableData()
     this.getRegionList()
     this.getSKU()
-    this.getTableData()
+    // this.getTableData()
     // this.getMP()
     // this.getCustomerList()
     this.getDistributorList()
@@ -753,6 +753,7 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.saveBtn = false
       this.firstIsPass = false
       this.firstIsPassComple = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
@@ -855,8 +856,8 @@ export default {
     downLoadElxModelNext() {
       API.exportV3({
         exportType: 'exportMakeUpTemplate',
-        channelName: this.filterObj.channelName,
-        // channelName: 'NKA',
+        // channelName: this.filterObj.channelName,
+        channelName: 'NKA',
         mainId: this.mainIdLocal
       }).then(
         response => {
@@ -905,6 +906,7 @@ export default {
     },
     // 关闭导入
     closeimportDialog() {
+      this.saveBtn = false
       this.dialogDataF = []
       this.uploadFileName = ''
       this.importVisible = false

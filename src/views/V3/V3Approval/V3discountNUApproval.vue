@@ -432,6 +432,7 @@ export default {
     },
     // 导入数据
     importData() {
+      this.saveBtn = false
       this.importVisible = true
     },
     // 确认导入

@@ -326,7 +326,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     // this.getEffectiveDate()
-    this.getTableData()
+    // this.getTableData()
     this.getSKU()
     // this.getMP()
     this.getRegionList()
@@ -508,6 +508,7 @@ export default {
     },
     // 关闭导入
     closeimportDialog() {
+      this.saveBtn = false
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
@@ -582,6 +583,7 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.saveBtn = false
       this.firstIsPass = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },

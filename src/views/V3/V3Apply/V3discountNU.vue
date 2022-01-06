@@ -299,7 +299,7 @@ export default {
     this.getChannel()
     this.getBrandList()
 
-    this.getTableData()
+    // this.getTableData()
     // this.getCustomerList()
     // this.getEffectiveDate()
   },
