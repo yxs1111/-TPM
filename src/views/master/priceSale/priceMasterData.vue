@@ -28,12 +28,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <div class="TpmButtonBG" @click="importData">
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" ref="multipleTable" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange"
+      style="width: 100%">
+      <el-table-column type="selection" align="center" />
       <el-table-column width="250" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
@@ -93,7 +96,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions,FormateThousandNum } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum } from '@/utils'
 import API from '@/api/masterData/mdprice.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -123,6 +126,7 @@ export default {
       warningList: [],
       ChannelList: [],
       warningShow: false,
+      checkArr: [], //批量删除,存放选中
     }
   },
   computed: {},
@@ -169,7 +173,7 @@ export default {
       })
     },
     search() {
-      this.pageNum=1
+      this.pageNum = 1
       this.getTableData()
     },
     //导入数据
@@ -238,9 +242,43 @@ export default {
         document.body.removeChild(elink)
       }
     },
-    //格式化--千位分隔符、两位小数 
+    //格式化--千位分隔符、两位小数
     FormateNum(num) {
-     return FormateThousandNum(num)
+      return FormateThousandNum(num)
+    },
+    //多个删除
+    mutidel() {
+      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
+      else {
+        const IdList = []
+        this.checkArr.forEach((item) => {
+          IdList.push(item.id)
+        })
+        this.$confirm('确定要删除数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            // API.deleteMdCostType(IdList).then((response) => {
+            //   if (response.code === 1000) {
+            //     this.getTableData()
+            //     this.$message.success('删除成功!')
+            //   }
+            // })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+            this.toggleSelection()
+          })
+      }
+    },
+    //选中置空
+    toggleSelection(rows) {
+      this.$refs.multipleTable.clearSelection()
     },
     handleSelectionChange(val) {
       this.checkArr = val

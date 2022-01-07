@@ -126,7 +126,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
-            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -278,7 +278,6 @@ export default {
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
-      isCheck: false, //检测数据按钮显示或隐藏
       usernameLocal: '',
       mainId: '',
       messageMap: messageMap(),
@@ -441,25 +440,9 @@ export default {
     },
     // 导入
     parsingExcel(event) {
-      this.isCheck = false
-      this.saveBtn = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event = event
-      let formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importExcel(formData).then((response) => {
-        if (response.code == 1000) {
-          this.$message.success(this.messageMap.importSuccess)
-          this.ImportData = response.data
-          this.isCheck =
-            response.data[0].judgmentType === 'Error' ? false : true
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
-        //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
-      })
     },
     // 关闭导入
     closeImportDialog() {
@@ -468,20 +451,18 @@ export default {
       this.uploadFile = ''
       this.ImportData = []
       this.saveBtn = false
-      this.isCheck = false
     },
     // 校验数据
     checkImport() {
       let formData = new FormData()
       formData.append('file', this.uploadFile)
-      API.exceptionCheckTwo(formData).then((response) => {
+      API.importExcel(formData).then((response) => {
         if (response.code == 1000) {
-          this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
           this.saveBtn =
             response.data[0].judgmentType === 'Error' ? false : true
-        } else {
-          this.$message.info(this.messageMap.checkError)
+          //清除input的value ,上传一样的
+          this.event.srcElement.value = '' // 置空
         }
       })
     },

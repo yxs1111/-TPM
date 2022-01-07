@@ -16,42 +16,43 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道</span>
           <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportData">
-          <img src="@/assets/images/export.png" alt="">
+          <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <div class="TpmButtonBG" @click="importData">
-        <img src="@/assets/images/import.png" alt="">
+        <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
-
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
-      
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  style="width: 100%"
+      @selection-change="handleSelectionChange">
+      <el-table-column type="selection" align="center" />
       <el-table-column width="150" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数">
-        {{(row.grossProfitPoints*100).toFixed(2)}}%
+      <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数(%)">
+        {{(row.grossProfitPoints*1).toFixed(2)}}
       </el-table-column>
-      <el-table-column v-slot={row} width="320" align="right" prop="dealerRebate" label="经销商返利">
-        {{(row.dealerRebate*100).toFixed(2)}}%
+      <el-table-column v-slot={row} width="320" align="right" prop="dealerRebate" label="经销商返利(%)">
+        {{(row.dealerRebate*1).toFixed(2)}}
       </el-table-column>
-      <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
-        {{(row.platformRebate*100).toFixed(2)}}%
+      <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利(%)">
+        {{(row.platformRebate*1).toFixed(2)}}
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="150" align="center" prop="createDate" label="创建时间">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <div>
-            {{row.createDate?row.createDate.slice(0,10):''}}
+            {{ row.createDate ? row.createDate.slice(0, 10) : '' }}
           </div>
         </template>
       </el-table-column>
@@ -64,7 +65,6 @@
     </div>
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-
       <div class="fileInfo ImportContent">
         <!-- <el-button type="primary" class="my-search selectFile" @click="TemplateDownload">
             <svg-icon icon-class="download_white" style="font-size: 16px;" />
@@ -83,10 +83,10 @@
           <img src="@/assets/images/selectFile.png" alt="" />
           <span class="text">选择文件</span>
         </div>
-        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div class="fileName" v-if="uploadFileName!=''">
+        <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)" />
+        <div class="fileName" v-if="uploadFileName != ''">
           <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-          <span>{{uploadFileName}}</span>
+          <span>{{ uploadFileName }}</span>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -130,6 +130,7 @@ export default {
       event: '',
       warningList: [],
       warningShow: false,
+      checkArr: [], //批量删除,存放选中
     }
   },
   computed: {},
@@ -170,7 +171,7 @@ export default {
     //确认导入
     confirmImport() {
       this.warningShow = false
-      this.warningList=[]
+      this.warningList = []
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importSaleComputeKeep(formData).then((response) => {
@@ -197,7 +198,7 @@ export default {
     },
     //导入
     parsingExcel(event) {
-      console.log(event);
+      console.log(event)
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
@@ -245,6 +246,35 @@ export default {
         elink.click()
         URL.revokeObjectURL(elink.href)
         document.body.removeChild(elink)
+      }
+    },
+    //多个删除
+    mutidel() {
+      if (this.checkArr.length === 0) return this.$message.error('请选择数据')
+      else {
+        const IdList = []
+        this.checkArr.forEach((item) => {
+          IdList.push(item.id)
+        })
+        this.$confirm('确定要删除数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.DeleteSaleComputeKeep(IdList).then((response) => {
+              if (response.code === 1000) {
+                this.getTableData()
+                this.$message.success('删除成功!')
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
       }
     },
     handleSelectionChange(val) {

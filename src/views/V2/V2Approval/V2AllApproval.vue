@@ -311,27 +311,27 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableData = []
-      API.getPage({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        regionCode: this.filterObj.regionCode,
-        productName: this.filterObj.dim_product,
-      })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.mainId = this.tableData[0].mainId
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-          //获取提交权限
-          this.infoByMainId()
-        })
-        .catch((error) => {})
+      // this.tableData = []
+      // API.getPage({
+      //   pageNum: this.pageNum, // 当前页
+      //   pageSize: this.pageSize, // 每页条数
+      //   yearAndMonth: this.filterObj.yearAndMonth,
+      //   channelCode: this.filterObj.channelCode,
+      //   customerCode: this.filterObj.customerCode,
+      //   distributorCode: this.filterObj.distributorCode,
+      //   regionCode: this.filterObj.regionCode,
+      //   productName: this.filterObj.dim_product,
+      // })
+      //   .then((response) => {
+      //     this.tableData = response.data.records
+      //     this.mainId = this.tableData[0].mainId
+      //     this.pageNum = response.data.pageNum
+      //     this.pageSize = response.data.pageSize
+      //     this.total = response.data.total
+      //     //获取提交权限
+      //     this.infoByMainId()
+      //   })
+      //   .catch((error) => {})
     },
     // 通过与审批按钮控制
     infoByMainId() {
@@ -363,7 +363,7 @@ export default {
     getMonth() {
       selectAPI.getMonth({ version: 'V2' }).then((res) => {
         this.filterObj.yearAndMonth = res.data
-        this.getTableData()
+        // this.getTableData()
       })
     },
     // 获取下拉框 渠道

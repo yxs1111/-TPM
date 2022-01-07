@@ -308,32 +308,32 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableData = []
-      API.getPage({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        regionCode: this.filterObj.regionCode,
-        productName: this.filterObj.dim_product,
-      }).then((response) => {
-        if (response.code == 1000) {
-          this.tableData = response.data.records
-          if (this.tableData.length) {
-            this.isSubmit = this.tableData[0].isSubmit
-            this.mainId = this.tableData[0].mainId
-            this.infoByMainId()
-          } else {
-            this.isSubmit = 1
-          }
+      // this.tableData = []
+      // API.getPage({
+      //   pageNum: this.pageNum, // 当前页
+      //   pageSize: this.pageSize, // 每页条数
+      //   yearAndMonth: this.filterObj.yearAndMonth,
+      //   channelCode: this.filterObj.channelCode,
+      //   customerCode: this.filterObj.customerCode,
+      //   distributorCode: this.filterObj.distributorCode,
+      //   regionCode: this.filterObj.regionCode,
+      //   productName: this.filterObj.dim_product,
+      // }).then((response) => {
+      //   if (response.code == 1000) {
+      //     this.tableData = response.data.records
+      //     if (this.tableData.length) {
+      //       this.isSubmit = this.tableData[0].isSubmit
+      //       this.mainId = this.tableData[0].mainId
+      //       this.infoByMainId()
+      //     } else {
+      //       this.isSubmit = 1
+      //     }
 
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        }
-      })
+      //     this.pageNum = response.data.pageNum
+      //     this.pageSize = response.data.pageSize
+      //     this.total = response.data.total
+      //   }
+      // })
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
@@ -363,7 +363,7 @@ export default {
     getMonth() {
       selectAPI.getMonth({ version: 'V2' }).then((res) => {
         this.filterObj.yearAndMonth = res.data
-        this.getTableData()
+        // this.getTableData()
       })
     },
     // 获取下拉框 渠道
