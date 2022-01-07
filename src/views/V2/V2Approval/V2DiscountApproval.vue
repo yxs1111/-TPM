@@ -445,7 +445,7 @@ export default {
       this.event = event
       let formData = new FormData()
       formData.append('file', this.uploadFile)
-      API.exceptionCheckTwo(formData).then((response) => {
+      API.importExcel(formData).then((response) => {
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn = this.ImportData.length ? true : false
