@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-07 11:08:33
+ * @LastEditTime: 2022-01-07 13:11:37
 -->
 <template>
   <div class="app-container">
@@ -134,7 +134,7 @@
           <div class="el-downloadFileBar">
             <div>
               <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
-              <el-button  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+              <el-button v-if="uploadFileName != ''"  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
             </div>
             <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
           </div>
