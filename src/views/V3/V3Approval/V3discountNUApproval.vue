@@ -118,7 +118,7 @@
           <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
           <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
         </el-button> -->
-          <el-button v-if="firstIsPass" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
+          <el-button v-if="firstIsPass" style="display:none;" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
           </el-button>
         </div>
         <div>
@@ -496,12 +496,13 @@ export default {
               type: 'success',
               message: messageMap().importSuccess
             })
-            if (response.data != null) {
-              this.dialogData = response.data
-              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
-            } else {
-              this.dialogData = []
-            }
+            // if (response.data != null) {
+            //   this.dialogData = response.data
+            //   this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+            // } else {
+            //   this.dialogData = []
+            // }
+            this.exceptionCheck()
           } else {
             this.$message({
               type: 'error',
