@@ -40,11 +40,13 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="storeCode" label="门店编码"> </el-table-column>
       <el-table-column width="250" align="center" prop="storeName" label="门店名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="channelCode" label="渠道编码"> </el-table-column>
+      <el-table-column width="150" align="center" prop="channelCode" label="渠道名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="customerCode" label="客户编码"> </el-table-column>
+      <el-table-column width="150" align="center" prop="customerCsName" label="客户名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="distributorCode" label="经销商编码"> </el-table-column>
-      <el-table-column width="250" align="center" prop="customerCode" label="客户中文名称"> </el-table-column>
-      <el-table-column width="360" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
+      <el-table-column width="280" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="orgCode" label="城市编码"> </el-table-column>
+      <el-table-column width="150" align="center" prop="orgName" label="城市名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
