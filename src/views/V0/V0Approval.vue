@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-07 13:11:37
+ * @LastEditTime: 2022-01-07 14:20:00
 -->
 <template>
   <div class="app-container">
@@ -134,9 +134,9 @@
           <div class="el-downloadFileBar">
             <div>
               <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
-              <el-button v-if="uploadFileName != ''"  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+              <!-- <el-button v-if="uploadFileName != ''"  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
             </div>
-            <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+            <!-- <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button> -->
           </div>
           <div class="fileInfo">
             <div class="fileInfo">
@@ -395,36 +395,34 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event = event
-    },
-    //校验数据
-    checkImport() {
-
       let formData = new FormData()
       formData.append('file', this.uploadFile)
-      API.importExcel(formData).then((response) => {
+      API.exceptionImport(formData).then((response) => {
         if (response.code == 1000) {
           this.ImportData = response.data
-          this.saveBtn =
-            response.data[0].judgmentType === 'Error' ? false : true
+          this.saveBtn = this.ImportData.length ? true : false
           //清除input的value ,上传一样的
           this.event.srcElement.value = '' // 置空
         }
       })
     },
+    //校验数据
+    // checkImport() {
+    //   let formData = new FormData()
+    //   formData.append('file', this.uploadFile)
+    //   API.exceptionImport(formData).then((response) => {
+    //     if (response.code == 1000) {
+    //       this.ImportData = response.data
+    //       this.saveBtn = this.ImportData.length ? true : false
+    //       //清除input的value ,上传一样的
+    //       this.event.srcElement.value = '' // 置空
+    //     }
+    //   })
+    // },
     //确认导入文件
     confirmImport() {
-      let arr = Object.keys(this.ContentData)
-      API.exceptionSave({
-        mainId: this.ContentData[arr[0]][0].mainId,
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.closeImportDialog()
-          this.getList()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      this.closeImportDialog()
+      this.getList()
     },
     //导出异常信息
     exportErrorList() {

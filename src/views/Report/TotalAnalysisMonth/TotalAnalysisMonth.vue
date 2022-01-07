@@ -5,8 +5,9 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
-          </el-date-picker>
+          <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
+          </el-date-picker> -->
+          <SelectMonth v-on:multipleMonth="getMultipleMonth"/>
           <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
@@ -129,10 +130,10 @@ import {
   ReportBgColorMap,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-
+import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 export default {
   name: 'AbnormalAnalysisHistoryByChannel',
-
+  components: { SelectMonth },
   data() {
     return {
       total: 1,
@@ -255,6 +256,10 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    //获取子组件传递的多个月份值
+    getMultipleMonth(data) {
+      this.filterObj.month=data
     },
     search() {
       // this.getTableData()
