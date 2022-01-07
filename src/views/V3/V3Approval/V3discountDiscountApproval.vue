@@ -610,12 +610,12 @@ export default {
               type: 'success',
               message: messageMap().importSuccess
             })
-            if (response.data != null) {
-              this.dialogData = response.data
-              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
-            } else {
-              this.dialogData = []
-            }
+            // if (response.data != null) {
+            //   this.dialogData = response.data
+            //   this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+            // } else {
+            //   this.dialogData = []
+            // }
             this.exceptionCheck()
           } else {
             this.$message({
