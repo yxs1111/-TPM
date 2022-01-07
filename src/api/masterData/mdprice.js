@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-08 09:04:09
+ * @LastEditTime: 2022-01-07 18:34:27
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -15,6 +15,9 @@ export default {
    */
   getPageMdprice(params) {
     return requestApi.request_get('/mdm/mdprice/getPageByRequest', params)
+  },
+  deleteMdPrice(params) {
+    return requestApi.request_post('/mdm/mdprice/deleteAll', params)
   },
   exportMdprice(params) {
     //二进制数据流转blob

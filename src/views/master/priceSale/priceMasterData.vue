@@ -260,12 +260,12 @@ export default {
           type: 'warning',
         })
           .then(() => {
-            // API.deleteMdCostType(IdList).then((response) => {
-            //   if (response.code === 1000) {
-            //     this.getTableData()
-            //     this.$message.success('删除成功!')
-            //   }
-            // })
+            API.deleteMdPrice(IdList).then((response) => {
+              if (response.code === 1000) {
+                this.getTableData()
+                this.$message.success('删除成功!')
+              }
+            })
           })
           .catch(() => {
             this.$message({
