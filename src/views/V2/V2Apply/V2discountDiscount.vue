@@ -440,10 +440,11 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      this.event = event
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importExcel(formData).then((response) => {
+        //清除input的value ,上传一样的
+        event.srcElement.value = '' // 置空
         if (response.code == 1000) {
           this.$message.success(this.messageMap.importSuccess)
           this.ImportData = response.data
@@ -451,8 +452,7 @@ export default {
         } else {
           this.$message.info(this.messageMap.importError)
         }
-        //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
+        
       })
     },
     // 关闭导入

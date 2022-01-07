@@ -442,15 +442,14 @@ export default {
     parsingExcel(event) {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      this.event = event
       let formData = new FormData()
       formData.append('file', this.uploadFile)
       API.importExcel(formData).then((response) => {
+        //清除input的value ,上传一样的
+        event.srcElement.value = '' // 置空
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn = this.ImportData.length ? true : false
-          //清除input的value ,上传一样的
-          this.event.srcElement.value = '' // 置空
           this.$message.success('导入成功！')
         }
       })
