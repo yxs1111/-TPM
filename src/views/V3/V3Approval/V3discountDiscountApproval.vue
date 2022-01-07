@@ -610,13 +610,14 @@ export default {
               type: 'success',
               message: messageMap().importSuccess
             })
-            // if (response.data != null) {
-            //   this.dialogData = response.data
-            //   this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
-            // } else {
-            //   this.dialogData = []
-            // }
-            this.exceptionCheck()
+            if (response.data != null) {
+              this.dialogData = response.data
+              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              this.$forceUpdate()
+              this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+            } else {
+              this.dialogData = []
+            }
           } else {
             this.$message({
               type: 'error',
