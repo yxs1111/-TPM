@@ -123,11 +123,11 @@
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
-          <el-button v-if="firstIsPass" type="primary" plain class="my-export" @click="confirmImport()">检测数据
+          <el-button v-if="false" type="primary" plain class="my-export" @click="confirmImport()">检测数据
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" plain class="my-export" @click="saveImportInfo">保存
+          <el-button v-if="false" type="primary" plain class="my-export" @click="closeimportDialog">保存
           </el-button>
         </div>
       </div>
@@ -412,11 +412,12 @@ export default {
       API.routineCheck(formData)
         .then((response) => {
           if (response.code === 1000) {
+            this.saveBtn = true
             this.event.srcElement.value = '' // 置空
             // this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: messageMap().importSuccess
+              message: '导入成功'
             })
             if (response.data != null) {
               this.checkedData = response.data
@@ -427,7 +428,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: messageMap().importError
+              message: '导入失败'
             })
           }
           this.event.srcElement.value = ''

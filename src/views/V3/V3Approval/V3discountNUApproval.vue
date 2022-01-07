@@ -118,11 +118,11 @@
           <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
           <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
         </el-button> -->
-          <el-button v-if="firstIsPass" style="display:none;" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
+          <el-button v-if="false" style="display:none;" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" class="my-export" icon="el-icon-odometer" @click="saveImportInfo">保存
+          <el-button v-if="false" type="primary" class="my-export" icon="el-icon-odometer" @click="closeimportDialog">保存
           </el-button>
         </div>
       </div>
@@ -425,6 +425,7 @@ export default {
     },
     // 关闭导入
     closeimportDialog() {
+      this.saveBtn = false
       this.importVisible = false
       this.uploadFileName = ''
       this.uploadFile = ''
@@ -490,16 +491,17 @@ export default {
       API.formatCheckNU(formData)
         .then((response) => {
           if (response.code === 1000) {
+            this.saveBtn = false
             this.event.srcElement.value = '' // 置空
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: messageMap().importSuccess
+              message: '导入成功'
             })
             if (response.data != null) {
               this.dialogData = response.data
               this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
-              this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              // this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               this.$forceUpdate()
             } else {
               this.dialogData = []
@@ -507,7 +509,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: messageMap().importError
+              message: '导入失败'
             })
           }
           this.event.srcElement.value = ''
