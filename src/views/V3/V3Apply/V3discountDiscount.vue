@@ -46,7 +46,7 @@
 
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -176,7 +176,8 @@
       </div>
 
       <div class="tableWrap">
-        <el-table
+        <vxe-table
+          ref="sampleTable"
           border
           height="400"
           :data="dialogDataF"
@@ -192,7 +193,7 @@
           :row-class-name="tableRowClassName"
           stripe
         >
-          <el-table-column fixed align="center" label="是否通过" width="100">
+          <vxe-table-column fixed align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
               <img v-else-if="scope.row.judgmentType===null? false:(scope.row.judgmentType.indexOf('Exception') > -1)" :src="excepImg" style="width:25px;height:25px;">
@@ -200,65 +201,65 @@
               <img v-else-if="scope.row.judgmentType===null" :src="passImg" style="width:25px;height:25px;">
               <img v-else :src="errorImg" style="width:25px;height:25px;">
             </template>
-          </el-table-column>
-          <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-          <el-table-column align="center" width="400" prop="cpId" label="CPID" />
-          <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-          <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
-          <el-table-column width="180" align="center" prop="minePackageName" label="Mine Package" />
-          <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
-          <el-table-column width="120" align="center" prop="channelName" label="渠道" />
-          <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
-          <el-table-column width="120" align="center" prop="brandName" label="品牌" />
-          <el-table-column width="180" align="center" prop="productName" label="SKU" />
-          <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
-          <el-table-column width="220" align="center" prop="regionName" label="区域" />
-          <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划销量（CTN）">
+          </vxe-table-column>
+          <vxe-table-column width="400" align="center" field="judgmentContent" title="验证信息" />
+          <vxe-table-column align="center" width="400" field="cpId" title="CPID" />
+          <vxe-table-column width="120" align="center" field="yearAndMonth" title="活动月" />
+          <vxe-table-column width="160" align="center" field="costTypeName" title="费用类型" />
+          <vxe-table-column width="180" align="center" field="minePackageName" title="Mine Package" />
+          <vxe-table-column width="280" align="center" field="costItemName" title="费用科目" />
+          <vxe-table-column width="120" align="center" field="channelName" title="渠道" />
+          <vxe-table-column width="120" align="center" field="customerName" title="客户系统名称" />
+          <vxe-table-column width="120" align="center" field="brandName" title="品牌" />
+          <vxe-table-column width="180" align="center" field="productName" title="SKU" />
+          <vxe-table-column width="320" align="center" field="distributorName" title="经销商" />
+          <vxe-table-column width="220" align="center" field="regionName" title="区域" />
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="planSales" title="V1计划销量（CTN）">
             {{ FormateNum((row.planSales*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="planPriceAve" title="V1计划均价（RMB/Tin）">
             {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="planCost" title="V1计划费用（RMB）">
             {{ FormateNum((row.planCost*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="forecastSales" title="V2预测销量（CTN）">
             {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="adjustedPriceAve" title="V2调整后均价（RMB/Tin）">
             {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="adjustedCost" title="V2调整后费用（RMB）">
             {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="actualSales" title="V3实际销量（CTN）">
             {{ FormateNum((row.actualSales*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationPriceAve" title="V3谈判前均价（RMB/Tin）">
             {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationCost" title="V3谈判前费用（RMB）">
             {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationPriceAve" title="V3谈判后均价（RMB/Tin）">
             {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationCost" title="V3谈判后费用（RMB）">
             {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
-          </el-table-column>
-          <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
+          </vxe-table-column>
+          <vxe-table-column width="160" align="right" field="avePriceDifference" title="均价差值（%）" />
             <!-- <template slot-scope="scope">{{ scope.row.avePriceDifference + '%' }}</template>
           </el-table-column> -->
-          <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
+          <vxe-table-column width="160" align="right" field="salesDifference" title="销量差值（%）" />
             <!-- <template slot-scope="scope">{{ scope.row.salesDifference + '%' }}</template>
           </el-table-column> -->
-          <el-table-column width="120" align="right" prop="costDifference" label="费用差值" />
-          <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
-          <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
-          <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
-          <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
-          <el-table-column width="220" align="center" prop="remark" label="备注" />
-        </el-table>
+          <vxe-table-column width="120" align="right" field="costDifference" title="费用差值" />
+          <vxe-table-column width="120" align="center" field="judgmentType" title="系统判定" />
+          <vxe-table-column width="120" align="center" field="applyRemarks" title="申请人备注" />
+          <vxe-table-column width="220" align="center" field="poApprovalComments" title="Package Owner审批意见" />
+          <vxe-table-column width="220" align="center" field="finApprovalComments" title="Finance审批意见" />
+          <vxe-table-column width="220" align="center" field="remark" title="备注" />
+        </vxe-table>
       </div>
     </el-dialog>
 
@@ -880,7 +881,8 @@ export default {
     downLoadException() {
       API.exportV3({
         exportType: 'exportExceptionTemplate',
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
+        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName
       }).then(
         response => {
           const fileName = '下载异常模板' + new Date().getTime() + '.xlsx'

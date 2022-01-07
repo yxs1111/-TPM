@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':''" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -377,7 +377,8 @@ export default {
     downLoadException() {
       API.exportV3NU({
         exportType: 'exportExceptionTemplate',
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
+        channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode
       }).then(
         response => {
           const fileName = 'NU下载异常模板' + new Date().getTime() + '.xlsx'
