@@ -147,7 +147,7 @@
           <!-- <el-button type="primary" plain class="my-export" icon="el-icon-odometer">
           <a href="/investCpVThreeDetail/exportException" download="exportTemplate.xlsx">检测数据</a>
         </el-button> -->
-          <el-button v-if="firstIsPass" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
+          <el-button v-if="firstIsPass" style="display:none;" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheck()">检测数据
           </el-button>
         </div>
         <div>
@@ -616,6 +616,7 @@ export default {
             } else {
               this.dialogData = []
             }
+            this.exceptionCheck()
           } else {
             this.$message({
               type: 'error',
