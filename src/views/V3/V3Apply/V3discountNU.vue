@@ -397,6 +397,7 @@ export default {
     },
     // 选择导入文件
     parsingExcelBtn() {
+      this.saveBtn = false
       this.firstIsPass = false
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
