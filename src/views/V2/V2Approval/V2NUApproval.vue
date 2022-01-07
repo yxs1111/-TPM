@@ -390,6 +390,7 @@ export default {
     // 导入
     parsingExcel(event) {
       this.isCheck = false
+      this.saveBtn = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event = event

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-03 18:57:56
+ * @LastEditTime: 2022-01-07 08:52:14
 -->
 <template>
   <div class="app-container">
@@ -491,6 +491,7 @@ export default {
     //导入
     parsingExcel(event) {
       this.isCheck = false
+      this.saveBtn = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event = event
