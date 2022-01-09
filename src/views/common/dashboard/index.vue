@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-01-09 18:11:20
+ * @LastEditTime: 2022-01-09 23:16:11
 -->
 <template>
   <div class="dashboard-container">
@@ -42,126 +42,118 @@
             <div class="monthPoint">
               <!-- 渠道 -->
               <div v-for="(value,ckey) in channelItem" :key="ckey">
-                <div v-for="item,index in value" :key="index"> 
-                <!-- PP -->
-                <div class="PPBar" v-if="item.minePackageName=='Price Promotion'">
-                  <span class="PointTitle">PP</span>
-                  <div class="V0">
-                    <div class="passIcon" v-if="item.version=='V1'||item.version=='V2'||item.version=='V3'||(item.version=='V0'&&item.processStatus==2)"></div>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V0'&&item.workDateFlag==='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="currentPoint" v-if="item.version=='V0'&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V0'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="delayPoint" v-if="item.version=='V0'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <div class="line" v-if="item.version=='V1'||item.version=='V2'||item.version=='V3'"></div>
-                    <div class="lineDark" v-if="(item.version!='V1'&&item.version!='V2'&&item.version!='V3')||item.version=='V0'"></div>
-                  </div>
-                  <div class="V1">
-                    <div class="passIcon" v-if="item.version=='V2'||item.version=='V3'||(item.version=='V1'&&item.processStatus==2)"></div>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V1'&&item.workDateFlag==='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="currentPoint" v-if="item.version=='V1'&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V1'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="delayPoint" v-if="item.version=='V1'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <div class="pointCircle" v-if="item.version!='V1'&&item.version!='V2'&&item.version!='V3'"></div>
-                    <div class="line" v-if="item.version=='V2'||item.version=='V3'"></div>
-                    <div class="lineDark" v-if="(item.version=='V0'&&item.version!='V2'&&item.version!='V3')||item.version=='V1'"></div>
-                  </div>
-                  <div class="V2">
-                    <div class="passIcon" v-if="item.version=='V3'||(item.version=='V2'&&item.processStatus==2)"></div>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V2'&&item.workDateFlag=='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="currentPoint" v-if="item.version=='V2'&&item.workDateFlag=='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V2'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="delayPoint" v-if="item.version=='V2'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <div class="pointCircle" v-if="item.version!='V2'&&item.version!='V3'"></div>
-                    <div class="line" v-if="item.version=='V3'"></div>
-                    <div class="lineDark" v-if="(item.version=='V0'||item.version=='V1')||item.version=='V2'"></div>
-                  </div>
-                  <div class="V3">
-                    <div class="passIcon" v-if="item.version=='V3'&&item.processStatus==2"></div>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="currentPoint" v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                      v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="delayPoint" v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <!-- <div class="currentPoint" v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.version=='V3'&&item.processStatus==1)"></div>
-                  <div class="delayPoint" v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.version=='V3'&&item.processStatus==1)"></div> -->
-                    <div class="pointCircle" v-if="item.version!='V3'"></div>
-                  </div>
-                </div>
-                <div class="NU" v-if="item.minePackageName=='New User'">
-                  <span class="PointTitle">NU</span>
-                  <div class="NuPoint">
+                <div v-for="item,index in value" :key="index">
+                  <!-- PP -->
+                  <div class="PPBar" v-if="item.minePackageName=='Price Promotion'">
+                    <div class="PointTitle">PP-{{item.channelName}}</div>
+                    <div class="V0">
+                      <div class="passIcon" v-if="item.version=='V1'||item.version=='V2'||item.version=='V3'||(item.version=='V0'&&item.processStatus==2)"></div>
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V0'&&item.workDateFlag==='0'&&(item.processStatus==1)">
+                        <div slot="content" v-html="getTip(item)"></div>
+                        <div class="currentPoint" v-if="item.version=='V0'&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
+                      </el-tooltip>
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V0'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
+                        <div slot="content" v-html="getTip(item)"></div>
+                        <div class="delayPoint" v-if="item.version=='V0'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
+                      </el-tooltip>
+                      <div class="line" v-if="item.version=='V1'||item.version=='V2'||item.version=='V3'"></div>
+                      <div class="lineDark" v-if="(item.version!='V1'&&item.version!='V2'&&item.version!='V3')||item.version=='V0'"></div>
+                    </div>
                     <div class="V1">
-                      <div class="passIcon" v-if="item.version=='NUV2'||item.version=='NUV3'||(item.version=='NUV1'&&item.processStatus==2)"></div>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                        v-if="item.version=='NUV1'&&item.workDateFlag==='0'&&(item.version=='NUV1'&&item.processStatus==1)">
+                      <div class="passIcon" v-if="item.version=='V2'||item.version=='V3'||(item.version=='V1'&&item.processStatus==2)"></div>
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V1'&&item.workDateFlag==='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
-                        <div class="currentPoint" v-if="item.version=='NUV1'&&item.workDateFlag==='0'&&(item.version=='NUV1'&&item.processStatus==1)"></div>
+                        <div class="currentPoint" v-if="item.version=='V1'&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                        v-if="item.version=='NUV1'&&item.workDateFlag!=='0'&&(item.version=='NUV1'&&item.processStatus==1)">
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V1'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
-                        <div class="delayPoint" v-if="item.version=='NUV1'&&item.workDateFlag!=='0'&&(item.version=='NUV1'&&item.processStatus==1)"></div>
+                        <div class="delayPoint" v-if="item.version=='V1'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <div class="pointCircle" v-if="item.version!='NUV1'&&item.version!='NUV2'&&item.version!='NUV3'"></div>
-                      <div class="line" v-if="item.version=='NUV2'||item.version=='NUV3'"></div>
-                      <div class="lineDark" v-if="(item.version!='NUV2'&&item.version!='NUV3')||item.version=='NUV1'"></div>
+                      <div class="pointCircle" v-if="item.version!='V1'&&item.version!='V2'&&item.version!='V3'"></div>
+                      <div class="line" v-if="item.version=='V2'||item.version=='V3'"></div>
+                      <div class="lineDark" v-if="(item.version=='V0'&&item.version!='V2'&&item.version!='V3')||item.version=='V1'"></div>
                     </div>
                     <div class="V2">
-                      <div class="passIcon" v-if="item.version=='NUV3'||(item.version=='NUV2'&&item.processStatus==2)"></div>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                        v-if="item.version=='NUV2'&&item.workDateFlag=='0'&&(item.version=='NUV2'&&item.processStatus==1)">
+                      <div class="passIcon" v-if="item.version=='V3'||(item.version=='V2'&&item.processStatus==2)"></div>
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V2'&&item.workDateFlag=='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
-                        <div class="currentPoint" v-if="item.version=='NUV2'&&item.workDateFlag=='0'&&(item.version=='NUV2'&&item.processStatus==1)"></div>
+                        <div class="currentPoint" v-if="item.version=='V2'&&item.workDateFlag=='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                        v-if="item.version=='NUV2'&&item.workDateFlag!=='0'&&(item.version=='NUV2'&&item.processStatus==1)">
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V2'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
-                        <div class="delayPoint" v-if="item.version=='NUV2'&&item.workDateFlag!=='0'&&(item.version=='NUV2'&&item.processStatus==1)"></div>
+                        <div class="delayPoint" v-if="item.version=='V2'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <div class="pointCircle" v-if="item.version!='NUV2'&&item.version!='NUV3'"></div>
-                      <div class="line" v-if="item.version=='NUV3'"></div>
-                      <div class="lineDark" v-if="(item.version=='NUV1')||item.version=='NUV2'"></div>
+                      <div class="pointCircle" v-if="item.version!='V2'&&item.version!='V3'"></div>
+                      <div class="line" v-if="item.version=='V3'"></div>
+                      <div class="lineDark" v-if="(item.version=='V0'||item.version=='V1')||item.version=='V2'"></div>
                     </div>
                     <div class="V3">
-                      <div class="passIcon" v-if="item.version=='NUV3'&&item.processStatus==2"></div>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                        v-if="item.version=='NUV3'&&item.workDateFlag=='0'&&(item.version=='NUV3'&&item.processStatus==1)">
+                      <div class="passIcon" v-if="item.version=='V3'&&item.processStatus==2"></div>
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
-                        <div class="currentPoint" v-if="item.version=='NUV3'&&item.workDateFlag=='0'&&(item.version=='NUV3'&&item.processStatus==1)"></div>
+                        <div class="currentPoint" v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
-                        v-if="item.version=='NUV3'&&item.workDateFlag!=='0'&&(item.version=='NUV3'&&item.processStatus==1)">
+                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
-                        <div class="delayPoint" v-if="item.version=='NUV3'&&item.workDateFlag!=='0'&&(item.version=='NUV3'&&item.processStatus==1)"></div>
+                        <div class="delayPoint" v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <div class="pointCircle" v-if="item.version!='NUV3'"></div>
+                      <!-- <div class="currentPoint" v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.version=='V3'&&item.processStatus==1)"></div>
+                  <div class="delayPoint" v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.version=='V3'&&item.processStatus==1)"></div> -->
+                      <div class="pointCircle" v-if="item.version!='V3'"></div>
                     </div>
                   </div>
+                  <div class="NU" v-if="item.minePackageName=='New User'">
+                    <div class="PointTitle">NU-{{item.channelName}}</div>
+                    <div class="NuPoint">
+                      <div class="V1">
+                        <div class="passIcon" v-if="item.version=='NUV2'||item.version=='NUV3'||(item.version=='NUV1'&&item.processStatus==2)"></div>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                          v-if="item.version=='NUV1'&&item.workDateFlag==='0'&&(item.version=='NUV1'&&item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="currentPoint" v-if="item.version=='NUV1'&&item.workDateFlag==='0'&&(item.version=='NUV1'&&item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                          v-if="item.version=='NUV1'&&item.workDateFlag!=='0'&&(item.version=='NUV1'&&item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="delayPoint" v-if="item.version=='NUV1'&&item.workDateFlag!=='0'&&(item.version=='NUV1'&&item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <div class="pointCircle" v-if="item.version!='NUV1'&&item.version!='NUV2'&&item.version!='NUV3'"></div>
+                        <div class="line" v-if="item.version=='NUV2'||item.version=='NUV3'"></div>
+                        <div class="lineDark" v-if="(item.version!='NUV2'&&item.version!='NUV3')||item.version=='NUV1'"></div>
+                      </div>
+                      <div class="V2">
+                        <div class="passIcon" v-if="item.version=='NUV3'||(item.version=='NUV2'&&item.processStatus==2)"></div>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                          v-if="item.version=='NUV2'&&item.workDateFlag=='0'&&(item.version=='NUV2'&&item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="currentPoint" v-if="item.version=='NUV2'&&item.workDateFlag=='0'&&(item.version=='NUV2'&&item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                          v-if="item.version=='NUV2'&&item.workDateFlag!=='0'&&(item.version=='NUV2'&&item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="delayPoint" v-if="item.version=='NUV2'&&item.workDateFlag!=='0'&&(item.version=='NUV2'&&item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <div class="pointCircle" v-if="item.version!='NUV2'&&item.version!='NUV3'"></div>
+                        <div class="line" v-if="item.version=='NUV3'"></div>
+                        <div class="lineDark" v-if="(item.version=='NUV1')||item.version=='NUV2'"></div>
+                      </div>
+                      <div class="V3">
+                        <div class="passIcon" v-if="item.version=='NUV3'&&item.processStatus==2"></div>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                          v-if="item.version=='NUV3'&&item.workDateFlag=='0'&&(item.version=='NUV3'&&item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="currentPoint" v-if="item.version=='NUV3'&&item.workDateFlag=='0'&&(item.version=='NUV3'&&item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                          v-if="item.version=='NUV3'&&item.workDateFlag!=='0'&&(item.version=='NUV3'&&item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="delayPoint" v-if="item.version=='NUV3'&&item.workDateFlag!=='0'&&(item.version=='NUV3'&&item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <div class="pointCircle" v-if="item.version!='NUV3'"></div>
+                      </div>
+                    </div>
 
-                </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -209,7 +201,28 @@
           </div>
         </div>
         <div class="TimeLineWrap" v-show="currentIndex == 1">
-          已完成
+          <div class="TimeLineTop">
+            <div class="TimeLineTitleli">年月</div>
+            <div class="TimeLineTitleli">版本号</div>
+            <div class="TimeLineTitleli">当前节点</div>
+            <div class="TimeLineTitleli">提交人</div>
+            <div class="TimeLineTitleli">操作</div>
+          </div>
+          <div class="TimeLineBar">
+            <el-timeline>
+              <el-timeline-item color="#4192d3" v-for="item,index in TodoList" :key="index">
+                <div class="TimeLineli">
+                  <div class="TimeLineTitleli">{{item.createTime?item.createTime.substring(0,10):""}}</div>
+                  <div class="TimeLineTitleli">{{item.version}}</div>
+                  <div class="TimeLineTitleli">{{item.activityName}}</div>
+                  <div class="TimeLineTitleli">{{getAssigneeName(item.assignee)}}</div>
+                  <div class="TimeLineTitleli">
+                    <div class="TimeLineOpertion" @click="goAssignee(item.version,item.activityName,item.channelCode)">办理</div>
+                  </div>
+                </div>
+              </el-timeline-item>
+            </el-timeline>
+          </div>
         </div>
       </div>
       <div class="Message MyToDo">
@@ -409,7 +422,7 @@ export default {
         //     }
         //   }
         // }
-        console.log(data);
+        console.log(data)
         this.ActivityList = data
         //日期处理
         let DateArray = res.data.calendar
@@ -569,7 +582,7 @@ export default {
   box-sizing: border-box;
   .chartWrap {
     width: 100%;
-    height: 520px;
+    height: 580px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -577,14 +590,14 @@ export default {
     margin-top: 0;
     .CityPlan {
       width: 68%;
-      height: 520px;
+      height: 580px;
       background-color: #fff;
       border-radius: 20px;
       box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
       .CityPlanTop {
         width: 100%;
         height: 52px;
-        padding-left: 220px;
+        padding-left: 280px;
         box-sizing: border-box;
         font-size: 16px;
         font-weight: 600;
@@ -699,6 +712,7 @@ export default {
               // background-color: pink;
             }
             .PointTitle {
+              width: 88px;
               font-size: 16px;
               font-family: Source Han Sans CN;
               font-weight: 500;
@@ -896,7 +910,7 @@ export default {
     }
     .calendarBar {
       width: 30%;
-      height: 520px;
+      height: 580px;
       background-color: #fff;
       border-radius: 20px;
       padding: 20px;
@@ -918,14 +932,14 @@ export default {
   }
   .BottomBar {
     width: 100%;
-    height: 370px;
+    height: 325px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 32px 0;
     .MyToDo {
       width: 65%;
-      height: 370px;
+      height: 325px;
       background-color: #fff;
       border-radius: 20px;
       padding: 20px;

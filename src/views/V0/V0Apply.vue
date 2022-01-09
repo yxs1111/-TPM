@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-09 21:56:04
+ * @LastEditTime: 2022-01-09 22:59:14
 -->
 <template>
   <div class="app-container">
@@ -144,7 +144,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Version" prop="dimVersion">
-              <el-select v-model="ruleForm.dimVersion"  placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.dimVersion" disabled  placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -798,6 +798,9 @@ export default {
   }
   .importDialog {
     height: 600px;
+  }
+  .Final {
+    width: 242px;
   }
 }
 </style>
