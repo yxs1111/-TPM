@@ -862,7 +862,7 @@ export default {
       API.exportV3({
         exportType: 'exportMakeUpTemplate',
         // channelName: this.filterObj.channelName,
-        channelName: 'NKA',
+        channelName: this.filterObj.channelName,
         mainId: this.mainIdLocal
       }).then(
         response => {
