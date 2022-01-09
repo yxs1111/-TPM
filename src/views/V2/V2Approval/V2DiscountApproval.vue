@@ -125,7 +125,7 @@
       <div class="importDialog">
         <div class="el-downloadFileBar">
           <div>
-            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
+            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
             <!-- <el-button v-if="uploadFileName != ''"  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
@@ -495,6 +495,22 @@ export default {
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success(this.messageMap.exportSuccess)
+        })
+      } else {
+        this.$message.info('数据不能为空')
+      }
+    },
+    // 下载模板
+    downloadTemplate() {
+      if (this.tableData.length) {
+        // 导出数据筛选
+        API.exportExcel({
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+        }).then((res) => {
+          const timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V2审批模板-' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {

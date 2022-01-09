@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-09 15:14:44
+ * @LastEditTime: 2022-01-09 19:27:10
 -->
 <template>
   <div class="app-container">
@@ -165,7 +165,7 @@
         <div class="importDialog">
           <div class="el-downloadFileBar">
             <div>
-              <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
+              <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
               <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
             </div>
             <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
@@ -571,6 +571,22 @@ export default {
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0 -' + timestamp + '.xlsx') //自定义Excel文件名
+          this.$message.success(this.messageMap.exportSuccess)
+        })
+      } else {
+        this.$message.warning('数据不能为空')
+      }
+    },
+    //下载模板
+    downloadTemplate() {
+      if (Object.keys(this.ContentData).length) {
+        //导出数据筛选
+        API.exportExcel({
+          yearAndMonth: this.filterObj.month,
+          channelCode: this.filterObj.channelCode,
+        }).then((res) => {
+          let timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V0申请模板 -' + timestamp + '.xlsx') //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
