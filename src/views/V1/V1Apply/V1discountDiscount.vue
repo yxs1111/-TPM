@@ -143,10 +143,7 @@
           <el-button v-if="firstIsPass" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
           </el-button>
         </div>
-        <div>
-          <el-button v-if="saveBtn" type="primary" plain class="TpmButtonBG" @click="saveImportInfo">保存
-          </el-button>
-        </div>
+          <el-button v-if="saveBtn" type="primary"  class="TpmButtonBG" @click="saveImportInfo">保存</el-button>
       </div>
 
       <div class="fileInfo" style="justify-content: space-between;">

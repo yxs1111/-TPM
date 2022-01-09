@@ -16,7 +16,7 @@
           </el-select>
         </div>
         <div class="Selectli">
-         <span class="SelectliTitle">客户</span>
+          <span class="SelectliTitle">客户</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
@@ -35,20 +35,20 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  style="width: 100%"
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column  width="150" align="right" prop="grossProfitPoints" label="毛利点数">
-       
+      <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数">
+        {{(row.grossProfitPoints*1).toFixed(4)}}
       </el-table-column>
-      <el-table-column  width="320" align="right" prop="dealerRebate" label="经销商返利">
-      
+      <el-table-column v-slot={row} width="320" align="right" prop="dealerRebate" label="经销商返利">
+        {{(row.dealerRebate*1).toFixed(4)}}
       </el-table-column>
-      <el-table-column  width="150" align="right" prop="platformRebate" label="平台返利">
-   
+      <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
+        {{(row.platformRebate*1).toFixed(4)}}
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="150" align="center" prop="createDate" label="创建时间">

@@ -126,10 +126,7 @@
           <!-- <el-button v-if="false" type="primary" plain class="my-export" @click="confirmImport()">检测数据
           </el-button> -->
         </div>
-        <div>
-          <el-button v-if="saveBtn" type="primary" plain class="TpmButtonBG" @click="closeimportDialog">保存
-          </el-button>
-        </div>
+          <el-button v-if="saveBtn" type="primary"  class="TpmButtonBG" @click="closeimportDialog">保存</el-button>
       </div>
 
       <div class="fileInfo" style="justify-content: space-between;">

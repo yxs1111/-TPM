@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-09 19:27:10
+ * @LastEditTime: 2022-01-09 21:56:04
 -->
 <template>
   <div class="app-container">
@@ -445,6 +445,7 @@ export default {
     getCPTData() {
       this.dialogVisible = true
       this.ruleForm.channelCode = this.filterObj.channelCode
+      this.ruleForm.dimVersion = 'Final'
       // API.isExist({
       //   yearAndMonth: this.filterObj.month,
       //   channelCode: this.filterObj.channelCode,

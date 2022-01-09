@@ -423,7 +423,7 @@ export function yearAndMonthList() {
   const date=new Date()
   let year=date.getFullYear()-1
   let yearAndMonthList=[]
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 0; i < 12; i++) {
     let str=year+' '+i+'+'+(12-i)
     yearAndMonthList.push(str)
     
