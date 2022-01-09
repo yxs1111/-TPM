@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-07 18:07:55
+ * @LastEditTime: 2022-01-09 10:46:11
 -->
 <template>
   <div class="app-container">
@@ -53,7 +53,7 @@
       </div>
       <!-- 商品 -->
       <div class="ContentWrap">
-        <div class="contentli" v-for="(tableData,key,index) in ContentData" :key="index">
+        <div class="contentli" v-for="(tableData,key) in ContentData" :key="key">
           <div class="contentTop">
             <div class="SKUTitle">
               {{key}}
