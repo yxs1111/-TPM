@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-28 10:16:44
+ * @LastEditTime: 2022-01-09 09:41:53
 -->
 <template>
   <div class="dashboard-container">
@@ -43,7 +43,7 @@
               <!-- 渠道 -->
               <div v-for="(value,ckey) in channelItem" :key="ckey">
                 <!-- PP -->
-                <div class="PPBar">
+                <div class="PPBar" v-if="value[0]">
                   <span class="PointTitle">PP</span>
                   <div class="V0">
                     <div class="passIcon" v-if="value[0].version=='V1'||value[0].version=='V2'||value[0].version=='V3'||(value[0].version=='V0'&&value[0].processStatus==2)"></div>
@@ -109,10 +109,9 @@
                     <div class="pointCircle" v-if="value[0].version!='V3'"></div>
                   </div>
                 </div>
-                <div class="NU">
+                <div class="NU" v-if="value[1]">
                   <span class="PointTitle">NU</span>
                   <div class="NuPoint">
-
                     <div class="V1">
                       <div class="passIcon" v-if="value[1].version=='NUV2'||value[1].version=='NUV3'||(value[1].version=='NUV1'&&value[1].processStatus==2)"></div>
                       <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
