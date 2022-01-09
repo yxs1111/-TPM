@@ -442,6 +442,8 @@ export default {
       this.uploadFile = event.target.files[0]
       let formData = new FormData()
       formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
+      formData.append('channelCode', this.filterObj.channelCode)
       API.importExcel(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空

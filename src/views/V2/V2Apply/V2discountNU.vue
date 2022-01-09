@@ -392,6 +392,8 @@ export default {
       this.uploadFile = event.target.files[0]
       const formData = new FormData()
       formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
+      formData.append('channelCode', this.filterObj.channelCode)
       API.importNUExcel(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
@@ -418,6 +420,8 @@ export default {
     checkImport() {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
+      formData.append('channelCode', this.filterObj.channelCode)
       API.exceptionNUCheckTwo(formData).then((response) => {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
