@@ -12,20 +12,20 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
+          <el-select v-model="filterObj.channelCode" placeholder="请选择">
             <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.productCode" clearable multiple collapse-tags filterable placeholder="请选择">
+            <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
 
@@ -131,6 +131,7 @@ import {
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'AbnormalAnalysisHistoryByChannel',
   components: { SelectMonth },
@@ -141,9 +142,9 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonthList: getCurrentMonth(),
-        customerNameList: '',
-        channelNameList: '',
-        productNameList: '',
+        customerCode: '',
+        channelCode: '',
+        productCode: '',
         type: '',
         month: '',
         category: '',
@@ -204,6 +205,8 @@ export default {
         },
       ],
       channelOptions: [],
+      customerArr: [],
+      skuList: [],
       checkList: [], //已选中的列
       tableColumnList: [], //动态列
       dynamicColumn: [
@@ -234,7 +237,10 @@ export default {
       'V3BeforeNegotiationsVsV1',
       'V3AfterNegotiationsVsV1',
     ]
-     this.getTableData()
+    this.getQueryChannelSelect()
+    this.getCustomerList()
+    this.getSkuSelect()
+    //  this.getTableData()
   },
   watch: {
     //动态列渲染
@@ -254,9 +260,9 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         yearAndMonthList: this.filterObj.yearAndMonthList,
-        customerNameList: this.filterObj.customerNameList,
-        channelNameList: this.filterObj.channelNameList,
-        productNameList: this.filterObj.productNameList,
+        customerNameList: this.filterObj.customerCode,
+        channelNameList: this.filterObj.channelCode,
+        productNameList: this.filterObj.productCode,
       }).then((response) => {
         this.tableData = response.data.records
         this.pageNum = response.data.pageNum
@@ -270,12 +276,30 @@ export default {
         this.channelOptions = res.data
       })
     },
+    // 客户
+    getCustomerList() {
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+    },
+    //获取SKU
+    getSkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuList = res.data
+      })
+    },
     //获取子组件传递的多个月份值
     getMultipleMonth(data) {
       this.filterObj.yearAndMonthList = data
     },
     search() {
-      this.pageNum=1
+      this.pageNum = 1
       this.getTableData()
     },
     // 每页显示页面数变更

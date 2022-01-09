@@ -166,6 +166,7 @@
               <img v-else :src="errorImg" style="width:25px;height:25px;">
             </template>
           </vxe-table-column>
+          <vxe-table-column width="400" align="center" field="judgmentContent" title="验证信息" />
           <vxe-table-column align="center" width="400" field="cpId" title="CPID" />
           <vxe-table-column width="120" align="center" field="yearAndMonth" title="活动月" />
           <vxe-table-column width="160" align="center" field="costTypeName" title="费用类型" />
