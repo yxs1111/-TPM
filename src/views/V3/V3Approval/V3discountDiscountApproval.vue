@@ -151,7 +151,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="false" type="primary" :class="!(saveDialog)?'':'noClick'" class="my-export" icon="el-icon-odometer" @click="closeimportDialog">保存
+          <el-button v-if="saveBtn" type="primary"  class="TpmButtonBG"  @click="closeimportDialog">保存
           </el-button>
         </div>
       </div>
@@ -164,12 +164,6 @@
           <div v-if="uploadFileName!=''" class="fileName">
             <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
             <span>{{ uploadFileName }}</span>
-          </div>
-        </div>
-        <div class="seeData" style="width: auto;">
-          <div class="exportError" @click="downLoadException">
-            <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-            <span>导出错误信息</span>
           </div>
         </div>
         <!-- <el-button v-if="uploadFileName!=''" style="line-height: 27px;color: #4192d3;border: 1px solid #4192d3;font-size:12px;padding:0 3px;margin-left:3px;" @click="confirmImport()">确定上传</el-button> -->
@@ -514,11 +508,16 @@ export default {
       this.uploadFileName = ''
       this.uploadFile = ''
       this.dialogData = []
+      this.getTableData()
     },
     // 导入数据
     importData() {
       this.saveDialog = false
-      this.importVisible = true
+      if(this.filterObj.channelName=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
     // 第二次检测数据
     exceptionCheck() {
@@ -616,6 +615,7 @@ export default {
               this.dialogData = response.data
               this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               this.$forceUpdate()
+              this.saveBtn = this.dialogData.length ? true : false
               // this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.dialogData = []

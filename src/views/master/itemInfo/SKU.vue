@@ -4,15 +4,15 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">产品英文名称</span>
-          <el-input v-model="filterObj.SKUEsName" placeholder="请输入" />
+          <el-input v-model="filterObj.SKUEsName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌</span>
-          <el-input v-model="filterObj.brandName" placeholder="请输入" />
+          <el-input v-model="filterObj.brandName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">阶段</span>
-          <el-input v-model="filterObj.stage" placeholder="请输入" />
+          <el-input v-model="filterObj.stage" clearable placeholder="请输入" />
         </div>
          <div class="Selectli">
           <span class="SelectliTitle">状态</span>
@@ -33,7 +33,7 @@
       </el-table-column>
       <el-table-column width="150" fixed align="center" prop="productCode" label="产品编号">
       </el-table-column>
-      <el-table-column width="360" align="center" prop="productCsName" label="产品中文名称">
+      <el-table-column width="420" align="center" prop="productCsName" label="产品中文名称">
       </el-table-column>
       <el-table-column width="220" align="center" prop="productEsName" label="产品英文名称">
       </el-table-column>
@@ -128,6 +128,7 @@ export default {
         .catch((error) => {})
     },
     search() {
+      this.pageNum=1
       this.getTableData()
     },
     handleSelectionChange(val) {

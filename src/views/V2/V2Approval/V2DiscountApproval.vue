@@ -128,7 +128,7 @@
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
             <!-- <el-button v-if="uploadFileName != ''"  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
           </div>
-          <!-- <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button> -->
+          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
         <div class="fileInfo">
           <div class="fileInfo">
@@ -142,12 +142,6 @@
             <div v-if="uploadFileName != ''" class="fileName">
               <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
               <span>{{ uploadFileName }}</span>
-            </div>
-          </div>
-          <div class="seeData" style="width: auto;">
-            <div class="exportError" @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-              <span>导出错误信息</span>
             </div>
           </div>
         </div>
@@ -430,7 +424,11 @@ export default {
     },
     importData() {
       this.saveBtn = false
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
 
     // 选择导入文件
@@ -478,36 +476,8 @@ export default {
     // },
     // 导入--保存
     confirmImport() {
-      API.exceptionSave({
-        mainId: this.tableData[0].mainId,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.closeImportDialog()
-          this.getTableData()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
-    },
-    // 导出异常信息
-    exportErrorList() {
-      if (this.ImportData.length) {
-        API.exceptionDownExcel({
-          yearAndMonth: this.filterObj.yearAndMonth,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
-          dimProduct: this.filterObj.dim_product,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
-      } else {
-        this.$message.info('异常数据为空!')
-      }
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 导出数据
     exportExcel() {

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-09 10:46:11
+ * @LastEditTime: 2022-01-09 15:14:44
 -->
 <template>
   <div class="app-container">
@@ -473,7 +473,12 @@ export default {
     },
     //导入数据弹窗显示
     importData() {
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
+      
     },
     //关闭导入
     closeImportDialog() {

@@ -427,7 +427,11 @@ export default {
     },
     importData() {
       this.saveBtn = false
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
 
     // 选择导入文件

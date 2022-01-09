@@ -22,7 +22,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
           <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandCode" :value="item.brandName" />
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -373,7 +373,11 @@ export default {
       this.getTableData()
     },
     importData() {
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
 
     // 选择导入文件

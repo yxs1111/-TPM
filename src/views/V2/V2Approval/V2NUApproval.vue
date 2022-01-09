@@ -3,11 +3,11 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
-        <!-- <div class="Selectli" @keyup.enter="search">
+        <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker disabled v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
-        </div> -->
+        </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
@@ -114,7 +114,7 @@
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
             <!-- <el-button v-if="uploadFileName != ''"  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
           </div>
-          <!-- <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button> -->
+          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
         <div class="fileInfo">
           <div class="fileInfo">
@@ -128,12 +128,6 @@
             <div v-if="uploadFileName != ''" class="fileName">
               <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
               <span>{{ uploadFileName }}</span>
-            </div>
-          </div>
-          <div class="seeData" style="width: auto;">
-            <div class="exportError" @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-              <span>导出错误信息</span>
             </div>
           </div>
         </div>
@@ -379,7 +373,11 @@ export default {
       this.getTableData()
     },
     importData() {
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
 
     // 选择导入文件
@@ -429,23 +427,6 @@ export default {
     confirmImport() {
       this.closeImportDialog()
       this.getTableData()
-    },
-    // 导出异常信息
-    exportErrorList() {
-      if (this.ImportData.length) {
-        API.exportNUExceptionExcel({
-          yearAndMonth: this.filterObj.yearAndMonth,
-          channelCode: this.filterObj.channelCode,
-          customerName: this.filterObj.customerCode,
-          brandName: this.filterObj.brandCode,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2-NU异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
-      } else {
-        this.$message.info('异常数据为空!')
-      }
     },
     // 导出数据
     exportExcel() {

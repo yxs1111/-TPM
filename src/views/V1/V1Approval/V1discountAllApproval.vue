@@ -156,27 +156,27 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      API.getPageNU({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        customerName: this.filterObj.customerName,
-        channelCode: this.filterObj.channelCode,
-        brandCode: this.filterObj.brandCode,
-        yearAndMonth: this.filterObj.month
-      }).then((response) => {
-        if (response.data.records.length > 0) {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
-          this.submitBtn = response.data.records[0].isSubmit
-          this.infoByMainId()
-        } else {
-          this.mainIdLocal = null
-          this.btnStatus = false
-        }
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
-      })
+      // API.getPageNU({
+      //   pageNum: this.pageNum, // 当前页
+      //   pageSize: this.pageSize, // 每页条数
+      //   customerName: this.filterObj.customerName,
+      //   channelCode: this.filterObj.channelCode,
+      //   brandCode: this.filterObj.brandCode,
+      //   yearAndMonth: this.filterObj.month
+      // }).then((response) => {
+      //   if (response.data.records.length > 0) {
+      //     this.tableData = response.data.records
+      //     this.mainIdLocal = response.data.records[0].mainId
+      //     this.submitBtn = response.data.records[0].isSubmit
+      //     this.infoByMainId()
+      //   } else {
+      //     this.mainIdLocal = null
+      //     this.btnStatus = false
+      //   }
+      //   this.pageNum = response.data.pageNum
+      //   this.pageSize = response.data.pageSize
+      //   this.total = response.data.total
+      // })
     },
     // 通过与审批按钮控制
     infoByMainId() {

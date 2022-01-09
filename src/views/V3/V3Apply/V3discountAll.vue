@@ -40,23 +40,6 @@
           <span class="text">导出</span>
         </div>
       </div>
-      <!-- <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出</span>
-        </div>
-      </div> -->
-    </div>
-    <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG noClick">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG noClick">
-        <svg-icon icon-class="passLocal" style="font-size: 22px;" />
-        <span class="text">提交</span>
-      </div>
     </div>
     <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="number" label="CPID" fixed />

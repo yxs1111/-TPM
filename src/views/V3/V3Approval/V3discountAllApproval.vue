@@ -41,16 +41,6 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG noClick">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG noClick">
-        <svg-icon icon-class="passLocal" style="font-size: 22px;" />
-        <span class="text">提交</span>
-      </div>
-    </div>
     <el-table  :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="number" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="name" label="活动月" />

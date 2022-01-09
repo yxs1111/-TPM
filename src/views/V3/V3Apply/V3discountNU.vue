@@ -139,7 +139,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" class="my-export" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -545,7 +545,11 @@ export default {
     // 导入数据
     importData() {
       this.saveBtn = false
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
     // 导出数据
     exportData() {
@@ -559,12 +563,12 @@ export default {
         mainId: this.mainIdLocal
       }
       API.exportV3NU(data).then(res => {
-        debugger
-        res
+        // debugger
+        // res
         if (res === undefined) {
           this.$message.warning('NU-V3导出失败!')
         } else {
-          this.downloadFile(res, 'V3-NU-申请Excel' + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(res, 'V3-NU-申请Excel-' +new Date().getTime()+ '.xlsx') // 自定义Excel文件名
           this.$message.success('NU-V3导出成功!')
         }
       }).catch()

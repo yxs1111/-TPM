@@ -9,14 +9,16 @@
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
         </div>
-        <!-- <div class="Selectli">
-          <span class="SelectliTitle">客户</span>
-          <el-input v-model="filterObj.customerCsName" placeholder="请输入" />
-        </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">渠道</span>
           <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
             <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+         <span class="SelectliTitle">客户</span>
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -39,14 +41,14 @@
       <el-table-column width="150" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数(%)">
-        {{(row.grossProfitPoints*1).toFixed(2)}}
+      <el-table-column  width="150" align="right" prop="grossProfitPoints" label="毛利点数">
+       
       </el-table-column>
-      <el-table-column v-slot={row} width="320" align="right" prop="dealerRebate" label="经销商返利(%)">
-        {{(row.dealerRebate*1).toFixed(2)}}
+      <el-table-column  width="320" align="right" prop="dealerRebate" label="经销商返利">
+      
       </el-table-column>
-      <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利(%)">
-        {{(row.platformRebate*1).toFixed(2)}}
+      <el-table-column  width="150" align="right" prop="platformRebate" label="平台返利">
+   
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="150" align="center" prop="createDate" label="创建时间">
@@ -117,12 +119,13 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
+        customerCode: '',
         channelCode: '',
       },
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       ChannelList: [],
+      customerArr: [],
       //导入
       importVisible: false, //导入弹窗
       uploadFileName: '',
@@ -137,6 +140,13 @@ export default {
   mounted() {
     this.getTableData()
     this.getChannelList()
+    this.getCustomerList()
+  },
+  watch: {
+    'filterObj.channelCode'() {
+      this.filterObj.customerCode = ''
+      this.getCustomerList()
+    },
   },
   methods: {
     // 获取表格数据
@@ -144,6 +154,7 @@ export default {
       API.getPageSaleComputeKeep({
         yearAndMonth: this.filterObj.yearAndMonth,
         channelCode: this.filterObj.channelCode,
+        customerCsName: this.filterObj.customerCode,
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
       })
@@ -159,6 +170,18 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
       })
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
     },
     search() {
       this.pageNum = 1

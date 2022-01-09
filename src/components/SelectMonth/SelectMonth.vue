@@ -1,7 +1,7 @@
 <!--
  * @Description: 多个月份选择
  * @Date: 2022-01-07 14:42:30
- * @LastEditTime: 2022-01-07 15:04:39
+ * @LastEditTime: 2022-01-09 14:43:39
 -->
 <template>
   <div class="monthEl">
@@ -44,24 +44,43 @@ export default {
       },
     }
   },
+  props: ['defaultMonth'],
   mounted() {
+    this.monthVal = '2022-1'
+    let dateList = this.monthVal.split('-')
     let date = new Date()
     this.years = date.getFullYear()
     for (var i = 1; i <= 12; i++) {
-      this.months.push({
-        num: i,
-        show: false,
-        currentM: false,
-      })
+      if (Number(dateList[1]) == i) {
+        this.months.push({
+          num: i,
+          show: true,
+          currentM: false,
+        })
+      } else {
+        this.months.push({
+          num: i,
+          show: false,
+          currentM: false,
+        })
+      }
     }
+
+    console.log(this.$props)
   },
   watch: {
     // 月账单
     monthVal(val) {
-      let arr = []
       if (val) {
-        console.log(val);
-        this.$emit('multipleMonth',val)
+        let list = val.split(',')
+        let dataList = []
+        list.forEach((item) => {
+          let date = item.split('-')
+          date[1] = Number(date[1]) < 10 ? '0' + date[1] : date[1]
+          let dateStr = date[0] + date[1]
+          dataList.push(dateStr)
+        })
+        this.$emit('multipleMonth', dataList)
       } else {
         this.filter.billinDateList = null
         this.clearSelected()

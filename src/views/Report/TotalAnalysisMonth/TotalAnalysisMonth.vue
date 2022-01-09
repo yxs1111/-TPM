@@ -7,13 +7,13 @@
           <span class="SelectliTitle">活动月：</span>
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
-          <SelectMonth v-on:multipleMonth="getMultipleMonth"/>
+          <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.yearAndMonthList' />
           <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
           <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -39,7 +39,7 @@
         </el-checkbox-group>
       </div>
 
-      <el-button type="primary" class="TpmButtonBG my-search">查询</el-button>
+      <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG">
@@ -129,7 +129,7 @@ import {
   getCurrentMonth,
   ReportBgColorMap,
 } from '@/utils'
-import API from '@/api/masterData/masterData.js'
+import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 export default {
   name: 'AbnormalAnalysisHistoryByChannel',
@@ -140,6 +140,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        yearAndMonthList: getCurrentMonth(),
+        customerNameList: '',
+        channelNameList: '',
+        productNameList: '',
         type: '',
         month: '',
         category: '',
@@ -199,6 +203,7 @@ export default {
           },
         },
       ],
+      channelOptions: [],
       checkList: [], //已选中的列
       tableColumnList: [], //动态列
       dynamicColumn: [
@@ -229,7 +234,7 @@ export default {
       'V3BeforeNegotiationsVsV1',
       'V3AfterNegotiationsVsV1',
     ]
-    // this.getTableData()
+     this.getTableData()
   },
   watch: {
     //动态列渲染
@@ -245,24 +250,33 @@ export default {
     //获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageMdBrand({
+      API.getTotalReportList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        yearAndMonthList: this.filterObj.yearAndMonthList,
+        customerNameList: this.filterObj.customerNameList,
+        channelNameList: this.filterObj.channelNameList,
+        productNameList: this.filterObj.productNameList,
+      }).then((response) => {
+        this.tableData = response.data.records
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
       })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch((error) => {})
+    },
+    // 获取渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        this.channelOptions = res.data
+      })
     },
     //获取子组件传递的多个月份值
     getMultipleMonth(data) {
-      this.filterObj.month=data
+      this.filterObj.yearAndMonthList = data
     },
     search() {
-      // this.getTableData()
+      this.pageNum=1
+      this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

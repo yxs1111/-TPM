@@ -43,19 +43,6 @@
           <span class="text">导出</span>
         </div>
       </div>
-      <!-- <div class="OpertionBar">
-
-      </div> -->
-    </div>
-    <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
-        <img src="@/assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve">
-        <svg-icon icon-class="passLocal" style="font-size: 22px;" />
-        <span class="text">提交</span>
-      </div>
     </div>
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
@@ -118,110 +105,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <!-- 导入 -->
-    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
-      <div class="importDialog">
-        <div class="el-downloadFileBar">
-          <div>
-            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportExcel">下载模板</el-button>
-            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
-          </div>
-          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
-        </div>
-        <div class="fileInfo">
-          <div class="fileInfo">
-            <div class="fileTitle">文件</div>
-            <div class="my-search selectFile" @click="parsingExcelBtn">
-              <img src="@/assets/images/selectFile.png" alt="">
-              <span class="text">选择文件</span>
-            </div>
-            <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
-            <div v-if="uploadFileName!=''" class="fileName">
-              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
-              <span>{{ uploadFileName }}</span>
-            </div>
-          </div>
-          <div class="seeData" style="width: auto;">
-            <div class="exportError" @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
-          </div>
-        </div>
-        <div class="tableWrap">
-          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
-              background: '#fff',
-              color: '#333',
-              fontSize: '16px',
-              textAlign: 'center',
-              fontWeight: 400,
-              fontFamily: 'Source Han Sans CN'
-            }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
-              <template slot-scope="scope">
-                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
-                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
-              </template>
-            </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
-            <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-            <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
-            <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
-            <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
-            <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
-            <el-table-column width="120" align="center" prop="brandName" label="品牌" />
-            <el-table-column width="220" align="center" prop="productName" label="SKU" />
-            <el-table-column width="360" align="center" prop="distributorName" label="经销商" />
-            <el-table-column width="120" align="center" prop="regionName" label="区域" />
-            <el-table-column width="220" v-slot={row} align="right" prop="planSales" label="V1计划销量（CTN）">
-              {{FormateNum(row.planSales)}}
-            </el-table-column>
-            <el-table-column width="220" v-slot={row} align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
-              {{FormateNum(row.planPriceAve)}}
-            </el-table-column>
-            <el-table-column width="220" v-slot={row} align="right" prop="planCost" label="V1计划费用（RMB）">
-              {{FormateNum(row.planCost)}}
-            </el-table-column>
-            <el-table-column width="220" v-slot={row} align="right" prop="forecastSales" label="V2预测销量（CTN）">
-              {{FormateNum(row.forecastSales)}}
-            </el-table-column>
-            <el-table-column width="220" v-slot={row} align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
-              {{FormateNum(row.adjustedPriceAve)}}
-            </el-table-column>
-            <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
-              {{FormateNum(row.adjustedCost)}}
-            </el-table-column>
-            <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
-         
-            </el-table-column>
-            <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
-        
-            </el-table-column>
-            <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
-              {{FormateNum(row.costDifference)}}
-            </el-table-column>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
-            <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
-            <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
-          </el-table>
-        </div>
-      </div>
-    </el-dialog>
+
   </div>
 </template>
 
@@ -425,90 +309,6 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
-    importData() {
-      this.importVisible = true
-    },
-
-    // 选择导入文件
-    parsingExcelBtn() {
-      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
-    },
-    // 导入
-    parsingExcel(event) {
-      this.isCheck = false
-      this.uploadFileName = event.target.files[0].name
-      this.uploadFile = event.target.files[0]
-      this.event = event
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importExcel(formData).then((response) => {
-        if (response.code == 1000) {
-          this.$message.success(this.messageMap.importSuccess)
-          this.ImportData = response.data
-          this.isCheck = response.data[0].judgmentType !== 'Error'
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
-        //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
-      })
-    },
-    // 关闭导入
-    closeImportDialog() {
-      this.importVisible = false
-      this.uploadFileName = ''
-      this.uploadFile = ''
-      this.ImportData = []
-      this.saveBtn = false
-      this.isCheck = false
-    },
-    // 校验数据
-    checkImport() {
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.exceptionCheckTwo(formData).then((response) => {
-        if (response.code == 1000) {
-          this.$message.success(this.messageMap.checkSuccess)
-          this.ImportData = response.data
-          this.saveBtn = response.data[0].judgmentType !== 'Error'
-        } else {
-          this.$message.info(this.messageMap.checkError)
-        }
-      })
-    },
-    // 确认导入
-    confirmImport() {
-      API.exceptionSave({
-        mainId: this.tableData[0].mainId,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
-    },
-    // 导出异常信息
-    exportErrorList() {
-      if (this.ImportData.length) {
-        API.exceptionDownExcel({
-          yearAndMonth: this.filterObj.yearAndMonth,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
-          dimProduct: this.filterObj.dim_product,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
-      } else {
-        this.$message.info('异常数据为空!')
-      }
-    },
     // 导出数据
     exportExcel() {
       if (this.tableData.length) {
@@ -546,41 +346,6 @@ export default {
         elink.click()
         URL.revokeObjectURL(elink.href)
         document.body.removeChild(elink)
-      }
-    },
-    // V0 提交审批
-    approve() {
-      if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              const mainId = this.tableData[0].mainId
-              API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('提交成功')
-                  this.getTableData()
-                }
-              })
-            })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
-              })
-            })
-        } else {
-          this.$message.info('数据未校验，请先进行导入验证')
-        }
-      } else {
-        this.$message.warning('数据不能为空')
       }
     },
     // 每页显示页面数变更

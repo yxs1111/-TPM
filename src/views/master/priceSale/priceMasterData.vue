@@ -20,6 +20,12 @@
             <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">客户</span>
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportData">
           <img src="@/assets/images/export.png" alt="" />
@@ -34,8 +40,8 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" ref="multipleTable" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange"
-      style="width: 100%">
+    <el-table :data="tableData" ref="multipleTable" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+      @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column width="250" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
@@ -136,6 +142,12 @@ export default {
     this.getChannelList()
     this.getQuerySkuSelect()
   },
+  watch: {
+    'filterObj.channelCode'() {
+      this.filterObj.customerCode = ''
+      this.getCustomerList()
+    },
+  },
   methods: {
     // 获取表格数据
     getTableData() {
@@ -145,6 +157,7 @@ export default {
         yearAndMonth: this.filterObj.yearAndMonth,
         sku: this.filterObj.sku,
         channelCode: this.filterObj.channelCode,
+        customerCsName: this.filterObj.customerCode,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -166,11 +179,13 @@ export default {
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList({}).then((res) => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      })
+      selectAPI
+        .queryCustomerList({ channelCode: this.filterObj.channelCode })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
     },
     search() {
       this.pageNum = 1

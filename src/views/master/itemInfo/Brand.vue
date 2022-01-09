@@ -5,11 +5,11 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">品牌编码</span>
-          <el-input v-model="filterObj.brandCode" placeholder="请输入" />
+          <el-input v-model="filterObj.brandCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌名称</span>
-          <el-input v-model="filterObj.brandName" placeholder="请输入" />
+          <el-input v-model="filterObj.brandName" clearable placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
       </div>
@@ -140,6 +140,7 @@ export default {
       this.dialogVisible = true
     },
     search() {
+      this.pageNum=1
       this.getTableData()
     },
     closeDialog() {

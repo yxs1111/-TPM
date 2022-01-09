@@ -144,7 +144,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" plain class="my-export" @click="saveImportInfo">保存
+          <el-button v-if="saveBtn" type="primary" plain class="TpmButtonBG" @click="saveImportInfo">保存
           </el-button>
         </div>
       </div>
@@ -462,7 +462,11 @@ export default {
     },
     // 导入数据
     importData() {
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
     // 确认导入
     confirmImport() {

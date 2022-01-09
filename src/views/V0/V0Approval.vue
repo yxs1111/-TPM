@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-07 18:08:08
+ * @LastEditTime: 2022-01-09 15:38:10
 -->
 <template>
   <div class="app-container">
@@ -136,7 +136,7 @@
               <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
               <!-- <el-button v-if="uploadFileName != ''"  type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
             </div>
-            <!-- <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button> -->
+            <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
           </div>
           <div class="fileInfo">
             <div class="fileInfo">
@@ -150,12 +150,6 @@
               <div class="fileName" v-if="uploadFileName != ''">
                 <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
                 <span>{{ uploadFileName }}</span>
-              </div>
-            </div>
-            <div class="seeData" style="width: auto;">
-              <div class="exportError" @click="exportErrorList">
-                <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon" />
-                <span>导出错误信息</span>
               </div>
             </div>
           </div>
@@ -277,7 +271,6 @@ export default {
   },
   directives: { elDragDialog, permission },
   mounted() {
-    console.log(this.$route.query.channelCode)
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getList()
     this.getQuerySkuSelect()
@@ -375,7 +368,11 @@ export default {
     },
     //导入数据
     importData() {
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
     //关闭导入
     closeImportDialog() {
@@ -422,22 +419,6 @@ export default {
     confirmImport() {
       this.closeImportDialog()
       this.getList()
-    },
-    //导出异常信息
-    exportErrorList() {
-      if (this.ImportData.length) {
-        API.exceptionDownExcel({
-          yearAndMonth: this.filterObj.month,
-          dimProduct: this.filterObj.SKU,
-          channelCode: this.filterObj.channelCode,
-        }).then((res) => {
-          this.$message.success(this.messageMap.exportErrorSuccess)
-          let timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
-        })
-      } else {
-        this.$message.info('异常数据为空!')
-      }
     },
     //导出数据
     exportData() {

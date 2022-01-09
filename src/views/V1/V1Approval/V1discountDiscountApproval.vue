@@ -123,11 +123,11 @@
         <div>
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModel">下载模板
           </el-button>
-          <el-button v-if="false" type="primary" plain class="my-export" @click="confirmImport()">检测数据
-          </el-button>
+          <!-- <el-button v-if="false" type="primary" plain class="my-export" @click="confirmImport()">检测数据
+          </el-button> -->
         </div>
         <div>
-          <el-button v-if="false" type="primary" plain class="my-export" @click="closeimportDialog">保存
+          <el-button v-if="saveBtn" type="primary" plain class="TpmButtonBG" @click="closeimportDialog">保存
           </el-button>
         </div>
       </div>
@@ -387,7 +387,11 @@ export default {
     },
     // 导入数据
     importData() {
-      this.importVisible = true
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
     },
     // 选择导入文件
     parsingExcelBtn() {
@@ -421,6 +425,7 @@ export default {
             })
             if (response.data != null) {
               this.checkedData = response.data
+              this.saveBtn = this.checkedData.length ? true : false
               // this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.checkedData = []
@@ -662,8 +667,8 @@ export default {
         .catch((error) => {})
     },
     search() {
-      console.log('hh')
-      // this.getTableData()
+      this.pageNum = 1
+      this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

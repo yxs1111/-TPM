@@ -274,7 +274,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="my-export" @click="saveImportInfoCpm">保存
+          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="TpmButtonBG" @click="saveImportInfoCpm">保存
           </el-button>
         </div>
       </div>
@@ -619,7 +619,11 @@ export default {
     // 导入数据
     importData() {
       this.saveDialog = false
-      this.importVisible = true
+      if(this.filterObj.channelName=='') {
+        this.$message.info('请先选择渠道！')
+      } else {
+        this.importVisible = true
+      }
       this.firstIsPass = false
     },
     // 补录
