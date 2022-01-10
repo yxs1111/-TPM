@@ -325,7 +325,8 @@ export default {
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
       isCheck: false, //检测数据按钮显示或隐藏
-      yearAndMonthList: yearAndMonthList(),
+      // yearAndMonthList: yearAndMonthList(),
+      yearAndMonthList: ['2022 0+12', '2021 11+1', '2021 10+2', '2021 9+3', '2021 8+4'],
       VersionList: VersionList(),
       ChannelList: [],
       backgroundList: [
