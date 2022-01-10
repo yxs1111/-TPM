@@ -1,13 +1,15 @@
 <!--
  * @Description: 多个月份选择
  * @Date: 2022-01-07 14:42:30
- * @LastEditTime: 2022-01-09 14:43:39
+ * @LastEditTime: 2022-01-10 13:50:50
 -->
 <template>
   <div class="monthEl">
-    <div @mouseenter="changeIcon" @mouseleave="removeIcon">
-      <el-input v-model="monthVal" placeholder="选择月份" readonly @click.stop.native="isMonthDis = true">
-      </el-input>
+    <div @mouseenter="changeIcon" @mouseleave="removeIcon" :class="!isDisabled?'':'disabled'">
+      <div class="Selectli">
+      <el-input v-model="monthVal" placeholder="选择月份" :disabled='isDisabled' readonly @click.stop.native="isMonthDis = true"> </el-input>
+      </div>
+     
       <i class="el-icon-circle-close" v-show="isRemove" @click="monthValRemove"></i>
     </div>
     <transition name="fade">
@@ -42,22 +44,37 @@ export default {
       filter: {
         billinDateList: [],
       },
+      isDisabled:'', //当前月是否禁用
     }
   },
   props: ['defaultMonth'],
   mounted() {
-    this.monthVal = '2022-1'
-    let dateList = this.monthVal.split('-')
-    let date = new Date()
-    this.years = date.getFullYear()
-    for (var i = 1; i <= 12; i++) {
-      if (Number(dateList[1]) == i) {
-        this.months.push({
-          num: i,
-          show: true,
-          currentM: false,
-        })
-      } else {
+    if (this.$props.defaultMonth) {
+      this.isDisabled=true
+      this.monthVal = this.$props.defaultMonth
+      let dateList = this.monthVal.split('-')
+      let date = new Date()
+      this.years = date.getFullYear()
+      for (var i = 1; i <= 12; i++) {
+        if (Number(dateList[1]) == i) {
+          this.months.push({
+            num: i,
+            show: true,
+            currentM: false,
+          })
+        } else {
+          this.months.push({
+            num: i,
+            show: false,
+            currentM: false,
+          })
+        }
+      }
+    } else {
+      this.isDisabled=false
+      let date = new Date()
+      this.years = date.getFullYear()
+      for (var i = 1; i <= 12; i++) {
         this.months.push({
           num: i,
           show: false,
@@ -162,6 +179,7 @@ export default {
 .monthEl {
   position: relative;
   width: 220px;
+  height: 40px;
   .el-input {
     position: relative;
     cursor: pointer;
@@ -245,5 +263,9 @@ export default {
 .monthWrap {
   display: flex;
   flex-wrap: wrap;
+}
+.disabled {
+    pointer-events: none;
+    /* background-color: #ccc !important; */
 }
 </style>

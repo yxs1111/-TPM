@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-01-09 23:16:11
+ * @LastEditTime: 2022-01-09 23:21:06
 -->
 <template>
   <div class="dashboard-container">
@@ -234,9 +234,6 @@
           <div class="Messgaeli" v-for="item,index in MessageList" :key="index">
             <span class="MessageDate">[{{item.time}}]</span>
             <span class="MessageContent">{{item.msg}}</span>
-          </div>
-          <div class="Messgaeli" v-if="MessageList.length==5">
-            <span class="MessageDate">……</span>
           </div>
         </div>
       </div>

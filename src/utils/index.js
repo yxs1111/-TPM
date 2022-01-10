@@ -414,7 +414,7 @@ export function replaceUnderLine(val, char = '_') {
   let month=date.getMonth()+1
   let year=date.getFullYear()
   month = month < 10 ? "0" + month : month
-  let currentMonth=year+''+month
+  let currentMonth=year+'-'+month
   return currentMonth
 }
 

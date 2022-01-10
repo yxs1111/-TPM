@@ -11,9 +11,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" type="monthrange"  format='yyyy-MM' value-format='yyyy-MM' range-separator="至" start-placeholder="开始月份"
-            end-placeholder="结束月份">
-          </el-date-picker>
+          <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.month'  />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
@@ -123,10 +121,11 @@ import {
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
+import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 export default {
   name: 'AbnormalAnalysisMonthByChannel',
   directives: { elDragDialog, permission },
-
+  components: { SelectMonth },
   data() {
     return {
       total: 1,
@@ -134,7 +133,7 @@ export default {
       pageNum: 1,
       filterObj: {
         exception: '',
-        month: getCurrentMonth(),
+        month: '',
         MinePackage: '',
         regionCode: '',
         brandCode: '',
@@ -360,6 +359,10 @@ export default {
           this.BrandList = res.data
         }
       })
+    },
+    //获取子组件传递的多个月份值
+    getMultipleMonth(data) {
+      this.filterObj.month = data
     },
     search() {
       this.getTableData()
