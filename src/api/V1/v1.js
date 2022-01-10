@@ -40,7 +40,7 @@ export default {
   // 第一次检测数据
   routineCheck(params) {
     return request({
-      url: '/cityplan/investCpVOneDetail/routineCheck',
+      url: '/cityplan/investCpVOneDetail/routineCheckV2',
       method: 'post',
       data: params,
       headers: { 'Content-Type': 'multipart/form-data' }
