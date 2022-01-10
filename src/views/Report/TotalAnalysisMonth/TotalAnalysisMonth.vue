@@ -7,7 +7,7 @@
           <span class="SelectliTitle">活动月：</span>
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
-          <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.yearAndMonthList' />
+          <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" />
           <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
@@ -35,7 +35,7 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox :label="item.value" v-for="item,index in dynamicColumn" :key="index">{{item.title}}</el-checkbox>
+          <el-checkbox v-for="item,index in dynamicColumn" :key="index" :label="item.value">{{ item.title }}</el-checkbox>
         </el-checkbox-group>
       </div>
 
@@ -52,8 +52,16 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="tableData" :key="tableKey" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
-        style="width: 100%">
+      <el-table
+        :key="tableKey"
+        :data="tableData"
+        border
+        :header-cell-class-name="headerStyle"
+        :row-class-name="tableRowClassName"
+        :cell-style="columnStyle"
+        height="550"
+        style="width: 100%"
+      >
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -80,23 +88,23 @@
             </el-table-column>
           </el-table-column>
         </el-table-column> -->
-        <el-table-column align="center" prop="name" v-for="item,key in tableData[0].month" :key="key">
+        <el-table-column v-for="item,key in tableData[0].month" :key="key" align="center" prop="name">
           <template v-slot:header>
             {{ key }}
           </template>
           <template>
-            <el-table-column align="center" width="250" v-for="(cvalue,ckey) in item" :key="ckey">
+            <el-table-column v-for="(cvalue,ckey) in item" :key="ckey" align="center" width="250">
               <template v-slot:header>
                 {{ ckey }}
               </template>
               <template>
-                <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="index">
+                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" width="250">
                   <template v-slot:header>
                     {{ titleItem.title }}
                   </template>
                   <template>
                     <div>
-                      {{cvalue[titleItem.value]}}
+                      {{ cvalue[titleItem.value] }}
                     </div>
                   </template>
                 </el-table-column>
@@ -111,8 +119,15 @@
 
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -127,7 +142,7 @@ import {
   ReportCheckList,
   dynamicColumn,
   getCurrentMonth,
-  ReportBgColorMap,
+  ReportBgColorMap
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
@@ -135,6 +150,7 @@ import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'AbnormalAnalysisHistoryByChannel',
   components: { SelectMonth },
+  directives: { elDragDialog, permission },
   data() {
     return {
       total: 1,
@@ -147,18 +163,18 @@ export default {
         productCode: '',
         type: '',
         month: '',
-        category: '',
+        category: ''
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      //表格列
+      // 表格列
       tableOption: [
         { label: 'V1' },
         { label: 'V2' },
         { label: 'V3谈判前' },
         { label: 'V3谈判后' },
         { label: '价格执行率1# V3谈判前  VS  V1' },
-        { label: '价格执行率1# V3谈判后  VS  V1' },
+        { label: '价格执行率1# V3谈判后  VS  V1' }
       ],
       tableData: [
         {
@@ -172,7 +188,7 @@ export default {
                 V3BeforeNegotiations: 'V3BeforeNegotiations',
                 V3AfterNegotiations: 'V3AfterNegotiations',
                 V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
               },
               孩子王: {
                 V1: 'V1',
@@ -180,8 +196,8 @@ export default {
                 V3BeforeNegotiations: 'V3BeforeNegotiations',
                 V3AfterNegotiations: 'V3AfterNegotiations',
                 V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
-              },
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
+              }
             },
             202103: {
               total: {
@@ -190,7 +206,7 @@ export default {
                 V3BeforeNegotiations: 'V3BeforeNegotiations',
                 V3AfterNegotiations: 'V3AfterNegotiations',
                 V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
               },
               孩子王: {
                 V1: 'V1',
@@ -198,17 +214,17 @@ export default {
                 V3BeforeNegotiations: 'V3BeforeNegotiations',
                 V3AfterNegotiations: 'V3AfterNegotiations',
                 V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
-              },
-            },
-          },
-        },
+                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
+              }
+            }
+          }
+        }
       ],
       channelOptions: [],
       customerArr: [],
       skuList: [],
-      checkList: [], //已选中的列
-      tableColumnList: [], //动态列
+      checkList: [], // 已选中的列
+      tableColumnList: [], // 动态列
       dynamicColumn: [
         { title: 'V1', value: 'V1' },
         { title: 'V2', value: 'V2' },
@@ -216,18 +232,27 @@ export default {
         { title: 'V3谈判后', value: 'V3AfterNegotiations' },
         {
           title: '价格执行率1# V3谈判前  VS  V1',
-          value: 'V3BeforeNegotiationsVsV1',
+          value: 'V3BeforeNegotiationsVsV1'
         },
         {
           title: '价格执行率1# V3谈判后  VS  V1',
-          value: 'V3AfterNegotiationsVsV1',
-        },
-      ], //展示列选项框
-      ReportBgColorMap: ReportBgColorMap(), //动态列背景色
-      tableKey: 0, //el-table key
+          value: 'V3AfterNegotiationsVsV1'
+        }
+      ], // 展示列选项框
+      ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
+      tableKey: 0 // el-table key
     }
   },
-  directives: { elDragDialog, permission },
+  computed: {},
+  watch: {
+    // 动态列渲染
+    checkList(checkedList) {
+      this.tableColumnList = this.dynamicColumn.filter(
+        (item) => checkedList.indexOf(item.value) != -1
+      )
+      this.tableKey++
+    }
+  },
   mounted() {
     this.checkList = [
       'V1',
@@ -235,34 +260,28 @@ export default {
       'V3BeforeNegotiations',
       'V3AfterNegotiations',
       'V3BeforeNegotiationsVsV1',
-      'V3AfterNegotiationsVsV1',
+      'V3AfterNegotiationsVsV1'
     ]
     this.getQueryChannelSelect()
     this.getCustomerList()
     this.getSkuSelect()
-    //  this.getTableData()
+    this.getTableData()
   },
-  watch: {
-    //动态列渲染
-    checkList(checkedList) {
-      this.tableColumnList = this.dynamicColumn.filter(
-        (item) => checkedList.indexOf(item.value) != -1
-      )
-      this.tableKey++
-    },
-  },
-  computed: {},
   methods: {
-    //获取表格数据
+    // 获取表格数据
     getTableData() {
       this.tableData = []
       API.getTotalReportList({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
-        yearAndMonthList: this.filterObj.yearAndMonthList,
-        customerNameList: this.filterObj.customerCode,
-        channelNameList: this.filterObj.channelCode,
-        productNameList: this.filterObj.productCode,
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        // yearAndMonthList: this.filterObj.yearAndMonthList,
+        // customerNameList: this.filterObj.customerCode,
+        // channelNameList: this.filterObj.channelCode,
+        // productNameList: this.filterObj.productCode
+        yearAndMonthList: ['202109', '202110'],
+        customerNameList: ['孩子王', '沃尔玛'],
+        channelNameList: ['NKA'],
+        productNameList: ['Friso F0 900g']
       }).then((response) => {
         this.tableData = response.data.records
         this.pageNum = response.data.pageNum
@@ -280,7 +299,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode,
+          channelCode: this.filterObj.channelCode
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -288,13 +307,13 @@ export default {
           }
         })
     },
-    //获取SKU
+    // 获取SKU
     getSkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
         this.skuList = res.data
       })
     },
-    //获取子组件传递的多个月份值
+    // 获取子组件传递的多个月份值
     getMultipleMonth(data) {
       this.filterObj.yearAndMonthList = data
     },
@@ -318,19 +337,19 @@ export default {
         return 'TotalRow'
       }
     },
-    //表格头样式
+    // 表格头样式
     headerStyle({ column, rowIndex, columnIndex }) {
       if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) {
         return 'headerStyle'
       }
     },
-    //列样式
+    // 列样式
     columnStyle({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0 && rowIndex !== 0) {
         return 'background:#4192d3;color: #fff'
       }
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -388,6 +407,4 @@ export default {
   font-size: 14px;
 }
 </style>
-
-
 

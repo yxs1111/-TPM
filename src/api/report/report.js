@@ -8,10 +8,9 @@ import request from '@/utils/request'
 
 export default {
   url: '/cityplan',
-  //汇总分析报告--当月
+  // 汇总分析报告--当月
   getTotalReportList(params) {
-    return requestApi.request_get(this.url+'/priceExecutionRate/queryList', params)
-  },
+    return requestApi.request_post(this.url + '/priceExecutionRate/queryList', params)
+  }
 }
-
 
