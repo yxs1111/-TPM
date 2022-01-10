@@ -12,8 +12,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.channelCode" placeholder="请选择">
-            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择">
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -52,16 +52,8 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table
-        :key="tableKey"
-        :data="tableData"
-        border
-        :header-cell-class-name="headerStyle"
-        :row-class-name="tableRowClassName"
-        :cell-style="columnStyle"
-        height="550"
-        style="width: 100%"
-      >
+      <el-table :key="tableKey" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
+        style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -72,30 +64,14 @@
             </div>
           </template>
         </el-table-column>
-        <!-- <el-table-column align="center" prop="name" label="202010">
-          <el-table-column align="center" width="150" prop="name" label="Total">
-            <el-table-column v-for="(item, index) in tableOption" width="250" :key="index" :label="item.label" align="center">
-              <template slot-scope="scope">
-                <span>{{scope.row.tableOption[index].value}}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="孩子王">
-            <el-table-column v-for="(item, index) in tableOption" width="250" :key="index" :label="item.label" align="center">
-              <template slot-scope="scope">
-                <span>{{scope.row.tableOption[index].value}}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table-column> -->
         <el-table-column v-for="item,key in tableData[0].month" :key="key" align="center" prop="name">
           <template v-slot:header>
             {{ key }}
           </template>
           <template>
-            <el-table-column v-for="(cvalue,ckey) in item" :key="ckey" align="center" width="250">
+            <el-table-column v-for="(CustomerItem,CustomerKey) in item" :key="CustomerKey" align="center" width="250">
               <template v-slot:header>
-                {{ ckey }}
+                {{ CustomerItem.customerName1 }}
               </template>
               <template>
                 <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" width="250">
@@ -104,7 +80,7 @@
                   </template>
                   <template>
                     <div>
-                      {{ cvalue[titleItem.value] }}
+                      {{ CustomerItem[titleItem.value] }}
                     </div>
                   </template>
                 </el-table-column>
@@ -115,19 +91,6 @@
 
         </el-table-column>
       </el-table>
-    </div>
-
-    <!-- 分页 -->
-    <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
     </div>
   </div>
 </template>
@@ -142,7 +105,7 @@ import {
   ReportCheckList,
   dynamicColumn,
   getCurrentMonth,
-  ReportBgColorMap
+  ReportBgColorMap,
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
@@ -163,7 +126,7 @@ export default {
         productCode: '',
         type: '',
         month: '',
-        category: ''
+        category: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -174,73 +137,30 @@ export default {
         { label: 'V3谈判前' },
         { label: 'V3谈判后' },
         { label: '价格执行率1# V3谈判前  VS  V1' },
-        { label: '价格执行率1# V3谈判后  VS  V1' }
+        { label: '价格执行率1# V3谈判后  VS  V1' },
       ],
-      tableData: [
-        {
-          version: 'V1',
-          name: 'EC',
-          month: {
-            202102: {
-              total: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
-              },
-              孩子王: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
-              }
-            },
-            202103: {
-              total: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
-              },
-              孩子王: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1'
-              }
-            }
-          }
-        }
-      ],
+      tableData: [],
       channelOptions: [],
       customerArr: [],
       skuList: [],
       checkList: [], // 已选中的列
       tableColumnList: [], // 动态列
       dynamicColumn: [
-        { title: 'V1', value: 'V1' },
-        { title: 'V2', value: 'V2' },
-        { title: 'V3谈判前', value: 'V3BeforeNegotiations' },
-        { title: 'V3谈判后', value: 'V3AfterNegotiations' },
+        { title: 'V1', value: 'v1Avg' },
+        { title: 'V2', value: 'v2Avg' },
+        { title: 'V3谈判前', value: 'v3AfterAvg' },
+        { title: 'V3谈判后', value: 'v3BeforeAvg' },
         {
           title: '价格执行率1# V3谈判前  VS  V1',
-          value: 'V3BeforeNegotiationsVsV1'
+          value: 'priceExecutionRate1',
         },
         {
-          title: '价格执行率1# V3谈判后  VS  V1',
-          value: 'V3AfterNegotiationsVsV1'
-        }
+          title: '价格执行率2# V3谈判后  VS  V1',
+          value: 'priceExecutionRate2',
+        },
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
-      tableKey: 0 // el-table key
+      tableKey: 0, // el-table key
     }
   },
   computed: {},
@@ -251,16 +171,16 @@ export default {
         (item) => checkedList.indexOf(item.value) != -1
       )
       this.tableKey++
-    }
+    },
   },
   mounted() {
     this.checkList = [
-      'V1',
-      'V2',
-      'V3BeforeNegotiations',
-      'V3AfterNegotiations',
-      'V3BeforeNegotiationsVsV1',
-      'V3AfterNegotiationsVsV1'
+      'v1Avg',
+      'v2Avg',
+      'v3AfterAvg',
+      'v3BeforeAvg',
+      'priceExecutionRate1',
+      'priceExecutionRate2',
     ]
     this.getQueryChannelSelect()
     this.getCustomerList()
@@ -281,29 +201,84 @@ export default {
         yearAndMonthList: ['202109', '202110'],
         customerNameList: ['孩子王', '沃尔玛'],
         channelNameList: ['NKA'],
-        productNameList: ['Friso F0 900g']
+        // productNameList: ['Friso F0 900g'],
+        productNameList: [],
       }).then((response) => {
-        this.tableData = response.data.records
+        let AllObj = response.data
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
+        //按SKU,customer拆分
+        let allList = []
+        for (const key in AllObj) {
+          if (AllObj.hasOwnProperty.call(AllObj, key)) {
+            //2021 09 year
+            const yearObj = AllObj[key]
+            let year = key
+            for (const customerKey in yearObj) {
+              if (yearObj.hasOwnProperty.call(yearObj, customerKey)) {
+                const list = yearObj[customerKey]
+                let customerName1 = customerKey
+                for (let index = 0; index < list.length; index++) {
+                  let obj = Object.assign(list[index], { year, customerName1 })
+                  allList.push(obj)
+                }
+              }
+            }
+          }
+        }
+        let AllData = {}
+        // 按SKU 重新分组
+        for (let m = 0; m < allList.length; m++) {
+          //根据productEsName 进行分组
+          if (!AllData[allList[m].productEsName]) {
+            var arr = []
+            arr.push(allList[m])
+            AllData[allList[m].productEsName] = arr
+          } else {
+            AllData[allList[m].productEsName].push(allList[m])
+          }
+        }
+        let AllDataList = []
+        // 按年月重新分组
+        for (const productItem in AllData) {
+          if (Object.hasOwnProperty.call(AllData, productItem)) {
+            const list = AllData[productItem]
+            let yearData = {}
+            for (let m = 0; m < list.length; m++) {
+              if (!yearData[list[m].year]) {
+                var arr = []
+                arr.push(list[m])
+                yearData[list[m].year] = arr
+              } else {
+                yearData[list[m].year].push(list[m])
+              }
+            }
+            AllData[productItem] = yearData
+            let obj = Object.assign({ name: productItem }, { month: yearData })
+            AllDataList.push(obj)
+          }
+        }
+        this.tableData=AllDataList
       })
     },
     // 获取渠道
     getQueryChannelSelect() {
       selectAPI.queryChannelSelect().then((res) => {
         this.channelOptions = res.data
+        this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
       })
     },
     // 客户
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
+            this.filterObj.customerCode = [this.customerArr[0].customerCsName]
           }
         })
     },
@@ -348,8 +323,8 @@ export default {
       if (columnIndex === 0 && rowIndex !== 0) {
         return 'background:#4192d3;color: #fff'
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
