@@ -24,11 +24,11 @@
           <span class="SelectliTitle">Measure:</span>
           <el-input v-model="filterObj.measure" clearable filterable placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
     <div class="SelectBarWrap">
-      <div class="TpmButtonBG" @click="importDataEC">
+      <div class="TpmButtonBG" @click="importDataEC" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">EC Rawdata导入</span>
       </div>

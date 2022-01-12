@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-01-07 11:49:03
+ * @LastEditTime: 2022-01-11 10:59:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -260,7 +260,7 @@ export default {
     return requestApi.request_get('/mdm/mdPricepromotionCalculationandmaintenance/getPageByDto', params)
   },
   DeleteSaleComputeKeep(params) {
-    return requestApi.request_delete('/mdm/mdPricepromotionCalculationandmaintenance/delete', params)
+    return requestApi.request_delete('/mdm/mdPricepromotionCalculationandmaintenance/hasAuthlogicDeleteBatch', params)
   },
   importSaleComputeKeep(params) {
     return requestApi.request_post('/mdm/mdPricepromotionCalculationandmaintenance/importData', params)

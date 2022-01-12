@@ -15,11 +15,11 @@
           <span class="SelectliTitle">费用科目</span>
           <el-input v-model="filterObj.costItem" clearable placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
     </div>
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" />

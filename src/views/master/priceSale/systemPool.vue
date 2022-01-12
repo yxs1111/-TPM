@@ -25,15 +25,15 @@
           <span class="SelectliTitle">机制名称：</span>
           <el-input v-model="filterObj.cdmName" placeholder="请输入" clearable />
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo">
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
@@ -43,6 +43,7 @@
         icon="el-icon-delete"
         size="small"
         @click="mutidel"
+        v-permission="permissions['delete']"
       >删除</el-button>
       <!-- <div class="TpmButtonBG" @click="add">
         <img src="../../../assets/images/import.png" alt="">

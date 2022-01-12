@@ -26,16 +26,16 @@
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
+        <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-      <div class="TpmButtonBG" @click="importData">
+      <el-button type="primary" v-permission="permissions['delete']" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>

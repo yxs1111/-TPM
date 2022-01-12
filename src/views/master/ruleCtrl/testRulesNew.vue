@@ -27,16 +27,16 @@
             placeholder="选择月"
           />
         </div>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo">
+        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
-      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
+      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave" v-permission="permissions['update']">保存</el-button>
+      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear" v-permission="permissions['insert']">新增</el-button>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="220" align="center" prop="version" label="版本" />

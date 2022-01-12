@@ -17,15 +17,15 @@
             <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="exportData">
+      <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
         <img src="@/assets/images/export.png" alt="">
         <span class="text">导出</span>
       </div>

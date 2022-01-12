@@ -21,16 +21,16 @@
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-      <div class="TpmButtonBG" @click="importData">
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
+      <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
@@ -38,13 +38,13 @@
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
-      <el-table-column width="150" fixed="left" align="center" prop="customerCsName" label="客户名称" />
+      <el-table-column  fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数">
         {{(row.grossProfitPoints*1).toFixed(4)}}
       </el-table-column>
-      <el-table-column v-slot={row} width="320" align="right" prop="dealerRebate" label="经销商返利">
+      <el-table-column v-slot={row} width="150" align="right" prop="dealerRebate" label="经销商返利">
         {{(row.dealerRebate*1).toFixed(4)}}
       </el-table-column>
       <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
@@ -99,6 +99,12 @@
         <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
       </div>
     </el-dialog>
+    <!-- 错误弹窗 -->
+    <el-dialog width="25%" class="my-el-dialog" title="错误信息" :visible="errorVisible" @close="closeErrorDialog">
+      <div style="height: 300px;overflow: scroll;overflow-x: hidden;margin-top:15px;">
+        <el-alert v-for="(item, index) in errorList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -133,6 +139,8 @@ export default {
       event: '',
       warningList: [],
       warningShow: false,
+      errorVisible: false, //错误信息弹窗
+      errorList: [], //错误信息数据
       checkArr: [], //批量删除,存放选中
     }
   },
@@ -235,6 +243,11 @@ export default {
       this.warningList = []
       this.warningShow = false
     },
+    //关闭导入
+    closeErrorDialog() {
+      this.errorVisible = false
+      this.errorList = []
+    },
     //导出数据
     exportData() {
       //导出数据筛选
@@ -289,6 +302,9 @@ export default {
               if (response.code === 1000) {
                 this.getTableData()
                 this.$message.success('删除成功!')
+              } else if(response.code === 1001) {
+                this.errorList=response.data
+                this.errorVisible=true
               }
             })
           })

@@ -7,7 +7,7 @@
           <span class="SelectliTitle">客户组名称</span>
           <el-input v-model="filterObj.groupName" clearable placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
       
       </div>
     </div>

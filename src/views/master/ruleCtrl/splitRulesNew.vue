@@ -22,11 +22,11 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData" v-permission="permissions['get']">查询</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="add">
+      <div class="TpmButtonBG" @click="add" v-permission="permissions['insert']">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">新增</span>
       </div>
@@ -34,7 +34,7 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div> -->
-      <div class="TpmButtonBG" @click="mutidel">
+      <div class="TpmButtonBG" @click="mutidel" v-permission="permissions['export']">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出</span>
       </div>

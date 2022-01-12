@@ -11,12 +11,12 @@
           <span class="SelectliTitle">品牌名称</span>
           <el-input v-model="filterObj.brandName" clearable placeholder="请输入" />
         </div>
-        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add" v-permission="permissions['insert']">新增</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
     </div>
     <el-table :data="tableData" border max-height="600" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />

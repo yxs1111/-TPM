@@ -25,8 +25,8 @@
             <el-option v-for="item in splitTypeArr" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo">
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
@@ -58,7 +58,7 @@
       </el-form-item>
     </el-form> -->
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="add">新增</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="add" v-permission="permissions['insert']">新增</el-button>
       <el-button
         type="danger"
         class="TpmButtonBG"

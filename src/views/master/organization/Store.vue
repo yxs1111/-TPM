@@ -27,7 +27,7 @@
             <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
     <el-table :data="tableData" border max-height="800" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
