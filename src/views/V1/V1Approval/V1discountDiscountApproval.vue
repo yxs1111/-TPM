@@ -654,6 +654,7 @@ export default {
             this.mainIdLocal = response.data.records[0].mainId
             this.infoByMainId()
           } else {
+            this.tableData = []
             this.mainIdLocal = null
             this.btnStatus = false
           }

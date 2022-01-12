@@ -651,6 +651,7 @@ export default {
             this.submitBtn = response.data.records[0].isSubmit
             this.infoByMainId()
           } else {
+            this.tableData = []
             this.mainIdLocal = null
             this.btnStatus = false
           }
