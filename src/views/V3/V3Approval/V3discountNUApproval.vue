@@ -81,12 +81,12 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
         {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
       </el-table-column>
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-        <!-- {{ row.avePriceDifference + '%' }}
-      </el-table-column> -->
-      <el-table-column width="160" align="right" prop="achievementRate" label="达成率（%）" />
-        <!-- {{ row.salesDifference + '%' }}
-      </el-table-column> -->
+      <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+        {{ (row.avePriceDifference*1).toFixed(2) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="160" align="right" prop="achievementRate" label="达成率（%）">
+        {{ (row.salesDifference*1).toFixed(2) }}
+      </el-table-column>
       <el-table-column v-slot="{row}" width="150" align="right" prop="costDifference" label="费用差值(RMB)">
         {{ FormateNum((row.costDifference*1).toFixed(2)) }}
       </el-table-column>
@@ -205,12 +205,12 @@
           <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationCost" title="V3谈判前费用（RMB）">
             {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
           </vxe-table-column>
-          <vxe-table-column width="160" align="right" field="avePriceDifference" title="均价差值（%）" />
-            <!-- {{ row.avePriceDifference + '%' }}
-          </el-table-column> -->
-          <vxe-table-column width="160" align="right" field="achievementRate" title="达成率（%）" />
-            <!-- {{ row.salesDifference + '%' }}
-          </el-table-column> -->
+          <vxe-table-column v-slot="{row}" width="160" align="right" field="avePriceDifference" title="均价差值（%）">
+            {{ (row.avePriceDifference*1).toFixed(2) }}
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="160" align="right" field="achievementRate" title="达成率（%）">
+            {{ (row.salesDifference*1).toFixed(2) }}
+          </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="150" align="right" field="costDifference" title="费用差值(RMB)">
             {{ FormateNum((row.costDifference*1).toFixed(2)) }}
           </vxe-table-column>

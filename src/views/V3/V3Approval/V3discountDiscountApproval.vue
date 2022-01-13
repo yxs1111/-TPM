@@ -102,12 +102,12 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
         {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
       </el-table-column>
-      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）" />
-        <!-- <template slot-scope="scope">{{ scope.row.avePriceDifference + '%' }}</template>
-      </el-table-column> -->
-      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）" />
-        <!-- <template slot-scope="scope">{{ scope.row.salesDifference + '%' }}</template>
-      </el-table-column> -->
+      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+        <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
+      </el-table-column>
+      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
+        <template slot-scope="scope">{{ (scope.row.salesDifference*1).toFixed(2) }}</template>
+      </el-table-column>
       <el-table-column v-slot="{row}" width="120" align="right" prop="costDifference" label="费用差值">
         {{ FormateNum((row.costDifference*1).toFixed(2)) }}
       </el-table-column>
@@ -151,7 +151,7 @@
           </el-button>
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary"  class="TpmButtonBG"  @click="closeimportDialog">保存
+          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="closeimportDialog">保存
           </el-button>
         </div>
       </div>
@@ -240,12 +240,12 @@
           <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationCost" title="V3谈判后费用（RMB）">
             {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
           </vxe-table-column>
-          <vxe-table-column width="160" align="right" field="avePriceDifference" title="均价差值（%）" />
-            <!-- <template slot-scope="scope">{{ scope.row.avePriceDifference + '%' }}</template>
-          </el-table-column> -->
-          <vxe-table-column width="160" align="right" field="salesDifference" title="销量差值（%）" />
-            <!-- <template slot-scope="scope">{{ scope.row.salesDifference + '%' }}</template>
-          </el-table-column> -->
+          <vxe-table-column width="160" align="right" field="avePriceDifference" title="均价差值（%）">
+            <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
+          </vxe-table-column>
+          <vxe-table-column width="160" align="right" field="salesDifference" title="销量差值（%）">
+            <template slot-scope="scope">{{ (scope.row.salesDifference*1).toFixed(2) }}</template>
+          </vxe-table-column>
           <vxe-table-column width="120" align="right" field="costDifference" title="费用差值" />
           <vxe-table-column width="120" align="center" field="judgmentType" title="系统判定" />
           <vxe-table-column width="120" align="center" field="applyRemarks" title="申请人备注" />
@@ -514,7 +514,7 @@ export default {
     // 导入数据
     importData() {
       this.saveDialog = false
-      if(this.filterObj.channelName=='') {
+      if (this.filterObj.channelName == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -616,7 +616,7 @@ export default {
               this.dialogData = response.data
               this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               this.$forceUpdate()
-              this.saveBtn = this.dialogData.length ? true : false
+              this.saveBtn = !!this.dialogData.length
               // this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.dialogData = []
