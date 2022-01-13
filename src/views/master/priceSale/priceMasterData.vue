@@ -35,6 +35,7 @@
     </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" v-permission="permissions['delete']" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <!-- <el-button type="primary"  class="TpmButtonBG"  @click="timeOut">定时任务</el-button> -->
       <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
@@ -149,6 +150,11 @@ export default {
     },
   },
   methods: {
+    timeOut() {
+      selectAPI.timeout().then((res) => {
+        
+      })
+    },
     // 获取表格数据
     getTableData() {
       API.getPageMdprice({

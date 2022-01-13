@@ -5,24 +5,27 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.month" type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" />
+          <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
+          </el-date-picker> -->
+          <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" />
+          <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择">
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.productCode" clearable multiple collapse-tags filterable placeholder="请选择">
+            <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
 
@@ -32,11 +35,11 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox :label="item.value" v-for="item,index in dynamicColumn" :key="index">{{item.title}}</el-checkbox>
+          <el-checkbox v-for="item,index in dynamicColumn" :key="index" :label="item.value">{{ item.title }}</el-checkbox>
         </el-checkbox-group>
       </div>
 
-      <el-button type="primary" class="TpmButtonBG my-search">查询</el-button>
+      <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG">
@@ -49,7 +52,7 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="tableData" :key="tableKey" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
+      <el-table :key="tableKey" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
         style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
@@ -61,39 +64,23 @@
             </div>
           </template>
         </el-table-column>
-        <!-- <el-table-column align="center" prop="name" label="202010">
-          <el-table-column align="center" width="150" prop="name" label="Total">
-            <el-table-column v-for="(item, index) in tableOption" width="250" :key="index" :label="item.label" align="center">
-              <template slot-scope="scope">
-                <span>{{scope.row.tableOption[index].value}}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column align="center" width="150" prop="name" label="孩子王">
-            <el-table-column v-for="(item, index) in tableOption" width="250" :key="index" :label="item.label" align="center">
-              <template slot-scope="scope">
-                <span>{{scope.row.tableOption[index].value}}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-        </el-table-column> -->
-        <el-table-column align="center" prop="name" v-for="item,key in tableData[0].month" :key="key">
+        <el-table-column v-for="item,key in tableData[0].month" :key="key" align="center" prop="name">
           <template v-slot:header>
             {{ key }}
           </template>
           <template>
-            <el-table-column align="center" width="250" v-for="(cvalue,ckey) in item" :key="ckey">
+            <el-table-column v-for="(CustomerItem,CustomerKey) in item" :key="CustomerKey" align="center" width="250">
               <template v-slot:header>
-                {{ ckey }}
+                {{ CustomerItem.customerName1 }}
               </template>
               <template>
-                <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="index">
+                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" width="250">
                   <template v-slot:header>
                     {{ titleItem.title }}
                   </template>
                   <template>
                     <div>
-                      {{cvalue[titleItem.value]}}
+                      {{ CustomerItem[titleItem.value] }}
                     </div>
                   </template>
                 </el-table-column>
@@ -104,12 +91,6 @@
 
         </el-table-column>
       </el-table>
-    </div>
-
-    <!-- 分页 -->
-    <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
@@ -126,24 +107,30 @@ import {
   getCurrentMonth,
   ReportBgColorMap,
 } from '@/utils'
-import API from '@/api/masterData/masterData.js'
-
+import API from '@/api/report/report.js'
+import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'AbnormalAnalysisHistoryByChannel',
-
+  components: { SelectMonth },
+  directives: { elDragDialog, permission },
   data() {
     return {
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        yearAndMonthList: getCurrentMonth(),
+        customerCode: '',
+        channelCode: '',
+        productCode: '',
         type: '',
         month: '',
         category: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      //表格列
+      // 表格列
       tableOption: [
         { label: 'V1' },
         { label: 'V2' },
@@ -152,84 +139,33 @@ export default {
         { label: '价格执行率1# V3谈判前  VS  V1' },
         { label: '价格执行率1# V3谈判后  VS  V1' },
       ],
-      tableData: [
-        {
-          version: 'V1',
-          name: 'EC',
-          month: {
-            202102: {
-              total: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
-              },
-              孩子王: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
-              },
-            },
-            202103: {
-              total: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
-              },
-              孩子王: {
-                V1: 'V1',
-                V2: 'V2',
-                V3BeforeNegotiations: 'V3BeforeNegotiations',
-                V3AfterNegotiations: 'V3AfterNegotiations',
-                V3BeforeNegotiationsVsV1: 'V3BeforeNegotiationsVsV1',
-                V3AfterNegotiationsVsV1: 'V3AfterNegotiationsVsV1',
-              },
-            },
-          },
-        },
-      ],
-      checkList: [], //已选中的列
-      tableColumnList: [], //动态列
+      tableData: [],
+      channelOptions: [],
+      customerArr: [],
+      skuList: [],
+      checkList: [], // 已选中的列
+      tableColumnList: [], // 动态列
       dynamicColumn: [
-        { title: 'V1', value: 'V1' },
-        { title: 'V2', value: 'V2' },
-        { title: 'V3谈判前', value: 'V3BeforeNegotiations' },
-        { title: 'V3谈判后', value: 'V3AfterNegotiations' },
+        { title: 'V1', value: 'v1Avg' },
+        { title: 'V2', value: 'v2Avg' },
+        { title: 'V3谈判前', value: 'v3AfterAvg' },
+        { title: 'V3谈判后', value: 'v3BeforeAvg' },
         {
           title: '价格执行率1# V3谈判前  VS  V1',
-          value: 'V3BeforeNegotiationsVsV1',
+          value: 'priceExecutionRate1',
         },
         {
-          title: '价格执行率1# V3谈判后  VS  V1',
-          value: 'V3AfterNegotiationsVsV1',
+          title: '价格执行率2# V3谈判后  VS  V1',
+          value: 'priceExecutionRate2',
         },
-      ], //展示列选项框
-      ReportBgColorMap: ReportBgColorMap(), //动态列背景色
-      tableKey: 0, //el-table key
+      ], // 展示列选项框
+      ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
+      tableKey: 0, // el-table key
     }
   },
-  directives: { elDragDialog, permission },
-  mounted() {
-    this.checkList = [
-      'V1',
-      'V2',
-      'V3BeforeNegotiations',
-      'V3AfterNegotiations',
-      'V3BeforeNegotiationsVsV1',
-      'V3AfterNegotiationsVsV1',
-    ]
-    // this.getTableData()
-  },
+  computed: {},
   watch: {
-    //动态列渲染
+    // 动态列渲染
     checkList(checkedList) {
       this.tableColumnList = this.dynamicColumn.filter(
         (item) => checkedList.indexOf(item.value) != -1
@@ -237,25 +173,126 @@ export default {
       this.tableKey++
     },
   },
-  computed: {},
+  mounted() {
+    this.checkList = [
+      'v1Avg',
+      'v2Avg',
+      'v3AfterAvg',
+      'v3BeforeAvg',
+      'priceExecutionRate1',
+      'priceExecutionRate2',
+    ]
+    this.getQueryChannelSelect()
+    this.getCustomerList()
+    this.getSkuSelect()
+    this.getTableData()
+  },
   methods: {
-    //获取表格数据
+    // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageMdBrand({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
+      API.getTotalReportList({
+        // yearAndMonthList: this.filterObj.yearAndMonthList,
+        // customerNameList: this.filterObj.customerCode,
+        // channelNameList: this.filterObj.channelCode,
+        // productNameList: this.filterObj.productCode
+        yearAndMonthList: ['202109', '202110'],
+        customerNameList: ['孩子王', '沃尔玛'],
+        channelNameList: ['NKA'],
+         productNameList: ['Friso F0 900g'],
+        //productNameList: [],
+      }).then((response) => {
+        let AllObj = response.data
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+        //按SKU,customer拆分
+        let allList = []
+        for (const key in AllObj) {
+          if (AllObj.hasOwnProperty.call(AllObj, key)) {
+            //2021 09 year
+            const yearObj = AllObj[key]
+            let year = key
+            for (const customerKey in yearObj) {
+              if (yearObj.hasOwnProperty.call(yearObj, customerKey)) {
+                const list = yearObj[customerKey]
+                let customerName1 = customerKey
+                for (let index = 0; index < list.length; index++) {
+                  let obj = Object.assign(list[index], { year, customerName1 })
+                  allList.push(obj)
+                }
+              }
+            }
+          }
+        }
+        let AllData = {}
+        // 按SKU 重新分组
+        for (let m = 0; m < allList.length; m++) {
+          //根据productEsName 进行分组
+          if (!AllData[allList[m].productEsName]) {
+            var arr = []
+            arr.push(allList[m])
+            AllData[allList[m].productEsName] = arr
+          } else {
+            AllData[allList[m].productEsName].push(allList[m])
+          }
+        }
+        let AllDataList = []
+        // 按年月重新分组
+        for (const productItem in AllData) {
+          if (Object.hasOwnProperty.call(AllData, productItem)) {
+            const list = AllData[productItem]
+            let yearData = {}
+            for (let m = 0; m < list.length; m++) {
+              if (!yearData[list[m].year]) {
+                var arr = []
+                arr.push(list[m])
+                yearData[list[m].year] = arr
+              } else {
+                yearData[list[m].year].push(list[m])
+              }
+            }
+            AllData[productItem] = yearData
+            let obj = Object.assign({ name: productItem }, { month: yearData })
+            AllDataList.push(obj)
+          }
+        }
+        this.tableData=AllDataList
       })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
+    },
+    // 获取渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        this.channelOptions = res.data
+        this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
+      })
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
         })
-        .catch((error) => {})
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+            this.filterObj.customerCode = [this.customerArr[0].customerCsName]
+          }
+        })
+    },
+    // 获取SKU
+    getSkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuList = res.data
+      })
+    },
+    // 获取子组件传递的多个月份值
+    getMultipleMonth(data) {
+      this.filterObj.yearAndMonthList = data
     },
     search() {
-      // this.getTableData()
+      this.pageNum = 1
+      this.getTableData()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -273,13 +310,13 @@ export default {
         return 'TotalRow'
       }
     },
-    //表格头样式
+    // 表格头样式
     headerStyle({ column, rowIndex, columnIndex }) {
       if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) {
         return 'headerStyle'
       }
     },
-    //列样式
+    // 列样式
     columnStyle({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0 && rowIndex !== 0) {
         return 'background:#4192d3;color: #fff'
@@ -343,6 +380,4 @@ export default {
   font-size: 14px;
 }
 </style>
-
-
 

@@ -192,8 +192,6 @@ export default {
     getTableData() {
       this.tableData = []
       API.getTotalReportList({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
         // yearAndMonthList: this.filterObj.yearAndMonthList,
         // customerNameList: this.filterObj.customerCode,
         // channelNameList: this.filterObj.channelCode,
@@ -201,8 +199,8 @@ export default {
         yearAndMonthList: ['202109', '202110'],
         customerNameList: ['孩子王', '沃尔玛'],
         channelNameList: ['NKA'],
-        // productNameList: ['Friso F0 900g'],
-        productNameList: [],
+         productNameList: ['Friso F0 900g'],
+        //productNameList: [],
       }).then((response) => {
         let AllObj = response.data
         this.pageNum = response.data.pageNum

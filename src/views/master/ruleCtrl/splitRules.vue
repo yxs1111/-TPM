@@ -61,6 +61,7 @@
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-plus" @click="add" v-permission="permissions['insert']">新增</el-button>
       <el-button
         type="danger"
+        v-permission="permissions['delete']"
         class="TpmButtonBG"
         icon="el-icon-delete"
         size="small"
@@ -104,7 +105,7 @@
       <el-table-column width="" align="center" prop="remark" label="备注" />
       <el-table-column width="180" align="center" prop="updateDate" label="修改时间">
         <template slot-scope="scope">
-          <div class="table_operation">
+          <div class="table_operation" v-permission="permissions['update']">
             <div class="table_operation_detail" @click="editor(scope.row)">
               <i class="el-icon-edit-outline" />
             </div>

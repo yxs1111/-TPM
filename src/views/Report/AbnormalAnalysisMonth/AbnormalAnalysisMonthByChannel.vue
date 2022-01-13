@@ -48,7 +48,7 @@
         </el-checkbox-group>
       </div>
 
-      <el-button type="primary" class="TpmButtonBG my-search">查询</el-button>
+      <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
       <div class="TpmButtonBG">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出Raw Date</span>
@@ -98,6 +98,48 @@
 
         </el-table-column>
       </el-table>
+      <el-table :data="tableData" :key="tableKey" ref="multipleTable" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+        <el-table-column align="center" prop="name" v-for="item,key in tableData[0].month" :key="key">
+          <template v-slot:header>
+            {{ key }}
+          </template>
+          <template>
+            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template>
+                <div>
+                  {{item[titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
+
+        </el-table-column>
+      </el-table>
+      <el-table :data="tableData" :key="tableKey" ref="multipleTable" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+        <el-table-column align="center" prop="name" v-for="item,key in tableData[0].month" :key="key">
+          <template v-slot:header>
+            {{ key }}
+          </template>
+          <template>
+            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template>
+                <div>
+                  {{item[titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
+
+        </el-table-column>
+      </el-table>
     </div>
     <!-- 分页 -->
     <!-- <div class="TpmPaginationWrap">
@@ -119,7 +161,7 @@ import {
   getCurrentMonth,
   ReportBgColorMap,
 } from '@/utils'
-import API from '@/api/masterData/masterData.js'
+import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 export default {
@@ -329,17 +371,30 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageMdBrand({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
+      API.getExceptionAnalysisReport({
+        startDate: '2020-09',
+        endDate: '2020-11',
+        minePackageCode:'L'
       })
         .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
+          // let list=[]
+          // let AllData=response.data
+          // for (const version in AllData) {
+          //   if (Object.hasOwnProperty.call(AllData, version)) {
+          //     let yearMonthObj=AllData[version]
+          //     for (const key in yearMonthObj) {
+          //       if (Object.hasOwnProperty.call(yearMonthObj, key)) {
+          //         const element = yearMonthObj[key];
+          //         for (let index = 0; index < element.length; index++) {
+          //           list.push(element[index]) 
+          //         }
+          //       }
+          //     }
+          //   }
+          // }
+          // console.log(list);
         })
-        .catch((error) => {})
+
     },
     getSkuSelect() {
       selectAPI.querySkuSelect().then((res) => {

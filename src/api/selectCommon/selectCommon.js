@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2021-12-15 13:19:54
+ * @LastEditTime: 2022-01-12 18:39:11
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -44,6 +44,9 @@ export default {
   },
   // 通过与驳回按钮状态
   infoByMainId(params) {
+    return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
+  },
+  timeout(params) {
     return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
   },
 }
