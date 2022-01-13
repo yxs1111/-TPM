@@ -438,9 +438,9 @@ export function VersionList() {
 //报表背景色
 export function ReportBgColorMap() {
   return  {
-    V1:'background:#fdf0f1!important',
-    V2:'background:#ebfbf8!important',
-    V3:'background:#fff6e5!important',
+    v1:'background:#fdf0f1!important',
+    v2:'background:#ebfbf8!important',
+    v3:'background:#fff6e5!important',
   }
 }
 //message map
@@ -463,27 +463,27 @@ export function messageMap() {
 //报表动态列
 export function ReportCheckList() {
   return [
-    'PassNum',
-    'Exception1Num',
-    'Exception2Num',
-    'Exception3Num',
-    'PassRange',
-    'Exception1Range',
-    'Exception2Range',
-    'Exception3Range',
+    'passNum',
+    'exceptionOneNum',
+    'exceptionTwoNum',
+    'exceptionThreeNum',
+    'passRange',
+    'exceptionOneRange',
+    'exceptionTwoRange',
+    'exceptionThreeRange',
   ]
 }
 //报表动态列
 export function dynamicColumn() {
   return [
-    {title:'Pass数量',value:'PassNum'},
-    {title:'Exception1数量',value:'Exception1Num'},
-    {title:'Exception2数量',value:'Exception2Num'},
-    {title:'Exception3数量',value:'Exception3Num'},
-    {title:'Pass占比',value:'PassRange'},
-    {title:'Exception1占比',value:'Exception1Range'},
-    {title:'Exception2占比',value:'Exception2Range'},
-    {title:'Exception3占比',value:'Exception3Range'},
+    {title:'Pass数量',value:'passNum'},
+    {title:'Exception1数量',value:'exceptionOneNum'},
+    {title:'Exception2数量',value:'exceptionTwoNum'},
+    {title:'Exception3数量',value:'exceptionThreeNum'},
+    {title:'Pass占比',value:'passRange'},
+    {title:'Exception1占比',value:'exceptionOneRange'},
+    {title:'Exception2占比',value:'exceptionTwoRange'},
+    {title:'Exception3占比',value:'exceptionThreeRange'},
   ]
 }
 export function FormateThousandNum(num) {

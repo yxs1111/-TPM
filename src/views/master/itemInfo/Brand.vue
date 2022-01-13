@@ -22,7 +22,7 @@
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">
         <template slot-scope="{ row }">
-          <div class="table_operation">
+          <div class="table_operation" v-permission="permissions['update']">
             <div class="table_operation_detail" @click="editor(row)">
               <i class="el-icon-edit-outline"></i>
             </div>

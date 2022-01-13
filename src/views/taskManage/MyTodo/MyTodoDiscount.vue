@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-01-09 10:20:17
+ * @LastEditTime: 2022-01-13 16:39:42
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -16,7 +16,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">版本名称:</span>
           <el-select v-model="filterObj.version" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in versionNameList" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -150,7 +150,7 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
-        version: this.filterObj.version,
+        versionName: this.filterObj.version,
         channelCode: this.filterObj.channelCode,
         category: this.filterObj.category,
       })

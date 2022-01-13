@@ -11,12 +11,12 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.month'  />
+          <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.month' />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
           <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in ['Price Promotion','New User']" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in ['Price Promotion','New User']" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -44,11 +44,11 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox :label="item.value" v-for="item,index in dynamicColumn" :key="index">{{item.title}}</el-checkbox>
+          <el-checkbox :label="item.value" v-for="item in dynamicColumn" :key="item.value">{{item.title}}</el-checkbox>
         </el-checkbox-group>
       </div>
 
-      <el-button type="primary" class="TpmButtonBG my-search">查询</el-button>
+      <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
       <div class="TpmButtonBG">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出Raw Date</span>
@@ -77,20 +77,62 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="tableData" :key="tableKey" ref="multipleTable" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+      <el-table :data="V1Data" v-if="V1Data.length" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
         <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-        <el-table-column align="center" prop="name" v-for="item,key in tableData[0].month" :key="key">
+        <el-table-column align="center" prop="name" v-for="item,key in V1Data[0].month" :key="'V1'+item.yearAndMonth+'-'+key">
           <template v-slot:header>
-            {{ key }}
+            {{ item.yearAndMonth }}
           </template>
           <template>
-            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="index">
+            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="'V1'+item.yearAndMonth+'-'+key+index">
               <template v-slot:header>
                 {{ titleItem.title }}
               </template>
-              <template>
+              <template slot-scope="{row}">
                 <div>
-                  {{item[titleItem.value]}}
+                  {{row.month[key][titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
+
+        </el-table-column>
+      </el-table>
+      <el-table :data="V2Data" v-if="V2Data.length" :key="tableKey2" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+        <el-table-column align="center" prop="name" v-for="item,key in V2Data[0].month" :key="'V2'+item.yearAndMonth+'-'+key">
+          <template v-slot:header>
+            {{ item.yearAndMonth }}
+          </template>
+          <template>
+            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="'V2'+item.yearAndMonth+'-'+key+index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template slot-scope="{row}">
+                <div>
+                  {{row.month[key][titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
+
+        </el-table-column>
+      </el-table>
+      <el-table :data="V3Data" v-if="V3Data.length" :key="tableKey3" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+        <el-table-column align="center" prop="name" v-for="item,key in V3Data[0].month" :key="'V3'+item.yearAndMonth+'-'+key">
+          <template v-slot:header>
+            {{ item.yearAndMonth }}
+          </template>
+          <template>
+            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="'V3'+item.yearAndMonth+'-'+key+index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template slot-scope="{row}">
+                <div>
+                  {{row.month[key][titleItem.value]}}
                 </div>
               </template>
             </el-table-column>
@@ -99,11 +141,6 @@
         </el-table-column>
       </el-table>
     </div>
-    <!-- 分页 -->
-    <!-- <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div> -->
   </div>
 </template>
 
@@ -119,7 +156,7 @@ import {
   getCurrentMonth,
   ReportBgColorMap,
 } from '@/utils'
-import API from '@/api/masterData/masterData.js'
+import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 export default {
@@ -128,12 +165,9 @@ export default {
   components: { SelectMonth },
   data() {
     return {
-      total: 1,
-      pageSize: 10,
-      pageNum: 1,
       filterObj: {
         exception: '',
-        month: '',
+        month: getCurrentMonth(),
         MinePackage: '',
         regionCode: '',
         brandCode: '',
@@ -141,180 +175,29 @@ export default {
       },
       BrandList: [],
       permissions: getDefaultPermissions(),
-      tableData: [
-        {
-          version: 'V1',
-          name: 'EC',
-          month: {
-            202102: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-            202103: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-          },
-        },
-        {
-          version: 'V1',
-          name: 'NKA',
-          month: {
-            202102: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-            202103: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-          },
-        },
-        {
-          version: 'V2',
-          name: 'EC',
-          month: {
-            202102: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-            202103: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-          },
-        },
-        {
-          version: 'V2',
-          name: 'NKA',
-          month: {
-            202102: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-            202103: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-          },
-        },
-        {
-          version: 'V3',
-          name: 'EC',
-          month: {
-            202102: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-            202103: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-          },
-        },
-        {
-          version: 'V3',
-          name: 'NKA',
-          month: {
-            202102: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-            202103: {
-              PassNum: 'PassNum',
-              Exception1Num: 'Exception1Num',
-              Exception2Num: 'Exception2Num',
-              Exception3Num: 'Exception3Num',
-              PassRange: 'PassRange',
-              Exception1Range: 'Exception1Range',
-              Exception2Range: 'Exception2Range',
-              Exception3Range: 'Exception3Range',
-            },
-          },
-        },
-      ],
+      V1Data: [],
+      V2Data: [],
+      V3Data: [],
       skuList: [],
       RegionList: [],
+      MinePackageList: [],
       checkList: [], //已选中的列
       tableColumnList: [], //动态列
       dynamicColumn: dynamicColumn(), //展示列选项框
       ReportBgColorMap: ReportBgColorMap(), //动态列背景色
       tableKey: 0, //el-table key
+      tableKey2: 0, //el-table key
+      tableKey3: 0, //el-table key
     }
   },
   computed: {},
   mounted() {
-    this.checkList=ReportCheckList()
-    // this.getTableData()
-    this.getSkuSelect()
-    this.getRegionList()
-    this.getBrandList()
+    this.checkList = ReportCheckList()
+    this.getTableData()
+    this.getMinePackage()
+    // this.getSkuSelect()
+    // this.getRegionList()
+    // this.getBrandList()
   },
   watch: {
     //动态列渲染
@@ -322,24 +205,112 @@ export default {
       this.tableColumnList = this.dynamicColumn.filter(
         (item) => checkedList.indexOf(item.value) != -1
       )
-      this.tableKey++
+      this.tableKey = Math.random()
+      this.tableKey2 = Math.random()
+      this.tableKey3 = Math.random()
     },
   },
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableData = []
-      API.getPageMdBrand({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
+      API.getExceptionAnalysisReport({
+        startDate: '2020-09',
+        endDate: '2020-11',
+        minePackageCode: 'L',
+      }).then((response) => {
+        let AllData = response.data
+        for (const version in AllData) {
+          if (Object.hasOwnProperty.call(AllData, version)) {
+            let yearMonthObj = AllData[version]
+            let list = []
+            let haveMonth = []
+            //版本分组处理
+            for (const key in yearMonthObj) {
+              if (Object.hasOwnProperty.call(yearMonthObj, key)) {
+                const element = yearMonthObj[key]
+                for (let index = 0; index < element.length; index++) {
+                  list.push(element[index])
+                }
+              }
+              //存当前版本的 月份
+              haveMonth.push(key)
+            }
+            let versionObj = {}
+            // 渠道分组处理
+            for (let m = 0; m < list.length; m++) {
+              if (!versionObj[list[m].channelCode]) {
+                var arr = []
+                arr.push(list[m])
+                versionObj[list[m].channelCode] = arr
+              } else {
+                versionObj[list[m].channelCode].push(list[m])
+              }
+            }
+
+            let versionList = []
+            for (const channelKey in versionObj) {
+              if (Object.hasOwnProperty.call(versionObj, channelKey)) {
+                let obj = {
+                  version: version,
+                  name: channelKey,
+                  month: versionObj[channelKey],
+                  haveMonth,
+                }
+                if (versionObj[channelKey].length == haveMonth.length) {
+                  //月份排序
+                  obj.month.sort(function (a, b) {
+                    return Number(a.yearAndMonth) - Number(b.yearAndMonth)
+                  })
+                  versionList.push(obj)
+                } else {
+                  //生成缺失的月份
+                  let missMonth = []
+                  for (let i = 0; i < obj.haveMonth.length; i++) {
+                    let month = obj.haveMonth[i]
+                    for (let m = 0; m < obj.month.length; m++) {
+                      let currentMonth = obj.month[m].yearAndMonth
+                      if (month != currentMonth) {
+                        missMonth.push(month)
+                      } else continue
+                    }
+                  }
+                  //补奇缺失月份
+                  for (let index = 0; index < missMonth.length; index++) {
+                    obj.month.push({
+                      channelCode: '-',
+                      countNum: '-',
+                      exceptionOneNum: '-',
+                      exceptionOneRange: '-',
+                      exceptionThreeNum: '-',
+                      exceptionThreeRange: '-',
+                      exceptionTwoNum: '-',
+                      exceptionTwoRange: '-',
+                      passNum: '-',
+                      passRange: '-',
+                      version: '',
+                      yearAndMonth: missMonth[index],
+                    })
+                  }
+                  //月份排序
+                  obj.month.sort(function (a, b) {
+                    return Number(a.yearAndMonth) - Number(b.yearAndMonth)
+                  })
+                  versionList.push(obj)
+                }
+              }
+            }
+            //排序
+            AllData[version] = versionList
+          }
+          if (version == 'v1') {
+            this.V1Data = AllData.v1
+          } else if (version == 'v2') {
+            this.V2Data = AllData.v2
+          } else if (version == 'v3') {
+            this.V3Data = AllData.v3
+          }
+        }
       })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch((error) => {})
     },
     getSkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
@@ -351,6 +322,11 @@ export default {
         if (res.code === 1000) {
           this.RegionList = res.data
         }
+      })
+    },
+    getMinePackage() {
+      selectAPI.queryMinePackageSelect().then((res) => {
+        this.MinePackageList=res.data
       })
     },
     getBrandList() {
@@ -365,16 +341,6 @@ export default {
       this.filterObj.month = data
     },
     search() {
-      this.getTableData()
-    },
-    // 每页显示页面数变更
-    handleSizeChange(size) {
-      this.pageSize = size
-      this.getTableData()
-    },
-    // 当前页变更
-    handleCurrentChange(num) {
-      this.pageNum = num
       this.getTableData()
     },
     columnStyle({ row, column, rowIndex, columnIndex }) {
