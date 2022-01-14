@@ -701,9 +701,9 @@ export default {
     },
     // 第二次检测数据---补录
     exceptionCheckComple() {
-      API.exceptionCheck({
-        mainId: this.mainIdLocal
-      }).then(res => {
+      let formDataComple = new FormData()
+      formDataComple.append('mainId', this.mainIdLocal)
+      API.exceptionCheck(formDataComple).then(res => {
         if (res.code === 1000) {
           this.uploadFileName = ''
           this.$message({
