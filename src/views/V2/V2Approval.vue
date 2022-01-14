@@ -1,15 +1,15 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-22 16:21:45
+ * @LastEditTime: 2022-01-14 16:31:09
 -->
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
       <router-link :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" v-for="(item, index) in routerList" :key="index"
         @click.native="changeTab(index)">
-        <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
-        <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex"> 
+        <img :src="item.img.light" alt="" v-if="index != currentIndex">
+        <img :src="item.img.dark" alt="" v-if="index == currentIndex">
         {{ item.name }}</router-link>
     </div>
     <div>
@@ -25,10 +25,36 @@ import elDragDialog from '@/directive/el-drag-dialog'
 export default {
   data() {
     return {
+      // routerList: [
+      //   {name:'折扣项-汇总',path:'/V2/V2Approval/V2AllApproval'},
+      //   {name:'折扣项-价促',path:'/V2/V2Approval/V2DiscountApproval'},
+      //   {name:'折扣项-新客',path:'/V2/V2Approval/V2NUApproval'},
+      // ],
       routerList: [
-        {name:'折扣项-汇总',path:'/V2/V2Approval/V2AllApproval'},
-        {name:'折扣项-价促',path:'/V2/V2Approval/V2DiscountApproval'},
-        {name:'折扣项-新客',path:'/V2/V2Approval/V2NUApproval'},
+        // {
+        //   name: '折扣项-汇总',
+        //   path: '/V2/V2Approval/V2AllApproval',
+        //   img: {
+        //     dark: require('@/assets/images/tab/tab1.png'),
+        //     light: require('@/assets/images/tab/tab1_l.png'),
+        //   },
+        // },
+        {
+          name: '折扣项-价促',
+          path: '/V2/V2Approval/V2DiscountApproval',
+          img: {
+            dark: require('@/assets/images/tab/tab2.png'),
+            light: require('@/assets/images/tab/tab2_l.png'),
+          },
+        },
+        {
+          name: '折扣项-新客',
+          path: '/V2/V2Approval/V2NUApproval',
+          img: {
+            dark: require('@/assets/images/tab/tab3.png'),
+            light: require('@/assets/images/tab/tab3_l.png'),
+          },
+        },
       ],
       currentIndex: 0,
       imgSrcList: [

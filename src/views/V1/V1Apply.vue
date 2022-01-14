@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-06 13:33:55
+ * @LastEditTime: 2022-01-14 16:19:20
 -->
 <template>
   <div class="tabViewsWrap">
@@ -29,14 +29,14 @@ export default {
   data() {
     return {
       routerList: [
-        {
-          name: '折扣项-汇总',
-          path: '/V1/V1Apply/V1discountAll',
-          img: {
-            dark: require('@/assets/images/tab/tab1.png'),
-            light: require('@/assets/images/tab/tab1_l.png'),
-          },
-        },
+        // {
+        //   name: '折扣项-汇总',
+        //   path: '/V1/V1Apply/V1discountAll',
+        //   img: {
+        //     dark: require('@/assets/images/tab/tab1.png'),
+        //     light: require('@/assets/images/tab/tab1_l.png'),
+        //   },
+        // },
         {
           name: '折扣项-价促',
           path: '/V1/V1Apply/V1discountDiscount',
