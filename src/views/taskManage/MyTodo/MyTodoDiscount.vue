@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-01-13 16:39:42
+ * @LastEditTime: 2022-01-14 10:13:38
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -27,8 +27,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">类型:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber"  />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -112,12 +112,12 @@ export default {
         version: '',
         channelCode: '',
         state: '',
-        category: '',
+        MinePackage: '',
       },
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       ChannelList: [],
+      MinePackageList: [],
       versionList: ['Final'],
       flowDiagram: {
         visible: false,
@@ -130,14 +130,15 @@ export default {
         V1: 'V1 - City plan 详细拆分',
         V2: 'V2 - Accrual 预提调整',
         V3: 'V3 - Actual 实际入账',
-        NUV2: 'V2 - Accrual 预提调整',
-        NUV3: 'V3 - Actual 实际入账',
+        NUV2: 'NUV2 - Accrual 预提调整',
+        NUV3: 'NUV3 - Actual 实际入账',
       },
     }
   },
   mounted() {
     this.getTableData()
     this.getChannelList()
+    this.getMinePackage()
   },
   components: {
     FlowDiagram,
@@ -150,9 +151,9 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
-        versionName: this.filterObj.version,
+        version: this.filterObj.version,
         channelCode: this.filterObj.channelCode,
-        category: this.filterObj.category,
+        minePackageCode: this.filterObj.MinePackage,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -166,6 +167,11 @@ export default {
         if (res.code == 1000) {
           this.ChannelList = res.data
         }
+      })
+    },
+    getMinePackage() {
+      selectAPI.queryMinePackageSelect().then((res) => {
+        this.MinePackageList=res.data
       })
     },
     search() {

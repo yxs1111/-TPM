@@ -16,7 +16,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
           <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in ['Price Promotion','New User']" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber"  />
           </el-select>
         </div>
         <div class="Selectli">

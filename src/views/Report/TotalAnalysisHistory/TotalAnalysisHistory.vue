@@ -74,13 +74,13 @@
                 {{ CustomerItem.customerName1 }}
               </template>
               <template>
-                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" width="250">
+                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="right" width="250">
                   <template v-slot:header>
                     {{ titleItem.title }}
                   </template>
                   <template>
                     <div>
-                      {{ CustomerItem[titleItem.value] }}
+                      {{ CustomerItem[titleItem.value] }}{{titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':''}}
                     </div>
                   </template>
                 </el-table-column>
@@ -120,7 +120,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonthList: getCurrentMonth(),
+        yearAndMonthList: '',
         customerCode: '',
         channelCode: '',
         productCode: '',
@@ -257,6 +257,7 @@ export default {
             AllDataList.push(obj)
           }
         }
+        AllDataList.sort(function(a,b){return b.name.indexOf('Total')-a.name.indexOf('Total')})
         this.tableData=AllDataList
       })
     },
@@ -318,8 +319,11 @@ export default {
     },
     // 列样式
     columnStyle({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0 && rowIndex !== 0) {
+      if (columnIndex === 0 && rowIndex !== 0&&row.name.indexOf('Total')==-1) {
         return 'background:#4192d3;color: #fff'
+      } 
+      if(row.name.indexOf('Total')!==-1) {
+        return 'background-color: #f3f7f8 !important;color: #666!important;'
       }
     },
   },

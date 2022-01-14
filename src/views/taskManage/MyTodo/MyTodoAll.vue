@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-01-13 16:39:39
+ * @LastEditTime: 2022-01-14 10:14:59
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -27,8 +27,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">类型:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber"  />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -38,6 +38,12 @@
         </div>
       </div>
     </div>
+    <!-- <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG">
+        <svg-icon icon-class="task" />
+        <span class="text">任务转办</span>
+      </div>
+    </div> -->
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" type="selection" />
       <el-table-column align="center" label="序号" width="55">
@@ -47,10 +53,10 @@
       </el-table-column>
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
       <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
-      <el-table-column align="center" prop="channelCode" label="渠道"> </el-table-column>
       <el-table-column width="240" v-slot={row} align="center" prop="versionName" label="版本名称">
         {{versionNameList[row.version]}}
       </el-table-column>
+      <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
       <el-table-column align="center" width="280" prop="assignee" label="提交人"> </el-table-column>
@@ -106,11 +112,12 @@ export default {
         version: '',
         channelCode: '',
         state: '',
-        category: '',
+        MinePackage: '',
       },
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      ChannelList: [],
+      MinePackageList: [],
       versionList: ['Final'],
       flowDiagram: {
         visible: false,
@@ -123,15 +130,15 @@ export default {
         V1: 'V1 - City plan 详细拆分',
         V2: 'V2 - Accrual 预提调整',
         V3: 'V3 - Actual 实际入账',
-        NUV2: 'V2 - Accrual 预提调整',
-        NUV3: 'V3 - Actual 实际入账',
+        NUV2: 'NUV2 - Accrual 预提调整',
+        NUV3: 'NUV3 - Actual 实际入账',
       },
-      ChannelList: [],
     }
   },
   mounted() {
     this.getTableData()
     this.getChannelList()
+    this.getMinePackage()
   },
   components: {
     FlowDiagram,
@@ -144,19 +151,16 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
-        versionName: this.filterObj.version,
+        version: this.filterObj.version,
         channelCode: this.filterObj.channelCode,
-        category: this.filterObj.category,
-      }).then((response) => {
-        this.tableData = response.data.records
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
+        minePackageCode: this.filterObj.MinePackage,
       })
-    },
-    search() {
-      this.pageNum = 1
-      this.getTableData()
+        .then((response) => {
+          this.tableData = response.data.records
+          this.pageNum = response.data.pageNum
+          this.pageSize = response.data.pageSize
+          this.total = response.data.total
+        })
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -164,6 +168,15 @@ export default {
           this.ChannelList = res.data
         }
       })
+    },
+    getMinePackage() {
+      selectAPI.queryMinePackageSelect().then((res) => {
+        this.MinePackageList=res.data
+      })
+    },
+    search() {
+      this.pageNum = 1
+      this.getTableData()
     },
     operateProcess(version, name, channelCode) {
       // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})

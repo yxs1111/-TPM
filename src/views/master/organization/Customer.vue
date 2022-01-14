@@ -4,7 +4,7 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">客户编号</span>
+          <span class="SelectliTitle">客户CP编码</span>
           <el-input v-model="filterObj.customerCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
