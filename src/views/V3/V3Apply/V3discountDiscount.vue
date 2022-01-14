@@ -270,12 +270,12 @@
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModelNext">
             下载模板
           </el-button>
-          <el-button v-if="firstIsPassComple" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheckComple()">检测数据
-          </el-button>
+          <!-- <el-button v-if="firstIsPassComple" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheckComple()">检测数据
+          </el-button> -->
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="TpmButtonBG" @click="saveImportInfoCpm">保存
-          </el-button>
+          <!-- <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="TpmButtonBG" @click="saveImportInfoCpm">保存
+          </el-button> -->
         </div>
       </div>
 
@@ -609,7 +609,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           this.$message.success('保存成功')
-          this.closeimportDialog()
+          // this.closeimportDialog()
           this.saveDialog = true
           this.getTableData()
         } else {
@@ -701,7 +701,7 @@ export default {
     },
     // 第二次检测数据---补录
     exceptionCheckComple() {
-      let formDataComple = new FormData()
+      const formDataComple = new FormData()
       formDataComple.append('mainId', this.mainIdLocal)
       API.exceptionCheck(formDataComple).then(res => {
         if (res.code === 1000) {
@@ -792,7 +792,15 @@ export default {
             if (response.data != null) {
               if (isMakeUp === true) {
                 this.dialogData = response.data
-                this.firstIsPassComple = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+                if (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '') {
+                  this.saveImportInfoCpm()
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '存在异常信息'
+                  })
+                }
+                // this.firstIsPassComple = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               } else {
                 this.dialogDataF = response.data
                 this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
