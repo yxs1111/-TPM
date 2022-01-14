@@ -270,12 +270,12 @@
           <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downLoadElxModelNext">
             下载模板
           </el-button>
-          <el-button v-if="firstIsPassComple" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheckComple()">检测数据
-          </el-button>
+          <!-- <el-button v-if="firstIsPassComple" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="exceptionCheckComple()">检测数据
+          </el-button> -->
         </div>
         <div>
-          <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="TpmButtonBG" @click="saveImportInfoCpm">保存
-          </el-button>
+          <!-- <el-button v-if="saveBtn" type="primary" :class="!(saveDialog)?'':'noClick'" class="TpmButtonBG" @click="saveImportInfoCpm">保存
+          </el-button> -->
         </div>
       </div>
 
@@ -792,7 +792,7 @@ export default {
             if (response.data != null) {
               if (isMakeUp === true) {
                 this.dialogData = response.data
-                this.firstIsPassComple = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+                // this.firstIsPassComple = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               } else {
                 this.dialogDataF = response.data
                 this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
