@@ -609,7 +609,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           this.$message.success('保存成功')
-          this.closeimportDialog()
+          // this.closeimportDialog()
           this.saveDialog = true
           this.getTableData()
         } else {
@@ -701,7 +701,7 @@ export default {
     },
     // 第二次检测数据---补录
     exceptionCheckComple() {
-      let formDataComple = new FormData()
+      const formDataComple = new FormData()
       formDataComple.append('mainId', this.mainIdLocal)
       API.exceptionCheck(formDataComple).then(res => {
         if (res.code === 1000) {
@@ -792,6 +792,14 @@ export default {
             if (response.data != null) {
               if (isMakeUp === true) {
                 this.dialogData = response.data
+                if (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '') {
+                  this.saveImportInfoCpm()
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '存在异常信息'
+                  })
+                }
                 // this.firstIsPassComple = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               } else {
                 this.dialogDataF = response.data
