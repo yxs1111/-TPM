@@ -7,7 +7,7 @@
           <span class="SelectliTitle">活动月：</span>
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
-          <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" />
+          <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" :Disabled="true"/>
           <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
@@ -24,7 +24,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU：</span>
-          <el-select v-model="filterObj.productCode" clearable multiple collapse-tags filterable placeholder="请选择">
+          <el-select v-model="filterObj.productName" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
@@ -52,8 +52,8 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :key="tableKey" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle" height="550"
-        style="width: 100%">
+      <el-table :key="tableKey" :data="tableData" v-if="tableData.length" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle"
+        height="550" style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -74,12 +74,12 @@
                 {{ CustomerItem.customerName1 }}
               </template>
               <template>
-                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="right" width="250">
+                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" width="250">
                   <template v-slot:header>
                     {{ titleItem.title }}
                   </template>
                   <template>
-                    <div>
+                    <div class="NumWrap">
                       {{ CustomerItem[titleItem.value] }}{{titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':''}}
                     </div>
                   </template>
@@ -100,10 +100,6 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  parseTime,
-  getTextMap,
-  ReportCheckList,
-  dynamicColumn,
   getCurrentMonth,
   ReportBgColorMap,
 } from '@/utils'
@@ -123,12 +119,8 @@ export default {
         yearAndMonthList: getCurrentMonth(),
         customerCode: '',
         channelCode: '',
-        productCode: '',
-        type: '',
-        month: '',
-        category: '',
+        productName: '',
       },
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       // 表格列
       tableOption: [
@@ -184,22 +176,22 @@ export default {
     ]
     this.getQueryChannelSelect()
     this.getCustomerList()
-    this.getSkuSelect()
-    this.getTableData()
+    
+    
   },
   methods: {
     // 获取表格数据
     getTableData() {
       this.tableData = []
       API.getTotalReportList({
-        // yearAndMonthList: this.filterObj.yearAndMonthList,
-        // customerNameList: this.filterObj.customerCode,
-        // channelNameList: this.filterObj.channelCode,
-        // productNameList: this.filterObj.productCode
-        yearAndMonthList: ['202109', '202110'],
-        customerNameList: ['孩子王', '沃尔玛'],
-        channelNameList: ['NKA'],
-         productNameList: ['Friso F0 900g'],
+        yearAndMonthList: this.filterObj.yearAndMonthList,
+        customerNameList: this.filterObj.customerCode,
+        channelNameList: this.filterObj.channelCode,
+        productNameList: this.filterObj.productName,
+        // yearAndMonthList: ['202201'],
+        // customerNameList: ['孩子王', '沃尔玛'],
+        // channelNameList: ['NKA'],
+        // productNameList: ['Friso F0 900g'],
         //productNameList: [],
       }).then((response) => {
         let AllObj = response.data
@@ -257,8 +249,10 @@ export default {
             AllDataList.push(obj)
           }
         }
-        AllDataList.sort(function(a,b){return b.name.indexOf('Total')-a.name.indexOf('Total')})
-        this.tableData=AllDataList
+        AllDataList.sort(function (a, b) {
+          return b.name.indexOf('Total') - a.name.indexOf('Total')
+        })
+        this.tableData = AllDataList
       })
     },
     // 获取渠道
@@ -266,6 +260,7 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         this.channelOptions = res.data
         this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
+        console.log(this.filterObj);
       })
     },
     // 客户
@@ -278,6 +273,7 @@ export default {
           if (res.code === 1000) {
             this.customerArr = res.data
             this.filterObj.customerCode = [this.customerArr[0].customerCsName]
+            this.getSkuSelect()
           }
         })
     },
@@ -285,6 +281,8 @@ export default {
     getSkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
         this.skuList = res.data
+        this.filterObj.productName = [this.skuList[0].productEsName]
+        this.getTableData()
       })
     },
     // 获取子组件传递的多个月份值
@@ -293,16 +291,6 @@ export default {
     },
     search() {
       this.pageNum = 1
-      this.getTableData()
-    },
-    // 每页显示页面数变更
-    handleSizeChange(size) {
-      this.pageSize = size
-      this.getTableData()
-    },
-    // 当前页变更
-    handleCurrentChange(num) {
-      this.pageNum = num
       this.getTableData()
     },
     // 行样式
@@ -319,10 +307,14 @@ export default {
     },
     // 列样式
     columnStyle({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0 && rowIndex !== 0&&row.name.indexOf('Total')==-1) {
+      if (
+        columnIndex === 0 &&
+        rowIndex !== 0 &&
+        row.name.indexOf('Total') == -1
+      ) {
         return 'background:#4192d3;color: #fff'
-      } 
-      if(row.name.indexOf('Total')!==-1) {
+      }
+      if (row.name.indexOf('Total') !== -1) {
         return 'background-color: #f3f7f8 !important;color: #666!important;'
       }
     },
@@ -368,6 +360,9 @@ export default {
   }
   .filstColumn {
     text-align: center;
+  }
+  .NumWrap {
+    text-align: right;
   }
 }
 </style>

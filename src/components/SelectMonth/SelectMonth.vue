@@ -1,19 +1,19 @@
 <!--
  * @Description: 多个月份选择
  * @Date: 2022-01-07 14:42:30
- * @LastEditTime: 2022-01-10 13:50:50
+ * @LastEditTime: 2022-01-14 14:25:50
 -->
 <template>
   <div class="monthEl">
     <div @mouseenter="changeIcon" @mouseleave="removeIcon" :class="!isDisabled?'':'disabled'">
       <div class="Selectli">
-      <el-input v-model="monthVal" placeholder="选择月份" :disabled='isDisabled' readonly @click.stop.native="isMonthDis = true"> </el-input>
+        <el-input v-model="monthVal" placeholder="选择月份" :disabled='isDisabled' readonly @click.stop.native="isMonthDis = true"> </el-input>
       </div>
-     
+
       <i class="el-icon-circle-close" v-show="isRemove" @click="monthValRemove"></i>
     </div>
     <transition name="fade">
-      <div class="month" v-show="isMonthDis" @click.stop="isMonthDis = true">
+      <div class="month" v-show="isMonthDis" @click.stop="isMonthDis = true" @mouseleave="hiddenSelectMonth">
         <div class="YearWrap">
           <i class="el-icon-d-arrow-left" @click="addAndReduce('reduce')"></i>
           <span>{{years}}年</span>
@@ -41,16 +41,12 @@ export default {
       months: [],
       isMonthDis: false,
       isRemove: false,
-      filter: {
-        billinDateList: [],
-      },
-      isDisabled:'', //当前月是否禁用
+      isDisabled: '', //当前月是否禁用
     }
   },
-  props: ['defaultMonth'],
+  props: ['defaultMonth', 'Disabled'],
   mounted() {
     if (this.$props.defaultMonth) {
-      this.isDisabled=true
       this.monthVal = this.$props.defaultMonth
       let dateList = this.monthVal.split('-')
       let date = new Date()
@@ -71,7 +67,6 @@ export default {
         }
       }
     } else {
-      this.isDisabled=false
       let date = new Date()
       this.years = date.getFullYear()
       for (var i = 1; i <= 12; i++) {
@@ -82,8 +77,7 @@ export default {
         })
       }
     }
-
-    console.log(this.$props)
+    this.isDisabled = this.$props.Disabled
   },
   watch: {
     // 月账单
@@ -92,14 +86,10 @@ export default {
         let list = val.split(',')
         let dataList = []
         list.forEach((item) => {
-          let date = item.split('-')
-          date[1] = Number(date[1]) < 10 ? '0' + date[1] : date[1]
-          let dateStr = date[0] + date[1]
-          dataList.push(dateStr)
+          dataList.push(item.replace('-', ''))
         })
         this.$emit('multipleMonth', dataList)
       } else {
-        this.filter.billinDateList = null
         this.clearSelected()
       }
     },
@@ -114,6 +104,19 @@ export default {
     },
   },
   methods: {
+    //月份初始化
+    InitMonth() {
+      let dateList = this.monthVal.split(',')
+      let date = new Date()
+      this.years = date.getFullYear()
+      //置空
+      this.months.forEach(item=>{item.show=false})
+      dateList.forEach((item) => {
+        const dateArray=item.split('-')
+        this.months[Number(dateArray[1])-1].show=true
+      })
+      this.$forceUpdate()
+    },
     // 清除选中项
     clearSelected() {
       this.months.forEach((e) => {
@@ -143,7 +146,7 @@ export default {
       let arr = []
       this.months.forEach((e) => {
         if (e.show) {
-          arr.push(`${this.years}-${e.num}`)
+          arr.push(`${this.years}-${e.num < 10 ? '0' + e.num : e.num}`)
         }
       })
       this.monthVal = arr.join(',')
@@ -172,6 +175,10 @@ export default {
     monthValRemove() {
       this.monthVal = ''
     },
+    hiddenSelectMonth() {
+      this.isMonthDis=false
+      this.InitMonth()
+    },
   },
 }
 </script>
@@ -189,8 +196,8 @@ export default {
   }
   .el-icon-circle-close {
     position: absolute;
-    top: 11px;
-    right: 10px;
+    top: 13px;
+    right: 28px;
     font-size: 14px;
     color: #c0c4cc;
     cursor: pointer;
@@ -265,7 +272,7 @@ export default {
   flex-wrap: wrap;
 }
 .disabled {
-    pointer-events: none;
-    /* background-color: #ccc !important; */
+  pointer-events: none;
+  /* background-color: #ccc !important; */
 }
 </style>
