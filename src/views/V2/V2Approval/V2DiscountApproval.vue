@@ -90,9 +90,9 @@
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
         {{FormateNum(row.adjustedCost)}}
       </el-table-column>
-      <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
+      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
       </el-table-column>
-      <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
+      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
       </el-table-column>
       <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
         {{FormateNum(row.costDifference)}}
@@ -190,7 +190,7 @@
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
               {{FormateNum(row.adjustedCost)}}
             </el-table-column>
-            <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
+            <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
             </el-table-column>
             <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
 
@@ -231,7 +231,7 @@ import {
   parseTime,
   getTextMap,
   messageMap,
-  FormateThousandNum
+  FormateThousandNum,
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -424,7 +424,7 @@ export default {
     },
     importData() {
       this.saveBtn = false
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -448,9 +448,13 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          this.ImportData = response.data
-          this.saveBtn = this.ImportData.length ? true : false
-          this.$message.success('导入成功！')
+          if (!response.data.length) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.ImportData = response.data
+            this.saveBtn = this.ImportData.length ? true : false
+            this.$message.success('导入成功！')
+          }
         }
       })
     },

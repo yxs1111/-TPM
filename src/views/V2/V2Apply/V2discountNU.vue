@@ -373,7 +373,7 @@ export default {
       this.getTableData()
     },
     importData() {
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -398,13 +398,16 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          this.$message.success(this.messageMap.importSuccess)
-          this.ImportData = response.data
-          this.isCheck = response.data[0].judgmentType !== 'Error'
+          if (!response.data.length) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.$message.success(this.messageMap.importSuccess)
+            this.ImportData = response.data
+            this.isCheck = response.data[0].judgmentType !== 'Error'
+          }
         } else {
           this.$message.info(this.messageMap.importError)
         }
-        
       })
     },
     // 关闭导入
@@ -424,9 +427,9 @@ export default {
       formData.append('channelCode', this.filterObj.channelCode)
       API.exceptionNUCheckTwo(formData).then((response) => {
         if (response.code == 1000) {
-          this.$message.success(this.messageMap.checkSuccess)
-          this.ImportData = response.data
-          this.saveBtn = response.data[0].judgmentType !== 'Error'
+            this.$message.success(this.messageMap.checkSuccess)
+            this.ImportData = response.data
+            this.saveBtn = response.data[0].judgmentType !== 'Error'
         } else {
           this.$message.info(this.messageMap.checkError)
         }
