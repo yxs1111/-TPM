@@ -16,7 +16,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
           <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber"  />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -217,6 +217,11 @@ export default {
         startDate: '2020-09',
         endDate: '2020-11',
         minePackageCode: 'L',
+        // yearAndMonthList: ['2020-09','2020-10','2020-11',],
+        // minePackageCode: 'L',
+        // brandCodeList: [],
+        // regionCodeList: [],
+        // productCodeList: [],
       }).then((response) => {
         let AllData = response.data
         for (const version in AllData) {
@@ -326,7 +331,7 @@ export default {
     },
     getMinePackage() {
       selectAPI.queryMinePackageSelect().then((res) => {
-        this.MinePackageList=res.data
+        this.MinePackageList = res.data
       })
     },
     getBrandList() {

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-11-05 09:55:03
+ * @LastEditTime: 2022-01-16 15:12:45
 -->
 <template>
   <div>
@@ -32,7 +32,7 @@ export default {
     return {
       routerList: [
         { name: 'Price Promotion', path: '/master/ruleCtrl/model/splitRules' },
-        { name: 'New User', path: '/master/ruleCtrl/model/splitRulesNew' }
+        // { name: 'New User', path: '/master/ruleCtrl/model/splitRulesNew' }
       ],
       currentIndex: 0
     }

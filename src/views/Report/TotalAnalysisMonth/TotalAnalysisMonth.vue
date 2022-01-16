@@ -7,7 +7,7 @@
           <span class="SelectliTitle">活动月：</span>
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
-          <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" :Disabled="true"/>
+          <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" :Disabled="false"/>
           <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
