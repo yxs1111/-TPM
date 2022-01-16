@@ -70,7 +70,6 @@
     </div>
     <el-table
       ref="Tdata"
-      v-loading="tableLoading"
       :data="tableData"
       border
       :header-cell-style="HeadTable"
@@ -328,7 +327,6 @@ export default {
         varsionName: '',
         splitType: ''
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -541,7 +539,6 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageByRequestSplitRule({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
@@ -552,7 +549,6 @@ export default {
         minePackageCode: 'L'
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
@@ -715,7 +711,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        that.loading = true
         API.deleteSplitRule(idList).then(
           res => {
             if (res.code === 1000) {
@@ -724,12 +719,9 @@ export default {
                 type: 'success',
                 message: '删除成功'
               })
-              that.loading = false
             }
-            that.loading = false
           }
         ).catch(() => {
-          that.loading = false
         })
       }).catch(() => {
         // 取消时清空 selection被选项
