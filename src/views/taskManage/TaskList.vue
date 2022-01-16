@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-25 16:34:51
+ * @LastEditTime: 2022-01-16 20:55:40
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -15,14 +15,20 @@
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">版本名称:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
+          <el-select v-model="filterObj.version" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in versionNameList" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道</span>
+          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">类型:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in versionList" :key="index" :label="item" :value="item" />
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber"  />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -39,8 +45,8 @@
       </div>
     </div> -->
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" type="selection" />
-      <el-table-column align="center" label="序号" width="55">
+      <!-- <el-table-column align="center" type="selection" /> -->
+      <el-table-column align="center" label="序号" width="65">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -51,13 +57,13 @@
         {{versionNameList[row.version]}}
       </el-table-column>
       <el-table-column align="center"  prop="channelName" label="渠道"> </el-table-column>
-      <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" width="200" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="审批节点"> </el-table-column>
       <el-table-column align="center" width="280" prop="assignee" label="办理人"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="280"  label="办理时间">
+      <el-table-column v-slot={row} align="center" width="150"  label="办理时间">
         {{row.dueDate?row.dueDate.substring(0,10):""}}
       </el-table-column>
-      <el-table-column width="150" align="center"  label="查看">
+      <el-table-column  width="150" align="center"  label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程
@@ -83,6 +89,7 @@ import { getDefaultPermissions, getTextMap, parseTime } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 import FlowDiagram from '@/components/FlowDiagram'
 export default {
   data() {
@@ -91,13 +98,14 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        yearAndMonth: '',
+        version: '',
         channelCode: '',
-        state: '',
-        category: '',
+        MinePackage: '',
       },
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      ChannelList: [],
       versionList: ['Final'],
       flowDiagram: {
         visible: false,
@@ -105,18 +113,20 @@ export default {
         businessId: null,
         processId: null,
       },
-      versionNameList:{
-        V0:'V0 - Pre city plan 预拆分',
-        V1:'V1 - City plan 详细拆分',
-        V2:'V2 - Accrual 预提调整',
-        V3:'V3 - Actual 实际入账',
-        NUV2:'V2 - Accrual 预提调整',
-        NUV3:'V3 - Actual 实际入账',
-      }
+      versionNameList: {
+        V0: 'V0 - Pre city plan 预拆分',
+        V1: 'V1 - City plan 详细拆分',
+        V2: 'V2 - Accrual 预提调整',
+        V3: 'V3 - Actual 实际入账',
+        NUV2: 'NUV2 - Accrual 预提调整',
+        NUV3: 'NUV3 - Actual 实际入账',
+      },
     }
   },
   mounted() {
     this.getTableData()
+    this.getMinePackage()
+    this.getChannelList()
   },
   components: {
     FlowDiagram,
@@ -128,6 +138,10 @@ export default {
       API.getMyHandleList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        yearAndMonth: this.filterObj.yearAndMonth,
+        version: this.filterObj.version,
+        channelCode: this.filterObj.channelCode,
+        minePackageCode: this.filterObj.MinePackage,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -136,6 +150,18 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    getChannelList() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code == 1000) {
+          this.ChannelList = res.data
+        }
+      })
+    },
+    getMinePackage() {
+      selectAPI.queryMinePackageSelect().then((res) => {
+        this.MinePackageList=res.data
+      })
     },
     search() {
       this.pageNum = 1
