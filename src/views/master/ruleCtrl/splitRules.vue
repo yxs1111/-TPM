@@ -408,7 +408,8 @@ export default {
         channelCode: this.filterObj.channelCode,
         yeardate: this.filterObj.yeardate,
         versions: this.filterObj.varsionName,
-        splitType: this.filterObj.splitType
+        splitType: this.filterObj.splitType,
+        minePackageCode: 'L'
       }
       API.exportExcelSplitRule(data).then(
         response => {
