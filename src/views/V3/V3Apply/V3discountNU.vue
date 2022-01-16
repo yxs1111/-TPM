@@ -425,6 +425,12 @@ export default {
               message: messageMap().importSuccess
             })
             if (response.data != null) {
+              if (response.data === []) {
+                this.$message({
+                  type: 'error',
+                  message: '导入数据为空，请检查模板！'
+                })
+              }
               this.dialogDataF = response.data
               this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {

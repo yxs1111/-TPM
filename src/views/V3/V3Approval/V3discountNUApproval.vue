@@ -500,6 +500,12 @@ export default {
               message: '导入成功'
             })
             if (response.data != null) {
+              if (response.data === []) {
+                this.$message({
+                  type: 'error',
+                  message: '导入数据为空，请检查模板！'
+                })
+              }
               this.dialogData = response.data
               this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               this.saveBtn = this.dialogData.length ? true : false

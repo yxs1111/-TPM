@@ -93,7 +93,7 @@
         {{ FormateNum((row.adjustedVol*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
-        <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
+      <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
       </el-table-column> -->
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）">
         {{ FormateNum(row.adjustedAmount) }}
@@ -143,7 +143,7 @@
           <el-button v-if="firstIsPass" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="confirmImport()">检测数据
           </el-button>
         </div>
-          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="saveImportInfo">保存</el-button>
+        <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="saveImportInfo">保存</el-button>
       </div>
 
       <div class="fileInfo" style="justify-content: space-between;">
@@ -218,16 +218,16 @@
           </vxe-table-column>
           <vxe-table-column width="400" align="center" field="distributorName" title="经销商" />
           <vxe-table-column width="120" align="center" field="regionName" title="区域" />
-          <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）" >
-              <template slot-scope="scope">  {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
+          <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）">
+            <template slot-scope="scope">  {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
           </vxe-table-column>
-          <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）" >
+          <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）">
             <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedVol) }}</template>
           </vxe-table-column>
           <vxe-table-column width="220" align="right" field="volDifference" title="销量差值（%）">
-            <template slot-scope="scope">{{ scope.row.volDifference}}</template>
+            <template slot-scope="scope">{{ scope.row.volDifference }}</template>
           </vxe-table-column>
-          <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）" >
+          <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）">
             <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedAmount) }}</template>
           </vxe-table-column>
           <vxe-table-column width="120" align="center" field="mechanismType" title="机制类型" />
@@ -324,9 +324,9 @@ export default {
     this.getDistributorList()
   },
   methods: {
-    //格式化--千位分隔符、两位小数 
+    // 格式化--千位分隔符、两位小数
     FormateNum(num) {
-     return FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
     // 获取年月
     getEffectiveDate() {
@@ -459,7 +459,7 @@ export default {
     },
     // 导入数据
     importData() {
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -537,8 +537,16 @@ export default {
               message: messageMap().importSuccess
             })
             if (response.data != null) {
+              if (response.data === []) {
+                this.$message({
+                  type: 'error',
+                  message: '导入数据为空，请检查模板！'
+                })
+                this.firstIsPass = false
+              } else {
+                this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              }
               this.checkedData = response.data
-              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else {
               this.checkedData = []
             }

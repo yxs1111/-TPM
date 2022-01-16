@@ -421,9 +421,20 @@ export default {
               message: '导入成功'
             })
             if (response.data != null) {
+              if (response.data === []) {
+                this.$message({
+                  type: 'error',
+                  message: '导入数据为空，请检查模板！'
+                })
+              }
               this.checkedData = response.data
               this.saveBtn = this.checkedData.length ? true : false
               // this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+            } else if (response.data === []) {
+              this.$message({
+                type: 'error',
+                message: '导入数据为空，请检查模板！'
+              })
             } else {
               this.checkedData = []
             }
