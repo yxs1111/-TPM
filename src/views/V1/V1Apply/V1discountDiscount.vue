@@ -539,7 +539,7 @@ export default {
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
-                  type: 'error',
+                  type: 'info',
                   message: '导入数据为空，请检查模板！'
                 })
                 this.firstIsPass = false

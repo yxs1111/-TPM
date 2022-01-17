@@ -423,7 +423,7 @@ export default {
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
-                  type: 'error',
+                  type: 'info',
                   message: '导入数据为空，请检查模板！'
                 })
               }
@@ -432,7 +432,7 @@ export default {
               // this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
             } else if (response.data === []) {
               this.$message({
-                type: 'error',
+                type: 'info',
                 message: '导入数据为空，请检查模板！'
               })
             } else {
