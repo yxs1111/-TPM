@@ -12,7 +12,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
           <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -432,7 +432,7 @@ export default {
     // 经销商
     getDistributorList() {
       selectAPI.queryDistributorList({
-        customerCsName: this.filterObj.customerName
+        customerMdmCode: this.filterObj.customerName
       }).then(res => {
         if (res.code === 1000) {
           this.distributorArr = res.data

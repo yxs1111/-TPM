@@ -51,7 +51,7 @@
       <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
       <div class="TpmButtonBG">
         <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出Raw Date</span>
+        <span class="text">导出Raw Data</span>
       </div>
     </div>
     <div class="colorWrap">
@@ -84,7 +84,7 @@
             {{ item.yearAndMonth }}
           </template>
           <template>
-            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="'V1'+item.yearAndMonth+'-'+key+index">
+            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V1'+item.yearAndMonth+'-'+key+index">
               <template v-slot:header>
                 {{ titleItem.title }}
               </template>
@@ -105,7 +105,7 @@
             {{ item.yearAndMonth }}
           </template>
           <template>
-            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="'V2'+item.yearAndMonth+'-'+key+index">
+            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V2'+item.yearAndMonth+'-'+key+index">
               <template v-slot:header>
                 {{ titleItem.title }}
               </template>
@@ -126,7 +126,7 @@
             {{ item.yearAndMonth }}
           </template>
           <template>
-            <el-table-column align="center" width="250" v-for="(titleItem,index) in tableColumnList" :key="'V3'+item.yearAndMonth+'-'+key+index">
+            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V3'+item.yearAndMonth+'-'+key+index">
               <template v-slot:header>
                 {{ titleItem.title }}
               </template>

@@ -44,7 +44,7 @@
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG">
         <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出Raw Date</span>
+        <span class="text">导出Raw Data</span>
       </div>
       <div class="TpmButtonBG">
         <img src="../../../assets/images/downloadIcon.png" alt="">
@@ -53,7 +53,7 @@
     </div>
     <div class="tableContentWrap">
       <el-table :key="tableKey" :data="tableData" v-if="tableData.length" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle"
-        height="550" style="width: 100%">
+        height="600" style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -69,12 +69,12 @@
             {{ key }}
           </template>
           <template>
-            <el-table-column v-for="(CustomerItem,CustomerKey) in item" :key="CustomerKey" align="center" width="250">
+            <el-table-column v-for="(CustomerItem,CustomerKey) in item" :key="CustomerKey" align="center">
               <template v-slot:header>
                 {{ CustomerItem.customerName1 }}
               </template>
               <template>
-                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" width="250">
+                <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" :width="titleItem.width">
                   <template v-slot:header>
                     {{ titleItem.title }}
                   </template>
@@ -138,17 +138,19 @@ export default {
       checkList: [], // 已选中的列
       tableColumnList: [], // 动态列
       dynamicColumn: [
-        { title: 'V1', value: 'v1Avg' },
-        { title: 'V2', value: 'v2Avg' },
-        { title: 'V3谈判前', value: 'v3AfterAvg' },
-        { title: 'V3谈判后', value: 'v3BeforeAvg' },
+        { title: 'V1', value: 'v1Avg' ,width:80},
+        { title: 'V2', value: 'v2Avg',width:80 },
+        { title: 'V3谈判前', value: 'v3AfterAvg' ,width:100},
+        { title: 'V3谈判后', value: 'v3BeforeAvg',width:100 },
         {
           title: '价格执行率1# V3谈判前  VS  V1',
           value: 'priceExecutionRate1',
+          width:250
         },
         {
           title: '价格执行率2# V3谈判后  VS  V1',
           value: 'priceExecutionRate2',
+          width:250
         },
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
