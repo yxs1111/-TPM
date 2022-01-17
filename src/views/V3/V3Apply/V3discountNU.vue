@@ -433,8 +433,9 @@ export default {
               type: 'success',
               message: messageMap().importSuccess
             })
+            debugger
             if (response.data != null) {
-              if (response.data === []) {
+              if (response.data.length === 0) {
                 this.$message({
                   type: 'error',
                   message: '导入数据为空，请检查模板！'
