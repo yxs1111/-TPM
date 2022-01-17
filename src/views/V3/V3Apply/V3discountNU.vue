@@ -433,7 +433,6 @@ export default {
               type: 'success',
               message: messageMap().importSuccess
             })
-            debugger
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
