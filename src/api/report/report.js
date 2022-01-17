@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-01-17 13:06:33
+ * @LastEditTime: 2022-01-17 15:42:43
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -19,7 +19,7 @@ export default {
   },
   // 代垫通知
   getAdvanceNoticeReport(params) {
-    return requestApi.request_get(this.url + '/advanceNoticeReport/page', params)
+    return requestApi.request_get(this.url + '/advanceNoticeReport/getPage', params)
   }
 }
 

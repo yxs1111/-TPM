@@ -10,7 +10,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+          <el-select v-model="filterObj.channelName" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
@@ -23,7 +23,7 @@
     </div>
     <el-table :data="tableData" ref="multipleTable" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <!-- <el-table-column type="selection" align="center" /> -->
       <el-table-column width="250" fixed="left" align="center" prop="cpId" label="通知函代垫编号" />
       <el-table-column width="250" align="center" prop="yearAndMonth" label="实际发生月" />
       <el-table-column width="250" align="center" prop="deptCode" label="部门代码" />
@@ -74,7 +74,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonth: '',
+        yearAndMonth: '202109',
         channelName: '',
       },
       permissions: getDefaultPermissions(),
@@ -85,8 +85,9 @@ export default {
   },
   computed: {},
   mounted() {
-    this.getTableData()
     this.getChannelList()
+    
+    
   },
   watch: {},
   methods: {
@@ -107,6 +108,8 @@ export default {
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
+        this.filterObj.channelName=this.ChannelList[0].channelCode
+        this.getTableData()
       })
     },
     search() {
