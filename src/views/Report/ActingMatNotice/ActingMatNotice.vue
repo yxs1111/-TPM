@@ -5,12 +5,12 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
-          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
           </el-date-picker>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelName" filterable clearable placeholder="请选择">
+          <el-select v-model="filterObj.channelName" filterable placeholder="请选择">
             <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
@@ -24,28 +24,28 @@
     <el-table :data="tableData" ref="multipleTable" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange" style="width: 100%">
       <!-- <el-table-column type="selection" align="center" /> -->
-      <el-table-column width="250" fixed="left" align="center" prop="cpId" label="通知函代垫编号" />
-      <el-table-column width="250" align="center" prop="yearAndMonth" label="实际发生月" />
+      <el-table-column width="450" fixed="left" align="center" prop="cpId" label="通知函代垫编号" />
+      <el-table-column width="150" align="center" prop="yearAndMonth" label="实际发生月" />
       <el-table-column width="250" align="center" prop="deptCode" label="部门代码" />
-      <el-table-column width="320" align="center" prop="distributorMdmCode" label="经销商编码" />
+      <el-table-column width="150" align="center" prop="distributorMdmCode" label="经销商编码" />
       <el-table-column width="280" align="center" prop="distributorName" label="经销商名称" />
-      <el-table-column width="280" align="center" prop="zoneName" label="大区" />
-      <el-table-column width="280" align="center" prop="regionName" label="区域" />
-      <el-table-column width="280" align="center" prop="cityName" label="城市" />
-      <el-table-column width="280" align="center" prop="channelName" label="渠道" />
-      <el-table-column width="280" align="center" prop="customerGroupName" label="客户组" />
-      <el-table-column width="280" align="center" prop="customerName" label="客户名称" />
-      <el-table-column width="280" align="center" prop="mechanismType" label="活动类型" />
-      <el-table-column width="280" align="center" prop="mechanismName" label="活动机制" />
-      <el-table-column width="280" align="center" prop="productName" label="活动SKU" />
-      <el-table-column width="280" align="center" prop="brandName" label="产品线" />
-      <el-table-column width="280" align="center" prop="priceGearAmount" label="促销价格" />
+      <el-table-column width="150" align="center" prop="zoneName" label="大区" />
+      <el-table-column width="150" align="center" prop="regionName" label="区域" />
+      <el-table-column width="150" align="center" prop="cityName" label="城市" />
+      <el-table-column width="150" align="center" prop="channelName" label="渠道" />
+      <el-table-column width="150" align="center" prop="customerGroupName" label="客户组" />
+      <el-table-column width="150" align="center" prop="customerName" label="客户名称" />
+      <el-table-column width="150" align="center" prop="mechanismType" label="活动类型" />
+      <el-table-column width="150" align="center" prop="mechanismName" label="活动机制" />
+      <el-table-column width="250" align="center" prop="productName" label="活动SKU" />
+      <el-table-column width="150" align="center" prop="brandName" label="产品线" />
+      <el-table-column width="150" align="center" prop="priceGearAmount" label="促销价格" />
       <el-table-column width="280" align="center" prop="adjustedVol" label="预计活动销量（箱）" />
-      <el-table-column width="280" align="center" prop="adjustedAmount" label="申请额度（元）" />
-      <el-table-column width="280" align="center" prop="activityDateStart" label="活动开始日期" />
-      <el-table-column width="280" align="center" prop="activityDateEnd" label="活动结束日期" />
+      <el-table-column width="150" align="center" prop="adjustedAmount" label="申请额度（元）" />
+      <el-table-column width="150" align="center" prop="activityDateStart" label="活动开始日期" />
+      <el-table-column width="150" align="center" prop="activityDateEnd" label="活动结束日期" />
       <el-table-column width="280" align="center" prop="costItemName" label="费用项目" />
-      <el-table-column width="280" align="center" prop="glAccount" label="GL Account" />
+      <el-table-column width="150" align="center" prop="glAccount" label="GL Account" />
       <el-table-column width="280" align="center" prop="wbsCode" label="WBS CODE" />
       <el-table-column width="280" align="center" prop="ioCode" label="IO Code" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
@@ -65,7 +65,7 @@ import { getDefaultPermissions, FormateThousandNum } from '@/utils'
 import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'PriceMasterData',
+  name: 'ActingMatNotice',
   directives: { elDragDialog, permission },
 
   data() {
@@ -86,29 +86,32 @@ export default {
   computed: {},
   mounted() {
     this.getChannelList()
-    
-    
   },
   watch: {},
   methods: {
     // 获取表格数据
     getTableData() {
-      API.getAdvanceNoticeReport({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelName: this.filterObj.channelName,
-      }).then((response) => {
-        this.tableData = response.data.records
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
-      })
+      if (this.filterObj.yearAndMonth==null) {
+        this.$message.info('请选择年月')
+        this.tableData=[]
+      } else {
+        API.getAdvanceNoticeReport({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelName,
+        }).then((response) => {
+          this.tableData = response.data.records
+          this.pageNum = response.data.pageNum
+          this.pageSize = response.data.pageSize
+          this.total = response.data.total
+        })
+      }
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
-        this.filterObj.channelName=this.ChannelList[0].channelCode
+        this.filterObj.channelName = this.ChannelList[0].channelCode
         this.getTableData()
       })
     },
