@@ -90,9 +90,18 @@
       <el-table-column v-slot="{row}" width="150" align="right" prop="costDifference" label="费用差值(RMB)">
         {{ FormateNum((row.costDifference*1).toFixed(2)) }}
       </el-table-column>
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
-      <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容" />
-      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="160" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <div v-if="row.judgmentType!== null" class="statusWrap">
+            <img v-if="row.judgmentType === 'Pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
+            {{ row.judgmentType }}
+          </div>
+          <div v-else>{{ row.judgmentType }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column width="560" align="center" prop="judgmentContent" label="系统判定内容" />
+      <el-table-column width="300" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>
@@ -431,7 +440,7 @@ export default {
     // 导入数据
     importData() {
       this.saveBtn = false
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -500,7 +509,7 @@ export default {
               message: '导入成功'
             })
             if (response.data != null) {
-              if (response.data === []) {
+              if (response.data.length === 0) {
                 this.$message({
                   type: 'error',
                   message: '导入数据为空，请检查模板！'
@@ -508,7 +517,7 @@ export default {
               }
               this.dialogData = response.data
               this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
-              this.saveBtn = this.dialogData.length ? true : false
+              this.saveBtn = !!this.dialogData.length
               // this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               this.$forceUpdate()
             } else {
