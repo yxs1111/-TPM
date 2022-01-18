@@ -452,7 +452,7 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          if (!response.data.length) {
+          if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)

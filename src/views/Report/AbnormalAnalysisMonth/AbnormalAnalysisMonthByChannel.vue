@@ -11,7 +11,10 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.month' />
+          <!-- <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.month' :Disabled="false" /> -->
+          <el-date-picker v-model="filterObj.month" type="monthrange"  format='yyyy-MM' value-format='yyyyMM' range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份">
+          </el-date-picker>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
@@ -167,8 +170,8 @@ export default {
     return {
       filterObj: {
         exception: '',
-        month: getCurrentMonth(),
-        MinePackage: '',
+        month: ['202109','202109'],
+        MinePackage: 'L',
         regionCode: '',
         brandCode: '',
         productCode: '',
@@ -193,11 +196,12 @@ export default {
   computed: {},
   mounted() {
     this.checkList = ReportCheckList()
-    this.getTableData()
+    
     this.getMinePackage()
-    // this.getSkuSelect()
-    // this.getRegionList()
-    // this.getBrandList()
+    this.getSkuSelect()
+    this.getRegionList()
+    this.getBrandList()
+    this.getTableData()
   },
   watch: {
     //动态列渲染
@@ -214,14 +218,14 @@ export default {
     // 获取表格数据
     getTableData() {
       API.getExceptionAnalysisReport({
-        startDate: '2020-09',
-        endDate: '2020-11',
-        minePackageCode: 'L',
-        // yearAndMonthList: ['2020-09','2020-10','2020-11',],
+        startDate: this.filterObj.month[0],
+        endDate: this.filterObj.month[1],
+        minePackageCode: this.filterObj.MinePackage,
+        // yearAndMonthList: this.filterObj.month,
         // minePackageCode: 'L',
-        // brandCodeList: [],
-        // regionCodeList: [],
-        // productCodeList: [],
+        brandCodeList: this.filterObj.brandCode,
+        regionCodeList: this.filterObj.regionCode,
+        productCodeList: this.filterObj.productCode,
       }).then((response) => {
         let AllData = response.data
         for (const version in AllData) {
@@ -344,6 +348,7 @@ export default {
     //获取子组件传递的多个月份值
     getMultipleMonth(data) {
       this.filterObj.month = data
+      this.getTableData()
     },
     search() {
       this.getTableData()

@@ -67,7 +67,7 @@
       <div class="importDialog">
         <div class="el-downloadFileBar">
           <div>
-            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportTemplate">下载模板</el-button>
+            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
             <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
@@ -264,7 +264,8 @@ export default {
         channelCode: this.filterObj.channelCode,
         productCode: this.filterObj.productCode,
       }).then((res) => {
-        this.downloadFile(res, '价格档位' + '.xlsx') // 自定义Excel文件名
+        const timestamp = Date.parse(new Date())
+        this.downloadFile(res, '价格档位维护-' + timestamp + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },

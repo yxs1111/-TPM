@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-01-17 17:03:29
+ * @LastEditTime: 2022-01-18 10:31:30
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -23,7 +23,7 @@ export default function() {
           name: 'AbnormalAnalysisMonth',
           alwaysShow: true,
           component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonth.vue'),
-          meta: { title: '异常分析报告-当月', icon: 'apply' },
+          meta: { title: '异常分析报告', icon: 'apply' },
           redirect: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthByChannel',
           children: [
             {
@@ -61,14 +61,14 @@ export default function() {
           code: 'LossAnalysisMonth',
           name: 'LossAnalysisMonth',
           component: () => import('@/views/Report/LossAnalysisMonth/LossAnalysisMonth.vue'),
-          meta: { title: '损益分析报告-当月', icon: 'approve' }
+          meta: { title: '损益分析报告', icon: 'approve' }
         },
         {
           path: '/TotalAnalysisMonth',
           code: 'resource-report-sum',
           name: 'TotalAnalysisMonth',
           component: () => import('@/views/Report/TotalAnalysisMonth/TotalAnalysisMonth.vue'),
-          meta: { title: '汇总分析报告-当月', icon: 'approve' }
+          meta: { title: '汇总分析报告', icon: 'approve' }
         },
         {
           path: '/ActingMatNotice',
