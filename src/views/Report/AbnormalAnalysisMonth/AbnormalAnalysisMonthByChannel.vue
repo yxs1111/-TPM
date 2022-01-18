@@ -6,7 +6,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">异常类别：</span>
           <el-select v-model="filterObj.exception" placeholder="请选择">
-            <el-option v-for="(item, index) in ['数量','费用']" :key="index" :label="item" :value="index" />
+            <el-option v-for="(item, index) in ['数量','费用']" :key="index" :label="item" :value="index+1" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -18,7 +18,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
           <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.minePackageId" />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.id" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -217,11 +217,11 @@ export default {
     // 获取表格数据
     getTableData() {
       API.getExceptionAnalysisReport({
+        exceptionType: this.filterObj.exception,
         startDate: this.filterObj.month[0],
         endDate: this.filterObj.month[1],
         minePackageCode: this.filterObj.MinePackage,
-        // yearAndMonthList: this.filterObj.month,
-        // minePackageCode: 'L',
+        queryType: 'byChannel',
         brandCodeList: this.filterObj.brandCode,
         regionCodeList: this.filterObj.regionCode,
         productCodeList: this.filterObj.productCode,

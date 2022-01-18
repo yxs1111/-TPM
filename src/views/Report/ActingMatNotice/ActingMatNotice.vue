@@ -3,7 +3,7 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
-        <div class="Selectli">
+        <div class="Selectli" style="margin-left: 23px;">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
           </el-date-picker>
@@ -14,18 +14,36 @@
             <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
-        <!-- <div class="Selectli">
-          <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable multiple collapse-tags filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+        <div class="Selectli">
+          <span class="SelectliTitle">客户:</span>
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable multiple collapse-tags filterable placeholder="请选择">
-            <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          <span class="SelectliTitle">经销商:</span>
+          <el-select v-model="filterObj.distributorName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
           </el-select>
-        </div> -->
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">区域:</span>
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">产品线:</span>
+          <el-select v-model="filterObj.brandName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">活动SKU:</span>
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <!-- <div class="TpmButtonBG" @click="exportData">
           <img src="@/assets/images/export.png" alt="" />
@@ -132,6 +150,11 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       ChannelList: [],
+      skuOptions: [],
+      customerArr: [],
+      distributorArr: [],
+      RegionList: [],
+      BrandList: [],
       checkArr: [], //批量删除,存放选中
       ALLtableData: [], //批量删除,存放选中
     }
@@ -139,8 +162,26 @@ export default {
   computed: {},
   mounted() {
     this.getChannelList()
+    this.getQuerySkuSelect()
+    this.getDistributorList()
+    this.getCustomerList()
+    this.getRegionList()
+    this.getBrandList()
   },
-  watch: {},
+  watch: {
+    'filterObj.channelName'() {
+      this.filterObj.customerName = ''
+      this.getCustomerList()
+    },
+    'filterObj.customerName'() {
+      this.filterObj.distributorName = ''
+      this.getDistributorList()
+    },
+    'filterObj.distributorName'() {
+      this.filterObj.regionName = ''
+      this.getRegionList()
+    },
+  },
   methods: {
     // 获取表格数据
     getTableData() {
@@ -199,6 +240,57 @@ export default {
         this.ChannelList = res.data
         this.filterObj.channelName = this.ChannelList[0].channelCode
         this.getTableData()
+      })
+    },
+    // 经销商
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+    },
+    getQuerySkuSelect() {
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          this.skuOptions = res.data
+        })
+        .catch()
+    },
+    getRegionList() {
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
+    },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
       })
     },
     search() {
