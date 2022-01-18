@@ -23,7 +23,7 @@
     "dayjs": "^1.8.14",
     "diagram-js-minimap": "^1.2.1",
     "element-ui": "2.13.2",
-    "file-saver": "^2.0.2",
+    "file-saver": "^2.0.5",
     "fuse.js": "3.4.4",
     "gantt-elastic": "^1.0.0",
     "gantt-elastic-header": "^0.1.11",
@@ -46,7 +46,8 @@
     "vxe-table": "^2.9.26",
     "vxe-table-plugin-element": "^1.9.4",
     "webpack-dev-server": "^4.0.0",
-    "xe-utils": "^2.8.1"
+    "xe-utils": "^2.8.1",
+    "xlsx": "^0.17.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.4",

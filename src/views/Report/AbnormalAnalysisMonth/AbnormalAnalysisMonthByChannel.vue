@@ -12,14 +12,13 @@
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
           <!-- <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.month' :Disabled="false" /> -->
-          <el-date-picker v-model="filterObj.month" type="monthrange"  format='yyyy-MM' value-format='yyyyMM' range-separator="至" start-placeholder="开始月份"
-            end-placeholder="结束月份">
+          <el-date-picker v-model="filterObj.month" type="monthrange" format='yyyy-MM' value-format='yyyyMM' range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
           </el-date-picker>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
           <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.minePackageId" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -31,7 +30,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable multiple collapse-tags filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -170,7 +169,7 @@ export default {
     return {
       filterObj: {
         exception: '',
-        month: ['202109','202109'],
+        month: ['202109', '202109'],
         MinePackage: 'L',
         regionCode: '',
         brandCode: '',
@@ -196,7 +195,7 @@ export default {
   computed: {},
   mounted() {
     this.checkList = ReportCheckList()
-    
+
     this.getMinePackage()
     this.getSkuSelect()
     this.getRegionList()
@@ -227,97 +226,103 @@ export default {
         regionCodeList: this.filterObj.regionCode,
         productCodeList: this.filterObj.productCode,
       }).then((response) => {
-        let AllData = response.data
-        for (const version in AllData) {
-          if (Object.hasOwnProperty.call(AllData, version)) {
-            let yearMonthObj = AllData[version]
-            let list = []
-            let haveMonth = []
-            //版本分组处理
-            for (const key in yearMonthObj) {
-              if (Object.hasOwnProperty.call(yearMonthObj, key)) {
-                const element = yearMonthObj[key]
-                for (let index = 0; index < element.length; index++) {
-                  list.push(element[index])
+        if ((Object.keys(response.data)).length) {
+          let AllData = response.data
+          for (const version in AllData) {
+            if (Object.hasOwnProperty.call(AllData, version)) {
+              let yearMonthObj = AllData[version]
+              let list = []
+              let haveMonth = []
+              //版本分组处理
+              for (const key in yearMonthObj) {
+                if (Object.hasOwnProperty.call(yearMonthObj, key)) {
+                  const element = yearMonthObj[key]
+                  for (let index = 0; index < element.length; index++) {
+                    list.push(element[index])
+                  }
                 }
+                //存当前版本的 月份
+                haveMonth.push(key)
               }
-              //存当前版本的 月份
-              haveMonth.push(key)
-            }
-            let versionObj = {}
-            // 渠道分组处理
-            for (let m = 0; m < list.length; m++) {
-              if (!versionObj[list[m].channelCode]) {
-                var arr = []
-                arr.push(list[m])
-                versionObj[list[m].channelCode] = arr
-              } else {
-                versionObj[list[m].channelCode].push(list[m])
-              }
-            }
-
-            let versionList = []
-            for (const channelKey in versionObj) {
-              if (Object.hasOwnProperty.call(versionObj, channelKey)) {
-                let obj = {
-                  version: version,
-                  name: channelKey,
-                  month: versionObj[channelKey],
-                  haveMonth,
-                }
-                if (versionObj[channelKey].length == haveMonth.length) {
-                  //月份排序
-                  obj.month.sort(function (a, b) {
-                    return Number(a.yearAndMonth) - Number(b.yearAndMonth)
-                  })
-                  versionList.push(obj)
+              let versionObj = {}
+              // 渠道分组处理
+              for (let m = 0; m < list.length; m++) {
+                if (!versionObj[list[m].channelCode]) {
+                  var arr = []
+                  arr.push(list[m])
+                  versionObj[list[m].channelCode] = arr
                 } else {
-                  //生成缺失的月份
-                  let missMonth = []
-                  for (let i = 0; i < obj.haveMonth.length; i++) {
-                    let month = obj.haveMonth[i]
-                    for (let m = 0; m < obj.month.length; m++) {
-                      let currentMonth = obj.month[m].yearAndMonth
-                      if (month != currentMonth) {
-                        missMonth.push(month)
-                      } else continue
-                    }
-                  }
-                  //补奇缺失月份
-                  for (let index = 0; index < missMonth.length; index++) {
-                    obj.month.push({
-                      channelCode: '-',
-                      countNum: '-',
-                      exceptionOneNum: '-',
-                      exceptionOneRange: '-',
-                      exceptionThreeNum: '-',
-                      exceptionThreeRange: '-',
-                      exceptionTwoNum: '-',
-                      exceptionTwoRange: '-',
-                      passNum: '-',
-                      passRange: '-',
-                      version: '',
-                      yearAndMonth: missMonth[index],
-                    })
-                  }
-                  //月份排序
-                  obj.month.sort(function (a, b) {
-                    return Number(a.yearAndMonth) - Number(b.yearAndMonth)
-                  })
-                  versionList.push(obj)
+                  versionObj[list[m].channelCode].push(list[m])
                 }
               }
+
+              let versionList = []
+              for (const channelKey in versionObj) {
+                if (Object.hasOwnProperty.call(versionObj, channelKey)) {
+                  let obj = {
+                    version: version,
+                    name: channelKey,
+                    month: versionObj[channelKey],
+                    haveMonth,
+                  }
+                  if (versionObj[channelKey].length == haveMonth.length) {
+                    //月份排序
+                    obj.month.sort(function (a, b) {
+                      return Number(a.yearAndMonth) - Number(b.yearAndMonth)
+                    })
+                    versionList.push(obj)
+                  } else {
+                    //生成缺失的月份
+                    let missMonth = []
+                    for (let i = 0; i < obj.haveMonth.length; i++) {
+                      let month = obj.haveMonth[i]
+                      for (let m = 0; m < obj.month.length; m++) {
+                        let currentMonth = obj.month[m].yearAndMonth
+                        if (month != currentMonth) {
+                          missMonth.push(month)
+                        } else continue
+                      }
+                    }
+                    //补奇缺失月份
+                    for (let index = 0; index < missMonth.length; index++) {
+                      obj.month.push({
+                        channelCode: '-',
+                        countNum: '-',
+                        exceptionOneNum: '-',
+                        exceptionOneRange: '-',
+                        exceptionThreeNum: '-',
+                        exceptionThreeRange: '-',
+                        exceptionTwoNum: '-',
+                        exceptionTwoRange: '-',
+                        passNum: '-',
+                        passRange: '-',
+                        version: '',
+                        yearAndMonth: missMonth[index],
+                      })
+                    }
+                    //月份排序
+                    obj.month.sort(function (a, b) {
+                      return Number(a.yearAndMonth) - Number(b.yearAndMonth)
+                    })
+                    versionList.push(obj)
+                  }
+                }
+              }
+              //排序
+              AllData[version] = versionList
             }
-            //排序
-            AllData[version] = versionList
+            if (version == 'v1') {
+              this.V1Data = AllData.v1
+            } else if (version == 'v2') {
+              this.V2Data = AllData.v2
+            } else if (version == 'v3') {
+              this.V3Data = AllData.v3
+            }
           }
-          if (version == 'v1') {
-            this.V1Data = AllData.v1
-          } else if (version == 'v2') {
-            this.V2Data = AllData.v2
-          } else if (version == 'v3') {
-            this.V3Data = AllData.v3
-          }
+        } else {
+          this.V1Data = []
+          this.V2Data = []
+          this.V3Data = []
         }
       })
     },

@@ -5,9 +5,12 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
+          <el-date-picker v-model="filterObj.yearAndMonthList" type="monthrange" format='yyyy-MM' value-format='yyyyMM' range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份">
+          </el-date-picker>
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
-          <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" :Disabled="false"/>
+          <!-- <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" :Disabled="false" /> -->
           <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
@@ -46,14 +49,14 @@
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出Raw Data</span>
       </div>
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG" @click="exportExcel">
         <img src="../../../assets/images/downloadIcon.png" alt="">
         <span class="text">下载报表</span>
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :key="tableKey" :data="tableData" v-if="tableData.length" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" :cell-style="columnStyle"
-        height="600" style="width: 100%">
+      <el-table :key="tableKey" id="outTable" :data="tableData" v-if="tableData.length" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
+        :cell-style="columnStyle" height="600" style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -78,9 +81,9 @@
                   <template v-slot:header>
                     {{ titleItem.title }}
                   </template>
-                  <template>
+                  <template slot-scope="{row}">
                     <div class="NumWrap">
-                      {{ CustomerItem[titleItem.value] }}{{titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':''}}
+                      {{FormateNum(row.month[key][CustomerKey][titleItem.value])}}{{titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':''}}
                     </div>
                   </template>
                 </el-table-column>
@@ -102,12 +105,15 @@ import {
   getDefaultPermissions,
   getCurrentMonth,
   ReportBgColorMap,
+  FormateThousandNum,
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
-  name: 'AbnormalAnalysisHistoryByChannel',
+  name: 'TotalAnalysisMonth',
   components: { SelectMonth },
   directives: { elDragDialog, permission },
   data() {
@@ -138,19 +144,19 @@ export default {
       checkList: [], // 已选中的列
       tableColumnList: [], // 动态列
       dynamicColumn: [
-        { title: 'V1', value: 'v1Avg' ,width:80},
-        { title: 'V2', value: 'v2Avg',width:80 },
-        { title: 'V3谈判前', value: 'v3AfterAvg' ,width:100},
-        { title: 'V3谈判后', value: 'v3BeforeAvg',width:100 },
+        { title: 'V1', value: 'v1Avg', width: 90 },
+        { title: 'V2', value: 'v2Avg', width: 90 },
+        { title: 'V3谈判前', value: 'v3AfterAvg', width: 100 },
+        { title: 'V3谈判后', value: 'v3BeforeAvg', width: 100 },
         {
           title: '价格执行率1# V3谈判前  VS  V1',
           value: 'priceExecutionRate1',
-          width:250
+          width: 250,
         },
         {
           title: '价格执行率2# V3谈判后  VS  V1',
           value: 'priceExecutionRate2',
-          width:250
+          width: 250,
         },
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
@@ -178,8 +184,6 @@ export default {
     ]
     this.getQueryChannelSelect()
     this.getCustomerList()
-    
-    
   },
   methods: {
     // 获取表格数据
@@ -190,11 +194,6 @@ export default {
         customerNameList: this.filterObj.customerCode,
         channelNameList: this.filterObj.channelCode,
         productNameList: this.filterObj.productName,
-        // yearAndMonthList: ['202201'],
-        // customerNameList: ['孩子王', '沃尔玛'],
-        // channelNameList: ['NKA'],
-        // productNameList: ['Friso F0 900g'],
-        //productNameList: [],
       }).then((response) => {
         let AllObj = response.data
         this.pageNum = response.data.pageNum
@@ -251,9 +250,9 @@ export default {
             AllDataList.push(obj)
           }
         }
-        AllDataList.sort(function (a, b) {
-          return b.name.indexOf('Total') - a.name.indexOf('Total')
-        })
+        // AllDataList.sort(function (a, b) {
+        //   return b.name.indexOf('Total') - a.name.indexOf('Total')
+        // })
         this.tableData = AllDataList
       })
     },
@@ -262,7 +261,6 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         this.channelOptions = res.data
         this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
-        console.log(this.filterObj);
       })
     },
     // 客户
@@ -295,6 +293,34 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
+    exportExcel() {
+      let fix = document.querySelector('.el-table__fixed')
+      let wb
+      if (fix) {
+        //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
+        wb = XLSX.utils.table_to_book(
+          document.querySelector('#outTable').removeChild(fix)
+        )
+        document.querySelector('#outTable').appendChild(fix)
+      } else {
+        wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
+      }
+      let wbout = XLSX.write(wb, {
+        bookType: 'xlsx',
+        bookSST: true,
+        type: 'array',
+      })
+      try {
+        FileSaver.saveAs(
+          new Blob([wbout], { type: 'application/octet-stream' }),
+          '汇总分析报告.xlsx'
+        )
+      } catch (e) {
+        if (typeof console !== 'undefined') console.log(e, wbout)
+      }
+      return wbout
+    },
+
     // 行样式
     tableRowClassName({ row, rowIndex }) {
       if (rowIndex == 0) {
@@ -319,6 +345,10 @@ export default {
       if (row.name.indexOf('Total') !== -1) {
         return 'background-color: #f3f7f8 !important;color: #666!important;'
       }
+    },
+    //格式化--千位分隔符、两位小数
+    FormateNum(num) {
+      return FormateThousandNum(num)
     },
   },
 }
@@ -379,6 +409,14 @@ export default {
   background-color: #f3f7f8 !important;
   color: #666;
   font-size: 14px;
+}
+.hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+  
+}
+.hover-row .filstColumn {
+  color: #666;
 }
 </style>
 
