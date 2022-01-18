@@ -151,7 +151,11 @@ export default {
   },
   methods: {
     timeOut() {
-      selectAPI.timeout().then((res) => {
+      var formData = new FormData()
+      formData.append('jobClassName', 'MdmInterfaceDataImport')
+      formData.append('jobGroupName', 'test')
+      formData.append('cronExpression', '0 0/15 * * * ? *')
+      selectAPI.timeout(formData).then((res) => {
         
       })
     },
@@ -211,7 +215,7 @@ export default {
           this.getTableData()
           this.warningShow = true
           this.warningList = response.data
-          console.log(typeof this.warningList)
+          console.dir(this.warningList)
           // this.$message.success(`${response.data}`)
         }
         this.event.srcElement.value = '' // 置空

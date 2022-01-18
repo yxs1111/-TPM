@@ -170,7 +170,7 @@ export default {
       filterObj: {
         exception: '',
         month: ['202109', '202109'],
-        MinePackage: 'L',
+        MinePackage: 14,
         regionCode: '',
         brandCode: '',
         productCode: '',
@@ -220,7 +220,7 @@ export default {
         exceptionType: this.filterObj.exception,
         startDate: this.filterObj.month[0],
         endDate: this.filterObj.month[1],
-        minePackageCode: this.filterObj.MinePackage,
+        minePackageId: this.filterObj.MinePackage,
         queryType: 'top',
         brandCodeList: this.filterObj.brandCode,
         regionCodeList: this.filterObj.regionCode,

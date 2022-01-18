@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-01-18 20:49:39
+ * @LastEditTime: 2022-01-18 21:24:48
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -35,21 +35,21 @@ export default function() {
             },
             {
               path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
-              code: 'resource-report-ycfxbg-dy-channel',
+              code: 'resource-report-KA',
               name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA',
               component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthBykA.vue'),
               meta: { title: 'by kA', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist',
-              code: 'resource-report-ycfxbg-dy-channel',
+              code: 'resource-report-ycfxbg-dy-disc',
               name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthAbnormalAnalysisMonthTop10Dist',
               component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthTop10Dist.vue'),
               meta: { title: 'Top 10 Dist', icon: 'approve' }
             },
             {
               path: '/AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
-              code: 'resource-report-ycfxbg-dy-channel',
+              code: 'resource-report-ycfxbg-dy-zone',
               name: 'AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone',
               component: () => import('@/views/Report/AbnormalAnalysisMonth/AbnormalAnalysisMonthByZone.vue'),
               meta: { title: 'by Zone', icon: 'approve' }
