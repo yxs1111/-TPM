@@ -12,8 +12,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
-          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerMdmCode" />
+          <el-select v-model="filterObj.customerIndex" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -419,6 +419,9 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        customerCode: '',
+        customerMdmCode: '',
+        customerIndex: '',
         channelName: null,
         customerName: null,
         distributorName: null,
@@ -443,10 +446,16 @@ export default {
   },
   computed: {},
   watch: {
-    'filterObj.customerName'() {
-      this.filterObj.distributorName = ''
+    'filterObj.customerIndex'() {
+      this.filterObj.customerCode = this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode = this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
+    // 'filterObj.customerName'() {
+    //   this.filterObj.distributorName = ''
+    //   this.getDistributorList()
+    // },
     'filterObj.distributorName'() {
       this.filterObj.regionName = ''
       this.getRegionList()
@@ -535,7 +544,7 @@ export default {
     // 经销商
     getDistributorList() {
       selectAPI.queryDistributorList({
-        customerMdmCode: this.filterObj.customerName
+        customerMdmCode: this.filterObj.customerMdmCode
       }).then(res => {
         if (res.code === 1000) {
           this.distributorArr = res.data
@@ -945,7 +954,7 @@ export default {
       const data = {
         channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
         // channelName: 'NKA',
-        customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
+        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
         distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
         productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
         yearAndMonth: this.localDate,
@@ -988,7 +997,7 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
-        customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
+        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
         distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
         productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
         yearAndMonth: this.localDate,

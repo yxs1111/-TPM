@@ -12,8 +12,8 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户</span>
           <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
+          <el-select v-model="filterObj.customerIndex" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -276,6 +276,8 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        customerMdmCode: '',
+        customerIndex: '',
         customerCode: '',
         channelCode: '',
         distributorCode: '',
@@ -303,10 +305,16 @@ export default {
   },
   computed: {},
   watch: {
-    'filterObj.customerCode'() {
+    'filterObj.customerIndex'() {
+      this.filterObj.customerCode = this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode = this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
+    // 'filterObj.customerCode'() {
+    //   this.filterObj.distributorCode = ''
+    //   this.getDistributorList()
+    // },
     'filterObj.distributorCode'() {
       this.filterObj.regionName = ''
       this.getRegionList()
@@ -386,7 +394,7 @@ export default {
     // 经销商
     getDistributorList() {
       selectAPI.queryDistributorList({
-        customerMdmCode: this.filterObj.customerCode
+        customerMdmCode: this.filterObj.customerMdmCode
       }).then((res) => {
         if (res.code === 1000) {
           this.distributorArr = res.data
