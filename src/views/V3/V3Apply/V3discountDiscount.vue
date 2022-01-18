@@ -854,6 +854,7 @@ export default {
       API.exportV3({
         exportType: 'exportTemplate',
         channelName: this.filterObj.channelName,
+        yearAndMonth: this.localDate,
         // channelName: 'NKA',
         mainId: this.mainIdLocal
       }).then(
@@ -876,6 +877,7 @@ export default {
     // 下载excel模板 --- 补录
     downLoadElxModelNext() {
       API.exportV3({
+        yearAndMonth: this.localDate,
         exportType: 'exportMakeUpTemplate',
         // channelName: this.filterObj.channelName,
         channelName: this.filterObj.channelName,
@@ -900,6 +902,7 @@ export default {
     // 校验excel
     downLoadException() {
       API.exportV3({
+        yearAndMonth: this.localDate,
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName

@@ -442,6 +442,7 @@ export default {
     // 校验excel
     downLoadException() {
       API.exportV3({
+        yearAndMonth: this.localDate,
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName
@@ -481,6 +482,7 @@ export default {
     // 下载excel模板
     downLoadElxModel() {
       API.exportV3({
+        yearAndMonth: this.localDate,
         exportType: 'exportApproveTemplate',
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelName
