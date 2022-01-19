@@ -169,7 +169,7 @@ export default {
     return {
       filterObj: {
         exception: '',
-        month: ['202109', '202109'],
+        month: getCurrentMonth(),
         MinePackage: 14,
         regionCode: '',
         brandCode: '',
