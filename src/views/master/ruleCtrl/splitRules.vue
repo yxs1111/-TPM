@@ -152,13 +152,13 @@
           <el-row :gutter="20" style="margin-bottom:8px;">
             <el-col :span="12">
               <div class="grid-content bg-purple">
-                <span style="color:red;">*</span>父Mine Package：
+                <span style="color:red;">*</span>费用类型：
                 <el-select v-model="dialogAdd.minePackageCodeP" placeholder="请选择" size="small" :disabled="isEditor" @change="getQueryMinePackageSelectDialog">
                   <el-option
                     v-for="item in MPA"
                     :key="item.costType"
                     :label="item.costTypeNumber"
-                    :value="item.costTypeNumber"
+                    :value="item.costType"
                   />
                 </el-select>
               </div>
