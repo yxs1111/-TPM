@@ -154,7 +154,7 @@ export default {
       var formData = new FormData()
       formData.append('jobClassName', 'MdmInterfaceDataImport')
       formData.append('jobGroupName', 'test')
-      formData.append('cronExpression', '0 0/15 * * * ? *')
+      formData.append('cronExpression', '0 0 2 * * ? *')
       selectAPI.timeout(formData).then((res) => {
         
       })

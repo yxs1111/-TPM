@@ -1,7 +1,7 @@
 <!--
  * @Description: 多个月份选择
  * @Date: 2022-01-07 14:42:30
- * @LastEditTime: 2022-01-14 14:25:50
+ * @LastEditTime: 2022-01-19 11:10:12
 -->
 <template>
   <div class="monthEl">
@@ -25,7 +25,7 @@
           </li>
         </ul>
         <el-row type="flex" justify="end">
-          <el-button class="mini" @click.stop="sure">确定</el-button>
+          <el-button class="mini" @click.stop="confirm">确定</el-button>
         </el-row>
       </div>
     </transition>
@@ -74,6 +74,7 @@ export default {
           num: i,
           show: false,
           currentM: false,
+          yearAndMonth: this.years + '-' + i,
         })
       }
     }
@@ -102,6 +103,29 @@ export default {
         }
       }
     },
+    years(val) {
+      this.months = []
+      let date = new Date()
+      let year = date.getFullYear()
+      let month = date.getMonth() +1
+      for (var i = 1; i <= 12; i++) {
+        if (val == year && month == i) {
+          this.months.push({
+            num: i,
+            show: false,
+            currentM: true,
+            yearAndMonth: val + '-' + i,
+          })
+        } else {
+          this.months.push({
+            num: i,
+            show: false,
+            currentM: false,
+            yearAndMonth: val + '-' + i,
+          })
+        }
+      }
+    },
   },
   methods: {
     //月份初始化
@@ -110,10 +134,12 @@ export default {
       let date = new Date()
       this.years = date.getFullYear()
       //置空
-      this.months.forEach(item=>{item.show=false})
+      this.months.forEach((item) => {
+        item.show = false
+      })
       dateList.forEach((item) => {
-        const dateArray=item.split('-')
-        this.months[Number(dateArray[1])-1].show=true
+        const dateArray = item.split('-')
+        this.months[Number(dateArray[1]) - 1].show = true
       })
       this.$forceUpdate()
     },
@@ -142,7 +168,7 @@ export default {
       item.show = !item.show
     },
     // 确定选中值
-    sure() {
+    confirm() {
       let arr = []
       this.months.forEach((e) => {
         if (e.show) {
@@ -176,8 +202,8 @@ export default {
       this.monthVal = ''
     },
     hiddenSelectMonth() {
-      this.isMonthDis=false
-      this.InitMonth()
+      this.isMonthDis = false
+      // this.InitMonth()
     },
   },
 }

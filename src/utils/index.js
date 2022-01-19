@@ -17,10 +17,10 @@ export function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
-    if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
       time = parseInt(time)
     }
-    if ((typeof time === 'number') && (time.toString().length === 10)) {
+    if (typeof time === 'number' && time.toString().length === 10) {
       time = time * 1000
     }
     date = new Date(time)
@@ -37,7 +37,9 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -112,31 +114,35 @@ export function param2Obj(url) {
  */
 export function getPickerOptions() {
   return {
-    shortcuts: [{
-      text: '最近一周',
-      onClick(picker) {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-        picker.$emit('pick', [start, end])
+    shortcuts: [
+      {
+        text: '最近一周',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          picker.$emit('pick', [start, end])
+        }
+      },
+      {
+        text: '最近一个月',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          picker.$emit('pick', [start, end])
+        }
+      },
+      {
+        text: '最近三个月',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          picker.$emit('pick', [start, end])
+        }
       }
-    }, {
-      text: '最近一个月',
-      onClick(picker) {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-        picker.$emit('pick', [start, end])
-      }
-    }, {
-      text: '最近三个月',
-      onClick(picker) {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-        picker.$emit('pick', [start, end])
-      }
-    }]
+    ]
   }
 }
 
@@ -146,34 +152,38 @@ export function getPickerOptions() {
  */
 export function getFormatPickerOptions() {
   return {
-    shortcuts: [{
-      text: '最近一周',
-      onClick(picker) {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-        setStartAndEnd(start, end)
-        picker.$emit('pick', [start, end])
+    shortcuts: [
+      {
+        text: '最近一周',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+          setStartAndEnd(start, end)
+          picker.$emit('pick', [start, end])
+        }
+      },
+      {
+        text: '最近一个月',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          setStartAndEnd(start, end)
+          picker.$emit('pick', [start, end])
+        }
+      },
+      {
+        text: '最近三个月',
+        onClick(picker) {
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+          setStartAndEnd(start, end)
+          picker.$emit('pick', [start, end])
+        }
       }
-    }, {
-      text: '最近一个月',
-      onClick(picker) {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-        setStartAndEnd(start, end)
-        picker.$emit('pick', [start, end])
-      }
-    }, {
-      text: '最近三个月',
-      onClick(picker) {
-        const end = new Date()
-        const start = new Date()
-        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-        setStartAndEnd(start, end)
-        picker.$emit('pick', [start, end])
-      }
-    }]
+    ]
   }
 }
 
@@ -204,12 +214,12 @@ export function getTextMap() {
 
 export function getDefaultPermissions() {
   return {
-    'get': 0,
-    'insert': 1,
-    'update': 2,
-    'delete': 3,
-    'import': 4,
-    'export': 5
+    get: 0,
+    insert: 1,
+    update: 2,
+    delete: 3,
+    import: 4,
+    export: 5
   }
 }
 
@@ -217,28 +227,28 @@ export function getDefaultPermissions() {
  * 获取授权类型
  */
 export function getGrantTypeOptions() {
-  return (
-    [
-      {
-        key: 'password',
-        label: 'password'
-      },
-      {
-        key: 'refresh',
-        label: 'refresh'
-      }
-    ]
-  )
+  return [
+    {
+      key: 'password',
+      label: 'password'
+    },
+    {
+      key: 'refresh',
+      label: 'refresh'
+    }
+  ]
 }
 
 export function randomNum(len, radix) {
-  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(
+    ''
+  )
   const uuid = []
   radix = radix || chars.length
 
   if (len) {
     // Compact form
-    for (let i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix ]
+    for (let i = 0; i < len; i++) uuid[i] = chars[0 | (Math.random() * radix)]
   } else {
     // rfc4122, version 4 form
     let r
@@ -251,8 +261,8 @@ export function randomNum(len, radix) {
     // per rfc4122, sec. 4.1.5
     for (let i = 0; i < 36; i++) {
       if (!uuid[i]) {
-        r = 0 | Math.random() * 16
-        uuid[i] = chars[(i === 19) ? (r & 0x3) | 0x8 : r]
+        r = 0 | (Math.random() * 16)
+        uuid[i] = chars[i === 19 ? (r & 0x3) | 0x8 : r]
       }
     }
   }
@@ -356,14 +366,24 @@ export function deepClone(obj) {
   // RegExp
   if (_toString.call(obj) === '[object RegExp]') {
     const flags = []
-    if (obj.global) { flags.push('g') }
-    if (obj.multiline) { flags.push('m') }
-    if (obj.ignoreCase) { flags.push('i') }
+    if (obj.global) {
+      flags.push('g')
+    }
+    if (obj.multiline) {
+      flags.push('m')
+    }
+    if (obj.ignoreCase) {
+      flags.push('i')
+    }
 
     return new RegExp(obj.source, flags.join(''))
   }
 
-  const result = Array.isArray(obj) ? [] : obj.constructor ? new obj.constructor() : {}
+  const result = Array.isArray(obj)
+    ? []
+    : obj.constructor
+    ? new obj.constructor()
+    : {}
 
   for (const key in obj) {
     result[key] = deepClone(obj[key])
@@ -396,70 +416,79 @@ export function replaceUnderLine(val, char = '_') {
  * 获取CPT版本月
  * @returns yyyy-mm
  */
- export function getCPTMonth() {
-  const date=new Date()
-  const cdate=new Date()
-  cdate.setDate(date.getDate()+60)
-  let year=cdate.getFullYear()
-  let month=cdate.getMonth()+1
-  month = month < 10 ? "0" + month : month;
-  return year+''+month
+export function getCPTMonth() {
+  const date = new Date()
+  const cdate = new Date()
+  cdate.setDate(date.getDate() + 60)
+  let year = cdate.getFullYear()
+  let month = cdate.getMonth() + 1
+  month = month < 10 ? '0' + month : month
+  return year + '' + month
 }
 /**
  * 获取当前月
  * @returns yyyy-mm
  */
- export function getCurrentMonth() {
-  const date=new Date()
-  let month=date.getMonth()+1
-  let year=date.getFullYear()
-  month = month < 10 ? "0" + month : month
-  let currentMonth=year+''+month
-  let list=[]
+export function getCurrentMonth() {
+  const date = new Date()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  month = month < 10 ? '0' + month : month
+  let currentMonth = year + '' + month
+  let list = []
   list.push(currentMonth)
-  return [...list,...list]
+  return [...list, ...list]
+}
+export function getCurrentMonth1() {
+  const date = new Date()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  month = month < 10 ? '0' + month : month
+  let currentMonth = year + '-' + month
+  let list = []
+  list.push(currentMonth)
+  return [...list, ...list]
 }
 
 // 获取Scenario
 export function yearAndMonthList() {
-  const date=new Date()
-  let year=date.getFullYear()-1
-  let yearAndMonthList=[]
+  const date = new Date()
+  let year = date.getFullYear() - 1
+  let yearAndMonthList = []
   for (let i = 0; i < 12; i++) {
-    let str=year+' '+i+'+'+(12-i)
+    let str = year + ' ' + i + '+' + (12 - i)
     yearAndMonthList.push(str)
-    
   }
 
   return yearAndMonthList
 }
 //Version
 export function VersionList() {
-  return  ['V1','V2','Final']
+  return ['V1', 'V2', 'Final']
 }
 //报表背景色
 export function ReportBgColorMap() {
-  return  {
-    v1:'background:#fdf0f1!important',
-    v2:'background:#ebfbf8!important',
-    v3:'background:#fff6e5!important',
+  return {
+    v1: 'background:#fdf0f1!important',
+    v2: 'background:#ebfbf8!important',
+    v3: 'background:#fff6e5!important'
   }
 }
 //message map
 export function messageMap() {
   return {
-    importSuccess:'常规项校验导入成功',
-    importError:'常规项校验导入失败',
-    checkSuccess:'异常项校验导入成功',
-    checkError:'异常项校验导入失败',
-    downloadSuccess:'下载模板成功',
-    downloadError:'下载模板失败',
-    exportSuccess:'导出成功',
-    exportError:'导出失败',
-    exportErrorSuccess:'导出错误信息成功',
-    exportErrorError:'导出错误信息失败',
-    saveSuccess:'保存成功',
-    saveError:'保存失败',
+    importSuccess: '常规项校验导入成功',
+    importError: '常规项校验导入失败',
+    checkSuccess: '异常项校验导入成功',
+    checkError: '异常项校验导入失败',
+    downloadSuccess: '下载模板成功',
+    downloadError: '下载模板失败',
+    exportSuccess: '导出成功',
+    exportError: '导出失败',
+    exportErrorSuccess: '导出错误信息成功',
+    exportErrorError: '导出错误信息失败',
+    saveSuccess: '保存成功',
+    saveError: '保存失败'
   }
 }
 //报表动态列
@@ -472,26 +501,57 @@ export function ReportCheckList() {
     'passRange',
     'exceptionOneRange',
     'exceptionTwoRange',
-    'exceptionThreeRange',
+    'exceptionThreeRange'
   ]
 }
 //报表动态列
 export function dynamicColumn() {
   return [
-    {title:'Pass数量',value:'passNum'},
-    {title:'Exception1数量',value:'exceptionOneNum'},
-    {title:'Exception2数量',value:'exceptionTwoNum'},
-    {title:'Exception3数量',value:'exceptionThreeNum'},
-    {title:'Pass占比',value:'passRange'},
-    {title:'Exception1占比',value:'exceptionOneRange'},
-    {title:'Exception2占比',value:'exceptionTwoRange'},
-    {title:'Exception3占比',value:'exceptionThreeRange'},
+    { title: 'Pass数量', value: 'passNum' },
+    { title: 'Exception1数量', value: 'exceptionOneNum' },
+    { title: 'Exception2数量', value: 'exceptionTwoNum' },
+    { title: 'Exception3数量', value: 'exceptionThreeNum' },
+    { title: 'Pass占比', value: 'passRange' },
+    { title: 'Exception1占比', value: 'exceptionOneRange' },
+    { title: 'Exception2占比', value: 'exceptionTwoRange' },
+    { title: 'Exception3占比', value: 'exceptionThreeRange' }
   ]
 }
 export function FormateThousandNum(num) {
- //千分位分隔符+两位小数
-  const money = num*1
-  return money.toLocaleString('zh', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); 
+  //千分位分隔符+两位小数
+  const money = num * 1
+  return money.toLocaleString('zh', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
 }
 
 export const exportDefault = 'export default '
+export function getYearAndMonthRange(start, end) {
+  var result = []
+  var starts = start.split('-')
+  var ends = end.split('-')
+  var staYear = parseInt(starts[0])
+  var staMon = parseInt(starts[1])
+  var endYear = parseInt(ends[0])
+  var endMon = parseInt(ends[1])
+  while (staYear <= endYear) {
+    if (staYear === endYear) {
+      while (staMon <= endMon) {
+        var str = staYear + '' + (staMon >= 10 ? staMon : '0' + staMon)
+        result.push(str)
+        staMon++
+      }
+      staYear++
+    } else {
+      if (staMon > 12) {
+        staMon = 1
+        staYear++
+      }
+      var str = staYear + '' + (staMon >= 10 ? staMon : '0' + staMon)
+      result.push(str)
+      staMon++
+    }
+  }
+  return result
+}

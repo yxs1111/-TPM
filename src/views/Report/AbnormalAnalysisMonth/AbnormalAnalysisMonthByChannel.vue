@@ -311,6 +311,9 @@ export default {
               //排序
               AllData[version] = versionList
             }
+            this.V1Data = []
+            this.V2Data = []
+            this.V3Data = []
             if (version == 'v1') {
               this.V1Data = AllData.v1
             } else if (version == 'v2') {

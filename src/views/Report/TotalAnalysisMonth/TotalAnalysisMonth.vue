@@ -5,12 +5,12 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.yearAndMonthList" type="monthrange" format='yyyy-MM' value-format='yyyyMM' range-separator="至" start-placeholder="开始月份"
+          <el-date-picker v-model="filterObj.yearAndMonthList" type="monthrange" format='yyyy-MM' value-format='yyyy-MM' range-separator="至" start-placeholder="开始月份"
             end-placeholder="结束月份">
           </el-date-picker>
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
-          <!-- <SelectMonth :default-month="filterObj.yearAndMonthList" @multipleMonth="getMultipleMonth" :Disabled="false" /> -->
+          <!-- <SelectMonth  :Disabled="false" /> -->
           <!-- <el-date-picker v-model="filterObj.month" disabled type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" /> -->
         </div>
         <div class="Selectli">
@@ -103,9 +103,10 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getCurrentMonth,
+  getCurrentMonth1,
   ReportBgColorMap,
   FormateThousandNum,
+  getYearAndMonthRange
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
@@ -122,7 +123,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonthList: getCurrentMonth(),
+        yearAndMonthList: getCurrentMonth1(),
         customerCode: '',
         channelCode: '',
         productName: '',
@@ -189,8 +190,9 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
+      let yearAndMonthList=getYearAndMonthRange(this.filterObj.yearAndMonthList[0],this.filterObj.yearAndMonthList[1])
       API.getTotalReportList({
-        yearAndMonthList: this.filterObj.yearAndMonthList,
+        yearAndMonthList:  yearAndMonthList,
         customerNameList: this.filterObj.customerCode,
         channelNameList: this.filterObj.channelCode,
         productNameList: this.filterObj.productName,
