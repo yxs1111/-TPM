@@ -157,8 +157,8 @@
                   <el-option
                     v-for="item in MPA"
                     :key="item.costType"
-                    :label="item.costTypeNumber"
-                    :value="item.costType"
+                    :label="item.costType"
+                    :value="item.costTypeNumber"
                   />
                 </el-select>
               </div>
