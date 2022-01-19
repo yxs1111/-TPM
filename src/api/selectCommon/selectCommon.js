@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-01-18 21:03:31
+ * @LastEditTime: 2022-01-19 17:23:06
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -47,6 +47,6 @@ export default {
     return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
   },
   timeout(params) {
-    return requestApi.request_put('/job/job', params)
+    return requestApi.request_put('/job/job/pause', params)
   },
 }

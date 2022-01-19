@@ -1,7 +1,7 @@
 <!--
  * @Description: 多个月份选择
  * @Date: 2022-01-07 14:42:30
- * @LastEditTime: 2022-01-19 11:10:12
+ * @LastEditTime: 2022-01-19 15:14:15
 -->
 <template>
   <div class="monthEl">
@@ -107,24 +107,30 @@ export default {
       this.months = []
       let date = new Date()
       let year = date.getFullYear()
-      let month = date.getMonth() +1
+      let month = date.getMonth() + 1
+
       for (var i = 1; i <= 12; i++) {
         if (val == year && month == i) {
           this.months.push({
             num: i,
             show: false,
             currentM: true,
-            yearAndMonth: val + '-' + i,
+            yearAndMonth: val + '-' + (i < 10 ? '0' + i : i),
           })
         } else {
           this.months.push({
             num: i,
             show: false,
             currentM: false,
-            yearAndMonth: val + '-' + i,
+            yearAndMonth: val + '-' + (i < 10 ? '0' + i : i),
           })
         }
       }
+      this.months.filter((item) => {
+        if (this.monthVal.includes(item.yearAndMonth)) {
+          item.show = true
+        }
+      })
     },
   },
   methods: {
@@ -170,11 +176,20 @@ export default {
     // 确定选中值
     confirm() {
       let arr = []
-      this.months.forEach((e) => {
-        if (e.show) {
-          arr.push(`${this.years}-${e.num < 10 ? '0' + e.num : e.num}`)
+      if (this.monthVal != '') {
+        arr = this.monthVal.split(',')
+      }
+      this.months.forEach((item) => {
+        if (!this.monthVal.includes(item.yearAndMonth) && item.show) {
+          arr.push(item.yearAndMonth)
         }
       })
+      // this.months.forEach((e) => {
+      //   if (e.show) {
+      //     arr.push(`${this.years}-${e.num < 10 ? '0' + e.num : e.num}`)
+      //   }
+      // })
+      // arr.filter(item=>this.monthVal.includes(item.))
       this.monthVal = arr.join(',')
       this.isMonthDis = false
     },
@@ -202,7 +217,7 @@ export default {
       this.monthVal = ''
     },
     hiddenSelectMonth() {
-      this.isMonthDis = false
+      // this.isMonthDis = false
       // this.InitMonth()
     },
   },

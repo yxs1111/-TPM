@@ -127,10 +127,10 @@
             <span v-show="userInfoDialog.data.gender === 2">其他</span>
           </span>
         </el-form-item>
-        <el-form-item label="组织权限" prop="orgId">
+        <!-- <el-form-item label="组织权限" prop="orgId">
           <treeselect v-model="userInfoDialog.data.orgId" :disabled="userInfoDialog.state === 'info'" :multiple="false" :options="allOrg" :normalizer="normalizer"
             clear-value-text="清除" placeholder=" " @input="onInputChange" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="锁定状态" prop="locked">
           <span v-if="userInfoDialog.state === 'info'">{{ userInfoDialog.data.locked | lockedWordFilter }}</span>
           <el-switch v-else v-model="userInfoDialog.data.locked" active-text="已锁定" inactive-text="未锁定" :active-value="1" :inactive-value="0" active-color="#ff4949"

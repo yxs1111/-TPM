@@ -152,9 +152,9 @@ export default {
   methods: {
     timeOut() {
       var formData = new FormData()
-      formData.append('jobClassName', 'MdmInterfaceDataImport')
+      formData.append('jobClassName', 'SampleJob')
       formData.append('jobGroupName', 'test')
-      formData.append('cronExpression', '0 0 2 * * ? *')
+      // formData.append('cronExpression', '0 0 2 * * ? *')
       selectAPI.timeout(formData).then((res) => {
         
       })
