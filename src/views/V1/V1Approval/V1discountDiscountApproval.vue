@@ -318,7 +318,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           // debugger
-          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal) {
+          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal && this.submitBtn === 1) {
             this.btnStatus = true
           } else {
             this.btnStatus = false
@@ -671,6 +671,7 @@ export default {
           if (response.data.records.length > 0) {
             this.tableData = response.data.records
             this.mainIdLocal = response.data.records[0].mainId
+            this.submitBtn = response.data.records[0].isSubmit
             this.infoByMainId()
           } else {
             this.tableData = []
