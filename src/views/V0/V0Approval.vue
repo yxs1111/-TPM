@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-09 19:27:22
+ * @LastEditTime: 2022-01-20 13:25:27
 -->
 <template>
   <div class="app-container">
@@ -255,6 +255,7 @@ export default {
       uploadFile: '',
       event: '',
       isSubmit: 1,
+      isSubmitStatus: 1,
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
@@ -294,6 +295,7 @@ export default {
             for (const key in this.ContentData) {
               let list = this.ContentData[key]
               this.mainId = this.ContentData[key][0].mainId
+              this.isSubmitStatus = this.ContentData[key][0].isSubmit
               for (let i = 0; i < list.length; i++) {
                 list[i].customGearList = JSON.parse(list[i].customGear)
                 //价格档位降序排序
@@ -318,7 +320,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V0' &&
-              res.data.assignee === this.usernameLocal
+              res.data.assignee === this.usernameLocal && this.isSubmitStatus 
             ) {
               //本人可以提交
               this.isSubmit = false
