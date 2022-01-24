@@ -34,9 +34,14 @@ export default {
       businessId: businessId
     })
   },
-  getAllHis: processInstanceId => {
-    return Http.request_get(`${baseUrl}/activiti/extension/getAllHistory`, {
-      processInstanceId: processInstanceId
+  /**
+   * 根据业务ID获取所有的活动历史
+   * @param businessId: 业务ID
+   * @returns {Promise}
+   */
+  getHisOfTaskByBusinessId: (businessId) => {
+    return Http.request_get(`${baseUrl}/activiti/extension/task/history`, {
+      businessId: businessId
     })
   }
 

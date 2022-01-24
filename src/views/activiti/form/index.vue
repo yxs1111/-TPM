@@ -6,7 +6,7 @@
         <el-input v-model="queryParams.businessName" placeholder="请输入业务表名称" />
       </el-form-item>
       <el-form-item>
-        <el-button v-permission="permissions['get']" type="primary" :loading="searchLoading" @click="pageList">查询</el-button>
+        <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="searchLoading" @click="pageList">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button v-permission="permissions['get']" icon="el-icon-refresh-left" @click="reset">重置</el-button>

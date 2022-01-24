@@ -33,8 +33,8 @@ export default function PaletteProvider(
   this._customPalette.registerProvider(this)
 }
 
-PaletteProvider.prototype.getPaletteEntries = function(element) {
-  const actions = {}
+PaletteProvider.prototype.getPaletteEntries = function() {
+  const entities = {}
   const create = this._create
   const elementFactory = this._elementFactory
   const lassoTool = this._lassoTool
@@ -43,205 +43,142 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
   const elementRegistry = this._elementRegistry
   const modeling = this._modeling
 
-  forEach(this._entries.commonPalette, (palette) => {
-    const paletteKey = 'create.' + palette.title
-    const action = {}
-    action[paletteKey] = createAction(palette.type, palette.group, palette.className, palette.title)
-    assign(actions, action)
+  forEach(this._entries.commonPalettes, (palette) => {
+    assign(entities, createEntity(palette))
   })
 
-  /**
-   * 当前选中的Element之后追加任务
-   * @param event
-   */
-  function appendTaskLater(event) {
-    if (!elementRegistry.activatedEle) return
-    const currentEle = elementRegistry.activatedEle
-    let parentEle = currentEle.parent
-    if (!currentEle.parent) {
-      parentEle = elementRegistry.get('bpmn:Process')
-    }
-    const newTask = elementFactory.createShape({ type: event.target.title })
-    modeling.updateProperties(newTask, { name: event.target.innerHTML })
+  forEach(this._entries.customPalettes, (palette) => {
+    assign(entities, createEntity(palette))
+  })
 
-    if (modeling._direction === 'horizontal') {
-      modeling.createShape(newTask, {
-        x: currentEle.x + BpmConfig.WIDTH_INTERVAL,
-        y: currentEle.y + currentEle.height / 2
-      }, parentEle)
-    } else {
-      modeling.createShape(newTask, {
-        x: currentEle.x + currentEle.width / 2,
-        y: currentEle.y + BpmConfig.HEIGHT_INTERVAL
-      }, parentEle)
+  function createEntity(palette) {
+    const paletteKey = 'create.' + (palette.title || palette.type.replace(/^bpmn:/, ''))
+    const entity = {}
+    entity[paletteKey] = {
+      type: palette.type,
+      group: palette.group,
+      className: palette.className,
+      title: palette.title || translate('{type}', { type: palette.type.replace(/^bpmn:/, '') }),
+      action: createAction(palette.type, palette.group, palette.title, palette.options),
+      imageUrl: palette.image
     }
-    elementRegistry.activatedEle = newTask
-    modeling.connect(currentEle, newTask)
-
-    modeling._eventBus.fire('element.click', { element: newTask })
+    return entity
   }
-
-  function createAction(type, group, className, title, image, options) {
+  function createAction(type, group, title, options) {
+    if (!group) {
+      throw new Error('title = ' + title + '的Palette未配置group')
+    }
+    const action = {}
+    // toolPaletteAction
+    if (group === 'tools') {
+      if (title && title === 'Activate the hand tool') {
+        assign(action, { click: function(event) {
+          handTool.activateHand(event)
+        } })
+        return action
+      } else if (title && title === 'Activate the lasso tool') {
+        assign(action, { click: function(event) {
+          lassoTool.activateSelection(event)
+        } })
+        return action
+      } else {
+        throw new Error('不支持的工具' + title)
+      }
+    }
+    // customPaletteAction
+    if (group === 'common-palette') {
+      assign(action, {
+        click: appendTaskListener,
+        dragstart: createListener
+      })
+      return action
+    }
+    // commonPaletteAction
+    if ((type || title).indexOf('SubProcess') !== -1) {
+      assign(action, {
+        click: createSubprocessListener,
+        dragstart: createSubprocessListener
+      })
+      return action
+    } else {
+      assign(action, {
+        click: createListener,
+        dragstart: createListener
+      })
+      return action
+    }
+    /**
+     * 创建Activity监听
+     * @param event
+     */
     function createListener(event) {
       const shape = elementFactory.createShape(assign({ type: type }, options))
-
       if (options) {
         shape.businessObject.di.isExpanded = options.isExpanded
       }
-
       create.start(event, shape)
     }
 
-    const shortType = type.replace(/^bpmn:/, '')
+    /**
+     * 追加Activity监听(当前选中的Element之后追加任务)
+     * @param event
+     */
+    function appendTaskListener(event) {
+      if (!elementRegistry.activatedEle) return
+      const currentEle = elementRegistry.activatedEle
+      let parentEle = currentEle.parent
+      if (!parentEle) {
+        parentEle = elementRegistry.get('bpmn:Process')
+      }
+      const newTask = elementFactory.createShape({ type: event.target.title })
+      modeling.updateProperties(newTask, { name: event.target.innerHTML })
 
-    return {
-      type: type,
-      group: group,
-      className: className,
-      title: title || translate('Create {type}', { type: shortType }),
-      action: {
-        dragstart: createListener,
-        click: group === 'common-palette' ? appendTaskLater : createListener
-      },
-      imageUrl: image
+      if (modeling._direction === 'horizontal') {
+        modeling.createShape(newTask, {
+          x: currentEle.x + BpmConfig.WIDTH_INTERVAL,
+          y: currentEle.y + currentEle.height / 2
+        }, parentEle)
+      } else {
+        modeling.createShape(newTask, {
+          x: currentEle.x + currentEle.width / 2,
+          y: currentEle.y + BpmConfig.HEIGHT_INTERVAL
+        }, parentEle)
+      }
+      elementRegistry.activatedEle = newTask
+      modeling.connect(currentEle, newTask)
+
+      modeling._eventBus.fire('element.click', { element: newTask })
+    }
+
+    /**
+     * 创建子流程监听
+     * @param event
+     */
+    function createSubprocessListener(event) {
+      const subProcess = elementFactory.createShape({
+        type: 'bpmn:SubProcess',
+        x: 0,
+        y: 0,
+        isExpanded: true
+      })
+
+      const startEvent = elementFactory.createShape({
+        type: 'bpmn:StartEvent',
+        x: 40,
+        y: 82,
+        parent: subProcess
+      })
+
+      create.start(event, [subProcess, startEvent], {
+        hints: {
+          autoSelect: [startEvent]
+        }
+      })
     }
   }
-
-  function createSubprocess(event) {
-    const subProcess = elementFactory.createShape({
-      type: 'bpmn:SubProcess',
-      x: 0,
-      y: 0,
-      isExpanded: true
-    })
-
-    const startEvent = elementFactory.createShape({
-      type: 'bpmn:StartEvent',
-      x: 40,
-      y: 82,
-      parent: subProcess
-    })
-
-    create.start(event, [subProcess, startEvent], {
-      hints: {
-        autoSelect: [startEvent]
-      }
-    })
-  }
-
-  assign(actions, {
-    // 工具租
-    'hand-tool': {
-      group: 'tools',
-      className: 'bpmn-icon-hand-tool',
-      title: translate('Activate the hand tool'),
-      action: {
-        click: function(event) {
-          handTool.activateHand(event)
-        }
-      }
-    },
-    'lasso-tool': {
-      group: 'tools',
-      className: 'bpmn-icon-lasso-tool',
-      title: translate('Activate the lasso tool'),
-      action: {
-        click: function(event) {
-          lassoTool.activateSelection(event)
-        }
-      }
-    },
-    /* 'space-tool': {
-      group: 'tools',
-      className: 'bpmn-icon-space-tool',
-      title: translate('Activate the create/remove space tool'),
-      action: {
-        click: function(event) {
-          spaceTool.activateSelection(event)
-        }
-      }
-    },
-    'global-connect-tool': {
-      group: 'tools',
-      className: 'bpmn-icon-connection-multi',
-      title: translate('Activate the global connect tool'),
-      action: {
-        click: function(event) {
-          globalConnect.toggle(event)
-        }
-      }
-    },
-    'tool-separator': {
-      group: 'tools',
-      separator: true
-    },*/
-    /* 'create.intermediate-event': createAction(
-      'bpmn:IntermediateThrowEvent', 'event', 'bpmn-icon-intermediate-event-none',
-      translate('Create Intermediate/Boundary Event')
-    ),*/
-    /* 'create.data-object': createAction(
-      'bpmn:DataObjectReference', 'data-object', 'bpmn-icon-data-object',
-      translate('Create DataObjectReference')
-    ),
-    'create.data-store': createAction(
-      'bpmn:DataStoreReference', 'data-store', 'bpmn-icon-data-store',
-      translate('Create DataStoreReference')
-    ),*/
-    // 任务租
-    'create.task': createAction(
-      'bpmn:Task',
-      'activity',
-      'inShape custom-icon-task',
-      translate('Create Task')
-    ),
-    'create.subprocess-expanded': {
-      group: 'activity',
-      className: 'bpmn-icon-subprocess-expanded',
-      title: translate('Create expanded SubProcess'),
-      action: {
-        dragstart: createSubprocess,
-        click: createSubprocess
-      }
-    },
-    /* 'create.participant-expanded': {
-      group: 'collaboration',
-      className: 'bpmn-icon-participant',
-      title: translate('Create Pool/Participant'),
-      action: {
-        dragstart: createParticipant,
-        click: createParticipant
-      }
-    },*/
-    /* 'create.group': createAction(
-      'bpmn:Group', 'artifact', 'bpmn-icon-group',
-      translate('Create Group')
-    ),*/
-    // 事件租
-    'create.start-StartEvent': createAction(
-      'bpmn:StartEvent',
-      'event',
-      'custom-icon-start-event-none',
-      translate('Create StartEvent'),
-      'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/start.png'
-    ),
-    'create.end-event': createAction(
-      'bpmn:EndEvent',
-      'event',
-      'custom-icon-end-event-none',
-      translate('Create EndEvent'),
-      'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/end.png'
-    ),
-    // 网关租
-    'create.exclusive-gateway': createAction(
-      'bpmn:ExclusiveGateway',
-      'gateway',
-      'inShape custom-icon-gateway-none',
-      translate('Create Gateway'),
-      require('../../../assets/images/activiti/gateway.jpeg')
-    )
-  })
-  return actions
+  return entities
 }
+
 PaletteProvider.$inject = [
   'config.paletteEntries',
   'customPalette',

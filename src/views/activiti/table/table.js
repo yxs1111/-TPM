@@ -6,6 +6,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 
 export default {
+  name: 'BusinessTable',
   data() {
     return {
       permissions: getDefaultPermissions(),

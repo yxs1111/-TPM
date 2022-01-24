@@ -39,12 +39,12 @@ export default {
     })
   },
   /**
-   * 获取模型设计
-   * @param param
+   * 根据ID获取模型设计
+   * @param modelId
    * @returns {AxiosPromise}
    */
-  getModel: param => {
-    return Http.request_get(`${baseUrl}/repository/model/get/${param.id}`)
+  getModelById: modelId => {
+    return Http.request_get(`${baseUrl}/repository/model/get/${modelId}`)
   },
   /**
    * 创建模型和模型扩展信息
@@ -95,5 +95,19 @@ export default {
       }
     }
     return request.post(`${baseUrl}/repository/model/upload`, param, config)
+  },
+  /**
+   * 根据业务Key获取所有的用户任务
+   * @param businessKey
+   * @returns {Promise}
+   */
+  getUserTaskByBusinessKey: (businessKey) => {
+    if (businessKey) {
+      return Http.request_get(`${baseUrl}/repository/model/user-task/list`, {
+        processDefinitionKey: businessKey
+      })
+    } else {
+      throw new Error('businessKey can not empty')
+    }
   }
 }

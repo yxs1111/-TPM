@@ -4,6 +4,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import { getDefaultPermissions, getTextMap } from '@/utils'
 export default {
+  name: 'Form',
   data() {
     return {
       queryParams: {

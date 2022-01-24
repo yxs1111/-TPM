@@ -62,14 +62,14 @@ import formApi from '@/api/activiti/formApi'
 import {
   formConf
 } from '@/components/activiti/form/generator/config'
-// import DynamicFormItem from '@/components/DynamicFormItem'
+import DynamicFormItem from '@/components/DynamicFormItem'
 import FlowDiagram from '@/components/FlowDiagram'
 import { Message } from 'element-ui'
 
 export default {
   name: 'TaskDetail',
   components: {
-     FlowDiagram
+    DynamicFormItem, FlowDiagram
   },
   data: function() {
     return {

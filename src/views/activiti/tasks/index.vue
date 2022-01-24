@@ -2,8 +2,8 @@
   <div class="app-container" @keyup.enter="pageList">
     <!--查询条件-->
     <el-form ref="taskSearchForm" :inline="true" :model="queryParams" class="demo-form-inline">
-      <el-form-item label="名称" prop="name">
-        <el-input v-model="queryParams.name" placeholder="请输入任务名称" />
+      <el-form-item label="名称" prop="nameLike">
+        <el-input v-model="queryParams.nameLike" placeholder="请输入任务名称" />
       </el-form-item>
       <el-form-item>
         <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="searchLoading" @click="pageList">搜索</el-button>

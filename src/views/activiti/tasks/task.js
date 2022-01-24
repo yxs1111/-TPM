@@ -1,10 +1,10 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
-import auth from '@/utils/auth'
 import { getDefaultPermissions, getTextMap, parseTime } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 
 export default {
+  name: 'Task',
   data() {
     return {
       permissions: getDefaultPermissions(),
@@ -13,7 +13,7 @@ export default {
     }
   },
   created() {
-    this.setLoginUser(auth.getLoginName())
+    /* this.setLoginUser(auth.getLoginName())*/
     this.pageList()
   },
   directives: { elDragDialog, permission },
