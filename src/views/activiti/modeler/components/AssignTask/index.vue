@@ -111,7 +111,7 @@ export default {
         }
       })
       // 2、重新加载角色。 roleOptions
-      roleApi.listAllRole().then(roleRes => {
+      roleApi.getAllRole().then(roleRes => {
         if (roleRes && roleRes.code === 1000) {
           this.roleOptions = roleRes.data.filter(role => role.isPrivate === 0)
         }

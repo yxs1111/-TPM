@@ -5,14 +5,14 @@
       <el-row>
         <el-button type="success" round icon="el-icon-back" @click="$router.go(-1)">返回列表</el-button>
         <el-button type="primary" round icon="el-icon-success" @click="save">保存设计</el-button>
-        <el-button type="primary" round icon="el-icon-success" @click="drawer = true">引擎配置</el-button>
+        <!-- <el-button type="primary" round icon="el-icon-success" @click="drawer = true">引擎配置</el-button> -->
         <el-button type="primary" round icon="el-icon-success" @click="$refs.refFile.click()">导入XML</el-button>
-        <el-button type="primary" round icon="el-icon-success" @click="$refs.refExcelFile.click()">导入Excel</el-button>
-        <el-button circle icon="el-icon-success" @click="handlerUndo" />
+        <!-- <el-button type="primary" round icon="el-icon-success" @click="$refs.refExcelFile.click()">导入Excel</el-button> -->
+        <!-- <el-button circle icon="el-icon-success" @click="handlerUndo" />
         <el-button circle icon="el-icon-search" @click="handlerRedo" />
         <el-button circle icon="el-icon-zoom-in" @click="handlerZoom(0.1)" />
         <el-button circle icon="el-icon-zoom-out" @click="handlerZoom(-0.1)" />
-        <el-button circle icon="el-icon-refresh-left" @click="handlerZoom(0)" />
+        <el-button circle icon="el-icon-refresh-left" @click="handlerZoom(0)" /> -->
         <input id="XMLFiles" ref="refFile" type="file" style="display: none" @change="loadXML">
         <input id="ExcelFiles" ref="refExcelFile" type="file" style="display: none" accept=".xlsx" @change="loadExcel($event)">
       </el-row>
@@ -34,7 +34,7 @@
       <div ref="canvas" class="canvas">
         <div class="toolbar">
           <a ref="saveDiagram" href="javascript:" title="download BPMN diagram">下载XML</a>
-          <a ref="saveSvg" href="javascript:" title="download as SVG image">下载SVG</a>
+          <!-- <a ref="saveSvg" href="javascript:" title="download as SVG image">下载SVG</a> -->
         </div>
       </div>
       <!--   属性栏   -->
@@ -89,7 +89,7 @@ import paletteEntries from '@/components/activiti/palette/PaletteEntries'
 // 描述文件
 import etlExtension from '@/components/activiti/template/etl.json'
 import activitiDescriptor from '@/components/activiti/descriptors/activitiDescriptor.json'
-import minimapModule from 'diagram-js-minimap'
+// import minimapModule from 'diagram-js-minimap'
 export default {
   components: {
     jbinfoPropertyPanel
@@ -161,7 +161,7 @@ export default {
           },
           additionalModules: [
             // 小地图
-            minimapModule,
+            // minimapModule,
             // 自定义工具栏
             customPaletteProvider,
             customTranslateModule,

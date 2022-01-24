@@ -24,7 +24,7 @@ export default {
         }
       },
       categoryArr: [
-        { label: '19号线', value: '19' }
+        
       ],
       flowDirection: [
         { text: '从左往右', value: 'horizontal' },
@@ -52,6 +52,9 @@ export default {
           { required: true, message: '请输入版本号', trigger: 'blur' },
           { type: 'number', min: 1, message: '最少为1', trigger: 'blur' }
         ],
+        description: [
+          { required: true, message: '请输入描述', trigger: 'blur' }
+        ]
         
       }
     }
