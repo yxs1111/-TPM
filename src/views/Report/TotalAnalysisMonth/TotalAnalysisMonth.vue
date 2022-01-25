@@ -188,7 +188,11 @@ export default {
         (item) => checkedList.indexOf(item.value) != -1
       )
       this.tableKey++
-    }
+    },
+    'filterObj.channelCode'() {
+      this.filterObj.customerCode = ''
+      this.getCustomerList()
+    },
   },
   mounted() {
     this.checkList = [
