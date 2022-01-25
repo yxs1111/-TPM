@@ -52,5 +52,5 @@ export default {
   // 报表 多渠道获取用户
   getCustomerListByChannels(data) {
     return requestApi.request_post('/mdm/common/getCustomerListByChannels', data)
-  }
+  },
 }

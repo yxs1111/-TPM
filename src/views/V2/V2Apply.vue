@@ -1,15 +1,22 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-03 14:17:00
  * @LastEditTime: 2022-01-14 16:23:25
 -->
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" v-for="(item, index) in routerList" :key="index"
-        @click.native="changeTab(index)">
-        <img :src="item.img.light" alt="" v-if="index != currentIndex">
-        <img :src="item.img.dark" alt="" v-if="index == currentIndex">
+      <router-link
+        v-for="(item, index) in routerList"
+        :key="index"
+        :to="item.path"
+        tag="div"
+        class="tabli"
+        :class="index === currentIndex ? 'currentTabli' : ''"
+        @click.native="changeTab(index)"
+      >
+        <img v-if="index != currentIndex" :src="item.img.light" alt="">
+        <img v-if="index == currentIndex" :src="item.img.dark" alt="">
         {{ item.name }}</router-link>
     </div>
     <div>
@@ -22,7 +29,10 @@
 import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
+
 export default {
+  directives: { elDragDialog, permission },
   data() {
     return {
       // routerList: [
@@ -39,22 +49,22 @@ export default {
         //     light: require('@/assets/images/tab/tab1_l.png'),
         //   },
         // },
-        {
-          name: '折扣项-价促',
-          path: '/V2/V2Apply/V2discountDiscount',
-          img: {
-            dark: require('@/assets/images/tab/tab2.png'),
-            light: require('@/assets/images/tab/tab2_l.png'),
-          },
-        },
-        {
-          name: '折扣项-新客',
-          path: '/V2/V2Apply/V2discountNU',
-          img: {
-            dark: require('@/assets/images/tab/tab3.png'),
-            light: require('@/assets/images/tab/tab3_l.png'),
-          },
-        },
+        // {
+        //   name: '折扣项-价促',
+        //   path: '/V2/V2Apply/V2discountDiscount',
+        //   img: {
+        //     dark: require('@/assets/images/tab/tab2.png'),
+        //     light: require('@/assets/images/tab/tab2_l.png')
+        //   }
+        // },
+        // {
+        //   name: '折扣项-新客',
+        //   path: '/V2/V2Apply/V2discountNU',
+        //   img: {
+        //     dark: require('@/assets/images/tab/tab3.png'),
+        //     light: require('@/assets/images/tab/tab3_l.png')
+        //   }
+        // }
       ],
       currentIndex: 0,
       imgSrcList: [
@@ -63,35 +73,65 @@ export default {
         require('@/assets/images/tab/tab3_l.png'),
         require('@/assets/images/tab/tab1.png'),
         require('@/assets/images/tab/tab2.png'),
-        require('@/assets/images/tab/tab3.png'),
-      ],
-    }
-  },
-  directives: { elDragDialog, permission },
-  mounted() {
-    if (sessionStorage.getItem('currentIndex')) {
-      this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
-    } else {
-      this.currentIndex = 0
-    }
-    if (!this.$route.query.channelCode) {
-      //我的待办跳转
-      this.$router.push(this.routerList[this.currentIndex].path)
-    } else {
-      this.$router.push({
-        path: this.routerList[this.currentIndex].path,
-        query: { channelCode: this.$route.query.channelCode },
-      })
+        require('@/assets/images/tab/tab3.png')
+      ]
     }
   },
   computed: {},
+  mounted() {
+    this.queryMinePackageSelect()
+  },
   methods: {
-    //tabview 切换
+    // tab标签权限
+    queryMinePackageSelect() {
+      let signP = 0
+      let signN = 0
+      selectAPI.queryMinePackageSelect().then(res => {
+        res.data.forEach(element => {
+          if (element.costType === 'Price Promotion' && signP === 0) {
+            this.routerList.push({
+              name: '折扣项-价促',
+              path: '/V2/V2Apply/V2discountDiscount',
+              img: {
+                dark: require('@/assets/images/tab/tab2.png'),
+                light: require('@/assets/images/tab/tab2_l.png')
+              }
+            })
+            signP = 1
+          } else if (element.costType === 'New User' && signN === 0) {
+            this.routerList.push({
+              name: '折扣项-新客',
+              path: '/V2/V2Apply/V2discountNU',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            })
+            signN = 1
+          }
+        })
+        if (sessionStorage.getItem('currentIndex')) {
+          this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+        } else {
+          this.currentIndex = 0
+        }
+        if (!this.$route.query.channelCode) {
+          // 我的待办跳转
+          this.$router.push(this.routerList[this.currentIndex].path)
+        } else {
+          this.$router.push({
+            path: this.routerList[this.currentIndex].path,
+            query: { channelCode: this.$route.query.channelCode }
+          })
+        }
+      }).catch()
+    },
+    // tabview 切换
     changeTab(index) {
       this.currentIndex = index
       sessionStorage.setItem('currentIndex', index)
     }
-  },
+  }
 }
 </script>
 
