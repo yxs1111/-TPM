@@ -329,11 +329,11 @@ export default {
         .queryChannelSelect()
         .then((res) => {
           this.channelOptions = res.data
-          if (!this.$route.query.channelCode) {
-            this.filterObj.channelCode = this.channelOptions[0].channelCode
-          } else {
-            this.filterObj.channelCode = this.$route.query.channelCode
-          }
+          // if (!this.$route.query.channelCode) {
+          //   this.filterObj.channelCode = this.channelOptions[0].channelCode
+          // } else {
+          //   this.filterObj.channelCode = this.$route.query.channelCode
+          // }
           this.getMonth()
         })
         .catch()

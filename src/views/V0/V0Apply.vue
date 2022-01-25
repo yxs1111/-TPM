@@ -401,11 +401,11 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
           this.ChannelList = res.data
-          if (!this.$route.query.channelCode) {
-            this.filterObj.channelCode = this.ChannelList[0].channelCode
-          } else {
-            this.filterObj.channelCode = this.$route.query.channelCode
-          }
+          // if (!this.$route.query.channelCode) {
+          //   this.filterObj.channelCode = this.ChannelList[0].channelCode
+          // } else {
+          //   this.filterObj.channelCode = this.$route.query.channelCode
+          // }
           this.getMonth()
         }
       })
