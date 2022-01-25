@@ -48,7 +48,7 @@
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column v-slot="{ row }" width="240" align="right" prop="ptc" label="零售价｜PTC （RMB/Tin）">
+      <el-table-column v-slot="{ row }" width="290" align="right" prop="ptc" label="平台指引含税价｜PTC （RMB/Tin）">
         {{ FormateNum(row.ptc)}}
       </el-table-column>
       <el-table-column v-slot="{ row }" width="320" align="right" prop="ptr" label="平台进货含税价｜PTR （RMB/Tin） ">
