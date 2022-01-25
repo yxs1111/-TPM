@@ -23,7 +23,7 @@ export default {
   getPermissionCodes(params) {
     return requestApi.request_get(this.url + '/getPermissionCodes', params)
   },
-  getAllRole() {
+  listAllRole() {
     return request({
       url: this.url + '/all/list',
       method: 'get'

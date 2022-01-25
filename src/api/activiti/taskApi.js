@@ -15,7 +15,8 @@ export default {
    * @returns {AxiosPromise}
    */
   complete: param => {
-    return Http.request_post(`${baseUrl}/runtime/tasks/${param.id}`, {
+    // /detain/car/1485523514460348418/complete
+    return Http.request_post(`/auth/detain/car/1485535536614944769/complete`, {
       action: 'complete',
       variables: param.variables
     })

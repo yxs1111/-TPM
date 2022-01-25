@@ -5,8 +5,18 @@
         <el-tabs v-model="assignInfo.way" @tab-click="handleClickTab">
           <!--   指定人员     -->
           <el-tab-pane label="指定人员" name="assign">
-            <el-form-item label="登录账号">
+            <!-- <el-form-item label="登录账号">
               <el-input v-model="assignInfo.userId" type="text" @input="$forceUpdate()" />
+            </el-form-item> -->
+            <el-form-item label="选择人员">
+              <el-select v-model="assignInfo.userId" filterable placeholder="请选择">
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.loginName"
+                  :label="item.name"
+                  :value="item.loginName"
+                />
+              </el-select>
             </el-form-item>
           </el-tab-pane>
           <!--   指定角色     -->
@@ -49,6 +59,7 @@ const is = require('bpmn-js/lib/util/ModelUtil').is
 
 import organizationApi from '@/api/system/organization-api'
 import roleApi from '@/api/system/role-api'
+import userApi from '@/api/system/user-api'
 export default {
   name: 'AssignTask',
   props: {
@@ -62,6 +73,7 @@ export default {
       dialogLoading: false,
       departmentOptions: [],
       roleOptions: [],
+      userOptions: [],
       assignWayEnum: {
         USER: 'assign',
         ROLE: 'role',
@@ -111,12 +123,18 @@ export default {
         }
       })
       // 2、重新加载角色。 roleOptions
-      roleApi.getAllRole().then(roleRes => {
+      roleApi.listAllRole().then(roleRes => {
         if (roleRes && roleRes.code === 1000) {
           this.roleOptions = roleRes.data.filter(role => role.isPrivate === 0)
         }
       })
       // 3、重新获取人员列表。
+      this.userOptions = []
+      userApi.getAllUser().then(res => {
+        if (res.data) {
+          this.userOptions = res.data
+        }
+      })
     },
     /**
      * 分配任务：

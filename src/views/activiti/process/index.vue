@@ -1,8 +1,3 @@
-<!--
- * @Description: 
- * @Date: 2022-01-24 13:11:41
- * @LastEditTime: 2022-01-24 15:17:14
--->
 <template>
   <div class="app-container" @keyup.enter="search">
     <el-form ref="processSearchForm" :inline="true" :model="queryParams" class="demo-form-inline">
@@ -48,9 +43,9 @@
       <el-table-column v-slot="{row}" label="模型版本" align="center">
         {{ row.version }}
       </el-table-column>
-      <!-- <el-table-column v-slot="{row}" label="是否有流程图" :show-overflow-tooltip="true" align="center">
+      <el-table-column v-slot="{row}" label="是否有流程图" :show-overflow-tooltip="true" align="center">
         <el-tag :type="row.graphicalNotationDefined | hasGraphicalStyleFilter" @click="showFlowDiagram(row)">{{ row.graphicalNotationDefined | hasGraphicalTextFilter }}</el-tag>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column v-slot="{row}" label="状态" :show-overflow-tooltip="true" align="center">
         <el-tag :type="row.suspended | processStatsStyleFilter">{{ row.suspended | processStatsTextFilter }}</el-tag>
       </el-table-column>
@@ -67,8 +62,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="TpmPaginationWrap">
-      <el-pagination
+    <el-pagination
       :current-page="queryParams.start"
       :page-sizes="[5, 10, 50, 100]"
       :page-size="queryParams.size"
@@ -77,7 +71,6 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-    </div>
     <!--  流程图  -->
     <flow-diagram
       svg-type="definition"
