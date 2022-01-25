@@ -26,26 +26,45 @@
 
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
+
 export default {
   directives: { elDragDialog, permission },
   data() {
     return {
       routerList: [
-        { name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' },
-        { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
+        // { name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' },
+        // { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
       ],
       currentIndex: 0
     }
   },
   computed: {},
   mounted() {
-    if (sessionStorage.getItem('currentIndex')) {
-      this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
-    } else {
-      this.currentIndex = 0
-    }
+    this.queryMinePackageSelect()
   },
   methods: {
+    // tab标签权限
+    queryMinePackageSelect() {
+      let signP = 0
+      let signN = 0
+      selectAPI.queryMinePackageSelect().then(res => {
+        res.data.forEach(element => {
+          if (element.costType === 'Price Promotion' && signP === 0) {
+            this.routerList.push({ name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' })
+            signP = 1
+          } else if (element.costType === 'New User' && signN === 0) {
+            this.routerList.push({ name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' })
+            signN = 1
+          }
+        })
+        if (sessionStorage.getItem('currentIndex')) {
+          this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+        } else {
+          this.currentIndex = 0
+        }
+      }).catch()
+    },
     // tabview 切换
     changeTab(index) {
       this.currentIndex = index
