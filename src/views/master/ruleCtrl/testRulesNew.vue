@@ -151,6 +151,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 // import type from '@/views/meta/dict/type'
 export default {
   name: 'TestRulesNew',
@@ -459,7 +460,7 @@ export default {
     },
     // 渠道
     getChannel() {
-      API.getMdChannelList().then(res => {
+      selectAPI.queryChannelSelect().then(res => {
         if (res.code === 1000) {
           this.channelArr = res.data
           if (!this.$route.query.channelCode) {
@@ -473,6 +474,22 @@ export default {
         }
       }).catch()
     },
+    // // 渠道
+    // getChannel() {
+    //   API.getMdChannelList().then(res => {
+    //     if (res.code === 1000) {
+    //       this.channelArr = res.data
+    //       if (!this.$route.query.channelCode) {
+    //         this.filterObj.channel = this.channelArr[0].channelCode
+    //       } else {
+    //         this.filterObj.channel = this.$route.query.channelCode
+    //       }
+    //       this.getTableData()
+    //     } else {
+    //       this.getTableData()
+    //     }
+    //   }).catch()
+    // },
     // select标签的change事件
     changeSelection(val) {
       const optionsImg = this.optionsImg
