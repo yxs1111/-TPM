@@ -25,7 +25,7 @@
       <el-table-column type="selection" align="center" />
       <el-table-column align="center" prop="costTypeNumber" label="费用类型编码"> </el-table-column>
       <el-table-column align="center" prop="costType" label="费用类型"> </el-table-column>
-      <el-table-column align="center" prop="minePackageId" label="MinePackageId"> </el-table-column>
+      <el-table-column align="center" prop="minePackageNumber" label="minePackage编码"> </el-table-column>
       <el-table-column align="center" prop="minePackage" label="minePackage"> </el-table-column>
       <el-table-column align="center" prop="costItemTypeNumber" label="费用科目编码"> </el-table-column>
       <el-table-column align="center" prop="costItem" label="费用科目名称"> </el-table-column>
