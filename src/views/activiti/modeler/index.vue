@@ -5,10 +5,10 @@
       <el-row>
         <el-button type="success" round icon="el-icon-back" @click="$router.go(-1)">返回列表</el-button>
         <el-button type="primary" round icon="el-icon-success" @click="save">保存设计</el-button>
-        <!-- <el-button type="primary" round icon="el-icon-success" @click="drawer = true">引擎配置</el-button>
+        <!-- <el-button type="primary" round icon="el-icon-success" @click="drawer = true">引擎配置</el-button> -->
         <el-button type="primary" round icon="el-icon-success" @click="$refs.refFile.click()">导入XML</el-button>
-        <el-button type="primary" round icon="el-icon-success" @click="$refs.refExcelFile.click()">导入Excel</el-button>
-        <el-button circle icon="el-icon-success" @click="handlerUndo" />
+        <!-- <el-button type="primary" round icon="el-icon-success" @click="$refs.refExcelFile.click()">导入Excel</el-button> -->
+        <!-- <el-button circle icon="el-icon-success" @click="handlerUndo" />
         <el-button circle icon="el-icon-search" @click="handlerRedo" />
         <el-button circle icon="el-icon-zoom-in" @click="handlerZoom(0.1)" />
         <el-button circle icon="el-icon-zoom-out" @click="handlerZoom(-0.1)" />
@@ -33,9 +33,8 @@
       <!--   BpmnModeler   -->
       <div ref="canvas" class="canvas">
         <div class="toolbar">
-          <!-- <a title="download">下载</a>
-          <a ref="saveDiagram" href="javascript:" title="download BPMN diagram">BPMN</a>
-          <a ref="saveSvg" href="javascript:" title="download as SVG image">SVG</a> -->
+          <a ref="saveDiagram" href="javascript:" title="download BPMN diagram">下载XML</a>
+          <a ref="saveSvg" href="javascript:" title="download as SVG image">下载SVG</a>
         </div>
       </div>
       <!--   属性栏   -->
@@ -57,15 +56,13 @@
       title="引擎配置"
       :visible.sync="drawer"
       :direction="direction"
-    >
-      <!--   TODO 引擎配置项     -->
-    </el-drawer>
+    />
   </div>
 </template>
 
 <script>
 import BpmnModeler from 'bpmn-js/lib/Modeler'
-import customModelerModels from '@/components/activiti/modeler/CustomModelerModels'
+import customModelerModels from '@/components/activiti/Modules'
 
 import BpmConfig from '@/components/activiti/template/BpmConfig'
 import modelApi from '@/api/activiti/modelApi'
@@ -81,7 +78,7 @@ import {
 import { Message } from 'element-ui'
 
 // 自定义:右侧实现2
-import jbinfoPropertyPanel from './CustomPropertyPanel' // 属性面板
+import jbinfoPropertyPanel from './components/CustomPropertyPanel' // 属性面板
 
 // 翻译
 import customTranslate from '@/components/activiti/translate/customTranslate'
@@ -92,7 +89,7 @@ import paletteEntries from '@/components/activiti/palette/PaletteEntries'
 // 描述文件
 import etlExtension from '@/components/activiti/template/etl.json'
 import activitiDescriptor from '@/components/activiti/descriptors/activitiDescriptor.json'
-// import minimapModule from 'diagram-js-minimap'
+import minimapModule from 'diagram-js-minimap'
 export default {
   components: {
     jbinfoPropertyPanel
@@ -122,8 +119,17 @@ export default {
   methods: {
     // 初始化模型
     init() {
+      const loading = this.$loading({
+        lock: true,
+        text: '设计器初始化中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       // 先获取当前的Model信息。
-      this.getModel().then(() => {
+      this.getModel().then((modelRes) => {
+        if (modelRes.code === 1000) {
+          this.model = modelRes.data
+        }
         // 获取容器
         const canvas = this.$refs.canvas
         const palette = this.$refs.palette
@@ -154,19 +160,14 @@ export default {
             bindTo: document
           },
           additionalModules: [
-            // 修改官方属性栏渲染
-            /* propertiesPanelModule,
-            JBInfoPropertiesProvider,*/
             // 小地图
-            // minimapModule,
+            minimapModule,
             // 自定义工具栏
             customPaletteProvider,
             customTranslateModule,
-            // 自定义Modeler.contextPadProvider,Modeler.customRenderer
             customModelerModels
           ],
           moddleExtensions: {
-            /* magic: magicModuleDescriptor,*/
             etl: etlExtension,
             self: activitiDescriptor
           }
@@ -176,49 +177,30 @@ export default {
         // 新增流程定义
         this.createNewDiagram()
 
-        // 调整与正中间
-        /* this.bpmnModeler.get('canvas').zoom('fit-viewport', 'auto')*/
-
         // 初始化箭头
         this.initArrow('sequenceflow-arrow-normal')
         this.initArrow('sequenceflow-arrow-active')
 
         // 默认打开 minimap
         this.bpmnModeler.get('minimap').close()
+        loading.close()
       })
     },
-    createNewDiagram() {
+    async createNewDiagram() {
       // 将字符串转换成图显示出来
       if (this.model.sourceUrl) {
-        this.bpmnModeler.importXML(this.model.sourceUrl, err => {
-          if (err) {
-            console.error(err)
-          } else {
-            this.success()
-          }
-        })
+        await this.bpmnModeler.importXML(this.model.sourceUrl)
+        this.addBpmnListener()
+        this.addEventBusListener()
+        await this.updateSVGAndXML()
       }
-    },
-    success() {
-      this.addBpmnListener()
-      this.addEventBusListener()
     },
     // 添加绑定事件
     addBpmnListener() {
       const that = this
-      // 获取a标签dom节点
-      const downloadLink = this.$refs.saveDiagram
-      const downloadSvgLink = this.$refs.saveSvg
       // 给图绑定事件，当图有发生改变就会触发这个事件
       this.bpmnModeler.on('commandStack.changed', function() {
-        that.saveSVG(function(err, svg) {
-          that.model.sourceSVG = svg
-          that.setEncoded(downloadSvgLink, 'diagram.svg', err ? null : svg)
-        })
-        that.saveDiagram(function(err, xml) {
-          that.model.sourceUrl = xml
-          that.setEncoded(downloadLink, 'diagram.bpmn', err ? null : xml)
-        })
+        that.updateSVGAndXML()
       })
     },
     // 监听Element并绑定事件
@@ -243,24 +225,23 @@ export default {
         })
       })
     },
-    // 下载为SVG格式,done是个函数，调用的时候传入的
-    saveSVG(done) {
-      // 把传入的done再传给bpmn原型的saveSVG函数调用
-      this.bpmnModeler.saveSVG(done)
-    },
-    // 下载为SVG格式,done是个函数，调用的时候传入的
-    saveDiagram(done) {
-      // 把传入的done再传给bpmn原型的saveXML函数调用
-      this.bpmnModeler.saveXML({ format: true }, function(err, xml) {
-        done(err, xml)
-      })
+    async updateSVGAndXML() {
+      // SVG
+      const downloadSvgLink = this.$refs.saveSvg
+      const { svg, err } = await this.bpmnModeler.saveSVG()
+      this.model.sourceSVG = svg
+      this.setEncoded(downloadSvgLink, this.model.name + '.svg', err ? null : svg)
+
+      // XML
+      const downloadLink = this.$refs.saveDiagram
+      const { xml } = await this.bpmnModeler.saveXML({ format: true })
+      this.model.sourceUrl = xml
+      this.setEncoded(downloadLink, this.model.name + '.xml', err ? null : xml)
     },
     // 当图发生改变的时候会调用这个函数，这个data就是图的xml
     setEncoded(link, name, data) {
       // 把xml转换为URI，下载要用到的
       const encodedData = encodeURIComponent(data)
-      // 获取到图的xml，保存就是把这个xml提交给后台
-      this.xmlStr = data
       // 下载图的具体操作,改变a的属性，className令a标签可点击，href令能下载，download是下载的文件的名字
       if (data) {
         link.className = 'active'
@@ -270,7 +251,14 @@ export default {
     },
     // 保存
     async save() {
+      const loading = this.$loading({
+        lock: true,
+        text: '设计保存中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       const res = await modelApi.saveModel(this.model)
+      loading.close()
       if (res.code === 1000) {
         Message.success({
           type: 'success',
@@ -284,21 +272,11 @@ export default {
       }
     },
     // 获取模型数据
-    async getModel() {
+    getModel() {
       if (!this.model || !this.model.id) {
-        Message.error({ type: 'error', message: '请返回重新选择模型' })
-        return
-      }
-
-      const res = await modelApi.getModel(this.model)
-      if (res && res.code === 1000) {
-        this.model.sourceUrl = res.data.sourceUrl
-      }
-      // 根据分类ID获取分类下的通用工具
-      if (!res.data.category) { return }
-      const paletteRes = await modelApi.getPaletteByCategoryId({ categoryId: res.data.category })
-      if (paletteRes && paletteRes.code === 1000) {
-        paletteEntries.commonPalette = paletteRes.data
+        this.$router.go(-1)
+      } else {
+        return modelApi.getModelById(this.model.id)
       }
     },
     elementChanged(e) {
@@ -327,12 +305,6 @@ export default {
     isSequenceFlow(type) {
       // 判断是否是线
       return type === 'bpmn:SequenceFlow'
-    },
-    /**
-     * tree节点点击
-     */
-    handleNodeClick() {
-      console.log('aaa')
     },
     // 初始化自定义箭头
     initArrow(id) {

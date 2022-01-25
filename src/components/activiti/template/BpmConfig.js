@@ -1,5 +1,6 @@
 /**
  * 存储流程设计相关参数
+ * @author sunshengteng
  */
 export default class BpmConfig {
   static WIDTH_INTERVAL = 250; // 元素的宽度间隔
@@ -9,25 +10,28 @@ export default class BpmConfig {
    * @type {string[]}
    */
   static customElements = [
-    'bpmn:StartEvent',
-    'bpmn:EndEvent'
+    'bpmn:Task',
+    'bpmn:UserTask',
+    'bpmn:ServiceTask',
+    'bpmn:SendTask'
   ]
   /**
    * 自定义元素的渲染配置
-   * @type {{"bpmn:StartEvent": {attr: {x: number, width: number, y: number, height: number}, url: string}, "bpmn:EndEvent": {attr: {x: number, width: number, y: number, height: number}, url: string}}}
+   * url暂不支持
+   * @type {{"bpmn:StartEvent": {attr: {x: number, width: number, y: number, height: number}, url: string}}}
    */
   static customConfig = {
-    /* 'bpmn:Task': {
-      'url': 'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/rules.png',
-      'attr': { x: 0, y: 0, width: 48, height: 48 }
-    },*/
-    'bpmn:StartEvent': {
-      'url': 'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/start.png',
-      'attr': { x: 0, y: 0, width: 40, height: 40 }
+    'bpmn:Task': {
+      'attr': { x: 0, y: 0, width: 130, height: 60 }
     },
-    'bpmn:EndEvent': {
-      'url': 'https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/end.png',
-      'attr': { x: 0, y: 0, width: 40, height: 40 }
+    'bpmn:UserTask': {
+      'attr': { x: 0, y: 0, width: 130, height: 60 }
+    },
+    'bpmn:ServiceTask': {
+      'attr': { x: 0, y: 0, width: 130, height: 60 }
+    },
+    'bpmn:SendTask': {
+      'attr': { x: 0, y: 0, width: 130, height: 60 }
     }
   }
   /**
@@ -54,11 +58,11 @@ export default class BpmConfig {
                                                id="jbinfo-diagram"
                                                targetNamespace="http://www.jbinfo.cn/schema/bpmn"
                                                xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
-                              <bpmn2:process id="jbinfo` + processId + '" name="流程:' + processName + `">
-                                <bpmn2:documentation>` + processDescription + `</bpmn2:documentation>
+                              <bpmn2:process id="` + processId + '" name="' + processName + `">
+                                <bpmn2:documentation>` + (processDescription || '') + `</bpmn2:documentation>
                               </bpmn2:process>
                               <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-                                <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="jbinfo` + processId + `">
+                                <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="` + processId + `">
                                 </bpmndi:BPMNPlane>
                               </bpmndi:BPMNDiagram>
                             </bpmn2:definitions>`

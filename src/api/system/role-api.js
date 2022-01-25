@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-11-23 14:21:20
+ * @LastEditTime: 2022-01-24 16:51:17
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -23,9 +23,9 @@ export default {
   getPermissionCodes(params) {
     return requestApi.request_get(this.url + '/getPermissionCodes', params)
   },
-  getAllRole() {
+  listAllRole() {
     return request({
-      url: this.url + '/getAllRole',
+      url: this.url + '/all/list',
       method: 'get'
     })
   },

@@ -111,7 +111,7 @@ Palette.prototype.registerProvider = function(priority, provider) {
  * @return {Object<string, PaletteEntryDescriptor>} map of entries
  */
 Palette.prototype.getEntries = function() {
-  var providers = this._getProviders()
+  const providers = this._getProviders()
 
   return providers.reduce(addPaletteEntries, {})
 }
@@ -318,28 +318,25 @@ Palette.prototype._update = function() {
  * @param  {Event} event
  */
 Palette.prototype.trigger = function(action, event, autoActivate) {
-  var entries = this._entries
-  var elementFactory = this._elementFactory
-  var create = this._create
-  var entry
-  var handler
-  var originalEvent
-  var button = event.delegateTarget || event.target
+  const entries = this._entries
+  const elementFactory = this._elementFactory
+  const create = this._create
+  const button = event.delegateTarget || event.target
 
   if (!button) {
     return event.preventDefault()
   }
 
-  entry = entries[domAttr(button, 'data-action')]
+  const entry = entries[domAttr(button, 'data-action')]
 
   // when user clicks on the palette and not on an action
   if (!entry) {
     return
   }
 
-  handler = entry.action
+  const handler = entry.action
 
-  originalEvent = event.originalEvent || event
+  const originalEvent = event.originalEvent || event
 
   // simple action (via callback function)
   //  传入 action 的 dragstart方法 click 方法
@@ -373,9 +370,9 @@ Palette.prototype._needsCollapse = function(availableHeight, entries) {
   // top margin + bottom toggle + bottom margin
   // implementors must override this method if they
   // change the palette styles
-  var margin = 20 + 10 + 20
+  const margin = 20 + 10 + 20
 
-  var entriesHeight = Object.keys(entries).length * 46
+  const entriesHeight = Object.keys(entries).length * 46
 
   return availableHeight < entriesHeight + margin
 }
@@ -487,7 +484,7 @@ function addClasses(element, classNames) {
 }
 
 function addPaletteEntries(entries, provider) {
-  var entriesOrUpdater = provider.getPaletteEntries()
+  const entriesOrUpdater = provider.getPaletteEntries()
 
   if (isFunction(entriesOrUpdater)) {
     return entriesOrUpdater(entries)

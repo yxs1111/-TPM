@@ -1,35 +1,47 @@
-<!--
- * @Description: 
- * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-07 09:19:47
--->
 <template>
   <div class="app-container" @keyup.enter="search">
-    <div class="SelectBarWrap">
-      <div class="SelectBar">
-        <div class="Selectli">
-          <span class="SelectliTitle">流程名称：</span>
-          <el-input v-model="filterObj.name" placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">流程关键词：</span>
-          <el-input v-model="filterObj.keyName" placeholder="请输入" />
-        </div>
-         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-      </div>
-    </div>
+    <el-form ref="processSearchForm" :inline="true" :model="queryParams" class="demo-form-inline">
+      <!-- 查询条件 -->
+      <el-form-item label="流程名称" prop="nameLike">
+        <el-input v-model="queryParams.nameLike" placeholder="请输入流程名称" maxlength="50" />
+      </el-form-item>
+      <el-form-item label="流程关键字" prop="key">
+        <el-input v-model="queryParams.key" placeholder="请输入流程关键字" />
+      </el-form-item>
+      <el-form-item>
+        <el-button v-permission="permissions['get']" type="primary" icon="el-icon-search" :loading="loading" @click="search">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button v-permission="permissions['get']" icon="el-icon-refresh-left" @click="reset">重置</el-button>
+      </el-form-item>
+    </el-form>
     <!--  流程列表  -->
-    <el-table ref="processTable"  :data="tableData"  border fit :header-cell-style="HeadTable" :row-class-name="tableRowClassName" height="600" highlight-current-row
-      @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
+    <el-table
+      ref="processTable"
+      v-loading="loading"
+      :data="tableData"
+      element-loading-text="正在查询"
+      border
+      fit
+      stripe
+      height="600"
+      highlight-current-row
+      @row-click="handleCurrentRowClick"
+      @row-dblclick="handleCurrentRowDblClick"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
         {{ scopeProps.$index+1 }}
       </el-table-column>
-      <el-table-column prop="key" label="关键字" align="center">
+      <el-table-column v-slot="{row}" label="关键字" align="center">
+        {{ row.key }}
       </el-table-column>
-      <el-table-column prop="name" label="流程名" align="center">
+      <el-table-column v-slot="{row}" label="流程名" align="center">
+        {{ row.name }}
       </el-table-column>
-      <el-table-column prop="version" label="模型版本" align="center">
+      <el-table-column v-slot="{row}" label="模型版本" align="center">
+        {{ row.version }}
       </el-table-column>
       <el-table-column v-slot="{row}" label="是否有流程图" :show-overflow-tooltip="true" align="center">
         <el-tag :type="row.graphicalNotationDefined | hasGraphicalStyleFilter" @click="showFlowDiagram(row)">{{ row.graphicalNotationDefined | hasGraphicalTextFilter }}</el-tag>
@@ -38,24 +50,35 @@
         <el-tag :type="row.suspended | processStatsStyleFilter">{{ row.suspended | processStatsTextFilter }}</el-tag>
       </el-table-column>
       <el-table-column v-slot="{row}" label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <el-button size="mini" type="primary" @click="startProcess(row)">
+        <el-button v-permission="permissions['update']" size="mini" type="primary" @click="startProcess(row)">
           {{ $t('table.enable') }}
         </el-button>
-        <el-button v-if="row.suspended" size="mini" type="success" @click="activateProcess(row)">
+        <el-button v-if="row.suspended" v-permission="permissions['update']" size="mini" type="success" @click="activateProcess(row)">
           {{ $t('table.activate') }}
         </el-button>
-        <el-button v-else size="mini" type="danger" @click="suspendProcess(row)">
+        <el-button v-else v-permission="permissions['update']" size="mini" type="danger" @click="suspendProcess(row)">
           {{ $t('table.suspend') }}
         </el-button>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div>
+    <el-pagination
+      :current-page="queryParams.start"
+      :page-sizes="[5, 10, 50, 100]"
+      :page-size="queryParams.size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="queryParams.total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
     <!--  流程图  -->
-    <flow-diagram svg-type="definition" :process-definition-id="flowDiagram.processDefinitionId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
+    <flow-diagram
+      svg-type="definition"
+      :process-definition-id="flowDiagram.processDefinitionId"
+      :visible.sync="flowDiagram.visible"
+      title="流程图"
+      width="90%"
+    />
   </div>
 </template>
 

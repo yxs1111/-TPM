@@ -40,5 +40,20 @@ export default {
    */
   getComponentList: param => {
     return Http.request_get(`${baseUrl}/activiti/extension/table/field/list`, param)
+  },
+  /**
+   * 获取租户下的所有帆软表单
+   * @returns {Promise}
+   */
+  fineListAll: () => {
+    return Http.request_get(`${baseUrl}/actReFineForm/list/all`)
+  },
+  /**
+   * 根据ID获取帆软表单
+   * @param id: 帆软表单ID
+   * @returns {Promise}
+   */
+  fineFindOne: id => {
+    return Http.request_get(`${baseUrl}/actReFineForm/findOne`, { id: id })
   }
 }

@@ -5,11 +5,9 @@ import modelApi from '@/api/activiti/modelApi'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 export default {
+  name: 'Model',
   data() {
     return {
-      total: 1,
-      pageSize: 10,
-      pageNum: 1,
       modelDialog: {
         type: null,
         visible: false,
@@ -25,25 +23,37 @@ export default {
           visible: false
         }
       },
-      filterObj:{
-        name:'',
-        keyName:'',
-        type:'',
-      },
+      categoryArr: [
+        { label: '19号线', value: '19' }
+      ],
+      flowDirection: [
+        { text: '从左往右', value: 'horizontal' },
+        { text: '从上往下', value: 'vertical' }
+      ],
       permissions: getDefaultPermissions(),
       textMap: getTextMap(),
       rules: {
         key: [
           { required: true, message: '请输入编码', trigger: 'blur' },
-          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+          { validator: (rule, value, callback) => {
+            const reg = /^[0-9]+$/
+            if (reg.test(value)) {
+              callback(new Error('不能以数字开头'))
+            } else {
+              callback()
+            }
+          }, trigger: 'blur' }
         ],
-        name: [
+        nameLike: [
           { required: true, message: '请输入模型名称', trigger: 'blur' },
           { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
         version: [
           { required: true, message: '请输入版本号', trigger: 'blur' },
           { type: 'number', min: 1, message: '最少为1', trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '请输入描述', trigger: 'blur' }
         ]
       }
     }
@@ -61,6 +71,7 @@ export default {
     ...mapMutations('model', ['selectModel', 'unSelectModel']),
     ...mapActions('model', ['saveModel', 'updateModel', 'pageList', 'rowSelected', 'deleteModel', 'publishModelApi', 'reset']),
     search() {
+      this.queryParams.start = 0
       this.pageList()
     },
     // 每页记录数改变时会触发
@@ -115,11 +126,14 @@ export default {
     publishModel() {
       this.$confirm('确认要发布吗?', '发布模型', {
         confirmButtonText: '确定',
-        callback: () => {
-          this.publishModelApi(this)
-        }
-      }).then(r => {
-        console.log('发布成功', r)
+        cancelButtonText: '取消'
+      }).then(() => {
+        this.publishModelApi(this)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消发布'
+        })
       })
     },
     /**
@@ -159,7 +173,10 @@ export default {
       this.resetModelInfoDialog()
     },
     init() {
-      
+      // 获取分类数据
+      modelApi.getCategoryOfModel({ tenantId: '0' }).then(res => {
+        this.categoryArr = res.data
+      })
       // 初始化列表页
       this.pageList()
     },
@@ -220,17 +237,6 @@ export default {
         return ''
       }
       return parseTime(time, cFormat)
-    },
-    // 行样式
-    tableRowClassName({ row, rowIndex }) {
-      if ((rowIndex + 1) % 2 === 0) {
-        return 'even-row'
-      } else {
-        return 'odd-row'
-      }
-    },
-    HeadTable() {
-      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
+    }
   }
 }

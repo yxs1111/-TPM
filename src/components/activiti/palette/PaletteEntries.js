@@ -1,127 +1,25 @@
-import { assign } from 'min-dash'
-import {
-  append as svgAppend,
-  attr as svgAttr,
-  create as svgCreate
-} from 'tiny-svg'
-
+/**
+ * Palette配置
+ */
 export default {
-  commonPalette: [],
+  /**
+   * 公共工具配置
+   *  group: tools-> 工具租，event->事件组，activity->任务组，gateway->网关组
+   *  title: 工具的提示文本(如有有type属性,title可以为空)
+   *  type: 工具对应的bpmn类型
+   *  className: 工具样式
+   */
+  commonPalettes: [
+    { group: 'tools', title: 'Activate the hand tool', className: 'bpmn-icon-hand-tool' },
+    { group: 'tools', title: 'Activate the lasso tool', className: 'bpmn-icon-lasso-tool' },
+    { group: 'event', type: 'bpmn:StartEvent', className: 'entry bpmn-icon-start-event-none' },
+    { group: 'event', type: 'bpmn:EndEvent', className: 'entry bpmn-icon-end-event-none' },
+    { group: 'activity', type: 'bpmn:Task', className: 'entry bpmn-icon-task' },
+    { group: 'activity', type: 'bpmn:Expanded SubProcess', className: 'bpmn-icon-subprocess-expanded' },
+    { group: 'gateway', type: 'bpmn:ExclusiveGateway', className: 'entry bpmn-icon-gateway-none' }
+  ],
+  /**
+   * 预设的工具(所述的group为common-palette)
+   */
   customPalettes: []
 }
-
-function createAction(type, group, className, title, drawShape, translate, options) {
-  function createListener(event, autoActivate, elementFactory, create) {
-    const shape = elementFactory.createShape(assign({ type: type }, options))
-
-    if (options) {
-      shape.businessObject.di.isExpanded = options.isExpanded
-    }
-
-    // TODO: 自定义元模型 需要 实现 createText
-    shape.businessObject.name = type
-
-    create.start(event, shape)
-  }
-  const shortType = type.replace(/^bpmn:/, '')
-
-  return {
-    group: group,
-    className: className,
-    title: title || translate('Create {type}', { type: shortType }),
-    action: {
-      dragstart: createListener,
-      click: createListener
-    }
-  }
-}
-
-function drawCustomTask(parentNode, element, textRenderer, entries) {
-  const width = 130
-  const height = 60
-  const borderRadius = 20
-  const strokeColor = '#4483ec'
-  const fillColor = !element.businessObject.suitable && '#a2c5fd'
-
-  element.width = width
-  element.height = height
-  const rect = drawRect(
-    parentNode,
-    width,
-    height,
-    borderRadius,
-    strokeColor,
-    fillColor
-  )
-  const text = textRenderer.createText(element.businessObject.name || '', {
-    box: element,
-    align: 'center-middle',
-    padding: 5,
-    size: {
-      width: 100
-    }
-  })
-  svgAppend(parentNode, text)
-  return rect
-}
-
-function drawTask(parentNode, element, textRenderer, entries) {
-  const width = 100
-  const height = 80
-  const borderRadius = 20
-  const strokeColor = element.businessObject.suitable
-  const fillColor = '#fff'
-
-  element.width = width
-  element.height = height
-  const rect = drawRect(
-    parentNode,
-    width,
-    height,
-    borderRadius,
-    strokeColor,
-    fillColor
-  )
-  const text = textRenderer.createText(element.businessObject.name || '', {
-    box: element,
-    align: 'center-middle',
-    padding: 5,
-    size: {
-      width: 100
-    }
-  })
-  svgAppend(parentNode, text)
-  return rect
-}
-
-// helpers //////////
-
-// copied from https://github.com/bpmn-io/bpmn-js/blob/master/lib/draw/BpmnRenderer.js
-function drawRect(
-  parentNode,
-  width,
-  height,
-  borderRadius,
-  strokeColor,
-  fillColor
-) {
-  const rect = svgCreate('rect')
-
-  svgAttr(rect, {
-    width: width,
-    height: height,
-    rx: borderRadius,
-    ry: borderRadius,
-    stroke: strokeColor || '#000',
-    strokeWidth: 2,
-    fill: fillColor
-  })
-
-  svgAppend(parentNode, rect)
-
-  return rect
-}
-// copied from https://github.com/bpmn-io/diagram-js/blob/master/lib/core/GraphicsFactory.js
-// function prependTo (newNode, parentNode, siblingNode) {
-//   parentNode.insertBefore(newNode, siblingNode || parentNode.firstChild)
-// }
