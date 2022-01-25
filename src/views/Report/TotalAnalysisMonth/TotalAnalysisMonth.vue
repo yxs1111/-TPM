@@ -5,9 +5,15 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker v-model="filterObj.yearAndMonthList" type="monthrange" format='yyyy-MM' value-format='yyyy-MM' range-separator="至" start-placeholder="开始月份"
-            end-placeholder="结束月份">
-          </el-date-picker>
+          <el-date-picker
+            v-model="filterObj.yearAndMonthList"
+            type="monthrange"
+            format="yyyy-MM"
+            value-format="yyyy-MM"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
+          />
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
           <!-- <SelectMonth  :Disabled="false" /> -->
@@ -15,7 +21,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择">
+          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomer">
             <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
@@ -55,8 +61,18 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :key="tableKey" id="outTable" :data="tableData" v-if="tableData.length" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
-        :cell-style="columnStyle" height="600" style="width: 100%">
+      <el-table
+        v-if="tableData.length"
+        id="outTable"
+        :key="tableKey"
+        :data="tableData"
+        border
+        :header-cell-class-name="headerStyle"
+        :row-class-name="tableRowClassName"
+        :cell-style="columnStyle"
+        height="600"
+        style="width: 100%"
+      >
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -83,7 +99,7 @@
                   </template>
                   <template slot-scope="{row}">
                     <div class="NumWrap">
-                      {{FormateNum(row.month[key][CustomerKey][titleItem.value])}}{{titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':''}}
+                      {{ FormateNum(row.month[key][CustomerKey][titleItem.value]) }}{{ titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':'' }}
                     </div>
                   </template>
                 </el-table-column>
@@ -126,7 +142,7 @@ export default {
         yearAndMonthList: getCurrentMonth1(),
         customerCode: '',
         channelCode: '',
-        productName: '',
+        productName: ''
       },
       permissions: getDefaultPermissions(),
       // 表格列
@@ -136,7 +152,7 @@ export default {
         { label: 'V3谈判前' },
         { label: 'V3谈判后' },
         { label: '价格执行率1# V3谈判前  VS  V1' },
-        { label: '价格执行率1# V3谈判后  VS  V1' },
+        { label: '价格执行率1# V3谈判后  VS  V1' }
       ],
       tableData: [],
       channelOptions: [],
@@ -152,16 +168,16 @@ export default {
         {
           title: '价格执行率1# V3谈判前  VS  V1',
           value: 'priceExecutionRate1',
-          width: 250,
+          width: 250
         },
         {
           title: '价格执行率2# V3谈判后  VS  V1',
           value: 'priceExecutionRate2',
-          width: 250,
-        },
+          width: 250
+        }
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
-      tableKey: 0, // el-table key
+      tableKey: 0 // el-table key
     }
   },
   computed: {},
@@ -172,7 +188,7 @@ export default {
         (item) => checkedList.indexOf(item.value) != -1
       )
       this.tableKey++
-    },
+    }
   },
   mounted() {
     this.checkList = [
@@ -181,49 +197,59 @@ export default {
       'v3AfterAvg',
       'v3BeforeAvg',
       'priceExecutionRate1',
-      'priceExecutionRate2',
+      'priceExecutionRate2'
     ]
     this.getQueryChannelSelect()
     this.getCustomerList()
   },
   methods: {
+    // 根据渠道获取客户 多选
+    getCustomer(choose) {
+      let params = []
+      choose.forEach(element => {
+        params.push(element)
+      })
+      selectAPI.getCustomerListByChannels({ channelCodes: params }).then(res => {
+        this.customerArr = res.data
+      }).catch()
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      let yearAndMonthList=getYearAndMonthRange(this.filterObj.yearAndMonthList[0],this.filterObj.yearAndMonthList[1])
+      const yearAndMonthList = getYearAndMonthRange(this.filterObj.yearAndMonthList[0], this.filterObj.yearAndMonthList[1])
       API.getTotalReportList({
-        yearAndMonthList:  yearAndMonthList,
+        yearAndMonthList: yearAndMonthList,
         customerNameList: this.filterObj.customerCode,
         channelNameList: this.filterObj.channelCode,
-        productNameList: this.filterObj.productName,
+        productNameList: this.filterObj.productName
       }).then((response) => {
-        let AllObj = response.data
+        const AllObj = response.data
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
-        //按SKU,customer拆分
-        let allList = []
+        // 按SKU,customer拆分
+        const allList = []
         for (const key in AllObj) {
           if (AllObj.hasOwnProperty.call(AllObj, key)) {
-            //2021 09 year
+            // 2021 09 year
             const yearObj = AllObj[key]
-            let year = key
+            const year = key
             for (const customerKey in yearObj) {
               if (yearObj.hasOwnProperty.call(yearObj, customerKey)) {
                 const list = yearObj[customerKey]
-                let customerName1 = customerKey
+                const customerName1 = customerKey
                 for (let index = 0; index < list.length; index++) {
-                  let obj = Object.assign(list[index], { year, customerName1 })
+                  const obj = Object.assign(list[index], { year, customerName1 })
                   allList.push(obj)
                 }
               }
             }
           }
         }
-        let AllData = {}
+        const AllData = {}
         // 按SKU 重新分组
         for (let m = 0; m < allList.length; m++) {
-          //根据productEsName 进行分组
+          // 根据productEsName 进行分组
           if (!AllData[allList[m].productEsName]) {
             var arr = []
             arr.push(allList[m])
@@ -232,12 +258,12 @@ export default {
             AllData[allList[m].productEsName].push(allList[m])
           }
         }
-        let AllDataList = []
+        const AllDataList = []
         // 按年月重新分组
         for (const productItem in AllData) {
           if (Object.hasOwnProperty.call(AllData, productItem)) {
             const list = AllData[productItem]
-            let yearData = {}
+            const yearData = {}
             for (let m = 0; m < list.length; m++) {
               if (!yearData[list[m].year]) {
                 var arr = []
@@ -248,7 +274,7 @@ export default {
               }
             }
             AllData[productItem] = yearData
-            let obj = Object.assign({ name: productItem }, { month: yearData })
+            const obj = Object.assign({ name: productItem }, { month: yearData })
             AllDataList.push(obj)
           }
         }
@@ -269,7 +295,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode,
+          channelCode: this.filterObj.channelCode
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -296,10 +322,10 @@ export default {
       this.getTableData()
     },
     exportExcel() {
-      let fix = document.querySelector('.el-table__fixed')
+      const fix = document.querySelector('.el-table__fixed')
       let wb
       if (fix) {
-        //判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
+        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
         wb = XLSX.utils.table_to_book(
           document.querySelector('#outTable').removeChild(fix)
         )
@@ -307,10 +333,10 @@ export default {
       } else {
         wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
       }
-      let wbout = XLSX.write(wb, {
+      const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
         bookSST: true,
-        type: 'array',
+        type: 'array'
       })
       try {
         FileSaver.saveAs(
@@ -348,11 +374,11 @@ export default {
         return 'background-color: #f3f7f8 !important;color: #666!important;'
       }
     },
-    //格式化--千位分隔符、两位小数
+    // 格式化--千位分隔符、两位小数
     FormateNum(num) {
       return FormateThousandNum(num)
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -415,7 +441,7 @@ export default {
 .hover-row {
   color: #666 !important;
   background-color: #f3f7f8;
-  
+
 }
 .hover-row .filstColumn {
   color: #666;

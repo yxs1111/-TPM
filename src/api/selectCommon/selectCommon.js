@@ -49,4 +49,8 @@ export default {
   timeout(params) {
     return requestApi.request_put('/job/job/pause', params)
   },
+  // 报表 多渠道获取用户
+  getCustomerListByChannels(data) {
+    return requestApi.request_post('/mdm/common/getCustomerListByChannels', data)
+  }
 }
