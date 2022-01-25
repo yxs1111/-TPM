@@ -36,7 +36,7 @@
           <fieldset class="element-item">
             <legend>其他配置</legend>
             <el-button size="mini" type="success" @click="assignTaskDialog.visible = true">分配任务</el-button>
-            <el-button size="mini" type="success" @click="bindFormDialog.visible = true">流程单据</el-button>
+            <!-- <el-button size="mini" type="success" @click="bindFormDialog.visible = true">流程单据</el-button> -->
           </fieldset>
         </div>
       </el-collapse-item>

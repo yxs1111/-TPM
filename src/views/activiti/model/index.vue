@@ -113,7 +113,7 @@
         <el-form-item label="版本" prop="version" label-width="80px">
           <el-input v-model.number="modelDialog.data.version" />
         </el-form-item>
-        <el-form-item label="分类" prop="category" label-width="80px">
+        <!-- <el-form-item label="分类" prop="category" label-width="80px">
           <el-select v-model="modelDialog.data.category" placeholder="请选择">
             <el-option
               v-for="item in categoryArr"
@@ -122,12 +122,12 @@
               :value="item.id"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item label="流程方向" prop="direction" label-width="80px">
+        </el-form-item> -->
+        <!-- <el-form-item label="流程方向" prop="direction" label-width="80px">
           <el-radio-group v-model="modelDialog.data.direction" @change="directionChange()">
             <el-radio v-for="item in flowDirection" :key="item.value" :label="item.value">{{ item.text }}</el-radio>
           </el-radio-group>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="流程描述" prop="description" label-width="80px">
           <el-input v-model="modelDialog.data.description" type="textarea" @input="onInput" />
         </el-form-item>

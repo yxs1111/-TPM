@@ -43,6 +43,11 @@ export default {
     return Http.request_get(`${baseUrl}/activiti/extension/task/history`, {
       businessId: businessId
     })
+  },
+  getAllHis: processInstanceId => {
+    return Http.request_get(`${baseUrl}/activiti/extension/getAllHistory`, {
+      processInstanceId: processInstanceId
+    })
   }
 
 }
