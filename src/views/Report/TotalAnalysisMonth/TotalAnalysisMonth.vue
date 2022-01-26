@@ -5,15 +5,8 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker
-            v-model="filterObj.yearAndMonthList"
-            type="monthrange"
-            format="yyyy-MM"
-            value-format="yyyy-MM"
-            range-separator="至"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份"
-          />
+          <el-date-picker v-model="filterObj.yearAndMonthList" type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份" />
           <!-- <el-date-picker v-model="filterObj.month" multiple  type="month" value-format="yyyy-MM" placeholder="选择月">
           </el-date-picker> -->
           <!-- <SelectMonth  :Disabled="false" /> -->
@@ -21,7 +14,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomer">
+          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
             <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
@@ -61,18 +54,8 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table
-        v-if="tableData.length"
-        id="outTable"
-        :key="tableKey"
-        :data="tableData"
-        border
-        :header-cell-class-name="headerStyle"
-        :row-class-name="tableRowClassName"
-        :cell-style="columnStyle"
-        height="600"
-        style="width: 100%"
-      >
+      <el-table v-if="tableData.length" id="outTable" :key="tableKey" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
+        :cell-style="columnStyle" height="600" style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -122,7 +105,7 @@ import {
   getCurrentMonth1,
   ReportBgColorMap,
   FormateThousandNum,
-  getYearAndMonthRange
+  getYearAndMonthRange,
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
@@ -142,7 +125,7 @@ export default {
         yearAndMonthList: getCurrentMonth1(),
         customerCode: '',
         channelCode: '',
-        productName: ''
+        productName: '',
       },
       permissions: getDefaultPermissions(),
       // 表格列
@@ -152,7 +135,7 @@ export default {
         { label: 'V3谈判前' },
         { label: 'V3谈判后' },
         { label: '价格执行率1# V3谈判前  VS  V1' },
-        { label: '价格执行率1# V3谈判后  VS  V1' }
+        { label: '价格执行率1# V3谈判后  VS  V1' },
       ],
       tableData: [],
       channelOptions: [],
@@ -168,16 +151,16 @@ export default {
         {
           title: '价格执行率1# V3谈判前  VS  V1',
           value: 'priceExecutionRate1',
-          width: 250
+          width: 250,
         },
         {
           title: '价格执行率2# V3谈判后  VS  V1',
           value: 'priceExecutionRate2',
-          width: 250
-        }
+          width: 250,
+        },
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
-      tableKey: 0 // el-table key
+      tableKey: 0, // el-table key
     }
   },
   computed: {},
@@ -189,10 +172,10 @@ export default {
       )
       this.tableKey++
     },
-    'filterObj.channelCode'() {
-      this.filterObj.customerCode = ''
-      this.getCustomerList()
-    },
+    // 'filterObj.channelCode'() {
+    //   this.filterObj.customerCode = ''
+    //   this.getCustomerList()
+    // },
   },
   mounted() {
     this.checkList = [
@@ -201,31 +184,33 @@ export default {
       'v3AfterAvg',
       'v3BeforeAvg',
       'priceExecutionRate1',
-      'priceExecutionRate2'
+      'priceExecutionRate2',
     ]
     this.getQueryChannelSelect()
-    this.getCustomerList()
   },
   methods: {
     // 根据渠道获取客户 多选
     getCustomer(choose) {
-      let params = []
-      choose.forEach(element => {
-        params.push(element)
-      })
-      selectAPI.getCustomerListByChannels({ channelCodes: params }).then(res => {
-        this.customerArr = res.data
-      }).catch()
+      // let params = []
+      // choose.forEach(element => {
+      //   params.push(element)
+      // })
+      // selectAPI.getCustomerListByChannels({ channelCodes: params }).then(res => {
+      //   this.customerArr = res.data
+      // }).catch()
     },
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      const yearAndMonthList = getYearAndMonthRange(this.filterObj.yearAndMonthList[0], this.filterObj.yearAndMonthList[1])
+      const yearAndMonthList = getYearAndMonthRange(
+        this.filterObj.yearAndMonthList[0],
+        this.filterObj.yearAndMonthList[1]
+      )
       API.getTotalReportList({
         yearAndMonthList: yearAndMonthList,
         customerNameList: this.filterObj.customerCode,
         channelNameList: this.filterObj.channelCode,
-        productNameList: this.filterObj.productName
+        productNameList: this.filterObj.productName,
       }).then((response) => {
         const AllObj = response.data
         this.pageNum = response.data.pageNum
@@ -243,7 +228,10 @@ export default {
                 const list = yearObj[customerKey]
                 const customerName1 = customerKey
                 for (let index = 0; index < list.length; index++) {
-                  const obj = Object.assign(list[index], { year, customerName1 })
+                  const obj = Object.assign(list[index], {
+                    year,
+                    customerName1,
+                  })
                   allList.push(obj)
                 }
               }
@@ -278,7 +266,10 @@ export default {
               }
             }
             AllData[productItem] = yearData
-            const obj = Object.assign({ name: productItem }, { month: yearData })
+            const obj = Object.assign(
+              { name: productItem },
+              { month: yearData }
+            )
             AllDataList.push(obj)
           }
         }
@@ -292,19 +283,28 @@ export default {
     getQueryChannelSelect() {
       selectAPI.queryChannelSelect().then((res) => {
         this.channelOptions = res.data
-        this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
+        // this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
+        this.filterObj.channelCode = ['NKA']
+        this.getCustomerList()
       })
     },
     // 客户
     getCustomerList() {
       selectAPI
-        .queryCustomerList({
-          channelCode: this.filterObj.channelCode
+        .getCustomerListByChannels({
+          channelCodes: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
-            this.filterObj.customerCode = [this.customerArr[0].customerCsName]
+            let list = []
+            this.customerArr.forEach((item) => {
+              // if (list.length<10) {
+              //   list.push(item.customerCsName)
+              // }
+              list.push(item.customerCsName)                       
+            })
+            this.filterObj.customerCode = list
             this.getSkuSelect()
           }
         })
@@ -340,7 +340,7 @@ export default {
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
         bookSST: true,
-        type: 'array'
+        type: 'array',
       })
       try {
         FileSaver.saveAs(
@@ -381,8 +381,8 @@ export default {
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
       return FormateThousandNum(num)
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -445,7 +445,6 @@ export default {
 .hover-row {
   color: #666 !important;
   background-color: #f3f7f8;
-
 }
 .hover-row .filstColumn {
   color: #666;
