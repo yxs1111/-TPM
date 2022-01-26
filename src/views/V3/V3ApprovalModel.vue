@@ -110,6 +110,26 @@ export default {
             signN = 1
           }
         })
+        if (this.routerList.length === 0 || res.data.length === 0) {
+          this.routerList = [
+            {
+              name: '折扣项-价促',
+              path: '/V3/V3Approval/V3discountDiscountApproval',
+              img: {
+                dark: require('@/assets/images/tab/tab2.png'),
+                light: require('@/assets/images/tab/tab2_l.png')
+              }
+            },
+            {
+              name: '折扣项-新客',
+              path: '/V3/V3Approval/V3discountNUApproval',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            }
+          ]
+        }
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
         } else {
