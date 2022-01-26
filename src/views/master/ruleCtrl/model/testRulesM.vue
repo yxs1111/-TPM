@@ -58,6 +58,12 @@ export default {
             signN = 1
           }
         })
+        if (this.routerList.length === 0 || res.data.length === 0) {
+          this.routerList = [
+            { name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' },
+            { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
+          ]
+        }
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
         } else {
