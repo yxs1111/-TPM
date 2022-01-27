@@ -367,7 +367,7 @@ export default {
     getMonth() {
       selectAPI.getMonth({ version: 'V2' }).then((res) => {
         this.filterObj.yearAndMonth = res.data
-        this.getTableData()
+        // this.getTableData()
       })
     },
     // 获取下拉框 渠道

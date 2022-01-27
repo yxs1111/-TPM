@@ -495,7 +495,7 @@ export default {
       selectAPI.getMonth({ version: 'V3' }).then((res) => {
         if (res.code === 1000) {
           this.localDate = res.data
-          this.getTableData()
+          // this.getTableData()
         } else {
           this.$message.warning('未查询到年月信息！')
         }

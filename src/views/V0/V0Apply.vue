@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-09 22:59:14
+ * @LastEditTime: 2022-01-27 10:47:46
 -->
 <template>
   <div class="app-container">
@@ -357,7 +357,7 @@ export default {
     getMonth() {
       API.getMonth({ version: 'V0' }).then((res) => {
         this.filterObj.month = res.data
-        this.getList()
+        // this.getList()
       })
     },
     getList() {

@@ -116,7 +116,7 @@ export default {
     getEffectiveDate() {
       API.getEffectiveDate({ version: 'V1' }).then((res) => {
         this.filterObj.month = res.data
-        this.getTableData()
+        // this.getTableData()
       })
     },
     // 获取下拉框
