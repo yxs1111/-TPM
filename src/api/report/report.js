@@ -23,7 +23,7 @@ export default {
   },
   // 损益报表
   profitAndLossReport(params) {
-    return requestApi.request_get('/profitAndLossReport/get', params)
+    return requestApi.request_post('/profitAndLossReport/get', params)
   }
 }
 
