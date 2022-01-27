@@ -5,15 +5,8 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker
-            v-model="filterObj.yearAndMonthList"
-            type="monthrange"
-            format="yyyy-MM"
-            value-format="yyyy-MM"
-            range-separator="至"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份"
-          />
+          <el-date-picker v-model="filterObj.yearAndMonthList" type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
@@ -62,26 +55,41 @@
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
             <el-table v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
-              <el-table-column align="center" width="150" fixed prop="channel" label="数据维度" />
+              <el-table-column align="center" v-slot={row} width="150" fixed prop="channel" label="数据维度">
+                {{row.name}}
+              </el-table-column>
               <el-table-column align="center" prop="name" label="Total">
                 <el-table-column align="center" width="150" prop="name" label="CPT" />
                 <el-table-column align="center" width="150" prop="name" label="V1" />
                 <el-table-column align="center" width="150" prop="name" label="V2" />
                 <el-table-column align="center" width="150" prop="name" label="V3" />
               </el-table-column>
-              <el-table-column align="center" prop="name" label="NKA">
-                <el-table-column align="center" width="150" prop="name" label="孩子王">
-                  <el-table-column align="center" width="150" prop="name" label="CPT" />
-                  <el-table-column align="center" width="150" prop="name" label="V1" />
-                  <el-table-column align="center" width="150" prop="name" label="V2" />
-                  <el-table-column align="center" width="150" prop="name" label="V3" />
-                </el-table-column>
-                <el-table-column align="center" width="150" prop="name" label="沃尔玛">
-                  <el-table-column align="center" width="150" prop="name" label="CPT" />
-                  <el-table-column align="center" width="150" prop="name" label="V1" />
-                  <el-table-column align="center" width="150" prop="name" label="V2" />
-                  <el-table-column align="center" width="150" prop="name" label="V3" />
-                </el-table-column>
+              <el-table-column v-for="(value,key) in tableData[0].channel" :key="key" align="center">
+                <template v-slot:header>
+                  {{ key }}
+                </template>
+                <template>
+                  <el-table-column v-for="(item,index) in value" :key="index" align="center">
+                    <template v-slot:header>
+                      {{ item.customerName }}
+                    </template>
+                    <template>
+                      <el-table-column align="center" width="150"  label="CPT" >
+                        {{ item.cptCost }}
+                      </el-table-column>
+                      <el-table-column align="center" width="150"  label="V1" >
+                        {{ item.voneCost }}
+                      </el-table-column>
+                      <el-table-column align="center" width="150"  label="V2" >
+                        {{ item.vtwoCost }}
+                      </el-table-column>
+                      <el-table-column align="center" width="150"  label="V3" >
+                        {{ item.vthreeCost }}
+                      </el-table-column>
+                    </template>
+
+                  </el-table-column>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -94,7 +102,9 @@
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
             <el-table v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" height="400" :row-class-name="tableRowClassName" style="width: 100%">
-              <el-table-column align="center" width="150" fixed prop="channel" label="数据维度" />
+              <el-table-column align="center" v-slot={row} width="150" fixed prop="channel" label="数据维度">
+                {{row.name}}
+              </el-table-column>
               <el-table-column align="center" prop="name" label="Total">
                 <el-table-column align="center" width="150" prop="name" label="CPT" />
                 <el-table-column align="center" width="150" prop="name" label="V1" />
@@ -131,7 +141,7 @@ import {
   getCurrentMonth1,
   ReportBgColorMap,
   FormateThousandNum,
-  getYearAndMonthRange
+  getYearAndMonthRange,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import APIReport from '@/api/report/report.js'
@@ -155,13 +165,13 @@ export default {
         type: '',
         regionCode: '',
         month: '',
-        category: ''
+        category: '',
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
-      checkList: ['0', '1']
+      checkList: ['0', '1'],
     }
   },
   computed: {},
@@ -176,7 +186,7 @@ export default {
     getCustomerList() {
       selectAPI
         .getCustomerListByChannels({
-          channelCodes: this.filterObj.channelCode
+          channelCodes: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -212,12 +222,12 @@ export default {
         channelName: this.filterObj.customerCode,
         customerName: this.filterObj.channelCode,
         brandName: [],
-        regionName: []
+        regionName: [],
       }
       axios({
         method: 'post',
         url: '/profitAndLossReport/get',
-        data: params
+        data: params,
       })
         // .get('/profitAndLossReport/get', { params: {
         //   yearAndMonth: '',
@@ -226,10 +236,64 @@ export default {
         //   brandName: '',
         //   regionName: ''
         // }})
-        .then(response => {
-          // this.tableData = response.data
+        .then((response) => {
+          let list = response.data.data
+          let AllList = []
+          for (let index = 0; index < list.length; index++) {
+            const sList = list[index].cost
+            for (let sIndex = 0; sIndex < sList.length; sIndex++) {
+              const element = sList[sIndex]
+              AllList.push(element)
+            }
+          }
+          // console.log(AllList)
+          //对version进行分组处理
+          const AllData = {}
+          for (let m = 0; m < AllList.length; m++) {
+            // 根据version 进行分组
+            if (!AllData[AllList[m].version]) {
+              let obj = {
+                name: '',
+                channel: [],
+              }
+              Object.assign(obj, { name: AllList[m].version })
+              var arr = obj.channel
+              arr.push(AllList[m])
+              AllData[AllList[m].version] = obj
+            } else {
+              AllData[AllList[m].version].channel.push(AllList[m])
+            }
+          }
+          //对渠道进行分组
+          for (const key in AllData) {
+            if (Object.hasOwnProperty.call(AllData, key)) {
+              const channelList = AllData[key].channel
+              const channelData = {}
+              for (let m = 0; m < channelList.length; m++) {
+                // 根据channelName 进行分组
+                if (!channelData[channelList[m].channelName]) {
+                  var arr = []
+                  arr.push(channelList[m])
+                  channelData[channelList[m].channelName] = arr
+                } else {
+                  channelData[channelList[m].channelName].push(channelList[m])
+                }
+              }
+              AllData[key].channel = channelData
+            }
+          }
+          console.log(AllData)
+          let tableList = []
+          for (const key in AllData) {
+            if (Object.hasOwnProperty.call(AllData, key)) {
+              const element = AllData[key]
+              tableList.push(element)
+            }
+          }
+          console.log(tableList)
+          this.tableData = tableList
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error)
         })
     },
@@ -247,7 +311,7 @@ export default {
       this.tableData = []
       API.getPageMdBrand({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -287,8 +351,8 @@ export default {
       if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) {
         return 'headerStyle'
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
