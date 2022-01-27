@@ -6,7 +6,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
           <el-date-picker
-            v-model="filterObj.month"
+            v-model="filterObj.yearAndMonthList"
             type="monthrange"
             format="yyyy-MM"
             value-format="yyyy-MM"
@@ -17,14 +17,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
-          <el-select v-model="filterObj.type" placeholder="请选择">
-            <el-option v-for="(item, index) in categoryArr" :key="index" :label="item.label" :value="index" />
+          <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -40,7 +40,7 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <el-button type="primary" class="TpmButtonBG my-search" style="margin-bottom:0px;">查询</el-button>
+          <el-button type="primary" class="TpmButtonBG my-search" style="margin-bottom:0px;" @click="search">查询</el-button>
         </div>
       </div>
     </div>
@@ -126,9 +126,17 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import {
+  getDefaultPermissions,
+  getCurrentMonth1,
+  ReportBgColorMap,
+  FormateThousandNum,
+  getYearAndMonthRange
+} from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import APIReport from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
+import axios from 'axios'
 
 export default {
   name: 'LossAnalysisHistory',
@@ -136,11 +144,14 @@ export default {
 
   data() {
     return {
+      customerArr: [],
+      channelOptions: [],
       RegionList: [],
       total: 1,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        yearAndMonthList: getCurrentMonth1(),
         type: '',
         regionCode: '',
         month: '',
@@ -155,10 +166,73 @@ export default {
   },
   computed: {},
   mounted() {
+    this.getReport()
     // this.getTableData()
-    this.getRegionList()
+    this.getQueryChannelSelect()
+    // this.getRegionList()
   },
   methods: {
+    // 客户
+    getCustomerList() {
+      selectAPI
+        .getCustomerListByChannels({
+          channelCodes: this.filterObj.channelCode
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+            const list = []
+            this.customerArr.forEach((item) => {
+              // if (list.length<10) {
+              //   list.push(item.customerCsName)
+              // }
+              list.push(item.customerCsName)
+            })
+            this.filterObj.customerCode = list
+          }
+        })
+    },
+    // 获取渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        this.channelOptions = res.data
+        // this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
+        this.filterObj.channelCode = ['NKA']
+        this.getCustomerList()
+      })
+    },
+    // 获取页面信息
+    getReport() {
+      const yearAndMonthList = getYearAndMonthRange(
+        this.filterObj.yearAndMonthList[0],
+        this.filterObj.yearAndMonthList[1]
+      )
+      const params = {
+        yearAndMonth: [],
+        channelName: this.filterObj.customerCode,
+        customerName: this.filterObj.channelCode,
+        brandName: [],
+        regionName: []
+      }
+      axios({
+        method: 'post',
+        url: '/profitAndLossReport/get',
+        data: params
+      })
+        // .get('/profitAndLossReport/get', { params: {
+        //   yearAndMonth: '',
+        //   channelName: '',
+        //   customerName: '',
+        //   brandName: '',
+        //   regionName: ''
+        // }})
+        .then(response => {
+          // this.tableData = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     // 下拉框
     getRegionList() {
       selectAPI.getRegionList().then((res) => {
@@ -185,7 +259,8 @@ export default {
         .catch((error) => {})
     },
     search() {
-      this.getTableData()
+      this.pageNum = 1
+      this.getReport()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
