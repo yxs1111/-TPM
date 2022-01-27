@@ -20,6 +20,10 @@ export default {
   // 代垫通知
   getAdvanceNoticeReport(params) {
     return requestApi.request_get(this.url + '/advanceNoticeReport/getPage', params)
+  },
+  // 损益报表
+  profitAndLossReport(params) {
+    return requestApi.request_get('/profitAndLossReport/get', params)
   }
 }
 
