@@ -352,7 +352,7 @@ export default {
         this.filterObj.yearAndMonthList[1]
       )
       const params = {
-        yearAndMonth: [],
+        yearAndMonth: yearAndMonthList,
         channelName: this.filterObj.channelCode,
         customerName: this.filterObj.customerCode,
         brandName: this.filterObj.brandName,

@@ -54,7 +54,7 @@ export const constantRoutes = [
   // ...V1(),
   // ...V2(),
   // ...V3(),
-  ...Report(),
+  // ...Report(),
   // ...taskManage(),
   // ...masterData(),
   // ...system(),

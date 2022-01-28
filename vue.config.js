@@ -53,14 +53,14 @@ module.exports = {
           '^/Api': '/Api'
         }
       },
-      '/profitAndLossReport': {
-        target: `http://41p269262w.wicp.vip`,
-        changeOrigin: true,
-        secure: false,
-        pathRewrite: {
-          '^/profitAndLossReport': '/profitAndLossReport'
-        }
-      },
+      // '/profitAndLossReport': {
+      //   target: `http://41p269262w.wicp.vip`,
+      //   changeOrigin: true,
+      //   secure: false,
+      //   pathRewrite: {
+      //     '^/profitAndLossReport': '/profitAndLossReport'
+      //   }
+      // },
       [process.env.VUE_APP_BASE_API]: {
         //target: `http://192.168.30.32:7777`,  //现云
         //target: `http://192.168.30.12:7777`,  //泽圣
@@ -71,8 +71,8 @@ module.exports = {
         //target: `http://192.168.50.156:7788`, // 张淼
         //target: `http://192.168.40.192:7777`, // 王宝兴
         //target: `http://192.168.50.162:7777`, // 樊鹏伟
-        target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`,  //测试服务器
-        // target: `https://iInvest.rfc-friso.com/prod-api`,  //正式服务器
+        // target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`,  //测试服务器
+        target: `https://iInvest.rfc-friso.com/prod-api`,  //正式服务器
         // target: `http://41p269262w.wicp.vip/`,  //正式服务器
 
         changeOrigin: true,
