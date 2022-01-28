@@ -58,7 +58,7 @@ export default function() {
         },
         {
           path: '/LossAnalysisMonth',
-          code: 'LossAnalysisMonth',
+          code: 'resource-report-profit',
           name: 'LossAnalysisMonth',
           component: () => import('@/views/Report/LossAnalysisMonth/LossAnalysisMonth.vue'),
           meta: { title: '损益分析报告', icon: 'approve' }
