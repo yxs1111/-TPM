@@ -146,8 +146,8 @@ export default {
       dynamicColumn: [
         { title: 'V1', value: 'v1Avg', width: 90 },
         { title: 'V2', value: 'v2Avg', width: 90 },
-        { title: 'V3谈判前', value: 'v3AfterAvg', width: 100 },
-        { title: 'V3谈判后', value: 'v3BeforeAvg', width: 100 },
+        { title: 'V3谈判前', value: 'v3BeforeAvg', width: 100 },
+        { title: 'V3谈判后', value: 'v3AfterAvg', width: 100 },
         {
           title: '价格执行率1# V3谈判前  VS  V1',
           value: 'priceExecutionRate1',
