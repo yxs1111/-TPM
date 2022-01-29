@@ -375,7 +375,7 @@ export default {
           this.tableData = [{
             channel: []
           }]
-          const list = response.data.data
+          const list = response.data
           const AllList = []
           for (let index = 0; index < list.length - 1; index++) {
             const sList = list[index].cost
