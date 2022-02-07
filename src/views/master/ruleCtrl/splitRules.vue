@@ -89,7 +89,7 @@
       </el-table-column>
       <el-table-column width="300" align="center" prop="splitRule" label="拆分规则" />
       <el-table-column width="120" align="center" prop="splitWeight" label="权重" />
-      <el-table-column width="180" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="260" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="scope">
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
@@ -407,7 +407,7 @@ export default {
         yeardate: this.filterObj.yeardate,
         versions: this.filterObj.varsionName,
         splitType: this.filterObj.splitType,
-        minePackageCode: 'L'
+        minePackageCode: 'A'
       }
       API.exportExcelSplitRule(data).then(
         response => {
@@ -546,7 +546,7 @@ export default {
         yeardate: this.filterObj.yeardate,
         versions: this.filterObj.varsionName,
         splitType: this.filterObj.splitType,
-        minePackageCode: 'L'
+        minePackageCode: 'A'
       })
         .then((response) => {
           this.tableData = response.data.records

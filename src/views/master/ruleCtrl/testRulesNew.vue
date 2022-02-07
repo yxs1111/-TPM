@@ -295,7 +295,7 @@ export default {
     },
     submitFormAdd(formName) {
       const params = {
-        minePackage: 'N',
+        minePackage: 'B',
         targetYearMonth: this.ruleFormAdd.targetYear,
         newYearMonth: this.ruleFormAdd.newYear
       }
@@ -347,7 +347,7 @@ export default {
     exportExcelInfo() {
       API.excportRuleSave({
         channelCode: this.filterObj.channel,
-        minePackage: 'N',
+        minePackage: 'B',
         yearAndMonth: this.filterObj.date
       }).then(
         response => {
@@ -511,7 +511,7 @@ export default {
       this.tableLoading = true
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: 'N',
+        minePackage: 'B',
         yearAndMonth: this.filterObj.date
       })
         .then((response) => {
