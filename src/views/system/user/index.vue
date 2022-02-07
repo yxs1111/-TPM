@@ -171,7 +171,7 @@
     </el-dialog>
 
     <!--用户-角色管理框-->
-    <el-dialog v-el-drag-dialog title="用户-角色管理" :visible.sync="userRoleDialog.visible" @dragDialog="handleDrag">
+    <el-dialog width="80%" v-el-drag-dialog title="用户-角色管理" :visible.sync="userRoleDialog.visible" @dragDialog="handleDrag">
       <div style="text-align: center">
         <el-transfer v-model="transferRoleProps.value" :filterable="true" :props="{
             key: 'code',
@@ -206,6 +206,18 @@
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+}
+.el-transfer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+</style>
+<style>
+.el-transfer-panel {
+  width: 40%;
 }
 </style>
 
