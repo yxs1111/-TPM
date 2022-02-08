@@ -38,7 +38,7 @@
       style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
-      <el-table-column v-slot={row} width="150" align="right" prop="gear" label="档位（箱/Tin）">
+      <el-table-column v-slot={row} width="150" align="right" prop="gear" label="档位（￥/Tin）">
         {{FormateNum(row.gear*1)}}
       </el-table-column>
       <el-table-column v-slot={row} width="150" align="right" prop="volMix" label="Vol Mix">
