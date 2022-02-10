@@ -68,7 +68,7 @@
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="200" align="center" prop="minePackageCode" label="Mine Package" />
       <el-table-column width="150" align="center" prop="sku" label="SKU" />
-      <el-table-column width="180" align="center" prop="grepLevel" label="价格档位" />
+      <el-table-column width="180" align="center" prop="grepLevel" label="活动级别" />
       <!-- <el-table-column width="180" align="center" prop="sku" label="价格档位描述" /> -->
       <el-table-column width="220" align="center" prop="cdmTypeName" label="机制类型">
         <!-- <template slot-scope="scope">
@@ -81,13 +81,7 @@
           {{ scope.row.createDate==null ? '':scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" label="更新时间">
-        <template slot-scope="scope">
-          {{ scope.row.updateDate==null ? '': scope.row.updateDate.replace('T', ' ') }}
-        </template>
-      </el-table-column>
-      <el-table-column width="180" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
