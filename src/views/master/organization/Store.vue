@@ -30,7 +30,7 @@
         <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" border max-height="800" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border max-height="600" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>

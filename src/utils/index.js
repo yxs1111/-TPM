@@ -517,6 +517,17 @@ export function dynamicColumn() {
     { title: 'Exception3占比', value: 'exceptionThreeRange' }
   ]
 }
+export const dynamicColumnCost= [
+    { title: 'Pass费用', value: 'passNum' },
+    { title: 'Exception1费用', value: 'exceptionOneNum' },
+    { title: 'Exception2费用', value: 'exceptionTwoNum' },
+    { title: 'Exception3费用', value: 'exceptionThreeNum' },
+    { title: 'Pass占比', value: 'passRange' },
+    { title: 'Exception1占比', value: 'exceptionOneRange' },
+    { title: 'Exception2占比', value: 'exceptionTwoRange' },
+    { title: 'Exception3占比', value: 'exceptionThreeRange' }
+  ]
+
 export function FormateThousandNum(num) {
   //千分位分隔符+两位小数
   const money = num * 1
