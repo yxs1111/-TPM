@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-01-13 16:54:57
+ * @LastEditTime: 2022-02-11 11:37:31
 -->
 <template>
   <div class="dashboard-container">
@@ -474,6 +474,8 @@ export default {
       let firstMonth = ''
       if (month <= 3) {
         firstMonth = month + 9
+        //0+12
+        if (month == 3) firstMonth = 0
       } else {
         firstMonth = month - 3
       }

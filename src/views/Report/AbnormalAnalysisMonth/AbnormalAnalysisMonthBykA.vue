@@ -6,7 +6,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">异常类别：</span>
           <el-select v-model="filterObj.exception" placeholder="请选择">
-            <el-option v-for="(item, index) in ['数量','费用']" :key="index" :label="item" :value="index+1" />
+            <el-option v-for="(item, index) in ['数量','费用']" :key="index+1" :label="item" :value="index+1" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -58,7 +58,7 @@
     </div>
     <div class="colorWrap">
       <div class="TpmButtonBGWrap">
-        <div class="TpmButtonBG">
+        <div class="TpmButtonBG" @click="exportExcel">
           <img src="../../../assets/images/downloadIcon.png" alt="">
           <span class="text">下载报表</span>
         </div>
@@ -79,7 +79,7 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="V1Data" v-if="V1Data.length" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+      <el-table :data="V1Data" v-if="V1Data.length" id="outTable" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
         <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
         <el-table-column align="center" prop="name" v-for="item,key in V1Data[0].month" :key="'V1'+item.yearAndMonth+'-'+key">
           <template v-slot:header>
@@ -91,7 +91,10 @@
                 {{ titleItem.title }}
               </template>
               <template slot-scope="{row}">
-                <div>
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                  {{FormateNum(row.month[key][titleItem.value])}}
+                </div>
+                <div v-else>
                   {{row.month[key][titleItem.value]}}
                 </div>
               </template>
@@ -100,7 +103,7 @@
 
         </el-table-column>
       </el-table>
-      <el-table :data="V2Data" v-if="V2Data.length" :key="tableKey2" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+      <el-table :data="V2Data" v-if="V2Data.length" id="outTable2" :key="tableKey2" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
         <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
         <el-table-column align="center" prop="name" v-for="item,key in V2Data[0].month" :key="'V2'+item.yearAndMonth+'-'+key">
           <template v-slot:header>
@@ -121,7 +124,7 @@
 
         </el-table-column>
       </el-table>
-      <el-table :data="V3Data" v-if="V3Data.length" :key="tableKey3" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+      <el-table :data="V3Data" v-if="V3Data.length" id="outTable3" :key="tableKey3" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
         <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
         <el-table-column align="center" prop="name" v-for="item,key in V3Data[0].month" :key="'V3'+item.yearAndMonth+'-'+key">
           <template v-slot:header>
@@ -154,13 +157,17 @@ import {
   parseTime,
   getTextMap,
   ReportCheckList,
+  FormateThousandNum,
   dynamicColumn,
+  dynamicColumnCost,
   getCurrentMonth,
   ReportBgColorMap,
 } from '@/utils'
 import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   name: 'AbnormalAnalysisMonthByChannel',
   directives: { elDragDialog, permission },
@@ -168,7 +175,7 @@ export default {
   data() {
     return {
       filterObj: {
-        exception: '',
+        exception: 1,
         month: getCurrentMonth(),
         MinePackage: 14,
         regionCode: '',
@@ -204,13 +211,18 @@ export default {
   },
   watch: {
     //动态列渲染
-    checkList(checkedList) {
-      this.tableColumnList = this.dynamicColumn.filter(
-        (item) => checkedList.indexOf(item.value) != -1
-      )
-      this.tableKey = Math.random()
-      this.tableKey2 = Math.random()
-      this.tableKey3 = Math.random()
+    checkList() {
+      this.tableRender()
+    },
+    'filterObj.exception'() {
+      if (this.filterObj.exception == 1) {
+        this.dynamicColumn = dynamicColumn()
+        this.tableRender()
+      } else {
+        this.dynamicColumn = dynamicColumnCost
+        this.tableRender()
+      }
+      this.getTableData()
     },
   },
   methods: {
@@ -226,7 +238,7 @@ export default {
         regionCodeList: this.filterObj.regionCode,
         productCodeList: this.filterObj.productCode,
       }).then((response) => {
-        if ((Object.keys(response.data)).length) {
+        if (Object.keys(response.data).length) {
           let AllData = response.data
           for (const version in AllData) {
             if (Object.hasOwnProperty.call(AllData, version)) {
@@ -245,14 +257,14 @@ export default {
                 haveMonth.push(key)
               }
               let versionObj = {}
-              // KA分组处理
+              // 渠道分组处理
               for (let m = 0; m < list.length; m++) {
-                if (!versionObj[list[m].customerName]) {
+                if (!versionObj[list[m].channelCode]) {
                   var arr = []
                   arr.push(list[m])
-                  versionObj[list[m].customerName] = arr
+                  versionObj[list[m].channelCode] = arr
                 } else {
-                  versionObj[list[m].customerName].push(list[m])
+                  versionObj[list[m].channelCode].push(list[m])
                 }
               }
 
@@ -311,6 +323,9 @@ export default {
               //排序
               AllData[version] = versionList
             }
+            this.V1Data = []
+            this.V2Data = []
+            this.V3Data = []
             if (version == 'v1') {
               this.V1Data = AllData.v1
             } else if (version == 'v2') {
@@ -358,6 +373,42 @@ export default {
     search() {
       this.getTableData()
     },
+    exportExcel() {
+      const fix = document.querySelector('.el-table__fixed')
+      let wb
+      if (fix) {
+        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
+        wb = XLSX.utils.table_to_book(
+          document.querySelector('#outTable').removeChild(fix)
+        )
+        document.querySelector('#outTable').appendChild(fix)
+      } else {
+        wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
+      }
+      const wbout = XLSX.write(wb, {
+        bookType: 'xlsx',
+        bookSST: true,
+        type: 'array',
+      })
+      try {
+        FileSaver.saveAs(
+          new Blob([wbout], { type: 'application/octet-stream' }),
+          '异常分析报告-byKA.xlsx'
+        )
+      } catch (e) {
+        if (typeof console !== 'undefined') console.log(e, wbout)
+      }
+      return wbout
+    },
+    //列表渲染
+    tableRender() {
+      this.tableColumnList = this.dynamicColumn.filter(
+        (item) => this.checkList.indexOf(item.value) != -1
+      )
+      this.tableKey = Math.random()
+      this.tableKey2 = Math.random()
+      this.tableKey3 = Math.random()
+    },
     columnStyle({ row, column, rowIndex, columnIndex }) {
       return this.ReportBgColorMap[row.version]
     },
@@ -368,6 +419,10 @@ export default {
       if (rowIndex === 0 || rowIndex === 1) {
         return 'headerStyle'
       }
+    },
+    // 格式化--千位分隔符、两位小数
+    FormateNum(num) {
+      return FormateThousandNum(num)
     },
   },
 }
