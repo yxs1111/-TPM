@@ -291,11 +291,11 @@ export default {
       if (fix) {
         // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
         wb = XLSX.utils.table_to_book(
-          document.querySelector('#outTable').removeChild(fix)
+          document.querySelector('#outTable1').removeChild(fix)
         )
-        document.querySelector('#outTable').appendChild(fix)
+        document.querySelector('#outTable1').appendChild(fix)
       } else {
-        wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
+        wb = XLSX.utils.table_to_book(document.querySelector('#outTable1'))
       }
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
