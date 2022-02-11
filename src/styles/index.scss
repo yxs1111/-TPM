@@ -66,8 +66,8 @@ div:focus {
   background-color: #fff;
   padding: 20px;
   border-radius: 16px;
-  margin-bottom: 100px;
-  overflow-y: auto;
+  // margin-bottom: 100px;
+  // overflow-y: auto;
 }
 .MainContent {
   height: 90%;
@@ -905,4 +905,8 @@ div:focus {
 }
 .tabViewsWrap {
   padding-bottom: 80px;
+}
+.TableWrap {
+  height: 600px;
+  overflow-y: scroll;
 }

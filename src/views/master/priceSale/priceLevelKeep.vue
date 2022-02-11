@@ -34,8 +34,8 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
-      style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable"
+      :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
       <el-table-column v-slot={row} width="150" align="right" prop="gear" label="档位（￥/Tin）">
@@ -63,6 +63,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
+
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="importDialog">
         <div class="el-downloadFileBar">
@@ -128,7 +129,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions,FormateThousandNum } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -160,14 +161,24 @@ export default {
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
       spanArr: [], //行合并
+      maxheight: window.innerHeight - 400,
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = window.innerHeight - 400
+      })()
+    }
     this.getTableData()
     this.getQuerySkuSelect()
     this.getQueryChannelSelect()
   },
+  activated() {
+    this.maxheight = window.innerHeight - 400
+  },
+
   methods: {
     // 获取表格数据
     getTableData() {
@@ -236,7 +247,7 @@ export default {
       //清除input的value ,上传一样的
       // this.event.target.value = null
       this.ImportData = []
-      this.saveBtn=''
+      this.saveBtn = ''
     },
     //检测数据
     checkImport() {
@@ -386,9 +397,9 @@ export default {
         }
       }
     },
-    //格式化--千位分隔符、两位小数 
+    //格式化--千位分隔符、两位小数
     FormateNum(num) {
-     return FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
   },
 }
