@@ -27,25 +27,25 @@
             placeholder="选择月"
           />
         </div>
-        <el-button type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData" v-permission="permissions['get']">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
+        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
+        <div v-permission="permissions['export']" class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave" v-permission="permissions['update']">保存</el-button>
-      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear" v-permission="permissions['insert']">新增</el-button>
+      <el-button v-permission="permissions['update']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
+      <el-button v-permission="permissions['insert']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" max-height="600">
       <el-table-column width="220" align="center" prop="version" label="版本" />
       <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="100" align="left" prop="ruleUnit" label="" />
       <el-table-column width="340" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="{row}">
           <div v-if="row.ruleUnit === '∈'">
-            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row, row.startRule)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
+            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row,row.startRule)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
           </div>
           <div v-else>
             {{ row.ruleContentAfter }}
@@ -349,14 +349,14 @@ export default {
     number(e, row, itemRow) {
       const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(e.target.value)
       // debugger
-      if (row.endRule === '' || row.startRule === '') {
-        // console.log('qqq')
-        return
-      }
       // else if (row.startRule === '') {
       //   return
       // }
-      else {
+      // console.log('******number*****', row.startRule, row.endRule)
+      if (row.endRule === '' || row.startRule === '') {
+        // console.log('qqq')
+        return
+      } else {
         // debugger
         if (!flag) {
           e.target.value = ''
@@ -367,12 +367,16 @@ export default {
           })
         } else if (Number(row.startRule) >= Number(row.endRule) && flag) {
           e.target.value = ''
+          // 赋值之后table中不同步问题
+          e.srcElement.dispatchEvent(new Event('input'))
+          this.$forceUpdate()
           this.$message({
             showClose: true,
             message: '区域数值需要前小后大！',
             type: 'warning'
           })
         }
+        this.$forceUpdate()
       }
     },
     // 导出excel
