@@ -336,11 +336,15 @@ export default {
         })
       } else if (row.startRule > row.endRule && flag) {
         e.target.value = ''
+        // 赋值之后table中不同步问题
+        e.srcElement.dispatchEvent(new Event('input'))
+        this.$forceUpdate()
         this.$message({
           showClose: true,
           message: '区域数值需要前大后小！',
           type: 'warning'
         })
+        this.$forceUpdate()
       }
     },
     // 导出excel
