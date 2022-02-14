@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <div class="ContentWrap">  
     <div class="treeWrap">
       <!--查询条件-->
       <el-form ref="menuForm" :inline="true" :model="menuQuery" class="demo-form-inline">
@@ -37,6 +38,7 @@
           </span>
         </span>
       </el-tree>
+    </div>
     </div>
     <!--编辑窗口-->
     <div v-show="editVisible" class="tableWrap">
@@ -135,6 +137,11 @@
 <script src="./index.js">
 </script>
 <style scoped>
+.ContentWrap {
+    width: 100%;
+    height: calc(100% - 100px);
+    overflow-y: auto;
+  }
 .treeWrap {
   float: left;
   width: 40%;

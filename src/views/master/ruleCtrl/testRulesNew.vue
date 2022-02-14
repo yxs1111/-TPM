@@ -38,7 +38,7 @@
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave" v-permission="permissions['update']">保存</el-button>
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear" v-permission="permissions['insert']">新增</el-button>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" max-height="600">
+    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
       <el-table-column width="220" align="center" prop="version" label="版本" />
       <el-table-column width="460" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="100" align="left" prop="ruleUnit" label="" />
@@ -233,11 +233,17 @@ export default {
       V0Total: 0,
       V1Total: 0,
       V2Total: 0,
-      V3Total: 0
+      V3Total: 0,
+      maxheight: window.innerHeight - 400,
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = window.innerHeight - 400
+      })()
+    }
     this.getChannel()
     this.getCostTypeList()
     this.getTableData()

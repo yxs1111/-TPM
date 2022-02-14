@@ -35,10 +35,10 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
-      <el-table-column  fixed="left" align="center" prop="customerCsName" label="客户名称" />
+      <el-table-column width="150"  fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数">
@@ -50,8 +50,8 @@
       <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
         {{(row.platformRebate*1).toFixed(4)}}
       </el-table-column>
-      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="150" align="center" prop="createDate" label="创建时间">
+      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="150" align="center" prop="updateDate" label="更新时间">
         <template slot-scope="{ row }">
           <div>
             {{ row.createDate ? row.createDate.slice(0, 10) : '' }}
@@ -111,7 +111,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions ,getHeight} from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -142,10 +142,16 @@ export default {
       errorVisible: false, //错误信息弹窗
       errorList: [], //错误信息数据
       checkArr: [], //批量删除,存放选中
+      maxheight: getHeight(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
     this.getChannelList()
     this.getCustomerList()

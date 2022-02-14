@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-27 10:47:46
+ * @LastEditTime: 2022-02-14 10:33:46
 -->
 <template>
   <div class="app-container">
@@ -724,6 +724,7 @@ export default {
 
 <style lang="scss" scoped>
 .Maincontent {
+  height: 100%;
   .TopBar {
     display: flex;
     align-items: center;
@@ -803,6 +804,11 @@ export default {
   .Final {
     width: 242px;
   }
+}
+.ContentWrap {
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow-y: auto;
 }
 </style>
 <style>

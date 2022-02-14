@@ -129,7 +129,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum,getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -161,14 +161,14 @@ export default {
       passImg: require('@/assets/images/success.png'),
       saveBtn: false,
       spanArr: [], //行合并
-      maxheight: window.innerHeight - 400,
+      maxheight: getHeight(),
     }
   },
   computed: {},
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = window.innerHeight - 400
+        this.maxheight = getHeight()
       })()
     }
     this.getTableData()
@@ -176,7 +176,7 @@ export default {
     this.getQueryChannelSelect()
   },
   activated() {
-    this.maxheight = window.innerHeight - 400
+    this.maxheight = getHeight()
   },
 
   methods: {

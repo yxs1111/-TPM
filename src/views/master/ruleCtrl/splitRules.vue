@@ -72,6 +72,7 @@
       ref="Tdata"
       :data="tableData"
       border
+      :max-height="maxheight"
       :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName"
       stripe
@@ -263,7 +264,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions,getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -341,11 +342,17 @@ export default {
         ]
       },
       isEditor: false,
-      editorId: ''
+      editorId: '',
+      maxheight: getHeight(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
     this.getQueryChannelSelect()
     // this.getQueryMinePackageSelect()

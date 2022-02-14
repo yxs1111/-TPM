@@ -1,3 +1,8 @@
+<!--
+ * @Description: 
+ * @Date: 2022-01-25 14:12:30
+ * @LastEditTime: 2022-02-14 10:26:02
+-->
 <template>
   <div class="app-container" @keyup.enter="search">
     <el-form ref="processSearchForm" :inline="true" :model="queryParams" class="demo-form-inline">
@@ -24,26 +29,26 @@
       border
       fit
       stripe
-      height="600"
+      :max-height="maxheight"
       highlight-current-row
       @row-click="handleCurrentRowClick"
       @row-dblclick="handleCurrentRowDblClick"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column align="center" type="selection" width="55" />
-      <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
+      <el-table-column align="center" type="selection" fixed="left" width="55" />
+      <el-table-column v-slot="scopeProps" align="center" fixed="left" label="序号" width="95">
         {{ scopeProps.$index+1 }}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="关键字" align="center">
+      <el-table-column v-slot="{row}" label="关键字" fixed="left" width="150" align="center">
         {{ row.key }}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="流程名" align="center">
+      <el-table-column v-slot="{row}" label="流程名" fixed="left" align="center" width="200">
         {{ row.name }}
       </el-table-column>
       <el-table-column v-slot="{row}" label="模型版本" align="center">
         {{ row.version }}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="是否有流程图" :show-overflow-tooltip="true" align="center">
+      <el-table-column v-slot="{row}" label="是否有流程图" width="150" :show-overflow-tooltip="true" align="center">
         <el-tag :type="row.graphicalNotationDefined | hasGraphicalStyleFilter" @click="showFlowDiagram(row)">{{ row.graphicalNotationDefined | hasGraphicalTextFilter }}</el-tag>
       </el-table-column>
       <el-table-column v-slot="{row}" label="状态" :show-overflow-tooltip="true" align="center">
@@ -62,7 +67,8 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination
+    <div class="TpmPaginationWrap">
+      <el-pagination
       :current-page="queryParams.start"
       :page-sizes="[5, 10, 50, 100]"
       :page-size="queryParams.size"
@@ -70,7 +76,9 @@
       :total="queryParams.total"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-    />
+      />
+    </div>
+    
     <!--  流程图  -->
     <flow-diagram
       svg-type="definition"

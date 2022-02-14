@@ -41,7 +41,7 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" ref="multipleTable" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+    <el-table :data="tableData"  ref="multipleTable" border :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column width="250" fixed="left" align="center" prop="customerCsName" label="客户名称" />
@@ -103,7 +103,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum,getHeight } from '@/utils'
 import API from '@/api/masterData/mdprice.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -134,14 +134,23 @@ export default {
       ChannelList: [],
       warningShow: false,
       checkArr: [], //批量删除,存放选中
+      maxheight: getHeight(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
     this.getCustomerList()
     this.getChannelList()
     this.getQuerySkuSelect()
+  },
+  activated() {
+    this.maxheight = getHeight()
   },
   watch: {
     'filterObj.channelCode'() {

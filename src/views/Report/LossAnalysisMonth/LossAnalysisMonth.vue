@@ -529,6 +529,8 @@ export default {
   }
   .ContentWrap {
     width: 100%;
+    height: calc(100% - 200px);
+    overflow-y: auto;
     .contentli {
       // height: 480px;
       padding: 20px;

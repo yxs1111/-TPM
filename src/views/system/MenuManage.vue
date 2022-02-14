@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <div class="ContentWrap">
     <div class="treeWrap">
       <!--查询条件-->
       <el-form ref="menuForm" :inline="true" :model="menuQuery" class="demo-form-inline">
@@ -38,7 +39,9 @@
         </span>
       </el-tree>
     </div>
+    </div>
     <!--编辑窗口-->
+    
     <div v-show="editVisible" class="tableWrap">
       <el-collapse v-model="activeName" accordion @change="handleCollapseChange">
         <el-collapse-item title="菜单信息" name="menuInfo">
@@ -608,6 +611,11 @@ export default {
 </script>
 
 <style scoped>
+  .ContentWrap {
+    width: 100%;
+    height: calc(100% - 200px);
+    overflow-y: auto;
+  }
   .treeWrap{
     float: left;
     width: 40%;

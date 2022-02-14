@@ -30,7 +30,7 @@
         <span class="text">导出</span>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
      
       <el-table-column align="center" fixed type="index" label="序号" width="80">
@@ -119,7 +119,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'Supplier',
@@ -161,10 +161,16 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       event: '',
+      maxheight: getHeight(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
   },
   methods: {

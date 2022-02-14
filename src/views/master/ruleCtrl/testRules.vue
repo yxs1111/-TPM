@@ -38,7 +38,7 @@
       <el-button v-permission="permissions['update']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
       <el-button v-permission="permissions['insert']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" max-height="600">
+    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
       <el-table-column width="220" align="center" prop="version" label="版本" />
       <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="100" align="left" prop="ruleUnit" label="" />
@@ -149,7 +149,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions ,getHeightHaveTab } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -248,7 +248,8 @@ export default {
       V0Total: 0,
       V1Total: 0,
       V2Total: 0,
-      V3Total: 0
+      V3Total: 0,
+      maxheight: window.innerHeight - 400,
     }
   },
   computed: {},
@@ -259,6 +260,11 @@ export default {
   //   })
   // },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = window.innerHeight - 400
+      })()
+    }
     this.getChannel()
     // this.getCostTypeList()
     // this.getTableData()

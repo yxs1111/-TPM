@@ -1,5 +1,5 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeight } from '@/utils'
 import BpmConfig from '@/components/activiti/template/BpmConfig'
 import modelApi from '@/api/activiti/modelApi'
 import permission from '@/directive/permission'
@@ -54,12 +54,19 @@ export default {
         ],
         description: [
           { required: true, message: '请输入描述', trigger: 'blur' }
-        ]
-      }
+        ],
+        
+      },
+      maxheight: window.innerHeight - 350,
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = window.innerHeight - 350
+      })()
+    }
     this.$nextTick(() => {
       this.init()
     })

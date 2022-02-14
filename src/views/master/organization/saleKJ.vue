@@ -22,9 +22,9 @@
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="name" label="城市中文名称"> </el-table-column>
-      <el-table-column align="center" prop="code" label="城市编码"> </el-table-column>
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" prop="name" label="城市中文名称" width="250"> </el-table-column>
+      <el-table-column align="center" prop="code" label="城市编码" width="200"> </el-table-column>
       <el-table-column width="150" align="center" prop="cityGroup" label="城市群"> </el-table-column>
       <el-table-column width="150" align="center" prop="cityGroupCode" label="城市群编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="region" label="区域"> </el-table-column>
@@ -44,7 +44,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
@@ -63,10 +63,16 @@ export default {
       },
       permissions: getDefaultPermissions(),
       tableData: [],
+      maxheight: getHeight(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
   },
   computed: {},

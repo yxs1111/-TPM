@@ -32,7 +32,7 @@
         <span class="text">NKA Rawdata导入</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" max-height="600" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-loading="tableLoading" :max-height="maxheight" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="230" align="center" prop="item" label="Item" />
       <el-table-column width="230" align="center" prop="dimProduct" label="Dim_Product" />
       <el-table-column width="260" align="center" prop="dimShopperType" label="Dim_Shopper_Type" />
@@ -100,7 +100,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions,getHeightHaveTab } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -128,11 +128,17 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       uploadFileName: '',
-      warningList: []
+      warningList: [],
+      maxheight: getHeightHaveTab(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightHaveTab()
+      })()
+    }
     this.getSKU()
     this.getTableData()
   },

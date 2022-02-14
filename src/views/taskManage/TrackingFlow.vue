@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2021-12-25 16:34:55
+ * @LastEditTime: 2022-02-14 10:44:08
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -41,13 +41,13 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
-      <el-table-column align="center" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" prop="minePackageName" label="Mine Package" width="250"> </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态"> 
         {{row.processStatus===2?'已完成':'进行中'}}
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="发起人"> </el-table-column>
-      <el-table-column align="center" prop="createDate" label="发起时间">
+      <el-table-column align="center" prop="createDate" label="发起时间" width="250">
         <template slot-scope="scope">
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
         </template>

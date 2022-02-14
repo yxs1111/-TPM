@@ -41,7 +41,7 @@
         </div> -->
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="customerCode" label="客户CP编码" />
       <el-table-column align="center" prop="customerMdmCode" label="MDM客户编号" />
       <el-table-column align="center" prop="customerCsName" label="客户中文名称" />
@@ -131,7 +131,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions,getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -160,10 +160,16 @@ export default {
       tableData: [],
       ChannelList: [],
       checkArr: [], // 批量删除,存放选中
+      maxheight: getHeight(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
     this.getChannelList()
   },
