@@ -116,7 +116,10 @@
                 {{ titleItem.title }}
               </template>
               <template slot-scope="{row}">
-                <div>
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                  {{FormateNum(row.month[key][titleItem.value])}}
+                </div>
+                <div v-else>
                   {{row.month[key][titleItem.value]}}
                 </div>
               </template>
@@ -137,7 +140,10 @@
                 {{ titleItem.title }}
               </template>
               <template slot-scope="{row}">
-                <div>
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                  {{FormateNum(row.month[key][titleItem.value])}}
+                </div>
+                <div v-else>
                   {{row.month[key][titleItem.value]}}
                 </div>
               </template>
@@ -377,8 +383,23 @@ export default {
       this.getTableData()
     },
     exportExcel() {
+      if (this.V1Data.length||this.V2Data.length||this.V3Data.length) {
+        if (this.V1Data.length) {
+         this.downloadExcels('#outTable','异常分析报告-V1')
+        } 
+        if (this.V2Data.length) {
+         this.downloadExcels('#outTable2','异常分析报告-V2')
+        } 
+        if (this.V3Data.length) {
+         this.downloadExcels('#outTable3','异常分析报告-V3')
+        } 
+      } else {
+        this.$message.info('表格数据为空')
+      }
+      
+     
       // this.downloadExcels('#outTable','异常分析报告-V1')
-      // return
+      return
       const fix = document.querySelector('.el-table__fixed')
       let wb
       // debugger
@@ -411,8 +432,9 @@ export default {
      */
     downloadExcels(tableId,tableName) {
       const fix = document.querySelector(`${tableId} .el-table__fixed`)
+      console.log(fix);
+      // return
       let wb
-      debugger
       if (fix) {
         // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
         wb = XLSX.utils.table_to_book(
@@ -430,7 +452,7 @@ export default {
       try {
         FileSaver.saveAs(
           new Blob([wbout], { type: 'application/octet-stream' }),
-          `${tableName}'-bychannel.xlsx'`
+          `${tableName}-bychannel.xlsx`
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)

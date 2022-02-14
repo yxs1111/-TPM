@@ -80,74 +80,80 @@
     </div>
     <div class="tableContentWrap">
       <div class="ContentWrap">
-        <el-table :data="V1Data" v-if="V1Data.length" id="outTable" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
-          <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-          <el-table-column align="center" prop="name" v-for="item,key in V1Data[0].month" :key="'V1'+item.yearAndMonth+'-'+key">
-            <template v-slot:header>
-              {{ item.yearAndMonth }}
-            </template>
-            <template>
-              <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V1'+item.yearAndMonth+'-'+key+index">
-                <template v-slot:header>
-                  {{ titleItem.title }}
-                </template>
-                <template slot-scope="{row}">
-                  <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
-                    {{FormateNum(row.month[key][titleItem.value])}}
-                  </div>
-                  <div v-else>
-                    {{row.month[key][titleItem.value]}}
-                  </div>
-                </template>
-              </el-table-column>
-            </template>
+      <el-table :data="V1Data" v-if="V1Data.length" id="outTable" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+        <el-table-column align="center" prop="name" v-for="item,key in V1Data[0].month" :key="'V1'+item.yearAndMonth+'-'+key">
+          <template v-slot:header>
+            {{ item.yearAndMonth }}
+          </template>
+          <template>
+            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V1'+item.yearAndMonth+'-'+key+index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template slot-scope="{row}">
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                  {{FormateNum(row.month[key][titleItem.value])}}
+                </div>
+                <div v-else>
+                  {{row.month[key][titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
 
-          </el-table-column>
-        </el-table>
-        <el-table :data="V2Data" v-if="V2Data.length" id="outTable2" :key="tableKey2" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
-          <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-          <el-table-column align="center" prop="name" v-for="item,key in V2Data[0].month" :key="'V2'+item.yearAndMonth+'-'+key">
-            <template v-slot:header>
-              {{ item.yearAndMonth }}
-            </template>
-            <template>
-              <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V2'+item.yearAndMonth+'-'+key+index">
-                <template v-slot:header>
-                  {{ titleItem.title }}
-                </template>
-                <template slot-scope="{row}">
-                  <div>
-                    {{row.month[key][titleItem.value]}}
-                  </div>
-                </template>
-              </el-table-column>
-            </template>
+        </el-table-column>
+      </el-table>
+      <el-table :data="V2Data" v-if="V2Data.length" id="outTable2" :key="tableKey2" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+        <el-table-column align="center" prop="name" v-for="item,key in V2Data[0].month" :key="'V2'+item.yearAndMonth+'-'+key">
+          <template v-slot:header>
+            {{ item.yearAndMonth }}
+          </template>
+          <template>
+            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V2'+item.yearAndMonth+'-'+key+index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template slot-scope="{row}">
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                  {{FormateNum(row.month[key][titleItem.value])}}
+                </div>
+                <div v-else>
+                  {{row.month[key][titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
 
-          </el-table-column>
-        </el-table>
-        <el-table :data="V3Data" v-if="V3Data.length" id="outTable3" :key="tableKey3" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
-          <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-          <el-table-column align="center" prop="name" v-for="item,key in V3Data[0].month" :key="'V3'+item.yearAndMonth+'-'+key">
-            <template v-slot:header>
-              {{ item.yearAndMonth }}
-            </template>
-            <template>
-              <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V3'+item.yearAndMonth+'-'+key+index">
-                <template v-slot:header>
-                  {{ titleItem.title }}
-                </template>
-                <template slot-scope="{row}">
-                  <div>
-                    {{row.month[key][titleItem.value]}}
-                  </div>
-                </template>
-              </el-table-column>
-            </template>
+        </el-table-column>
+      </el-table>
+      <el-table :data="V3Data" v-if="V3Data.length" id="outTable3" :key="tableKey3" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+        <el-table-column align="center" prop="name" v-for="item,key in V3Data[0].month" :key="'V3'+item.yearAndMonth+'-'+key">
+          <template v-slot:header>
+            {{ item.yearAndMonth }}
+          </template>
+          <template>
+            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V3'+item.yearAndMonth+'-'+key+index">
+              <template v-slot:header>
+                {{ titleItem.title }}
+              </template>
+              <template slot-scope="{row}">
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                  {{FormateNum(row.month[key][titleItem.value])}}
+                </div>
+                <div v-else>
+                  {{row.month[key][titleItem.value]}}
+                </div>
+              </template>
+            </el-table-column>
+          </template>
 
-          </el-table-column>
-        </el-table>
+        </el-table-column>
+      </el-table>
       </div>
-
+      
     </div>
   </div>
 </template>
@@ -377,8 +383,26 @@ export default {
       this.getTableData()
     },
     exportExcel() {
+      if (this.V1Data.length||this.V2Data.length||this.V3Data.length) {
+        if (this.V1Data.length) {
+         this.downloadExcels('#outTable','异常分析报告-V1')
+        } 
+        if (this.V2Data.length) {
+         this.downloadExcels('#outTable2','异常分析报告-V2')
+        } 
+        if (this.V3Data.length) {
+         this.downloadExcels('#outTable3','异常分析报告-V3')
+        } 
+      } else {
+        this.$message.info('表格数据为空')
+      }
+      
+     
+      // this.downloadExcels('#outTable','异常分析报告-V1')
+      return
       const fix = document.querySelector('.el-table__fixed')
       let wb
+      // debugger
       if (fix) {
         // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
         wb = XLSX.utils.table_to_book(
@@ -396,7 +420,39 @@ export default {
       try {
         FileSaver.saveAs(
           new Blob([wbout], { type: 'application/octet-stream' }),
-          '异常分析报告-byZone.xlsx'
+          '异常分析报告-bychannel.xlsx'
+        )
+      } catch (e) {
+        if (typeof console !== 'undefined') console.log(e, wbout)
+      }
+      return wbout
+    },
+    /**
+     * 下载多表格
+     */
+    downloadExcels(tableId,tableName) {
+      const fix = document.querySelector(`${tableId} .el-table__fixed`)
+      console.log(fix);
+      // return
+      let wb
+      if (fix) {
+        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
+        wb = XLSX.utils.table_to_book(
+          document.querySelector(`${tableId}`).removeChild(fix)
+        )
+        document.querySelector(`${tableId}`).appendChild(fix)
+      } else {
+        wb = XLSX.utils.table_to_book(document.querySelector(`${tableId}`))
+      }
+      const wbout = XLSX.write(wb, {
+        bookType: 'xlsx',
+        bookSST: true,
+        type: 'array',
+      })
+      try {
+        FileSaver.saveAs(
+          new Blob([wbout], { type: 'application/octet-stream' }),
+          `${tableName}-byZone.xlsx`
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)
@@ -458,10 +514,6 @@ export default {
     overflow: hidden;
     height: calc(100% - 230px);
   }
-  .ContentWrap {
-    height: calc(100% - 10px);
-    overflow-y: auto;
-  }
   .colorWrap {
     display: flex;
     justify-content: space-between;
@@ -494,6 +546,10 @@ export default {
         }
       }
     }
+  }
+  .ContentWrap {
+    height: calc(100% - 10px);
+    overflow-y: auto;
   }
 }
 </style>
