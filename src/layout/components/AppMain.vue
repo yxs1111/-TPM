@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-13 11:34:43
+ * @LastEditTime: 2022-02-14 10:41:05
 -->
 <template>
   <section class="app-main">
@@ -30,14 +30,14 @@ export default {
 <style lang="scss" scoped>
   .app-main {
     /* 50= navbar  50  */
-    min-height: calc(100vh - 50px);
+    height: calc(100vh - 50px);
     width: 100%;
-    height: 100vh;
+    // height: 100vh;
     position: relative;
-    overflow: auto;
+    // overflow: auto;
     padding: 21px 20px;
     box-sizing: border-box;
-    padding-bottom: 50px;
+    // padding-bottom: 50px;
     background-color: #EFF3FA;
   }
 

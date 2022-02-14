@@ -11,7 +11,7 @@
       
       </div>
     </div>
-    <el-table :data="tableData" max-height="600"  border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight"  border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
@@ -46,7 +46,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeightSingle } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
@@ -63,10 +63,16 @@ export default {
       },
       permissions: getDefaultPermissions(),
       tableData: [],
+      maxheight: getHeightSingle(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightSingle()
+      })()
+    }
     this.getTableData()
   },
   computed: {},

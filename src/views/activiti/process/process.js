@@ -18,12 +18,21 @@ export default {
         type: null,
         visible: false,
         data: {}
-      }
+      },
+      maxheight: window.innerHeight - 350,
     }
   },
   created() {
     this.pageList()
   },
+  mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = window.innerHeight - 350
+      })()
+    }
+  },
+  
   filters: {
     // 是否包含流程图显示文字
     hasGraphicalTextFilter(status) {

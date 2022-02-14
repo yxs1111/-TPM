@@ -55,7 +55,7 @@
         </div>
       </div>
     </div>
-    <el-table :data="tableData" ref="multipleTable" border max-height="600" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+    <el-table :data="tableData" ref="multipleTable" border :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange" style="width: 100%">
       <!-- <el-table-column type="selection" align="center" /> -->
       <el-table-column width="450" fixed="left" align="center" prop="cpId" label="通知函代垫编号" />
@@ -124,7 +124,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum ,getHeight} from '@/utils'
 import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import FileSaver from 'file-saver'
@@ -157,10 +157,16 @@ export default {
       BrandList: [],
       checkArr: [], //批量删除,存放选中
       ALLtableData: [], //批量删除,存放选中
+      maxheight: getHeight(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getChannelList()
     this.getQuerySkuSelect()
     this.getDistributorList()

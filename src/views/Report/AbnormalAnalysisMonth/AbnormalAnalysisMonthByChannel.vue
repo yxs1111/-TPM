@@ -374,8 +374,11 @@ export default {
       this.getTableData()
     },
     exportExcel() {
+      // this.downloadExcels('#outTable','异常分析报告-V1')
+      // return
       const fix = document.querySelector('.el-table__fixed')
       let wb
+      // debugger
       if (fix) {
         // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
         wb = XLSX.utils.table_to_book(
@@ -394,6 +397,37 @@ export default {
         FileSaver.saveAs(
           new Blob([wbout], { type: 'application/octet-stream' }),
           '异常分析报告-bychannel.xlsx'
+        )
+      } catch (e) {
+        if (typeof console !== 'undefined') console.log(e, wbout)
+      }
+      return wbout
+    },
+    /**
+     * 下载多表格
+     */
+    downloadExcels(tableId,tableName) {
+      const fix = document.querySelector(`${tableId} .el-table__fixed`)
+      let wb
+      debugger
+      if (fix) {
+        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
+        wb = XLSX.utils.table_to_book(
+          document.querySelector(`${tableId}`).removeChild(fix)
+        )
+        document.querySelector(`${tableId}`).appendChild(fix)
+      } else {
+        wb = XLSX.utils.table_to_book(document.querySelector(`${tableId}`))
+      }
+      const wbout = XLSX.write(wb, {
+        bookType: 'xlsx',
+        bookSST: true,
+        type: 'array',
+      })
+      try {
+        FileSaver.saveAs(
+          new Blob([wbout], { type: 'application/octet-stream' }),
+          `${tableName}'-bychannel.xlsx'`
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)

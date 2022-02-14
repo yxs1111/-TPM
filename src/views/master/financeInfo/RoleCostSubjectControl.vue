@@ -21,7 +21,7 @@
     <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column align="center" prop="costTypeNumber" label="费用类型编码"> </el-table-column>
       <el-table-column align="center" prop="costType" label="费用类型"> </el-table-column>
@@ -42,7 +42,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'RoleCostSubjectControl',
@@ -64,10 +64,16 @@ export default {
       costlevel: '1',
       costTypeList: [],
       MinePackageList: [],
+      maxheight: getHeight(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
   },
   watch: {},

@@ -36,7 +36,7 @@
       </el-button>
     </div>
     <!--查询结果-->
-    <el-table ref="userInfoTable"  :data="userPageProps.records"  border fit :header-cell-style="HeadTable" :row-class-name="tableRowClassName" height="600" highlight-current-row
+    <el-table ref="userInfoTable"  :data="userPageProps.records"  border fit :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :max-height="maxheight" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column align="center" label="序号" width="55">

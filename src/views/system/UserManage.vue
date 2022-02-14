@@ -25,7 +25,7 @@
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
       <el-button type="success" icon="el-icon-plus" class="TpmButtonBG">发布</el-button>
     </div>
-    <el-table :data="tableData" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" v-loading="tableLoading" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">
         <template slot-scope="{ row }">
@@ -83,7 +83,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
@@ -121,10 +121,16 @@ export default {
       isEditor: '',
       editorId: '',
       checkArr: [], //批量删除,存放选中
+      maxheight: getHeight(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     //this.getTableData()
   },
   computed: {},

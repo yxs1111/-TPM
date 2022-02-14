@@ -34,7 +34,7 @@
       </el-button> -->
     </div>
     <!--查询结果-->
-    <el-table ref="roleTable"  :data="rolePageProps.records" border fit stripe height="600" highlight-current-row
+    <el-table ref="roleTable"  :data="rolePageProps.records" border fit stripe :max-height="maxheight" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
@@ -45,9 +45,9 @@
         </template>
       </el-table-column>
       <el-table-column fixed width="280" label="角色名称" align="center" prop="name"></el-table-column>
-      <el-table-column fixed label="权限区分类型" align="center" prop="permissionType"></el-table-column>
+      <el-table-column fixed label="权限区分类型" align="center" prop="permissionType"  width="120"></el-table-column>
       <el-table-column label="创建人" align="center" prop="createBy"></el-table-column>
-      <el-table-column align="center" prop="created_date" label="创建时间">
+      <el-table-column align="center" prop="created_date" label="创建时间" width="250">
         <template slot-scope="{row}">
           <em class="el-icon-time" />
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
@@ -111,7 +111,7 @@
         <el-form-item v-if="roleDialog.state !== 'create'" label="创建人" prop="createBy">
           <span>{{ roleDialog.data.createBy }}</span>
         </el-form-item>
-        <el-form-item v-if="roleDialog.state !== 'create'" label="创建时间" prop="createDate">
+        <el-form-item v-if="roleDialog.state !== 'create'"  label="创建时间" prop="createDate">
           <em class="el-icon-time" />
           <span>{{ parseJson(roleDialog.data.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </el-form-item>
@@ -247,6 +247,7 @@ import {
   getTextMap,
   parseTime,
   getDefaultPermissions,
+  getHeight
 } from '@/utils'
 import { Message } from 'element-ui'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -397,10 +398,18 @@ export default {
       permissionType: '', //角色数据权限类型
       roleCode: '',
       roleName:'', //角色数据权限--角色名称
+      maxheight: getHeight(),
     }
   },
   created() {
     this.fetchData()
+  },
+  mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
   },
   watch: {
     multipleSelection(val) {

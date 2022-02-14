@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -66,7 +66,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeightHaveTab } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/v1.js'
 export default {
@@ -95,7 +95,8 @@ export default {
       mainIdLocal: null,
       submitBtn: 1,
       btnStatus: true,
-      usernameLocal: ''
+      usernameLocal: '',
+      maxheight: getHeightHaveTab(),
     }
   },
   computed: {},
@@ -106,6 +107,11 @@ export default {
     }
   },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightHaveTab()
+      })()
+    }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getEffectiveDate()
     this.getChannel()

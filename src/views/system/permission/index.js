@@ -1,6 +1,6 @@
 import requestApi from '@/api/request-api'
 import permissionApi from '@/api/system/permission-api'
-import { getFormatPickerOptions, parseTime, getTextMap, getDefaultPermissions } from '@/utils'
+import { getFormatPickerOptions, parseTime, getTextMap, getDefaultPermissions,getHeight } from '@/utils'
 import { Message } from 'element-ui'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -68,7 +68,8 @@ export default {
       pickerOptions: getFormatPickerOptions(),
       // 对话框
       centerDialogVisible: false,
-      permissions: getDefaultPermissions()
+      permissions: getDefaultPermissions(),
+      maxheight: window.innerHeight - 450,
     }
   },
   created() {
@@ -85,6 +86,13 @@ export default {
   watch: {
     multipleSelection(val) {
       this.editDisabled = !(val && val.length === 1)
+    }
+  },
+  mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = window.innerHeight - 450
+      })()
     }
   },
   methods: {

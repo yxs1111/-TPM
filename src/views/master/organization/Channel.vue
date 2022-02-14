@@ -16,7 +16,7 @@
         <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="channelCode" label="渠道编码"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="渠道中文名称"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="渠道英文名称"> </el-table-column>
@@ -43,7 +43,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeightSingle } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 
 export default {
@@ -62,10 +62,16 @@ export default {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      maxheight: getHeightSingle(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightSingle()
+      })()
+    }
     this.getTableData()
   },
   computed: {},

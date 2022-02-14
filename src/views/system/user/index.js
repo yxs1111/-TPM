@@ -2,7 +2,7 @@ import requestApi from '@/api/request-api'
 import userApi from '@/api/system/user-api'
 import authTenantApi from '@/api/system/auth-tenant-api'
 import organizationApi from '@/api/system/organization-api'
-import { getFormatPickerOptions, getTextMap, parseTime, getDefaultPermissions } from '@/utils'
+import { getFormatPickerOptions, getTextMap, parseTime, getDefaultPermissions,getHeight } from '@/utils'
 import { Message, MessageBox } from 'element-ui'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -272,12 +272,20 @@ export default {
       },
       // 租户列表
       authTenantList: [],
-      user_org_map: {}
+      user_org_map: {},
+      maxheight: getHeight(),
     }
   },
   created() {
     this.fetchData()
     this.getAllOrg()
+  },
+  mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
   },
   watch: {
     multipleSelection(val) {

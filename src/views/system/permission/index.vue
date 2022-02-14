@@ -34,40 +34,40 @@
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="newRowData">新增</el-button>
     </div>
     <!--查询结果-->
-    <el-table ref="permissionTable"  :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  :data="permissionPageProps.records"  border fit  height="600" highlight-current-row
+    <el-table ref="permissionTable"  :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  :data="permissionPageProps.records"  border fit  :max-height="maxheight" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
-      <el-table-column align="center" type="selection" width="55" />
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column align="center" fixed="left" type="selection" width="55" />
+      <el-table-column align="center" fixed="left" label="序号" width="95">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column label="权限名称" align="center">
+      <el-table-column fixed="left" label="权限名称" align="center" width="250">
         <template slot-scope="{row}">
           {{ row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="权限编码" align="center">
+      <el-table-column label="权限编码" align="center" width="280">
         <template slot-scope="{row}">
           {{ row.code }}
         </template>
       </el-table-column>
-      <el-table-column label="所属系统" align="center">
+      <el-table-column label="所属系统" align="center" width="100">
         <template slot-scope="{row}">
           {{ row.osName }}
         </template>
       </el-table-column>
-      <el-table-column label="所属菜单" align="center">
+      <el-table-column label="所属菜单" align="center" width="180">
         <template slot-scope="{row}">
           {{ row.menuName }}
         </template>
       </el-table-column>
-      <el-table-column label="创建人" align="center">
+      <el-table-column label="创建人" align="center" width="250">
         <template slot-scope="{row}">
           {{ row.createBy }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_date" label="创建时间">
+      <el-table-column align="center" prop="created_date" label="创建时间" width="250">
         <template slot-scope="{row}">
           <em class="el-icon-time" />
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>

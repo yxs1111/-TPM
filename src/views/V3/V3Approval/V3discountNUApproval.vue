@@ -42,7 +42,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" max-height="500">
+    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -237,7 +237,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap, FormateThousandNum } from '@/utils'
+import { getDefaultPermissions, messageMap, FormateThousandNum,getHeightHaveTab } from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -275,11 +275,17 @@ export default {
       usernameLocal: '',
       localDate: '',
       BrandList: [],
-      firstIsPass: false
+      firstIsPass: false,
+      maxheight: getHeightHaveTab(),
     }
   },
   computed: {},
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightHaveTab()
+      })()
+    }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getTableData()
     this.getChannel()

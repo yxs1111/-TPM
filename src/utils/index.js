@@ -566,3 +566,15 @@ export function getYearAndMonthRange(start, end) {
   }
   return result
 }
+//多行筛选
+export function getHeight() {
+  return window.innerHeight - 450
+}
+// tab
+export function getHeightHaveTab() {
+  return window.innerHeight - 500
+}
+// 单行筛选（1366 下筛选一行展示）
+export function getHeightSingle() {
+  return window.innerHeight - 340
+}

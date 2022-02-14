@@ -57,7 +57,7 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
@@ -234,6 +234,7 @@ import {
   getTextMap,
   messageMap,
   FormateThousandNum,
+  getHeightHaveTab
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -280,6 +281,7 @@ export default {
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
+      maxheight: getHeightHaveTab(),
     }
   },
   computed: {},
@@ -300,6 +302,11 @@ export default {
     },
   },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightHaveTab()
+      })()
+    }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getQueryChannelSelect()
 

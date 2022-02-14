@@ -55,7 +55,7 @@
     </div>
     <div class="tableContentWrap">
       <el-table v-if="tableData.length" id="outTable" :key="tableKey" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
-        :cell-style="columnStyle" height="600" style="width: 100%">
+        :cell-style="columnStyle" :max-height="maxheight" style="width: 100%">
         <el-table-column width="150" fixed>
           <template slot="header">
             <div class="filstColumn">RMB/tin</div>
@@ -106,6 +106,7 @@ import {
   ReportBgColorMap,
   FormateThousandNum,
   getYearAndMonthRange,
+  getHeight
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
@@ -161,6 +162,7 @@ export default {
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
       tableKey: 0, // el-table key
+      maxheight: getHeight(),
     }
   },
   computed: {},
@@ -178,6 +180,11 @@ export default {
     // },
   },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.checkList = [
       'v1Avg',
       'v2Avg',

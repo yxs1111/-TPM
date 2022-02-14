@@ -59,7 +59,7 @@
         <span class="text">提交</span>
       </div>
     </div>
-    <el-table :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -249,7 +249,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap, FormateThousandNum } from '@/utils'
+import { getDefaultPermissions, messageMap, FormateThousandNum ,getHeightHaveTab} from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -300,7 +300,8 @@ export default {
       localDate: '',
       btnStatus: true,
       usernameLocal: '',
-      firstIsPass: false
+      firstIsPass: false,
+      maxheight: getHeightHaveTab(),
     }
   },
   computed: {},
@@ -321,6 +322,11 @@ export default {
     }
   },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightHaveTab()
+      })()
+    }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     // this.getTableData()

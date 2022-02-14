@@ -60,7 +60,7 @@
       :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName"
       stripe
-      max-height="600"
+      :max-height="maxheight"
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
@@ -216,7 +216,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions } from '@/utils'
+import { getDefaultPermissions,getHeightHaveTab } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/masterData/masterData.js'
 export default {
@@ -295,7 +295,8 @@ export default {
         }
       ],
       importVisible: false,
-      loading: false
+      loading: false,
+      maxheight: getHeightHaveTab(),
     }
   },
 
@@ -319,6 +320,11 @@ export default {
     }
   },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightHaveTab()
+      })()
+    }
     this.getTableData()
     // 获取下拉框
     this.getQueryChannelSelect()

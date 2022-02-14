@@ -37,30 +37,30 @@
       border
       fit
       stripe
-      height="600"
+      :max-height="maxheight"
       highlight-current-row
       @row-click="handleCurrentRowClick"
       @row-dblclick="handleCurrentRowDblClick"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column align="center" type="selection" width="55" />
-      <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
+      <el-table-column align="center" fixed="left" type="selection" width="55" />
+      <el-table-column v-slot="scopeProps" align="center" fixed="left" label="序号" width="95">
         {{ scopeProps.$index+1 }}
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" label="编码">
+      <el-table-column v-slot="{row}" align="center" fixed="left" label="编码" width="295">
         {{ row.key }}
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" label="名称">
+      <el-table-column v-slot="{row}" align="center" fixed="left" label="名称" width="285">
         {{ row.name }}
       </el-table-column>
       <el-table-column v-slot="{row}" align="center" label="模型版本">
         {{ row.version }}
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" label="创建时间">
+      <el-table-column v-slot="{row}" align="center" label="创建时间" width="255">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" label="最后更新时间">
+      <el-table-column v-slot="{row}" align="center" label="最后更新时间" width="255">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.lastUpdateTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>
@@ -77,7 +77,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="block">
+    <div class="TpmPaginationWrap">
       <el-pagination
         :current-page="queryParams.start"
         :page-sizes="[5, 10, 50, 100]"

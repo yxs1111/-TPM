@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-01-16 20:55:40
+ * @LastEditTime: 2022-02-14 09:40:49
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -44,7 +44,7 @@
         <span class="text">任务转办</span>
       </div>
     </div> -->
-    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <!-- <el-table-column align="center" type="selection" /> -->
       <el-table-column align="center" label="序号" width="65">
         <template slot-scope="scope">
@@ -85,7 +85,7 @@
 
 <script>
 import API from '@/api/taskManage/taskManage.js'
-import { getDefaultPermissions, getTextMap, parseTime } from '@/utils'
+import { getDefaultPermissions, getTextMap, parseTime,getHeight } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
@@ -121,9 +121,15 @@ export default {
         NUV2: 'NUV2 - Accrual 预提调整',
         NUV3: 'NUV3 - Actual 实际入账',
       },
+      maxheight: getHeight(),
     }
   },
   mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
     this.getTableData()
     this.getMinePackage()
     this.getChannelList()
