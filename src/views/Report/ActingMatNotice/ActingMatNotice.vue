@@ -191,8 +191,11 @@ export default {
       this.getCustomerList()
     },
     'filterObj.customerIndex'() {
-      this.filterObj.customerName=this.customerArr[this.filterObj.customerIndex].customerCsName
+      if(this.filterObj.customerIndex) {
+        this.filterObj.customerName=this.customerArr[this.filterObj.customerIndex].customerCsName
       this.filterObj.customerMdmCode=this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      }
+      
       this.filterObj.distributorName = ''
       this.getDistributorList()
     },

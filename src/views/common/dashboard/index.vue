@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-02-14 16:11:01
+ * @LastEditTime: 2022-02-14 17:21:04
 -->
 <template>
   <div class="dashboard-container">
@@ -919,6 +919,7 @@ export default {
       padding: 20px;
       box-sizing: border-box;
       box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
+      overflow: hidden;
       .calendarBarTitle {
         font-size: 18px;
         font-family: Source Han Sans CN;
