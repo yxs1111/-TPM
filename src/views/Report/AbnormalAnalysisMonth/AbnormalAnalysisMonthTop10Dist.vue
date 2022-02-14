@@ -383,35 +383,25 @@ export default {
       this.getTableData()
     },
     exportExcel() {
-      if (this.V1Data.length||this.V2Data.length||this.V3Data.length) {
-        if (this.V1Data.length) {
-         this.downloadExcels('#outTable','异常分析报告-V1')
-        } 
-        if (this.V2Data.length) {
-         this.downloadExcels('#outTable2','异常分析报告-V2')
-        } 
-        if (this.V3Data.length) {
-         this.downloadExcels('#outTable3','异常分析报告-V3')
-        } 
-      } else {
-        this.$message.info('表格数据为空')
-      }
-      
-     
-      // this.downloadExcels('#outTable','异常分析报告-V1')
-      return
-      const fix = document.querySelector('.el-table__fixed')
-      let wb
+      const fix = document.querySelector('#outTable .el-table__fixed')
+      // 创建一个workbook对象
+      let wb = XLSX.utils.book_new()
+      let ws
       // debugger
       if (fix) {
-        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-        wb = XLSX.utils.table_to_book(
-          document.querySelector('#outTable').removeChild(fix)
-        )
-        document.querySelector('#outTable').appendChild(fix)
-      } else {
-        wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
+        //生成 V1 worksheet对象
+        ws=XLSX.utils.table_to_sheet(document.querySelector('#outTable .el-table__fixed'))
+      } 
+      if (document.querySelector('#outTable2 .el-table__fixed')) {
+        //追加v2 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
+        XLSX.utils.sheet_add_dom(ws, document.querySelector('#outTable2 .el-table__fixed'), {origin: -1})
       }
+      if (document.querySelector('#outTable3 .el-table__fixed')) {
+         //追加v3 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
+        XLSX.utils.sheet_add_dom(ws, document.querySelector('#outTable3 .el-table__fixed'), {origin: -1})
+      }
+      //把worksheet对象添加进workbook对象，第三个参数是excel中sheet的名字
+      XLSX.utils.book_append_sheet(wb, ws, 'sheet1')
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
         bookSST: true,
@@ -420,7 +410,7 @@ export default {
       try {
         FileSaver.saveAs(
           new Blob([wbout], { type: 'application/octet-stream' }),
-          '异常分析报告-bychannel.xlsx'
+          '异常分析报告-top.xlsx'
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)

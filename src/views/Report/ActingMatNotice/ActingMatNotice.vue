@@ -76,8 +76,12 @@
       <el-table-column width="150" align="center" prop="priceGearAmount" label="促销价格" />
       <el-table-column width="280" align="center" prop="adjustedVol" label="预计活动销量（箱）" />
       <el-table-column width="150" align="center" prop="adjustedAmount" label="申请额度（元）" />
-      <el-table-column width="150" align="center" prop="activityDateStart" label="活动开始日期" />
-      <el-table-column width="150" align="center" prop="activityDateEnd" label="活动结束日期" />
+      <el-table-column v-slot={row} width="150" align="center" prop="activityDateStart" label="活动开始日期" >
+         {{ row.activityDateStart ? row.activityDateStart.substring(0, 10) : '' }}
+      </el-table-column>
+      <el-table-column v-slot={row} width="150" align="center" prop="activityDateEnd" label="活动结束日期" >
+         {{ row.activityDateEnd ? row.activityDateEnd.substring(0, 10) : '' }}
+      </el-table-column>
       <el-table-column width="280" align="center" prop="costItemName" label="费用项目" />
       <el-table-column width="150" align="center" prop="glAccount" label="GL Account" />
       <el-table-column width="280" align="center" prop="wbsCode" label="WBS CODE" />
@@ -124,7 +128,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum ,getHeight} from '@/utils'
+import { getDefaultPermissions, FormateThousandNum ,getHeight,getCurrentMonth} from '@/utils'
 import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import FileSaver from 'file-saver'
@@ -139,7 +143,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonth: '202109',
+        yearAndMonth: '',
         channelName: '',
         customerName: '',
         distributorName: '',
@@ -162,6 +166,8 @@ export default {
   },
   computed: {},
   mounted() {
+    const yearAndMonth=getCurrentMonth()
+    this.filterObj.yearAndMonth=yearAndMonth[0]
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeight()
