@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-02-11 17:15:32
+ * @LastEditTime: 2022-02-14 16:11:01
 -->
 <template>
   <div class="dashboard-container">
@@ -1083,7 +1083,7 @@ export default {
     }
   }
   .dashWrap {
-    height: 100%;
+    height: calc(100% - 33px);
     overflow-y: auto;
     
   }
