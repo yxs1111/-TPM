@@ -39,10 +39,10 @@
       <el-button v-permission="permissions['insert']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
-      <el-table-column width="220" align="center" prop="version" label="版本" />
+      <el-table-column width="180" align="center" prop="version" label="版本" />
       <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
-      <el-table-column width="100" align="left" prop="ruleUnit" label="" />
-      <el-table-column width="340" align="left" prop="ruleContentAfter" label="">
+      <el-table-column width="60" align="left" prop="ruleUnit" label="" />
+      <el-table-column width="300" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="{row}">
           <div v-if="row.ruleUnit === '∈'">
             [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row,row.startRule)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
@@ -71,9 +71,15 @@
           </el-select>
         </template>
       </el-table-column> -->
-      <el-table-column width="" align="left" prop="channelEsName" label="渠道" />
+      <el-table-column width="100" align="left" prop="channelEsName" label="渠道" />
       <!-- <el-table-column width="180" align="left" prop="costType" label="Mine Package" /> -->
       <el-table-column width="150" align="left" prop="yearAndMonth" label="年月" />
+      <el-table-column width="" align="left" prop="updateBy" label="更新人" />
+      <el-table-column width="180" align="left" prop="updateDate" label="更新时间">
+        <template slot-scope="{row}">
+          {{ row.updateDate === null? '':row.updateDate.replace('T',' ') }}
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <!-- <div class="TpmPaginationWrap">
@@ -149,7 +155,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions ,getHeightHaveTab } from '@/utils'
+import { getDefaultPermissions, getHeightHaveTab } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -249,7 +255,7 @@ export default {
       V1Total: 0,
       V2Total: 0,
       V3Total: 0,
-      maxheight: window.innerHeight - 400,
+      maxheight: window.innerHeight - 400
     }
   },
   computed: {},
@@ -417,18 +423,20 @@ export default {
             ruleUnit: item.ruleUnit.trim(),
             startRule: item.startRule + '%',
             endRule: item.endRule.trim() + '%',
-            id: item.id
+            id: item.id,
+            yearAndMonth: item.yearAndMonth
           }
           params.push(tempItem)
         }
       }
       API.updateRuleSave(params).then(res => {
         if (res.code === 1000) {
-          this.getTableData()
           this.$message.success('保存成功')
         } else {
           this.$message.error('保存失败')
         }
+        this.getTableData()
+        this.$forceUpdate()
       }).catch()
     },
     // 合并第一行操作
