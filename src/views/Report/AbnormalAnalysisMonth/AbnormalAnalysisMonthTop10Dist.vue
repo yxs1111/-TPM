@@ -51,7 +51,7 @@
       </div>
 
       <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG exportDataButton">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出Raw Data</span>
       </div>
@@ -79,72 +79,75 @@
       </div>
     </div>
     <div class="tableContentWrap">
-      <el-table :data="V1Data" v-if="V1Data.length" id="outTable" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
-        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-        <el-table-column align="center" prop="name" v-for="item,key in V1Data[0].month" :key="'V1'+item.yearAndMonth+'-'+key">
-          <template v-slot:header>
-            {{ item.yearAndMonth }}
-          </template>
-          <template>
-            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V1'+item.yearAndMonth+'-'+key+index">
-              <template v-slot:header>
-                {{ titleItem.title }}
-              </template>
-              <template slot-scope="{row}">
-                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
-                  {{FormateNum(row.month[key][titleItem.value])}}
-                </div>
-                <div v-else>
-                  {{row.month[key][titleItem.value]}}
-                </div>
-              </template>
-            </el-table-column>
-          </template>
+      <div class="ContentWrap">
+        <el-table :data="V1Data" v-if="V1Data.length" id="outTable" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+          <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+          <el-table-column align="center" prop="name" v-for="item,key in V1Data[0].month" :key="'V1'+item.yearAndMonth+'-'+key">
+            <template v-slot:header>
+              {{ item.yearAndMonth }}
+            </template>
+            <template>
+              <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V1'+item.yearAndMonth+'-'+key+index">
+                <template v-slot:header>
+                  {{ titleItem.title }}
+                </template>
+                <template slot-scope="{row}">
+                  <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                    {{FormateNum(row.month[key][titleItem.value])}}
+                  </div>
+                  <div v-else>
+                    {{row.month[key][titleItem.value]}}
+                  </div>
+                </template>
+              </el-table-column>
+            </template>
 
-        </el-table-column>
-      </el-table>
-      <el-table :data="V2Data" v-if="V2Data.length" id="outTable2" :key="tableKey2" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
-        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-        <el-table-column align="center" prop="name" v-for="item,key in V2Data[0].month" :key="'V2'+item.yearAndMonth+'-'+key">
-          <template v-slot:header>
-            {{ item.yearAndMonth }}
-          </template>
-          <template>
-            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V2'+item.yearAndMonth+'-'+key+index">
-              <template v-slot:header>
-                {{ titleItem.title }}
-              </template>
-              <template slot-scope="{row}">
-                <div>
-                  {{row.month[key][titleItem.value]}}
-                </div>
-              </template>
-            </el-table-column>
-          </template>
+          </el-table-column>
+        </el-table>
+        <el-table :data="V2Data" v-if="V2Data.length" id="outTable2" :key="tableKey2" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+          <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+          <el-table-column align="center" prop="name" v-for="item,key in V2Data[0].month" :key="'V2'+item.yearAndMonth+'-'+key">
+            <template v-slot:header>
+              {{ item.yearAndMonth }}
+            </template>
+            <template>
+              <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V2'+item.yearAndMonth+'-'+key+index">
+                <template v-slot:header>
+                  {{ titleItem.title }}
+                </template>
+                <template slot-scope="{row}">
+                  <div>
+                    {{row.month[key][titleItem.value]}}
+                  </div>
+                </template>
+              </el-table-column>
+            </template>
 
-        </el-table-column>
-      </el-table>
-      <el-table :data="V3Data" v-if="V3Data.length" id="outTable3" :key="tableKey3" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
-        <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
-        <el-table-column align="center" prop="name" v-for="item,key in V3Data[0].month" :key="'V3'+item.yearAndMonth+'-'+key">
-          <template v-slot:header>
-            {{ item.yearAndMonth }}
-          </template>
-          <template>
-            <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V3'+item.yearAndMonth+'-'+key+index">
-              <template v-slot:header>
-                {{ titleItem.title }}
-              </template>
-              <template slot-scope="{row}">
-                <div>
-                  {{row.month[key][titleItem.value]}}
-                </div>
-              </template>
-            </el-table-column>
-          </template>
+          </el-table-column>
+        </el-table>
+        <el-table :data="V3Data" v-if="V3Data.length" id="outTable3" :key="tableKey3" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
+          <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
+          <el-table-column align="center" prop="name" v-for="item,key in V3Data[0].month" :key="'V3'+item.yearAndMonth+'-'+key">
+            <template v-slot:header>
+              {{ item.yearAndMonth }}
+            </template>
+            <template>
+              <el-table-column align="center" width="140" v-for="(titleItem,index) in tableColumnList" :key="'V3'+item.yearAndMonth+'-'+key+index">
+                <template v-slot:header>
+                  {{ titleItem.title }}
+                </template>
+                <template slot-scope="{row}">
+                  <div>
+                    {{row.month[key][titleItem.value]}}
+                  </div>
+                </template>
+              </el-table-column>
+            </template>
 
-        </el-table-column>
-      </el-table>
+          </el-table-column>
+        </el-table>
+      </div>
+
     </div>
   </div>
 </template>
@@ -453,6 +456,11 @@ export default {
   .tableContentWrap {
     border-radius: 10px 10px 0px 0px;
     overflow: hidden;
+    height: calc(100% - 230px);
+  }
+  .ContentWrap {
+    height: calc(100% - 10px);
+    overflow-y: auto;
   }
   .colorWrap {
     display: flex;

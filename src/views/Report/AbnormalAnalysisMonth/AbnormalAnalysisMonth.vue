@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-15 19:57:59
- * @LastEditTime: 2021-11-17 14:49:32
+ * @LastEditTime: 2022-02-14 11:46:29
 -->
 <template>
-  <div>
+  <div class="routerView">
     <router-view></router-view>
   </div>
 </template>
@@ -30,5 +30,7 @@ export default {
 </script>
 
 <style  scoped>
-
+.routerView {
+  height: 98%;
+}
 </style>

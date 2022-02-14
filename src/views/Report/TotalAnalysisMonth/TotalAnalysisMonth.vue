@@ -44,7 +44,7 @@
       <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG exportDataButton">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出Raw Data</span>
       </div>
@@ -162,7 +162,7 @@ export default {
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
       tableKey: 0, // el-table key
-      maxheight: getHeight(),
+      maxheight: window.innerHeight - 380,
     }
   },
   computed: {},
@@ -182,7 +182,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeight()
+        this.maxheight = window.innerHeight - 380
       })()
     }
     this.checkList = [

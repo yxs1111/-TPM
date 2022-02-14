@@ -45,9 +45,9 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG exportDataButton">
         <img src="../../../assets/images/export.png" alt="">
-        <span class="text">导出Raw Date</span>
+        <span class="text">导出Raw Data</span>
       </div>
       <div class="TpmButtonBG" @click="exportExcel">
         <img src="../../../assets/images/downloadIcon.png" alt="">

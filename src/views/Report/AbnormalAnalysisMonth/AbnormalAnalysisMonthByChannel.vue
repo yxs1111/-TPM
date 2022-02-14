@@ -51,7 +51,7 @@
       </div>
 
       <el-button type="primary" class="TpmButtonBG my-search" @click="search">查询</el-button>
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG exportDataButton">
         <img src="../../../assets/images/export.png" alt="">
         <span class="text">导出Raw Data</span>
       </div>
@@ -79,6 +79,7 @@
       </div>
     </div>
     <div class="tableContentWrap">
+      <div class="ContentWrap">
       <el-table :data="V1Data" v-if="V1Data.length" id="outTable" :key="tableKey" :header-cell-class-name="headerStyle" :cell-style="columnStyle" style="width: 100%">
         <el-table-column align="center" width="150" fixed="left" prop="name" label="数据维度" />
         <el-table-column align="center" prop="name" v-for="item,key in V1Data[0].month" :key="'V1'+item.yearAndMonth+'-'+key">
@@ -145,6 +146,8 @@
 
         </el-table-column>
       </el-table>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -487,6 +490,7 @@ export default {
   .tableContentWrap {
     border-radius: 10px 10px 0px 0px;
     overflow: hidden;
+    height: calc(100% - 230px);
   }
   .colorWrap {
     display: flex;
@@ -520,6 +524,10 @@ export default {
         }
       }
     }
+  }
+  .ContentWrap {
+    height: calc(100% - 10px);
+    overflow-y: auto;
   }
 }
 </style>

@@ -62,7 +62,7 @@ div:focus {
 
 // main-container global css
 .app-container {
-  height: 86%;
+  height: calc(100% - 80px);
   background-color: #fff;
   padding: 20px;
   border-radius: 16px;
@@ -356,7 +356,7 @@ div:focus {
 }
 //TpmPagination
 .TpmPaginationWrap {
-  margin-top: 15px;
+  // margin-top: 15px;
   display: flex;
   justify-content: center;
   .el-pagination {
@@ -910,4 +910,7 @@ div:focus {
 .TableWrap {
   height: 600px;
   overflow-y: scroll;
+}
+.exportDataButton {
+  padding: 0 33px;
 }
