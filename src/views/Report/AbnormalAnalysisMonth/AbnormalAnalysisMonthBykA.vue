@@ -92,7 +92,7 @@
                 {{ titleItem.title }}
               </template>
               <template slot-scope="{row}">
-                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1&&row.month[key][titleItem.value]!=null">
                   {{FormateNum(row.month[key][titleItem.value])}}
                 </div>
                 <div v-else>
@@ -116,7 +116,7 @@
                 {{ titleItem.title }}
               </template>
               <template slot-scope="{row}">
-                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1&&row.month[key][titleItem.value]!=null">
                   {{FormateNum(row.month[key][titleItem.value])}}
                 </div>
                 <div v-else>
@@ -140,7 +140,7 @@
                 {{ titleItem.title }}
               </template>
               <template slot-scope="{row}">
-                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1">
+                <div v-if="String(row.month[key][titleItem.value]).indexOf('%')==-1&&row.month[key][titleItem.value]!=null">
                   {{FormateNum(row.month[key][titleItem.value])}}
                 </div>
                 <div v-else>
@@ -432,7 +432,6 @@ export default {
      */
     downloadExcels(tableId,tableName) {
       const fix = document.querySelector(`${tableId} .el-table__fixed`)
-      console.log(fix);
       // return
       let wb
       if (fix) {
