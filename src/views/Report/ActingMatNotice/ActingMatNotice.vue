@@ -16,8 +16,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerMdmCode" />
+          <el-select v-model="filterObj.customerIndex" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -146,6 +146,8 @@ export default {
         yearAndMonth: '',
         channelName: '',
         customerName: '',
+        customerIndex: '',
+        customerMdmCode: '',
         distributorName: '',
         regionName: '',
         brandName: '',
@@ -183,9 +185,14 @@ export default {
   watch: {
     'filterObj.channelName'() {
       this.filterObj.customerName = ''
+      this.filterObj.customerIndex = ''
+      this.filterObj.distributorName = ''
+      this.filterObj.regionName = ''
       this.getCustomerList()
     },
-    'filterObj.customerName'() {
+    'filterObj.customerIndex'() {
+      this.filterObj.customerName=this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode=this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorName = ''
       this.getDistributorList()
     },
@@ -206,11 +213,11 @@ export default {
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.yearAndMonth,
           channelName: this.filterObj.channelName,
-          // customerName: this.filterObj.customerName,
-          // distributorName: this.filterObj.distributorName,
-          // regionName: this.filterObj.regionName,
-          // brandName: this.filterObj.brandName,
-          // productName: this.filterObj.productName,
+          customerName: this.filterObj.customerName,
+          distributorName: this.filterObj.distributorName,
+          regionName: this.filterObj.regionName,
+          brandName: this.filterObj.brandName,
+          productName: this.filterObj.productName,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -258,7 +265,7 @@ export default {
     getDistributorList() {
       selectAPI
         .queryDistributorList({
-          customerMdmCode: this.filterObj.customerName,
+          customerMdmCode: this.filterObj.customerMdmCode,
         })
         .then((res) => {
           if (res.code === 1000) {
