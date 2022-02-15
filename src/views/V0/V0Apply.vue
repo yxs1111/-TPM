@@ -32,7 +32,8 @@
           </div>
         </div>
         <div class="OpertionBar">
-          <div class="TpmButtonBG"  @click="getCPTData">
+          <!-- <el-button type="primary" @click="getCPTData" v-permission="permissions['getCPT']">获取CPT数据</el-button> -->
+          <div class="TpmButtonBG" @click="getCPTData" v-permission="permissions['getCPT']" >
             <img src="@/assets/images/huoqu.png" alt="" />
             <span class="text">获取CPT数据</span>
           </div>

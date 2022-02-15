@@ -219,7 +219,8 @@ export function getDefaultPermissions() {
     update: 2,
     delete: 3,
     import: 4,
-    export: 5
+    export: 5,
+    getCPT: 6
   }
 }
 
