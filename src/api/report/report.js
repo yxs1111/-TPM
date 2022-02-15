@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-01-17 15:42:43
+ * @LastEditTime: 2022-02-15 09:45:46
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -20,6 +20,15 @@ export default {
   // 代垫通知
   getAdvanceNoticeReport(params) {
     return requestApi.request_get(this.url + '/advanceNoticeReport/getPage', params)
+  },
+  //代垫通知报表--导出
+  exportNoticeReport(params) {
+    return request({
+      url: this.url + '/advanceNoticeReport/exportList',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
   // 损益报表
   profitAndLossReport(params) {

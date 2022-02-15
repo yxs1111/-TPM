@@ -16,8 +16,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerIndex" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="index" />
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -76,11 +76,11 @@
       <el-table-column width="150" align="center" prop="priceGearAmount" label="促销价格" />
       <el-table-column width="280" align="center" prop="adjustedVol" label="预计活动销量（箱）" />
       <el-table-column width="150" align="center" prop="adjustedAmount" label="申请额度（元）" />
-      <el-table-column v-slot={row} width="150" align="center" prop="activityDateStart" label="活动开始日期" >
-         {{ row.activityDateStart ? row.activityDateStart.substring(0, 10) : '' }}
+      <el-table-column v-slot={row} width="150" align="center" prop="activityDateStart" label="活动开始日期">
+        {{ row.activityDateStart ? row.activityDateStart.substring(0, 10) : '' }}
       </el-table-column>
-      <el-table-column v-slot={row} width="150" align="center" prop="activityDateEnd" label="活动结束日期" >
-         {{ row.activityDateEnd ? row.activityDateEnd.substring(0, 10) : '' }}
+      <el-table-column v-slot={row} width="150" align="center" prop="activityDateEnd" label="活动结束日期">
+        {{ row.activityDateEnd ? row.activityDateEnd.substring(0, 10) : '' }}
       </el-table-column>
       <el-table-column width="280" align="center" prop="costItemName" label="费用项目" />
       <el-table-column width="150" align="center" prop="glAccount" label="GL Account" />
@@ -128,7 +128,12 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum ,getHeight,getCurrentMonth} from '@/utils'
+import {
+  getDefaultPermissions,
+  FormateThousandNum,
+  getHeight,
+  getCurrentMonth,
+} from '@/utils'
 import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import FileSaver from 'file-saver'
@@ -168,8 +173,8 @@ export default {
   },
   computed: {},
   mounted() {
-    const yearAndMonth=getCurrentMonth()
-    this.filterObj.yearAndMonth=yearAndMonth[0]
+    const yearAndMonth = getCurrentMonth()
+    this.filterObj.yearAndMonth = yearAndMonth[0]
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeight()
@@ -190,12 +195,11 @@ export default {
       this.filterObj.regionName = ''
       this.getCustomerList()
     },
-    'filterObj.customerIndex'() {
-      if(this.filterObj.customerIndex) {
-        this.filterObj.customerName=this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode=this.customerArr[this.filterObj.customerIndex].customerMdmCode
-      }
-      
+    'filterObj.customerName'() {
+      const customerObj= this.customerArr.find(item=>{
+        return item.customerCsName==this.filterObj.customerName
+      })
+      this.filterObj.customerMdmCode=customerObj.customerMdmCode
       this.filterObj.distributorName = ''
       this.getDistributorList()
     },
@@ -228,34 +232,6 @@ export default {
           this.total = response.data.total
         })
       }
-    },
-    exportExcel() {
-      API.getAdvanceNoticeReport({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.total, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelName: this.filterObj.channelName,
-      }).then((response) => {
-        this.ALLtableData = response.data.records
-        this.$message.success('请稍等，正在准备下载')
-        setTimeout(function () {
-          let wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
-          let wbout = XLSX.write(wb, {
-            bookType: 'xlsx',
-            bookSST: true,
-            type: 'array',
-          })
-          try {
-            FileSaver.saveAs(
-              new Blob([wbout], { type: 'application/octet-stream' }),
-              '代垫通知报表.xlsx'
-            )
-          } catch (e) {
-            if (typeof console !== 'undefined') console.log(e, wbout)
-          }
-          return wbout
-        }, 5000)
-      })
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -318,6 +294,41 @@ export default {
     search() {
       this.pageNum = 1
       this.getTableData()
+    },
+    //下载报表
+    exportExcel() {
+      API.exportNoticeReport({
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelName: this.filterObj.channelName,
+        customerName: this.filterObj.customerName,
+        distributorName: this.filterObj.distributorName,
+        regionName: this.filterObj.regionName,
+        brandName: this.filterObj.brandName,
+        productName: this.filterObj.productName,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        this.downloadFile(res, '代垫通知报表-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
+    //下载文件
+    downloadFile(res, fileName) {
+      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
     },
     handleSelectionChange(val) {
       this.checkArr = val

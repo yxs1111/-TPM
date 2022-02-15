@@ -214,21 +214,10 @@ export default {
     importData() {
       this.importVisible = true
     },
-    //确认导入
+    //确认
     confirmImport() {
-      var formData = new FormData()
-      formData.append('excelFile', this.uploadFile)
-      API.importMdprice(formData).then((response) => {
-        if (response.code == 1000) {
-          //this.closeImport()
-          this.getTableData()
-          this.warningShow = true
-          this.warningList = response.data
-          console.dir(this.warningList)
-          // this.$message.success(`${response.data}`)
-        }
-        this.event.srcElement.value = '' // 置空
-      })
+      this.closeImport()
+      this.getTableData()
     },
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
@@ -238,6 +227,19 @@ export default {
       this.event = event
       this.uploadFile = event.target.files[0]
       this.uploadFileName = event.target.files[0].name
+      var formData = new FormData()
+      formData.append('excelFile', this.uploadFile)
+      API.importMdprice(formData).then((response) => {
+        if (response.code == 1000) {
+          //this.closeImport()
+          // this.getTableData()
+          this.warningShow = true
+          this.warningList = response.data
+          console.dir(this.warningList)
+          // this.$message.success(`${response.data}`)
+        }
+        this.event.srcElement.value = '' // 置空
+      })
     },
     //关闭导入
     closeImport() {

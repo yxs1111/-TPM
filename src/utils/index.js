@@ -504,6 +504,18 @@ export function ReportCheckList() {
     'exceptionThreeRange'
   ]
 }
+export function ReportCheckListCost() {
+  return [
+    'passNum',
+    'exceptionOneNum',
+    'exceptionTwoNum',
+    'exceptionThreeNum',
+    'passRange',
+    'exceptionOneRange',
+    'exceptionTwoRange',
+    'exceptionThreeRange'
+  ]
+}
 //报表动态列
 export function dynamicColumn() {
   return [
