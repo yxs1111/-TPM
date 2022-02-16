@@ -3,16 +3,12 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">经销商</span>
+          <span class="SelectliTitle">经销商CP编码</span>
+          <el-input v-model="filterObj.distributorCode" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商名称</span>
           <el-input v-model="filterObj.Distributor" clearable placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">大区</span>
-          <el-input v-model="filterObj.zoneName" clearable placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">区域</span>
-          <el-input v-model="filterObj.regionName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
@@ -20,22 +16,22 @@
             <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="distributorCode" label="经销商编号"> </el-table-column>
-      <el-table-column width="320" align="center" prop="distributorName" label="经销商中文名称"> </el-table-column>
-      <el-table-column align="center" prop="zoneCode" label="大区"> </el-table-column>
-      <el-table-column align="center" prop="regionCode" label="区域"> </el-table-column>
-      <el-table-column align="center" prop="cityGroupCode" label="城市群"> </el-table-column>
-      <el-table-column align="center" prop="cityCode" label="城市"> </el-table-column>
-      <el-table-column width="150" align="center" prop="state" label="状态">
+      <el-table-column align="center" prop="distributorMdmCode" label="经销商MDM编码"> </el-table-column>
+      <el-table-column align="center" prop="distributorCode" label="经销商CP编码"> </el-table-column>
+      <el-table-column align="center" prop="distributorName" label="经销商名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="state" label="有效性">
         <template slot-scope="{ row }">
           <div>
             {{ row.state ? '正常' : '无效' }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="更新时间">
+        {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -49,7 +45,12 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap ,getHeight} from '@/utils'
+import {
+  getDefaultPermissions,
+  parseTime,
+  getTextMap,
+  getHeight,
+} from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'Dealers',
@@ -60,10 +61,9 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        distributorCode: '',
         Distributor: '',
-        zoneName: '',
-        regionName: '',
-        state: '',
+        state: 1,
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -87,8 +87,7 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         distributorName: this.filterObj.Distributor,
-        regionCode: this.filterObj.regionName,
-        zoneCode: this.filterObj.zoneName,
+        distributorCode: this.filterObj.distributorCode,
         state: this.filterObj.state,
       })
         .then((response) => {
