@@ -11,6 +11,12 @@
           <span class="SelectliTitle">品牌名称</span>
           <el-input v-model="filterObj.brandName" clearable placeholder="请输入" />
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
@@ -39,6 +45,7 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="remark" label="备注"> </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -91,6 +98,7 @@ export default {
       filterObj: {
         brandCode: '',
         brandName: '',
+        state: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -134,6 +142,7 @@ export default {
         pageSize: this.pageSize, //每页条数
         brandCode: this.filterObj.brandCode,
         brandName: this.filterObj.brandName,
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -154,6 +163,7 @@ export default {
       this.filterObj = {
         brandCode: '',
         brandName: '',
+        state: '',
       }
       this.getTableData()
     },
