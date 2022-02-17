@@ -27,6 +27,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
@@ -185,6 +186,15 @@ export default {
           this.total = response.data.total
         })
         .catch(() => {})
+    },
+    Reset() {
+      this.filterObj = {
+        customerCode: '',
+        yearAndMonth: '',
+        sku: '',
+        channelCode: '',
+      }
+      this.getTableData()
     },
     getQuerySkuSelect() {
       selectAPI.querySkuSelect().then((res) => {

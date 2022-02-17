@@ -26,6 +26,7 @@
           <el-input v-model="filterObj.cdmName" placeholder="请输入" clearable />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
@@ -332,6 +333,16 @@ export default {
     // this.getQueryMinePackageSelect()
   },
   methods: {
+    Reset() {
+      this.filterObj = {
+        channelCode: '',
+        minePackageCode: '',
+        sku: '',
+        cdmType: '',
+        cdmName: ''
+      }
+      this.getTableData()
+    },
     // 多个删除
     mutidel() {
       var that = this

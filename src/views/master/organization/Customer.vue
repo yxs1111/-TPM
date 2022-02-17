@@ -24,6 +24,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <!-- <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button> -->
         <!-- <div class="TpmButtonBG" @click="importDataNKA">
           <img src="@/assets/images/import.png" alt="">
@@ -269,6 +270,15 @@ export default {
         this.pageSize = response.data.pageSize
         this.total = response.data.total
       })
+    },
+    Reset() {
+      this.filterObj = {
+        customerCode: '',
+        customerCsName: '',
+        channelCode: '',
+        state: '',
+      }
+      this.getTableData()
     },
     search() {
       this.pageNum = 1

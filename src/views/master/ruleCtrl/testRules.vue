@@ -28,6 +28,7 @@
           />
         </div>
         <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div v-permission="permissions['export']" class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
@@ -277,6 +278,13 @@ export default {
     // 获取下拉框
   },
   methods: {
+    Reset() {
+      this.filterObj = {
+        channel: '',
+        date: ''
+      }
+      this.getTableData()
+    },
     // 合并相同列 根据相同名称判断
     spanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {

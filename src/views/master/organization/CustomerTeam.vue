@@ -8,7 +8,7 @@
           <el-input v-model="filterObj.groupName" clearable placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
-      
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight"  border @selection-change="handleSelectionChange" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -91,6 +91,13 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    Reset() {
+      this.filterObj = {
+        groupCode: '',
+        groupName: '',
+      }
+      this.getTableData()
     },
     search() {
       this.pageNum = 1

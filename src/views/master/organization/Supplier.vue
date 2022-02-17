@@ -18,6 +18,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -202,6 +203,7 @@ export default {
       this.filterObj = {
         supplierCode: '',
         supplierName: '',
+        state: '',
       }
       this.getTableData()
     },

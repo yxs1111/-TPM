@@ -22,6 +22,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
@@ -199,6 +200,14 @@ export default {
     },
     search() {
       this.pageNum = 1
+      this.getTableData()
+    },
+    Reset() {
+      this.filterObj = {
+        yearAndMonth: '',
+        customerCode: '',
+        channelCode: '',
+      }
       this.getTableData()
     },
     //导入数据

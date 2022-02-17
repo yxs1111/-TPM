@@ -16,6 +16,7 @@
           <el-input v-model="filterObj.costItem" clearable placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -95,6 +96,14 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    Reset() {
+      this.filterObj = {
+        costType: '',
+        minePackage: '',
+        costItem: '',
+      }
+      this.getTableData()
     },
     //多个删除
     mutidel() {

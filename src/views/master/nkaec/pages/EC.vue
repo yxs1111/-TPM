@@ -25,6 +25,7 @@
           <el-input v-model="filterObj.measure" clearable filterable placeholder="请输入" />
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
     <div class="SelectBarWrap">
@@ -241,6 +242,16 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    Reset() {
+      this.filterObj = {
+        product: '',
+        scenario: '',
+        version: '',
+        customer: '',
+        measure: ''
+      }
+      this.getTableData()
     },
     search() {
       this.pageNum=1

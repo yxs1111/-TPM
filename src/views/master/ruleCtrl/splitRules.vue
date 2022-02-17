@@ -26,6 +26,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="getTableData" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
@@ -359,6 +360,15 @@ export default {
     this.getDictInfoByType()
   },
   methods: {
+    Reset() {
+      this.filterObj = {
+        channelCode: '',
+        yeardate: '',
+        varsionName: '',
+        splitType: ''
+      }
+      this.getTableData()
+    },
     number(e) {
       const flag = new RegExp('^[1-9]([0-9])*$').test(e.target.value)
       if (!flag) {
