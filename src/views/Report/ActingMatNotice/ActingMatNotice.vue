@@ -59,8 +59,10 @@
       @selection-change="handleSelectionChange" style="width: 100%">
       <!-- <el-table-column type="selection" align="center" /> -->
       <el-table-column width="450" fixed="left" align="center" prop="cpId" label="通知函代垫编号" />
+      <el-table-column width="450" fixed="left" align="center" prop="cpIdV3" label="通知函代垫编号" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="实际发生月" />
-      <el-table-column width="250" align="center" prop="deptCode" label="部门代码" />
+      <el-table-column width="150" align="center" prop="deptCode" label="部门代码" />
+      <el-table-column width="150" align="center" prop="deptName" label="部门" />
       <el-table-column width="150" align="center" prop="distributorMdmCode" label="经销商编码" />
       <el-table-column width="280" align="center" prop="distributorName" label="经销商名称" />
       <el-table-column width="150" align="center" prop="zoneName" label="大区" />
@@ -68,14 +70,15 @@
       <el-table-column width="150" align="center" prop="cityName" label="城市" />
       <el-table-column width="150" align="center" prop="channelName" label="渠道" />
       <el-table-column width="150" align="center" prop="customerGroupName" label="客户组" />
-      <el-table-column width="150" align="center" prop="customerName" label="客户名称" />
+      <el-table-column width="280" align="center" prop="customerName" label="客户名称" />
       <el-table-column width="150" align="center" prop="mechanismType" label="活动类型" />
       <el-table-column width="150" align="center" prop="mechanismName" label="活动机制" />
-      <el-table-column width="250" align="center" prop="productName" label="活动SKU" />
+      <el-table-column width="200" align="center" prop="productName" label="活动SKU" />
       <el-table-column width="150" align="center" prop="brandName" label="产品线" />
       <el-table-column width="150" align="center" prop="priceGearAmount" label="促销价格" />
-      <el-table-column width="280" align="center" prop="adjustedVol" label="预计活动销量（箱）" />
-      <el-table-column width="150" align="center" prop="adjustedAmount" label="申请额度（元）" />
+      <el-table-column width="200" align="center" prop="adjustedVol" label="预计活动销量（箱）" />
+      <el-table-column width="200" align="center" prop="adjustedAmount" label="V1调整后费用（元）" />
+      <el-table-column width="150" align="center" prop="applyAmount" label="申请额度（元）" />
       <el-table-column v-slot={row} width="150" align="center" prop="activityDateStart" label="活动开始日期">
         {{ row.activityDateStart ? row.activityDateStart.substring(0, 10) : '' }}
       </el-table-column>
