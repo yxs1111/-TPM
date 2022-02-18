@@ -320,7 +320,11 @@ export default {
     getSkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
         this.skuList = res.data
-        this.filterObj.productName = [this.skuList[0].productEsName]
+        let list=[]
+        this.skuList.forEach(item=>{
+          list.push(item.productEsName)
+        })
+        this.filterObj.productName = [...list]
         this.getTableData()
       })
     },
