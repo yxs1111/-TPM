@@ -268,7 +268,7 @@ export default function() {
             },
             {
               path: '/WbsMaintenance',
-              code: 'mdm_Expense_Account',
+              code: 'mdm_WbsMaintenance',
               name: 'WbsMaintenance',
               component: () =>
                 import('@/views/master/financeInfo/wbs.vue'),
@@ -276,7 +276,7 @@ export default function() {
             },
             {
               path: '/IoMaintenance',
-              code: 'mdm_Expense_Account',
+              code: 'mdm_IoMaintenance',
               name: 'IoMaintenance',
               component: () =>
                 import('@/views/master/financeInfo/io.vue'),
