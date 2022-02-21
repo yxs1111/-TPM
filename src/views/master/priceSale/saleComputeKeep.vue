@@ -21,6 +21,12 @@
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.deleteFlag" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['正常','无效']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
@@ -58,6 +64,8 @@
             {{ row.createDate ? row.createDate.slice(0, 10) : '' }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="deleteFlg" label="状态">
       </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
@@ -128,6 +136,7 @@ export default {
         yearAndMonth: '',
         customerCode: '',
         channelCode: '',
+        deleteFlag: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -144,6 +153,7 @@ export default {
       errorList: [], //错误信息数据
       checkArr: [], //批量删除,存放选中
       maxheight: getHeight(),
+      month:'',
     }
   },
   computed: {},
@@ -153,6 +163,7 @@ export default {
         this.maxheight = getHeight()
       })()
     }
+
     this.getTableData()
     this.getChannelList()
     this.getCustomerList()
@@ -164,12 +175,19 @@ export default {
     },
   },
   methods: {
+    getMonth() {
+      selectAPI.getMonth({ version: 'V0' }).then((res) => {
+        this.month = res.data
+        // this.getList()
+      })
+    },
     // 获取表格数据
     getTableData() {
       API.getPageSaleComputeKeep({
         yearAndMonth: this.filterObj.yearAndMonth,
         channelCode: this.filterObj.channelCode,
         customerCsName: this.filterObj.customerCode,
+        deleteFlag: this.filterObj.deleteFlag,
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
       })
@@ -212,6 +230,7 @@ export default {
     },
     //导入数据
     importData() {
+      this.getMonth()
       this.importVisible = true
     },
     //确认导入
@@ -220,6 +239,7 @@ export default {
       this.warningList = []
       var formData = new FormData()
       formData.append('file', this.uploadFile)
+      formData.append('accountingPeriod', this.month)
       API.importSaleComputeKeep(formData).then((response) => {
         if (response.code === 1000) {
           this.$message.success('导入成功!')

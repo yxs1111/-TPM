@@ -42,8 +42,8 @@
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="supplierCode" label="供应商编码" />
-      <el-table-column width="360" align="center" prop="supplierName" label="供应商名称" />
-      <el-table-column width="150" align="center" prop="country" label="country" />
+      <el-table-column width="180" align="center" prop="supplierBiCode" label="供应商COUPA编码" />
+      <el-table-column  align="center" prop="supplierName" label="供应商名称" />
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间" >
         <template slot-scope="{row}">
@@ -52,14 +52,14 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
+      <!-- <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
       <el-table-column width="180" align="center" prop="updateDate" label="更新时间">
         <template slot-scope="{row}">
           <div>
             {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -100,6 +100,13 @@
     </el-dialog>
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+      <div class="fileInfo ImportContent">
+        <div class="fileTitle">模板</div>
+        <div class="my-search selectFile" @click="downloadTemplate">
+          <svg-icon icon-class="download_white" style="font-size: 16px;" />
+          <span class="text">下载模板</span>
+        </div>
+      </div>
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
@@ -284,6 +291,15 @@ export default {
           })
       }
     },
+    // 下载模板
+    downloadTemplate() {
+      // var data = {}
+      // data = { ...this.filterObj }
+      // API.exportMdprice(data).then((res) => {
+      //   this.downloadFile(res, '供应商模板' + '.xlsx') //自定义Excel文件名
+      //   this.$message.success('模板下载成功!')
+      // })
+    },
     // 取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -299,7 +315,12 @@ export default {
       formData.append('file', this.uploadFile)
       API.importSupplier(formData)
         .then((response) => {
+          if (response.code === 1000) {
+          this.$message.success('导入成功!')
           this.closeImport()
+          this.getTableData()
+        }
+          
         })
         .catch(() => {})
     },

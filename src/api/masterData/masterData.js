@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-01-11 10:59:31
+ * @LastEditTime: 2022-02-21 09:36:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -375,5 +375,32 @@ export default {
   getOrgPage(params) {
     return requestApi.request_get('/auth/organization/getOrgPage', params)
   },
+  // WBS
+  getPageByWbs(params) {
+    return requestApi.request_get('/cityplan/mdCustomerWbs/getPage', params)
+  },
+  insertWbs(params) {
+    return requestApi.request_post('/cityplan/mdCustomerWbs/insert', params)
+  },
+  updateWbs(params) {
+    return requestApi.request_put('/cityplan/mdCustomerWbs/update', params)
+  },
+  deleteWbs(params) {
+    return requestApi.request_delete('/cityplan/mdCustomerWbs/delete', params)
+  },
+  // io
+  getPageByIo(params) {
+    return requestApi.request_get('/cityplan/mdOrganizationIo/getPage', params)
+  },
+  insertIo(params) {
+    return requestApi.request_post('/cityplan/mdOrganizationIo/insert', params)
+  },
+  updateIo(params) {
+    return requestApi.request_put('/cityplan/mdOrganizationIo/update', params)
+  },
+  deleteIo(params) {
+    return requestApi.request_delete('/cityplan/mdOrganizationIo/delete', params)
+  },
+
 
 }

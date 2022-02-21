@@ -265,7 +265,23 @@ export default function() {
               component: () =>
                 import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
               meta: { title: '费用科目', icon: 'apply' }
-            }
+            },
+            {
+              path: '/WbsMaintenance',
+              code: 'mdm_Expense_Account',
+              name: 'WbsMaintenance',
+              component: () =>
+                import('@/views/master/financeInfo/wbs.vue'),
+              meta: { title: 'WBS维护', icon: 'apply' }
+            },
+            {
+              path: '/IoMaintenance',
+              code: 'mdm_Expense_Account',
+              name: 'IoMaintenance',
+              component: () =>
+                import('@/views/master/financeInfo/io.vue'),
+              meta: { title: 'IO维护', icon: 'apply' }
+            },
           ]
         },
         // 规则控制
