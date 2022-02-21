@@ -88,6 +88,7 @@
                 <el-table-column align="center" width="150" prop="name" label="V3" /> -->
               </el-table-column>
               <el-table-column v-for="(value,key) in tableData[0].channel" :key="key" align="center">
+                <!-- NKA  OR EC -->
                 <template v-slot:header>
                   {{ key }}
                 </template>
@@ -97,17 +98,21 @@
                       {{ item.customerName }}
                     </template>
                     <template>
-                      <el-table-column align="center" width="150" label="CPT">
-                        {{ FormateNum(item.cptCost) }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="CPT">
+                        <!-- {{ FormateNum(item.cptCost) }} -->
+                        {{ FormateNum(row.channel[key][index].cptCost) }}
                       </el-table-column>
-                      <el-table-column align="center" width="150" label="V1">
-                        {{ FormateNum(item.voneCost) }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="V1">
+                        <!-- {{ FormateNum(item.voneCost) }} -->
+                        {{ FormateNum(row.channel[key][index].voneCost) }}
                       </el-table-column>
-                      <el-table-column align="center" width="150" label="V2">
-                        {{ FormateNum(item.vtwoCost) }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="V2">
+                        <!-- {{ FormateNum(item.vtwoCost) }} -->
+                        {{ FormateNum(row.channel[key][index].vtwoCost) }}
                       </el-table-column>
-                      <el-table-column align="center" width="150" label="V3">
-                        {{ FormateNum(item.vthreeCost) }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="V3">
+                        <!-- {{ FormateNum(item.vthreeCost) }} -->
+                        {{ FormateNum(row.channel[key][index].vthreeCost) }}
                       </el-table-column>
                     </template>
 
@@ -154,17 +159,18 @@
                       {{ item.customerName }}
                     </template>
                     <template>
-                      <el-table-column align="center" width="150" label="CPT">
-                        {{ item.cptFabe===null?'':item.cptFabe + '%' }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="CPT">
+                        <!-- {{ FormateNum(row.channel[key][index].vthreeCost) }} -->
+                        {{ row.channel[key][index].cptFabe===null?'':row.channel[key][index].cptFabe + '%' }}
                       </el-table-column>
-                      <el-table-column align="center" width="150" label="V1">
-                        {{ item.voneFabe===null?'':item.voneFabe + '%' }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="V1">
+                        {{ row.channel[key][index].voneFabe===null?'':row.channel[key][index].voneFabe + '%' }}
                       </el-table-column>
-                      <el-table-column align="center" width="150" label="V2">
-                        {{ item.vtwoFabe===null?'':item.vtwoFabe + '%' }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="V2">
+                        {{ row.channel[key][index].vtwoFabe===null?'':row.channel[key][index].vtwoFabe + '%' }}
                       </el-table-column>
-                      <el-table-column align="center" width="150" label="V3">
-                        {{ item.vthreeFabe===null?'':item.vthreeFabe + '%' }}
+                      <el-table-column v-slot="{row}" align="center" width="150" label="V3">
+                        {{ row.channel[key][index].vthreeFabe===null?'':row.channel[key][index].vthreeFabe + '%' }}
                       </el-table-column>
                     </template>
 
@@ -352,6 +358,7 @@ export default {
         this.filterObj.yearAndMonthList[1]
       )
       const params = {
+        // yearAndMonth: ['202203', '202204'],
         yearAndMonth: yearAndMonthList,
         channelName: this.filterObj.channelCode,
         customerName: this.filterObj.customerCode,
@@ -449,7 +456,7 @@ export default {
             this.tableData[i].threeFabe = total[i].vthreeFabe
           }
           this.$forceUpdate()
-          // console.log('wwwww', this.tableData)
+          console.log('wwwww', this.tableData)
         })
         .catch((error) => {
           console.log(error)
