@@ -428,10 +428,12 @@ export default {
       for (const item of this.tableData) {
         if (item.ruleUnit === '∈') {
           const tempItem = {
+            minePackage: 'Price Promotion',
             ruleUnit: item.ruleUnit.trim(),
             startRule: item.startRule + '%',
             endRule: item.endRule.trim() + '%',
             id: item.id,
+            channelCode: item.channelCode,
             yearAndMonth: item.yearAndMonth
           }
           params.push(tempItem)
