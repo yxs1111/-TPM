@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-02-14 10:33:46
+ * @LastEditTime: 2022-02-21 13:26:32
 -->
 <template>
   <div class="app-container">
@@ -421,7 +421,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V0' &&
-              res.data.assignee === this.usernameLocal
+              res.data.assignee.indexOf(this.usernameLocal)!=-1
             ) {
               //本人可以提交
               this.isSelf = true

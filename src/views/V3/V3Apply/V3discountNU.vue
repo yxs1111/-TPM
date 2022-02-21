@@ -688,7 +688,7 @@ export default {
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
-          if (res.data.version === 'NUV3' && res.data.assignee === this.usernameLocal && this.submitBtn === 0) {
+          if (res.data.version === 'NUV3' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 0) {
             this.btnStatus = true
           } else {
             this.btnStatus = false

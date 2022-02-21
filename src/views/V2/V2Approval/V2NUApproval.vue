@@ -308,7 +308,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'NUV2' &&
-              res.data.assignee === this.usernameLocal
+              res.data.assignee.indexOf(this.usernameLocal)!=-1
             ) {
               //本人可以提交
               this.isSubmit = false

@@ -324,7 +324,7 @@ export default {
       }).then(res => {
         if (res.code === 1000) {
           // debugger
-          if (res.data.version === 'V1' && res.data.assignee === this.usernameLocal && this.submitBtn === 1) {
+          if (res.data.version === 'V1' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 1) {
             this.btnStatus = true
           } else {
             this.btnStatus = false

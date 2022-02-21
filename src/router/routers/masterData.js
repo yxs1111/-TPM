@@ -81,14 +81,14 @@ export default function() {
                 import('@/views/master/organization/Customer.vue'),
               meta: { title: '客户', icon: 'apply' }
             },
-            {
-              path: '/organization/CustomerTeam',
-              code: 'mdm_customer_group',
-              name: 'CustomerTeam',
-              component: () =>
-                import('@/views/master/organization/CustomerTeam.vue'),
-              meta: { title: '客户组', icon: 'apply' }
-            },
+            // {
+            //   path: '/organization/CustomerTeam',
+            //   code: 'mdm_customer_group',
+            //   name: 'CustomerTeam',
+            //   component: () =>
+            //     import('@/views/master/organization/CustomerTeam.vue'),
+            //   meta: { title: '客户组', icon: 'apply' }
+            // },
             {
               path: '/organization/Store',
               code: 'mdm_store',

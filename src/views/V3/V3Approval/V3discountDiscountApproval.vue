@@ -393,7 +393,7 @@ export default {
         mainId: this.mainIdLocal
       }).then(res => {
         if (res.code === 1000) {
-          if (res.data.version === 'V3' && res.data.assignee === this.usernameLocal && this.submitBtn === 1) {
+          if (res.data.version === 'V3' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 1) {
             this.btnStatus = true
           } else {
             this.btnStatus = false
