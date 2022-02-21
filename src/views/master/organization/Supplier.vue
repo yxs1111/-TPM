@@ -33,7 +33,7 @@
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
-     
+
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
@@ -41,14 +41,15 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="supplierCode" label="供应商编码" />
+      <el-table-column width="150" align="center" prop="supplierCode" label="供应商CP编码" />
       <el-table-column width="180" align="center" prop="supplierBiCode" label="供应商COUPA编码" />
-      <el-table-column  align="center" prop="supplierName" label="供应商名称" />
+      <el-table-column align="center" prop="supplierName" label="供应商名称" />
+      <el-table-column width="150" align="center" prop="country" label="country" />
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间" >
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
           <div>
-           {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+            {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
           </div>
         </template>
       </el-table-column>
@@ -127,7 +128,12 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap,getHeight } from '@/utils'
+import {
+  getDefaultPermissions,
+  parseTime,
+  getTextMap,
+  getHeight,
+} from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'Supplier',
@@ -293,12 +299,12 @@ export default {
     },
     // 下载模板
     downloadTemplate() {
-      // var data = {}
-      // data = { ...this.filterObj }
-      // API.exportMdprice(data).then((res) => {
-      //   this.downloadFile(res, '供应商模板' + '.xlsx') //自定义Excel文件名
-      //   this.$message.success('模板下载成功!')
-      // })
+      var data = {}
+      data = { ...this.filterObj }
+      API.exportSupplierTemplate(data).then((res) => {
+        this.downloadFile(res, '供应商模板' + '.xlsx') //自定义Excel文件名
+        this.$message.success('模板下载成功!')
+      })
     },
     // 取消
     resetForm(formName) {
@@ -316,11 +322,10 @@ export default {
       API.importSupplier(formData)
         .then((response) => {
           if (response.code === 1000) {
-          this.$message.success('导入成功!')
-          this.closeImport()
-          this.getTableData()
-        }
-          
+            this.$message.success('导入成功!')
+            this.closeImport()
+            this.getTableData()
+          }
         })
         .catch(() => {})
     },

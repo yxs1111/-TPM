@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-02-21 09:36:49
+ * @LastEditTime: 2022-02-21 14:03:48
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -224,6 +224,15 @@ export default {
   exportSupplier(params) {
     return request({
       url: 'mdm/mdSupplier/exportSupplier',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //下载模板
+  exportSupplierTemplate(params) {
+    return request({
+      url: 'mdm/mdSupplier/exportSupplierTemplate',
       method: 'post',
       params: params,
       responseType: 'blob'

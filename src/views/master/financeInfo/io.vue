@@ -13,20 +13,20 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add" v-permission="permissions['insert']">新增</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
     </div>
     <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
       style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" label="操作" width="100">
         <template slot-scope="{ row }">
-          <div class="table_operation">
+          <div class="table_operation" v-permission="permissions['update']">
             <div class="table_operation_detail" @click="editor(row)">
               <i class="el-icon-edit-outline"></i>
             </div>
@@ -36,10 +36,26 @@
       <el-table-column align="center" prop="ioNumber" label="IO编码"> </el-table-column>
       <el-table-column align="center" prop="name" label="区域名称"> </el-table-column>
       <el-table-column align="center" prop="code" label="区域编码"> </el-table-column>
-      <el-table-column width="150" align="center" prop="state" label="状态">
+      <!-- <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
             {{ row.state ? '正常' : '无效' }}
+          </div>
+        </template>
+      </el-table-column> -->
+      <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间" >
+        <template slot-scope="{row}">
+          <div>
+           {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="180" align="center" prop="updateDate" label="更新时间">
+        <template slot-scope="{row}">
+          <div>
+            {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
           </div>
         </template>
       </el-table-column>
