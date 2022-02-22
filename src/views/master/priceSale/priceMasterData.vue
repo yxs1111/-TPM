@@ -46,7 +46,7 @@
       @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column width="250" fixed="left" align="center" prop="customerCsName" label="客户名称" />
-      <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
+      <el-table-column align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
       <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot="{ row }" width="290" align="right" prop="ptc" label="平台指引含税价｜PTC （RMB/Tin）">
