@@ -79,8 +79,17 @@
       stripe
       style="width: 100%"
     >
-      <el-table-column type="selection" align="center" />
-      <el-table-column width="" align="center" prop="channelCode" label="渠道" />
+      <el-table-column type="selection" fixed="left" align="center" />
+      <el-table-column width="180" align="center" fixed="left" prop="updateDate" label="操作">
+        <template slot-scope="scope">
+          <div class="table_operation" v-permission="permissions['update']">
+            <div class="table_operation_detail" @click="editor(scope.row)">
+              <i class="el-icon-edit-outline" />
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="channelCode" label="渠道" />
       <el-table-column width="100" align="center" prop="yeardate" label="年月" />
       <el-table-column width="220" align="center" prop="varsionName" label="版本" />
       <!-- <el-table-column width="200" align="center" prop="costType" label="Mine Package" /> -->
@@ -104,15 +113,7 @@
         </template>
       </el-table-column>
       <el-table-column width="" align="center" prop="remark" label="备注" />
-      <el-table-column width="180" align="center" prop="updateDate" label="修改时间">
-        <template slot-scope="scope">
-          <div class="table_operation" v-permission="permissions['update']">
-            <div class="table_operation_detail" @click="editor(scope.row)">
-              <i class="el-icon-edit-outline" />
-            </div>
-          </div>
-        </template>
-      </el-table-column>
+      
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">

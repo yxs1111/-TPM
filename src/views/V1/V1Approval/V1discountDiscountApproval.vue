@@ -97,9 +97,22 @@
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
       <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
-      <el-table-column width="120" align="center" prop="activityDateStart" label="活动开始时间" />
-      <el-table-column width="120" align="center" prop="activityDateEnd" label="活动结束时间" />
-      <el-table-column width="120" align="center" prop="judgmentType" label="系统判定" />
+      <el-table-column v-slot="{row}" width="180" align="center" prop="activityDateStart" label="活动开始时间">
+        {{ row.activityDateStart ? row.activityDateStart.substring(0, 10) : '' }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="180" align="center" prop="activityDateEnd" label="活动结束时间">
+        {{ row.activityDateEnd ? row.activityDateEnd.substring(0, 10) : '' }}
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <div v-if="row.judgmentType!== null" class="statusWrap">
+            <img v-if="row.judgmentType === 'Pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
+            {{ row.judgmentType }}
+          </div>
+          <div v-else>{{ row.judgmentType }}</div>
+        </template>
+      </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />

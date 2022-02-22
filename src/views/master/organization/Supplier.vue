@@ -49,7 +49,7 @@
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
           <div>
-            {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+            {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
           </div>
         </template>
       </el-table-column>

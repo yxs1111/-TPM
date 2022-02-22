@@ -57,7 +57,7 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        state: '',
+        state: 1,
         category: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
@@ -96,7 +96,7 @@ export default {
     Reset() {
       this.filterObj = {
         channelCode: '',
-        state: '',
+        state: 1,
         category: '',
       }
       this.getTableData()

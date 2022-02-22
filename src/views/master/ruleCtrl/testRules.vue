@@ -27,7 +27,7 @@
             placeholder="选择月"
           />
         </div>
-        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" :loading="tableLoading" @click="getTableData">查询</el-button>
+        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG"  @click="getTableData">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div v-permission="permissions['export']" class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
@@ -39,7 +39,7 @@
       <el-button v-permission="permissions['update']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
       <el-button v-permission="permissions['insert']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
     </div>
-    <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
+    <el-table  :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
       <el-table-column width="180" align="center" prop="version" label="版本" />
       <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="60" align="left" prop="ruleUnit" label="" />
@@ -201,7 +201,6 @@ export default {
         channel: '',
         date: ''
       },
-      tableLoading: false,
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -551,14 +550,12 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageByDto({
         channelCode: this.filterObj.channel,
         minePackage: 'A',
         yearAndMonth: this.filterObj.date
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data
           this.total = response.data.total
           // 验证内容字段修改
@@ -675,12 +672,10 @@ export default {
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size
-      this.tableLoading = true
       this.getTableData()
     },
     // 当前页变更
     handleCurrentChange(num) {
-      this.tableLoading = true
       this.pageNum = num
       this.getTableData()
     },

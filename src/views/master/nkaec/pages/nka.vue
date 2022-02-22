@@ -33,7 +33,7 @@
         <span class="text">NKA Rawdata导入</span>
       </div>
     </div>
-    <el-table v-loading="tableLoading" :max-height="maxheight" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table  :max-height="maxheight" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="230" align="center" prop="item" label="Item" />
       <el-table-column width="230" align="center" prop="dimProduct" label="Dim_Product" />
       <el-table-column width="260" align="center" prop="dimShopperType" label="Dim_Shopper_Type" />
@@ -124,7 +124,6 @@ export default {
         customer: '',
         measure: ''
       },
-      tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -202,7 +201,6 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      this.tableLoading = true
       API.getPageByDtoNKA({
         product: this.filterObj.product,
         scenario: this.filterObj.scenario,
@@ -213,7 +211,6 @@ export default {
         pageSize: this.pageSize // 每页条数
       })
         .then((response) => {
-          this.tableLoading = false
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize

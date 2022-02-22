@@ -27,7 +27,7 @@
     </div>
     <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
-      <el-table-column fixed align="center" label="操作" width="100">
+      <el-table-column fixed align="center" label="操作">
         <template slot-scope="{ row }">
           <div class="table_operation" v-permission="permissions['update']">
             <div class="table_operation_detail" @click="editor(row)">
@@ -38,7 +38,7 @@
       </el-table-column>
       <el-table-column align="center" prop="brandCode" label="品牌编码"> </el-table-column>
       <el-table-column align="center" prop="brandName" label="品牌名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="state" label="状态">
+      <el-table-column align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
             {{ row.state ? '正常' : '无效' }}

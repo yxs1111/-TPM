@@ -102,10 +102,10 @@
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
       <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
       <el-table-column v-slot="{row}" width="180" align="center" prop="activityDateStart" label="活动开始时间">
-        {{ row.activityDateStart===null?'':row.activityDateStart.replace('T',' ') }}
+        {{ row.activityDateStart ? row.activityDateStart.substring(0, 10) : '' }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="180" align="center" prop="activityDateEnd" label="活动结束时间">
-        {{ row.activityDateEnd===null?'':row.activityDateEnd.replace('T',' ') }}
+        {{ row.activityDateEnd ? row.activityDateEnd.substring(0, 10) : '' }}
       </el-table-column>
       <el-table-column width="150" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
