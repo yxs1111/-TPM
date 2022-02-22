@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-02-14 17:21:04
+ * @LastEditTime: 2022-02-22 13:54:37
 -->
 <template>
   <div class="dashboard-container">
@@ -16,19 +16,19 @@
           </div>
           <div class="PointTipWrap">
             <div class="PointTip">
-              <img src="@/assets/images/index/point1.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_right.png" alt="" class="pointTipImg">
               <span>已完成</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point2.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_circle.png" alt="" class="pointTipImg">
               <span>当前节点</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point3.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_amaze.png" alt="" class="pointTipImg">
               <span>延误节点</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point4.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point.png" alt="" class="pointTipImg">
               <span>未开始</span>
             </div>
           </div>
@@ -37,8 +37,9 @@
             <!-- 流程 -->
             <div class="monthBar" v-for="(channelItem,key) in ActivityList" :key="key">
               <div class="monthBg">
-                <div class="monthName">{{key}}</div>
-                <div class="monthName">({{getCPTMonth(key)}})</div>
+                <div class="monthName">{{getCPTMonth(key)}}</div>
+                <div class="monthName">({{key}})</div>
+               
               </div>
               <div class="monthPoint">
                 <!-- 渠道 -->
@@ -752,46 +753,46 @@ export default {
             .line {
               width: calc(100% - 28px);
               height: 10px;
-              background: linear-gradient(90deg, #f9a470 0%, #fb5a56 100%);
-              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
+              background: linear-gradient(90deg, #8de6cd 0%, #55ba9e 100%);
+              box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
             }
             .lineDark {
               width: calc(100% - 28px);
               height: 10px;
-              background-color: #fee4e4;
-              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
+              background-color: #e5e5e5;
+              // box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
             }
             .pointCircle {
               width: 27px;
               height: 27px;
-              background-color: #fee4e4;
+              background-color: #e5e5e5;
               border: 1px solid #fff;
               border-radius: 50%;
             }
             .passIcon {
               width: 28px;
               height: 28px;
-              background: url('../../../assets/images/index/point3_right.png');
+              background: url('../../../assets/images/index/point_right.png');
               background-size: 100% 100%;
-              box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+              box-shadow: 0px 6px 13px 0px rgba(85, 186, 158, 0.38);
               border-radius: 50%;
               overflow: hidden;
             }
             .currentPoint {
               width: 28px;
               height: 28px;
-              background: url('../../../assets/images/index/point3_circle.png');
+              background: url('../../../assets/images/index/point_circle.png');
               background-size: 100% 100%;
-              box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+              box-shadow: 0px 6px 13px 0px rgba(44, 133, 255, 0.38);
               border-radius: 50%;
               overflow: hidden;
             }
             .delayPoint {
               width: 28px;
               height: 28px;
-              background: url('../../../assets/images/index/point1_amaze.png');
+              background: url('../../../assets/images/index/point_amaze.png');
               background-size: 100% 100%;
-              box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
+              box-shadow: 0px 6px 13px 0px rgba(251, 90, 86, 0.38);
               border-radius: 50%;
               overflow: hidden;
             }
@@ -805,109 +806,34 @@ export default {
           }
         }
         .monthBar:nth-child(3n + 1) .monthBg {
-          background: url('../../../assets/images/index/month (1).png')
+          .monthName {
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #fb5a56;
+          }
+          background: url('../../../assets/images/index/monthNew (1).png')
             no-repeat;
           background-size: 100% 100%;
         }
         .monthBar:nth-child(3n + 2) .monthBg {
-          background: url('../../../assets/images/index/month (2).png')
+          .monthName {
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #2c85ff;
+          }
+          background: url('../../../assets/images/index/monthNew (2).png')
             no-repeat;
           background-size: 100% 100%;
         }
         .monthBar:nth-child(3n + 3) .monthBg {
-          background: url('../../../assets/images/index/month (3).png')
+          .monthName {
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: #ffaa30;
+          }
+          background: url('../../../assets/images/index/monthNew (3).png')
             no-repeat;
           background-size: 100% 100%;
-        }
-        .monthBar:nth-child(3n + 1) {
-          .monthPoint {
-            .line {
-              background: linear-gradient(90deg, #f9a470 0%, #fb5a56 100%);
-              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
-            }
-            .lineDark {
-              background-color: #fee4e4;
-              box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
-            }
-            .pointCircle {
-              background-color: #fee4e4;
-            }
-          }
-          .passIcon {
-            background: url('../../../assets/images/index/point1_right.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(251, 91, 86, 0.38);
-          }
-          .currentPoint {
-            background: url('../../../assets/images/index/point1_circle.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(251, 91, 86, 0.38);
-          }
-          .delayPoint {
-            background: url('../../../assets/images/index/point1_amaze.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(251, 91, 86, 0.38);
-          }
-        }
-        .monthBar:nth-child(3n + 2) {
-          .monthPoint {
-            .line {
-              background: linear-gradient(90deg, #3ebcfd 0%, #2c85ff 100%);
-              box-shadow: 0px 2px 6px 0px rgba(44, 133, 255, 0.31);
-            }
-            .lineDark {
-              background-color: #e2eeff;
-              box-shadow: 0px 2px 6px 0px rgba(44, 133, 255, 0.31);
-            }
-            .pointCircle {
-              background-color: #e2eeff;
-            }
-          }
-          .passIcon {
-            background: url('../../../assets/images/index/point2_right.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(47, 142, 255, 0.38);
-          }
-          .currentPoint {
-            background: url('../../../assets/images/index/point2_circle.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(47, 142, 255, 0.38);
-          }
-          .delayPoint {
-            background: url('../../../assets/images/index/point2_amaze.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(47, 142, 255, 0.38);
-          }
-        }
-        .monthBar:nth-child(3n + 3) {
-          .monthPoint {
-            .line {
-              background: linear-gradient(90deg, #ffd35c 0%, #ffaa30 100%);
-              box-shadow: 0px 2px 6px 0px rgba(255, 170, 48, 0.31);
-            }
-            .lineDark {
-              background-color: #fff1de;
-              box-shadow: 0px 2px 6px 0px rgba(255, 170, 48, 0.31);
-            }
-            .pointCircle {
-              background-color: #fff1de;
-            }
-          }
-          .passIcon {
-            background: url('../../../assets/images/index/point3_right.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
-          }
-          .currentPoint {
-            background: url('../../../assets/images/index/point3_circle.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
-          }
-          .delayPoint {
-            background: url('../../../assets/images/index/point3_amaze.png');
-            background-size: 100% 100%;
-            box-shadow: 0px 6px 13px 0px rgba(255, 175, 55, 0.38);
-          }
         }
       }
     }
@@ -1086,10 +1012,8 @@ export default {
   .dashWrap {
     height: calc(100% - 33px);
     overflow-y: auto;
-    
   }
 }
-
 </style>
 <style>
 /* timeLine 样式设置 */
