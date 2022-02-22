@@ -37,7 +37,7 @@
     <el-table ref="permissionTable"  :header-cell-style="HeadTable" :row-class-name="tableRowClassName"  :data="permissionPageProps.records"  border fit  :max-height="maxheight" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" fixed="left" type="selection" width="55" />
-      <el-table-column align="center" fixed="left" label="序号" width="95">
+      <el-table-column align="center" fixed="left" label="序号" >
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>

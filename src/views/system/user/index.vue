@@ -54,7 +54,7 @@
           <span>{{ row.loginName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" align="center">
+      <el-table-column label="创建人" align="center" width="380">
         <template slot-scope="{row}">
           {{ row.createBy }}
         </template>

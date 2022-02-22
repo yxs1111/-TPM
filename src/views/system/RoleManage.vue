@@ -16,7 +16,7 @@
           :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd" :default-time="['00:00:00','23:59:59']" @change="search" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG"  @click="search">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">搜索</el-button>
       </el-form-item>
       <el-form-item>
         <el-button @click="reset" class="TpmButtonBG">重置</el-button>
@@ -34,8 +34,8 @@
       </el-button> -->
     </div>
     <!--查询结果-->
-    <el-table ref="roleTable"  :data="rolePageProps.records" border fit stripe :max-height="maxheight" highlight-current-row
-      @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
+    <el-table ref="roleTable" :data="rolePageProps.records" border fit stripe :max-height="maxheight" highlight-current-row @row-click="handleCurrentRowClick"
+      @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
@@ -45,7 +45,7 @@
         </template>
       </el-table-column>
       <el-table-column fixed width="280" label="角色名称" align="center" prop="name"></el-table-column>
-      <el-table-column fixed label="权限区分类型" align="center" prop="permissionType"  width="120"></el-table-column>
+      <el-table-column fixed label="权限区分类型" align="center" prop="permissionType" width="120"></el-table-column>
       <el-table-column label="创建人" align="center" prop="createBy"></el-table-column>
       <el-table-column align="center" prop="created_date" label="创建时间" width="250">
         <template slot-scope="{row}">
@@ -111,7 +111,7 @@
         <el-form-item v-if="roleDialog.state !== 'create'" label="创建人" prop="createBy">
           <span>{{ roleDialog.data.createBy }}</span>
         </el-form-item>
-        <el-form-item v-if="roleDialog.state !== 'create'"  label="创建时间" prop="createDate">
+        <el-form-item v-if="roleDialog.state !== 'create'" label="创建时间" prop="createDate">
           <em class="el-icon-time" />
           <span>{{ parseJson(roleDialog.data.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </el-form-item>
@@ -120,10 +120,10 @@
         <el-button @click="roleDialog.visible = false">
           关闭
         </el-button>
-        <el-button v-if="roleDialog.state==='info'"  type="primary" @click="changeToEdit">
+        <el-button v-if="roleDialog.state==='info'" type="primary" @click="changeToEdit">
           编辑
         </el-button>
-        <el-button v-else  type="primary"  @click="saveOrUpdate">
+        <el-button v-else type="primary" @click="saveOrUpdate">
           保存并关闭
         </el-button>
       </div>
@@ -149,7 +149,7 @@
               </el-select>
             </el-form-item>
             <el-form-item style="margin-bottom: 5px;">
-              <el-button type="primary" icon="el-icon-search" class="TpmButtonBG"  @click="fetchMenuData">刷新</el-button>
+              <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="fetchMenuData">刷新</el-button>
             </el-form-item>
           </el-form>
           <!--搜索框-->
@@ -183,15 +183,15 @@
                 <el-checkbox v-model="showCheckedOnly">只看已绑定</el-checkbox>
               </el-form-item>
               <el-form-item style="margin-bottom: 5px;">
-                <el-button type="primary"  @click="clickToSearchPer">搜索</el-button>
+                <el-button type="primary" @click="clickToSearchPer">搜索</el-button>
               </el-form-item>
               <!-- <el-form-item style="margin-bottom: 5px;">
               <el-button type="primary" @click="bindPermission">绑定权限</el-button>
             </el-form-item> -->
             </el-form>
             <!--查询结果-->
-            <el-table ref="perTable" :data="filterPerPage()"  border fit stripe height="490" highlight-current-row size="mini"
-              :row-class-name="perTableRowClassName" @row-click="handleCurrentPerRowClick" @selection-change="handlePerSelectionChange">
+            <el-table ref="perTable" :data="filterPerPage()" border fit stripe height="490" highlight-current-row size="mini" :row-class-name="perTableRowClassName"
+              @row-click="handleCurrentPerRowClick" @selection-change="handlePerSelectionChange">
               <el-table-column align="center" type="selection" width="55" />
               <el-table-column align="center" label="序号" width="55">
                 <template slot-scope="scope">
@@ -222,12 +222,16 @@
     </el-dialog>
     <!-- 数据权限绑定 -->
     <el-dialog width="55%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
-      <div class="roleBindWrap" >
+      <div class="roleBindWrap">
         <div class="roleName">{{roleName}}</div>
         <el-input placeholder="输入关键字进行过滤" v-model="RoleTreeFilter">
         </el-input>
         <div class="roleTree">
-          <el-tree :data="RoleTreedata" ref="RoleTree" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="id" highlight-current :props="Role_KA">
+          <el-tree v-show="permissionType === 'Mine Package'||permissionType === null"  :data="RoleTreeData_Mine" ref="RoleTree_Mine" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true"
+            node-key="mid" highlight-current :props="treeProps_Mine">
+          </el-tree>
+          <el-tree v-show="permissionType !== 'Mine Package'||permissionType === null"  :data="RoleTreedata" ref="RoleTree" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="id"
+            highlight-current :props="Role_KA">
           </el-tree>
         </div>
       </div>
@@ -247,7 +251,7 @@ import {
   getTextMap,
   parseTime,
   getDefaultPermissions,
-  getHeight
+  getHeight,
 } from '@/utils'
 import { Message } from 'element-ui'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -394,10 +398,15 @@ export default {
         children: 'children',
         label: 'label',
       },
+      treeProps_Mine: {
+        children: 'children',
+        label: 'label',
+      },
       Role_KAData: {}, //KA 权限数据
+      RoleTreeData_Mine: [], //Mine-package tree data
       permissionType: '', //角色数据权限类型
       roleCode: '',
-      roleName:'', //角色数据权限--角色名称
+      roleName: '', //角色数据权限--角色名称
       maxheight: getHeight(),
     }
   },
@@ -834,7 +843,8 @@ export default {
     },
     //数据权限绑定--弹窗显示
     showRoleDialog(obj) {
-      this.roleName=obj.name
+      this.roleName = obj.name
+      this.permissionType = obj.permissionType
       if (obj.permissionType == 'KA') {
         this.getKAList()
       } else if (obj.permissionType == 'Mine Package') {
@@ -876,33 +886,25 @@ export default {
       this.roleVisible = false
       this.roleCode = ''
       this.RoleTreedata = []
+      this.RoleTreeData_Mine = []
+      this.permissionType = ''
     },
     //获取默认权限
     getDefaultRolePermissions(roleCode) {
       roleApi.getDefaultRolePermissions({ roleCode }).then((res) => {
-        console.log(res)
-        // let list = res.data
-        // for (let i = 0; i < list.length; i++) {
-        //   let secondList = list[i].childList
-        //   for (let j = 0; j < secondList.length; j++) {
-        //     let thirdList = secondList[j].childList
-        //     for (let m = 0; m < thirdList.length; m++) {
-        //       thirdList[m].label = thirdList[m].dataTerCode
-        //       thirdList[m].dataSecId = secondList[j].dataSecId
-        //       thirdList[m].dataSecCode = secondList[j].dataSecCode
-        //       thirdList[m].dataFircode = list[i].dataFirCode
-        //     }
-        //   }
-        // }
-        // console.log(list)
         let list = res.data
         for (let i = 0; i < list.length; i++) {
           list[i].label=list[i].dataTerCode
           list[i].id=list[i].dataTerId
+          list[i].mid=list[i].dataSecId+'-'+list[i].dataTerCode
         }
-        console.log(list);
-        this.$refs.RoleTree.setCheckedNodes(list)
-        // this.$refs.RoleTree.setCheckedKeys(IdList, true)
+        //分成两个板块
+        if (this.permissionType === 'Mine Package'||this.permissionType ===null) {
+          this.$refs.RoleTree_Mine.setCheckedNodes([...list])
+        } else if(this.permissionType != 'Mine Package') {
+          this.$refs.RoleTree.setCheckedNodes([...list])
+        }
+        this.$forceUpdate()
       })
     },
     //获取KA 权限
@@ -934,7 +936,6 @@ export default {
         this.roleVisible = true
         //获取已绑定权限
         this.getDefaultRolePermissions(this.roleCode)
-        console.log(this.RoleTreedata)
       })
     },
     //获取Mine Package 权限
@@ -953,6 +954,8 @@ export default {
               list[i].children[j]['dataSecId'] = list[i].id
               list[i].children[j]['dataSecCode'] = list[i].costTypeNumber
               list[i].children[j]['dataFircode'] = 'MinePackage'
+              list[i].children[j]['mid'] =
+                list[i].id + '-' + list[i].children[j].channelCode
             }
           } else {
             list[i]['children'] = []
@@ -962,7 +965,10 @@ export default {
           label: 'Mine Package',
           children: [...list],
         }
-        this.RoleTreedata.push(obj)
+        this.RoleTreeData_Mine = []
+        this.RoleTreeData_Mine.push(obj)
+        //将tree 分成两个板块 ，minePackage层用  3-NKA作为辨别id（mid），其他正常
+        // this.RoleTreedata.push(obj)
         this.roleVisible = true
         //获取已绑定权限
         this.getDefaultRolePermissions(this.roleCode)
