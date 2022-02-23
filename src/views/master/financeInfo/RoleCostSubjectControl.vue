@@ -17,6 +17,10 @@
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="@/assets/images/export.png" alt="" />
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -43,7 +47,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap,getHeight } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,getHeight,downloadFile} from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
   name: 'RoleCostSubjectControl',
@@ -140,6 +144,18 @@ export default {
     search() {
       this.pageNum=1
       this.getTableData()
+    },
+    //导出数据
+    exportData() {
+      let formData = new FormData()
+      formData.append('costType', this.filterObj.costType)
+      formData.append('minePackage', this.filterObj.minePackage)
+      formData.append('costItem', this.filterObj.costItem)
+      API.exportCostType(formData).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '费用类型 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     handleSelectionChange(val) {
       this.checkArr = val

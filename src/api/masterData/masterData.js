@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-02-21 14:03:48
+ * @LastEditTime: 2022-02-23 09:45:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -18,6 +18,15 @@ export default {
    */
   getPageMdProduct(params) {
     return requestApi.request_get('/mdm/mdProduct/getPage', params)
+  },
+  // 产品导出
+  exportProduct(params) {
+    return request({
+      url: '/mdm/mdProduct/exportProduct',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
   },
   /**
    * 产品信息--添加
@@ -120,6 +129,15 @@ export default {
   deleteMdCustomer(params) {
     return requestApi.request_delete('/mdm/mdCustomer/delete', params)
   },
+  // 导出客户
+  exportCustomer(params) {
+    return request({
+      url: '/mdm/mdCustomer/exportCustomer',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
+  },
   // 渠道信息
   getPageMdChannel(params) {
     return requestApi.request_get('/mdm/mdChannel/getPage', params)
@@ -132,6 +150,15 @@ export default {
   },
   deleteMdChannel(params) {
     return requestApi.request_delete('/mdm/mdChannel/delete', params)
+  },
+  //渠道导出
+  exportChannel(params) {
+    return request({
+      url: '/mdm/mdChannel/exportChannel',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
   },
   // 经销商信息
   getPageMdDistributor(params) {
@@ -162,6 +189,15 @@ export default {
   getCostTypeList(params) {
     return requestApi.request_get('/mdm/mdCostType/getCostTypeList', params)
   },
+  //导出费用类型
+  exportCostType(params) {
+    return request({
+      url: '/mdm/mdCostType/exportCostType',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
+  },
   // 品牌信息
   getPageMdBrand(params) {
     return requestApi.request_get('/mdm/mdBrand/getPage', params)
@@ -175,6 +211,15 @@ export default {
   deleteMdBrand(params) {
     return requestApi.request_delete('/mdm/mdBrand/delete', params)
   },
+  //导出品牌
+  exportBrand(params) {
+    return request({
+      url: '/mdm/mdBrand/exportBrand',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
+  },
   // 门店信息
   getPageMdStore(params) {
     return requestApi.request_get('/mdm/mdStore/getPage', params)
@@ -187,6 +232,15 @@ export default {
   },
   deleteMdStore(params) {
     return requestApi.request_delete('/mdm/mdStore/delete', params)
+  },
+  //门店导出
+  exportStore(params) {
+    return request({
+      url: '/mdm/mdStore/exportStore',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
   },
   // 规则控制---检验规则
   getPageByDto(params) {
@@ -383,6 +437,15 @@ export default {
   // 销售架构
   getOrgPage(params) {
     return requestApi.request_get('/auth/organization/getOrgPage', params)
+  },
+  //导出销售架构
+  exportOrg(params) {
+    return request({
+      url: '/mdm/mdCustomerDistributor/exportOrg',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
   },
   // WBS
   getPageByWbs(params) {

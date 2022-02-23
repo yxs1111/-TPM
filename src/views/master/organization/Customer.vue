@@ -25,6 +25,10 @@
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="@/assets/images/export.png" alt="" />
+          <span class="text">导出</span>
+        </div>
         <!-- <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button> -->
         <!-- <div class="TpmButtonBG" @click="importDataNKA">
           <img src="@/assets/images/import.png" alt="">
@@ -134,7 +138,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions,getHeight } from '@/utils'
+import { getDefaultPermissions,getHeight,downloadFile } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -292,6 +296,19 @@ export default {
         customerCsName: '',
       }
       this.getTableData()
+    },
+    //导出数据
+    exportData() {
+      let formData = new FormData()
+      formData.append('customerCode', this.filterObj.customerCode)
+      formData.append('customerCsName', this.filterObj.customerCsName)
+      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('state', this.filterObj.state)
+      API.exportCustomer(formData).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '客户 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

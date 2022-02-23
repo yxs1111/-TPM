@@ -15,6 +15,10 @@
         </div>
         <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="@/assets/images/export.png" alt="" />
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -104,6 +108,36 @@ export default {
     search() {
       this.pageNum = 1
       this.getTableData()
+    },
+    //导出数据
+    exportData() {
+      let formData = new FormData()
+      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('state', this.filterObj.state)
+      API.exportChannel(formData).then((res) => {
+        let timestamp = Date.parse(new Date())
+        this.downloadFile(res, '渠道 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
+    //下载文件
+    downloadFile(res, fileName) {
+      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
