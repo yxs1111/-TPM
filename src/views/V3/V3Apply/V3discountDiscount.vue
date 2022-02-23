@@ -130,15 +130,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
@@ -176,23 +169,14 @@
       </div>
 
       <div class="tableWrap">
-        <vxe-table
-          ref="sampleTable"
-          border
-          height="400"
-          :data="dialogDataF"
-          style="width: 100%"
-          :header-cell-style="{
+        <vxe-table ref="sampleTable" border height="400" :data="dialogDataF" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }"
-          :row-class-name="tableRowClassName"
-          stripe
-        >
+          }" :row-class-name="tableRowClassName" stripe>
           <vxe-table-column fixed align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -298,22 +282,14 @@
       </div>
 
       <div class="tableWrap">
-        <vxe-table
-          border
-          height="400"
-          :data="dialogData"
-          style="width: 100%"
-          :header-cell-style="{
+        <vxe-table border height="400" :data="dialogData" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }"
-          :row-class-name="tableRowClassName"
-          stripe
-        >
+          }" :row-class-name="tableRowClassName" stripe>
           <vxe-table-column fixed align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -388,7 +364,13 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap, FormateThousandNum ,getHeightHaveTab} from '@/utils'
+import {
+  getDefaultPermissions,
+  messageMap,
+  FormateThousandNum,
+  getHeightHaveTab,
+  messageObj
+} from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -426,7 +408,7 @@ export default {
         customerName: null,
         distributorName: null,
         productName: null,
-        regionName: null
+        regionName: null,
       },
       categoryArr: [{ label: '选项一', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -448,8 +430,10 @@ export default {
   computed: {},
   watch: {
     'filterObj.customerIndex'() {
-      this.filterObj.customerCode = this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode = this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      this.filterObj.customerCode =
+        this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode =
+        this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
@@ -460,7 +444,7 @@ export default {
     'filterObj.distributorName'() {
       this.filterObj.regionName = ''
       this.getRegionList()
-    }
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -488,13 +472,15 @@ export default {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
     getRegionList() {
-      selectAPI.getRegionList({
-        distributorName: this.filterObj.distributorName
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
     },
     // 获取年月
     getEffectiveDate() {
@@ -509,25 +495,31 @@ export default {
     },
     // 获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
-        if (res.code === 1000) {
-          this.channelArr = res.data
-          // if (!this.$route.query.channelCode) {
-          //   this.filterObj.channelName = this.channelArr[0].channelCode
-          // } else {
-          //   this.filterObj.channelName = this.$route.query.channelCode
-          // }
-          this.getEffectiveDate()
-          this.getCustomerList()
-        }
-      }).catch()
+      selectAPI
+        .queryChannelSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.channelArr = res.data
+            // if (!this.$route.query.channelCode) {
+            //   this.filterObj.channelName = this.channelArr[0].channelCode
+            // } else {
+            //   this.filterObj.channelName = this.$route.query.channelCode
+            // }
+            this.getEffectiveDate()
+            this.getCustomerList()
+          }
+        })
+        .catch()
     },
     getSKU() {
-      selectAPI.querySkuSelect().then(res => {
-        if (res.code === 1000) {
-          this.skuArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.skuArr = res.data
+          }
+        })
+        .catch()
     },
     // getMP() {
     //   selectAPI.queryMinePackageSelect().then(res => {
@@ -539,99 +531,115 @@ export default {
     // 客户
     getCustomerList() {
       this.filterObj.customerName = null
-      selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelName
-      }).then(res => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+        .catch()
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList({
-        customerMdmCode: this.filterObj.customerMdmCode
-      }).then(res => {
-        if (res.code === 1000) {
-          this.distributorArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
     },
     // 提交
     submitApply() {
       if (this.tableData[0].judgmentType === null) {
         this.$confirm('数据未校验，请先进行导入验证', '提示', {
           confirmButtonText: '确定',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '好的!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'warning',
         })
+          .then(() => {
+            this.$message({
+              type: 'success',
+              message: '好的!',
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
       } else {
         this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          API.submitApply({
-            mainId: this.mainIdLocal
-          }).then(res => {
-            if (res.code === 1000) {
-              this.getTableData()
-              this.$message({
-                type: 'success',
-                message: '提交成功!'
-              })
-            }
-          }).catch()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消提交'
-          })
+          type: 'warning',
         })
+          .then(() => {
+            API.submitApply({
+              mainId: this.mainIdLocal,
+            })
+              .then((res) => {
+                if (res.code === 1000) {
+                  this.getTableData()
+                  this.$message({
+                    type: 'success',
+                    message: '提交成功!',
+                  })
+                }
+              })
+              .catch()
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消提交',
+            })
+          })
       }
     },
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
-        isMakeUp: false
-      }).then(res => {
-        if (res.code === 1000) {
-          this.$message.success('保存成功')
-          this.closeimportDialog()
-          this.saveDialog = true
-          this.getTableData()
-        } else {
-          this.$message.error('保存失败')
-          this.getTableData()
-        }
-      }).catch()
+        isMakeUp: false,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('保存成功')
+            this.closeimportDialog()
+            this.saveDialog = true
+            this.getTableData()
+          } else {
+            this.$message.error('保存失败')
+            this.getTableData()
+          }
+        })
+        .catch()
     },
     // 导入文件检索后保存  补录
     saveImportInfoCpm() {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
-        isMakeUp: true
-      }).then(res => {
-        if (res.code === 1000) {
-          this.$message.success('保存成功')
-          // this.closeimportDialog()
-          this.saveDialog = true
-          this.getTableData()
-        } else {
-          this.$message.error('保存失败')
-          this.getTableData()
-        }
-      }).catch()
+        isMakeUp: true,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('保存成功')
+            // this.closeimportDialog()
+            this.saveDialog = true
+            this.getTableData()
+          } else {
+            this.$message.error('保存失败')
+            this.getTableData()
+          }
+        })
+        .catch()
     },
     // 导入数据
     importData() {
@@ -652,31 +660,35 @@ export default {
     exceptionCheck() {
       var formData = new FormData()
       formData.append('mainId', this.mainIdLocal)
-      API.exceptionCheck(formData).then(res => {
-        if (res.code === 1000) {
-          this.uploadFileName = ''
-          this.firstIsPass = false
-          this.firstIsPassComple = false
-          this.$message({
-            type: 'success',
-            message: '第二次检测文件上传成功'
-          })
-          if (res.data != null) {
-            this.dialogDataF = res.data
-            this.$forceUpdate()
-            this.saveBtn = (res.data[0].judgmentType !== 'Error' && res.data[0].judgmentType !== '')
+      API.exceptionCheck(formData)
+        .then((res) => {
+          if (res.code === 1000) {
+            this.uploadFileName = ''
+            this.firstIsPass = false
+            this.firstIsPassComple = false
+            this.$message({
+              type: 'success',
+              message: '第二次检测文件上传成功',
+            })
+            if (res.data != null) {
+              this.dialogDataF = res.data
+              this.$forceUpdate()
+              this.saveBtn =
+                res.data[0].judgmentType !== 'Error' &&
+                res.data[0].judgmentType !== ''
+            } else {
+              this.dialogDataF = []
+            }
           } else {
+            this.uploadFileName = ''
             this.dialogDataF = []
+            this.$message({
+              type: 'error',
+              message: '第二次检测文件上传失败，请重新上传。',
+            })
           }
-        } else {
-          this.uploadFileName = ''
-          this.dialogDataF = []
-          this.$message({
-            type: 'error',
-            message: '第二次检测文件上传失败，请重新上传。'
-          })
-        }
-      }).catch()
+        })
+        .catch()
     },
     // 确认导入
     confirmImport() {
@@ -693,20 +705,22 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '检测文件上传成功'
+              message: '检测文件上传成功',
             })
             if (response.data != null) {
               // debugger
               this.dialogDataF = response.data
               this.$forceUpdate()
-              this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              this.saveBtn =
+                response.data[0].judgmentType !== 'Error' &&
+                response.data[0].judgmentType !== ''
             } else {
               this.dialogDataF = []
             }
           } else {
             this.$message({
               type: 'error',
-              message: '检测文件上传失败，请重新上传。'
+              message: '检测文件上传失败，请重新上传。',
             })
           }
           // 清除input的value ,上传一样的
@@ -718,28 +732,32 @@ export default {
     exceptionCheckComple() {
       const formDataComple = new FormData()
       formDataComple.append('mainId', this.mainIdLocal)
-      API.exceptionCheck(formDataComple).then(res => {
-        if (res.code === 1000) {
-          this.uploadFileName = ''
-          this.$message({
-            type: 'success',
-            message: messageMap().checkSuccess
-          })
-          if (res.data != null) {
-            this.dialogData = res.data
-            this.saveBtn = (res.data[0].judgmentType !== 'Error' && res.data[0].judgmentType !== '')
+      API.exceptionCheck(formDataComple)
+        .then((res) => {
+          if (res.code === 1000) {
+            this.uploadFileName = ''
+            this.$message({
+              type: 'success',
+              message: messageMap().checkSuccess,
+            })
+            if (res.data != null) {
+              this.dialogData = res.data
+              this.saveBtn =
+                res.data[0].judgmentType !== 'Error' &&
+                res.data[0].judgmentType !== ''
+            } else {
+              this.dialogData = []
+            }
           } else {
+            this.uploadFileName = ''
             this.dialogData = []
+            this.$message({
+              type: 'error',
+              message: messageMap().checkError,
+            })
           }
-        } else {
-          this.uploadFileName = ''
-          this.dialogData = []
-          this.$message({
-            type: 'error',
-            message: messageMap().checkError
-          })
-        }
-      }).catch()
+        })
+        .catch()
     },
     // 确认导入--补录
     confirmImportComple() {
@@ -755,18 +773,20 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '检测文件上传成功'
+              message: '检测文件上传成功',
             })
             if (response.data != null) {
               this.dialogData = response.data
-              this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              this.saveBtn =
+                response.data[0].judgmentType !== 'Error' &&
+                response.data[0].judgmentType !== ''
             } else {
               this.dialogData = []
             }
           } else {
             this.$message({
               type: 'error',
-              message: '检测文件上传失败，请重新上传。'
+              message: '检测文件上传失败，请重新上传。',
             })
           }
           this.event.srcElement.value = ''
@@ -802,29 +822,34 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: messageMap().importSuccess
+              message: messageMap().importSuccess,
             })
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
                   type: 'info',
-                  message: '导入数据为空，请检查模板！'
+                  message: '导入数据为空，请检查模板！',
                 })
               }
               if (isMakeUp === true) {
                 this.dialogData = response.data
-                if (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '') {
+                if (
+                  response.data[0].judgmentType !== 'Error' &&
+                  response.data[0].judgmentType !== ''
+                ) {
                   this.saveImportInfoCpm()
                 } else {
                   this.$message({
                     type: 'error',
-                    message: '存在异常信息'
+                    message: '存在异常信息',
                   })
                 }
                 // this.firstIsPassComple = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
               } else {
                 this.dialogDataF = response.data
-                this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+                this.firstIsPass =
+                  response.data[0].judgmentType !== 'Error' &&
+                  response.data[0].judgmentType !== ''
               }
             } else {
               this.dialogDataF = []
@@ -833,7 +858,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: messageMap().importError
+              message: messageMap().importError,
             })
             this.uploadFile = ''
           }
@@ -871,23 +896,22 @@ export default {
         channelName: this.filterObj.channelName,
         yearAndMonth: this.localDate,
         // channelName: 'NKA',
-        mainId: this.mainIdLocal
-      }).then(
-        response => {
-          const fileName = '导入模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        mainId: this.mainIdLocal,
+      }).then((response) => {
+        const fileName = '导入模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 下载excel模板 --- 补录
     downLoadElxModelNext() {
@@ -896,23 +920,22 @@ export default {
         exportType: 'exportMakeUpTemplate',
         // channelName: this.filterObj.channelName,
         channelName: this.filterObj.channelName,
-        mainId: this.mainIdLocal
-      }).then(
-        response => {
-          const fileName = '补录导入模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        mainId: this.mainIdLocal,
+      }).then((response) => {
+        const fileName = '补录导入模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 校验excel
     downLoadException() {
@@ -920,23 +943,23 @@ export default {
         yearAndMonth: this.localDate,
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal,
-        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName
-      }).then(
-        response => {
-          const fileName = '下载异常模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        channelName:
+          this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+      }).then((response) => {
+        const fileName = '下载异常模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 打开文件
     openFile(file) {
@@ -958,15 +981,24 @@ export default {
     exportData() {
       // 导出数据筛选
       const data = {
-        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+        channelName:
+          this.filterObj.channelName === '' ? null : this.filterObj.channelName,
         // channelName: 'NKA',
-        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
-        distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
-        productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
+        customerName:
+          this.filterObj.customerCode === ''
+            ? null
+            : this.filterObj.customerCode,
+        distributorName:
+          this.filterObj.distributorName === ''
+            ? null
+            : this.filterObj.distributorName,
+        productName:
+          this.filterObj.productName === '' ? null : this.filterObj.productName,
         yearAndMonth: this.localDate,
-        regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+        regionName:
+          this.filterObj.regionName === '' ? null : this.filterObj.regionName,
         exportType: 'export',
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
       }
       API.exportV3(data).then((res) => {
         // if (res.code) {
@@ -999,48 +1031,71 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageV3({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
-        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
-        distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
-        productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
-        yearAndMonth: this.localDate,
-        regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName
-      })
-        .then((response) => {
-          if (response.data.records.length > 0) {
-            this.tableData = response.data.records
-            this.mainIdLocal = response.data.records[0].mainId
-            this.submitBtn = response.data.records[0].isSubmit
-            this.infoByMainId()
-          } else {
-            this.tableData = []
-            this.mainIdLocal = null
-            this.btnStatus = false
-          }
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
+      if (!this.filterObj.channelName) {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPageV3({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          channelName:
+            this.filterObj.channelName === ''
+              ? null
+              : this.filterObj.channelName,
+          customerName:
+            this.filterObj.customerCode === ''
+              ? null
+              : this.filterObj.customerCode,
+          distributorName:
+            this.filterObj.distributorName === ''
+              ? null
+              : this.filterObj.distributorName,
+          productName:
+            this.filterObj.productName === ''
+              ? null
+              : this.filterObj.productName,
+          yearAndMonth: this.localDate,
+          regionName:
+            this.filterObj.regionName === '' ? null : this.filterObj.regionName,
         })
-        .catch((error) => {})
+          .then((response) => {
+            if (response.data.records.length > 0) {
+              this.tableData = response.data.records
+              this.mainIdLocal = response.data.records[0].mainId
+              this.submitBtn = response.data.records[0].isSubmit
+              this.infoByMainId()
+            } else {
+              this.tableData = []
+              this.mainIdLocal = null
+              this.btnStatus = false
+            }
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+          .catch((error) => {})
+      }
     },
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainId({
-        mainId: this.mainIdLocal
-      }).then(res => {
-        if (res.code === 1000) {
-          if (res.data.version === 'V3' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 0) {
-            this.btnStatus = true
+        mainId: this.mainIdLocal,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V3' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.submitBtn === 0
+            ) {
+              this.btnStatus = true
+            } else {
+              this.btnStatus = false
+            }
           } else {
             this.btnStatus = false
           }
-        } else {
-          this.btnStatus = false
-        }
-      }).catch()
+        })
+        .catch()
     },
     search() {
       console.log('hh')
@@ -1066,20 +1121,20 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-.el-icon-my-file{
+.el-icon-my-file {
   background: url('~@/assets/images/selFile.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-file:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-file:before {
+  content: '\e611';
+  font-size: 16px;
 }
 </style>
 <style lang="scss" scoped>

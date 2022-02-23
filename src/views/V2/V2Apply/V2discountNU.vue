@@ -49,7 +49,7 @@
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="240" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" v-slot={row} align="right" prop="planVol" label="V1计划总销量（CTN）">
         {{FormateNum(row.planVol)}}
@@ -208,7 +208,8 @@ import {
   getTextMap,
   messageMap,
   FormateThousandNum,
-  getHeightHaveTab
+  getHeightHaveTab,
+  messageObj
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -275,30 +276,34 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageNU({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerName: this.filterObj.customerCode,
-        brandName: this.filterObj.brandCode,
-      })
-        .then((response) => {
-          if (response.code == 1000) {
-            this.tableData = response.data.records
-            if (this.tableData.length) {
-              this.isSubmit = this.tableData[0].isSubmit
-              this.mainId = this.tableData[0].mainId
-              this.infoByMainId()
-            } else {
-              this.isSubmit = 1
-            }
-            this.pageNum = response.data.pageNum
-            this.pageSize = response.data.pageSize
-            this.total = response.data.total
-          }
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPageNU({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          brandName: this.filterObj.brandCode,
         })
-        .catch((error) => {})
+          .then((response) => {
+            if (response.code == 1000) {
+              this.tableData = response.data.records
+              if (this.tableData.length) {
+                this.isSubmit = this.tableData[0].isSubmit
+                this.mainId = this.tableData[0].mainId
+                this.infoByMainId()
+              } else {
+                this.isSubmit = 1
+              }
+              this.pageNum = response.data.pageNum
+              this.pageSize = response.data.pageSize
+              this.total = response.data.total
+            }
+          })
+          .catch((error) => {})
+      }
     },
     // 通过与审批按钮控制
     infoByMainId() {
@@ -310,7 +315,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'NUV2' &&
-              res.data.assignee.indexOf(this.usernameLocal)!=-1
+              res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
               this.isSelf = true
@@ -434,9 +439,9 @@ export default {
       formData.append('channelCode', this.filterObj.channelCode)
       API.exceptionNUCheckTwo(formData).then((response) => {
         if (response.code == 1000) {
-            this.$message.success(this.messageMap.checkSuccess)
-            this.ImportData = response.data
-            this.saveBtn = response.data[0].judgmentType !== 'Error'
+          this.$message.success(this.messageMap.checkSuccess)
+          this.ImportData = response.data
+          this.saveBtn = response.data[0].judgmentType !== 'Error'
         } else {
           this.$message.info(this.messageMap.checkError)
         }

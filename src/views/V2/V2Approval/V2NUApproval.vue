@@ -57,7 +57,7 @@
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" v-slot={row} align="right" prop="planVol" label="V1计划总销量（CTN）">
         {{FormateNum(row.planVol)}}
@@ -213,7 +213,8 @@ import {
   getTextMap,
   messageMap,
   FormateThousandNum,
-  getHeightHaveTab
+  getHeightHaveTab,
+  messageObj
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -280,22 +281,26 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageNU({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerName: this.filterObj.customerCode,
-        brandName: this.filterObj.brandCode,
-      }).then((response) => {
-        this.tableData = response.data.records
-        this.mainId = this.tableData[0].mainId
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
-        //获取提交权限
-        this.infoByMainId()
-      })
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPageNU({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          brandName: this.filterObj.brandCode,
+        }).then((response) => {
+          this.tableData = response.data.records
+          this.mainId = this.tableData[0].mainId
+          this.pageNum = response.data.pageNum
+          this.pageSize = response.data.pageSize
+          this.total = response.data.total
+          //获取提交权限
+          this.infoByMainId()
+        })
+      }
     },
     // 通过与审批按钮控制
     infoByMainId() {
@@ -308,7 +313,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'NUV2' &&
-              res.data.assignee.indexOf(this.usernameLocal)!=-1
+              res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
               this.isSubmit = false
@@ -404,7 +409,7 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-         if (!Array.isArray(response.data)) {
+          if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.ImportData = response.data

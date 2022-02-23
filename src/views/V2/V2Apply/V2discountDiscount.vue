@@ -64,7 +64,7 @@
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="250" align="center" prop="channelName" label="渠道" />
-      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="180" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" align="center" prop="productName" label="SKU" />
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
@@ -87,11 +87,11 @@
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
         {{FormateNum(row.adjustedCost)}}
       </el-table-column>
-      <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
-      
+      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+
       </el-table-column>
-      <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
-     
+      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
+
       </el-table-column>
       <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
         {{FormateNum(row.costDifference)}}
@@ -193,11 +193,11 @@
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
               {{FormateNum(row.adjustedCost)}}
             </el-table-column>
-            <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
-         
+            <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+
             </el-table-column>
-            <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
-        
+            <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
+
             </el-table-column>
             <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
               {{FormateNum(row.costDifference)}}
@@ -234,7 +234,8 @@ import {
   getTextMap,
   messageMap,
   FormateThousandNum,
-  getHeightHaveTab
+  getHeightHaveTab,
+  messageObj
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -291,8 +292,10 @@ export default {
       this.getCustomerList()
     },
     'filterObj.customerIndex'() {
-      this.filterObj.customerCode=this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode=this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      this.filterObj.customerCode =
+        this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode =
+        this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
@@ -320,31 +323,35 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPage({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        regionCode: this.filterObj.regionCode,
-        productName: this.filterObj.dim_product,
-      }).then((response) => {
-        if (response.code == 1000) {
-          this.tableData = response.data.records
-          if (this.tableData.length) {
-            this.isSubmit = this.tableData[0].isSubmit
-            this.mainId = this.tableData[0].mainId
-            this.infoByMainId()
-          } else {
-            this.isSubmit = 1
-          }
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPage({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          productName: this.filterObj.dim_product,
+        }).then((response) => {
+          if (response.code == 1000) {
+            this.tableData = response.data.records
+            if (this.tableData.length) {
+              this.isSubmit = this.tableData[0].isSubmit
+              this.mainId = this.tableData[0].mainId
+              this.infoByMainId()
+            } else {
+              this.isSubmit = 1
+            }
 
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        }
-      })
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          }
+        })
+      }
     },
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
@@ -359,7 +366,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V2' &&
-              res.data.assignee.indexOf(this.usernameLocal)!=-1
+              res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
               this.isSelf = true
@@ -438,7 +445,7 @@ export default {
     },
     importData() {
       this.saveBtn = false
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -470,13 +477,10 @@ export default {
             this.ImportData = response.data
             this.isCheck = response.data[0].judgmentType !== 'Error'
           }
-          
         } else {
           this.$message.info(this.messageMap.importError)
         }
-        
       })
-      
     },
     // 关闭导入
     closeImportDialog() {

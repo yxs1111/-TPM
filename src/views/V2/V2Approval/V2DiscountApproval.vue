@@ -67,7 +67,7 @@
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
-      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" align="center" prop="productName" label="SKU" />
       <el-table-column width="360" align="center" prop="distributorName" label="经销商" />
@@ -232,7 +232,8 @@ import {
   getTextMap,
   messageMap,
   FormateThousandNum,
-  getHeightHaveTab
+  getHeightHaveTab,
+  messageObj
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -302,8 +303,10 @@ export default {
       this.getCustomerList()
     },
     'filterObj.customerIndex'() {
-      this.filterObj.customerCode=this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode=this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      this.filterObj.customerCode =
+        this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode =
+        this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
@@ -316,26 +319,30 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPage({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        customerCode: this.filterObj.customerCode,
-        distributorCode: this.filterObj.distributorCode,
-        regionCode: this.filterObj.regionCode,
-        productName: this.filterObj.dim_product,
-      })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.mainId = this.tableData[0].mainId
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-          //获取提交权限
-          this.infoByMainId()
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPage({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          productName: this.filterObj.dim_product,
         })
-        .catch((error) => {})
+          .then((response) => {
+            this.tableData = response.data.records
+            this.mainId = this.tableData[0].mainId
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+            //获取提交权限
+            this.infoByMainId()
+          })
+          .catch((error) => {})
+      }
     },
     // 通过与审批按钮控制
     infoByMainId() {
@@ -348,7 +355,8 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V2' &&
-              res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.tableData[0].isSubmit 
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.tableData[0].isSubmit
             ) {
               //本人可以提交
               this.isSubmit = false

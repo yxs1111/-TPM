@@ -55,7 +55,7 @@
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
-    </div> 
+    </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
@@ -119,15 +119,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
     <!-- 导入 -->
@@ -139,7 +132,7 @@
           <!-- <el-button v-if="false" type="primary" plain class="my-export" @click="confirmImport()">检测数据
           </el-button> -->
         </div>
-          <el-button v-if="saveBtn" type="primary"  class="TpmButtonBG" @click="closeimportDialog">保存</el-button>
+        <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="closeimportDialog">保存</el-button>
       </div>
 
       <div class="fileInfo" style="justify-content: space-between;">
@@ -155,24 +148,14 @@
       </div>
 
       <div class="tableWrap">
-        <vxe-table
-          ref="sampleTable"
-          border
-          fit
-          height="400"
-          :data="checkedData"
-          style="width: 100%"
-          :header-cell-style="{
+        <vxe-table ref="sampleTable" border fit height="400" :data="checkedData" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }"
-          :row-class-name="tableRowClassName"
-          stripe
-        >
+          }" :row-class-name="tableRowClassName" stripe>
           <vxe-table-column prop="date" fixed="left" align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -208,17 +191,17 @@
           </vxe-table-column>
           <vxe-table-column width="400" align="center" field="distributorName" title="经销商" />
           <vxe-table-column width="120" align="center" field="regionName" title="区域" />
-          <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）" >
-              <template slot-scope="scope">  {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
+          <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）">
+            <template slot-scope="scope"> {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
           </vxe-table-column>
-          <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）" >
-            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedVol) }}</template>
+          <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）">
+            <template slot-scope="scope"> {{ FormateNum(scope.row.adjustedVol) }}</template>
           </vxe-table-column>
           <vxe-table-column width="220" align="right" field="volDifference" title="销量差值（%）">
             <template slot-scope="scope">{{ scope.row.volDifference}}</template>
           </vxe-table-column>
-          <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）" >
-            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedAmount) }}</template>
+          <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）">
+            <template slot-scope="scope"> {{ FormateNum(scope.row.adjustedAmount) }}</template>
           </vxe-table-column>
           <vxe-table-column width="120" align="center" field="mechanismType" title="机制类型" />
           <vxe-table-column width="120" align="center" field="mechanismName" title="机制名称" />
@@ -238,7 +221,13 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap, FormateThousandNum,getHeightHaveTab } from '@/utils'
+import {
+  getDefaultPermissions,
+  messageMap,
+  FormateThousandNum,
+  getHeightHaveTab,
+  messageObj,
+} from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -263,7 +252,7 @@ export default {
         channelCode: '',
         distributorCode: '',
         regionName: '',
-        productCode: ''
+        productCode: '',
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -289,8 +278,10 @@ export default {
   computed: {},
   watch: {
     'filterObj.customerIndex'() {
-      this.filterObj.customerCode = this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode = this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      this.filterObj.customerCode =
+        this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode =
+        this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
@@ -301,7 +292,7 @@ export default {
     'filterObj.distributorCode'() {
       this.filterObj.regionName = ''
       this.getRegionList()
-    }
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -322,64 +313,80 @@ export default {
       return FormateThousandNum(num)
     },
     getRegionList() {
-      selectAPI.getRegionList({
-        distributorName: this.filterObj.distributorCode
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
     },
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainId({
-        mainId: this.mainIdLocal
-      }).then(res => {
-        if (res.code === 1000) {
-          // debugger
-          if (res.data.version === 'V1' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 1) {
-            this.btnStatus = true
+        mainId: this.mainIdLocal,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            // debugger
+            if (
+              res.data.version === 'V1' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.submitBtn === 1
+            ) {
+              this.btnStatus = true
+            } else {
+              this.btnStatus = false
+            }
           } else {
             this.btnStatus = false
           }
-        } else {
-          this.btnStatus = false
-        }
-      }).catch()
+        })
+        .catch()
     },
     // 获取年月
     getEffectiveDate() {
-      API.getEffectiveDate({ version: 'V1' }).then(res => {
-        if (res.code === 1000) {
-          this.localDate = res.data
-          // this.getTableData()
-        } else {
-          this.$message.warning('未查询到年月信息！')
-        }
-      }).catch()
+      API.getEffectiveDate({ version: 'V1' })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.localDate = res.data
+            // this.getTableData()
+          } else {
+            this.$message.warning('未查询到年月信息！')
+          }
+        })
+        .catch()
     },
     // 获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
-        if (res.code === 1000) {
-          this.channelArr = res.data
-          // if (!this.$route.query.channelCode) {
-          //   this.filterObj.channelCode = this.channelArr[0].channelEsName
-          // } else {
-          //   this.filterObj.channelCode = this.$route.query.channelCode
-          // }
+      selectAPI
+        .queryChannelSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.channelArr = res.data
+            // if (!this.$route.query.channelCode) {
+            //   this.filterObj.channelCode = this.channelArr[0].channelEsName
+            // } else {
+            //   this.filterObj.channelCode = this.$route.query.channelCode
+            // }
 
-          this.getCustomerList(this.filterObj.channelCode)
-          this.getEffectiveDate()
-        }
-      }).catch()
+            this.getCustomerList(this.filterObj.channelCode)
+            this.getEffectiveDate()
+          }
+        })
+        .catch()
     },
     getSKU() {
-      selectAPI.querySkuSelect().then(res => {
-        if (res.code === 1000) {
-          this.skuArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.skuArr = res.data
+          }
+        })
+        .catch()
     },
     // getMP() {
     //   selectAPI.queryMinePackageSelect().then(res => {
@@ -391,27 +398,33 @@ export default {
     // 客户
     getCustomerList() {
       this.filterObj.customerCode = ''
-      selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelCode
-      }).then(res => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+        .catch()
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList({
-        customerMdmCode: this.filterObj.customerMdmCode
-      }).then(res => {
-        if (res.code === 1000) {
-          this.distributorArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
     },
     // 导入数据
     importData() {
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -445,13 +458,13 @@ export default {
             // this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '导入成功'
+              message: '导入成功',
             })
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
                   type: 'info',
-                  message: '导入数据为空，请检查模板！'
+                  message: '导入数据为空，请检查模板！',
                 })
               }
               this.checkedData = response.data
@@ -460,7 +473,7 @@ export default {
             } else if (response.data === []) {
               this.$message({
                 type: 'info',
-                message: '导入数据为空，请检查模板！'
+                message: '导入数据为空，请检查模板！',
               })
             } else {
               this.checkedData = []
@@ -468,7 +481,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '导入失败'
+              message: '导入失败',
             })
           }
           this.event.srcElement.value = ''
@@ -492,13 +505,15 @@ export default {
       API.saveImportInfo({
         // mainId: this.mainIdLocal
         channelName: this.filterObj.channelCode,
-        yearAndMonth: this.localDate
-      }).then(res => {
-        if (res.code === 1000) {
-          this.closeimportDialog()
-          this.$message.success('保存成功！')
-        }
-      }).catch()
+        yearAndMonth: this.localDate,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.closeimportDialog()
+            this.$message.success('保存成功！')
+          }
+        })
+        .catch()
     },
     // 确认导入
     confirmImport() {
@@ -515,10 +530,10 @@ export default {
             this.uploadFileName = ''
             this.uploadFile = ''
             this.firstIsPass = false
-            if (typeof (response.data) !== 'string' && response.data.length > 0) {
+            if (typeof response.data !== 'string' && response.data.length > 0) {
               this.$message({
                 type: 'success',
-                message: messageMap().checkSuccess
+                message: messageMap().checkSuccess,
               })
               this.checkedData = response.data
               this.saveBtn = response.data[0].judgmentType !== 'Error'
@@ -526,13 +541,13 @@ export default {
               this.checkedData = []
               this.$message({
                 type: 'error',
-                message: messageMap().checkError
+                message: messageMap().checkError,
               })
             }
           } else {
             this.$message({
               type: 'error',
-              message: messageMap().checkError
+              message: messageMap().checkError,
             })
           }
           // 清除input的value ,上传一样的
@@ -546,23 +561,22 @@ export default {
         // mainId: this.mainIdLocal,
         ImportType: 2,
         channelName: this.filterObj.channelCode,
-        yearAndMonth: this.localDate
-      }).then(
-        response => {
-          const fileName = 'V1审批模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        yearAndMonth: this.localDate,
+      }).then((response) => {
+        const fileName = 'V1审批模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 关闭导入
     closeimportDialog() {
@@ -578,7 +592,7 @@ export default {
       if (this.mainIdLocal === null || this.mainIdLocal === '') {
         this.$alert('未查询到数据，请稍后重试。', '提示', {
           confirmButtonText: '确定',
-          callback: action => {}
+          callback: (action) => {},
         })
       } else {
         API.exportExcel({
@@ -587,23 +601,22 @@ export default {
           distributorName: this.filterObj.distributorCode,
           productName: this.filterObj.productCode,
           regionName: this.filterObj.regionName,
-          yearAndMonth: this.localDate
-        }).then(
-          response => {
-            const fileName = '导出审批Excel' + new Date().getTime() + '.xlsx'
-            //   res.data:请求到的二进制数据
-            const blob = new Blob([response], {
-              type: 'application/vnd.ms-excel'
-            }) // 1.创建一个blob
-            const link = document.createElement('a') // 2.创建一个a链接
-            link.download = fileName // 3.设置名称
-            link.style.display = 'none' // 4.默认不显示
-            link.href = URL.createObjectURL(blob) // 5.设置a链接href
-            document.body.appendChild(link) // 6.将a链接dom插入当前html中
-            link.click() // 7.点击事件
-            URL.revokeObjectURL(link.href) // 8.释放url对象
-            document.body.removeChild(link) // 9.移除a链接dom
-          })
+          yearAndMonth: this.localDate,
+        }).then((response) => {
+          const fileName = '导出审批Excel' + new Date().getTime() + '.xlsx'
+          //   res.data:请求到的二进制数据
+          const blob = new Blob([response], {
+            type: 'application/vnd.ms-excel',
+          }) // 1.创建一个blob
+          const link = document.createElement('a') // 2.创建一个a链接
+          link.download = fileName // 3.设置名称
+          link.style.display = 'none' // 4.默认不显示
+          link.href = URL.createObjectURL(blob) // 5.设置a链接href
+          document.body.appendChild(link) // 6.将a链接dom插入当前html中
+          link.click() // 7.点击事件
+          URL.revokeObjectURL(link.href) // 8.释放url对象
+          document.body.removeChild(link) // 9.移除a链接dom
+        })
       }
     },
     // v1流程审批
@@ -611,97 +624,109 @@ export default {
       this.$confirm('此操作将审批通过, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        API.approveV1({
-          mainId: this.mainIdLocal,
-          opinion: 'agree'
-        }).then(res => {
-          if (res.code === 1000) {
-            this.getTableData()
-            this.$message({
-              type: 'success',
-              message: '审批成功!'
-            })
-          } else {
-            this.$message({
-              type: 'error',
-              message: '审批失败!'
-            })
-          }
-        }).catch()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消提交'
-        })
+        type: 'warning',
       })
+        .then(() => {
+          API.approveV1({
+            mainId: this.mainIdLocal,
+            opinion: 'agree',
+          })
+            .then((res) => {
+              if (res.code === 1000) {
+                this.getTableData()
+                this.$message({
+                  type: 'success',
+                  message: '审批成功!',
+                })
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '审批失败!',
+                })
+              }
+            })
+            .catch()
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交',
+          })
+        })
     },
     reject() {
       this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        API.approveV1({
-          mainId: this.mainIdLocal,
+        type: 'warning',
+      })
+        .then(() => {
+          API.approveV1({
+            mainId: this.mainIdLocal,
+            channelName: this.filterObj.channelCode,
+            customerName: this.filterObj.customerCode,
+            distributorName: this.filterObj.distributorCode,
+            productName: this.filterObj.productCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.localDate,
+            opinion: 'reject',
+          })
+            .then((res) => {
+              if (res.code === 1000) {
+                this.getTableData()
+                this.$message({
+                  type: 'success',
+                  message: '驳回成功!',
+                })
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '驳回失败!',
+                })
+              }
+            })
+            .catch()
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交',
+          })
+        })
+    },
+    // 获取表格数据
+    getTableData() {
+      this.tableData = []
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getApprovePageV1({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
           channelName: this.filterObj.channelCode,
           customerName: this.filterObj.customerCode,
           distributorName: this.filterObj.distributorCode,
           productName: this.filterObj.productCode,
           regionName: this.filterObj.regionName,
           yearAndMonth: this.localDate,
-          opinion: 'reject'
-        }).then(res => {
-          if (res.code === 1000) {
-            this.getTableData()
-            this.$message({
-              type: 'success',
-              message: '驳回成功!'
-            })
-          } else {
-            this.$message({
-              type: 'error',
-              message: '驳回失败!'
-            })
-          }
-        }).catch()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消提交'
         })
-      })
-    },
-    // 获取表格数据
-    getTableData() {
-      this.tableData = []
-      API.getApprovePageV1({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        channelName: this.filterObj.channelCode,
-        customerName: this.filterObj.customerCode,
-        distributorName: this.filterObj.distributorCode,
-        productName: this.filterObj.productCode,
-        regionName: this.filterObj.regionName,
-        yearAndMonth: this.localDate
-      })
-        .then((response) => {
-          if (response.data.records.length > 0) {
-            this.tableData = response.data.records
-            this.mainIdLocal = response.data.records[0].mainId
-            this.submitBtn = response.data.records[0].isSubmit
-            this.infoByMainId()
-          } else {
-            this.tableData = []
-            this.mainIdLocal = null
-            this.btnStatus = false
-          }
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch((error) => {})
+          .then((response) => {
+            if (response.data.records.length > 0) {
+              this.tableData = response.data.records
+              this.mainIdLocal = response.data.records[0].mainId
+              this.submitBtn = response.data.records[0].isSubmit
+              this.infoByMainId()
+            } else {
+              this.tableData = []
+              this.mainIdLocal = null
+              this.btnStatus = false
+            }
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+          .catch((error) => {})
+      }
     },
     search() {
       this.pageNum = 1
@@ -727,25 +752,25 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-.el-icon-my-file{
+.el-icon-my-file {
   background: url('~@/assets/images/selFile.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-file:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-file:before {
+  content: '\e611';
+  font-size: 16px;
 }
 </style>
 
 <style lang="scss" scoped>
-::v-deep.el-table td{
+::v-deep.el-table td {
   padding: 6px 0;
 }
 .MainContent {

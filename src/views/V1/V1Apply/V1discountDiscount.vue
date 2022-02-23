@@ -124,15 +124,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
@@ -165,24 +158,14 @@
       </div>
 
       <div class="tableWrap">
-        <vxe-table
-          ref="sampleTable"
-          border
-          fit
-          height="400"
-          :data="checkedData"
-          style="width: 100%"
-          :header-cell-style="{
+        <vxe-table ref="sampleTable" border fit height="400" :data="checkedData" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }"
-          :row-class-name="tableRowClassName"
-          stripe
-        >
+          }" :row-class-name="tableRowClassName" stripe>
           <vxe-table-column prop="date" fixed="left" align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -219,16 +202,16 @@
           <vxe-table-column width="400" align="center" field="distributorName" title="经销商" />
           <vxe-table-column width="120" align="center" field="regionName" title="区域" />
           <vxe-table-column width="220" align="right" field="systemRecommendedVol" title="系统拆分销量（CTN）">
-            <template slot-scope="scope">  {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
+            <template slot-scope="scope"> {{ FormateNum(scope.row.systemRecommendedVol) }}</template>
           </vxe-table-column>
           <vxe-table-column width="220" align="right" field="adjustedVol" title="调整后销量（CTN）">
-            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedVol) }}</template>
+            <template slot-scope="scope"> {{ FormateNum(scope.row.adjustedVol) }}</template>
           </vxe-table-column>
           <vxe-table-column width="220" align="right" field="volDifference" title="销量差值（%）">
             <template slot-scope="scope">{{ scope.row.volDifference }}</template>
           </vxe-table-column>
           <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）">
-            <template slot-scope="scope">  {{ FormateNum(scope.row.adjustedAmount) }}</template>
+            <template slot-scope="scope"> {{ FormateNum(scope.row.adjustedAmount) }}</template>
           </vxe-table-column>
           <vxe-table-column width="120" align="center" field="mechanismType" title="机制类型" />
           <vxe-table-column width="120" align="center" field="mechanismName" title="机制名称" />
@@ -249,7 +232,13 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap, FormateThousandNum ,getHeightHaveTab} from '@/utils'
+import {
+  getDefaultPermissions,
+  messageMap,
+  FormateThousandNum,
+  getHeightHaveTab,
+  messageObj,
+} from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -282,7 +271,7 @@ export default {
         channelCode: '',
         distributorCode: '',
         productCode: '',
-        regionName: ''
+        regionName: '',
       },
       RegionList: [],
       categoryArr: [],
@@ -307,8 +296,10 @@ export default {
   computed: {},
   watch: {
     'filterObj.customerIndex'() {
-      this.filterObj.customerCode = this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode = this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      this.filterObj.customerCode =
+        this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode =
+        this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
@@ -319,7 +310,7 @@ export default {
     'filterObj.distributorCode'() {
       this.filterObj.regionName = ''
       this.getRegionList()
-    }
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -369,13 +360,15 @@ export default {
       })
     },
     getRegionList() {
-      selectAPI.getRegionList({
-        distributorName: this.filterObj.distributorCode
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
     },
     getSKU() {
       selectAPI.querySkuSelect().then((res) => {
@@ -389,7 +382,7 @@ export default {
       this.filterObj.customerCode = ''
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -399,20 +392,22 @@ export default {
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList({
-        customerMdmCode: this.filterObj.customerMdmCode
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.distributorArr = res.data
-        }
-      })
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
     },
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
         // mainId: this.mainIdLocal
         channelName: this.filterObj.channelCode,
-        yearAndMonth: this.localDate
+        yearAndMonth: this.localDate,
       }).then((res) => {
         if (res.code === 1000) {
           this.closeimportDialog()
@@ -428,12 +423,12 @@ export default {
       API.exportErrorList({
         // mainId: this.mainIdLocal
         channelName: this.filterObj.channelCode,
-        yearAndMonth: this.localDate
+        yearAndMonth: this.localDate,
       }).then((response) => {
         const fileName = '错误信息' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel'
+          type: 'application/vnd.ms-excel',
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -454,12 +449,12 @@ export default {
         distributorName: this.filterObj.distributorCode,
         productName: this.filterObj.productCode,
         regionName: this.filterObj.regionName,
-        yearAndMonth: this.localDate
+        yearAndMonth: this.localDate,
       }).then((response) => {
         const fileName = '导出申请Excel' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel'
+          type: 'application/vnd.ms-excel',
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -494,10 +489,10 @@ export default {
             this.uploadFileName = ''
             this.uploadFile = ''
             this.firstIsPass = false
-            if (response.data.length > 0 && typeof (response.data) !== 'string') {
+            if (response.data.length > 0 && typeof response.data !== 'string') {
               this.$message({
                 type: 'success',
-                message: messageMap().checkSuccess
+                message: messageMap().checkSuccess,
               })
               this.checkedData = response.data
               this.saveBtn = response.data[0].judgmentType !== 'Error'
@@ -505,7 +500,7 @@ export default {
               this.checkedData = []
               this.$message({
                 type: 'error',
-                message: messageMap().checkError
+                message: messageMap().checkError,
               })
             }
           } else {
@@ -513,7 +508,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'error',
-              message: messageMap().checkError
+              message: messageMap().checkError,
             })
           }
           // 清除input的value ,上传一样的
@@ -548,17 +543,19 @@ export default {
             // this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: messageMap().importSuccess
+              message: messageMap().importSuccess,
             })
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
                   type: 'info',
-                  message: '导入数据为空，请检查模板！'
+                  message: '导入数据为空，请检查模板！',
                 })
                 this.firstIsPass = false
               } else {
-                this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+                this.firstIsPass =
+                  response.data[0].judgmentType !== 'Error' &&
+                  response.data[0].judgmentType !== ''
               }
               this.checkedData = response.data
             } else {
@@ -567,7 +564,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: messageMap().importError
+              message: messageMap().importError,
             })
             this.checkedData = []
           }
@@ -622,18 +619,18 @@ export default {
         this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
         })
           .then(() => {
             API.submitV1({
-              mainId: this.mainIdLocal
+              mainId: this.mainIdLocal,
             })
               .then((res) => {
                 if (res.code === 1000) {
                   this.getTableData()
                   this.$message({
                     type: 'success',
-                    message: '提交成功!'
+                    message: '提交成功!',
                   })
                 }
               })
@@ -642,7 +639,7 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '已取消提交'
+              message: '已取消提交',
             })
           })
       }
@@ -653,12 +650,12 @@ export default {
         // mainId: this.mainIdLocal,
         ImportType: 1,
         channelName: this.filterObj.channelCode,
-        yearAndMonth: this.localDate
+        yearAndMonth: this.localDate,
       }).then((response) => {
         const fileName = 'V1申请模板' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel'
+          type: 'application/vnd.ms-excel',
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -715,48 +712,58 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageV1({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        channelName: this.filterObj.channelCode,
-        customerName: this.filterObj.customerCode,
-        distributorName: this.filterObj.distributorCode,
-        productName: this.filterObj.productCode,
-        regionName: this.filterObj.regionName,
-        yearAndMonth: this.localDate
-      })
-        .then((response) => {
-          if (response.data.records.length > 0) {
-            this.tableData = response.data.records
-            this.mainIdLocal = response.data.records[0].mainId
-            this.submitBtn = response.data.records[0].isSubmit
-            this.infoByMainId()
-          } else {
-            this.tableData = []
-            this.mainIdLocal = null
-            this.btnStatus = false
-          }
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPageV1({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          channelName: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          distributorName: this.filterObj.distributorCode,
+          productName: this.filterObj.productCode,
+          regionName: this.filterObj.regionName,
+          yearAndMonth: this.localDate,
         })
-        .catch((error) => {})
+          .then((response) => {
+            if (response.data.records.length > 0) {
+              this.tableData = response.data.records
+              this.mainIdLocal = response.data.records[0].mainId
+              this.submitBtn = response.data.records[0].isSubmit
+              this.infoByMainId()
+            } else {
+              this.tableData = []
+              this.mainIdLocal = null
+              this.btnStatus = false
+            }
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+          .catch((error) => {})
+      }
     },
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainId({
-        mainId: this.mainIdLocal
-      }).then(res => {
-        if (res.code === 1000) {
-          if (res.data.version === 'V1' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 0) {
-            this.btnStatus = true
+        mainId: this.mainIdLocal,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V1' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.submitBtn === 0
+            ) {
+              this.btnStatus = true
+            } else {
+              this.btnStatus = false
+            }
           } else {
             this.btnStatus = false
           }
-        } else {
-          this.btnStatus = false
-        }
-      }).catch()
+        })
+        .catch()
     },
     search() {
       this.pageNum = 1
@@ -782,8 +789,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 

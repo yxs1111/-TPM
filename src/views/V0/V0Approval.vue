@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-02-21 13:26:44
+ * @LastEditTime: 2022-02-23 14:24:08
 -->
 <template>
   <div class="app-container">
@@ -92,7 +92,7 @@
                 {{FormateNum(row.cityPlanPromotionExpenses)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-              {{FormateNum(row.cptAveragePrice)}}
+                {{FormateNum(row.cptAveragePrice)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{FormateNum(row.cptPromotionExpenses)}}
@@ -101,7 +101,7 @@
                 {{(row.averagePriceRange*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                 {{FormateNum(row.promotionExpensesGapValue)}}
+                {{FormateNum(row.promotionExpensesGapValue)}}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -184,7 +184,7 @@
                 {{FormateNum(row.cityPlanPromotionExpenses)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-              {{FormateNum(row.cptAveragePrice)}}
+                {{FormateNum(row.cptAveragePrice)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{FormateNum(row.cptPromotionExpenses)}}
@@ -193,7 +193,7 @@
                 {{(row.averagePriceRange*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                 {{FormateNum(row.promotionExpensesGapValue)}}
+                {{FormateNum(row.promotionExpensesGapValue)}}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -227,7 +227,8 @@ import {
   getCPTMonth,
   parseTime,
   getTextMap,
-  FormateThousandNum
+  FormateThousandNum,
+  messageObj
 } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -281,34 +282,38 @@ export default {
   computed: {},
   methods: {
     getList() {
-      API.getApproveList({
-        yearAndMonth: this.filterObj.month,
-        dimProduct: this.filterObj.SKU,
-        channelCode: this.filterObj.channelCode,
-      }).then((response) => {
-        if (response.code == 1000) {
-          this.ContentData = response.data
-          if (Object.keys(this.ContentData).length == 0) {
-            this.isNoData = true
-          } else {
-            this.isNoData = false
-            for (const key in this.ContentData) {
-              let list = this.ContentData[key]
-              this.mainId = this.ContentData[key][0].mainId
-              this.isSubmitStatus = this.ContentData[key][0].isSubmit
-              for (let i = 0; i < list.length; i++) {
-                list[i].customGearList = JSON.parse(list[i].customGear)
-                //价格档位降序排序
-                list[i].customGearList.sort(function (a, b) {
-                  return b.gear - a.gear
-                })
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getApproveList({
+          yearAndMonth: this.filterObj.month,
+          dimProduct: this.filterObj.SKU,
+          channelCode: this.filterObj.channelCode,
+        }).then((response) => {
+          if (response.code == 1000) {
+            this.ContentData = response.data
+            if (Object.keys(this.ContentData).length == 0) {
+              this.isNoData = true
+            } else {
+              this.isNoData = false
+              for (const key in this.ContentData) {
+                let list = this.ContentData[key]
+                this.mainId = this.ContentData[key][0].mainId
+                this.isSubmitStatus = this.ContentData[key][0].isSubmit
+                for (let i = 0; i < list.length; i++) {
+                  list[i].customGearList = JSON.parse(list[i].customGear)
+                  //价格档位降序排序
+                  list[i].customGearList.sort(function (a, b) {
+                    return b.gear - a.gear
+                  })
+                }
               }
+              //审批人匹配
+              this.infoByMainId()
             }
-            //审批人匹配
-            this.infoByMainId()
           }
-        }
-      })
+        })
+      }
     },
     // 通过与审批按钮控制
     infoByMainId() {
@@ -320,7 +325,8 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V0' &&
-              res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.isSubmitStatus 
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.isSubmitStatus
             ) {
               //本人可以提交
               this.isSubmit = false
@@ -370,7 +376,7 @@ export default {
     },
     //导入数据
     importData() {
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -562,9 +568,9 @@ export default {
         return this.backgroundList[num]
       }
     },
-     //格式化--千位分隔符、两位小数 
+    //格式化--千位分隔符、两位小数
     FormateNum(num) {
-     return FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
   },
 }
@@ -649,9 +655,9 @@ export default {
   }
 }
 .ContentWrap {
-    width: 100%;
-    height: calc(100% - 50px);
-    overflow-y: auto;
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow-y: auto;
 }
 </style>
 <style>

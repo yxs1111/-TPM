@@ -127,15 +127,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
@@ -173,22 +166,14 @@
       </div>
 
       <div class="tableWrap">
-        <vxe-table
-          border
-          height="400"
-          :data="dialogDataF"
-          style="width: 100%"
-          :header-cell-style="{
+        <vxe-table border height="400" :data="dialogDataF" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }"
-          :row-class-name="tableRowClassName"
-          stripe
-        >
+          }" :row-class-name="tableRowClassName" stripe>
           <vxe-table-column fixed align="center" title="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -260,7 +245,13 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap, FormateThousandNum ,getHeightHaveTab} from '@/utils'
+import {
+  getDefaultPermissions,
+  messageMap,
+  FormateThousandNum,
+  getHeightHaveTab,
+  messageObj
+} from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -281,7 +272,7 @@ export default {
       filterObj: {
         channelCode: '',
         customerCode: '',
-        brandName: ''
+        brandName: '',
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -327,17 +318,19 @@ export default {
     saveImportInfo() {
       API.saveImportInfoNU({
         mainId: this.mainIdLocal,
-        isMakeUp: false
-      }).then(res => {
-        if (res.code === 1000) {
-          this.$message.success('保存成功')
-          this.closeimportDialog()
-          // this.saveDialog = true
-          this.getTableData()
-        } else {
-          this.$message.error('保存失败')
-        }
-      }).catch()
+        isMakeUp: false,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('保存成功')
+            this.closeimportDialog()
+            // this.saveDialog = true
+            this.getTableData()
+          } else {
+            this.$message.error('保存失败')
+          }
+        })
+        .catch()
     },
     getBrandList() {
       selectAPI.getBrand({}).then((res) => {
@@ -351,41 +344,47 @@ export default {
       if (this.tableData[0].judgmentType === null) {
         this.$confirm('系统判定为null,不可提交?', '提示', {
           confirmButtonText: '确定',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '好的!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          })
+          type: 'warning',
         })
+          .then(() => {
+            this.$message({
+              type: 'success',
+              message: '好的!',
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
       } else {
         this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          API.submitApplyNU({
-            mainId: this.mainIdLocal
-          }).then(res => {
-            if (res.code === 1000) {
-              this.getTableData()
-              this.$message({
-                type: 'success',
-                message: '提交成功!'
-              })
-            }
-          }).catch()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消提交'
-          })
+          type: 'warning',
         })
+          .then(() => {
+            API.submitApplyNU({
+              mainId: this.mainIdLocal,
+            })
+              .then((res) => {
+                if (res.code === 1000) {
+                  this.getTableData()
+                  this.$message({
+                    type: 'success',
+                    message: '提交成功!',
+                  })
+                }
+              })
+              .catch()
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消提交',
+            })
+          })
       }
     },
     // 校验excel
@@ -393,23 +392,23 @@ export default {
       API.exportV3NU({
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal,
-        channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode
-      }).then(
-        response => {
-          const fileName = 'NU下载异常模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        channelName:
+          this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+      }).then((response) => {
+        const fileName = 'NU下载异常模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 选择导入文件
     parsingExcelBtn() {
@@ -437,24 +436,26 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: messageMap().importSuccess
+              message: messageMap().importSuccess,
             })
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
                   type: 'info',
-                  message: '导入数据为空，请检查模板！'
+                  message: '导入数据为空，请检查模板！',
                 })
               }
               this.dialogDataF = response.data
-              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              this.firstIsPass =
+                response.data[0].judgmentType !== 'Error' &&
+                response.data[0].judgmentType !== ''
             } else {
               this.dialogDataF = []
             }
           } else {
             this.$message({
               type: 'error',
-              message: messageMap().importError
+              message: messageMap().importError,
             })
             this.uploadFile = ''
           }
@@ -471,30 +472,34 @@ export default {
     exceptionCheck() {
       var formData = new FormData()
       formData.append('mainId', this.mainIdLocal)
-      API.exceptionCheckNU(formData).then(res => {
-        if (res.code === 1000) {
-          // this.uploadFileName = ''
-          this.firstIsPass = false
-          this.$message({
-            type: 'success',
-            message: messageMap().checkSuccess
-          })
-          if (res.data != null) {
-            this.dialogDataF = res.data
-            this.$forceUpdate()
-            this.saveBtn = (res.data[0].judgmentType !== 'Error' && res.data[0].judgmentType !== '')
+      API.exceptionCheckNU(formData)
+        .then((res) => {
+          if (res.code === 1000) {
+            // this.uploadFileName = ''
+            this.firstIsPass = false
+            this.$message({
+              type: 'success',
+              message: messageMap().checkSuccess,
+            })
+            if (res.data != null) {
+              this.dialogDataF = res.data
+              this.$forceUpdate()
+              this.saveBtn =
+                res.data[0].judgmentType !== 'Error' &&
+                res.data[0].judgmentType !== ''
+            } else {
+              this.dialogDataF = []
+            }
           } else {
+            this.uploadFileName = ''
             this.dialogDataF = []
+            this.$message({
+              type: 'error',
+              message: messageMap().checkError,
+            })
           }
-        } else {
-          this.uploadFileName = ''
-          this.dialogDataF = []
-          this.$message({
-            type: 'error',
-            message: messageMap().checkError
-          })
-        }
-      }).catch()
+        })
+        .catch()
     },
     // 关闭导入
     closeimportDialog() {
@@ -519,20 +524,22 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '检测文件上传成功'
+              message: '检测文件上传成功',
             })
             if (response.data.length > 0) {
               // debugger
               this.dialogDataF = response.data
               this.$forceUpdate()
-              this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              this.saveBtn =
+                response.data[0].judgmentType !== 'Error' &&
+                response.data[0].judgmentType !== ''
             } else {
               this.dialogDataF = []
             }
           } else {
             this.$message({
               type: 'error',
-              message: '检测文件上传失败，请重新上传。'
+              message: '检测文件上传失败，请重新上传。',
             })
           }
           this.event.srcElement.value = '' // 置空
@@ -544,24 +551,23 @@ export default {
       API.exportV3NU({
         exportType: 'exportTemplate',
         mainId: this.mainIdLocal,
-        channelName: this.filterObj.channelCode
+        channelName: this.filterObj.channelCode,
         // channelName: 'EC'
-      }).then(
-        response => {
-          const fileName = 'V3-NU申请导入模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+      }).then((response) => {
+        const fileName = 'V3-NU申请导入模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 导入数据
     importData() {
@@ -577,22 +583,32 @@ export default {
       // 导出数据筛选
       var data = {}
       data = {
-        channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
-        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
-        brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName,
+        channelName:
+          this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
+        customerName:
+          this.filterObj.customerCode === ''
+            ? null
+            : this.filterObj.customerCode,
+        brandName:
+          this.filterObj.brandName === '' ? null : this.filterObj.brandName,
         exportType: 'export',
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
       }
-      API.exportV3NU(data).then(res => {
-        // debugger
-        // res
-        if (res === undefined) {
-          this.$message.warning('NU-V3导出失败!')
-        } else {
-          this.downloadFile(res, 'V3-NU-申请Excel-' + new Date().getTime() + '.xlsx') // 自定义Excel文件名
-          this.$message.success('NU-V3导出成功!')
-        }
-      }).catch()
+      API.exportV3NU(data)
+        .then((res) => {
+          // debugger
+          // res
+          if (res === undefined) {
+            this.$message.warning('NU-V3导出失败!')
+          } else {
+            this.downloadFile(
+              res,
+              'V3-NU-申请Excel-' + new Date().getTime() + '.xlsx'
+            ) // 自定义Excel文件名
+            this.$message.success('NU-V3导出成功!')
+          }
+        })
+        .catch()
     },
     // 下载文件
     downloadFile(res, fileName) {
@@ -615,18 +631,21 @@ export default {
     },
     // 获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
-        if (res.code === 1000) {
-          this.channelArr = res.data
-          // if (!this.$route.query.channelCode) {
-          //   this.filterObj.channelCode = this.channelArr[0].channelCode
-          // } else {
-          //   this.filterObj.channelCode = this.$route.query.channelCode
-          // }
-          this.getCustomerList()
-          this.getEffectiveDate()
-        }
-      }).catch()
+      selectAPI
+        .queryChannelSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.channelArr = res.data
+            // if (!this.$route.query.channelCode) {
+            //   this.filterObj.channelCode = this.channelArr[0].channelCode
+            // } else {
+            //   this.filterObj.channelCode = this.$route.query.channelCode
+            // }
+            this.getCustomerList()
+            this.getEffectiveDate()
+          }
+        })
+        .catch()
     },
     // 获取年月
     getEffectiveDate() {
@@ -642,61 +661,81 @@ export default {
     // 客户
     getCustomerList() {
       this.filterObj.customerCode = ''
-      selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelCode
-      }).then(res => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+        .catch()
     },
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageV3NU({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        channelName: this.filterObj.channelCode === '' ? null : this.filterObj.channelCode,
-        // channelName: 'EC',
-        customerName: this.filterObj.customerCode === '' ? null : this.filterObj.customerCode,
-        // customerName: '京东网-POP',
-        // yearAndMonth: this.localDate,
-        yearAndMonth: this.localDate,
-        brandName: this.filterObj.brandName === '' ? null : this.filterObj.brandName
-        // brandName: 'Prestige'
-      })
-        .then((response) => {
-          if (response.data.records.length > 0) {
-            this.tableData = response.data.records
-            this.mainIdLocal = response.data.records[0].mainId
-            this.submitBtn = response.data.records[0].isSubmit
-            this.infoByMainId()
-          } else {
-            this.tableData = []
-            this.mainIdLocal = null
-            this.btnStatus = false
-          }
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
+      if (this.filterObj.channelCode == '') {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPageV3NU({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          channelName:
+            this.filterObj.channelCode === ''
+              ? null
+              : this.filterObj.channelCode,
+          // channelName: 'EC',
+          customerName:
+            this.filterObj.customerCode === ''
+              ? null
+              : this.filterObj.customerCode,
+          // customerName: '京东网-POP',
+          // yearAndMonth: this.localDate,
+          yearAndMonth: this.localDate,
+          brandName:
+            this.filterObj.brandName === '' ? null : this.filterObj.brandName,
+          // brandName: 'Prestige'
         })
-        .catch((error) => {})
+          .then((response) => {
+            if (response.data.records.length > 0) {
+              this.tableData = response.data.records
+              this.mainIdLocal = response.data.records[0].mainId
+              this.submitBtn = response.data.records[0].isSubmit
+              this.infoByMainId()
+            } else {
+              this.tableData = []
+              this.mainIdLocal = null
+              this.btnStatus = false
+            }
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+          .catch((error) => {})
+      }
     },
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainId({
-        mainId: this.mainIdLocal
-      }).then(res => {
-        if (res.code === 1000) {
-          if (res.data.version === 'NUV3' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 0) {
-            this.btnStatus = true
+        mainId: this.mainIdLocal,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'NUV3' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.submitBtn === 0
+            ) {
+              this.btnStatus = true
+            } else {
+              this.btnStatus = false
+            }
           } else {
             this.btnStatus = false
           }
-        } else {
-          this.btnStatus = false
-        }
-      }).catch()
+        })
+        .catch()
     },
     search() {
       console.log('hh')
@@ -722,11 +761,10 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-
 </style>

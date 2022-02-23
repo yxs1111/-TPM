@@ -127,15 +127,8 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeimportDialog">
@@ -170,22 +163,14 @@
       </div>
 
       <div class="tableWrap">
-        <vxe-table
-          border
-          height="400"
-          :data="dialogData"
-          style="width: 100%"
-          :header-cell-style="{
+        <vxe-table border height="400" :data="dialogData" style="width: 100%" :header-cell-style="{
             background: '#fff',
             color: '#333',
             fontSize: '16px',
             textAlign: 'center',
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
-          }"
-          :row-class-name="tableRowClassName"
-          stripe
-        >
+          }" :row-class-name="tableRowClassName" stripe>
           <vxe-table-column fixed align="center" label="是否通过" width="100">
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
@@ -260,7 +245,13 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, messageMap, FormateThousandNum,getHeightHaveTab } from '@/utils'
+import {
+  getDefaultPermissions,
+  messageMap,
+  FormateThousandNum,
+  getHeightHaveTab,
+  messageObj
+} from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -294,7 +285,7 @@ export default {
         customerName: null,
         distributorName: null,
         productName: null,
-        regionName: null
+        regionName: null,
       },
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -312,8 +303,10 @@ export default {
   computed: {},
   watch: {
     'filterObj.customerIndex'() {
-      this.filterObj.customerName = this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode = this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      this.filterObj.customerName =
+        this.customerArr[this.filterObj.customerIndex].customerCsName
+      this.filterObj.customerMdmCode =
+        this.customerArr[this.filterObj.customerIndex].customerMdmCode
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },
@@ -324,7 +317,7 @@ export default {
     'filterObj.distributorName'() {
       this.filterObj.regionName = ''
       this.getRegionList()
-    }
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -349,13 +342,15 @@ export default {
       return FormateThousandNum(num)
     },
     getRegionList() {
-      selectAPI.getRegionList({
-        distributorName: this.filterObj.distributorName
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
     },
     // 获取年月
     getEffectiveDate() {
@@ -390,40 +385,52 @@ export default {
     // 通过与审批按钮控制
     infoByMainId() {
       API.infoByMainId({
-        mainId: this.mainIdLocal
-      }).then(res => {
-        if (res.code === 1000) {
-          if (res.data.version === 'V3' && res.data.assignee.indexOf(this.usernameLocal)!=-1 && this.submitBtn === 1) {
-            this.btnStatus = true
+        mainId: this.mainIdLocal,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V3' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.submitBtn === 1
+            ) {
+              this.btnStatus = true
+            } else {
+              this.btnStatus = false
+            }
           } else {
             this.btnStatus = false
           }
-        } else {
-          this.btnStatus = false
-        }
-      }).catch()
+        })
+        .catch()
     },
     // 获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
-        if (res.code === 1000) {
-          this.channelArr = res.data
-          // if (!this.$route.query.channelCode) {
-          //   this.filterObj.channelName = this.channelArr[0].channelEsName
-          // } else {
-          //   this.filterObj.channelName = this.$route.query.channelCode
-          // }
-          this.getCustomerList()
-          this.getEffectiveDate()
-        }
-      }).catch()
+      selectAPI
+        .queryChannelSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.channelArr = res.data
+            // if (!this.$route.query.channelCode) {
+            //   this.filterObj.channelName = this.channelArr[0].channelEsName
+            // } else {
+            //   this.filterObj.channelName = this.$route.query.channelCode
+            // }
+            this.getCustomerList()
+            this.getEffectiveDate()
+          }
+        })
+        .catch()
     },
     getSKU() {
-      selectAPI.querySkuSelect().then(res => {
-        if (res.code === 1000) {
-          this.skuArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.skuArr = res.data
+          }
+        })
+        .catch()
     },
     // getMP() {
     //   selectAPI.queryMinePackageSelect().then(res => {
@@ -435,23 +442,29 @@ export default {
     // 客户
     getCustomerList() {
       this.filterObj.customerName = null
-      selectAPI.queryCustomerList({
-        channelCode: this.filterObj.channelName
-      }).then(res => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+        .catch()
     },
     // 经销商
     getDistributorList() {
-      selectAPI.queryDistributorList({
-        customerMdmCode: this.filterObj.customerMdmCode
-      }).then(res => {
-        if (res.code === 1000) {
-          this.distributorArr = res.data
-        }
-      }).catch()
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
     },
     // 校验excel
     downLoadException() {
@@ -459,39 +472,41 @@ export default {
         yearAndMonth: this.localDate,
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal,
-        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName
-      }).then(
-        response => {
-          const fileName = '校验' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        channelName:
+          this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+      }).then((response) => {
+        const fileName = '校验' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 导入文件检索后保存
     saveImportInfo() {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
-        isMakeUp: false
-      }).then(res => {
-        if (res.code === 1000) {
-          this.$message.success('保存成功')
-          this.closeimportDialog()
-          this.saveDialog = true
-          this.getTableData()
-        } else {
-          this.$message.error('保存失败')
-        }
-      }).catch()
+        isMakeUp: false,
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('保存成功')
+            this.closeimportDialog()
+            this.saveDialog = true
+            this.getTableData()
+          } else {
+            this.$message.error('保存失败')
+          }
+        })
+        .catch()
     },
     // 下载excel模板
     downLoadElxModel() {
@@ -499,24 +514,23 @@ export default {
         yearAndMonth: this.localDate,
         exportType: 'exportApproveTemplate',
         mainId: this.mainIdLocal,
-        channelName: this.filterObj.channelName
+        channelName: this.filterObj.channelName,
         // channelName: 'NKA'
-      }).then(
-        response => {
-          const fileName = '导入模板' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+      }).then((response) => {
+        const fileName = '导入模板' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 关闭导入
     closeimportDialog() {
@@ -540,30 +554,34 @@ export default {
     exceptionCheck() {
       var formData = new FormData()
       formData.append('mainId', this.mainIdLocal)
-      API.exceptionCheck(formData).then(res => {
-        if (res.code === 1000) {
-          this.uploadFileName = ''
-          this.firstIsPass = false
-          this.$message({
-            type: 'success',
-            message: messageMap().checkSuccess
-          })
-          if (res.data != null) {
-            this.dialogData = res.data
-            this.$forceUpdate()
-            this.saveBtn = (res.data[0].judgmentType !== 'Error' && res.data[0].judgmentType !== '')
+      API.exceptionCheck(formData)
+        .then((res) => {
+          if (res.code === 1000) {
+            this.uploadFileName = ''
+            this.firstIsPass = false
+            this.$message({
+              type: 'success',
+              message: messageMap().checkSuccess,
+            })
+            if (res.data != null) {
+              this.dialogData = res.data
+              this.$forceUpdate()
+              this.saveBtn =
+                res.data[0].judgmentType !== 'Error' &&
+                res.data[0].judgmentType !== ''
+            } else {
+              this.dialogData = []
+            }
           } else {
+            this.uploadFileName = ''
             this.dialogData = []
+            this.$message({
+              type: 'error',
+              message: messageMap().checkError,
+            })
           }
-        } else {
-          this.uploadFileName = ''
-          this.dialogData = []
-          this.$message({
-            type: 'error',
-            message: messageMap().checkError
-          })
-        }
-      }).catch()
+        })
+        .catch()
     },
     // 确认导入
     confirmImport() {
@@ -580,7 +598,7 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '检测文件上传成功'
+              message: '检测文件上传成功',
             })
             if (response.data != null) {
               this.dialogData = response.data
@@ -591,7 +609,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '检测文件上传失败，请重新上传。'
+              message: '检测文件上传失败，请重新上传。',
             })
           }
           this.event.srcElement.value = '' // 置空
@@ -626,17 +644,19 @@ export default {
             this.uploadFile = ''
             this.$message({
               type: 'success',
-              message: '导入成功'
+              message: '导入成功',
             })
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({
                   type: 'info',
-                  message: '导入数据为空，请检查模板！'
+                  message: '导入数据为空，请检查模板！',
                 })
               }
               this.dialogData = response.data
-              this.firstIsPass = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
+              this.firstIsPass =
+                response.data[0].judgmentType !== 'Error' &&
+                response.data[0].judgmentType !== ''
               this.$forceUpdate()
               this.saveBtn = !!this.dialogData.length
               // this.saveBtn = (response.data[0].judgmentType !== 'Error' && response.data[0].judgmentType !== '')
@@ -646,7 +666,7 @@ export default {
           } else {
             this.$message({
               type: 'error',
-              message: '导入失败'
+              message: '导入失败',
             })
             this.uploadFile = ''
           }
@@ -663,14 +683,23 @@ export default {
     exportData() {
       // 导出数据筛选
       const data = {
-        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
-        customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
-        distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
-        productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
+        channelName:
+          this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+        customerName:
+          this.filterObj.customerName === ''
+            ? null
+            : this.filterObj.customerName,
+        distributorName:
+          this.filterObj.distributorName === ''
+            ? null
+            : this.filterObj.distributorName,
+        productName:
+          this.filterObj.productName === '' ? null : this.filterObj.productName,
         yearAndMonth: this.localDate,
-        regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+        regionName:
+          this.filterObj.regionName === '' ? null : this.filterObj.regionName,
         exportType: 'export',
-        mainId: this.mainIdLocal
+        mainId: this.mainIdLocal,
       }
       API.exportV3(data).then((res) => {
         this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
@@ -685,71 +714,100 @@ export default {
       } else if (val === 2) {
         statusLocal = 'reject'
       }
-      this.$confirm(statusLocal === 'agree' ? '此操作将通过审批, 是否继续?' : '此操作将驳回审批, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        API.approve({
-          mainId: this.mainIdLocal,
-          state: statusLocal,
-          opinion: ''
-        }).then(res => {
-          this.getTableData()
-          if (res.code === 1000) {
-            this.$message({
-              type: 'success',
-              message: statusLocal === 'agree' ? '审批提交成功' : '驳回提交成功'
+      this.$confirm(
+        statusLocal === 'agree'
+          ? '此操作将通过审批, 是否继续?'
+          : '此操作将驳回审批, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      )
+        .then(() => {
+          API.approve({
+            mainId: this.mainIdLocal,
+            state: statusLocal,
+            opinion: '',
+          })
+            .then((res) => {
+              this.getTableData()
+              if (res.code === 1000) {
+                this.$message({
+                  type: 'success',
+                  message:
+                    statusLocal === 'agree' ? '审批提交成功' : '驳回提交成功',
+                })
+              } else {
+                this.$message({
+                  type: 'error',
+                  message:
+                    statusLocal === 'agree' ? '审批提交失败' : '驳回提交失败',
+                })
+              }
             })
-          } else {
-            this.$message({
-              type: 'error',
-              message: statusLocal === 'agree' ? '审批提交失败' : '驳回提交失败'
-            })
-          }
-        }).catch()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消提交'
+            .catch()
         })
-      })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交',
+          })
+        })
     },
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageV3({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-        channelName: this.filterObj.channelName === '' ? null : this.filterObj.channelName,
-        customerName: this.filterObj.customerName === '' ? null : this.filterObj.customerName,
-        distributorName: this.filterObj.distributorName === '' ? null : this.filterObj.distributorName,
-        productName: this.filterObj.productName === '' ? null : this.filterObj.productName,
-        yearAndMonth: this.localDate,
-        regionName: this.filterObj.regionName === '' ? null : this.filterObj.regionName
-      })
-        .then((response) => {
-          if (response.data.records.length > 0) {
-            if (response.data.records[0].isSubmit === 0) {
-              this.tableData = response.data.records
-            } else if (response.data.records[0].isSubmit === 1) {
-              this.tableData = response.data.records
+      if (!this.filterObj.channelName) {
+        this.$message.info(messageObj.requireChannel)
+      } else {
+        API.getPageV3({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          channelName:
+            this.filterObj.channelName === ''
+              ? null
+              : this.filterObj.channelName,
+          customerName:
+            this.filterObj.customerName === ''
+              ? null
+              : this.filterObj.customerName,
+          distributorName:
+            this.filterObj.distributorName === ''
+              ? null
+              : this.filterObj.distributorName,
+          productName:
+            this.filterObj.productName === ''
+              ? null
+              : this.filterObj.productName,
+          yearAndMonth: this.localDate,
+          regionName:
+            this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+        })
+          .then((response) => {
+            if (response.data.records.length > 0) {
+              if (response.data.records[0].isSubmit === 0) {
+                this.tableData = response.data.records
+              } else if (response.data.records[0].isSubmit === 1) {
+                this.tableData = response.data.records
+              } else {
+                this.tableData = []
+              }
+              this.mainIdLocal = response.data.records[0].mainId
+              this.submitBtn = response.data.records[0].isSubmit
+              this.infoByMainId()
             } else {
               this.tableData = []
+              this.mainIdLocal = null
+              this.btnStatus = false
             }
-            this.mainIdLocal = response.data.records[0].mainId
-            this.submitBtn = response.data.records[0].isSubmit
-            this.infoByMainId()
-          } else {
-            this.tableData = []
-            this.mainIdLocal = null
-            this.btnStatus = false
-          }
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch((error) => {})
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+          .catch((error) => {})
+      }
     },
     search() {
       this.getTableData()
@@ -774,19 +832,19 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 <style>
-.el-icon-my-file{
+.el-icon-my-file {
   background: url('~@/assets/images/selFile.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-file:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-file:before {
+  content: '\e611';
+  font-size: 16px;
 }
 </style>
 <style lang="scss" scoped>

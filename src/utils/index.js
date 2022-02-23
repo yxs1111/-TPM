@@ -489,8 +489,12 @@ export function messageMap() {
     exportErrorSuccess: '导出错误信息成功',
     exportErrorError: '导出错误信息失败',
     saveSuccess: '保存成功',
-    saveError: '保存失败'
+    saveError: '保存失败',
+    requireChannel:'渠道不能为空，请选择渠道'
   }
+}
+export const messageObj={
+  requireChannel:'渠道不能为空，请选择渠道'
 }
 //报表动态列
 export function ReportCheckList() {

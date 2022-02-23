@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-02-21 13:26:32
+ * @LastEditTime: 2022-02-23 14:20:18
 -->
 <template>
   <div class="app-container">
@@ -33,7 +33,7 @@
         </div>
         <div class="OpertionBar">
           <!-- <el-button type="primary" @click="getCPTData" v-permission="permissions['getCPT']">获取CPT数据</el-button> -->
-          <div class="TpmButtonBG" @click="getCPTData" v-permission="permissions['getCPT']" >
+          <div class="TpmButtonBG" @click="getCPTData" v-permission="permissions['getCPT']">
             <img src="@/assets/images/huoqu.png" alt="" />
             <span class="text">获取CPT数据</span>
           </div>
@@ -95,7 +95,7 @@
                 {{FormateNum(row.cityPlanPromotionExpenses)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-              {{FormateNum(row.cptAveragePrice)}}
+                {{FormateNum(row.cptAveragePrice)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{FormateNum(row.cptPromotionExpenses)}}
@@ -104,7 +104,7 @@
                 {{(row.averagePriceRange*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                 {{FormateNum(row.promotionExpensesGapValue)}}
+                {{FormateNum(row.promotionExpensesGapValue)}}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -135,17 +135,17 @@
         <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">
-              <el-select v-model="ruleForm.Minepackage"  placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in ['Price Promotion','New User']" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
-              <el-select v-model="ruleForm.dimScenario"  placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.dimScenario" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Version" prop="dimVersion">
-              <el-select v-model="ruleForm.dimVersion" disabled  placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.dimVersion" disabled placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -222,7 +222,7 @@
                 {{FormateNum(row.cityPlanPromotionExpenses)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-              {{FormateNum(row.cptAveragePrice)}}
+                {{FormateNum(row.cptAveragePrice)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
                 {{FormateNum(row.cptPromotionExpenses)}}
@@ -231,7 +231,7 @@
                 {{(row.averagePriceRange*1).toFixed(2)}}
               </el-table-column>
               <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                 {{FormateNum(row.promotionExpensesGapValue)}}
+                {{FormateNum(row.promotionExpensesGapValue)}}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
                 <template slot-scope="{row}">
@@ -265,7 +265,7 @@ import {
   yearAndMonthList,
   VersionList,
   messageMap,
-  FormateThousandNum
+  FormateThousandNum,
 } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -327,7 +327,13 @@ export default {
       saveBtn: false,
       isCheck: false, //检测数据按钮显示或隐藏
       // yearAndMonthList: yearAndMonthList(),
-      yearAndMonthList: ['2022 0+12', '2021 11+1', '2021 10+2', '2021 9+3', '2021 8+4'],
+      yearAndMonthList: [
+        '2022 0+12',
+        '2021 11+1',
+        '2021 10+2',
+        '2021 9+3',
+        '2021 8+4',
+      ],
       VersionList: VersionList(),
       ChannelList: [],
       backgroundList: [
@@ -362,36 +368,39 @@ export default {
       })
     },
     getList() {
-      //encodeURIComponent
-      API.getList({
-        yearAndMonth: this.filterObj.month,
-        dimProduct: this.filterObj.SKU,
-        channelCode: this.filterObj.channelCode,
-      }).then((response) => {
-        if (response.code === 1000) {
-          this.ContentData = response.data
-          if (Object.keys(this.ContentData).length == 0) {
-            this.isNoData = true
-            this.isSubmit = 0
-          } else {
-            this.isNoData = false
-            for (const key in this.ContentData) {
-              let list = this.ContentData[key]
-              this.isSubmit = this.ContentData[key][0].isSubmit
-              this.mainId = this.ContentData[key][0].mainId
-              for (let i = 0; i < list.length; i++) {
-                list[i].customGearList = JSON.parse(list[i].customGear)
-                //价格档位降序排序
-                list[i].customGearList.sort(function (a, b) {
-                  return b.gear - a.gear
-                })
+      if (this.filterObj.channelCode == '') {
+        this.$message.info('渠道不能为空，请选择渠道')
+      } else {
+        API.getList({
+          yearAndMonth: this.filterObj.month,
+          dimProduct: this.filterObj.SKU,
+          channelCode: this.filterObj.channelCode,
+        }).then((response) => {
+          if (response.code === 1000) {
+            this.ContentData = response.data
+            if (Object.keys(this.ContentData).length == 0) {
+              this.isNoData = true
+              this.isSubmit = 0
+            } else {
+              this.isNoData = false
+              for (const key in this.ContentData) {
+                let list = this.ContentData[key]
+                this.isSubmit = this.ContentData[key][0].isSubmit
+                this.mainId = this.ContentData[key][0].mainId
+                for (let i = 0; i < list.length; i++) {
+                  list[i].customGearList = JSON.parse(list[i].customGear)
+                  //价格档位降序排序
+                  list[i].customGearList.sort(function (a, b) {
+                    return b.gear - a.gear
+                  })
+                }
               }
+              //审批人匹配
+              this.infoByMainId()
             }
-            //审批人匹配
-            this.infoByMainId()
           }
-        }
-      })
+        })
+      }
     },
     getQuerySkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
@@ -421,7 +430,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V0' &&
-              res.data.assignee.indexOf(this.usernameLocal)!=-1
+              res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
               this.isSelf = true
@@ -476,12 +485,11 @@ export default {
     },
     //导入数据弹窗显示
     importData() {
-      if(this.filterObj.channelCode=='') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
       }
-      
     },
     //关闭导入
     closeImportDialog() {
@@ -619,20 +627,22 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var url = this.ruleForm.Minepackage=='Price Promotion' ? API.getCPTData : API.getNuData
+          var url =
+            this.ruleForm.Minepackage == 'Price Promotion'
+              ? API.getCPTData
+              : API.getNuData
           url({
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
+          }).then((response) => {
+            if (response.code == 1000) {
+              this.$message.success('成功获取数据!')
+              this.getList()
+              this.resetForm(formName)
+            }
           })
-            .then((response) => {
-              if (response.code == 1000) {
-                this.$message.success('成功获取数据!')
-                this.getList()
-                this.resetForm(formName)
-              }
-            })
         } else {
           this.$message.warning('提交失败,请填写必填项')
           return false
@@ -715,9 +725,9 @@ export default {
         return this.backgroundList[num]
       }
     },
-    //格式化--千位分隔符、两位小数 
+    //格式化--千位分隔符、两位小数
     FormateNum(num) {
-     return FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
   },
 }
@@ -807,9 +817,9 @@ export default {
   }
 }
 .ContentWrap {
-    width: 100%;
-    height: calc(100% - 50px);
-    overflow-y: auto;
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow-y: auto;
 }
 </style>
 <style>
