@@ -36,33 +36,27 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" fixed align="center" prop="productCode" label="产品编号">
+      <el-table-column width="150" fixed align="center" prop="productCode" label="产品CP编号">
+      </el-table-column>
+      <el-table-column width="150" fixed align="center" prop="productMdmCode" label="产品SAP编码">
       </el-table-column>
       <el-table-column width="420" align="center" prop="productCsName" label="产品中文名称">
       </el-table-column>
       <el-table-column width="220" align="center" prop="productEsName" label="产品英文名称">
       </el-table-column>
-      <el-table-column width="340" align="center" prop="productAbbreviation" label="产品简称">
-      </el-table-column>
       <el-table-column width="150" align="center" prop="category" label="品类">
       </el-table-column>
       <el-table-column width="150" align="center" prop="brand" label="品牌">
       </el-table-column>
-      <el-table-column width="150" align="center" prop="series" label="系列">
-      </el-table-column>
       <el-table-column width="150" align="center" prop="stage" label="阶段">
-      </el-table-column>
-      <!-- <el-table-column width="150" align="center" prop="pack" label="包装"> </el-table-column>
-      <el-table-column width="150" align="center" prop="content" label="含量"> </el-table-column> -->
-      <el-table-column width="150" align="center" prop="conversionRatio" label="大小单位转换比">
       </el-table-column>
       <el-table-column width="150" align="center" prop="largeUnit" label="大单位">
       </el-table-column>
-      <el-table-column width="150" align="center" prop="largeUnitPrice" label="大单位价格">
-      </el-table-column>
       <el-table-column width="150" align="center" prop="smallUnit" label="小单位">
       </el-table-column>
-      <el-table-column width="150" align="center" prop="smallUnitPrice" label="小单位价格">
+      <el-table-column width="150" align="center" prop="conversionRatio" label="大小单位转换比">
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="buCode" label="BU">
       </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
