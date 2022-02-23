@@ -26,7 +26,7 @@
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
@@ -42,9 +42,9 @@
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData"  ref="multipleTable" border :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+    <el-table :data="tableData" ref="multipleTable" border :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       <el-table-column width="250" fixed="left" align="center" prop="customerCsName" label="客户名称" />
       <el-table-column align="center" prop="channelCode" label="渠道" />
       <el-table-column width="250" align="center" prop="sku" label="SKU" />
@@ -61,6 +61,13 @@
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" v-slot="{ row }" align="center" prop="createDate" label="创建时间">
         {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="deleteFlag" label="状态">
+        <template slot-scope="{row}">
+          <div>
+            {{row.deleteFlag?'无效':'正常'}}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
@@ -104,7 +111,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum,getHeight } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum, getHeight } from '@/utils'
 import API from '@/api/masterData/mdprice.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -165,9 +172,10 @@ export default {
       formData.append('jobClassName', 'SampleJob')
       formData.append('jobGroupName', 'test')
       // formData.append('cronExpression', '0 0 2 * * ? *')
-      selectAPI.timeout(formData).then((res) => {
-        
-      })
+      selectAPI.timeout(formData).then((res) => {})
+    },
+    checkSelectable(row) {
+      return row.deleteFlag==0
     },
     // 获取表格数据
     getTableData() {
@@ -296,9 +304,17 @@ export default {
     mutidel() {
       if (this.checkArr.length === 0) return this.$message.error('请选择数据')
       else {
-        const IdList = []
+        const ObjList = []
         this.checkArr.forEach((item) => {
-          IdList.push(item.id)
+          let obj = {
+            id: '',
+            channelCode: '',
+            yearAndMonth: '',
+          }
+          obj.id = item.id
+          obj.channelCode = item.channelCode
+          obj.yearAndMonth = item.yearAndMonth
+          ObjList.push(obj)
         })
         this.$confirm('确定要删除数据吗?', '提示', {
           confirmButtonText: '确定',
@@ -306,7 +322,7 @@ export default {
           type: 'warning',
         })
           .then(() => {
-            API.deleteMdPrice(IdList).then((response) => {
+            API.deleteMdPrice(ObjList).then((response) => {
               if (response.code === 1000) {
                 this.getTableData()
                 this.$message.success('删除成功!')

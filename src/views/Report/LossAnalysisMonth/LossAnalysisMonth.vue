@@ -5,15 +5,8 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月：</span>
-          <el-date-picker
-            v-model="filterObj.yearAndMonthList"
-            type="monthrange"
-            format="yyyy-MM"
-            value-format="yyyy-MM"
-            range-separator="至"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份"
-          />
+          <el-date-picker v-model="filterObj.yearAndMonthList" type="monthrange" format="yyyy-MM" value-format="yyyy-MM" range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
@@ -82,7 +75,7 @@
                   </el-table-column>
                 </template>
                 <!-- </el-table-column> -->
-              <!-- <el-table-column align="center" width="150" prop="name" label="CPT" />
+                <!-- <el-table-column align="center" width="150" prop="name" label="CPT" />
                 <el-table-column align="center" width="150" prop="name" label="V1" />
                 <el-table-column align="center" width="150" prop="name" label="V2" />
                 <el-table-column align="center" width="150" prop="name" label="V3" /> -->
@@ -129,7 +122,8 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table id="outTable1" v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" style="width: 100%">
+            <el-table id="outTable1" v-loading="tableLoading" :data="tableDataRange" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
+              style="width: 100%">
               <el-table-column v-slot="{row}" align="center" width="150" fixed prop="channel" label="数据维度">
                 {{ row.name }}
               </el-table-column>
@@ -193,7 +187,7 @@ import {
   getCurrentMonth1,
   ReportBgColorMap,
   FormateThousandNum,
-  getYearAndMonthRange
+  getYearAndMonthRange,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import APIReport from '@/api/report/report.js'
@@ -218,14 +212,17 @@ export default {
         type: '',
         regionCode: '',
         month: '',
-        category: ''
+        category: '',
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
-      tableData: [{
-        channel: []
-      }],
+      tableData: [
+        {
+          channel: [],
+        },
+      ],
+      tableDataRange: [],
       checkList: ['0', '1'],
       totalArr: [],
       CPT: [],
@@ -233,7 +230,7 @@ export default {
       two: [],
       three: [],
       BrandList: [],
-      RegionList: []
+      RegionList: [],
     }
   },
   computed: {},
@@ -278,7 +275,7 @@ export default {
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
         bookSST: true,
-        type: 'array'
+        type: 'array',
       })
       try {
         FileSaver.saveAs(
@@ -306,7 +303,7 @@ export default {
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
         bookSST: true,
-        type: 'array'
+        type: 'array',
       })
       try {
         FileSaver.saveAs(
@@ -326,7 +323,7 @@ export default {
     getCustomerList() {
       selectAPI
         .getCustomerListByChannels({
-          channelCodes: this.filterObj.channelCode
+          channelCodes: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -363,34 +360,49 @@ export default {
         channelName: this.filterObj.channelCode,
         customerName: this.filterObj.customerCode,
         brandName: this.filterObj.brandName,
-        regionName: this.filterObj.regionName
+        regionName: this.filterObj.regionName,
       }
       APIReport.profitAndLossReport(params)
-      // axios({
-      //   method: 'post',
-      //   url: '/profitAndLossReport/get',
-      //   data: params
-      // })
-        // .get('/profitAndLossReport/get', { params: {
-        //   yearAndMonth: '',
-        //   channelName: '',
-        //   customerName: '',
-        //   brandName: '',
-        //   regionName: ''
-        // }})
         .then((response) => {
-          this.tableData = [{
-            channel: []
-          }]
+          this.tableData = [
+            {
+              channel: [],
+            },
+          ]
           const list = response.data
           const AllList = []
           for (let index = 0; index < list.length - 1; index++) {
             const sList = list[index].cost
             for (let sIndex = 0; sIndex < sList.length; sIndex++) {
+              // debugger
               const element = sList[sIndex]
+              if (element.version == 'Price Promotion') {
+                let PosObj = {
+                  version: 'POS Vol(ctn)',
+                  cptCost: element.cptPosVol,
+                  voneCost: element.onePosVol,
+                  vtwoCost: element.twoPosVol,
+                  vthreeCost: element.threePosVol,
+                  channelName: element.channelName,
+                  customerName: element.customerName,
+                }
+                let GmvObj = {
+                  version: 'GMV(KRMB)',
+                  cptCost: element.cptGmv,
+                  voneCost: element.oneGmv,
+                  vtwoCost: element.twoGmv,
+                  vthreeCost: element.threeGmv,
+                  channelName: element.channelName,
+                  customerName: element.customerName,
+                }
+                AllList.push(PosObj)
+                AllList.push(GmvObj)
+              }
               AllList.push(element)
             }
+            // AllList.push(versionList)
           }
+
           // console.log(AllList)
           // 对version进行分组处理
           const AllData = {}
@@ -399,7 +411,7 @@ export default {
             if (!AllData[AllList[m].version]) {
               const obj = {
                 name: '',
-                channel: []
+                channel: [],
               }
               Object.assign(obj, { name: AllList[m].version })
               var arr = obj.channel
@@ -427,7 +439,7 @@ export default {
               AllData[key].channel = channelData
             }
           }
-          console.log(AllData)
+
           let tableList = []
           for (const key in AllData) {
             if (Object.hasOwnProperty.call(AllData, key)) {
@@ -436,27 +448,78 @@ export default {
             }
           }
           if (tableList.length === 0) {
-            tableList = [{
-              channel: []
-            }]
+            tableList = [
+              {
+                channel: [],
+              },
+            ]
           }
           this.tableData = tableList
           // total
           const total = list[list.length - 1].cost
-          // console.log('uuuuuu', this.tableData)
-          for (let i = 0; i < total.length; i++) {
-            this.tableData[i].CPT = total[i].cptCost
-            this.tableData[i].one = total[i].voneCost
-            this.tableData[i].two = total[i].vtwoCost
-            this.tableData[i].three = total[i].vthreeCost
-
-            this.tableData[i].CPTFabe = total[i].cptFabe
-            this.tableData[i].oneFabe = total[i].voneFabe
-            this.tableData[i].twoFabe = total[i].vtwoFabe
-            this.tableData[i].threeFabe = total[i].vthreeFabe
+          const TotalList = []
+          for (let m = 0; m < total.length; m++) {
+            const element = total[m]
+            if (element.version == 'Price Promotion') {
+              let PosObj = {
+                version: 'POS Vol(ctn)',
+                cptCost: element.cptPosVol,
+                voneCost: element.onePosVol,
+                vtwoCost: element.twoPosVol,
+                vthreeCost: element.threePosVol,
+                channelName: element.channelName,
+                customerName: element.customerName,
+              }
+              let GmvObj = {
+                version: 'GMV(KRMB)',
+                cptCost: element.cptGmv,
+                voneCost: element.oneGmv,
+                vtwoCost: element.twoGmv,
+                vthreeCost: element.threeGmv,
+                channelName: element.channelName,
+                customerName: element.customerName,
+              }
+              TotalList.push(PosObj)
+              TotalList.push(GmvObj)
+            }
+            TotalList.push(element)
+          }
+          console.log(TotalList)
+          for (let i = 0; i < TotalList.length; i++) {
+            if (
+              this.tableData[i].name == 'Price Promotion' ||
+              this.tableData[i].name == 'New User'
+            ) {
+              this.tableData[i].CPT = TotalList[i].cptCost
+              this.tableData[i].one = TotalList[i].voneCost
+              this.tableData[i].two = TotalList[i].vtwoCost
+              this.tableData[i].three = TotalList[i].vthreeCost
+              this.tableData[i].CPTFabe = TotalList[i].cptFabe
+              this.tableData[i].oneFabe = TotalList[i].voneFabe
+              this.tableData[i].twoFabe = TotalList[i].vtwoFabe
+              this.tableData[i].threeFabe = TotalList[i].vthreeFabe
+            } else if (
+              this.tableData[i].name == 'POS Vol(ctn)' ||
+              this.tableData[i].name == 'GMV(KRMB)'
+            ) {
+              this.tableData[i].CPT = TotalList[i].cptCost
+              this.tableData[i].one = TotalList[i].voneCost
+              this.tableData[i].two = TotalList[i].vtwoCost
+              this.tableData[i].three = TotalList[i].vthreeCost
+            }
           }
           this.$forceUpdate()
-          console.log('wwwww', this.tableData)
+          console.log(this.tableData)
+          for (let s = 0; s < this.tableData.length; s++) {
+            const element = this.tableData[s]
+            if (
+              element.name == 'Price Promotion' ||
+              element.name == 'New User'
+            ) {
+              this.tableDataRange.push(element)
+            }
+          }
+          console.log(this.tableDataRange)
         })
         .catch((error) => {
           console.log(error)
@@ -468,7 +531,7 @@ export default {
       this.tableData = []
       API.getPageMdBrand({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableLoading = false
@@ -504,8 +567,8 @@ export default {
       if (rowIndex === 0 || rowIndex === 1 || rowIndex === 2) {
         return 'headerStyle'
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

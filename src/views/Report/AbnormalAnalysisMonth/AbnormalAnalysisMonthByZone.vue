@@ -268,12 +268,12 @@ export default {
               let versionObj = {}
               // 渠道分组处理
               for (let m = 0; m < list.length; m++) {
-                if (!versionObj[list[m].channelCode]) {
+                if (!versionObj[list[m].regionName]) {
                   var arr = []
                   arr.push(list[m])
-                  versionObj[list[m].channelCode] = arr
+                  versionObj[list[m].regionName] = arr
                 } else {
-                  versionObj[list[m].channelCode].push(list[m])
+                  versionObj[list[m].regionName].push(list[m])
                 }
               }
 
