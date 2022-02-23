@@ -236,7 +236,6 @@ export default {
   computed: {},
   mounted() {
     this.getReport()
-    // this.getTableData()
     this.getQueryChannelSelect()
     // this.getRegionList()
     this.getBrandList()
@@ -441,6 +440,7 @@ export default {
           }
 
           let tableList = []
+          console.log(AllData)
           for (const key in AllData) {
             if (Object.hasOwnProperty.call(AllData, key)) {
               const element = AllData[key]
@@ -448,9 +448,23 @@ export default {
             }
           }
           if (tableList.length === 0) {
+            //表格数据进行初始化
             tableList = [
               {
                 channel: [],
+                name: 'POS Vol(ctn)',
+              },
+              {
+                channel: [],
+                name: 'GMV(KRMB)',
+              },
+              {
+                channel: [],
+                name: 'Price Promotion',
+              },
+              {
+                channel: [],
+                name: 'New User',
               },
             ]
           }
@@ -484,7 +498,7 @@ export default {
             }
             TotalList.push(element)
           }
-          console.log(TotalList)
+
           for (let i = 0; i < TotalList.length; i++) {
             if (
               this.tableData[i].name == 'Price Promotion' ||
@@ -509,7 +523,7 @@ export default {
             }
           }
           this.$forceUpdate()
-          console.log(this.tableData)
+          this.tableDataRange = []
           for (let s = 0; s < this.tableData.length; s++) {
             const element = this.tableData[s]
             if (
@@ -519,38 +533,10 @@ export default {
               this.tableDataRange.push(element)
             }
           }
-          console.log(this.tableDataRange)
         })
         .catch((error) => {
           console.log(error)
         })
-    },
-    // 获取表格数据
-    getTableData() {
-      this.tableLoading = true
-      this.tableData = []
-      API.getPageMdBrand({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
-      })
-        .then((response) => {
-          this.tableLoading = false
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch((error) => {})
-    },
-    // 每页显示页面数变更
-    handleSizeChange(size) {
-      this.pageSize = size
-      this.getTableData()
-    },
-    // 当前页变更
-    handleCurrentChange(num) {
-      this.pageNum = num
-      this.getTableData()
     },
     // 行样式
     tableRowClassName({ row, rowIndex }) {

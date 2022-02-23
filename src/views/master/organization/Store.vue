@@ -157,7 +157,7 @@ export default {
     exportData() {
       let formData = new FormData()
       formData.append('StoreName', this.filterObj.StoreName)
-      formData.append('customerCsName', this.filterObj.customerCsName)
+      formData.append('customerCsName', this.filterObj.customerName)
       formData.append('distributorName', this.filterObj.distributorName)
       formData.append('channelCode', this.filterObj.channelCode)
       formData.append('state', this.filterObj.state)

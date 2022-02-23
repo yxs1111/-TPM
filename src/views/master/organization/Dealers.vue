@@ -18,6 +18,10 @@
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
+          <img src="@/assets/images/export.png" alt="" />
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -51,6 +55,7 @@ import {
   parseTime,
   getTextMap,
   getHeight,
+  downloadFile
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 export default {
@@ -110,6 +115,18 @@ export default {
     search() {
       this.pageNum = 1
       this.getTableData()
+    },
+    //导出数据
+    exportData() {
+      let formData = new FormData()
+      formData.append('distributorName', this.filterObj.Distributor)
+      formData.append('distributorCode', this.filterObj.distributorCode)
+      formData.append('state', this.filterObj.state)
+      API.exportDistributor(formData).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '经销商 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

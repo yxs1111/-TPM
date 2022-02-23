@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-02-23 09:45:57
+ * @LastEditTime: 2022-02-23 14:03:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -172,6 +172,15 @@ export default {
   },
   deleteMdDistributor(params) {
     return requestApi.request_delete('/mdm/mdDistributor/delete', params)
+  },
+  //经销商导出
+  exportDistributor(params) {
+    return request({
+      url: '/mdm/mdDistributor/exportDistributor',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
   },
   // 费用科目
   getPageMdCostType(params) {
