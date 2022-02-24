@@ -175,7 +175,7 @@ export default {
       selectAPI.timeout(formData).then((res) => {})
     },
     checkSelectable(row) {
-      return row.deleteFlag==0
+      return row.deleteFlag===0
     },
     // 获取表格数据
     getTableData() {

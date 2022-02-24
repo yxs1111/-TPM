@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-02 13:27:44
- * @LastEditTime: 2021-12-12 15:22:50
+ * @LastEditTime: 2022-02-24 12:41:43
  */
 import { asyncRoutes, constantRoutes } from '@/router'
 import  common  from "@/router/routers/common.js";
@@ -38,17 +38,21 @@ export function filterAsyncRoutes(routes, menus) {
   routes.forEach(route => {
     const tmp = { ...route }
     if (tmp.children) {
+      //父级加sort,异常分析报告
+      hasPermission(menus, tmp)
       tmp.children = filterAsyncRoutes(tmp.children, menus)
     }
     if ((tmp.children && tmp.children.length > 0) || hasPermission(menus, tmp)) {
       res.push(tmp)
     }
   })
-  return res.sort(function(a, b) {
+  const list=res.sort(function(a, b) {
     const x = a.meta.sorting
     const y = b.meta.sorting
     return ((x < y) ? -1 : ((x > y) ? 1 : 0))
   })
+  return list
+  
 }
 
 const state = {

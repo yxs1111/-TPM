@@ -54,7 +54,7 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table id="outTable" v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" style="width: 100%">
+            <el-table id="outTable" :key="tableKey" v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" style="width: 100%">
               <el-table-column v-slot="{row}" align="center" width="150" fixed prop="channel" label="数据维度">
                 {{ row.name }}
               </el-table-column>
@@ -122,7 +122,7 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table id="outTable1" v-loading="tableLoading" :data="tableDataRange" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
+            <el-table id="outTable1" :key="tableKey2" v-loading="tableLoading" :data="tableDataRange" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
               style="width: 100%">
               <el-table-column v-slot="{row}" align="center" width="150" fixed prop="channel" label="数据维度">
                 {{ row.name }}
@@ -231,6 +231,9 @@ export default {
       three: [],
       BrandList: [],
       RegionList: [],
+      tableKey: 0, //el-table key
+      tableKey2: 0, //el-table key
+      
     }
   },
   computed: {},
@@ -533,6 +536,8 @@ export default {
               this.tableDataRange.push(element)
             }
           }
+          this.tableKey = Math.random()
+          this.tableKey2 = Math.random()
         })
         .catch((error) => {
           console.log(error)

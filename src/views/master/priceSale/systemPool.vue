@@ -25,6 +25,18 @@
           <span class="SelectliTitle">机制名称：</span>
           <el-input v-model="filterObj.cdmName" placeholder="请输入" clearable />
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Mine package:</span>
+          <el-select v-model="filterObj.minePackageCode" clearable placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costType" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
@@ -77,12 +89,23 @@
         </template> -->
       </el-table-column>
       <el-table-column width="200" align="center" prop="cdmName" label="机制名称" />
+      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" label="创建时间">
         <template slot-scope="scope">
           {{ scope.row.createDate==null ? '':scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
+      <el-table-column width="280" align="center" prop="updateBy" label="修改人"> </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
+        {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="state" label="状态" >
+        <template slot-scope="{ row }">
+          <div>
+            {{ row.state ? '正常' : '无效' }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
@@ -197,7 +220,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmImport()">确定导入</el-button>
+        <el-button type="primary" @click="confirmImport()">确 认</el-button>
         <el-button @click="closeImport">取 消</el-button>
       </span>
       <div v-if="warningShow" style="height: 300px;overflow: scroll;overflow-x: hidden;margin-top:15px;">
@@ -240,7 +263,8 @@ export default {
         minePackageCode: '',
         sku: '',
         cdmType: '',
-        cdmName: ''
+        cdmName: '',
+        state:''
       },
       dialogAdd: {
         channelCode: '',
@@ -252,6 +276,7 @@ export default {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      MinePackageList: [],
       ruleForm: {
         channelCode: '',
         channelCsName: '',
@@ -327,12 +352,18 @@ export default {
       })()
     }
     this.getTableData()
+    this.getMinePackage()
     // 获取下拉框
     this.getQueryChannelSelect()
     this.getQuerySkuSelect()
     // this.getQueryMinePackageSelect()
   },
   methods: {
+    getMinePackage() {
+      selectAPI.queryMinePackageSelect().then((res) => {
+        this.MinePackageList = res.data
+      })
+    },
     Reset() {
       this.filterObj = {
         channelCode: '',
@@ -555,7 +586,8 @@ export default {
         minePackageCode: this.filterObj.minePackageCode,
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
-        cdmName: this.filterObj.cdmName
+        cdmName: this.filterObj.cdmName,
+        state:this.filterObj.state
       })
         .then((response) => {
           this.tableData = response.data.records

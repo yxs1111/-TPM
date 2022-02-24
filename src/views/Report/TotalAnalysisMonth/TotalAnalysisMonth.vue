@@ -37,7 +37,7 @@
       <div class="checkBox">
         <span class="checkBoxTitle">显示内容:</span>
         <el-checkbox-group v-model="checkList">
-          <el-checkbox v-for="item,index in dynamicColumn" :key="index" :label="item.value">{{ item.title }}</el-checkbox>
+          <el-checkbox v-for="item,index in dynamicColumn" :key="index" :label="item.value">{{ getCheckTitle(item.title) }}</el-checkbox>
         </el-checkbox-group>
       </div>
 
@@ -78,7 +78,8 @@
               <template>
                 <el-table-column v-for="(titleItem,index) in tableColumnList" :key="index" align="center" :width="titleItem.width">
                   <template v-slot:header>
-                    {{ titleItem.title }}
+                    <!-- {{ titleItem.title }} -->
+                    <span v-html="titleItem.title"></span>
                   </template>
                   <template slot-scope="{row}">
                     <div class="NumWrap">
@@ -150,14 +151,14 @@ export default {
         { title: 'V3谈判前', value: 'v3BeforeAvg', width: 100 },
         { title: 'V3谈判后', value: 'v3AfterAvg', width: 100 },
         {
-          title: '价格执行率1# V3谈判前  VS  V1',
+          title: `价格执行率1<br>#V3谈判前 VS V1`,
           value: 'priceExecutionRate1',
-          width: 250,
+          width: 140,
         },
         {
-          title: '价格执行率2# V3谈判后  VS  V1',
+          title: `价格执行率2<br>#V3谈判后 VS V1`,
           value: 'priceExecutionRate2',
-          width: 250,
+          width: 140,
         },
       ], // 展示列选项框
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
@@ -388,6 +389,9 @@ export default {
       if (row.name.indexOf('Total') !== -1) {
         return 'background-color: #f3f7f8 !important;color: #666!important;'
       }
+    },
+    getCheckTitle(str) {
+      return str.replace(/<br>/g," ")
     },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
