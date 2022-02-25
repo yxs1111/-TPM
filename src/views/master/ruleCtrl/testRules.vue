@@ -18,16 +18,9 @@
         </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
-          <el-date-picker
-            v-model="filterObj.date"
-            clearable
-            type="month"
-            value-format="yyyyMM"
-            format="yyyyMM"
-            placeholder="选择月"
-          />
+          <el-date-picker v-model="filterObj.date" clearable type="month" value-format="yyyyMM" format="yyyyMM" placeholder="选择月" />
         </div>
-        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG"  @click="getTableData">查询</el-button>
+        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div v-permission="permissions['export']" class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
@@ -39,14 +32,17 @@
       <el-button v-permission="permissions['update']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave">保存</el-button>
       <el-button v-permission="permissions['insert']" type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear">新增</el-button>
     </div>
-    <el-table  :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
+    <el-table :data="tableData" :key="tableKey" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+      style="width: 100%" :max-height="maxheight">
       <el-table-column width="180" align="center" prop="version" label="版本" />
       <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="60" align="left" prop="ruleUnit" label="" />
       <el-table-column width="300" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="{row}">
           <div v-if="row.ruleUnit === '∈'">
-            [&nbsp;<el-input v-model="row.startRule" style="width:60px;" size="small" @blur="number($event,row,row.startRule)" />%, <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
+            [&nbsp;
+            <el-input v-model="row.startRule" :class="row.status?'':'noPass'" style="width:60px;" size="small" @blur="number($event,row,row.startRule)" />%,
+            <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
           </div>
           <div v-else>
             {{ row.ruleContentAfter }}
@@ -168,28 +164,29 @@ export default {
     return {
       // 所有要合并的数量（一行一行的开始）
       spanAll: [],
-      titleData: [{
-        name: 'version'
-      }
-      // {
-      //   name: 'ruleContentFront'
-      // },
-      // {
-      //   name: 'ruleUnit'
-      // },
-      // {
-      //   name: 'ruleContentAfter'
-      // }, {
-      //   name: 'channelEsName'
-      // }, {
-      //   name: 'yearAndMonth'
-      // }
+      titleData: [
+        {
+          name: 'version',
+        },
+        // {
+        //   name: 'ruleContentFront'
+        // },
+        // {
+        //   name: 'ruleUnit'
+        // },
+        // {
+        //   name: 'ruleContentAfter'
+        // }, {
+        //   name: 'channelEsName'
+        // }, {
+        //   name: 'yearAndMonth'
+        // }
       ],
       yearArr: [],
       visibleAdd: false,
       ruleFormAdd: {
         targetYear: '',
-        newYear: ''
+        newYear: '',
       },
       url: '@/assets/images/selectError.png',
       channelArr: [],
@@ -199,7 +196,7 @@ export default {
       filterObj: {
         // minePackage: '',
         channel: '',
-        date: ''
+        date: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
@@ -213,24 +210,22 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       },
       rules: {
         channelCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       rulesAdd: {
         targetYear: [
-          { required: true, message: '请输入目标年月', trigger: 'blur' }
+          { required: true, message: '请输入目标年月', trigger: 'blur' },
         ],
-        newYear: [
-          { required: true, message: '请输入新年月', trigger: 'blur' }
-        ]
+        newYear: [{ required: true, message: '请输入新年月', trigger: 'blur' }],
       },
       dialogVisible: false,
       isEditor: '',
@@ -241,13 +236,13 @@ export default {
         {
           id: 0,
           label: 'Error',
-          valueImg: require('@/assets/images/selectError.png')
+          valueImg: require('@/assets/images/selectError.png'),
         },
         {
           id: 1,
           label: 'Exception',
-          valueImg: require('@/assets/images/warning.png')
-        }
+          valueImg: require('@/assets/images/warning.png'),
+        },
       ],
       ErrorType: '', // 异常类型
       minePackage: [],
@@ -255,7 +250,8 @@ export default {
       V1Total: 0,
       V2Total: 0,
       V3Total: 0,
-      maxheight: window.innerHeight - 400
+      maxheight: window.innerHeight - 400,
+      tableKey: 0,
     }
   },
   computed: {},
@@ -280,7 +276,7 @@ export default {
     Reset() {
       this.filterObj = {
         channel: '',
-        date: ''
+        date: '',
       }
       this.getTableData()
     },
@@ -291,12 +287,12 @@ export default {
         if (rowNum !== 0) {
           return {
             rowspan: rowNum,
-            colspan: 1
+            colspan: 1,
           }
         } else {
           return {
             rowspan: 0,
-            colspan: 0
+            colspan: 0,
           }
         }
       }
@@ -327,27 +323,31 @@ export default {
     // 新增弹框
     // 获取新月份
     queryYearAndMonth() {
-      API.queryYearAndMonth().then(res => {
-        if (res.data) {
-          this.yearArr = res.data
-        }
-      }).catch()
+      API.queryYearAndMonth()
+        .then((res) => {
+          if (res.data) {
+            this.yearArr = res.data
+          }
+        })
+        .catch()
     },
     submitFormAdd(formName) {
       const params = {
         minePackage: 'A',
         targetYearMonth: this.ruleFormAdd.newYear,
-        newYearMonth: this.ruleFormAdd.targetYear
+        newYearMonth: this.ruleFormAdd.targetYear,
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          API.saveNewExeRule(params).then(res => {
-            if (res.code === 1000) {
-              this.$message.success('添加成功')
-              this.closeAdd()
-              this.getTableData()
-            }
-          }).catch()
+          API.saveNewExeRule(params)
+            .then((res) => {
+              if (res.code === 1000) {
+                this.$message.success('添加成功')
+                this.closeAdd()
+                this.getTableData()
+              }
+            })
+            .catch()
         } else {
           return false
         }
@@ -366,7 +366,9 @@ export default {
     },
     // 验证input输入框数据
     number(e, row, itemRow) {
-      const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(e.target.value)
+      const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(
+        e.target.value
+      )
       // debugger
       // else if (row.startRule === '') {
       //   return
@@ -382,19 +384,20 @@ export default {
           this.$message({
             showClose: true,
             message: '需要输入整数！',
-            type: 'warning'
-          })
-        } else if (Number(row.startRule) >= Number(row.endRule) && flag) {
-          e.target.value = ''
-          // 赋值之后table中不同步问题
-          e.srcElement.dispatchEvent(new Event('input'))
-          this.$forceUpdate()
-          this.$message({
-            showClose: true,
-            message: '区域数值需要前小后大！',
-            type: 'warning'
+            type: 'warning',
           })
         }
+        // else if (Number(row.startRule) >= Number(row.endRule) && flag) {
+        //   e.target.value = ''
+        //   // 赋值之后table中不同步问题
+        //   e.srcElement.dispatchEvent(new Event('input'))
+        //   this.$forceUpdate()
+        //   this.$message({
+        //     showClose: true,
+        //     message: '区域数值需要前小后大！',
+        //     type: 'warning'
+        //   })
+        // }
         this.$forceUpdate()
       }
     },
@@ -403,50 +406,82 @@ export default {
       API.excportRuleSave({
         channelCode: this.filterObj.channel,
         minePackage: 'A',
-        yearAndMonth: this.filterObj.date
-      }).then(
-        response => {
-          const fileName = '检验数据Excel' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+        yearAndMonth: this.filterObj.date,
+      }).then((response) => {
+        const fileName = '检验数据Excel' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 保存
     updateSave() {
-      const params = []
-      for (const item of this.tableData) {
-        if (item.ruleUnit === '∈') {
-          const tempItem = {
-            minePackage: 'Price Promotion',
-            ruleUnit: item.ruleUnit.trim(),
-            startRule: item.startRule + '%',
-            endRule: item.endRule.trim() + '%',
-            id: item.id,
-            channelCode: item.channelCode,
-            yearAndMonth: item.yearAndMonth
+      let flag = 1
+      this.tableKey = Math.random()
+      for (let index = 0; index < this.tableData.length; index++) {
+        const element = this.tableData[index]
+        element['status'] = 1
+        // this.$forceUpdate();
+        if (element.ruleUnit === '∈') {
+          if (element.endRule === '' || element.startRule === '') {
+            element.status = 0
+            flag=0
+            this.$forceUpdate();
+          } else {
+            let countNumber =
+              Number(element.startRule) - Number(element.endRule)
+            if (countNumber >= 0) {
+              flag = 0
+              
+              element.startRule = ''
+              element.status = 0
+            }
           }
-          params.push(tempItem)
         }
       }
-      API.updateRuleSave(params).then(res => {
-        if (res.code === 1000) {
-          this.$message.success('保存成功')
-        } else {
-          this.$message.error('保存失败')
+      if (flag) {
+        const params = []
+        for (const item of this.tableData) {
+          if (item.ruleUnit === '∈') {
+            const tempItem = {
+              minePackage: 'Price Promotion',
+              ruleUnit: item.ruleUnit.trim(),
+              startRule: item.startRule + '%',
+              endRule: item.endRule.trim() + '%',
+              id: item.id,
+              channelCode: item.channelCode,
+              yearAndMonth: item.yearAndMonth,
+            }
+            params.push(tempItem)
+          }
         }
-        this.getTableData()
-        this.$forceUpdate()
-      }).catch()
+        API.updateRuleSave(params)
+          .then((res) => {
+            if (res.code === 1000) {
+              this.$message.success('保存成功')
+            } else {
+              this.$message.error('保存失败')
+            }
+            this.getTableData()
+            this.$forceUpdate()
+          })
+          .catch()
+      } else {
+        this.$message({
+          showClose: true,
+          message: `区域数值需要前小后大,请进行检验`,
+          type: 'warning',
+        })
+      }
     },
     // 合并第一行操作
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
@@ -455,12 +490,12 @@ export default {
           if (rowIndex % this.V0Total === 0) {
             return {
               rowspan: this.V0Total,
-              colspan: 1
+              colspan: 1,
             }
           } else {
             return {
               rowspan: 0,
-              colspan: 0
+              colspan: 0,
             }
           }
         }
@@ -469,12 +504,12 @@ export default {
           if ((rowIndex - this.V0Total) % this.V1Total === 0) {
             return {
               rowspan: this.V1Total,
-              colspan: 1
+              colspan: 1,
             }
           } else {
             return {
               rowspan: 0,
-              colspan: 0
+              colspan: 0,
             }
           }
         }
@@ -483,26 +518,30 @@ export default {
           if ((rowIndex - this.V0Total - this.V1Total) % this.V2Total === 0) {
             return {
               rowspan: this.V2Total,
-              colspan: 1
+              colspan: 1,
             }
           } else {
             return {
               rowspan: 0,
-              colspan: 0
+              colspan: 0,
             }
           }
         }
       } else if (row.version === 'V3') {
         if (columnIndex === 0) {
-          if ((rowIndex - this.V0Total - this.V1Total - this.V2Total) % this.V3Total === 0) {
+          if (
+            (rowIndex - this.V0Total - this.V1Total - this.V2Total) %
+              this.V3Total ===
+            0
+          ) {
             return {
               rowspan: this.V3Total,
-              colspan: 1
+              colspan: 1,
             }
           } else {
             return {
               rowspan: 0,
-              colspan: 0
+              colspan: 0,
             }
           }
         }
@@ -511,27 +550,32 @@ export default {
     // mine package
     getCostTypeList() {
       var params = { costLevel: 2 }
-      API.getCostTypeList(params).then(res => {
-        if (res.code === 1000) {
-          this.minePackage = res.data
-        }
-      }).catch()
+      API.getCostTypeList(params)
+        .then((res) => {
+          if (res.code === 1000) {
+            this.minePackage = res.data
+          }
+        })
+        .catch()
     },
     // 渠道
     getChannel() {
-      selectAPI.queryChannelSelect().then(res => {
-        if (res.code === 1000) {
-          this.channelArr = res.data
-          // if (!this.$route.query.channelCode) {
-          //   this.filterObj.channel = this.channelArr[0].channelCode
-          // } else {
-          //   this.filterObj.channel = this.$route.query.channelCode
-          // }
-          this.getTableData()
-        } else {
-          this.getTableData()
-        }
-      }).catch()
+      selectAPI
+        .queryChannelSelect()
+        .then((res) => {
+          if (res.code === 1000) {
+            this.channelArr = res.data
+            // if (!this.$route.query.channelCode) {
+            //   this.filterObj.channel = this.channelArr[0].channelCode
+            // } else {
+            //   this.filterObj.channel = this.$route.query.channelCode
+            // }
+            this.getTableData()
+          } else {
+            this.getTableData()
+          }
+        })
+        .catch()
     },
     // select标签的change事件
     changeSelection(val) {
@@ -553,7 +597,7 @@ export default {
       API.getPageByDto({
         channelCode: this.filterObj.channel,
         minePackage: 'A',
-        yearAndMonth: this.filterObj.date
+        yearAndMonth: this.filterObj.date,
       })
         .then((response) => {
           this.tableData = response.data
@@ -563,12 +607,15 @@ export default {
             if (this.tableData[i].ruleUnit === '∈') {
               const temp = this.tableData[i].ruleContentAfter.split('%,')
               this.tableData[i].startRule = temp[0].replace('[', '')
-              this.tableData[i].endRule = temp[1].replace(']', '').replace('%', '')
+              this.tableData[i].endRule = temp[1]
+                .replace(']', '')
+                .replace('%', '')
+              this.tableData[i].status = 1
             }
           }
           this.$forceUpdate()
           // this.computerColspan(this.tableData)
-          this.titleData.forEach(val => {
+          this.titleData.forEach((val) => {
             this.getSpanNum(val.name)
           })
         })
@@ -612,7 +659,7 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       }
     },
     editor(obj) {
@@ -627,7 +674,7 @@ export default {
         gear: obj.gear,
         volMin: obj.volMin,
         yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark
+        remark: obj.remark,
       }
       this.editorId = obj.id
     },
@@ -647,7 +694,7 @@ export default {
             gear: this.ruleForm.gear,
             volMin: this.ruleForm.volMin,
             yearAndMonth: this.ruleForm.yearAndMonth,
-            remark: this.ruleForm.remark
+            remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
@@ -706,20 +753,20 @@ export default {
       } else {
         return 'border:none;'
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-.el-icon-my-saveBtn{
+.el-icon-my-saveBtn {
   background: url('~@/assets/images/saveBtn.png') no-repeat;
   font-size: 16px;
   background-size: cover;
 }
-.el-icon-my-saveBtn:before{
-    content: "\e611";
-    font-size: 16px;
+.el-icon-my-saveBtn:before {
+  content: '\e611';
+  font-size: 16px;
 }
 </style>
 
@@ -727,12 +774,12 @@ export default {
 // ::v-deep .el-table__body tr:hover > td{
 //     background-color:yellow !important;
 // }
-table th{
-     border-bottom: none;
+table th {
+  border-bottom: none;
 }
 
 table th {
-    border-right: none;
+  border-right: none;
 }
 
 .option_box {
@@ -747,5 +794,8 @@ table th {
   margin-right: 7px;
   // background: url(../../../assets/images/selectError.png) no-repeat;
 }
-
+.noPass {
+  border: 2px solid salmon;
+  border-radius: 4px;
+}
 </style>

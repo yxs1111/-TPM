@@ -32,10 +32,9 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">状态</span>
-          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
-          </el-select>
+          <span class="SelectliTitle">有效至:</span>
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
+          </el-date-picker>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
@@ -50,14 +49,7 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <el-button
-        type="danger"
-        class="TpmButtonBG"
-        icon="el-icon-delete"
-        size="small"
-        @click="mutidel"
-        v-permission="permissions['delete']"
-      >删除</el-button>
+      <el-button type="danger" class="TpmButtonBG" icon="el-icon-delete" size="small" @click="showDeleteDialog" v-permission="permissions['delete']">删除</el-button>
       <!-- <div class="TpmButtonBG" @click="add">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
@@ -65,18 +57,8 @@
       <!-- <el-button type="primary" icon="el-icon-download" class="TpmButtonBG" @click="mutidel">新增</el-button> -->
       <!-- <el-button type="primary" icon="el-icon-upload2" class="TpmButtonBG" @click="add">新增</el-button> -->
     </div>
-    <el-table
-      ref="Tdata"
-      v-loading="loading"
-      :data="tableData"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      stripe
-      :max-height="maxheight"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table ref="Tdata" :data="tableData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" stripe :max-height="maxheight" style="width: 100%"
+      @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="200" align="center" prop="minePackageCode" label="Mine Package" />
@@ -99,7 +81,7 @@
       <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
         {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="state" label="状态" >
+      <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
             {{ row.state ? '正常' : '无效' }}
@@ -110,96 +92,9 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <!-- 新增 -->
-    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '信息'" :visible="dialogVisible" width="70%" @close="closeDialog">
-      <div class="el-dialogContent">
-        <div style="margin-bottom:15px;">
-          <el-row :gutter="20">
-            <el-col :span="5">
-              <div class="grid-content bg-purple">
-                渠道：
-                <el-select v-model="dialogAdd.channelcode" placeholder="请选择" size="small">
-                  <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
-                </el-select>
-              </div>
-            </el-col>
-            <el-col :span="7">
-              <div class="grid-content bg-purple">
-                Mine Package：
-                <el-select v-model="dialogAdd.costTypeNumber" placeholder="请选择" size="small">
-                  <el-option v-for="item in mpOptons" :key="item.costTypeNumber" :label="item.costType" :value="item.costTypeNumber" />
-                </el-select>
-              </div>
-            </el-col>
-            <el-col :span="5">
-              <div class="grid-content bg-purple">
-                SKU：
-                <el-select v-model="dialogAdd.productCode" placeholder="请选择" size="small">
-                  <el-option v-for="item in skuOptons" :key="item.productCode" :label="item.productCsName" :value="item.productCode" />
-                </el-select>
-              </div>
-            </el-col>
-            <el-col :span="7">
-              <div class="grid-content bg-purple">
-                备注：
-                <el-input v-model="dialogAdd.remark" style="width: 260px;" placeholder="请输入内容" size="small" />
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-        <div>
-          <el-button plain type="primary" size="mini" icon="el-icon-plus" @click="handleAddDetails">添加一行</el-button>
-          <el-button type="success" icon="el-icon-delete" size="mini" @click="handleDeleteDetails">删除</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteAllDetails">清空</el-button>
-        </div>
-        <div style="height:1px;background:#dcdfe6;margin:20px 0px;" />
-        <div style="border: 1px solid #dcdfe6;">
-          <el-table ref="tb" :data="systemList" :row-class-name="rowClassName" @selection-change="handleDetailSelectionChange">
-            <el-table-column type="selection" width="55" />
-            <el-table-column type="index" label="序号" align="center" width="50" />
-            <el-table-column label="机制类型" align="center" prop="cdmType">
-              <template slot-scope="scope">
-                <el-select v-model="systemList[scope.row.xh-1].cdmType" size="small" clearable>
-                  <el-option v-for="dict in cdmTypeOptions" :key="dict.code" :label="dict.name" :value="dict.code" />
-                </el-select>
-              </template>
-            </el-table-column>
-            <el-table-column label="机制规则" align="center" prop="fs">
-              <template slot-scope="scope">
-                <el-input
-                  v-model="systemList[scope.row.xh-1].cdmRuleF"
-                  :disabled="systemList[scope.row.xh-1].cdmType == '5'"
-                  style="width:80px;margin-right:8px;"
-                  size="small"
-                  placeholder="请输入"
-                />
-                <el-input v-model="systemList[scope.row.xh-1].cdmRuleS" :disabled="systemList[scope.row.xh-1].cdmType == '5'" style="width:80px;" size="small" placeholder="请输入" />
-              </template>
-            </el-table-column>
-            <el-table-column label="机制名称" align="center" prop="cdmName">
-              <template slot-scope="scope">
-                <span v-if="systemList[scope.row.xh-1].cdmType != '5'">{{ '满 '+ systemList[scope.row.xh-1].cdmRuleF + ' 听 '+ systemList[scope.row.xh-1].cdmRuleS + ' 折' }}</span>
-                <el-input v-if="systemList[scope.row.xh-1].cdmType == '5'" v-model="systemList[scope.row.xh-1].cdmName" style="width:260px;" size="small" placeholder="请输入内容" />
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm()">保 存</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
-      </span>
-    </el-dialog>
     <!-- 导入 -->
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <!-- <div style="color:#4192d3;text-align:center;cursor:pointer;" @click="downLoadElxModel">下 载 模 板</div> -->
@@ -224,15 +119,22 @@
         <el-button @click="closeImport">取 消</el-button>
       </span>
       <div v-if="warningShow" style="height: 300px;overflow: scroll;overflow-x: hidden;margin-top:15px;">
-        <el-alert
-          v-for="(item, index) in warningList"
-          :key="index"
-          :title="item.errMsg"
-          style="margin-bottom:5px;"
-          type="warning"
-          effect="dark"
-        />
+        <el-alert v-for="(item, index) in warningList" :key="index" :title="item.errMsg" style="margin-bottom:5px;" type="warning" effect="dark" />
       </div>
+    </el-dialog>
+    <!-- 删除 -->
+    <el-dialog width="25%" class="my-el-dialog" title="删除" :visible="deleteVisible" @close="closeDeleteDialog">
+      <div class="fileInfo ImportContent">
+        <div class="fileTitle">有效期</div>
+        <div class="my-search selectFile">
+          <el-date-picker v-model="deleteObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
+          </el-date-picker>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmDelete()">确 定</el-button>
+        <el-button @click="closeDeleteDialog">取 消</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -240,7 +142,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions,getHeightHaveTab } from '@/utils'
+import { getDefaultPermissions, getHeightHaveTab } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/masterData/masterData.js'
 export default {
@@ -264,13 +166,14 @@ export default {
         sku: '',
         cdmType: '',
         cdmName: '',
-        state:''
+        state: '',
+        yearAndMonth: '',
       },
       dialogAdd: {
         channelCode: '',
         costTypeNumber: '',
         productCode: '',
-        remark: ''
+        remark: '',
       },
       value: '',
       categoryArr: [{ label: 'test', value: '19' }],
@@ -286,16 +189,16 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       },
       rules: {
         channelCode: [
           {
             required: true,
             message: 'This field is required',
-            trigger: 'blur'
-          }
-        ]
+            trigger: 'blur',
+          },
+        ],
       },
       dialogVisible: false,
       isEditor: '',
@@ -309,26 +212,29 @@ export default {
       cdmTypeOptions: [
         {
           code: 'cdm1',
-          name: '打折'
+          name: '打折',
         },
         {
           code: 'cdm2',
-          name: '特价'
+          name: '特价',
         },
         {
           code: 'cdm3',
-          name: '满减'
-        }
+          name: '满减',
+        },
       ],
       importVisible: false,
-      loading: false,
       maxheight: getHeightHaveTab(),
+      deleteVisible: false,
+      deleteObj: {
+        yearAndMonth: '',
+      },
     }
   },
 
   computed: {
     typeVSinfo() {
-      return function(type) {
+      return function (type) {
         switch (type) {
           case '1':
             return '打折'
@@ -343,7 +249,7 @@ export default {
             break
         }
       }
-    }
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -370,7 +276,7 @@ export default {
         minePackageCode: '',
         sku: '',
         cdmType: '',
-        cdmName: ''
+        cdmName: '',
       }
       this.getTableData()
     },
@@ -378,45 +284,41 @@ export default {
     mutidel() {
       var that = this
       var ids = that.$refs.Tdata.selection
-      if (ids.length === 0) {
-        that.$alert('请选择要删除的数据', '提示', {
-          confirmButtonText: '确定'
-        }).then()
-        return
-      }
       var idList = []
       ids.forEach((item, index) => {
-        idList[index] = item.id
+        let obj={
+          id:'',
+          validDate:'',
+        }
+        obj.id = item.id
+        obj.validDate = this.deleteObj.yearAndMonth
+        idList.push(obj)
       })
-      this.$confirm('确定要删除数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        that.loading = true
-        API.deleteConfig(idList).then(
-          res => {
-            if (res.code === 1000) {
-              that.getTableData(that.pageNum, that.pageSize)
-              that.$message({
-                type: 'success',
-                message: '删除成功'
-              })
-              that.loading = false
-            }
-            that.loading = false
-          }
-        ).catch(() => {
-          that.loading = false
-        })
-      }).catch(() => {
-        // 取消时清空 selection被选项
-        this.$refs.Tdata.clearSelection()
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+      API.deleteConfig(idList).then((res) => {
+        if (res.code === 1000) {
+          that.getTableData(that.pageNum, that.pageSize)
+          that.$message({
+            type: 'success',
+            message: '删除成功',
+          })
+          this.closeDeleteDialog()
+        }
       })
+    },
+    showDeleteDialog() {
+      if (this.checkArr.length == 0) {
+        this.$message.info('请选择数据')
+      } else {
+        this.deleteVisible = true
+      }
+    },
+    confirmDelete() {
+      this.mutidel()
+    },
+    closeDeleteDialog() {
+      this.deleteObj.yearAndMonth = ''
+      this.deleteVisible = false
+      this.$refs.Tdata.clearSelection()
     },
     // 导出excel
     exportExcelInfo() {
@@ -425,24 +327,23 @@ export default {
         minePackageCode: this.filterObj.minePackageCode,
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
-        cdmName: this.filterObj.cdmName
+        cdmName: this.filterObj.cdmName,
       }
-      API.exportExcelSyspool(data).then(
-        response => {
-          const fileName = '机制池导出Excel' + new Date().getTime() + '.xlsx'
-          //   res.data:请求到的二进制数据
-          const blob = new Blob([response], {
-            type: 'application/vnd.ms-excel'
-          }) // 1.创建一个blob
-          const link = document.createElement('a') // 2.创建一个a链接
-          link.download = fileName // 3.设置名称
-          link.style.display = 'none' // 4.默认不显示
-          link.href = URL.createObjectURL(blob) // 5.设置a链接href
-          document.body.appendChild(link) // 6.将a链接dom插入当前html中
-          link.click() // 7.点击事件
-          URL.revokeObjectURL(link.href) // 8.释放url对象
-          document.body.removeChild(link) // 9.移除a链接dom
-        })
+      API.exportExcelSyspool(data).then((response) => {
+        const fileName = '机制池导出Excel' + new Date().getTime() + '.xlsx'
+        //   res.data:请求到的二进制数据
+        const blob = new Blob([response], {
+          type: 'application/vnd.ms-excel',
+        }) // 1.创建一个blob
+        const link = document.createElement('a') // 2.创建一个a链接
+        link.download = fileName // 3.设置名称
+        link.style.display = 'none' // 4.默认不显示
+        link.href = URL.createObjectURL(blob) // 5.设置a链接href
+        document.body.appendChild(link) // 6.将a链接dom插入当前html中
+        link.click() // 7.点击事件
+        URL.revokeObjectURL(link.href) // 8.释放url对象
+        document.body.removeChild(link) // 9.移除a链接dom
+      })
     },
     // 下载excel模板
     downLoadElxModel() {
@@ -450,7 +351,7 @@ export default {
         const fileName = '机制池模板' + new Date().getTime() + '.xlsx'
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
-          type: 'application/vnd.ms-excel'
+          type: 'application/vnd.ms-excel',
         }) // 1.创建一个blob
         const link = document.createElement('a') // 2.创建一个a链接
         link.download = fileName // 3.设置名称
@@ -477,13 +378,13 @@ export default {
             this.getTableData()
             this.closeImport()
           } else {
-            if (typeof (response.data) === 'string') {
+            if (typeof response.data === 'string') {
               this.$message.error(response.data)
             } else if (response.data.length > 0) {
               this.warningList = []
               this.warningShow = true
               this.warningList = response.data
-            } else if (typeof (response.data) === 'object') {
+            } else if (typeof response.data === 'object') {
               this.$message.error(response.data)
             }
           }
@@ -542,7 +443,7 @@ export default {
     handleDeleteDetails() {
       if (this.checkedDetail.length === 0) {
         this.$alert('请先选择要删除的数据', '提示', {
-          confirmButtonText: '确定'
+          confirmButtonText: '确定',
         })
       } else {
         this.systemList.splice(this.checkedDetail[0].xh - 1, 1)
@@ -587,7 +488,7 @@ export default {
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
         cdmName: this.filterObj.cdmName,
-        state:this.filterObj.state
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -601,7 +502,7 @@ export default {
     getTableData() {
       API.getPageByRequestConfig({
         pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize // 每页条数
+        pageSize: this.pageSize, // 每页条数
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -627,7 +528,7 @@ export default {
         gear: '',
         volMin: '',
         yearAndMonth: '',
-        remark: ''
+        remark: '',
       }
     },
     editor(obj) {
@@ -642,7 +543,7 @@ export default {
         gear: obj.gear,
         volMin: obj.volMin,
         yearAndMonth: obj.yearAndMonth,
-        remark: obj.remark
+        remark: obj.remark,
       }
       this.editorId = obj.id
     },
@@ -655,7 +556,7 @@ export default {
           cdmTypeItem: '',
           cdmNameItem: '',
           beginNumItem: '',
-          endNumItem: ''
+          endNumItem: '',
         }
         cdnItem.cdmTypeItem = item.cdmType
         cdnItem.cdmNameItem =
@@ -672,7 +573,7 @@ export default {
         minePackageCode: this.dialogAdd.costTypeNumber,
         sku: this.dialogAdd.productCode,
         remark: this.dialogAdd.remark,
-        cdmList: cdmListLocal
+        cdmList: cdmListLocal,
       }
       API.insertDataConfig(params)
         .then((res) => {
@@ -737,8 +638,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
-  }
+    },
+  },
 }
 </script>
 

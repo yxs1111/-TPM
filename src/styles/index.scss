@@ -429,7 +429,7 @@ div:focus {
   }
   .el-table__fixed-left {
     height: 100% !important; //设置高优先，以覆盖内联样式
-    bottom: 20px;
+    // bottom: 20px;
   }
   .el-table--striped .el-table__body tr.el-table__row--striped td {
     background: #fff;

@@ -52,6 +52,9 @@
       <el-table-column width="340" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="orgCode" label="城市编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="orgName" label="城市名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="isFmc" label="IsFMC "> </el-table-column>
+      <el-table-column width="150" align="center" prop="fmcCode" label="FMC编码"> </el-table-column>
+      <el-table-column width="150" align="center" prop="fmcName" label="FMC名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>

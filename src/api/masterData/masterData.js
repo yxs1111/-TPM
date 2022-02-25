@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-02-23 14:03:08
+ * @LastEditTime: 2022-02-25 14:57:46
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -325,7 +325,7 @@ export default {
     return requestApi.request_put('/mdm/mdCdmConfig/update', params)
   },
   deleteConfig(params) {
-    return requestApi.request_delete('/mdm/mdCdmConfig/delete', params)
+    return requestApi.request_delete('/mdm/mdCdmConfig/deleteDate', params)
   },
   //价促计算维护
   getPageSaleComputeKeep(params) {
