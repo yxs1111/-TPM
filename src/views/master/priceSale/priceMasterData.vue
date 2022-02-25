@@ -26,6 +26,12 @@
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.deleteFlag" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['正常','无效']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
@@ -128,6 +134,7 @@ export default {
         yearAndMonth: '',
         sku: '',
         channelCode: '',
+        deleteFlag: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -186,6 +193,7 @@ export default {
         sku: this.filterObj.sku,
         channelCode: this.filterObj.channelCode,
         customerCsName: this.filterObj.customerCode,
+        deleteFlag: this.filterObj.deleteFlag,
       })
         .then((response) => {
           this.tableData = response.data.records

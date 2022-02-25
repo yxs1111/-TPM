@@ -302,12 +302,17 @@ export default {
   },
   computed: {},
   watch: {
-    'filterObj.customerIndex'() {
-      this.filterObj.customerName =
-        this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode =
-        this.customerArr[this.filterObj.customerIndex].customerMdmCode
-      this.filterObj.distributorCode = ''
+    'filterObj.customerIndex'(value) {
+      if (value === '') {
+        this.filterObj.customerName = ''
+        this.filterObj.customerMdmCode = ''
+      } else {
+        this.filterObj.customerName =
+          this.customerArr[this.filterObj.customerIndex].customerCsName
+        this.filterObj.customerMdmCode =
+          this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      }
+      this.filterObj.distributorName = ''
       this.getDistributorList()
     },
     // 'filterObj.customerName'() {

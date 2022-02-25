@@ -302,11 +302,17 @@ export default {
       this.filterObj.customerCode = ''
       this.getCustomerList()
     },
-    'filterObj.customerIndex'() {
-      this.filterObj.customerCode =
-        this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode =
-        this.customerArr[this.filterObj.customerIndex].customerMdmCode
+    'filterObj.customerIndex'(value) {
+      if (value === '') {
+        this.filterObj.customerCode = ''
+        this.filterObj.customerMdmCode = ''
+      } else {
+        this.filterObj.customerCode =
+          this.customerArr[this.filterObj.customerIndex].customerCsName
+        this.filterObj.customerMdmCode =
+          this.customerArr[this.filterObj.customerIndex].customerMdmCode
+        
+      }
       this.filterObj.distributorCode = ''
       this.getDistributorList()
     },

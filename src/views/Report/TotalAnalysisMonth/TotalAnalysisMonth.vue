@@ -14,21 +14,26 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
+          <MutiSelect v-model="filterObj.channelCode" :list="channelOptions" :props="{value:'channelEsName',label:'channelEsName',key:'channelCode'}"/>
+          <!-- <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
             <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
-          </el-select>
+          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
-          <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.customerCode" :list="customerArr" :props="{value:'customerCsName',label:'customerCsName',key:'customerCode'}"/>
+          <!-- <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
-          </el-select>
+          </el-select> -->
         </div>
+        
+        
         <div class="Selectli">
           <span class="SelectliTitle">SKU：</span>
-          <el-select v-model="filterObj.productName" clearable multiple collapse-tags filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.productName" :list="skuList" :props="{value:'productEsName',label:'productEsName',key:'productEsName'}"/>
+          <!-- <el-select v-model="filterObj.productName" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
-          </el-select>
+          </el-select> -->
         </div>
 
       </div>
@@ -114,9 +119,10 @@ import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
+import MutiSelect from '@/components/MutiSelect';
 export default {
   name: 'TotalAnalysisMonth',
-  components: { SelectMonth },
+  components: { SelectMonth,MutiSelect },
   directives: { elDragDialog, permission },
   data() {
     return {
@@ -125,9 +131,9 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonthList: getCurrentMonth1(),
-        customerCode: '',
-        channelCode: '',
-        productName: '',
+        customerCode: [],
+        channelCode: [],
+        productName: [],
       },
       permissions: getDefaultPermissions(),
       // 表格列
@@ -164,6 +170,7 @@ export default {
       ReportBgColorMap: ReportBgColorMap(), // 动态列背景色
       tableKey: 0, // el-table key
       maxheight: window.innerHeight - 380,
+      selectIsAll: false, //选择框是否全选
     }
   },
   computed: {},
@@ -175,10 +182,10 @@ export default {
       )
       this.tableKey++
     },
-    // 'filterObj.channelCode'() {
-    //   this.filterObj.customerCode = ''
-    //   this.getCustomerList()
-    // },
+
+    'filterObj.productName'(Value,oldValue) {
+      
+    }
   },
   mounted() {
     window.onresize = () => {

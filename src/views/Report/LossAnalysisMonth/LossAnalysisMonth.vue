@@ -10,27 +10,31 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
+          <MutiSelect v-model="filterObj.channelCode" :list="channelOptions" :props="{value:'channelEsName',label:'channelEsName',key:'channelCode'}"/>
+          <!-- <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
             <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
-          </el-select>
+          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
-          <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.customerCode" :list="customerArr" :props="{value:'customerCsName',label:'customerCsName',key:'customerCode'}"/>
+          <!-- <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
-          </el-select>
+          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域：</span>
-          <el-select v-model="filterObj.regionName" clearable multiple collapse-tags filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.regionName" :list="RegionList" :props="{value:'nameAbridge',label:'name',key:'nameAbridge'}"/>
+          <!-- <el-select v-model="filterObj.regionName" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
-          </el-select>
+          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
-          <el-select v-model="filterObj.brandName" clearable multiple filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.brandName" :list="BrandList" :props="{value:'brandName',label:'brandName',key:'brandName'}"/>
+          <!-- <el-select v-model="filterObj.brandName" clearable multiple filterable placeholder="请选择">
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
-          </el-select>
+          </el-select> -->
         </div>
         <div class="Selectli">
           <el-button type="primary" class="TpmButtonBG my-search" style="margin-bottom:0px;" @click="getReport">查询</el-button>
@@ -192,14 +196,13 @@ import {
 import API from '@/api/masterData/masterData.js'
 import APIReport from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import axios from 'axios'
 import XLSX from 'xlsx'
 import FileSaver from 'file-saver'
-
+import MutiSelect from '@/components/MutiSelect';
 export default {
   name: 'LossAnalysisHistory',
   directives: { elDragDialog, permission },
-
+  components: { MutiSelect },
   data() {
     return {
       customerArr: [],
@@ -213,6 +216,10 @@ export default {
         regionCode: '',
         month: '',
         category: '',
+        channelCode: [],
+        customerCode: [],
+        brandName: [],
+        regionName: [],
       },
       tableLoading: '',
       categoryArr: [{ label: 'test', value: '19' }],

@@ -369,7 +369,7 @@ import {
   messageMap,
   FormateThousandNum,
   getHeightHaveTab,
-  messageObj
+  messageObj,
 } from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -429,12 +429,18 @@ export default {
   },
   computed: {},
   watch: {
-    'filterObj.customerIndex'() {
-      this.filterObj.customerCode =
-        this.customerArr[this.filterObj.customerIndex].customerCsName
-      this.filterObj.customerMdmCode =
-        this.customerArr[this.filterObj.customerIndex].customerMdmCode
-      this.filterObj.distributorCode = ''
+    'filterObj.customerIndex'(value) {
+      if (value === '') {
+        this.filterObj.customerCode = ''
+        this.filterObj.customerMdmCode = ''
+      } else {
+        this.filterObj.customerCode =
+          this.customerArr[this.filterObj.customerIndex].customerCsName
+        this.filterObj.customerMdmCode =
+          this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      }
+
+      this.filterObj.distributorName = ''
       this.getDistributorList()
     },
     // 'filterObj.customerName'() {

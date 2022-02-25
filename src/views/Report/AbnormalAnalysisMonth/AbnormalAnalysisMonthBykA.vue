@@ -23,21 +23,24 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
-          <el-select v-model="filterObj.brandCode" clearable multiple collapse-tags filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.brandCode" :list="BrandList" :props="{value:'brandName',label:'brandName',key:'brandName'}"/>
+          <!-- <el-select v-model="filterObj.brandCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
-          </el-select>
+          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable multiple collapse-tags filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.regionCode" :list="RegionList" :props="{value:'nameAbridge',label:'name',key:'nameAbridge'}"/>
+          <!-- <el-select v-model="filterObj.regionCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
-          </el-select>
+          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable multiple collapse-tags filterable placeholder="请选择">
+          <MutiSelect v-model="filterObj.productCode" :list="skuList" :props="{value:'productEsName',label:'productEsName',key:'productEsName'}"/>
+          <!-- <el-select v-model="filterObj.productCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
-          </el-select>
+          </el-select> -->
         </div>
 
       </div>
@@ -177,19 +180,20 @@ import selectAPI from '@/api/selectCommon/selectCommon.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
+import MutiSelect from '@/components/MutiSelect';
 export default {
   name: 'AbnormalAnalysisMonthByChannel',
   directives: { elDragDialog, permission },
-  components: { SelectMonth },
+  components: { SelectMonth,MutiSelect },
   data() {
     return {
       filterObj: {
         exception: 1,
         month: getCurrentMonth(),
         MinePackage: 14,
-        regionCode: '',
-        brandCode: '',
-        productCode: '',
+        regionCode: [],
+        brandCode: [],
+        productCode: [],
       },
       BrandList: [],
       permissions: getDefaultPermissions(),
