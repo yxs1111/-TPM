@@ -379,14 +379,14 @@ export default {
         return
       } else {
         // debugger
-        if (!flag) {
-          e.target.value = ''
-          this.$message({
-            showClose: true,
-            message: '需要输入整数！',
-            type: 'warning',
-          })
-        }
+        // if (!flag) {
+        //   e.target.value = ''
+        //   this.$message({
+        //     showClose: true,
+        //     message: '需要输入整数！',
+        //     type: 'warning',
+        //   })
+        // }
         // else if (Number(row.startRule) >= Number(row.endRule) && flag) {
         //   e.target.value = ''
         //   // 赋值之后table中不同步问题
