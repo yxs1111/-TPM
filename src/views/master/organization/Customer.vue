@@ -52,7 +52,7 @@
       <el-table-column align="center" prop="customerCode" label="客户CP编码" />
       <el-table-column align="center" prop="customerMdmCode" label="MDM客户编号" />
       <el-table-column align="center" prop="customerCsName" label="客户中文名称" />
-      <el-table-column width="220" align="center" prop="customerCsName" label="客户英文名称" />
+      <el-table-column width="220" align="center" prop="customerEsName" label="客户英文名称" />
       <el-table-column align="center" prop="customerType" label="客户类型" />
       <el-table-column align="center" prop="channelCode" label="渠道" />
       <el-table-column width="150" align="center" prop="state" label="状态">

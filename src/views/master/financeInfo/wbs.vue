@@ -15,12 +15,6 @@
           <span class="SelectliTitle">客户编码</span>
           <el-input v-model="filterObj.customerMdmCode" clearable placeholder="请输入" />
         </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">状态</span>
-          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
-          </el-select>
-        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>
