@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-02-22 13:54:37
+ * @LastEditTime: 2022-02-28 10:24:28
 -->
 <template>
   <div class="dashboard-container">
@@ -1013,6 +1013,16 @@ export default {
     height: calc(100% - 33px);
     overflow-y: auto;
   }
+  /*滚动条的宽度*/
+::-webkit-scrollbar {
+  width: 0px;
+  height: 2px;
+}
+/* //滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: #d1d1d1;
+  border-radius: 3px;
+}
 }
 </style>
 <style>
@@ -1033,16 +1043,7 @@ export default {
   background-color: #fff !important;
   border: 2px solid #4192d3 !important;
 }
-/*滚动条的宽度*/
-::-webkit-scrollbar {
-  width: 0px;
-  height: 2px;
-}
-/* //滚动条的滑块 */
-::-webkit-scrollbar-thumb {
-  background-color: #d1d1d1;
-  border-radius: 3px;
-}
+
 .vc-day {
   width: 40px;
   height: 40px;

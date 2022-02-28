@@ -33,7 +33,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">有效至:</span>
-          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
+          <el-date-picker v-model="filterObj.validDate" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
           </el-date-picker>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
@@ -81,12 +81,7 @@
       <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
         {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="state" label="状态">
-        <template slot-scope="{ row }">
-          <div>
-            {{ row.state ? '正常' : '无效' }}
-          </div>
-        </template>
+      <el-table-column width="150" align="center" prop="validDate" label="有效至">
       </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
@@ -166,7 +161,7 @@ export default {
         sku: '',
         cdmType: '',
         cdmName: '',
-        state: '',
+        validDate: '',
         yearAndMonth: '',
       },
       dialogAdd: {
@@ -175,8 +170,6 @@ export default {
         productCode: '',
         remark: '',
       },
-      value: '',
-      categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
       MinePackageList: [],
@@ -282,28 +275,32 @@ export default {
     },
     // 多个删除
     mutidel() {
-      var that = this
-      var ids = that.$refs.Tdata.selection
-      var idList = []
-      ids.forEach((item, index) => {
-        let obj={
-          id:'',
-          validDate:'',
-        }
-        obj.id = item.id
-        obj.validDate = this.deleteObj.yearAndMonth
-        idList.push(obj)
-      })
-      API.deleteConfig(idList).then((res) => {
-        if (res.code === 1000) {
-          that.getTableData(that.pageNum, that.pageSize)
-          that.$message({
-            type: 'success',
-            message: '删除成功',
-          })
-          this.closeDeleteDialog()
-        }
-      })
+      if (this.deleteObj.yearAndMonth == '') {
+        this.$message.info('请选择年月')
+      } else {
+        var that = this
+        var ids = that.$refs.Tdata.selection
+        var idList = []
+        ids.forEach((item, index) => {
+          let obj = {
+            id: '',
+            validDate: '',
+          }
+          obj.id = item.id
+          obj.validDate = this.deleteObj.yearAndMonth
+          idList.push(obj)
+        })
+        API.deleteConfig(idList).then((res) => {
+          if (res.code === 1000) {
+            that.getTableData(that.pageNum, that.pageSize)
+            that.$message({
+              type: 'success',
+              message: '删除成功',
+            })
+            this.closeDeleteDialog()
+          }
+        })
+      }
     },
     showDeleteDialog() {
       if (this.checkArr.length == 0) {
@@ -488,7 +485,7 @@ export default {
         sku: this.filterObj.sku,
         cdmType: this.filterObj.cdmType,
         cdmName: this.filterObj.cdmName,
-        state: this.filterObj.state,
+        validDate: this.filterObj.validDate,
       })
         .then((response) => {
           this.tableData = response.data.records
