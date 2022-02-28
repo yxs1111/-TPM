@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-02-25 14:57:46
+ * @LastEditTime: 2022-02-28 15:31:56
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -469,6 +469,15 @@ export default {
   deleteWbs(params) {
     return requestApi.request_delete('/cityplan/mdCustomerWbs/delete', params)
   },
+  //导出
+  exportWbs(params) {
+    return request({
+      url: '/cityplan/mdCustomerWbs/exportToExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
   // io
   getPageByIo(params) {
     return requestApi.request_get('/cityplan/mdOrganizationIo/getPage', params)
@@ -481,6 +490,15 @@ export default {
   },
   deleteIo(params) {
     return requestApi.request_delete('/cityplan/mdOrganizationIo/delete', params)
+  },
+  //导出
+  exportIo(params) {
+    return request({
+      url: '/cityplan/mdOrganizationIo/exportToExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
 
 

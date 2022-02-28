@@ -17,6 +17,10 @@
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
+          <img src="@/assets/images/export.png" alt="" />
+          <span class="text">导出</span>
+        </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
@@ -102,6 +106,7 @@ import {
   parseTime,
   getTextMap,
   getHeightSingle,
+  downloadFile
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -209,6 +214,18 @@ export default {
         customerMdmCode: '',
       }
       this.getTableData()
+    },
+    //导出数据
+    exportData() {
+      API.exportWbs({
+        wbsCustomerCode: this.filterObj.wbsCustomerCode,
+        customerCsName: this.filterObj.customerCsName,
+        customerMdmCode: this.filterObj.customerMdmCode,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, 'WBS维护 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     closeDialog() {
       this.dialogVisible = false
