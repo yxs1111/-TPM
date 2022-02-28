@@ -251,6 +251,11 @@ export default {
     this.getBrandList()
     this.getRegionList()
   },
+  watch:{
+    'filterObj.channelCode'()  {
+      this.getCustomerList()
+    }
+  },
   methods: {
     getRegionList() {
       selectAPI.getRegionList().then((res) => {
