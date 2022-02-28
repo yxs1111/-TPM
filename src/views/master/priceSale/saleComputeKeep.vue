@@ -58,12 +58,8 @@
         {{(row.platformRebate*1).toFixed(4)}}
       </el-table-column>
       <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
-      <el-table-column width="150" align="center" prop="updateDate" label="更新时间">
-        <template slot-scope="{ row }">
-          <div>
-            {{ row.createDate ? row.createDate.slice(0, 10) : '' }}
-          </div>
-        </template>
+      <el-table-column v-slot={row} width="160" align="center" prop="updateDate" label="更新时间">
+         {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
       <el-table-column width="150" align="center" prop="deleteFlg" label="状态">
       </el-table-column>

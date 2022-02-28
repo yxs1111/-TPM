@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-12 15:14:27
+ * @LastEditTime: 2022-02-28 14:17:38
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -53,6 +53,13 @@ export default function() {
           component: () => import('@/views/system/menu/index.vue'),
           meta: { title: '菜单管理', icon: 'tree' }
         },
+        // {
+        //   path: 'CycleManagement',
+        //   code: 'menu',
+        //   name: 'CycleManagement',
+        //   component: () => import('@/views/system/CycleManagement.vue'),
+        //   meta: { title: '周期管理', icon: 'form' }
+        // },
         {
           path: 'InterfaceManage',
           code: 'authPage_interface',

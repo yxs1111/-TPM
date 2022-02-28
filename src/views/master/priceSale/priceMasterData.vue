@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" v-slot="{ row }" align="center" prop="createDate" label="创建时间">
-        {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
+        {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
       </el-table-column>
       <el-table-column width="150" align="center" prop="deleteFlag" label="状态">
         <template slot-scope="{row}">

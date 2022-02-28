@@ -166,7 +166,8 @@ export default {
       )
       if (obj) this.ruleForm.regionName = obj.name
     },
-    'filterObj.regionCode'() {
+    'filterObj.regionCode'(value) {
+      if(value=='') this.filterObj.regionName=''
       let obj = this.RegionList.find(
         (item) => item.code == this.filterObj.regionCode
       )

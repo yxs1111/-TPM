@@ -38,8 +38,8 @@
     <!--查询结果-->
     <el-table ref="userInfoTable"  :data="userPageProps.records"  border fit :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :max-height="maxheight" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
-      <el-table-column align="center" type="selection" width="55" />
-      <el-table-column align="center" label="序号" width="55">
+      <el-table-column align="center" fixed="left" type="selection" width="55" />
+      <el-table-column align="center" fixed="left" label="序号" width="55">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -59,9 +59,9 @@
           {{ row.createBy }}
         </template>
       </el-table-column>
-      <el-table-column  width="280" align="center" prop="created_date" label="创建时间">
+      <el-table-column  width="180" align="center" prop="created_date" label="创建时间">
         <template slot-scope="{row}">
-          <em class="el-icon-time" />
+          <!-- <em class="el-icon-time" /> -->
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>

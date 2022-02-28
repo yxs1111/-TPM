@@ -1,3 +1,8 @@
+<!--
+ * @Description: 周期管理
+ * @Date: 2022-02-28 13:50:00
+ * @LastEditTime: 2022-02-28 13:59:06
+-->
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
@@ -29,13 +34,12 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-
       <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable"
+    <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle"  border :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
       <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
@@ -49,7 +53,7 @@
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
-         {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+        {{row.createDate?row.createDate.substring(0,10):""}}
       </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{row}">
@@ -65,62 +69,9 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
-    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="66%" class="my-el-dialog" title="开账" :visible="importVisible" @close="closeImport">
       <div class="importDialog">
-        <div class="el-downloadFileBar">
-          <div>
-            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="exportData">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
-          </div>
-          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
-        </div>
-        <div class="fileInfo">
-          <div class="fileInfo">
-            <div class="fileTitle">文件</div>
-            <div class="my-search selectFile" @click="parsingExcelBtn">
-              <img src="@/assets/images/selectFile.png" alt="" />
-              <span class="text">选择文件</span>
-            </div>
-            <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-            <div class="fileName" v-if="uploadFileName!=''">
-              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-              <span>{{uploadFileName}}</span>
-            </div>
-          </div>
-          <div class="seeData" style="width: auto;">
-            <div class="exportError" @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
-          </div>
-        </div>
-        <div class="tableWrap">
-          <el-table border height="440" :data="ImportData" style="width: 100%" :header-cell-style="{
-              background: '#fff',
-              color: '#333',
-              fontSize: '16px',
-              textAlign: 'center',
-              fontWeight: 400,
-              fontFamily: 'Source Han Sans CN'
-            }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column fixed align="center" label="是否通过" width="100">
-              <template slot-scope="scope">
-                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
-              </template>
-            </el-table-column>
-            <el-table-column width="320" align="center" prop="error" label="错误信息" />
-            <el-table-column align="center" prop="yearAndMonth" label="年月" />
-            <el-table-column align="center" prop="channelCode" label="渠道" />
-            <el-table-column align="center" prop="productEsName" label="SKU" />
-            <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
-              ¥{{row.gear}}
-            </el-table-column>
-            <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">
-              {{row.volMix}}%
-            </el-table-column>
-          </el-table>
-        </div>
+        
       </div>
 
     </el-dialog>
@@ -157,11 +108,7 @@ export default {
       ImportData: [],
       uploadFile: '',
       event: '',
-      errorImg: require('@/assets/images/selectError.png'),
-      excepImg: require('@/assets/images/warning.png'),
-      passImg: require('@/assets/images/success.png'),
       saveBtn: false,
-      spanArr: [], //行合并
       maxheight: getHeight(),
     }
   },
@@ -192,7 +139,6 @@ export default {
       })
         .then((response) => {
           this.tableData = response.data.records
-          this.getSpanArr(this.tableData)
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -340,71 +286,9 @@ export default {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     columnStyle({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0 || columnIndex === 10) {
-        return 'background:#fff!important'
-      }
-    },
-    //合并行
-    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      // columnIndex === xx 找到第xx列，实现合并随机出现的行数
-      if (columnIndex === 0) {
-        const _row = this.spanArr[rowIndex]
-        const _col = _row > 0 ? 1 : 0
-        return {
-          rowspan: _row,
-          colspan: _col,
-        }
-      }
-      if (columnIndex === 10) {
-        const _row = this.spanArr[rowIndex]
-        const _col = _row > 0 ? 1 : 0
-        return {
-          rowspan: _row,
-          colspan: _col,
-        }
-      }
-    },
-    //合并行--导入弹窗检测数据
-    objectSpanMethod_check({ row, column, rowIndex, columnIndex }) {
-      // columnIndex === xx 找到第xx列，实现合并随机出现的行数
-      if (columnIndex === 0) {
-        const _row = this.spanArr[rowIndex]
-        const _col = _row > 0 ? 1 : 0
-        return {
-          rowspan: _row,
-          colspan: _col,
-        }
-      }
-      if (columnIndex === 10) {
-        const _row = this.spanArr[rowIndex]
-        const _col = _row > 0 ? 1 : 0
-        return {
-          rowspan: _row,
-          colspan: _col,
-        }
-      }
-    },
-    // 因为要合并的行数是不固定的，此函数是实现合并随意行数的功能
-    getSpanArr(data) {
-      this.spanArr = []
-      this.pos = 0
-      for (var i = 0; i < data.length; i++) {
-        if (i === 0) {
-          // 如果是第一条记录（即索引是0的时候），向数组中加入１
-          this.spanArr.push(1)
-          this.pos = 0
-        } else {
-          if (data[i].productEsName === data[i - 1].productEsName) {
-            // 如果id相等就累加，并且push 0
-            this.spanArr[this.pos] += 1
-            this.spanArr.push(0)
-          } else {
-            // 不相等push 1
-            this.spanArr.push(1)
-            this.pos = i
-          }
-        }
-      }
+      // if (columnIndex === 0 || columnIndex === 10) {
+      //   return 'background:#fff!important'
+      // }
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
@@ -419,3 +303,4 @@ export default {
   height: 600px;
 }
 </style>
+
