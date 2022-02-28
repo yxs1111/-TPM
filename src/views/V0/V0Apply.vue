@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-02-23 14:20:18
+ * @LastEditTime: 2022-02-28 11:19:13
 -->
 <template>
   <div class="app-container">
@@ -596,8 +596,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
-          let timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V0申请模板 -' + timestamp + '.xlsx') //自定义Excel文件名
+          this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0申请.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {

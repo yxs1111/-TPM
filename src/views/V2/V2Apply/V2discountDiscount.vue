@@ -576,8 +576,7 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2申请模板-' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(res, `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2申请.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {

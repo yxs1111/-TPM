@@ -431,7 +431,7 @@ export default {
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelCode,
       }).then((response) => {
-        const fileName = 'V3-NU审批导入模板' + new Date().getTime() + '.xlsx'
+        const fileName = `${this.localDate}_NU_${this.filterObj.channelCode}_V3审批.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',

@@ -904,7 +904,7 @@ export default {
         // channelName: 'NKA',
         mainId: this.mainIdLocal,
       }).then((response) => {
-        const fileName = '导入模板' + new Date().getTime() + '.xlsx'
+        const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
@@ -928,7 +928,7 @@ export default {
         channelName: this.filterObj.channelName,
         mainId: this.mainIdLocal,
       }).then((response) => {
-        const fileName = '补录导入模板' + new Date().getTime() + '.xlsx'
+        const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请_补录.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',

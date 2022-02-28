@@ -522,7 +522,7 @@ export default {
         channelName: this.filterObj.channelName,
         // channelName: 'NKA'
       }).then((response) => {
-        const fileName = '导入模板' + new Date().getTime() + '.xlsx'
+        const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3审批.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
