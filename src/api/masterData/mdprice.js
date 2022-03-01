@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-01-07 18:34:27
+ * @LastEditTime: 2022-03-01 10:36:05
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -23,6 +23,15 @@ export default {
     //二进制数据流转blob
     return request({
       url:'/mdm/mdprice/excport',
+      method:'get',
+      params:params,
+      responseType:'blob'
+    })
+  },
+  downloadMdprice(params) {
+    //二进制数据流转blob
+    return request({
+      url:'/mdm/mdprice/excports',
       method:'get',
       params:params,
       responseType:'blob'

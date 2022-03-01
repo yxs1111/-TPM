@@ -86,7 +86,7 @@
     <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">模板</div>
-        <div class="my-search selectFile" @click="exportData">
+        <div class="my-search selectFile" @click="downloadMdprice">
           <svg-icon icon-class="download_white" style="font-size: 16px;" />
           <span class="text">下载模板</span>
         </div>
@@ -282,6 +282,15 @@ export default {
       data = { ...this.filterObj }
       API.exportMdprice(data).then((res) => {
         this.downloadFile(res, '价格主数据信息' + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
+    //导出数据
+    downloadMdprice() {
+      var data = {}
+      data = { ...this.filterObj }
+      API.downloadMdprice(data).then((res) => {
+        this.downloadFile(res, '价格主数据信息模板' + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
