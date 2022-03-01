@@ -273,19 +273,21 @@ export default {
     },
     // 下载报表
     exportExcel() {
-      this.exportExcel1()
-      const element = document.getElementById('outTable')
-      const fix = element.querySelector('.el-table__fixed')
-      let wb
+      const fix = document.querySelector('#outTable .el-table__fixed')
+      // 创建一个workbook对象
+      let wb = XLSX.utils.book_new()
+      let ws
+      // debugger
       if (fix) {
-        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-        wb = XLSX.utils.table_to_book(
-          document.querySelector('#outTable').removeChild(fix)
-        )
-        document.querySelector('#outTable').appendChild(fix)
-      } else {
-        wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
+        //生成 V1 worksheet对象
+        ws=XLSX.utils.table_to_sheet(document.querySelector('#outTable .el-table__fixed'))
+      } 
+      if (document.querySelector('#outTable1 .el-table__fixed')) {
+        //追加v2 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
+        XLSX.utils.sheet_add_dom(ws, document.querySelector('#outTable1 .el-table__fixed'), {origin: -1})
       }
+      //把worksheet对象添加进workbook对象，第三个参数是excel中sheet的名字
+      XLSX.utils.book_append_sheet(wb, ws, 'sheet1')
       const wbout = XLSX.write(wb, {
         bookType: 'xlsx',
         bookSST: true,
@@ -294,35 +296,7 @@ export default {
       try {
         FileSaver.saveAs(
           new Blob([wbout], { type: 'application/octet-stream' }),
-          '损益分析报告费用.xlsx'
-        )
-      } catch (e) {
-        if (typeof console !== 'undefined') console.log(e, wbout)
-      }
-      return wbout
-    },
-    exportExcel1() {
-      const element = document.getElementById('outTable1')
-      const fix = element.querySelector('.el-table__fixed')
-      let wb
-      if (fix) {
-        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-        wb = XLSX.utils.table_to_book(
-          document.querySelector('#outTable1').removeChild(fix)
-        )
-        document.querySelector('#outTable1').appendChild(fix)
-      } else {
-        wb = XLSX.utils.table_to_book(document.querySelector('#outTable1'))
-      }
-      const wbout = XLSX.write(wb, {
-        bookType: 'xlsx',
-        bookSST: true,
-        type: 'array',
-      })
-      try {
-        FileSaver.saveAs(
-          new Blob([wbout], { type: 'application/octet-stream' }),
-          '损益分析报告费比.xlsx'
+          '损益分析报告.xlsx'
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)

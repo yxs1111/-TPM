@@ -387,7 +387,7 @@ export default {
 }
 .warningWrap {
   width: 100%;
-  height: 100px;
+  height: 300px;
   overflow-y: scroll;
 }
 </style>
