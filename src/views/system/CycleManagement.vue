@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-02-28 13:59:06
+ * @LastEditTime: 2022-03-01 11:53:22
 -->
 <template>
   <div class="app-container">
@@ -9,59 +9,42 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">年月:</span>
+          <span class="SelectliTitle">活动月:</span>
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
         </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptons" :key="index" :label="item.channelEsName" :value="item.channelCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in skuOptons" :key="index" :label="item.productEsName" :value="item.productEsName" />
-          </el-select>
-        </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
-        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
-          <img src="@/assets/images/export.png" alt="" />
-          <span class="text">导出</span>
-        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
-        <img src="@/assets/images/import.png" alt="" />
-        <span class="text">导入</span>
-      </div>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="importData">新增</el-button>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle"  border :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName" style="width: 100%" @selection-change="handleSelectionChange">
-      <el-table-column fixed width="250" align="center" prop="productEsName" label="SKU" />
-      <el-table-column width="150" align="center" prop="activityLevel" label="活动级别" />
-      <el-table-column v-slot={row} width="150" align="right" prop="gear" label="档位（￥/Tin）">
-        {{FormateNum(row.gear*1)}}
+    <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
+      @selection-change="handleSelectionChange">
+      <el-table-column align="center" fixed type="index" label="序号" width="80">
+        <template slot-scope="scope">
+          <div>
+            {{ (pageNum - 1) * pageSize + 1 + scope.$index }}
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="150" align="right" prop="volMix" label="Vol Mix">
-        {{row.volMix}}%
-      </el-table-column>
-      <el-table-column width="150" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
-      <el-table-column width="280" align="center" prop="createBy" label="创建人" />
-      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
-        {{row.createDate?row.createDate.substring(0,10):""}}
-      </el-table-column>
-      <el-table-column width="150" align="center" prop="state" label="状态">
+      <el-table-column width="150" align="center" prop="activityLevel" label="活动月" />
+      <el-table-column width="280" align="center" prop="createBy" label="V0" />
+      <el-table-column width="280" align="center" prop="createBy" label="V1" />
+      <el-table-column width="280" align="center" prop="createBy" label="V2" />
+      <el-table-column width="280" align="center" prop="createBy" label="V3" />
+      <el-table-column width="150" align="center" prop="state" label="开启状态">
         <template slot-scope="{row}">
           <div>
             {{ row.state?'正常':'无效' }}
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="280" align="center" prop="createBy" label="开启人" />
+      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="开启时间">
+        {{row.createDate?row.createDate.substring(0,10):""}}
+      </el-table-column>
+
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -69,9 +52,23 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
-    <el-dialog width="66%" class="my-el-dialog" title="开账" :visible="importVisible" @close="closeImport">
-      <div class="importDialog">
-        
+    <el-dialog width="66%" class="my-el-dialog" title="新增账期" :visible="importVisible" @close="closeImport">
+      <div class="el-dialogContent">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
+          <el-form-item label="IO编码" prop="ioNumber">
+            <el-input v-model="ruleForm.ioNumber" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="区域" prop="regionCode">
+            <el-select v-model="ruleForm.regionCode" class="my-el-input"  clearable filterable placeholder="请选择">
+              <el-option v-for="(item) in RegionList" :key="item.code" :label="item.name" :value="item.code" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+        </el-form>
       </div>
 
     </el-dialog>
@@ -81,7 +78,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum,getHeight } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum, getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
