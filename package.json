@@ -47,7 +47,8 @@
     "vxe-table-plugin-element": "^1.9.4",
     "webpack-dev-server": "^4.0.0",
     "xe-utils": "^2.8.1",
-    "xlsx": "^0.17.5"
+    "xlsx": "^0.17.5",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.4",

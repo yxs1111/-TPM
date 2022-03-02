@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-03-01 11:53:22
+ * @LastEditTime: 2022-03-02 08:42:21
 -->
 <template>
   <div class="app-container">
@@ -10,17 +10,19 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
+          <el-date-picker v-model="filterObj.activityMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="importData">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="showAddDialog">新增</el-button>
+      <el-button type="primary" icon="el-icon-circle-close" class="TpmButtonBG" @click="closeTheAccount">关账</el-button>
     </div>
     <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
+      <el-table-column type="selection" align="center" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
@@ -28,23 +30,22 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="activityLevel" label="活动月" />
-      <el-table-column width="280" align="center" prop="createBy" label="V0" />
-      <el-table-column width="280" align="center" prop="createBy" label="V1" />
-      <el-table-column width="280" align="center" prop="createBy" label="V2" />
-      <el-table-column width="280" align="center" prop="createBy" label="V3" />
-      <el-table-column width="150" align="center" prop="state" label="开启状态">
-        <template slot-scope="{row}">
+      <el-table-column width="150" align="center" fixed="left" prop="activityMonth" label="活动月" />
+      <el-table-column width="280" align="center" prop="startAndEndVZero" label="V0" />
+      <el-table-column width="280" align="center" prop="startAndEndVOne" label="V1" />
+      <el-table-column width="280" align="center" prop="startAndEndVTwo" label="V2" />
+      <el-table-column width="280" align="center" prop="startAndEndVThree" label="V3" />
+      <el-table-column width="150" align="center" prop="openingStatus" label="开启状态">
+        <template slot-scope="{ row }">
           <div>
-            {{ row.state?'正常':'无效' }}
+            {{ row.openingStatus===1 ? '已开账' : '已关账' }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="开启人" />
-      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="开启时间">
-        {{row.createDate?row.createDate.substring(0,10):""}}
+      <el-table-column v-slot="{ row }" width="180" align="center" prop="createDate" label="开启时间">
+        {{ row.createDate ? row.createDate.substring(0, 10) : '' }}
       </el-table-column>
-
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -52,25 +53,47 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
-    <el-dialog width="66%" class="my-el-dialog" title="新增账期" :visible="importVisible" @close="closeImport">
+    <el-dialog width="25%" class="my-el-dialog" title="新增账期" :visible="addVisible" @close="closeDialog">
       <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="IO编码" prop="ioNumber">
-            <el-input v-model="ruleForm.ioNumber" class="my-el-input" placeholder="请输入">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="50px" class="el-form-row">
+          <el-form-item label="活动月" prop="ioNumber">
+            <el-input v-model="ruleForm.activityMonth" disabled class="my-el-dateRange" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="区域" prop="regionCode">
-            <el-select v-model="ruleForm.regionCode" class="my-el-input"  clearable filterable placeholder="请选择">
-              <el-option v-for="(item) in RegionList" :key="item.code" :label="item.name" :value="item.code" />
-            </el-select>
+          <el-form-item label="V0" prop="startAndEndVZero">
+            <!-- <el-input v-model="ruleForm.startAndEndVZero" class="my-el-input"  placeholder="请输入">
+            </el-input> -->
+            <el-date-picker v-model="ruleForm.startAndEndVZero" class="my-el-dateRange" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
           </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
-            </el-input>
+          <el-form-item label="V1" prop="startAndEndVOne">
+            <!-- <el-input v-model="ruleForm.startAndEndVOne" class="my-el-input" placeholder="请输入">
+            </el-input> -->
+            <el-date-picker v-model="ruleForm.startAndEndVOne" class="my-el-dateRange" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="V2" prop="startAndEndVTwo">
+            <!-- <el-input v-model="ruleForm.startAndEndVTwo" class="my-el-input" placeholder="请输入">
+            </el-input> -->
+            <el-date-picker v-model="ruleForm.startAndEndVTwo" class="my-el-dateRange" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="V3" prop="startAndEndVThree">
+            <!-- <el-input v-model="ruleForm.startAndEndVThree" class="my-el-input" placeholder="请输入">
+            </el-input> -->
+            <el-date-picker v-model="ruleForm.startAndEndVThree" class="my-el-dateRange" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
           </el-form-item>
         </el-form>
       </div>
-
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmAdd('ruleForm')">确 定</el-button>
+        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -78,11 +101,16 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum, getHeight } from '@/utils'
-import API from '@/api/masterData/masterData.js'
+import {
+  getDefaultPermissions,
+  FormateThousandNum,
+  getHeight,
+  parseTime,
+} from '@/utils'
+import API from '@/api/system/CycleConfig'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'PriceLevelKeep',
+  name: 'CycleManagement',
   directives: { elDragDialog, permission },
 
   data() {
@@ -91,22 +119,63 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonth: null,
-        channelCode: null,
-        productCode: null,
+        activityMonth: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
-      skuOptons: [],
-      channelOptons: [],
+      ruleForm: {
+        activityMonth: '',
+        startAndEndVZero: '',
+        startAndEndVOne: '',
+        startAndEndVTwo: '',
+        startAndEndVThree: '',
+      },
+      rules: {
+        activityMonth: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        startAndEndVZero: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        startAndEndVOne: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        startAndEndVTwo: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        startAndEndVThree: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+      },
       // 导入
-      importVisible: false, // 导入弹窗
+      addVisible: false, // 导入弹窗
       uploadFileName: '',
       ImportData: [],
       uploadFile: '',
       event: '',
       saveBtn: false,
       maxheight: getHeight(),
+      checkArr: [],
     }
   },
   computed: {},
@@ -117,8 +186,6 @@ export default {
       })()
     }
     this.getTableData()
-    this.getQuerySkuSelect()
-    this.getQueryChannelSelect()
   },
   activated() {
     this.maxheight = getHeight()
@@ -127,135 +194,124 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      API.getPageMdPriceGear({
+      API.getPageCycleConfig({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        productCode: this.filterObj.productCode,
+        activityMonth: this.filterObj.activityMonth, 
+      }).then((response) => {
+        this.tableData = response.data.records
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
       })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch(() => {})
-    },
-    getQuerySkuSelect() {
-      selectAPI.querySkuSelect().then((res) => {
-        this.skuOptons = res.data
-      })
-    },
-    // 获取下拉框 渠道
-    getQueryChannelSelect() {
-      selectAPI.queryChannelSelect().then((res) => {
-        this.channelOptons = res.data
-      })
-    },
-    Reset() {
-      this.filterObj = {
-        yearAndMonth: null,
-        channelCode: null,
-        productCode: null,
-      }
-      this.getTableData()
     },
     search() {
       this.pageNum = 1
       this.getTableData()
     },
     // 导入数据
-    importData() {
-      this.importVisible = true
+    showAddDialog() {
+      this.addVisible = true
+      this.getInfoYearAndMonth()
     },
-    // 确认导入
-    confirmImport() {
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importPriceGear(formData).then((response) => {
-        if (response.code == 1000) {
-          this.closeImport()
-          this.$message.success('保存成功!')
-          this.getTableData()
-        }
+    getInfoYearAndMonth() {
+      API.getInfoByYearAndMonth().then((response) => {
+        this.ruleForm.activityMonth = response.data.activityMonth
+        this.ruleForm.startAndEndVZero = this.FormDateRange(
+          response.data.startAndEndVZero
+        )
+        this.ruleForm.startAndEndVOne = this.FormDateRange(
+          response.data.startAndEndVOne
+        )
+        this.ruleForm.startAndEndVTwo = this.FormDateRange(
+          response.data.startAndEndVTwo
+        )
+        this.ruleForm.startAndEndVThree = this.FormDateRange(
+          response.data.startAndEndVThree
+        )
       })
     },
-    // 选择导入文件
-    parsingExcelBtn() {
-      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
+    //日期范围格式化
+    FormDateRange(date) {
+      let list = date.split('~')
+      return list
     },
-    // 导入
-    parsingExcel(event) {
-      this.uploadFileName = event.target.files[0].name
-      this.uploadFile = event.target.files[0]
-      this.event = event
+    FormDataRangeTransfer(dateList) {
+      return dateList[0] + '~' + dateList[1]
     },
-    // 关闭导入
-    closeImport() {
-      this.importVisible = false
-      this.uploadFileName = ''
-      this.uploadFile = ''
-      //清除input的value ,上传一样的
-      // this.event.target.value = null
-      this.ImportData = []
-      this.saveBtn = ''
-    },
-    //检测数据
-    checkImport() {
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importCheck(formData).then((response) => {
-        if (response.code == 1000) {
-          this.ImportData = response.data
-          this.saveBtn = response.data[0].judgmentType !== 'Error'
-          this.event.srcElement.value = '' // 置空
-        }
-      })
-    },
-    exportErrorList() {
-      API.exportPriceGearError().then((res) => {
-        this.downloadFile(res, '价格档位异常信息' + '.xlsx') // 自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-    },
-    // 导出数据
-    exportData() {
-      // 导出数据筛选
-      API.exportPriceGear({
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-        productCode: this.filterObj.productCode,
-      }).then((res) => {
-        const timestamp = Date.parse(new Date())
-        this.downloadFile(res, '价格档位维护-' + timestamp + '.xlsx') // 自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-    },
-    // 下载模板
-    exportTemplate() {
-      API.exportTemplate().then((res) => {
-        this.downloadFile(res, '价格档位模板' + '.xlsx') // 自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-    },
-    // 下载文件
-    downloadFile(res, fileName) {
-      const blob = new Blob([res], { type: 'application/vnd.ms-excel' })
-      if (!fileName) {
-        fileName = res.headers['content-disposition'].split('filename=').pop()
+    closeDialog() {
+      this.addVisible = false
+      this.ruleForm = {
+        activityMonth: '',
+        startAndEndVZero: '',
+        startAndEndVOne: '',
+        startAndEndVTwo: '',
+        startAndEndVThree: '',
       }
-      if ('msSaveOrOpenBlob' in navigator) {
-        window.navigator.msSaveOrOpenBlob(blob, fileName)
-      } else {
-        const elink = document.createElement('a')
-        elink.download = fileName
-        elink.style.display = 'none'
-        elink.href = URL.createObjectURL(blob)
-        document.body.appendChild(elink)
-        elink.click()
-        URL.revokeObjectURL(elink.href)
-        document.body.removeChild(elink)
+    },
+    //提交form
+    confirmAdd(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          API.confirmCycleConfig({
+            activityMonth: this.ruleForm.activityMonth,
+            startAndEndVZero: this.FormDataRangeTransfer(
+              this.ruleForm.startAndEndVZero
+            ),
+            startAndEndVOne: this.FormDataRangeTransfer(
+              this.ruleForm.startAndEndVOne
+            ),
+            startAndEndVTwo: this.FormDataRangeTransfer(
+              this.ruleForm.startAndEndVTwo
+            ),
+            startAndEndVThree: this.FormDataRangeTransfer(
+              this.ruleForm.startAndEndVThree
+            ),
+          }).then((response) => {
+            if (response.code === 1000) {
+              this.$message.success(`添加成功`)
+              this.resetForm(formName)
+              this.getTableData()
+            }
+          })
+        } else {
+          this.$message.error('提交失败')
+          return false
+        }
+      })
+    },
+    //取消
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+      this.closeDialog()
+    },
+    //多个删除
+    closeTheAccount() {
+      if (this.checkArr.length != 1) return this.$message.error('请选择一条数据')
+      else {
+        var Id = ''
+        this.checkArr.forEach((item) => {
+          Id=item.id
+        })
+        this.$confirm('确定要关账吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.closeTheAccount({id:Id}).then((response) => {
+              if (response.code === 1000) {
+                this.getTableData()
+                this.$message.success('关账成功!')
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
       }
     },
     handleSelectionChange(val) {
@@ -299,5 +355,9 @@ export default {
 .importDialog {
   height: 600px;
 }
+.el-form-row .my-el-dateRange {
+  width: 242px !important;
+  border-radius: 5px;
+  margin-right: 20px;
+}
 </style>
-

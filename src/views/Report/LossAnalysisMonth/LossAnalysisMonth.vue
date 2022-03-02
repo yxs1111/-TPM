@@ -10,28 +10,28 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <MutiSelect v-model="filterObj.channelCode" :list="channelOptions" :props="{value:'channelEsName',label:'channelEsName',key:'channelCode'}"/>
+          <MutiSelect v-model="filterObj.channelCode" :list="channelOptions" :props="{value:'channelEsName',label:'channelEsName',key:'channelCode'}" />
           <!-- <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
             <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
-          <MutiSelect v-model="filterObj.customerCode" :list="customerArr" :props="{value:'customerCsName',label:'customerCsName',key:'customerCode'}"/>
+          <MutiSelect v-model="filterObj.customerCode" :list="customerArr" :props="{value:'customerCsName',label:'customerCsName',key:'customerCode'}" />
           <!-- <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域：</span>
-          <MutiSelect v-model="filterObj.regionName" :list="RegionList" :props="{value:'nameAbridge',label:'name',key:'nameAbridge'}"/>
+          <MutiSelect v-model="filterObj.regionName" :list="RegionList" :props="{value:'nameAbridge',label:'name',key:'nameAbridge'}" />
           <!-- <el-select v-model="filterObj.regionName" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
-          <MutiSelect v-model="filterObj.brandName" :list="BrandList" :props="{value:'brandName',label:'brandName',key:'brandName'}"/>
+          <MutiSelect v-model="filterObj.brandName" :list="BrandList" :props="{value:'brandName',label:'brandName',key:'brandName'}" />
           <!-- <el-select v-model="filterObj.brandName" clearable multiple filterable placeholder="请选择">
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select> -->
@@ -58,7 +58,8 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table id="outTable" :key="tableKey" v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName" style="width: 100%">
+            <el-table id="outTable" :key="tableKey" v-loading="tableLoading" :data="tableData" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
+              style="width: 100%">
               <el-table-column v-slot="{row}" align="center" width="150" fixed prop="channel" label="数据维度">
                 {{ row.name }}
               </el-table-column>
@@ -126,8 +127,8 @@
         </div>
         <div class="contentInfoWrap">
           <div class="tableContentWrap">
-            <el-table id="outTable1" :key="tableKey2" v-loading="tableLoading" :data="tableDataRange" border :header-cell-class-name="headerStyle" :row-class-name="tableRowClassName"
-              style="width: 100%">
+            <el-table id="outTable1" :key="tableKey2" v-loading="tableLoading" :data="tableDataRange" border :header-cell-class-name="headerStyle"
+              :row-class-name="tableRowClassName" style="width: 100%">
               <el-table-column v-slot="{row}" align="center" width="150" fixed prop="channel" label="数据维度">
                 {{ row.name }}
               </el-table-column>
@@ -198,7 +199,8 @@ import APIReport from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import XLSX from 'xlsx'
 import FileSaver from 'file-saver'
-import MutiSelect from '@/components/MutiSelect';
+import XLSXStyle from 'xlsx-style'
+import MutiSelect from '@/components/MutiSelect'
 export default {
   name: 'LossAnalysisHistory',
   directives: { elDragDialog, permission },
@@ -240,7 +242,6 @@ export default {
       RegionList: [],
       tableKey: 0, //el-table key
       tableKey2: 0, //el-table key
-      
     }
   },
   computed: {},
@@ -251,10 +252,10 @@ export default {
     this.getBrandList()
     this.getRegionList()
   },
-  watch:{
-    'filterObj.channelCode'()  {
+  watch: {
+    'filterObj.channelCode'() {
       this.getCustomerList()
-    }
+    },
   },
   methods: {
     getRegionList() {
@@ -280,28 +281,54 @@ export default {
       // debugger
       if (fix) {
         //生成 V1 worksheet对象
-        ws=XLSX.utils.table_to_sheet(document.querySelector('#outTable .el-table__fixed'))
-      } 
+        ws = XLSX.utils.table_to_sheet(
+          document.querySelector('#outTable .el-table__fixed')
+        )
+      }
       if (document.querySelector('#outTable1 .el-table__fixed')) {
         //追加v2 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
-        XLSX.utils.sheet_add_dom(ws, document.querySelector('#outTable1 .el-table__fixed'), {origin: -1})
+        XLSX.utils.sheet_add_dom(
+          ws,
+          document.querySelector('#outTable1 .el-table__fixed'),
+          { origin: -1 }
+        )
       }
+      // debugger
+      Object.keys(ws).forEach((key) => {
+        //这里遍历单元格给单元格对象设置属性,s为控制样式的属性
+        if (key.indexOf('!') < 0) {
+          ws[key].s = {
+            alignment: {
+              //对齐方式
+              horizontal: 'center', //水平居中
+              vertical: 'center', //竖直居中
+              wrapText: true, //自动换行
+            },
+          }
+        }
+      })
       //把worksheet对象添加进workbook对象，第三个参数是excel中sheet的名字
       XLSX.utils.book_append_sheet(wb, ws, 'sheet1')
-      const wbout = XLSX.write(wb, {
+      const wbout = XLSXStyle.write(wb, {
+        type: 'binary',
         bookType: 'xlsx',
-        bookSST: true,
-        type: 'array',
       })
       try {
         FileSaver.saveAs(
-          new Blob([wbout], { type: 'application/octet-stream' }),
+          new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }),
           '损益分析报告.xlsx'
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)
       }
       return wbout
+    },
+    //字符串转ArrayBuffer
+    s2ab(s) {
+      var buf = new ArrayBuffer(s.length)
+      var view = new Uint8Array(buf)
+      for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
+      return buf
     },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
