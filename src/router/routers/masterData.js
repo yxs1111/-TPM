@@ -119,14 +119,14 @@ export default function() {
               component: () => import('@/views/master/organization/saleKJ.vue'),
               meta: { title: '销售架构', icon: 'apply' }
             },
-            // {
-            //   path: '/organization/CityVstore',
-            //   code: 'mdm_City_Stor',
-            //   name: 'CityVstore',
-            //   component: () =>
-            //     import('@/views/master/organization/cityVStore.vue'),
-            //   meta: { title: '城市&门店对应关系', icon: 'apply' }
-            // }
+            {
+              path: '/organization/CustomerSupplier',
+              code: 'mdm_supplier',
+              name: 'CustomerSupplier',
+              component: () =>
+                import('@/views/master/organization/CustomerSupplier.vue'),
+              meta: { title: '客户&经销商对应关系', icon: 'apply' }
+            }
           ]
         },
         // 产品信息
