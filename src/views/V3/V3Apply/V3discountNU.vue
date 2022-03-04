@@ -4,6 +4,12 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
+            <span class="SelectliTitle">活动月</span>
+            <el-select v-model="localDate" filterable clearable placeholder="请选择">
+              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+            </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
@@ -71,12 +77,6 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedNewUserNum" label="目标新客数量">
         {{ FormateNum((row.adjustedNewUserNum*1).toFixed(2)) }}
       </el-table-column>
-      <!-- <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
-        {{ (row.forecastSales*1).toFixed(2) }}
-      </el-table-column>
-      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
-        {{ row.adjustedPriceAve===undefined?'':(row.adjustedPriceAve*1).toFixed(2) }}
-      </el-table-column> -->
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
         {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
       </el-table-column>
@@ -86,24 +86,12 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualNewUserNum" label="实际新客数量">
         {{ FormateNum((row.actualNewUserNum*1).toFixed(2)) }}
       </el-table-column>
-      <!-- <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）">
-        {{ (row.beforeNegotiationPriceAve*1).toFixed(2) }}
-      </el-table-column> -->
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
         {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
       </el-table-column>
-      <!-- <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
-        {{ (row.afterNegotiationPriceAve*1).toFixed(2) }}
-      </el-table-column>
-      <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
-        {{ (row.afterNegotiationCost*1).toFixed(2) }}
-      </el-table-column> -->
       <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
         {{ (row.avePriceDifference*1).toFixed(2) }}
       </el-table-column>
-      <!-- <el-table-column v-slot="{row}" width="160" align="right" prop="salesDifference" label="销量差值（%）">
-        {{ row.salesDifference + '%' }}
-      </el-table-column> -->
       <el-table-column v-slot="{row}" width="160" align="right" prop="achievementRate" label="达成率（%）">
         {{ (row.salesDifference*1).toFixed(2) }}
       </el-table-column>
@@ -274,7 +262,7 @@ export default {
         customerCode: '',
         brandName: '',
       },
-      categoryArr: [],
+      monthList: [],
       permissions: getDefaultPermissions(),
       tableData: [],
       dialogVisible: false,
@@ -301,13 +289,9 @@ export default {
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
-    // this.getTableData()
     this.getChannel()
     this.getBrandList()
-
-    // this.getTableData()
-    // this.getCustomerList()
-    // this.getEffectiveDate()
+    this.getAllMonth()
   },
   methods: {
     // 格式化--千位分隔符、两位小数
@@ -633,26 +617,15 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.channelArr = res.data
-            // if (!this.$route.query.channelCode) {
-            //   this.filterObj.channelCode = this.channelArr[0].channelCode
-            // } else {
-            //   this.filterObj.channelCode = this.$route.query.channelCode
-            // }
             this.getCustomerList()
-            this.getEffectiveDate()
           }
         })
         .catch()
     },
     // 获取年月
-    getEffectiveDate() {
-      selectAPI.getMonth({ version: 'V3' }).then((res) => {
-        if (res.code === 1000) {
-          this.localDate = res.data
-          // this.getTableData()
-        } else {
-          this.$message.warning('未查询到年月信息！')
-        }
+    getAllMonth() {
+      selectAPI.getAllMonth().then((res) => {
+        this.monthList=res.data
       })
     },
     // 客户
@@ -672,8 +645,14 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == '') {
-        this.$message.info(messageObj.requireChannel)
+      if (!this.filterObj.channelCode||!this.localDate) {
+        if (!this.localDate) {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (!this.filterObj.channelCode) {
+          this.$message.info(messageObj.requireChannel)
+        }  
       } else {
         API.getPageV3NU({
           pageNum: this.pageNum, // 当前页

@@ -3,6 +3,12 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
+        <div class="Selectli">
+            <span class="SelectliTitle">活动月</span>
+            <el-select v-model="localDate" filterable clearable placeholder="请选择">
+              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+            </el-select>
+          </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
@@ -273,6 +279,7 @@ export default {
         productCode: '',
         regionName: '',
       },
+      monthList: [],
       RegionList: [],
       categoryArr: [],
       permissions: getDefaultPermissions(),
@@ -325,9 +332,7 @@ export default {
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    // this.getTableData()
-    // this.getEffectiveDate()
-
+    this.getAllMonth()
     this.getSKU()
     this.getRegionList()
     // this.getCustomerList()
@@ -338,15 +343,9 @@ export default {
     FormateNum(num) {
       return FormateThousandNum(num)
     },
-    // 获取年月
-    getEffectiveDate() {
-      API.getEffectiveDate({ version: 'V1' }).then((res) => {
-        if (res.code === 1000) {
-          this.localDate = res.data
-          // this.getTableData()
-        } else {
-          this.$message.warning('未查询到年月信息！')
-        }
+    getAllMonth() {
+      selectAPI.getAllMonth().then((res) => {
+        this.monthList=res.data
       })
     },
     // 获取下拉框
@@ -360,7 +359,6 @@ export default {
           //   this.filterObj.channelCode = this.$route.query.channelCode
           // }
           this.getCustomerList(this.filterObj.channelCode)
-          this.getEffectiveDate()
         }
       })
     },
@@ -717,8 +715,14 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == '') {
-        this.$message.info(messageObj.requireChannel)
+      if (this.filterObj.channelCode == ''||this.localDate=='') {
+        if (this.localDate == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        } 
       } else {
         API.getPageV1({
           pageNum: this.pageNum, // 当前页

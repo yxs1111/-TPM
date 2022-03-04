@@ -180,6 +180,9 @@ import {
   dynamicColumnCost,
   getCurrentMonth,
   ReportBgColorMap,
+  createCellPos,
+  s2ab,
+  getMonthBetween,
 } from '@/utils'
 import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -187,6 +190,7 @@ import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
 import MutiSelect from '@/components/MutiSelect';
+import XLSXStyle from 'xlsx-style'
 export default {
   name: 'AbnormalAnalysisMonthByChannel',
   directives: { elDragDialog, permission },
@@ -218,6 +222,7 @@ export default {
       tableKey: 0, //el-table key
       tableKey2: 0, //el-table key
       tableKey3: 0, //el-table key
+      columnCount: 0, //列数
     }
   },
   computed: {},
@@ -416,63 +421,149 @@ export default {
       // debugger
       if (fix) {
         //生成 V1 worksheet对象
-        ws=XLSX.utils.table_to_sheet(document.querySelector('#outTable .el-table__fixed'))
-      } 
+        ws = XLSX.utils.table_to_sheet(
+          document.querySelector('#outTable .el-table__fixed')
+        )
+      }
       if (document.querySelector('#outTable2 .el-table__fixed')) {
         //追加v2 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
-        XLSX.utils.sheet_add_dom(ws, document.querySelector('#outTable2 .el-table__fixed'), {origin: -1})
+        XLSX.utils.sheet_add_dom(
+          ws,
+          document.querySelector('#outTable2 .el-table__fixed'),
+          { origin: -1 }
+        )
       }
       if (document.querySelector('#outTable3 .el-table__fixed')) {
-         //追加v3 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
-        XLSX.utils.sheet_add_dom(ws, document.querySelector('#outTable3 .el-table__fixed'), {origin: -1})
+        //追加v3 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
+        XLSX.utils.sheet_add_dom(
+          ws,
+          document.querySelector('#outTable3 .el-table__fixed'),
+          { origin: -1 }
+        )
       }
+      // debugger
+      let borderAll = {
+        color: { auto: 1 },
+        top: { style: 'thin' },
+        bottom: { style: 'thin' },
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+      }
+      ws['!cols'] = this.getColumWidth()
+      Object.keys(ws).forEach((key) => {
+        //这里遍历单元格给单元格对象设置属性,s为控制样式的属性
+        if (key.indexOf('!') < 0) {
+          ws[key].s = {
+            alignment: {
+              //对齐方式
+              horizontal: 'center', //水平居中
+              vertical: 'center', //竖直居中
+              wrapText: true, //自动换行
+            },
+          }
+        }
+        if (
+          key.replace(/[^0-9]/gi, '') === '1' ||
+          key.replace(/[^0-9]/gi, '') === '2'
+        ) {
+          ws[key].s = {
+            border: borderAll,
+            fill: {
+              //背景色
+              fgColor: { rgb: '4192D3' },
+            },
+            font: {
+              color: { rgb: 'FFFFFFFF' },
+            },
+            alignment: {
+              //对齐方式
+              horizontal: 'center', //水平居中
+              vertical: 'center', //竖直居中
+              wrapText: true, //自动换行
+            },
+          }
+        }
+      })
+      this.addRangeBorder(ws['!merges'], ws)
       //把worksheet对象添加进workbook对象，第三个参数是excel中sheet的名字
       XLSX.utils.book_append_sheet(wb, ws, 'sheet1')
-      const wbout = XLSX.write(wb, {
+      const wbout = XLSXStyle.write(wb, {
+        type: 'binary',
         bookType: 'xlsx',
-        bookSST: true,
-        type: 'array',
       })
       try {
         FileSaver.saveAs(
-          new Blob([wbout], { type: 'application/octet-stream' }),
-          '异常分析报告-byKA.xlsx'
+          new Blob([s2ab(wbout)], { type: 'application/octet-stream' }),
+          '异常分析报告-bychannel.xlsx'
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)
       }
       return wbout
     },
-    /**
-     * 下载多表格
-     */
-    downloadExcels(tableId,tableName) {
-      const fix = document.querySelector(`${tableId} .el-table__fixed`)
-      // return
-      let wb
-      if (fix) {
-        // 判断要导出的节点中是否有fixed的表格，如果有，转换excel时先将该dom移除，然后append回去
-        wb = XLSX.utils.table_to_book(
-          document.querySelector(`${tableId}`).removeChild(fix)
-        )
-        document.querySelector(`${tableId}`).appendChild(fix)
-      } else {
-        wb = XLSX.utils.table_to_book(document.querySelector(`${tableId}`))
+    //需要传入列的总数
+    initColum() {
+      let AllColum = []
+      for (let index = 0; index < this.columnCount; index++) {
+        AllColum.push(createCellPos(index))
       }
-      const wbout = XLSX.write(wb, {
-        bookType: 'xlsx',
-        bookSST: true,
-        type: 'array',
+      return AllColum
+    },
+    addRangeBorder(range, ws) {
+      //得到所有列名
+      let cols = this.initColum()
+      range.forEach((item) => {
+        //添加单元格border样式
+        let style = {
+          s: {
+            border: {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            },
+          },
+        }
+        // 处理合并行
+        for (let i = item.s.c; i <= item.e.c; i++) {
+          ws[`${cols[i]}${Number(item.e.r) + 1}`] =
+            ws[`${cols[i]}${Number(item.e.r) + 1}`] || style
+          // 处理合并列
+          for (let k = item.s.r + 2; k <= item.e.r + 1; k++) {
+            ws[cols[i] + k] = ws[cols[k] + item.e.r] || style
+          }
+        }
       })
-      try {
-        FileSaver.saveAs(
-          new Blob([wbout], { type: 'application/octet-stream' }),
-          `${tableName}-byKA.xlsx`
-        )
-      } catch (e) {
-        if (typeof console !== 'undefined') console.log(e, wbout)
+      return ws
+    },
+    //获取数组宽度列表
+    getColumWidth() {
+      let yearAndMonthList = this.filterObj.month
+      let start = ''
+      let end = ''
+      if (yearAndMonthList[0]) {
+        start =
+          yearAndMonthList[0].substring(0, 4) +
+          '-' +
+          yearAndMonthList[0].substring(4)
       }
-      return wbout
+      if (yearAndMonthList[0]) {
+        end =
+          yearAndMonthList[1].substring(0, 4) +
+          '-' +
+          yearAndMonthList[1].substring(4)
+      }
+      let MonthList = getMonthBetween(start, end)
+
+      let columnCount = MonthList.length * this.checkList.length + 1
+      this.columnCount = columnCount
+      let ColumWidthList = []
+      for (let index = 0; index < columnCount; index++) {
+        ColumWidthList.push({
+          wpx: 150,
+        })
+      }
+      return ColumWidthList
     },
     //列表渲染
     tableRender() {

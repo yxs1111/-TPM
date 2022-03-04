@@ -494,7 +494,8 @@ export function messageMap() {
   }
 }
 export const messageObj={
-  requireChannel:'渠道不能为空，请选择渠道'
+  requireChannel:'渠道不能为空，请选择渠道',
+  requireMonth:'活动月不能为空，请选择活动月'
 }
 //报表动态列
 export function ReportCheckList() {
@@ -619,3 +620,56 @@ export function downloadFile(res, fileName) {
     document.body.removeChild(elink)
   }
 }
+
+/**
+ * 
+ * @param {数字} n 
+ * @returns 列名
+ * 数字向列名转换
+ */
+export function createCellPos(n) {
+  var ordA = 'A'.charCodeAt(0) //字母转unicode
+  var ordZ = 'Z'.charCodeAt(0)
+  var len = ordZ - ordA + 1 // 计算字母长度
+  var s = ''
+  while (n >= 0) {
+    //将输入数字转换成字母
+    s = String.fromCharCode((n % len) + ordA) + s
+    //每次进行完需要重新floor向下取整，-1是因为 A的unicode是0
+    n = Math.floor(n / len) - 1
+  }
+  return s
+} 
+//字符串转ArrayBuffer
+export function s2ab(s) {
+  var buf = new ArrayBuffer(s.length)
+  var view = new Uint8Array(buf)
+  for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff
+  return buf
+}
+//-[获取两个日期中所有的月份中]
+export function getMonthBetween(start,end){  
+ var result = [];  
+ var s = start.split("-");  
+ var e = end.split("-");  
+ var min = new Date();  
+ var max = new Date();  
+ min.setFullYear(s[0],s[1]);  
+ max.setFullYear(e[0],e[1]);  
+ var curr = min;  
+ while(curr <= max){  
+     var month = curr.getMonth();  
+     //month=month==0?12:month;
+     var str=curr.getFullYear()+"-"+(month);
+     var s=curr.getFullYear()+"-0";
+     if(str==s){
+       str=curr.getFullYear()+"-12";
+     }
+     result.push(str);  
+     curr.setMonth(month+1);
+ }  
+ return result;  
+} 
+
+
+

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-03-04 09:19:32
+ * @LastEditTime: 2022-03-04 14:46:23
 -->
 <template>
   <div class="app-container">
@@ -9,20 +9,21 @@
       <div class="SelectBarWrap" @keyup.enter="search">
         <div class="SelectBar">
           <div class="Selectli">
-            <span class="SelectliTitle">SKU</span>
-            <el-select v-model="filterObj.SKU" filterable clearable placeholder="请选择">
-              <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
+            <span class="SelectliTitle">活动月</span>
+            <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
+              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
             </el-select>
-          </div>
-          <div class="Selectli">
-            <span class="SelectliTitle">月份</span>
-            <el-date-picker disabled v-model="filterObj.month" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
-            </el-date-picker>
           </div>
           <div class="Selectli">
             <span class="SelectliTitle">渠道</span>
             <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+            </el-select>
+          </div>
+          <div class="Selectli">
+            <span class="SelectliTitle">SKU</span>
+            <el-select v-model="filterObj.SKU" filterable clearable placeholder="请选择">
+              <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
             </el-select>
           </div>
           <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -38,7 +39,6 @@
             <span class="text">获取CPT数据</span>
           </div>
           <!-- 提交 有数据  正常 暗 -->
-
           <!-- 没有提交 有数据  正常点击 -->
           <!-- 没有提交 无数据  正常 暗 -->
           <div class="TpmButtonBG" :class="!isSubmit&&!isNoData&&isSelf?'':'noClick'" @click="importData">
@@ -127,7 +127,7 @@
           </div>
         </div>
       </div>
-      <div class="null_content" v-if="isNoData">
+      <div class="null_content" v-show="isNoData">
         <img src="@/assets/images/null_content.jpg" alt="">
         <div class="null_content_tit">暂无数据</div>
       </div>
@@ -266,6 +266,7 @@ import {
   VersionList,
   messageMap,
   FormateThousandNum,
+  messageObj,
 } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -280,6 +281,7 @@ export default {
         SKU: '',
         channelCode: '',
       },
+      monthList: [],
       skuOptons: [],
       ContentData: [],
       ruleForm: {
@@ -341,7 +343,7 @@ export default {
         'background:#FEF5F6',
         'background:#F0F6FC',
       ], //价格档位背景色
-      isNoData: false,
+      isNoData: true,
       usernameLocal: '',
       mainId: '',
       messageMap: messageMap(),
@@ -351,6 +353,7 @@ export default {
   mounted() {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannelList()
+    this.getAllMonth()
     // this.getList()
     this.getQuerySkuSelect()
   },
@@ -361,15 +364,23 @@ export default {
   },
   computed: {},
   methods: {
-    getMonth() {
-      API.getMonth({ version: 'V0' }).then((res) => {
-        this.filterObj.month = res.data
-        // this.getList()
+    getAllMonth() {
+      selectAPI.getAllMonth().then((res) => {
+        this.monthList=res.data
       })
     },
     getList() {
-      if (this.filterObj.channelCode == '') {
-        this.$message.info('渠道不能为空，请选择渠道')
+      if (this.filterObj.channelCode == ''|| this.filterObj.month == '') {
+        this.ContentData=[]
+        this.isNoData=true
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+           this.$message.info(messageObj.requireChannel)
+        } 
+        
       } else {
         API.getList({
           yearAndMonth: this.filterObj.month,
@@ -416,7 +427,7 @@ export default {
           // } else {
           //   this.filterObj.channelCode = this.$route.query.channelCode
           // }
-          this.getMonth()
+          // this.getMonth()
         }
       })
     },
@@ -734,6 +745,7 @@ export default {
 <style lang="scss" scoped>
 .Maincontent {
   height: 100%;
+  position: relative;
   .TopBar {
     display: flex;
     align-items: center;
@@ -747,6 +759,7 @@ export default {
   }
   .ContentWrap {
     width: 100%;
+    height: 90%;
     // min-height: 50vh;
     .contentli {
       // height: 480px;
@@ -816,7 +829,7 @@ export default {
 }
 .ContentWrap {
   width: 100%;
-  height: calc(100% - 50px);
+  // height: calc(100% - 50px);
   overflow-y: auto;
 }
 </style>

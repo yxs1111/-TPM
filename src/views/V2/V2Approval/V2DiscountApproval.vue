@@ -3,11 +3,12 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
-        <!-- <div class="Selectli" @keyup.enter="search">
-          <span class="SelectliTitle">年月:</span>
-          <el-date-picker disabled v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
-          </el-date-picker>
-        </div> -->
+        <div class="Selectli">
+            <span class="SelectliTitle">活动月</span>
+            <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
+              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+            </el-select>
+        </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
@@ -248,7 +249,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonth: '202101',
+        yearAndMonth: '',
         channelCode: '',
         customerCode: '',
         customerMdmCode: '',
@@ -259,6 +260,7 @@ export default {
       },
       permissions: getDefaultPermissions(),
       tableData: [],
+      monthList: [],
       skuOptions: [],
       channelOptions: [],
       customerArr: [],
@@ -296,6 +298,7 @@ export default {
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
+    this.getAllMonth()
   },
   watch: {
     'filterObj.channelCode'() {
@@ -325,8 +328,14 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == '') {
-        this.$message.info(messageObj.requireChannel)
+      if (this.filterObj.channelCode == ''||this.filterObj.yearAndMonth == '') {
+        if (this.filterObj.yearAndMonth == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        } 
       } else {
         API.getPage({
           pageNum: this.pageNum, // 当前页
@@ -349,6 +358,11 @@ export default {
           })
           .catch((error) => {})
       }
+    },
+    getAllMonth() {
+      selectAPI.getAllMonth().then((res) => {
+        this.monthList=res.data
+      })
     },
     // 通过与审批按钮控制
     infoByMainId() {
@@ -377,25 +391,12 @@ export default {
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
-    //查询列表 --获取活动年月
-    getMonth() {
-      selectAPI.getMonth({ version: 'V2' }).then((res) => {
-        this.filterObj.yearAndMonth = res.data
-        // this.getTableData()
-      })
-    },
     // 获取下拉框 渠道
     getQueryChannelSelect() {
       selectAPI
         .queryChannelSelect()
         .then((res) => {
           this.channelOptions = res.data
-          // if (!this.$route.query.channelCode) {
-          //   this.filterObj.channelCode = this.channelOptions[0].channelCode
-          // } else {
-          //   this.filterObj.channelCode = this.$route.query.channelCode
-          // }
-          this.getMonth()
         })
         .catch()
     },

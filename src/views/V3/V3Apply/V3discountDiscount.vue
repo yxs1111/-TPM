@@ -5,6 +5,12 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
+            <span class="SelectliTitle">活动月</span>
+            <el-select v-model="localDate" filterable clearable placeholder="请选择">
+              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+            </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
@@ -390,6 +396,7 @@ export default {
       saveBtn: false,
       // 下拉框
       channelArr: [],
+      monthList: [],
       skuArr: [],
       mainIdLocal: null,
       // 导入
@@ -443,10 +450,6 @@ export default {
       this.filterObj.distributorName = ''
       this.getDistributorList()
     },
-    // 'filterObj.customerName'() {
-    //   this.filterObj.distributorName = ''
-    //   this.getDistributorList()
-    // },
     'filterObj.distributorName'() {
       this.filterObj.regionName = ''
       this.getRegionList()
@@ -460,16 +463,17 @@ export default {
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    // this.getEffectiveDate()
-    // this.getTableData()
     this.getRegionList()
     this.getSKU()
-    // this.getTableData()
-    // this.getMP()
-    // this.getCustomerList()
     this.getDistributorList()
+    this.getAllMonth()
   },
   methods: {
+    getAllMonth() {
+      selectAPI.getAllMonth().then((res) => {
+        this.monthList=res.data
+      })
+    },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
       return FormateThousandNum(num)
@@ -488,17 +492,6 @@ export default {
           }
         })
     },
-    // 获取年月
-    getEffectiveDate() {
-      selectAPI.getMonth({ version: 'V3' }).then((res) => {
-        if (res.code === 1000) {
-          this.localDate = res.data
-          // this.getTableData()
-        } else {
-          this.$message.warning('未查询到年月信息！')
-        }
-      })
-    },
     // 获取下拉框
     getChannel() {
       selectAPI
@@ -506,12 +499,6 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.channelArr = res.data
-            // if (!this.$route.query.channelCode) {
-            //   this.filterObj.channelName = this.channelArr[0].channelCode
-            // } else {
-            //   this.filterObj.channelName = this.$route.query.channelCode
-            // }
-            this.getEffectiveDate()
             this.getCustomerList()
           }
         })
@@ -1037,8 +1024,14 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (!this.filterObj.channelName) {
-        this.$message.info(messageObj.requireChannel)
+      if (!this.filterObj.channelName||!this.localDate) {
+        if (!this.localDate) {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (!this.filterObj.channelName) {
+          this.$message.info(messageObj.requireChannel)
+        } 
       } else {
         API.getPageV3({
           pageNum: this.pageNum, // 当前页

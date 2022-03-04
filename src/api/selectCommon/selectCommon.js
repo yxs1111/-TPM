@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-03-03 15:15:44
+ * @LastEditTime: 2022-03-04 14:00:59
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -42,6 +42,10 @@ export default {
   getRegionList(params) {
     return requestApi.request_get('auth/common2/regionList', params)
   },
+  //大区
+  getLargeAreaList(params) {
+    return requestApi.request_get('/cityplan/mdOrganizationIo/getLargetArea', params)
+  },
   //getCostTypeList
   getCostTypeList(params) {
     return requestApi.request_get('mdm/mdCostType/getCostTypeList', params)
@@ -56,5 +60,9 @@ export default {
   // 报表 多渠道获取用户
   getCustomerListByChannels(data) {
     return requestApi.request_post('/mdm/common/getCustomerListByChannels', data)
+  },
+  // V0-V3获取活动月List
+  getAllMonth(data) {
+    return requestApi.request_get('/mdm/mdCycleConfig/getAllMonth', data)
   },
 }

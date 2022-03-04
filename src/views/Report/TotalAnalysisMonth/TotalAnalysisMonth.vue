@@ -14,28 +14,16 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
-          <MutiSelect v-model="filterObj.channelCode" :list="channelOptions" :props="{value:'channelEsName',label:'channelEsName',key:'channelCode'}"/>
-          <!-- <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
-          </el-select> -->
+          <MutiSelect v-model="filterObj.channelCode" :list="channelOptions" :props="{value:'channelEsName',label:'channelEsName',key:'channelCode'}" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
-          <MutiSelect v-model="filterObj.customerCode" :list="customerArr" :props="{value:'customerCsName',label:'customerCsName',key:'customerCode'}"/>
-          <!-- <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
-          </el-select> -->
+          <MutiSelect v-model="filterObj.customerCode" :list="customerArr" :props="{value:'customerCsName',label:'customerCsName',key:'customerCode'}" />
         </div>
-        
-        
         <div class="Selectli">
           <span class="SelectliTitle">SKU：</span>
-          <MutiSelect v-model="filterObj.productName" :list="skuList" :props="{value:'productEsName',label:'productEsName',key:'productEsName'}"/>
-          <!-- <el-select v-model="filterObj.productName" clearable multiple collapse-tags filterable placeholder="请选择">
-            <el-option v-for="item,index in skuList" :key="index" :label="item.productEsName" :value="item.productEsName" />
-          </el-select> -->
+          <MutiSelect v-model="filterObj.productName" :list="skuList" :props="{value:'productEsName',label:'productEsName',key:'productEsName'}" />
         </div>
-
       </div>
     </div>
     <div class="checkBoxWrap">
@@ -112,17 +100,20 @@ import {
   ReportBgColorMap,
   FormateThousandNum,
   getYearAndMonthRange,
-  getHeight
+  createCellPos,
+  s2ab,
+  getHeight,
 } from '@/utils'
 import API from '@/api/report/report.js'
 import SelectMonth from '@/components/SelectMonth/SelectMonth.vue'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
-import MutiSelect from '@/components/MutiSelect';
+import XLSXStyle from 'xlsx-style'
+import MutiSelect from '@/components/MutiSelect'
 export default {
   name: 'TotalAnalysisMonth',
-  components: { SelectMonth,MutiSelect },
+  components: { SelectMonth, MutiSelect },
   directives: { elDragDialog, permission },
   data() {
     return {
@@ -171,6 +162,7 @@ export default {
       tableKey: 0, // el-table key
       maxheight: window.innerHeight - 380,
       selectIsAll: false, //选择框是否全选
+      columCount: 0, //下载报表所有列=》确定width 和 合并单元格
     }
   },
   computed: {},
@@ -183,9 +175,7 @@ export default {
       this.tableKey++
     },
 
-    'filterObj.productName'(Value,oldValue) {
-      
-    }
+    'filterObj.productName'(Value, oldValue) {},
   },
   mounted() {
     window.onresize = () => {
@@ -204,16 +194,6 @@ export default {
     this.getQueryChannelSelect()
   },
   methods: {
-    // 根据渠道获取客户 多选
-    getCustomer(choose) {
-      // let params = []
-      // choose.forEach(element => {
-      //   params.push(element)
-      // })
-      // selectAPI.getCustomerListByChannels({ channelCodes: params }).then(res => {
-      //   this.customerArr = res.data
-      // }).catch()
-    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -317,7 +297,7 @@ export default {
               // if (list.length<10) {
               //   list.push(item.customerCsName)
               // }
-              list.push(item.customerCsName)                       
+              list.push(item.customerCsName)
             })
             this.filterObj.customerCode = list
             this.getSkuSelect()
@@ -328,8 +308,8 @@ export default {
     getSkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
         this.skuList = res.data
-        let list=[]
-        this.skuList.forEach(item=>{
+        let list = []
+        this.skuList.forEach((item) => {
           list.push(item.productEsName)
         })
         this.filterObj.productName = [...list]
@@ -356,14 +336,60 @@ export default {
       } else {
         wb = XLSX.utils.table_to_book(document.querySelector('#outTable'))
       }
-      const wbout = XLSX.write(wb, {
+      let ws = wb.Sheets.Sheet1
+      //获取列宽数组
+      ws['!cols'] = this.getColumWidth()
+      // debugger
+      let borderAll = {
+        color: { auto: 1 },
+        top: { style: 'thin' },
+        bottom: { style: 'thin' },
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+      }
+      Object.keys(ws).forEach((key) => {
+        //这里遍历单元格给单元格对象设置属性,s为控制样式的属性
+        if (key.indexOf('!') < 0) {
+          ws[key].s = {
+            alignment: {
+              //对齐方式
+              horizontal: 'center', //水平居中
+              vertical: 'center', //竖直居中
+              wrapText: true, //自动换行
+            },
+          }
+        }
+        if (
+          key.replace(/[^0-9]/gi, '') === '1' ||
+          key.replace(/[^0-9]/gi, '') === '2' ||
+          key.replace(/[^0-9]/gi, '') === '3'
+        ) {
+          ws[key].s = {
+            border: borderAll,
+            fill: {
+              //背景色
+              fgColor: { rgb: '4192D3' },
+            },
+            font: {
+              color: { rgb: 'FFFFFFFF' },
+            },
+            alignment: {
+              //对齐方式
+              horizontal: 'center', //水平居中
+              vertical: 'center', //竖直居中
+              wrapText: true, //自动换行
+            },
+          }
+        }
+      })
+      this.addRangeBorder(ws['!merges'], ws)
+      const wbout = XLSXStyle.write(wb, {
+        type: 'binary',
         bookType: 'xlsx',
-        bookSST: true,
-        type: 'array',
       })
       try {
         FileSaver.saveAs(
-          new Blob([wbout], { type: 'application/octet-stream' }),
+          new Blob([s2ab(wbout)], { type: 'application/octet-stream' }),
           '汇总分析报告.xlsx'
         )
       } catch (e) {
@@ -371,7 +397,80 @@ export default {
       }
       return wbout
     },
+    //获取数组宽度列表
+    getColumWidth() {
+      //得到渠道下所有客户的数量
+      let AllData = { ...this.tableData[0].month }
+      let customCount = 0
+      for (const key in AllData) {
+        if (AllData.hasOwnProperty.call(AllData, key)) {
+          const customList = AllData[key]
+          customCount += Number(customList.length)
+        }
+      }
+      //所有列：(客户+1)*4+1
+      let columCount = (customCount + 1) * 6 + 1
+      this.columCount = columCount
+      let ColumWidthList = []
+      for (let index = 0; index < columCount; index++) {
+        if (index > 10) {
+          if ((index - 10) % 6 == 1 || (index - 10) % 6 == 2) {
+            ColumWidthList.push({
+              wpx: 150,
+            })
+          }else {
+            ColumWidthList.push({
+              wpx: 100,
+            })
+          }
+        } else if (index == 5 || index == 6) {
+          ColumWidthList.push({
+            wpx: 150,
+          })
+        } else {
+          ColumWidthList.push({
+            wpx: 100,
+          })
+        }
+      }
+      return ColumWidthList
+    },
 
+    //需要传入列的总数 count default 26
+    initColum() {
+      let AllColum = []
+      for (let index = 0; index < this.columCount; index++) {
+        AllColum.push(createCellPos(index))
+      }
+      return AllColum
+    },
+    addRangeBorder(range, ws) {
+      //得到所有列名
+      let cols = this.initColum()
+      range.forEach((item) => {
+        //添加单元格border样式
+        let style = {
+          s: {
+            border: {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            },
+          },
+        }
+        // 处理合并行
+        for (let i = item.s.c; i <= item.e.c; i++) {
+          ws[`${cols[i]}${Number(item.e.r) + 1}`] =
+            ws[`${cols[i]}${Number(item.e.r) + 1}`] || style
+          // 处理合并列
+          for (let k = item.s.r + 2; k <= item.e.r + 1; k++) {
+            ws[cols[i] + k] = ws[cols[k] + item.e.r] || style
+          }
+        }
+      })
+      return ws
+    },
     // 行样式
     tableRowClassName({ row, rowIndex }) {
       if (rowIndex == 0) {
@@ -398,7 +497,7 @@ export default {
       }
     },
     getCheckTitle(str) {
-      return str.replace(/<br>/g," ")
+      return str.replace(/<br>/g, ' ')
     },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {

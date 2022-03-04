@@ -18,6 +18,12 @@
           </el-select>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">客户组名称</span>
+          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
@@ -47,12 +53,12 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="groupCode" label="客户组编码" />
-      <el-table-column align="center" prop="groupName" label="客户组名称" />
       <el-table-column align="center" prop="customerCode" label="客户CP编码" />
       <el-table-column align="center" prop="customerMdmCode" label="MDM客户编号" />
       <el-table-column align="center" prop="customerCsName" label="客户中文名称" />
       <el-table-column width="220" align="center" prop="customerEsName" label="客户英文名称" />
+      <el-table-column align="center" prop="groupCode" label="客户组编码" />
+      <el-table-column align="center" prop="groupName" label="客户组名称" />
       <el-table-column align="center" prop="customerType" label="客户类型" />
       <el-table-column align="center" prop="channelCode" label="渠道" />
       <el-table-column width="150" align="center" prop="state" label="状态">

@@ -13,6 +13,18 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">大区:</span>
+          <el-select v-model="filterObj.largeAreaName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in largeAreaList" :key="index" :label="item.name" :value="item.code" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
@@ -40,18 +52,12 @@
       <el-table-column align="center" prop="ioNumber" label="IO编码"> </el-table-column>
       <el-table-column align="center" prop="name" label="区域名称"> </el-table-column>
       <el-table-column align="center" prop="code" label="区域编码"> </el-table-column>
-      <!-- <el-table-column width="150" align="center" prop="state" label="状态">
-        <template slot-scope="{ row }">
-          <div>
-            {{ row.state ? '正常' : '无效' }}
-          </div>
-        </template>
-      </el-table-column> -->
+      <el-table-column align="center" prop="largeAreaName" label="大区名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" prop="createDate" label="创建时间" >
+      <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
           <div>
-           {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+            {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
           </div>
         </template>
       </el-table-column>
@@ -60,6 +66,13 @@
         <template slot-scope="{row}">
           <div>
             {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="state" label="状态">
+        <template slot-scope="{ row }">
+          <div>
+            {{ row.state ? '正常' : '无效' }}
           </div>
         </template>
       </el-table-column>
@@ -78,9 +91,21 @@
             </el-input>
           </el-form-item>
           <el-form-item label="区域" prop="regionCode">
-            <el-select v-model="ruleForm.regionCode" class="my-el-input"  clearable filterable placeholder="请选择">
+            <el-select v-model="ruleForm.regionCode" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="(item) in RegionList" :key="item.code" :label="item.name" :value="item.code" />
             </el-select>
+          </el-form-item>
+          <el-form-item label="大区" prop="largeAreaName">
+            <el-select v-model="ruleForm.largeAreaName" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.code" />
+            </el-select>
+          </el-form-item>
+           <el-form-item label="状态">
+              <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
+              <el-radio v-model="ruleForm.state" label="1">正常</el-radio>
+            <!-- <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item,index) in ['无效','正常']" :key="item" :label="item" :value="index" />
+            </el-select> -->
           </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
@@ -104,7 +129,7 @@ import {
   parseTime,
   getTextMap,
   getHeightSingle,
-  downloadFile
+  downloadFile,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -120,14 +145,20 @@ export default {
         ioNumber: '',
         regionCode: '',
         regionName: '',
+        largeAreaName: '',
+        state: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
       RegionList: [],
+      largeAreaList: [],
+      largeAreaDialogList: [],
       ruleForm: {
         ioNumber: '',
         regionCode: '',
         regionName: '',
+        largeAreaName: '',
+        state: '1',
         remark: '',
       },
       rules: {
@@ -161,6 +192,7 @@ export default {
       })()
     }
     this.getRegionList()
+    this.getLargeAreaList()
     this.getTableData()
   },
   computed: {},
@@ -169,10 +201,17 @@ export default {
       let obj = this.RegionList.find(
         (item) => item.code == this.ruleForm.regionCode
       )
+      this.ruleForm.largeAreaName = ''
+      this.getLargeAreaListDialog()
       if (obj) this.ruleForm.regionName = obj.name
     },
     'filterObj.regionCode'(value) {
-      if(value=='') this.filterObj.regionName=''
+      if (value == '') {
+        this.filterObj.regionName = ''
+        this.filterObj.largeAreaName = ''
+      }
+      this.filterObj.largeAreaName = ''
+      this.getLargeAreaList()
       let obj = this.RegionList.find(
         (item) => item.code == this.filterObj.regionCode
       )
@@ -189,6 +228,8 @@ export default {
         ioNumber: this.filterObj.ioNumber,
         code: this.filterObj.regionCode,
         name: this.filterObj.regionName,
+        largeAreaCode: this.filterObj.largeAreaName,
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -205,7 +246,30 @@ export default {
         }
       })
     },
+    getLargeAreaList() {
+      selectAPI
+        .getLargeAreaList({
+          parentCode: this.filterObj.regionCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.largeAreaList = res.data
+          }
+        })
+    },
+    getLargeAreaListDialog() {
+      selectAPI
+        .getLargeAreaList({
+          parentCode: this.ruleForm.regionCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.largeAreaDialogList = res.data
+          }
+        })
+    },
     add() {
+      this.getLargeAreaListDialog()
       this.dialogVisible = true
     },
     search() {
@@ -240,6 +304,8 @@ export default {
         ioNumber: '',
         regionCode: '',
         regionName: '',
+        largeAreaName: '',
+        state: '1',
         remark: '',
       }
     },
@@ -250,7 +316,9 @@ export default {
         ioNumber: obj.ioNumber,
         regionCode: obj.code,
         regionName: obj.name,
+        largeAreaName: obj.largeAreaName,
         remark: obj.remark,
+        state: String(obj.state),
       }
       this.editorId = obj.id
     },
@@ -264,6 +332,8 @@ export default {
             ioNumber: this.ruleForm.ioNumber,
             code: this.ruleForm.regionCode,
             name: this.ruleForm.regionName,
+            state: this.ruleForm.state,
+            largeAreaName: this.ruleForm.largeAreaName,
             remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {
