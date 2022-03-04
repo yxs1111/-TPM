@@ -608,7 +608,7 @@ export default {
           regionName: this.filterObj.regionName,
           yearAndMonth: this.localDate,
         }).then((response) => {
-          const fileName = '导出审批Excel' + new Date().getTime() + '.xlsx'
+          const fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1_查询.xlsx`
           //   res.data:请求到的二进制数据
           const blob = new Blob([response], {
             type: 'application/vnd.ms-excel',

@@ -16,6 +16,12 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">CostType:</span>
+          <el-select v-model="filterObj.CostType" placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">Mine package:</span>
           <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.id" />
@@ -190,6 +196,7 @@ export default {
       filterObj: {
         exception: 1,
         month: getCurrentMonth(),
+        CostType: 'Disc',
         MinePackage: 14,
         regionCode: [],
         brandCode: [],
@@ -203,6 +210,7 @@ export default {
       skuList: [],
       RegionList: [],
       MinePackageList: [],
+      CostTypeList: [], 
       checkList: [], //已选中的列
       tableColumnList: [], //动态列
       dynamicColumn: dynamicColumn(), //展示列选项框
@@ -219,6 +227,7 @@ export default {
     this.getMinePackage()
     this.getSkuSelect()
     this.getRegionList()
+    this.getCostTypeList()
     this.getBrandList()
     this.getTableData()
   },
@@ -226,6 +235,10 @@ export default {
     //动态列渲染
     checkList() {
       this.tableRender()
+    },
+    'filterObj.CostType'() {
+      this.filterObj.MinePackage=''
+      this.getMinePackage()
     },
     'filterObj.exception'() {
       if (this.filterObj.exception == 1) {
@@ -253,6 +266,9 @@ export default {
       }).then((response) => {
         if (Object.keys(response.data).length) {
           let AllData = response.data
+          this.V1Data = []
+          this.V2Data = []
+          this.V3Data = []  
           for (const version in AllData) {
             if (Object.hasOwnProperty.call(AllData, version)) {
               let yearMonthObj = AllData[version]
@@ -336,22 +352,17 @@ export default {
               //排序
               AllData[version] = versionList
             }
-            // this.V1Data = []
-            // this.V2Data = []
-            // this.V3Data = []
             if (version == 'v1') {
-              this.V1Data = AllData.v1
-            } else if (version == 'v2') {
-              this.V2Data = AllData.v2
-            } else if (version == 'v3') {
-              this.V3Data = AllData.v3
-            }
+              this.V1Data=[...AllData.v1]
+            } 
+            if (version == 'v2') {
+              this.V2Data=[...AllData.v2]
+            } 
+            if (version == 'v3') {
+              this.V3Data=[...AllData.v3]
+            } 
           }
-        } else {
-          this.V1Data = []
-          this.V2Data = []
-          this.V3Data = []
-        }
+        } 
       })
     },
     getSkuSelect() {
@@ -366,8 +377,19 @@ export default {
         }
       })
     },
+    getCostTypeList() {
+      selectAPI.getCostTypeList({
+        costLevel:1
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.CostTypeList = res.data
+        }
+      })
+    },
     getMinePackage() {
-      selectAPI.queryMinePackageSelect().then((res) => {
+      selectAPI.queryMinePackageSelect({
+         parentId:this.filterObj.CostType
+      }).then((res) => {
         this.MinePackageList = res.data
       })
     },

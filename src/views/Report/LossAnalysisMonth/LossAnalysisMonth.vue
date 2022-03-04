@@ -246,6 +246,7 @@ export default {
   },
   computed: {},
   mounted() {
+    
     this.getReport()
     this.getQueryChannelSelect()
     // this.getRegionList()
@@ -290,10 +291,17 @@ export default {
         XLSX.utils.sheet_add_dom(
           ws,
           document.querySelector('#outTable1 .el-table__fixed'),
-          { origin: -1 }
+          {origin: {c: 0, r: 8}}
         )
       }
       // debugger
+      let borderAll = {
+        color: { auto: 1 },
+        top: { style: 'thin' },
+        bottom: { style: 'thin' },
+        left: { style: 'thin' },
+        right: { style: 'thin' },
+      }
       Object.keys(ws).forEach((key) => {
         //这里遍历单元格给单元格对象设置属性,s为控制样式的属性
         if (key.indexOf('!') < 0) {
@@ -306,7 +314,33 @@ export default {
             },
           }
         }
+        if (
+          key.replace(/[^0-9]/gi, '') === '1' ||
+          key.replace(/[^0-9]/gi, '') === '2' ||
+          key.replace(/[^0-9]/gi, '') === '3' ||
+          key.replace(/[^0-9]/gi, '') === '9' ||
+          key.replace(/[^0-9]/gi, '') === '10' ||
+          key.replace(/[^0-9]/gi, '') === '11'
+        ) {
+          ws[key].s = {
+            border: borderAll,
+            fill: {
+              //背景色
+              fgColor: { rgb: '4192D3' },
+            },
+            font: {
+              color: { rgb: 'FFFFFFFF' },
+            },
+            alignment: {
+              //对齐方式
+              horizontal: 'center', //水平居中
+              vertical: 'center', //竖直居中
+              wrapText: true, //自动换行
+            },
+          }
+        }
       })
+      this.addRangeBorder(ws['!merges'], ws)
       //把worksheet对象添加进workbook对象，第三个参数是excel中sheet的名字
       XLSX.utils.book_append_sheet(wb, ws, 'sheet1')
       const wbout = XLSXStyle.write(wb, {
@@ -322,6 +356,66 @@ export default {
         if (typeof console !== 'undefined') console.log(e, wbout)
       }
       return wbout
+    },
+    //数字向列名转换
+    createCellPos(n) {
+      var ordA = 'A'.charCodeAt(0) //字母转unicode
+      var ordZ = 'Z'.charCodeAt(0)
+      var len = ordZ - ordA + 1 // 计算字母长度
+      var s = ''
+      while (n >= 0) {
+        //将输入数字转换成字母
+        s = String.fromCharCode((n % len) + ordA) + s
+        //每次进行完需要重新floor向下取整，-1是因为 A的unicode是0
+        n = Math.floor(n / len) - 1
+      }
+      return s
+    },
+    //需要传入列的总数 count default 26
+    initColum() {
+      //得到渠道下所有客户的数量
+      let AllData={...this.tableData[0].channel}
+      let customCount=0
+      for (const key in AllData) {
+        if (AllData.hasOwnProperty.call(AllData, key)) {
+          const customList = AllData[key];
+          customCount+=Number(customList.length)
+        }
+      }
+      //所有列：(客户+1)*4+1
+      let columCount=(customCount+1)*4+1
+      let AllColum=[]
+      for (let index = 0; index < columCount; index++) {
+        AllColum.push(this.createCellPos(index))
+      }
+      return AllColum
+    },
+    addRangeBorder(range, ws) {
+      //得到所有列名
+      let cols=this.initColum() 
+      range.forEach((item) => {
+        //添加单元格border样式
+        let style = {
+          s: {
+            border: {
+              top: { style: 'thin' },
+              left: { style: 'thin' },
+              bottom: { style: 'thin' },
+              right: { style: 'thin' },
+            },
+          },
+        }
+        // 处理合并行
+        for (let i = item.s.c; i <= item.e.c; i++) {
+          ws[`${cols[i]}${Number(item.e.r) + 1}`] =
+            ws[`${cols[i]}${Number(item.e.r) + 1}`] || style
+          // 处理合并列
+          for (let k = item.s.r + 2; k <= item.e.r + 1; k++) {
+            ws[cols[i] + k] = ws[cols[k] + item.e.r] || style
+          }
+        }
+      })
+      return ws
     },
     //字符串转ArrayBuffer
     s2ab(s) {
@@ -343,14 +437,6 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
-            // const list = []
-            // this.customerArr.forEach((item) => {
-            //   // if (list.length<10) {
-            //   //   list.push(item.customerCsName)
-            //   // }
-            //   list.push(item.customerCsName)
-            // })
-            // this.filterObj.customerCode = list
           }
         })
     },

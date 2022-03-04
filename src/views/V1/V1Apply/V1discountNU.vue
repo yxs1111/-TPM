@@ -231,8 +231,7 @@ export default {
           brandCode: this.filterObj.brandCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V1新客信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(res, `${this.filterObj.month}_NU_${this.filterObj.channelCode}_V1_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {

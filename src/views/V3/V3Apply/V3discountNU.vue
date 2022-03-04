@@ -601,10 +601,7 @@ export default {
           if (res === undefined) {
             this.$message.warning('NU-V3导出失败!')
           } else {
-            this.downloadFile(
-              res,
-              'V3-NU-申请Excel-' + new Date().getTime() + '.xlsx'
-            ) // 自定义Excel文件名
+            this.downloadFile(res, `${this.localDate}_NU_${this.filterObj.channelCode}_V3_查询.xlsx`) //自定义Excel文件名
             this.$message.success('NU-V3导出成功!')
           }
         })

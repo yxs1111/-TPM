@@ -1010,7 +1010,7 @@ export default {
         // if (res.code) {
         //   this.$message.warning('导出失败!')
         // } else {
-        this.downloadFile(res, 'V3' + '.xlsx') // 自定义Excel文件名
+        this.downloadFile(res, `${this.localDate}_Price_${this.filterObj.channelName}_V3_查询.xlsx`) //自定义Excel文件名
         this.$message.success('导出成功!')
         // }
       })

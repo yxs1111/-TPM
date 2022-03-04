@@ -560,8 +560,7 @@ export default {
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
         }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2-' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(res, `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2_查询.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {

@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-01-19 17:23:06
+ * @LastEditTime: 2022-03-03 15:15:44
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -41,6 +41,10 @@ export default {
   //区域
   getRegionList(params) {
     return requestApi.request_get('auth/common2/regionList', params)
+  },
+  //getCostTypeList
+  getCostTypeList(params) {
+    return requestApi.request_get('mdm/mdCostType/getCostTypeList', params)
   },
   // 通过与驳回按钮状态
   infoByMainId(params) {
