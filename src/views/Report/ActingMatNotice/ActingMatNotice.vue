@@ -77,6 +77,7 @@
       <el-table-column width="150" align="center" prop="brandName" label="产品线" />
       <el-table-column width="150" align="center" prop="priceGearAmount" label="促销价格" />
       <el-table-column width="200" align="center" prop="adjustedVol" label="预计活动销量（箱）" />
+      <el-table-column width="200" align="center" prop="adjustedVolTin" label="预计活动销量（听）" />
       <el-table-column width="200" align="center" prop="adjustedAmount" label="V1调整后费用（元）" />
       <el-table-column width="150" align="center" prop="applyAmount" label="申请额度（元）" />
       <el-table-column v-slot={row} width="150" align="center" prop="activityDateStart" label="活动开始日期">
