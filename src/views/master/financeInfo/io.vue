@@ -15,7 +15,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.largeAreaName" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.largeAreaCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in largeAreaList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
@@ -53,6 +53,7 @@
       <el-table-column align="center" prop="name" label="区域名称"> </el-table-column>
       <el-table-column align="center" prop="code" label="区域编码"> </el-table-column>
       <el-table-column align="center" prop="largeAreaName" label="大区名称"> </el-table-column>
+      <el-table-column align="center" prop="largeAreaCode" label="大区编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
@@ -95,17 +96,14 @@
               <el-option v-for="(item) in RegionList" :key="item.code" :label="item.name" :value="item.code" />
             </el-select>
           </el-form-item>
-          <el-form-item label="大区" prop="largeAreaName">
-            <el-select v-model="ruleForm.largeAreaName" class="my-el-input" clearable filterable placeholder="请选择">
+          <el-form-item label="大区" prop="largeAreaCode">
+            <el-select v-model="ruleForm.largeAreaCode" class="my-el-input" clearable filterable placeholder="请选择" @change="changeLargeArea">
               <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.code" />
             </el-select>
           </el-form-item>
            <el-form-item label="状态">
               <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
               <el-radio v-model="ruleForm.state" label="1">正常</el-radio>
-            <!-- <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item,index) in ['无效','正常']" :key="item" :label="item" :value="index" />
-            </el-select> -->
           </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
@@ -145,7 +143,7 @@ export default {
         ioNumber: '',
         regionCode: '',
         regionName: '',
-        largeAreaName: '',
+        largeAreaCode: '',
         state: '',
       },
       permissions: getDefaultPermissions(),
@@ -158,6 +156,7 @@ export default {
         regionCode: '',
         regionName: '',
         largeAreaName: '',
+        largeAreaCode: '',
         state: '1',
         remark: '',
       },
@@ -200,9 +199,9 @@ export default {
     'filterObj.regionCode'(value) {
       if (value == '') {
         this.filterObj.regionName = ''
-        this.filterObj.largeAreaName = ''
+        this.filterObj.largeAreaCode = ''
       }
-      this.filterObj.largeAreaName = ''
+      this.filterObj.largeAreaCode = ''
       this.getLargeAreaList()
       let obj = this.RegionList.find(
         (item) => item.code == this.filterObj.regionCode
@@ -217,8 +216,17 @@ export default {
         (item) => item.code == this.ruleForm.regionCode
       )
       this.ruleForm.largeAreaName = ''
+      this.ruleForm.largeAreaCode = ''
       this.getLargeAreaListDialog()
+      this.changeLargeArea()
       if (obj) this.ruleForm.regionName = obj.name
+    },
+    changeLargeArea(value) {
+
+      let obj = this.largeAreaDialogList.find(
+        (item) => item.code == this.ruleForm.largeAreaCode
+      )
+      if (obj) this.ruleForm.largeAreaName = obj.name
     },
     //获取表格数据
     getTableData() {
@@ -229,7 +237,7 @@ export default {
         ioNumber: this.filterObj.ioNumber,
         code: this.filterObj.regionCode,
         name: this.filterObj.regionName,
-        largeAreaCode: this.filterObj.largeAreaName,
+        largeAreaCode: this.filterObj.largeAreaCode,
         state: this.filterObj.state,
       })
         .then((response) => {
@@ -298,6 +306,7 @@ export default {
       API.exportIo({
         ioNumber: this.filterObj.ioNumber,
         code: this.filterObj.regionCode,
+        largeAreaCode: this.filterObj.largeAreaCode,
         name: this.filterObj.regionName,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
@@ -314,6 +323,7 @@ export default {
         regionCode: '',
         regionName: '',
         largeAreaName: '',
+        largeAreaCode: '',
         state: '1',
         remark: '',
       }
@@ -326,6 +336,7 @@ export default {
         regionCode: obj.code,
         regionName: obj.name,
         largeAreaName: obj.largeAreaName,
+        largeAreaCode: obj.largeAreaCode,
         remark: obj.remark,
         state: String(obj.state),
       }
@@ -343,6 +354,7 @@ export default {
             name: this.ruleForm.regionName,
             state: this.ruleForm.state,
             largeAreaName: this.ruleForm.largeAreaName,
+            largeAreaCode: this.ruleForm.largeAreaCode,
             remark: this.ruleForm.remark,
           }).then((response) => {
             if (response.code === 1000) {

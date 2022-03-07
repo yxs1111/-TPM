@@ -16,7 +16,7 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">CostType:</span>
+          <span class="SelectliTitle">Cost Type:</span>
           <el-select v-model="filterObj.CostType" placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
