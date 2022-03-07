@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-02-15 09:45:46
+ * @LastEditTime: 2022-03-07 10:23:20
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -25,6 +25,19 @@ export default {
   exportNoticeReport(params) {
     return request({
       url: this.url + '/advanceNoticeReport/exportList',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  // 代垫确认
+  getSubstituteConfirmReport(params) {
+    return requestApi.request_get(this.url + '/substituteConfirmReport/getPage', params)
+  },
+  //代垫确认--导出
+  exportSubstituteConfirmReport(params) {
+    return request({
+      url: this.url + '/substituteConfirmReport/exportList',
       method: 'get',
       params: params,
       responseType: 'blob'

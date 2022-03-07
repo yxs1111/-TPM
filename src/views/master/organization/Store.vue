@@ -22,11 +22,27 @@
           </el-select>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">城市名称</span>
+          <el-input v-model="filterObj.orgName" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">城市群名称</span>
+          <el-input v-model="filterObj.groupName" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">区域名称</span>
+          <el-input v-model="filterObj.regionName" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">大区名称</span>
+          <el-input v-model="filterObj.zoneName" clearable placeholder="请输入" />
+        </div>
+        <!-- <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ['无效','正常']" :key="index" :label="item" :value="index" />
           </el-select>
-        </div>
+        </div> -->
         <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
@@ -43,8 +59,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="orgCode" label="城市编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="orgName" label="城市名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="groupName" label="城市群名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="regionName" label="区域名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="zoneName" label="大区名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="storeCode" label="门店编码"> </el-table-column>
       <el-table-column width="250" align="center" prop="storeName" label="门店名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="channelCode" label="渠道名称"> </el-table-column>
@@ -52,7 +70,6 @@
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="distributorCode" label="经销商编码"> </el-table-column>
       <el-table-column width="340" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
-      
       <el-table-column width="150" align="center" prop="isFmc" label="IsFMC "> </el-table-column>
       <el-table-column width="150" align="center" prop="fmcCode" label="FMC编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="fmcName" label="FMC名称"> </el-table-column>
@@ -97,7 +114,10 @@ export default {
         customerName: '',
         distributorName: '',
         channelCode: '',
-        state: '',
+        orgName: '',
+        groupName: '',
+        regionName: '',
+        zoneName: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -127,7 +147,10 @@ export default {
         customerCsName: this.filterObj.customerName,
         distributorName: this.filterObj.distributorName,
         channelCode: this.filterObj.channelCode,
-        state: this.filterObj.state,
+        orgName: this.filterObj.orgName,
+        groupName: this.filterObj.groupName,
+        regionName: this.filterObj.regionName,
+        zoneName: this.filterObj.zoneName,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -143,7 +166,10 @@ export default {
         customerName: '',
         distributorName: '',
         channelCode: '',
-        state: '',
+        orgName: '',
+        groupName: '',
+        regionName: '',
+        zoneName: '',
       }
       this.getTableData()
     },
@@ -164,7 +190,10 @@ export default {
       formData.append('customerCsName', this.filterObj.customerName)
       formData.append('distributorName', this.filterObj.distributorName)
       formData.append('channelCode', this.filterObj.channelCode)
-      formData.append('state', this.filterObj.state)
+      formData.append('orgName', this.filterObj.orgName)
+      formData.append('groupName', this.filterObj.groupName)
+      formData.append('regionName', this.filterObj.regionName)
+      formData.append('zoneName', this.filterObj.zoneName)
       API.exportStore(formData).then((res) => {
         let timestamp = Date.parse(new Date())
         // this.downloadFile(res, '渠道 -' + timestamp + '.xlsx') //自定义Excel文件名

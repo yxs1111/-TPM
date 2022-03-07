@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-01-18 21:24:48
+ * @LastEditTime: 2022-03-07 10:24:59
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -76,6 +76,13 @@ export default function() {
           name: 'ActingMatNotice',
           component: () => import('@/views/Report/ActingMatNotice/ActingMatNotice.vue'),
           meta: { title: '代垫通知报表', icon: 'approve' }
+        },
+        {
+          path: '/ActingConfirm',
+          code: 'resource-report-notice',
+          name: 'ActingConfirm',
+          component: () => import('@/views/Report/ActingConfirm/ActingConfirm.vue'),
+          meta: { title: '代垫确认报表', icon: 'approve' }
         },
       ]
     }

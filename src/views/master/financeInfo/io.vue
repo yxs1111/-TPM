@@ -91,7 +91,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="区域" prop="regionCode">
-            <el-select v-model="ruleForm.regionCode" class="my-el-input" clearable filterable placeholder="请选择">
+            <el-select v-model="ruleForm.regionCode" class="my-el-input" clearable filterable placeholder="请选择" @change="changeRegion">
               <el-option v-for="(item) in RegionList" :key="item.code" :label="item.name" :value="item.code" />
             </el-select>
           </el-form-item>
@@ -134,7 +134,7 @@ import {
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'WBS',
+  name: 'IoMaintenance',
 
   data() {
     return {
@@ -197,14 +197,6 @@ export default {
   },
   computed: {},
   watch: {
-    'ruleForm.regionCode'() {
-      let obj = this.RegionList.find(
-        (item) => item.code == this.ruleForm.regionCode
-      )
-      this.ruleForm.largeAreaName = ''
-      this.getLargeAreaListDialog()
-      if (obj) this.ruleForm.regionName = obj.name
-    },
     'filterObj.regionCode'(value) {
       if (value == '') {
         this.filterObj.regionName = ''
@@ -219,6 +211,15 @@ export default {
     },
   },
   methods: {
+    changeRegion(value) {
+      console.log(value);
+      let obj = this.RegionList.find(
+        (item) => item.code == this.ruleForm.regionCode
+      )
+      this.ruleForm.largeAreaName = ''
+      this.getLargeAreaListDialog()
+      if (obj) this.ruleForm.regionName = obj.name
+    },
     //获取表格数据
     getTableData() {
       this.tableData = []
@@ -247,26 +248,34 @@ export default {
       })
     },
     getLargeAreaList() {
-      selectAPI
+      let obj=this.RegionList.filter(item=> item.code==this.filterObj.regionCode)
+      if (obj.length) {
+        selectAPI
         .getLargeAreaList({
-          parentCode: this.filterObj.regionCode,
+          parentCode: obj[0].parentCode?obj[0].parentCode:'',
         })
         .then((res) => {
           if (res.code === 1000) {
             this.largeAreaList = res.data
           }
         })
+      }
+      
     },
     getLargeAreaListDialog() {
-      selectAPI
+      let obj=this.RegionList.filter(item=> item.code==this.ruleForm.regionCode)
+      if (obj.length) {
+        selectAPI
         .getLargeAreaList({
-          parentCode: this.ruleForm.regionCode,
+          parentCode: obj[0].parentCode?obj[0].parentCode:'',
         })
         .then((res) => {
           if (res.code === 1000) {
             this.largeAreaDialogList = res.data
           }
         })
+      }
+      
     },
     add() {
       this.getLargeAreaListDialog()
