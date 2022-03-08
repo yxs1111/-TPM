@@ -4,13 +4,23 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli" style="margin-left: 23px;">
-          <span class="SelectliTitle">年月:</span>
+          <span class="SelectliTitle">CPID:</span>
+          <el-input v-model="filterObj.cpId" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli" style="margin-left: 23px;">
+          <span class="SelectliTitle">活动月:</span>
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
           </el-date-picker>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">Mine package:</span>
+          <el-select v-model="filterObj.MinePackage" placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.id" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelName" filterable placeholder="请选择">
+          <el-select v-model="filterObj.channelName" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
@@ -32,10 +42,11 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+        
         <div class="Selectli">
-          <span class="SelectliTitle">活动SKU:</span>
-          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          <span class="SelectliTitle">品牌：</span>
+          <el-select v-model="filterObj.brandName" clearable  filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -134,9 +145,9 @@ import {
   FormateThousandNum,
   getHeight,
   getCurrentMonth,
-  messageObj
+  messageObj,
 } from '@/utils'
-import API from '@/api/V3/v3.js'
+import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
@@ -151,6 +162,7 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
+        cpId: '',
         channelName: '',
         customerName: '',
         customerIndex: '',
@@ -159,10 +171,12 @@ export default {
         regionName: '',
         brandName: '',
         productName: '',
+        minePackageName: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
       ChannelList: [],
+      MinePackageList: [],
       skuOptions: [],
       customerArr: [],
       distributorArr: [],
@@ -184,12 +198,15 @@ export default {
         this.maxheight = getHeight()
       })()
     }
+    
     this.getChannelList()
     this.getQuerySkuSelect()
     this.getDistributorList()
     this.getCustomerList()
     this.getRegionList()
     this.getBrandList()
+    this.getMinePackage()
+    this.getTableData()
   },
   watch: {
     'filterObj.channelName'() {
@@ -200,10 +217,10 @@ export default {
       this.getCustomerList()
     },
     'filterObj.customerName'() {
-      const customerObj= this.customerArr.find(item=>{
-        return item.customerCsName==this.filterObj.customerName
+      const customerObj = this.customerArr.find((item) => {
+        return item.customerCsName == this.filterObj.customerName
       })
-      this.filterObj.customerMdmCode=customerObj.customerMdmCode
+      this.filterObj.customerMdmCode = customerObj.customerMdmCode
       this.filterObj.distributorName = ''
       this.getDistributorList()
     },
@@ -216,16 +233,7 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (!this.filterObj.channelName||!this.filterObj.yearAndMonth) {
-        if (!this.filterObj.yearAndMonth) {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (!this.filterObj.channelName) {
-          this.$message.info(messageObj.requireChannel)
-        } 
-      } else {
-        API.getPageV3({
+      API.getMonthlyAnalysis({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           channelName:
@@ -240,32 +248,35 @@ export default {
             this.filterObj.distributorName === ''
               ? null
               : this.filterObj.distributorName,
-          productName:
-            this.filterObj.productName === ''
+          brandName:
+            this.filterObj.brandName === '' ? null : this.filterObj.brandName,
+          minePackageName:
+            this.filterObj.minePackageName === ''
               ? null
-              : this.filterObj.productName,
+              : this.filterObj.minePackageName,
           yearAndMonth: this.filterObj.yearAndMonth,
           regionName:
             this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+        }).then((response) => {
+          // this.tableData = response.data
+          // this.pageNum = response.data.pageNum
+          // this.pageSize = response.data.pageSize
+          // this.total = response.data.total
         })
-          .then((response) => {
-            if (response.data.records.length > 0) {
-                this.tableData = response.data.records
-            } else {
-              this.tableData = []
-            }
-            this.pageNum = response.data.pageNum
-            this.pageSize = response.data.pageSize
-            this.total = response.data.total
-          })
-      }
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
-        this.filterObj.channelName = this.ChannelList[0].channelCode
-        this.getTableData()
       })
+    },
+    getMinePackage() {
+      selectAPI
+        .queryMinePackageSelect({
+          parentId: this.filterObj.CostType,
+        })
+        .then((res) => {
+          this.MinePackageList = res.data
+        })
     },
     // 经销商
     getDistributorList() {

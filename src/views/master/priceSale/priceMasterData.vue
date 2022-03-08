@@ -103,6 +103,10 @@
           <span>{{ uploadFileName }}</span>
         </div>
       </div>
+      <div class="fileInfo ImportContent tip">
+        <span class="tipStar">*</span>
+        注意事项：PTR/PTW/PTC只保留2位小数，四舍五入！
+      </div>
       <div v-if="warningShow" class="warningWrap">
         <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
       </div>
@@ -398,5 +402,12 @@ export default {
   width: 100%;
   height: 300px;
   overflow-y: scroll;
+}
+.tip {
+  color: #666;
+  font-size: 14px;
+}
+.tipStar{
+  color: #eb4f48;
 }
 </style>

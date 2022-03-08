@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-03-07 10:23:20
+ * @LastEditTime: 2022-03-08 17:12:59
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -46,6 +46,10 @@ export default {
   // 损益报表
   profitAndLossReport(params) {
     return requestApi.request_post(this.url + '/profitAndLossReport/get', params)
+  },
+  // 月结POS差异分析报表
+  getMonthlyAnalysis(params) {
+    return requestApi.request_post(this.url + '/monthlyAnalysis/get', params)
   }
 }
 
