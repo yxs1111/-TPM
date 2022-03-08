@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-03-04 14:00:59
+ * @LastEditTime: 2022-03-08 13:16:12
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -64,5 +64,9 @@ export default {
   // V0-V3获取活动月List
   getAllMonth(data) {
     return requestApi.request_get('/mdm/mdCycleConfig/getAllMonth', data)
+  },
+  // 客户组
+  getCustomerGroupList(data) {
+    return requestApi.request_get('/mdm/mdCustomer/getCustomerGroupList', data)
   },
 }

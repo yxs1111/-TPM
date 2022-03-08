@@ -19,8 +19,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户组名称</span>
-          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+          <el-select v-model="filterObj.groupName" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in CustomerGroupList" :key="index" :label="item.groupName" :value="item.groupName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -166,11 +166,13 @@ export default {
         customerCode: '',
         customerCsName: '',
         channelCode: '',
+        groupName: '',
         state: '',
       },
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      CustomerGroupList: [],
       ChannelList: [],
       checkArr: [], // 批量删除,存放选中
       maxheight: getHeight(),
@@ -183,6 +185,7 @@ export default {
         this.maxheight = getHeight()
       })()
     }
+    this.getCustomerGroupList()
     this.getTableData()
     this.getChannelList()
   },
@@ -191,6 +194,13 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
           this.ChannelList = res.data
+        }
+      })
+    },
+    getCustomerGroupList() {
+      selectAPI.getCustomerGroupList().then((res) => {
+        if (res.code == 1000) {
+          this.CustomerGroupList=res.data
         }
       })
     },
@@ -273,6 +283,7 @@ export default {
         customerCode: this.filterObj.customerCode,
         customerCsName: this.filterObj.customerCsName,
         channelCode: this.filterObj.channelCode,
+        groupName: this.filterObj.groupName,
         state: this.filterObj.state,
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
@@ -289,6 +300,7 @@ export default {
         customerCsName: '',
         channelCode: '',
         state: '',
+        groupName: '',
       }
       this.getTableData()
     },
