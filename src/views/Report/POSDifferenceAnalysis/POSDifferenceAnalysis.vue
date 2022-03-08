@@ -1,0 +1,446 @@
+<template>
+  <div class="app-container">
+    <!-- 查询条件 -->
+    <div class="SelectBarWrap">
+      <div class="SelectBar" @keyup.enter="search">
+        <div class="Selectli" style="margin-left: 23px;">
+          <span class="SelectliTitle">年月:</span>
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
+          </el-date-picker>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channelName" filterable placeholder="请选择">
+            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">客户:</span>
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商:</span>
+          <el-select v-model="filterObj.distributorName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">区域:</span>
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">活动SKU:</span>
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="@/assets/images/export.png" alt="" />
+          <span class="text">导出</span>
+        </div>
+      </div>
+    </div>
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+      <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
+      <el-table-column width="180" align="center" prop="minePackageName" label="Mine Package" />
+      <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="120" align="center" prop="channelName" label="渠道" />
+      <el-table-column width="200" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="120" align="center" prop="brandName" label="品牌" />
+      <el-table-column width="180" align="center" prop="productName" label="SKU" />
+      <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
+      <el-table-column width="220" align="center" prop="regionName" label="区域" />
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划销量（CTN）">
+        {{ FormateNum((row.planSales*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
+        {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
+        {{ FormateNum((row.planCost*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
+        {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
+        {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
+        {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
+        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量(TIN)">
+        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）">
+        {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
+        {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
+        {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
+        {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
+        <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
+      </el-table-column>
+      <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
+        <template slot-scope="scope">{{ (scope.row.salesDifference*1).toFixed(2) }}</template>
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="120" align="right" prop="costDifference" label="费用差值">
+        {{ FormateNum((row.costDifference*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column width="160" align="center" prop="judgmentType" label="系统判定">
+        <template slot-scope="{row}">
+          <div v-if="row.judgmentType!== null" class="statusWrap">
+            <img v-if="row.judgmentType === 'Pass'" src="../../../assets/images/success.png" alt="">
+            <img v-if="row.judgmentType.indexOf('Exception') > -1" src="../../../assets/images/warning.png" alt="">
+            {{ row.judgmentType }}
+          </div>
+          <div v-else>{{ row.judgmentType }}</div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="MDM最新渠道" />
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="MDM最新区域" />
+    </el-table>
+    <!-- 分页 -->
+    <div class="TpmPaginationWrap">
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    </div>
+  </div>
+</template>
+
+<script>
+import permission from '@/directive/permission'
+import elDragDialog from '@/directive/el-drag-dialog'
+import {
+  getDefaultPermissions,
+  FormateThousandNum,
+  getHeight,
+  getCurrentMonth,
+  messageObj
+} from '@/utils'
+import API from '@/api/V3/v3.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
+export default {
+  name: 'POSDifferenceAnalysis',
+  directives: { elDragDialog, permission },
+
+  data() {
+    return {
+      total: 1,
+      pageSize: 10,
+      pageNum: 1,
+      filterObj: {
+        yearAndMonth: '',
+        channelName: '',
+        customerName: '',
+        customerIndex: '',
+        customerMdmCode: '',
+        distributorName: '',
+        regionName: '',
+        brandName: '',
+        productName: '',
+      },
+      permissions: getDefaultPermissions(),
+      tableData: [],
+      ChannelList: [],
+      skuOptions: [],
+      customerArr: [],
+      distributorArr: [],
+      RegionList: [],
+      BrandList: [],
+      checkArr: [], //批量删除,存放选中
+      maxheight: getHeight(),
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
+    }
+  },
+  computed: {},
+  mounted() {
+    const yearAndMonth = getCurrentMonth()
+    this.filterObj.yearAndMonth = yearAndMonth[0]
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeight()
+      })()
+    }
+    this.getChannelList()
+    this.getQuerySkuSelect()
+    this.getDistributorList()
+    this.getCustomerList()
+    this.getRegionList()
+    this.getBrandList()
+  },
+  watch: {
+    'filterObj.channelName'() {
+      this.filterObj.customerName = ''
+      this.filterObj.customerIndex = ''
+      this.filterObj.distributorName = ''
+      this.filterObj.regionName = ''
+      this.getCustomerList()
+    },
+    'filterObj.customerName'() {
+      const customerObj= this.customerArr.find(item=>{
+        return item.customerCsName==this.filterObj.customerName
+      })
+      this.filterObj.customerMdmCode=customerObj.customerMdmCode
+      this.filterObj.distributorName = ''
+      this.getDistributorList()
+    },
+    'filterObj.distributorName'() {
+      this.filterObj.regionName = ''
+      this.getRegionList()
+    },
+  },
+  methods: {
+    // 获取表格数据
+    getTableData() {
+      this.tableData = []
+      if (!this.filterObj.channelName||!this.filterObj.yearAndMonth) {
+        if (!this.filterObj.yearAndMonth) {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (!this.filterObj.channelName) {
+          this.$message.info(messageObj.requireChannel)
+        } 
+      } else {
+        API.getPageV3({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          channelName:
+            this.filterObj.channelName === ''
+              ? null
+              : this.filterObj.channelName,
+          customerName:
+            this.filterObj.customerName === ''
+              ? null
+              : this.filterObj.customerName,
+          distributorName:
+            this.filterObj.distributorName === ''
+              ? null
+              : this.filterObj.distributorName,
+          productName:
+            this.filterObj.productName === ''
+              ? null
+              : this.filterObj.productName,
+          yearAndMonth: this.filterObj.yearAndMonth,
+          regionName:
+            this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+        })
+          .then((response) => {
+            if (response.data.records.length > 0) {
+                this.tableData = response.data.records
+            } else {
+              this.tableData = []
+            }
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+      }
+    },
+    getChannelList() {
+      selectAPI.queryChannelSelect().then((res) => {
+        this.ChannelList = res.data
+        this.filterObj.channelName = this.ChannelList[0].channelCode
+        this.getTableData()
+      })
+    },
+    // 经销商
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
+    },
+    // 客户
+    getCustomerList() {
+      selectAPI
+        .queryCustomerList({
+          channelCode: this.filterObj.channelName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
+    },
+    getQuerySkuSelect() {
+      selectAPI
+        .querySkuSelect()
+        .then((res) => {
+          this.skuOptions = res.data
+        })
+        .catch()
+    },
+    getRegionList() {
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorName,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
+    },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
+    },
+    search() {
+      this.pageNum = 1
+      this.getTableData()
+    },
+    //下载报表
+    exportData() {
+      API.exportSubstituteConfirmReport({
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelName: this.filterObj.channelName,
+        customerName: this.filterObj.customerName,
+        distributorName: this.filterObj.distributorName,
+        regionName: this.filterObj.regionName,
+        brandName: this.filterObj.brandName,
+        productName: this.filterObj.productName,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        this.downloadFile(res, '代垫确认报表-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
+    //下载文件
+    downloadFile(res, fileName) {
+      let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+      if (!fileName) {
+        fileName = res.headers['content-disposition'].split('filename=').pop()
+      }
+      if ('msSaveOrOpenBlob' in navigator) {
+        window.navigator.msSaveOrOpenBlob(blob, fileName)
+      } else {
+        const elink = document.createElement('a')
+        elink.download = fileName
+        elink.style.display = 'none'
+        elink.href = URL.createObjectURL(blob)
+        document.body.appendChild(elink)
+        elink.click()
+        URL.revokeObjectURL(elink.href)
+        document.body.removeChild(elink)
+      }
+    },
+    handleSelectionChange(val) {
+      this.checkArr = val
+    },
+    // 每页显示页面数变更
+    handleSizeChange(size) {
+      this.pageSize = size
+      this.getTableData()
+    },
+    // 当前页变更
+    handleCurrentChange(num) {
+      this.pageNum = num
+      this.getTableData()
+    },
+    // 格式化--千位分隔符、两位小数
+    FormateNum(num) {
+      return FormateThousandNum(num)
+    },
+    // 行样式
+    tableRowClassName({ row, rowIndex }) {
+      if ((rowIndex + 1) % 2 === 0) {
+        return 'even-row'
+      } else {
+        return 'odd-row'
+      }
+    },
+    HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.app-container {
+  .checkBoxWrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    .checkBox {
+      display: flex;
+      align-items: center;
+    }
+    .checkBoxTitle {
+      font-family: MicrosoftYaHei;
+      font-size: 14px;
+      color: #4d4d4d;
+      margin-right: 20px;
+    }
+    .my-search {
+      margin-left: 30px;
+    }
+  }
+  .tableContentWrap {
+    border-radius: 10px 10px 0px 0px;
+    overflow: hidden;
+  }
+  .TopBar {
+    display: flex;
+    align-items: center;
+    .viewTitle {
+      font-size: 14px;
+      font-family: Microsoft YaHei;
+      font-weight: bold;
+      color: #4192d3;
+      margin-left: 14px;
+    }
+  }
+  .filstColumn {
+    text-align: center;
+  }
+  .NumWrap {
+    text-align: right;
+  }
+}
+.message {
+  color: #eb4f48;
+  text-align: center;
+  margin: 10px 0;
+  white-space: normal;
+}
+.warningWrap {
+  width: 100%;
+  height: 100px;
+  overflow-y: scroll;
+}
+</style>

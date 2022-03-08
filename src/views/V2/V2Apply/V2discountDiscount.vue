@@ -329,7 +329,7 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == ''||this.filterObj.yearAndMonth) {
+      if (this.filterObj.channelCode == ''||this.filterObj.yearAndMonth=="") {
        if (this.filterObj.yearAndMonth == '') {
           this.$message.info(messageObj.requireMonth)
           return

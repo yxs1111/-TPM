@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-03-07 10:24:59
+ * @LastEditTime: 2022-03-08 09:31:25
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -84,6 +84,13 @@ export default function() {
           component: () => import('@/views/Report/ActingConfirm/ActingConfirm.vue'),
           meta: { title: '代垫确认报表', icon: 'approve' }
         },
+        // {
+        //   path: '/POSDifferenceAnalysis',
+        //   code: 'resource-report-notice',
+        //   name: 'POSDifferenceAnalysis',
+        //   component: () => import('@/views/Report/POSDifferenceAnalysis/POSDifferenceAnalysis.vue'),
+        //   meta: { title: '月结POS差异分析报表', icon: 'approve' }
+        // },
       ]
     }
   ]
