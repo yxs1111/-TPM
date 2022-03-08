@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-03-04 16:48:10
+ * @LastEditTime: 2022-03-08 11:50:01
 -->
 <template>
   <div class="app-container">
@@ -282,7 +282,7 @@ export default {
       this.$refs[formName].resetFields()
       this.closeDialog()
     },
-    //多个删除
+    //关账
     closeTheAccount() {
       if (this.checkArr.length != 1)
         return this.$message.error('请选择一条数据')
@@ -300,7 +300,11 @@ export default {
             API.closeTheAccount({ id: Id }).then((response) => {
               if (response.code === 1000) {
                 this.getTableData()
-                this.$message.success('关账成功!')
+                if(response.data.status==="success") {
+                  this.$message.success(response.data.msg)
+                } else if(response.data.status==="fail") {
+                  this.$message.info(response.data.msg)
+                }
               }
             })
           })
