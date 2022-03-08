@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-03-08 11:50:01
+ * @LastEditTime: 2022-03-08 13:30:57
 -->
 <template>
   <div class="app-container">
@@ -234,7 +234,7 @@ export default {
       return list
     },
     FormDataRangeTransfer(dateList) {
-      return dateList[0] + ' - ' + dateList[1]
+      return dateList[0].trim() + ' - ' + dateList[1].trim()
     },
     closeDialog() {
       this.addVisible = false
