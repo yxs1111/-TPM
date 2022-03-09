@@ -4,7 +4,7 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">费用类型名称</span>
+          <span class="SelectliTitle">费用类型</span>
           <el-input v-model="filterObj.costType" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
@@ -23,17 +23,17 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
+    <!-- <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
-    </div>
+    </div> -->
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <!-- <el-table-column type="selection" align="center" /> -->
       <el-table-column align="center" prop="costTypeNumber" label="费用类型编码"> </el-table-column>
       <el-table-column align="center" prop="costType" label="费用类型"> </el-table-column>
-      <el-table-column align="center" prop="minePackageNumber" label="minePackage编码"> </el-table-column>
-      <el-table-column align="center" prop="minePackage" label="minePackage"> </el-table-column>
+      <el-table-column align="center" prop="minePackageNumber" label="MinePackage编码"> </el-table-column>
+      <el-table-column align="center" prop="minePackage" label="MinePackage"> </el-table-column>
       <el-table-column align="center" prop="costItemTypeNumber" label="费用科目编码"> </el-table-column>
-      <el-table-column align="center" prop="costItem" label="费用科目名称"> </el-table-column>
+      <el-table-column align="center" prop="costItem" label="费用科目"> </el-table-column>
 
     </el-table>
     <!-- 分页 -->
