@@ -4,13 +4,13 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-          <span class="SelectliTitle">异常类别：</span>
+          <span class="SelectliTitle">异常类别:</span>
           <el-select v-model="filterObj.exception" placeholder="请选择">
             <el-option v-for="(item, index) in ['数量','费用']" :key="index+1" :label="item" :value="index+1" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">活动月：</span>
+          <span class="SelectliTitle">活动月:</span>
           <!-- <SelectMonth v-on:multipleMonth="getMultipleMonth" :defaultMonth='filterObj.month' :Disabled="false" /> -->
           <el-date-picker v-model="filterObj.month" type="monthrange" format='yyyy-MM' value-format='yyyyMM' range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
           </el-date-picker>
@@ -28,7 +28,7 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">品牌：</span>
+          <span class="SelectliTitle">品牌:</span>
           <MutiSelect v-model="filterObj.brandCode" :list="BrandList" :props="{value:'brandName',label:'brandName',key:'brandName'}"/>
           <!-- <el-select v-model="filterObj.brandCode" clearable multiple collapse-tags filterable placeholder="请选择">
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />

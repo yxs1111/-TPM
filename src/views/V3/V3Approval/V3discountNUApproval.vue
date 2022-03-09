@@ -4,7 +4,7 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-            <span class="SelectliTitle">活动月</span>
+            <span class="SelectliTitle">活动月:</span>
             <el-select v-model="localDate" filterable clearable placeholder="请选择">
               <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
             </el-select>
@@ -16,7 +16,7 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户</span>
+          <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>

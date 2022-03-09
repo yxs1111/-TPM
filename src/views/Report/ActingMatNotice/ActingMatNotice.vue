@@ -3,8 +3,8 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
-        <div class="Selectli" style="margin-left: 23px;">
-          <span class="SelectliTitle">年月:</span>
+        <div class="Selectli">
+          <span class="SelectliTitle">活动月:</span>
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
           </el-date-picker>
         </div>

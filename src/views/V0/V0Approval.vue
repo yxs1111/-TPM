@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-03-04 14:47:07
+ * @LastEditTime: 2022-03-09 09:08:46
 -->
 <template>
   <div class="app-container">
@@ -9,19 +9,19 @@
       <div class="SelectBarWrap">
         <div class="SelectBar">
           <div class="Selectli">
-            <span class="SelectliTitle">活动月</span>
+            <span class="SelectliTitle">活动月:</span>
             <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
               <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
             </el-select>
           </div>
           <div class="Selectli">
-            <span class="SelectliTitle">渠道</span>
+            <span class="SelectliTitle">渠道:</span>
             <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
             </el-select>
           </div>
           <div class="Selectli">
-            <span class="SelectliTitle">SKU</span>
+            <span class="SelectliTitle">SKU:</span>
             <el-select v-model="filterObj.SKU" filterable clearable placeholder="请选择">
               <el-option v-for="item in skuOptons" :key="item.productEsName" :label="item.productEsName" :value="item.productEsName" />
             </el-select>
