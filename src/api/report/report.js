@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-03-08 17:12:59
+ * @LastEditTime: 2022-03-09 15:14:24
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -50,6 +50,10 @@ export default {
   // 月结POS差异分析报表
   getMonthlyAnalysis(params) {
     return requestApi.request_post(this.url + '/monthlyAnalysis/get', params)
+  },
+  // 月结POS差异分析报表
+  getMonthlyAnalysisExport(params) {
+    return requestApi.request_post(this.url + '/monthlyAnalysis/export', params)
   }
 }
 
