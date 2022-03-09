@@ -37,7 +37,7 @@
     </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="updateSave" v-permission="permissions['update']">保存</el-button>
-      <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear" v-permission="permissions['insert']">新增</el-button>
+      <!-- <el-button type="primary" icon="el-icon-my-saveBtn" class="TpmButtonBG" @click="addYear" v-permission="permissions['insert']">新增</el-button> -->
     </div>
     <el-table v-loading="tableLoading" :data="tableData" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%" :max-height="maxheight">
       <el-table-column width="180" align="center" prop="version" label="版本" />
