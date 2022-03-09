@@ -101,9 +101,9 @@
               <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.code" />
             </el-select>
           </el-form-item>
-           <el-form-item label="状态">
-              <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
-              <el-radio v-model="ruleForm.state" label="1">正常</el-radio>
+          <el-form-item label="状态">
+            <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
+            <el-radio v-model="ruleForm.state" label="1">正常</el-radio>
           </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
@@ -201,6 +201,7 @@ export default {
         this.filterObj.regionName = ''
         this.filterObj.largeAreaCode = ''
       }
+      this.largeAreaList = []
       this.filterObj.largeAreaCode = ''
       this.getLargeAreaList()
       let obj = this.RegionList.find(
@@ -211,10 +212,11 @@ export default {
   },
   methods: {
     changeRegion(value) {
-      console.log(value);
+      console.log(value)
       let obj = this.RegionList.find(
         (item) => item.code == this.ruleForm.regionCode
       )
+      this.largeAreaDialogList = []
       this.ruleForm.largeAreaName = ''
       this.ruleForm.largeAreaCode = ''
       this.getLargeAreaListDialog()
@@ -222,7 +224,6 @@ export default {
       if (obj) this.ruleForm.regionName = obj.name
     },
     changeLargeArea(value) {
-
       let obj = this.largeAreaDialogList.find(
         (item) => item.code == this.ruleForm.largeAreaCode
       )
@@ -256,34 +257,56 @@ export default {
       })
     },
     getLargeAreaList() {
-      let obj=this.RegionList.filter(item=> item.code==this.filterObj.regionCode)
+      let obj = this.RegionList.filter(
+        (item) => item.code == this.filterObj.regionCode
+      )
       if (obj.length) {
         selectAPI
-        .getLargeAreaList({
-          parentCode: obj[0].parentCode?obj[0].parentCode:'',
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.largeAreaList = res.data
-          }
-        })
+          .getLargeAreaList({
+            parentCode: obj[0].parentCode ? obj[0].parentCode : '',
+          })
+          .then((res) => {
+            if (res.code === 1000) {
+              this.largeAreaList = res.data
+            }
+          })
+      } else {
+        selectAPI
+          .getLargeAreaList({
+            parentCode: '',
+          })
+          .then((res) => {
+            if (res.code === 1000) {
+              this.largeAreaList = res.data
+            }
+          })
       }
-      
     },
     getLargeAreaListDialog() {
-      let obj=this.RegionList.filter(item=> item.code==this.ruleForm.regionCode)
+      let obj = this.RegionList.filter(
+        (item) => item.code == this.ruleForm.regionCode
+      )
       if (obj.length) {
         selectAPI
-        .getLargeAreaList({
-          parentCode: obj[0].parentCode?obj[0].parentCode:'',
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.largeAreaDialogList = res.data
-          }
-        })
+          .getLargeAreaList({
+            parentCode: obj[0].parentCode ? obj[0].parentCode : '',
+          })
+          .then((res) => {
+            if (res.code === 1000) {
+              this.largeAreaDialogList = res.data
+            }
+          })
+      } else {
+        selectAPI
+          .getLargeAreaList({
+            parentCode: '',
+          })
+          .then((res) => {
+            if (res.code === 1000) {
+              this.largeAreaDialogList = res.data
+            }
+          })
       }
-      
     },
     add() {
       this.getLargeAreaListDialog()
