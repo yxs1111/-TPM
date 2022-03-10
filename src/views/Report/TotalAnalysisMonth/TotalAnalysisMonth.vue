@@ -139,6 +139,7 @@ export default {
       tableData: [],
       channelOptions: [],
       customerArr: [],
+      AllCustomerList: [],
       skuList: [],
       checkList: [], // 已选中的列
       tableColumnList: [], // 动态列
@@ -175,7 +176,9 @@ export default {
       this.tableKey++
     },
 
-    'filterObj.productName'(Value, oldValue) {},
+    'filterObj.customerCode'(Value, oldValue) {
+      
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -249,7 +252,8 @@ export default {
         // 按年月重新分组
         for (const productItem in AllData) {
           if (Object.hasOwnProperty.call(AllData, productItem)) {
-            const list = AllData[productItem]
+            //对客户进行排序
+            const list = this.sortByCustomer(AllData[productItem])
             const yearData = {}
             for (let m = 0; m < list.length; m++) {
               if (!yearData[list[m].year]) {
@@ -273,6 +277,17 @@ export default {
         // })
         this.tableData = AllDataList
       })
+    },
+    sortByCustomer(array) {
+      var newList = []
+      var order = this.AllCustomerList
+      newList = array.sort(function compareFunction(item1, item2) {
+        return (
+          order.indexOf(item1.customerName1) -
+          order.indexOf(item2.customerName1)
+        )
+      })
+      return newList
     },
     // 获取渠道
     getQueryChannelSelect() {
@@ -300,6 +315,7 @@ export default {
               list.push(item.customerCsName)
             })
             this.filterObj.customerCode = list
+            this.AllCustomerList = list
             this.getSkuSelect()
           }
         })
@@ -418,7 +434,7 @@ export default {
             ColumWidthList.push({
               wpx: 150,
             })
-          }else {
+          } else {
             ColumWidthList.push({
               wpx: 100,
             })
