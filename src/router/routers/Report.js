@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-03-09 17:18:41
+ * @LastEditTime: 2022-03-09 17:37:37
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -79,7 +79,7 @@ export default function() {
         },
         {
           path: '/ActingConfirm',
-          code: 'resource-report-notice',
+          code: 'resource-report-confirm',
           name: 'ActingConfirm',
           component: () => import('@/views/Report/ActingConfirm/ActingConfirm.vue'),
           meta: { title: '代垫确认报表', icon: 'approve' }
