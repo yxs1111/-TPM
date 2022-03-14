@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-02-28 15:31:56
+ * @LastEditTime: 2022-03-14 10:14:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -500,6 +500,21 @@ export default {
       responseType: 'blob'
     })
   },
-
-
+  //监控管理
+  getMdDataInterface(params) {
+    return requestApi.request_get('/mdm/mdDataInterface/page', params)
+  },
+  //接口名称下拉筛选
+  getInterfaceList(params) {
+    return requestApi.request_get('/mdm/mdDataInterface/getInterfaceList', params)
+  },
+  //导出监控管理
+  exportMdDataInterface(data) {
+    return request({
+      url: '/mdm/mdDataInterface/exportMdData',
+      method: 'post',
+      data: data,
+      responseType: 'blob'
+    })
+  },
 }

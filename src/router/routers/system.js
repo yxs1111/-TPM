@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-03-07 09:22:44
+ * @LastEditTime: 2022-03-14 10:18:22
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -60,6 +60,32 @@ export default function() {
           component: () => import('@/views/system/CycleManagement.vue'),
           meta: { title: '周期管理', icon: 'form' }
         },
+        {
+          path: 'MonitoringManagement',
+          code: 'MonitoringManagement',
+          name: 'MonitoringManagement',
+          component: () => import('@/views/system/MonitoringManagement.vue'),
+          meta: { title: '监控管理', icon: 'form' }
+        },
+        // {
+        //   path: 'CycleManagement',
+        //   name: 'itemInfo',
+        //   alwaysShow: true,
+        //   code: 'authPage_cycle',
+        //   component: () => import('@/views/system/CycleManagement.vue'),
+        //   meta: { title: '周期管理', icon: 'form' },
+        //   redirect: 'CycleManagement/saleComputeKeep',
+        //   children: [
+        //     {
+        //       path: 'CycleManagement',
+        //       code: 'authPage_cycle',
+        //       name: 'CycleManagement',
+        //       component: () => import('@/views/system/CycleManagement.vue'),
+        //       meta: { title: '周期管理', icon: 'form' }
+        //     },
+            
+        //   ]
+        // },
         {
           path: 'InterfaceManage',
           code: 'authPage_interface',
