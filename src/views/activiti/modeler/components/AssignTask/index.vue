@@ -9,7 +9,7 @@
               <el-input v-model="assignInfo.userId" type="text" @input="$forceUpdate()" />
             </el-form-item> -->
             <el-form-item label="选择人员">
-              <el-select v-model="assignInfo.userId" filterable placeholder="请选择">
+              <el-select v-model="assignInfo.userId" clearable filterable placeholder="请选择">
                 <el-option
                   v-for="item in userOptions"
                   :key="item.loginName"
@@ -22,7 +22,7 @@
           <!--   指定角色     -->
           <el-tab-pane label="指定角色" name="role">
             <el-form-item label="选择角色">
-              <el-select v-model="assignInfo.roleId" filterable clearable>
+              <el-select v-model="assignInfo.roleId" clearable filterable clearable>
                 <el-option
                   v-for="role in roleOptions"
                   :key="role.code"
@@ -33,7 +33,7 @@
             </el-form-item>
           </el-tab-pane>
           <!--   指定部门     -->
-          <el-tab-pane label="指定部门" name="dept">
+          <!-- <el-tab-pane label="指定部门" name="dept">
             <el-form-item label="审批部门" prop="departments">
               <el-cascader
                 v-model="assignInfo.deptId"
@@ -42,7 +42,7 @@
                 :props="{ value: 'id', label: 'name'}"
               />
             </el-form-item>
-          </el-tab-pane>
+          </el-tab-pane> -->
         </el-tabs>
         <el-form-item>
           <el-button type="primary" @click="handleAssignTask">保存</el-button>
