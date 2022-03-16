@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-03-16 14:22:21
+ * @LastEditTime: 2022-03-16 14:27:22
 -->
 <template>
   <div class="app-container">
@@ -291,7 +291,6 @@ export default {
         if (valid) {
           if (this.isConfirm) {
             console.log('isConfirm');
-            return
             API.confirmCycleConfig({
               activityMonth: this.ruleForm.activityMonth,
               startAndEndVZero: this.FormDataRangeTransfer(
@@ -339,6 +338,8 @@ export default {
                 })
                 if (errorList.length == 0) {
                   this.isConfirm = 1
+                } else {
+                  this.isConfirm = 0
                 }
                 console.log(errorList)
                 this.statusList = list
