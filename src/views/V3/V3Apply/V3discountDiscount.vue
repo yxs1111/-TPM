@@ -64,6 +64,10 @@
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
+      <div class="tip" v-if="btnStatus">
+          <span class="tipStar">*</span>
+          注意事项：若未获取到实际销量，不能办理
+      </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
@@ -1137,6 +1141,14 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.tip {
+  color: #eb4f48;
+  font-size: 14px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #eb4f48;
+}
 .Tip {
   text-align: center;
   font-size: 14px;

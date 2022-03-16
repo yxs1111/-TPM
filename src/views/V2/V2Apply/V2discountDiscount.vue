@@ -4,10 +4,10 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-            <span class="SelectliTitle">活动月:</span>
-            <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
-              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
-            </el-select>
+          <span class="SelectliTitle">活动月:</span>
+          <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+          </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
@@ -44,9 +44,10 @@
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
+        
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
@@ -54,6 +55,10 @@
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
+      </div>
+      <div class="tip" v-if="!isSubmit&&isSelf&&isGainLe">
+          <span class="tipStar">*</span>
+          注意事项：若未获取到LE销量，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -301,7 +306,6 @@ export default {
           this.customerArr[this.filterObj.customerIndex].customerCsName
         this.filterObj.customerMdmCode =
           this.customerArr[this.filterObj.customerIndex].customerMdmCode
-        
       }
       this.filterObj.distributorCode = ''
       this.getDistributorList()
@@ -329,14 +333,17 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == ''||this.filterObj.yearAndMonth=="") {
-       if (this.filterObj.yearAndMonth == '') {
+      if (
+        this.filterObj.channelCode == '' ||
+        this.filterObj.yearAndMonth == ''
+      ) {
+        if (this.filterObj.yearAndMonth == '') {
           this.$message.info(messageObj.requireMonth)
           return
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getPage({
           pageNum: this.pageNum, // 当前页
@@ -379,7 +386,7 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V2' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1 
+              res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
               this.isSelf = true
@@ -400,7 +407,7 @@ export default {
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
-        this.monthList=res.data
+        this.monthList = res.data
       })
     },
     // 经销商
@@ -557,7 +564,10 @@ export default {
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
         }).then((res) => {
-          this.downloadFile(res, `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2_查询.xlsx`) //自定义Excel文件名
+          this.downloadFile(
+            res,
+            `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2_查询.xlsx`
+          ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -572,7 +582,10 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
-          this.downloadFile(res, `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2申请.xlsx`) //自定义Excel文件名
+          this.downloadFile(
+            res,
+            `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2申请.xlsx`
+          ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -706,6 +719,14 @@ export default {
   font-family: Source Han Sans CN;
   font-weight: 400;
   margin: 3px 0;
+}
+.tip {
+  color: #eb4f48;
+  font-size: 14px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #eb4f48;
 }
 </style>
 

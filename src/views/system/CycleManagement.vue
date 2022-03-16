@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-03-08 13:30:57
+ * @LastEditTime: 2022-03-16 14:22:21
 -->
 <template>
   <div class="app-container">
@@ -22,7 +22,7 @@
     </div>
     <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
-      <el-table-column type="selection" align="center" :selectable="checkSelectable"  />
+      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
@@ -35,10 +35,10 @@
       <el-table-column width="280" align="center" prop="startAndEndVOne" label="V1" />
       <el-table-column width="280" align="center" prop="startAndEndVTwo" label="V2" />
       <el-table-column width="280" align="center" prop="startAndEndVThree" label="V3" />
-      <el-table-column  width="150" align="center" prop="openingStatus" label="开启状态">
+      <el-table-column width="150" align="center" prop="openingStatus" label="开启状态">
         <template slot-scope="scope">
           <div>
-            <el-switch disabled v-model="scope.row.openingStatus" :active-value="1"   :inactive-value="2">
+            <el-switch disabled v-model="scope.row.openingStatus" :active-value="1" :inactive-value="2">
             </el-switch>
           </div>
         </template>
@@ -54,39 +54,72 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
-    <el-dialog width="30%" class="my-el-dialog" title="新增账期" :visible="addVisible" @close="closeDialog">
+    <el-dialog width="48%" title="新增账期" :visible="addVisible" @close="closeDialog" class="my-el-dialog">
       <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="50px" class="el-form-row">
-          <el-form-item label="活动月" prop="ioNumber">
+        <el-form class="el-form-row">
+          <div class="Selectli el_Dialog_dateRange" style="margin-bottom: 10px;width:50%">
+            <span class="SelectliTitle" style="margin-right: 2px;">活动月</span>
             <el-input v-model="ruleForm.activityMonth" disabled class="my-el-dateRange" placeholder="请输入">
             </el-input>
-          </el-form-item>
-          <el-form-item label="V0" prop="startAndEndVZero">
+          </div>
+          <div class="Selectli" style="visibility: hidden;width:50%">
+            <span class="SelectliTitle">活动月</span>
+            <el-input v-model="ruleForm.activityMonth" disabled class="my-el-dateRange" placeholder="请输入">
+            </el-input>
+          </div>
+        </el-form>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="el-form-row">
+          <el-form-item label="V0" prop="startAndEndVZero" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVZero" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="V1" prop="startAndEndVOne">
+          <el-form-item label="V1" prop="startAndEndVOne" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVOne" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="V2" prop="startAndEndVTwo">
+          <el-form-item label="V2" prop="startAndEndVTwo" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVTwo" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="V3" prop="startAndEndVThree">
+          <el-form-item label="V3" prop="startAndEndVThree" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVThree" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
         </el-form>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <span class="dialog-footer">
         <el-button type="primary" @click="confirmAdd('ruleForm')">确 定</el-button>
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
+      <el-divider></el-divider>
+      <el-form class="el-form-row" v-if="statusList.length">
+        <div class="statusLi" v-for="item,key in statusList" :key="key">
+          <img :src=errorImg alt="" class="statusImg" v-if="item.exceptionType==1">
+          <img :src="excepImg" alt="" class="statusImg" v-if="item.exceptionType==2">
+          <img :src="passImg" alt="" class="statusImg" v-if="item.exceptionType==0">
+          <div class="statusContent">
+            <div class="statusTop">
+              <div class="statusTopLeft">
+                <span :class="item.exceptionType==0?'statusTitle':item.exceptionType==1?'statusTitle_error':item.exceptionType==2?'statusTitle_warning':''">{{item.itemName}}</span>
+                <span class="ParticleSize">粒度：{{item.particle}}</span>
+              </div>
+              <div class="statusTopRight">
+                <span v-if="item.isOpen">收起</span>
+                <span v-if="!item.isOpen">展开</span>
+                <i class="el-icon-arrow-up" v-if="item.isOpen" @click="PackUp(key)"></i>
+                <i class="el-icon-arrow-down" v-if="!item.isOpen" @click="PackDown(key)"></i>
+              </div>
+            </div>
+            <div class="detailContent" v-show="item.isOpen">
+              <div class="detailContentItem" v-for="sitem,sindex in item.children" :key="sindex">{{sitem.itemDesc}}</div>
+            </div>
+          </div>
+        </div>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -108,6 +141,9 @@ export default {
 
   data() {
     return {
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
       total: 1,
       pageSize: 10,
       pageNum: 1,
@@ -169,10 +205,11 @@ export default {
       saveBtn: false,
       maxheight: getHeight(),
       checkArr: [],
+      isConfirm: 0,
+      statusList: [],
     }
   },
-  computed: {
-  },
+  computed: {},
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -228,8 +265,8 @@ export default {
     //日期范围格式化
     FormDateRange(date) {
       let list = date.split('-')
-      list.forEach(item=>{
-        item=item.trim()
+      list.forEach((item) => {
+        item = item.trim()
       })
       return list
     },
@@ -238,6 +275,8 @@ export default {
     },
     closeDialog() {
       this.addVisible = false
+      this.statusList = []
+      this.isConfirm=0
       this.ruleForm = {
         activityMonth: '',
         startAndEndVZero: '',
@@ -250,27 +289,62 @@ export default {
     confirmAdd(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          API.confirmCycleConfig({
-            activityMonth: this.ruleForm.activityMonth,
-            startAndEndVZero: this.FormDataRangeTransfer(
-              this.ruleForm.startAndEndVZero
-            ),
-            startAndEndVOne: this.FormDataRangeTransfer(
-              this.ruleForm.startAndEndVOne
-            ),
-            startAndEndVTwo: this.FormDataRangeTransfer(
-              this.ruleForm.startAndEndVTwo
-            ),
-            startAndEndVThree: this.FormDataRangeTransfer(
-              this.ruleForm.startAndEndVThree
-            ),
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.$message.success(`添加成功`)
-              this.resetForm(formName)
-              this.getTableData()
-            }
-          })
+          if (this.isConfirm) {
+            console.log('isConfirm');
+            return
+            API.confirmCycleConfig({
+              activityMonth: this.ruleForm.activityMonth,
+              startAndEndVZero: this.FormDataRangeTransfer(
+                this.ruleForm.startAndEndVZero
+              ),
+              startAndEndVOne: this.FormDataRangeTransfer(
+                this.ruleForm.startAndEndVOne
+              ),
+              startAndEndVTwo: this.FormDataRangeTransfer(
+                this.ruleForm.startAndEndVTwo
+              ),
+              startAndEndVThree: this.FormDataRangeTransfer(
+                this.ruleForm.startAndEndVThree
+              ),
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success(`添加成功`)
+                this.resetForm(formName)
+                this.getTableData()
+              }
+            })
+          } else {
+            API.checkComplete({
+              activityMonth: this.ruleForm.activityMonth,
+            }).then((response) => {
+              if (response.code === 1000) {
+                let obj = response.data
+                let list = []
+                for (const key in obj) {
+                  if (Object.hasOwnProperty.call(obj, key)) {
+                    const element = obj[key]
+                    let template = {
+                      exceptionType: element[0].exceptionType,
+                      itemName: element[0].itemName,
+                      particle: element[0].particle,
+                      isOpen: 0,
+                      children: [],
+                    }
+                    template.children = element
+                    list.push(template)
+                  }
+                }
+                let errorList = list.filter((item) => {
+                  return item.exceptionType == 1
+                })
+                if (errorList.length == 0) {
+                  this.isConfirm = 1
+                }
+                console.log(errorList)
+                this.statusList = list
+              }
+            })
+          }
         } else {
           this.$message.error('提交失败')
           return false
@@ -300,9 +374,9 @@ export default {
             API.closeTheAccount({ id: Id }).then((response) => {
               if (response.code === 1000) {
                 this.getTableData()
-                if(response.data.status==="success") {
+                if (response.data.status === 'success') {
                   this.$message.success(response.data.msg)
-                } else if(response.data.status==="fail") {
+                } else if (response.data.status === 'fail') {
                   this.$message.info(response.data.msg)
                 }
               }
@@ -317,7 +391,23 @@ export default {
       }
     },
     checkSelectable(row) {
-      return row.openingStatus===1
+      return row.openingStatus === 1
+    },
+    PackUp(index) {
+      this.statusList.forEach((item) => {
+        item.isOpen = 0
+      })
+      this.statusList[index].isOpen = 0
+      this.$forceUpdate()
+      console.log(this.statusList[index].isOpen)
+    },
+    PackDown(index) {
+      this.statusList.forEach((item) => {
+        item.isOpen = 0
+      })
+      this.statusList[index].isOpen = 1
+      this.$forceUpdate()
+      console.log(this.statusList[index].isOpen)
     },
     handleSelectionChange(val) {
       this.checkArr = val
@@ -364,5 +454,73 @@ export default {
   width: 242px !important;
   border-radius: 5px;
   margin-right: 20px;
+}
+.el_Dialog_dateRange {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.statusLi {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  .statusImg {
+    width: 25px;
+    height: 25px;
+    margin-right: 20px;
+  }
+  .statusContent {
+    width: calc(100% - 50px);
+    .statusTop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .statusTitle {
+        font-size: 16px;
+        font-weight: 600;
+        color: #74bb8b;
+        //error e2887c
+        //warning f4bb40
+        //pass  74bb8b
+      }
+      .statusTitle_error {
+        font-size: 16px;
+        font-weight: 600;
+        color: #e2887c;
+        //error e2887c
+        //warning f4bb40
+        //pass  74bb8b
+      }
+      .statusTitle_warning {
+        font-size: 16px;
+        font-weight: 600;
+        color: #f4bb40;
+        //error e2887c
+        //warning f4bb40
+        //pass  74bb8b
+      }
+      .ParticleSize {
+        font-size: 14px;
+        color: #666;
+        margin-left: 20px;
+      }
+    }
+    .detailContent {
+      width: 100%;
+      max-height: 400px;
+      overflow-y: auto;
+      background-color: #f5f8fa;
+      .detailContentItem {
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        color: #b8b9bb;
+        padding: 0 15px;
+        box-sizing: border-box;
+      }
+    }
+  }
 }
 </style>

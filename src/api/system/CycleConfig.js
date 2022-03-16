@@ -1,7 +1,7 @@
 /*
  * @Description: 周期管理
  * @Date: 2022-03-01 16:46:15
- * @LastEditTime: 2022-03-08 11:48:22
+ * @LastEditTime: 2022-03-16 10:53:14
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -27,6 +27,10 @@ export default {
   //关账
   closeTheAccount(params) {
     return requestApi.request_get('/cityplan/mdCycleConfig/closeTheAccount', params)
+  },
+  //周期管理检验
+  checkComplete(params) {
+    return requestApi.request_post('/cityplan/mdCycleConfig/checkComplete', params)
   },
   
 }
