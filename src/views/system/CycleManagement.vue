@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-03-16 14:27:22
+ * @LastEditTime: 2022-03-16 15:57:53
 -->
 <template>
   <div class="app-container">
@@ -92,7 +92,8 @@
         </el-form>
       </div>
       <span class="dialog-footer">
-        <el-button type="primary" @click="confirmAdd('ruleForm')">确 定</el-button>
+        <el-button type="primary" @click="confirmAdd('ruleForm')" v-if="!isConfirm">检 测</el-button>
+        <el-button type="primary" @click="confirmAdd('ruleForm')" v-if="isConfirm">确 定</el-button>
         <el-button @click="resetForm('ruleForm')">取 消</el-button>
       </span>
       <el-divider></el-divider>

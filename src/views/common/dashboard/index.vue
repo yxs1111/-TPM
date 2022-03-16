@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-03-16 09:19:30
+ * @LastEditTime: 2022-03-16 16:06:53
 -->
 <template>
   <div class="dashboard-container">
@@ -193,7 +193,7 @@
                     <div class="TimeLineTitleli">{{item.createTime?item.createTime.substring(0,10):""}}</div>
                     <div class="TimeLineTitleli">{{item.version}}</div>
                     <div class="TimeLineTitleli">{{item.activityName}}</div>
-                    <div class="TimeLineTitleli">{{getAssigneeName(item.assignee)}}</div>
+                    <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>
                     <div class="TimeLineTitleli">
                       <div class="TimeLineOpertion" @click="goAssignee(item.version,item.activityName,item.channelCode)">办理</div>
                     </div>
@@ -217,7 +217,7 @@
                     <div class="TimeLineTitleli">{{item.createTime?item.createTime.substring(0,10):""}}</div>
                     <div class="TimeLineTitleli">{{item.version}}</div>
                     <div class="TimeLineTitleli">{{item.activityName}}</div>
-                    <div class="TimeLineTitleli">{{getAssigneeName(item.assignee)}}</div>
+                    <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>
                     <div class="TimeLineTitleli">
                       <div class="TimeLineOpertion" @click="goAssignee(item.version,item.activityName,item.channelCode)">办理</div>
                     </div>
@@ -568,8 +568,15 @@ export default {
     //获取办理人姓名
     getAssigneeName(assigneeStr) {
       if (assigneeStr != '') {
-        let index = assigneeStr.indexOf('@')
-        return assigneeStr.slice(0, index)
+        let list=assigneeStr.split(',')
+        let allName=''
+        list.forEach(item=>{
+          let index = item.indexOf('@')
+          allName+='<br>'+item.slice(0, index)
+        })
+        return allName.slice(4)
+        // let index = assigneeStr.indexOf('@')
+        // return assigneeStr.slice(0, index)
       }
     },
   },
@@ -919,7 +926,8 @@ export default {
             background-color: #fff;
             .TimeLineTitleli {
               width: 20%;
-              line-height: 68px;
+              line-height: 30px;
+              padding: 5px 0;
               color: #333333;
               font-size: 16px;
               .TimeLineOpertion {

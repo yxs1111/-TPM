@@ -38,7 +38,7 @@ const initUserInfo = (data) => {
     // console.log('*****user****', usr.userProfile.email)
     auth.setLoginNameEmail(usr.user.loginName)
     auth.setLoginName(usr.username)
-    auth.setLoginNameCheck(usr.userProfile.email)
+    auth.setLoginNameCheck(usr.user.loginName)
     auth.setName(usr.user.name)
     auth.setPhone(usr.user.phone)
     auth.setAvatar('https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
