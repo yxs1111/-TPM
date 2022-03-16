@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-02-28 10:24:28
+ * @LastEditTime: 2022-03-16 09:19:30
 -->
 <template>
   <div class="dashboard-container">
@@ -183,7 +183,7 @@
               <div class="TimeLineTitleli">年月</div>
               <div class="TimeLineTitleli">版本号</div>
               <div class="TimeLineTitleli">当前节点</div>
-              <div class="TimeLineTitleli">提交人</div>
+              <div class="TimeLineTitleli">办理人</div>
               <div class="TimeLineTitleli">操作</div>
             </div>
             <div class="TimeLineBar">
@@ -593,7 +593,7 @@ export default {
     margin: 32px 0;
     margin-top: 0;
     .CityPlan {
-      width: 68%;
+      width: 65%;
       height: 580px;
       background-color: #fff;
       border-radius: 20px;
@@ -838,7 +838,7 @@ export default {
       }
     }
     .calendarBar {
-      width: 30%;
+      width: 33%;
       height: 580px;
       background-color: #fff;
       border-radius: 20px;

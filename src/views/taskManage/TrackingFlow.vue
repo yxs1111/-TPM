@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-02-14 10:44:08
+ * @LastEditTime: 2022-03-16 09:03:41
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -52,7 +52,10 @@
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="assignee" label="办理人"> </el-table-column>
+      <el-table-column v-slot={row} width="280" align="center" prop="assignee" label="办理人"> 
+        <!-- {{setSplitAssignee(row.assignee)}} -->
+        <span v-html="setSplitAssignee(row.assignee)"></span>
+      </el-table-column>
       <el-table-column width="150" align="center"  label="查看" fixed="right">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
@@ -160,6 +163,15 @@ export default {
     },
     // 导出数据
     exportExcel() {},
+    setSplitAssignee(value) {
+      let list=value.split(',')
+      let formatString=''
+      for (let index = 0; index <list.length; index++) {
+        formatString+=`${list[index]}<br>`
+        
+      }
+      return formatString
+    },
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size

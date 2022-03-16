@@ -670,6 +670,20 @@ export function getMonthBetween(start,end){
  }  
  return result;  
 } 
+/**
+ * 字符串根据逗号分割换行显示
+ * @param {字符串} value 
+ * @returns 换行
+ */
+export function setSplitAssignee(value) {
+  let list=value.split(',')
+  let formatString=''
+  for (let index = 0; index <list.length; index++) {
+    formatString+=`${list[index]}<br>`
+    
+  }
+  return formatString
+}
 
 
 

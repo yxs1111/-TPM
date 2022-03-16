@@ -167,7 +167,7 @@ export default {
             })
             const moddle = this.modeler.get('moddle')
             const extensions = moddle.create('bpmn:ExtensionElements', { values: [] })
-            const roleTaskListener = moddle.create('activiti:TaskListener', { event: 'create', delegateExpression: '${roleUserTaskListener}' })
+            const roleTaskListener = moddle.create('activiti:TaskListener', { event: 'create', delegateExpression: '#{roleUserTaskListener}' })
             extensions.values.push(roleTaskListener)
             this.updateProperties({
               extensionElements: extensions

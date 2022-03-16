@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-01-14 10:13:38
+ * @LastEditTime: 2022-03-16 09:19:01
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -59,7 +59,9 @@
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column align="center" width="280" prop="assignee" label="提交人"> </el-table-column>
+      <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人"> 
+         <span v-html="setSplitAssignee(row.assignee)"></span>
+      </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
         {{row.createTime?row.createTime.substring(0,10):""}}
       </el-table-column>
@@ -94,7 +96,7 @@
 
 <script>
 import API from '@/api/taskManage/taskManage.js'
-import { getDefaultPermissions, getTextMap, parseTime,getHeightHaveTab } from '@/utils'
+import { getDefaultPermissions, getTextMap, parseTime,getHeightHaveTab ,setSplitAssignee} from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
@@ -183,6 +185,9 @@ export default {
     search() {
       this.pageNum = 1
       this.getTableData()
+    },
+    setSplitAssignee(value) {
+      return setSplitAssignee(value)
     },
     operateProcess(version, name, channelCode) {
       // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})

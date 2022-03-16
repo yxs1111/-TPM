@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-03-03 11:37:10
+ * @LastEditTime: 2022-03-16 09:20:56
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -59,7 +59,9 @@
       <el-table-column align="center"  prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="200" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="name" label="审批节点"> </el-table-column>
-      <el-table-column align="center" width="280" prop="assignee" label="办理人"> </el-table-column>
+      <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人">
+         <span v-html="setSplitAssignee(row.assignee)"></span>  
+      </el-table-column>
       <el-table-column v-slot={row} align="center" width="150"  label="办理时间">
         {{row.dueDate?row.dueDate.substring(0,10):""}}
       </el-table-column>
@@ -85,7 +87,7 @@
 
 <script>
 import API from '@/api/taskManage/taskManage.js'
-import { getDefaultPermissions, getTextMap, parseTime,getHeight } from '@/utils'
+import { getDefaultPermissions, getTextMap, parseTime,getHeight,setSplitAssignee } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
@@ -103,6 +105,7 @@ export default {
         channelCode: '',
         MinePackage: '',
       },
+      MinePackageList:[],
       permissions: getDefaultPermissions(),
       tableData: [],
       ChannelList: [],
@@ -238,6 +241,9 @@ export default {
     },
     // 导出数据
     exportExcel() {},
+    setSplitAssignee(value) {
+      return setSplitAssignee(value)
+    },
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size
