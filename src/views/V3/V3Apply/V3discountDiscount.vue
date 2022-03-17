@@ -51,7 +51,7 @@
       </div>
 
     </div>
-    <div class="TpmButtonBGWrap">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
@@ -64,7 +64,7 @@
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="btnStatus">
+      <div class="tip" v-if="!btnStatus" >
           <span class="tipStar">*</span>
           注意事项：若未获取到实际销量，不能办理
       </div>
@@ -1144,6 +1144,7 @@ export default {
 .tip {
   color: #eb4f48;
   font-size: 14px;
+  margin-bottom: 10px;
 }
 .tipStar {
   font-size: 12px;

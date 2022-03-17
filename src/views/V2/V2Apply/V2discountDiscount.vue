@@ -56,7 +56,7 @@
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="!isSubmit&&isSelf&&isGainLe">
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
           <span class="tipStar">*</span>
           注意事项：若未获取到LE销量，不能办理
       </div>
@@ -723,10 +723,15 @@ export default {
 .tip {
   color: #eb4f48;
   font-size: 14px;
+  margin-bottom: 10px;
 }
 .tipStar {
   font-size: 12px;
   color: #eb4f48;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
 }
 </style>
 
