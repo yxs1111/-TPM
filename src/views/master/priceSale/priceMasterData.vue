@@ -105,7 +105,7 @@
       </div>
       <div class="fileInfo ImportContent tip">
         <span class="tipStar">*</span>
-        注意事项：PTR/PTW/PTC只保留2位小数，四舍五入！
+       *注意事项：PTW/PTR 只保留2位小数，若超出，系统将会自动四舍五入！
       </div>
       <div v-if="warningShow" class="warningWrap">
         <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />

@@ -246,7 +246,6 @@ export default {
   },
   computed: {},
   mounted() {
-    
     this.getReport()
     this.getQueryChannelSelect()
     // this.getRegionList()
@@ -278,23 +277,34 @@ export default {
       const fix = document.querySelector('#outTable .el-table__fixed')
       // 创建一个workbook对象
       let wb = XLSX.utils.book_new()
-      let ws
-      // debugger
+      const ws = XLSX.utils.aoa_to_sheet([])
+      ws['A1'] = {
+        t: 's',
+        v: '费用（K RMB）',
+      }
       if (fix) {
-        //生成 V1 worksheet对象
-        ws = XLSX.utils.table_to_sheet(
-          document.querySelector('#outTable .el-table__fixed')
+        //生成 费用
+        XLSX.utils.sheet_add_dom(
+          ws,
+          document.querySelector('#outTable .el-table__fixed'),
+          { origin: { c: 0, r: 1 } }
         )
+        // ws = XLSX.utils.table_to_sheet(
+        //   document.querySelector('#outTable .el-table__fixed')
+        // )
       }
       if (document.querySelector('#outTable1 .el-table__fixed')) {
+        ws['A9'] = {
+          t: 's',
+          v: '费比（% vs .GMV）',
+        }
         //追加v2 dom到 worksheet对象，origin：-1 表示从上一个表格的末尾行追加
         XLSX.utils.sheet_add_dom(
           ws,
           document.querySelector('#outTable1 .el-table__fixed'),
-          {origin: {c: 0, r: 8}}
+          { origin: { c: 0, r: 9 } }
         )
       }
-      // debugger
       let borderAll = {
         color: { auto: 1 },
         top: { style: 'thin' },
@@ -302,6 +312,11 @@ export default {
         left: { style: 'thin' },
         right: { style: 'thin' },
       }
+      ws['!cols'] = [
+        {
+          wpx: 150,
+        },
+      ]
       Object.keys(ws).forEach((key) => {
         //这里遍历单元格给单元格对象设置属性,s为控制样式的属性
         if (key.indexOf('!') < 0) {
@@ -315,12 +330,12 @@ export default {
           }
         }
         if (
-          key.replace(/[^0-9]/gi, '') === '1' ||
+          key.replace(/[^0-9]/gi, '') === '4' ||
           key.replace(/[^0-9]/gi, '') === '2' ||
           key.replace(/[^0-9]/gi, '') === '3' ||
-          key.replace(/[^0-9]/gi, '') === '9' ||
           key.replace(/[^0-9]/gi, '') === '10' ||
-          key.replace(/[^0-9]/gi, '') === '11'
+          key.replace(/[^0-9]/gi, '') === '11' ||
+          key.replace(/[^0-9]/gi, '') === '12'
         ) {
           ws[key].s = {
             border: borderAll,
@@ -374,17 +389,17 @@ export default {
     //需要传入列的总数 count default 26
     initColum() {
       //得到渠道下所有客户的数量
-      let AllData={...this.tableData[0].channel}
-      let customCount=0
+      let AllData = { ...this.tableData[0].channel }
+      let customCount = 0
       for (const key in AllData) {
         if (AllData.hasOwnProperty.call(AllData, key)) {
-          const customList = AllData[key];
-          customCount+=Number(customList.length)
+          const customList = AllData[key]
+          customCount += Number(customList.length)
         }
       }
       //所有列：(客户+1)*4+1
-      let columCount=(customCount+1)*4+1
-      let AllColum=[]
+      let columCount = (customCount + 1) * 4 + 1
+      let AllColum = []
       for (let index = 0; index < columCount; index++) {
         AllColum.push(this.createCellPos(index))
       }
@@ -392,7 +407,7 @@ export default {
     },
     addRangeBorder(range, ws) {
       //得到所有列名
-      let cols=this.initColum() 
+      let cols = this.initColum()
       range.forEach((item) => {
         //添加单元格border样式
         let style = {
