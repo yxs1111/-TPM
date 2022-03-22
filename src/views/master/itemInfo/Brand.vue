@@ -59,7 +59,7 @@
     <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '品牌信息'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="品牌编号" v-show="!isEditor">
+          <el-form-item label="品牌编码" v-show="!isEditor">
             <el-input v-model="ruleForm.brandCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
