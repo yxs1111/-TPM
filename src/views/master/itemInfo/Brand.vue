@@ -63,7 +63,7 @@
             <el-input v-model="ruleForm.brandCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="品牌编号"  v-show="isEditor">
+          <el-form-item label="品牌编码"  v-show="isEditor">
             <el-input v-model="ruleForm.brandCode" disabled class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
