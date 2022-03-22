@@ -25,8 +25,8 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" prop="distributorMdmCode" label="经销商MDM编码"> </el-table-column>
       <el-table-column align="center" prop="distributorCode" label="经销商CP编码"> </el-table-column>
+      <el-table-column align="center" prop="distributorMdmCode" label="经销商MDM编码"> </el-table-column>
       <el-table-column align="center" prop="distributorName" label="经销商名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="有效性">
         <template slot-scope="{ row }">
