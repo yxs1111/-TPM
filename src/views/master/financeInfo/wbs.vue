@@ -53,7 +53,7 @@
       </el-table-column>
       <el-table-column width="120" align="center" prop="wbsCustomerCode" label="WBS客户编码"> </el-table-column>
       <el-table-column width="220" align="center" prop="customerCsName" label="客户名称"> </el-table-column>
-      <el-table-column align="center" prop="customerMdmCode" label="客户编码"> </el-table-column>
+      <el-table-column width="150" align="center" prop="customerMdmCode" label="客户编码"> </el-table-column>
       <el-table-column align="center" prop="channelCode" label="渠道"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
@@ -93,9 +93,9 @@
             <el-input v-model="ruleForm.wbsCustomerCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="客户" prop="customerMdmCode">
-            <el-select v-model="ruleForm.customerMdmCode" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerMdmCode" />
+          <el-form-item label="客户" prop="customerCsName">
+            <el-select v-model="ruleForm.customerCsName" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
             </el-select>
           </el-form-item>
           <el-form-item label="渠道" prop="channelCode">
@@ -206,11 +206,11 @@ export default {
   },
   computed: {},
   watch: {
-    'ruleForm.customerMdmCode'() {
+    'ruleForm.customerCsName'() {
       let obj = this.customerArr.find(
-        (item) => item.customerMdmCode == this.ruleForm.customerMdmCode
+        (item) => item.customerCsName == this.ruleForm.customerCsName
       )
-      if (obj) this.ruleForm.customerCsName = obj.customerCsName
+      if (obj) this.ruleForm.customerMdmCode = obj.customerMdmCode
     },
   },
   methods: {
@@ -303,6 +303,7 @@ export default {
       }
     },
     editor(obj) {
+      console.log(obj);
       this.getCustomerList()
       this.isEditor = true
       this.dialogVisible = true
