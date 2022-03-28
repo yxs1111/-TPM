@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-03-14 10:14:29
+ * @LastEditTime: 2022-03-28 10:05:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -215,10 +215,10 @@ export default {
     return requestApi.request_post('/mdm/mdBrand/insert', params)
   },
   updateMdBrand(params) {
-    return requestApi.request_put('/mdm/mdBrand/update', params)
+    return requestApi.request_put('/mdm/mdBrand/updatebrand', params)
   },
   deleteMdBrand(params) {
-    return requestApi.request_delete('/mdm/mdBrand/delete', params)
+    return requestApi.request_put('/mdm/mdBrand/deleteDate', params)
   },
   //导出品牌
   exportBrand(params) {
