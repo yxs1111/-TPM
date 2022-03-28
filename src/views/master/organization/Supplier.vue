@@ -31,15 +31,15 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add" v-permission="permissions['insert']">新增</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column fixed width="100" align="center" label="操作">
         <template slot-scope="{ row }">
-          <div class="table_operation">
+          <div class="table_operation" v-permission="permissions['update']">
             <div class="table_operation_detail" @click="editor(row)">
               <i class="el-icon-edit-outline"></i>
             </div>
@@ -89,7 +89,7 @@
           <el-form-item label="供应商名称" prop="supplierName">
             <el-input v-model="ruleForm.supplierName" class="my-el-input" placeholder="请输入" />
           </el-form-item>
-          <el-form-item label="Country">
+          <el-form-item label="Country" prop="country">
             <el-input v-model="ruleForm.country" class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="状态">
