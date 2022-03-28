@@ -19,44 +19,48 @@
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
+          <img src="@/assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
       </div>
+
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
-        <img src="@/assets/images/export.png" alt="">
-        <span class="text">导出</span>
-      </div>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add">新增</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%"
       @selection-change="handleSelectionChange">
-
-      <el-table-column align="center" fixed type="index" label="序号" width="80">
+      <el-table-column type="selection" align="center" />
+      <el-table-column fixed width="100" align="center" label="操作">
+        <template slot-scope="{ row }">
+          <div class="table_operation">
+            <div class="table_operation_detail" @click="editor(row)">
+              <i class="el-icon-edit-outline"></i>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column align="center" fixed type="index" label="序号" width="80">
         <template slot-scope="scope">
           <div>
             {{ (pageNum - 1) * pageSize + 1 + scope.$index }}
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column width="150" align="center" prop="supplierCode" label="供应商CP编码" />
       <el-table-column width="180" align="center" prop="supplierBiCode" label="供应商COUPA编码" />
       <el-table-column align="center" prop="supplierName" label="供应商名称" />
-      <el-table-column width="150" align="center" prop="country" label="country" />
+      <el-table-column width="150" align="center" prop="country" label="Country" />
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
         {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
       </el-table-column>
-      <!-- <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
-      <el-table-column width="180" align="center" prop="updateDate" label="更新时间">
-        <template slot-scope="{row}">
-          <div>
-            {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -72,21 +76,26 @@
     </div>
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '供应商信息'" :visible="dialogVisible" width="25%" @close="closeDialog">
       <div class="el-dialogContent">
-        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
-          <el-form-item v-show="!isEditor" label="供应商编码">
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140px" class="el-form-row">
+          <el-form-item label="供应商CP编码" v-show="!isEditor" prop="supplierCode">
             <el-input v-model="ruleForm.supplierCode" class="my-el-input" placeholder="请输入" />
           </el-form-item>
-          <el-form-item v-show="isEditor" label="供应商编码">
+          <el-form-item label="供应商CP编码" v-show="isEditor" prop="supplierCode">
             <el-input v-model="ruleForm.supplierCode" disabled class="my-el-input" placeholder="请输入" />
           </el-form-item>
-          <el-form-item label="供应商名称">
+          <el-form-item label="供应商COUPA编码" prop="supplierBiCode">
+            <el-input v-model="ruleForm.supplierBiCode" class="my-el-input" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="供应商名称" prop="supplierName">
             <el-input v-model="ruleForm.supplierName" class="my-el-input" placeholder="请输入" />
           </el-form-item>
-          <el-form-item label="country">
+          <el-form-item label="Country">
             <el-input v-model="ruleForm.country" class="my-el-input" placeholder="请输入" />
           </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入" />
+          <el-form-item label="状态">
+            <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item,index) in ['无效','正常']" :key="item" :label="item" :value="index" />
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -96,27 +105,70 @@
       </span>
     </el-dialog>
     <!-- 导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div class="fileInfo ImportContent">
-        <div class="fileTitle">模板</div>
-        <div class="my-search selectFile" @click="downloadTemplate">
-          <svg-icon icon-class="download_white" style="font-size: 16px;" />
-          <span class="text">下载模板</span>
+    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+      <div class="importDialog">
+        <div class="el-downloadFileBar">
+          <div>
+            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
+            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+          </div>
+          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+        </div>
+        <div class="fileInfo">
+          <div class="fileInfo">
+            <div class="fileTitle">文件</div>
+            <div class="my-search selectFile" @click="parsingExcelBtn">
+              <img src="@/assets/images/selectFile.png" alt="" />
+              <span class="text">选择文件</span>
+            </div>
+            <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
+            <div class="fileName" v-if="uploadFileName!=''">
+              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
+              <span>{{uploadFileName}}</span>
+            </div>
+          </div>
+          <div class="seeData" style="width: auto;">
+            <div class="exportError" @click="exportErrorList">
+              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+              <span>导出错误信息</span>
+            </div>
+          </div>
+        </div>
+        <div class="tableWrap">
+          <el-table border height="300" :data="ImportData" style="width: 100%" :header-cell-style="{
+              background: '#fff',
+              color: '#333',
+              fontSize: '16px',
+              textAlign: 'center',
+              fontWeight: 400,
+              fontFamily: 'Source Han Sans CN'
+            }" :row-class-name="tableRowClassName" stripe>
+            <el-table-column fixed align="center" label="是否通过" width="100">
+              <template slot-scope="scope">
+                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+                <img v-else-if="scope.row.judgmentType == 'Pass'||scope.row.judgmentType == ''" :src="passImg" style="width:25px;height:25px;">
+              </template>
+            </el-table-column>
+            <el-table-column width="320" align="center" prop="error" label="错误信息" />
+            <el-table-column width="150" align="center" prop="supplierCode" label="供应商CP编码" />
+            <el-table-column width="180" align="center" prop="supplierBiCode" label="供应商COUPA编码" />
+            <el-table-column width="180" align="center" prop="supplierName" label="供应商名称" />
+            <el-table-column width="150" align="center" prop="country" label="Country" />
+            <el-table-column width="150" align="center" prop="createBy" label="创建人" />
+            <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
+              {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+            </el-table-column>
+            <el-table-column width="150" align="center" prop="state" label="状态">
+              <template slot-scope="{ row }">
+                <div>
+                  {{ row.state ? '正常' : '无效' }}
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </div>
-      <div class="fileInfo ImportContent">
-        <div class="fileTitle">文件</div>
-        <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
-        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
-        <div v-if="uploadFileName!=''" class="fileName">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
-          <span>{{ uploadFileName }}</span>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmImport()">确 定</el-button>
-        <el-button @click="closeImport">取 消</el-button>
-      </span>
+
     </el-dialog>
   </div>
 </template>
@@ -149,12 +201,34 @@ export default {
       tableData: [],
       ruleForm: {
         supplierCode: '',
+        supplierBiCode: '',
         supplierName: '',
         country: '',
-        remark: '',
+        state: '',
       },
       rules: {
         supplierCode: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        supplierBiCode: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        supplierName: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        country: [
           {
             required: true,
             message: 'This field is required',
@@ -172,6 +246,12 @@ export default {
       uploadFile: '',
       event: '',
       maxheight: getHeight(),
+      errorImg: require('@/assets/images/selectError.png'),
+      excepImg: require('@/assets/images/warning.png'),
+      passImg: require('@/assets/images/success.png'),
+      saveBtn: false,
+      ImportData: [],
+      override: false, //覆盖数据dialog
     }
   },
   computed: {},
@@ -222,9 +302,10 @@ export default {
       this.editorId = ''
       this.ruleForm = {
         supplierCode: '',
+        supplierBiCode: '',
         supplierName: '',
         country: '',
-        remark: '',
+        state: '',
       }
     },
     editor(obj) {
@@ -232,9 +313,10 @@ export default {
       this.dialogVisible = true
       this.ruleForm = {
         supplierCode: obj.supplierCode,
+        supplierBiCode: obj.supplierBiCode,
         supplierName: obj.supplierName,
         country: obj.country,
-        remark: obj.remark,
+        state: obj.state,
       }
       this.editorId = obj.id
     },
@@ -247,10 +329,10 @@ export default {
             : API.insertMdSupplier
           url({
             id: this.editorId,
-            supplierCode: this.ruleForm.supplierCode,
+            supplierBiCode: this.ruleForm.supplierBiCode,
             supplierName: this.ruleForm.supplierName,
             country: this.ruleForm.country,
-            remark: this.ruleForm.remark,
+            state: this.ruleForm.state,
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
@@ -302,6 +384,12 @@ export default {
         this.$message.success('模板下载成功!')
       })
     },
+    exportErrorList() {
+      API.exportSupplierEb().then((res) => {
+        this.downloadFile(res, '供应商异常信息' + '.xlsx') // 自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
     // 取消
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -313,18 +401,42 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importSupplier(formData)
-        .then((response) => {
+      if (this.override) {
+        this.$confirm('已有重复数据，确定要覆盖数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            var formData = new FormData()
+            formData.append('file', this.uploadFile)
+            API.importSupplier(formData).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success('导入成功!')
+                this.closeImport()
+                this.getTableData()
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
+      } else {
+        var formData = new FormData()
+        formData.append('file', this.uploadFile)
+        API.importSupplier(formData).then((response) => {
           if (response.code === 1000) {
             this.$message.success('导入成功!')
             this.closeImport()
             this.getTableData()
           }
         })
-        .catch(() => {})
+      }
     },
+
     // 选择导入文件
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
@@ -334,7 +446,20 @@ export default {
       this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      console.log(this.event)
+    },
+    //检测数据
+    checkImport() {
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      API.checkSupplier(formData).then((response) => {
+        if (response.code == 1000) {
+          this.ImportData = response.data
+          this.saveBtn = response.data[0].judgmentType !== 'Error'
+          this.event.srcElement.value = '' // 置空
+          this.override =
+            response.data[0].judgmentType === 'Exception' ? true : false
+        }
+      })
     },
     // 关闭导入
     closeImport() {
@@ -342,7 +467,6 @@ export default {
       this.event.srcElement.value = '' // 置空
       this.uploadFileName = ''
       this.uploadFile = ''
-      console.log(this.event)
     },
     // 导出数据
     exportData() {

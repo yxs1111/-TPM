@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-03-28 10:05:23
+ * @LastEditTime: 2022-03-28 16:37:03
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -279,7 +279,19 @@ export default {
     return requestApi.request_put('/mdm/mdSupplier/update', params)
   },
   deleteMdSupplier(params) {
-    return requestApi.request_delete('/mdm/mdSupplier/delete', params)
+    return requestApi.request_post('/mdm/mdSupplier/deleteAll', params)
+  },
+  checkSupplier(params) {
+    return requestApi.request_post('/mdm/mdSupplier/checkSupplier', params)
+  },
+  //导出错误信息
+  exportSupplierEb(params) {
+    return request({
+      url: 'mdm/mdSupplier/exportSupplierEb',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
   },
   importSupplier(params) {
     return requestApi.request_post('/mdm/mdSupplier/importSupplier', params)

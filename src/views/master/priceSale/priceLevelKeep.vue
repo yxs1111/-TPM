@@ -28,11 +28,14 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
-
+    <div class="TpmButtonBGWrap" style="align-items: center;">
       <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
+      </div>
+      <div class="tip">
+          <span class="tipStar">*</span>
+         注意事项：建议先进行价格主数据维护，后进行价格档位维护
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable"
@@ -417,5 +420,14 @@ export default {
 <style lang="scss" scoped>
 .importDialog {
   height: 600px;
+}
+.tip {
+  color: #eb4f48;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #eb4f48;
 }
 </style>

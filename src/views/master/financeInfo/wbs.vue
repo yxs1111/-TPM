@@ -185,6 +185,13 @@ export default {
             trigger: 'blur',
           },
         ],
+        customerCsName: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
       },
       dialogVisible: false,
       isEditor: '',
@@ -203,6 +210,7 @@ export default {
     }
     this.getTableData()
     this.getChannelList()
+    this.getCustomerList()
   },
   computed: {},
   watch: {
@@ -304,7 +312,7 @@ export default {
     },
     editor(obj) {
       console.log(obj);
-      this.getCustomerList()
+      
       this.isEditor = true
       this.dialogVisible = true
       this.ruleForm = {
@@ -315,6 +323,12 @@ export default {
         state: String(obj.state),
         remark: obj.remark,
       }
+      //若客户下拉框数据没有当前则置空
+      let isExistCustom=this.customerArr.find(item=>item.customerCsName == this.ruleForm.customerCsName)
+      if (!isExistCustom) {
+        this.ruleForm.customerCsName=''
+        this.ruleForm.customerMdmCode=''
+      } 
       this.editorId = obj.id
     },
     //提交form
