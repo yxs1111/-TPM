@@ -46,7 +46,7 @@
       @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" />
       <el-table-column width="150"  fixed="left" align="center" prop="customerCsName" label="客户名称" />
-      <el-table-column width="150"  fixed="left" align="center" prop="customerMdmCode" label="客户编码" />
+      <el-table-column width="150"  fixed="left" align="center" prop="customerMdmCode" label="客户MDM编码" />
       <el-table-column width="150" align="center" prop="channelEsName" label="渠道" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot={row} width="150" align="right" prop="grossProfitPoints" label="毛利点数">
