@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-03-16 16:06:53
+ * @LastEditTime: 2022-03-29 15:10:49
 -->
 <template>
   <div class="dashboard-container">
@@ -208,19 +208,15 @@
               <div class="TimeLineTitleli">版本号</div>
               <div class="TimeLineTitleli">当前节点</div>
               <div class="TimeLineTitleli">提交人</div>
-              <div class="TimeLineTitleli">操作</div>
             </div>
             <div class="TimeLineBar">
               <el-timeline>
                 <el-timeline-item color="#4192d3" v-for="item,index in TodoList" :key="index">
                   <div class="TimeLineli">
-                    <div class="TimeLineTitleli">{{item.createTime?item.createTime.substring(0,10):""}}</div>
+                    <div class="TimeLineTitleli">{{item.dueDate?item.dueDate.substring(0,10):""}}</div>
                     <div class="TimeLineTitleli">{{item.version}}</div>
-                    <div class="TimeLineTitleli">{{item.activityName}}</div>
+                    <div class="TimeLineTitleli">{{item.name}}</div>
                     <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>
-                    <div class="TimeLineTitleli">
-                      <div class="TimeLineOpertion" @click="goAssignee(item.version,item.activityName,item.channelCode)">办理</div>
-                    </div>
                   </div>
                 </el-timeline-item>
               </el-timeline>
@@ -249,6 +245,7 @@
 import auth from '@/utils/auth'
 import TaskAPI from '@/api/taskManage/taskManage.js'
 import API from '@/api/index/index.js'
+import completeAPI from '@/api/taskManage/taskManage.js'
 export default {
   name: 'Dashboard',
   created() {},
@@ -263,6 +260,7 @@ export default {
         { id: 1, title: '已完成' },
       ],
       TodoList: [],
+      completeData: [],
       currentIndex: 0,
       // 当前日期
       attrs: [
@@ -286,6 +284,7 @@ export default {
     this.getMesList()
     this.getHomePageData()
     this.getToDoData()
+    this.getCompleteData()
   },
   watch: {
     '$store.state.app.sidebar.opened'() {
@@ -495,6 +494,16 @@ export default {
       }).then((response) => {
         this.TodoList = response.data.records
       })
+    },
+    //获取表格数据
+    getCompleteData() {
+      completeAPI.getMyHandleList({
+        pageNum: 1, //当前页
+        pageSize: 999, //每页条数
+      })
+        .then((response) => {
+          this.completeData = response.data.records
+        })
     },
     //办理
     goAssignee(version, name, channelCode) {
