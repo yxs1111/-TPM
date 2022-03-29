@@ -22,21 +22,24 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">城市名称</span>
-          <el-input v-model="filterObj.orgName" clearable placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">城市群名称</span>
-          <el-input v-model="filterObj.groupName" clearable placeholder="请输入" />
+          <span class="SelectliTitle">大区名称</span>
+          <el-input v-model="filterObj.zoneName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域名称</span>
           <el-input v-model="filterObj.regionName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">大区名称</span>
-          <el-input v-model="filterObj.zoneName" clearable placeholder="请输入" />
+          <span class="SelectliTitle">城市群名称</span>
+          <el-input v-model="filterObj.groupName" clearable placeholder="请输入" />
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">城市名称</span>
+          <el-input v-model="filterObj.orgName" clearable placeholder="请输入" />
+        </div>
+        
+       
+        
         <!-- <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.state" filterable clearable placeholder="请选择">
@@ -59,17 +62,17 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="orgName" label="城市名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="groupName" label="城市群名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="regionName" label="区域名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="zoneName" label="大区名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="storeCode" label="门店编码"> </el-table-column>
       <el-table-column width="250" align="center" prop="storeName" label="门店名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="channelCode" label="渠道名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="customerCode" label="客户编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="customerCsName" label="客户名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="distributorCode" label="经销商编码"> </el-table-column>
       <el-table-column width="340" align="center" prop="distributorName" label="经销商名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="channelCode" label="渠道名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="zoneName" label="大区名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="regionName" label="区域名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="groupName" label="城市群名称"> </el-table-column>
+      <el-table-column width="150" align="center" prop="orgName" label="城市名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="isFmc" label="IsFMC "> </el-table-column>
       <el-table-column width="150" align="center" prop="fmcCode" label="FMC编码"> </el-table-column>
       <el-table-column width="150" align="center" prop="fmcName" label="FMC名称"> </el-table-column>

@@ -230,7 +230,7 @@
           <el-tree v-show="permissionType === 'Mine Package'||permissionType === null"  :data="RoleTreeData_Mine" ref="RoleTree_Mine" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true"
             node-key="mid" highlight-current :props="treeProps_Mine">
           </el-tree>
-          <el-tree v-show="permissionType !== 'Mine Package'||permissionType === null"  :data="RoleTreedata" ref="RoleTree" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="id"
+          <el-tree v-show="permissionType !== 'Mine Package'||permissionType === null"  :data="RoleTreedata" ref="RoleTree" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="NodeKey"
             highlight-current :props="Role_KA">
           </el-tree>
         </div>
@@ -897,6 +897,7 @@ export default {
           list[i].label=list[i].dataTerCode
           list[i].id=list[i].dataTerId
           list[i].mid=list[i].dataSecId+'-'+list[i].dataTerCode
+          list[i].NodeKey=list[i].dataFirCode+'-'+list[i].dataSecCode+'-'+list[i].dataTerCode
         }
         //分成两个板块
         if (this.permissionType === 'Mine Package'||this.permissionType ===null) {
@@ -907,7 +908,7 @@ export default {
         this.$forceUpdate()
       })
     },
-    //获取KA 权限
+    //获取KA 权限  NodeKey: "KA-EC-007"
     getKAList() {
       roleApi.getKAList().then((res) => {
         let list = res.data.channelList
@@ -916,13 +917,14 @@ export default {
           if (list[i].customerList) {
             list[i]['children'] = list[i].customerList
             for (let j = 0; j < list[i].children.length; j++) {
+              list[i].children[j]['dataFirCode'] = res.data.ka
               list[i].children[j]['label'] = list[i].children[j].customerCsName
               list[i].children[j]['dataTerId'] = list[i].children[j].id
               list[i].children[j]['dataTerCode'] =
                 list[i].children[j].customerCode
               list[i].children[j]['dataSecId'] = list[i].id
               list[i].children[j]['dataSecCode'] = list[i].channelCode
-              list[i].children[j]['dataFircode'] = 'KA'
+              list[i].children[j]['NodeKey'] = list[i].children[j]['dataFirCode']+'-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
             }
           } else {
             list[i]['children'] = []
@@ -938,7 +940,7 @@ export default {
         this.getDefaultRolePermissions(this.roleCode)
       })
     },
-    //获取Mine Package 权限
+    //获取Mine Package 权限  
     getMinePackage() {
       roleApi.getMinePackage().then((res) => {
         let list = res.data.mdCostTypeDTOList
@@ -974,7 +976,7 @@ export default {
         this.getDefaultRolePermissions(this.roleCode)
       })
     },
-    //获取Field sales 权限
+    //获取Field sales 权限  NodeKey: "FieldSales-zone-4678"
     getFieldSales() {
       roleApi.getFieldSales().then((res) => {
         let list = res.data.children
@@ -988,6 +990,7 @@ export default {
               list[i].children[j]['dataSecId'] = list[i].id
               list[i].children[j]['dataSecCode'] = list[i].name
               list[i].children[j]['dataFircode'] = 'FieldSales'
+              list[i].children[j]['NodeKey'] = 'FieldSales-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
             }
           } else {
             list[i]['children'] = []
