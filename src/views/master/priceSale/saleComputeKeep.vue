@@ -150,7 +150,6 @@ export default {
       errorList: [], //错误信息数据
       checkArr: [], //批量删除,存放选中
       maxheight: getHeight(),
-      month:'',
     }
   },
   computed: {},
@@ -172,12 +171,6 @@ export default {
     },
   },
   methods: {
-    getMonth() {
-      selectAPI.getMonth({ version: 'V0' }).then((res) => {
-        this.month = res.data
-        // this.getList()
-      })
-    },
     // 获取表格数据
     getTableData() {
       API.getPageSaleComputeKeep({
@@ -227,7 +220,6 @@ export default {
     },
     //导入数据
     importData() {
-      this.getMonth()
       this.importVisible = true
     },
     //确认导入
@@ -236,7 +228,6 @@ export default {
       this.warningList = []
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      formData.append('accountingPeriod', this.month)
       API.importSaleComputeKeep(formData).then((response) => {
         if (response.code === 1000) {
           this.$message.success('导入成功!')
