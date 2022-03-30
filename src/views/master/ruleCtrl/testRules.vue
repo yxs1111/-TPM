@@ -10,12 +10,6 @@
             <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
-        <!-- <div class="Selectli">
-          <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in minePackage" :key="index" :label="item.costType" :value="item.costType" />
-          </el-select>
-        </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker v-model="filterObj.date" clearable type="month" value-format="yyyyMM" format="yyyyMM" placeholder="选择月" />
@@ -38,36 +32,18 @@
       <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="60" align="left" prop="ruleUnit" label="" />
       <el-table-column width="300" align="left" prop="ruleContentAfter" label="">
-        <template slot-scope="{row}">
-          <div v-if="row.ruleUnit === '∈'">
+        <template slot-scope="scope">
+          <div v-if="scope.row.ruleUnit === '∈'">
             [&nbsp;
-            <el-input v-model="row.startRule" :class="row.status?'':'noPass'" style="width:60px;" size="small" @blur="number($event,row,row.startRule)" />%,
-            <el-input v-model="row.endRule" style="width:60px;" size="small" @blur="number($event,row,row.endRule)" />%&nbsp;]
+            <el-input v-model="scope.row.startRule" :class="scope.row.status?'':'noPass'" style="width:60px;" size="small"
+              @blur="number($event,scope.row,scope.row.startRule,scope.$index)" />%,
+            <el-input v-model="scope.row.endRule" style="width:60px;" size="small" @blur="number($event,scope.row,scope.row.endRule,scope.$index)" />%&nbsp;]
           </div>
           <div v-else>
-            {{ row.ruleContentAfter }}
+            {{ scope.row.ruleContentAfter }}
           </div>
         </template>
       </el-table-column>
-      <!--<el-table-column width="200" align="left" prop="checkType" label="验证类型">
-         <template>
-          <el-select v-model="filterObj.category" placeholder="请选择" size="small">
-            <el-option v-for="item in categoryArr" :key="item.name" :label="item.name" :value="item.value" />
-          </el-select>
-        </template>
-      </el-table-column>-->
-      <!-- <el-table-column width="" align="left" prop="exceptionType" label="异常类型">
-        <template slot-scope="{row}">
-          <el-select ref="refSelect" v-model="row.ErrorType" style="width: 100%" placeholder="请选择图标" @change="changeSelection">
-            <el-option v-for="item in optionsImg" :key="item.id" :value="item.label" :label="item.label">
-              <div class="option_box">
-                <el-image class="option_img" :src="item.valueImg" />
-                {{ item.label }}
-              </div>
-            </el-option>
-          </el-select>
-        </template>
-      </el-table-column> -->
       <el-table-column width="100" align="left" prop="channelEsName" label="渠道" />
       <!-- <el-table-column width="180" align="left" prop="costType" label="Mine Package" /> -->
       <el-table-column width="150" align="left" prop="yearAndMonth" label="年月" />
@@ -78,18 +54,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
-    <!-- <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
-    </div> -->
     <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '产品信息'" :visible="dialogVisible" width="48%" @close="closeDialog">
       <div class="el-dialogContent">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="el-form-row">
@@ -252,6 +216,7 @@ export default {
       V3Total: 0,
       maxheight: window.innerHeight - 400,
       tableKey: 0,
+      isChangeData: [], //已更改的数据
     }
   },
   computed: {},
@@ -365,7 +330,11 @@ export default {
       this.resetFormAdd('ruleFormAdd')
     },
     // 验证input输入框数据
-    number(e, row, itemRow) {
+    number(e, row, itemRow, index) {
+      let isFind = this.isChangeData.indexOf(index)
+      if (isFind == -1) {
+        this.isChangeData.push(index)
+      }
       const flag = new RegExp('^(0|[1-9][0-9]*|-[1-9][0-9]*)$').test(
         e.target.value
       )
@@ -427,6 +396,7 @@ export default {
     updateSave() {
       let flag = 1
       this.tableKey = Math.random()
+      //判断状态--是否满足前小后大，并标志错误位置
       for (let index = 0; index < this.tableData.length; index++) {
         const element = this.tableData[index]
         element['status'] = 1
@@ -434,14 +404,13 @@ export default {
         if (element.ruleUnit === '∈') {
           if (element.endRule === '' || element.startRule === '') {
             element.status = 0
-            flag=0
-            this.$forceUpdate();
+            flag = 0
+            this.$forceUpdate()
           } else {
             let countNumber =
               Number(element.startRule) - Number(element.endRule)
             if (countNumber >= 0) {
               flag = 0
-              
               element.startRule = ''
               element.status = 0
             }
@@ -449,32 +418,33 @@ export default {
         }
       }
       if (flag) {
-        const params = []
-        for (const item of this.tableData) {
-          if (item.ruleUnit === '∈') {
-            const tempItem = {
-              minePackage: 'Price Promotion',
-              ruleUnit: item.ruleUnit.trim(),
-              startRule: item.startRule + '%',
-              endRule: item.endRule.trim() + '%',
-              id: item.id,
-              channelCode: item.channelCode,
-              yearAndMonth: item.yearAndMonth,
+        //若无进行编辑操作，则不允许保存
+        if (this.isChangeData.length) {
+          const params = []
+          for (const item of this.isChangeData) {
+            if (this.tableData[item].ruleUnit === '∈') {
+              const tempItem = {
+                minePackage: 'Price Promotion',
+                ruleUnit: this.tableData[item].ruleUnit.trim(),
+                startRule: this.tableData[item].startRule + '%',
+                endRule: this.tableData[item].endRule.trim() + '%',
+                id: this.tableData[item].id,
+                channelCode: this.tableData[item].channelCode,
+                yearAndMonth: this.tableData[item].yearAndMonth,
+              }
+              params.push(tempItem)
             }
-            params.push(tempItem)
           }
+          API.updateRuleSave(params)
+            .then((res) => {
+              this.$message.info(`${res.data}`)
+              this.getTableData()
+              this.$forceUpdate()
+            })
+            .catch()
+        } else {
+          this.$message.info('请先进行修改再进行保存')
         }
-        API.updateRuleSave(params)
-          .then((res) => {
-            if (res.code === 1000) {
-              this.$message.success('保存成功')
-            } else {
-              this.$message.error('保存失败')
-            }
-            this.getTableData()
-            this.$forceUpdate()
-          })
-          .catch()
       } else {
         this.$message({
           showClose: true,
@@ -594,6 +564,7 @@ export default {
     },
     // 获取表格数据
     getTableData() {
+      this.isChangeData = []
       API.getPageByDto({
         channelCode: this.filterObj.channel,
         minePackage: 'A',
