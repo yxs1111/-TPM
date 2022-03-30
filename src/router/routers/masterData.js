@@ -271,7 +271,7 @@ export default function() {
               code: 'mdm_WbsMaintenance',
               name: 'WbsMaintenance',
               component: () =>
-                import('@/views/master/financeInfo/wbs.vue'),
+                import('@/views/master/financeInfo/WbsMaintenance.vue'),
               meta: { title: 'WBS维护', icon: 'apply' }
             },
             {
@@ -279,7 +279,7 @@ export default function() {
               code: 'mdm_IoMaintenance',
               name: 'IoMaintenance',
               component: () =>
-                import('@/views/master/financeInfo/io.vue'),
+                import('@/views/master/financeInfo/IoMaintenance.vue'),
               meta: { title: 'IO维护', icon: 'apply' }
             },
           ]

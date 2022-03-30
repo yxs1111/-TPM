@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-03-14 10:18:22
+ * @LastEditTime: 2022-03-30 10:20:00
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -18,13 +18,6 @@ export default function() {
       name: 'OsPage',
       meta: { title: '系统管理', icon: 'sysManage' },
       children: [
-        // {
-        //   path: 'organization',
-        //   code: 'organization',
-        //   name: 'OrganizationInfo',
-        //   component: () => import('@/views/system/organization/index.vue'),
-        //   meta: { title: '组织信息', icon: 'form' }
-        // },
         {
           path: 'user',
           code: 'authPage_user',
@@ -67,25 +60,6 @@ export default function() {
           component: () => import('@/views/system/MonitoringManagement.vue'),
           meta: { title: '监控管理', icon: 'form' }
         },
-        // {
-        //   path: 'CycleManagement',
-        //   name: 'itemInfo',
-        //   alwaysShow: true,
-        //   code: 'authPage_cycle',
-        //   component: () => import('@/views/system/CycleManagement.vue'),
-        //   meta: { title: '周期管理', icon: 'form' },
-        //   redirect: 'CycleManagement/saleComputeKeep',
-        //   children: [
-        //     {
-        //       path: 'CycleManagement',
-        //       code: 'authPage_cycle',
-        //       name: 'CycleManagement',
-        //       component: () => import('@/views/system/CycleManagement.vue'),
-        //       meta: { title: '周期管理', icon: 'form' }
-        //     },
-            
-        //   ]
-        // },
         {
           path: 'InterfaceManage',
           code: 'authPage_interface',
