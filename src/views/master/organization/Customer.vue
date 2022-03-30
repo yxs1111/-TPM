@@ -54,7 +54,7 @@
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="customerCode" label="客户CP编码" />
-      <el-table-column align="center" prop="customerMdmCode" label="MDM客户编号" />
+      <el-table-column align="center" prop="customerMdmCode" label="客户MDM编码" />
       <el-table-column align="center" prop="customerCsName" label="客户中文名称" />
       <el-table-column width="220" align="center" prop="customerEsName" label="客户英文名称" />
       <el-table-column align="center" prop="groupCode" label="客户组编码" />
