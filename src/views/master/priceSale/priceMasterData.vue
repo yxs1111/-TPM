@@ -266,7 +266,6 @@ export default {
           // this.getTableData()
           this.warningShow = true
           this.warningList = response.data
-          console.dir(this.warningList)
           // this.$message.success(`${response.data}`)
         }
         this.event.srcElement.value = '' // 置空
@@ -345,10 +344,8 @@ export default {
         })
           .then(() => {
             API.deleteMdPrice(ObjList).then((response) => {
-              if (response.code === 1000) {
-                this.getTableData()
-                this.$message.success('删除成功!')
-              }
+              this.getTableData()
+              this.$message.info(`${response.data}`)
             })
           })
           .catch(() => {
