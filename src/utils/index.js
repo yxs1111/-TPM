@@ -597,6 +597,13 @@ export function getHeightSingle() {
   return window.innerHeight - 340
 }
 /**
+ * 合同录入表格最大高度
+ * @returns el-table max-height
+ */
+export function getContractEntry() {
+  return window.innerHeight - 350
+}
+/**
  * 
  * @param {*数据流} res 
  * @param {*文件名称} fileName 
