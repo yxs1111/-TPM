@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-03-31 16:19:43
+ * @LastEditTime: 2022-03-31 17:23:46
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -160,18 +160,81 @@
         </div>
       </el-table-column>
       <el-table-column prop="applyRemark" align="center" width="220" label="申请人备注">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+            <el-input v-model="scope.row.applyRemark" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+            {{scope.row.applyRemark}}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+            <el-input v-model="scope.row.packageOwner" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+            {{scope.row.packageOwner}}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
+         <template slot-scope="scope">
+          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+            <el-input v-model="scope.row.finance" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+            {{scope.row.finance}}
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column prop="createBy" align="center" width="160" label="创建人">
+      <el-table-column prop="createBy" align="center" width="220" label="创建人">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+            <el-input v-model="scope.row.createBy" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+            {{scope.row.createBy}}
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column prop="createDate" align="center" width="160" label="创建时间">
+      <el-table-column prop="createDate" align="center" width="220" label="创建时间">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+            <el-input v-model="scope.row.createDate" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+            {{scope.row.createDate}}
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column prop="updateBy" align="center" width="160" label="修改人">
+      <el-table-column prop="updateBy" align="center" width="220" label="修改人">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+            <el-input v-model="scope.row.updateBy" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+            {{scope.row.updateBy}}
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column prop="updateDate" align="center" width="160" label="修改时间">
+      <el-table-column prop="updateDate" align="center" width="220" label="修改时间">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+            <el-input v-model="scope.row.updateDate" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+            {{scope.row.updateDate}}
+          </div>
+        </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -223,6 +286,8 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 1,
           contractTimeoutTime: '',
+          isNewData:0
+
         },
         {
           customerName: '孩子王',
@@ -243,6 +308,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -263,6 +329,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -283,6 +350,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -303,6 +371,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -323,6 +392,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -343,6 +413,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -363,6 +434,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -383,6 +455,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -403,6 +476,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -423,6 +497,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -443,6 +518,7 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
+          isNewData:0
         },
       ],
       customerArr: [],
@@ -501,7 +577,8 @@ export default {
         createDate: '',
         updateBy: '',
         updateDate: '',
-        isEditor: 0,
+        isEditor: 0, //是否 处于编辑状态
+        isNewData: 1, //是否 处于编辑状态
         isTimeout: '',
         contractTimeoutStatus: '',
         contractTimeoutTime: '',
