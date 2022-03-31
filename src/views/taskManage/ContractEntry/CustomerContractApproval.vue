@@ -92,7 +92,7 @@ import { getDefaultPermissions, parseTime, getTextMap ,getHeightSingle,downloadF
 import API from '@/api/masterData/masterData.js'
 
 export default {
-  name: 'CustomerContractEntry',
+  name: 'CustomerContractApproval',
 
   data() {
     return {

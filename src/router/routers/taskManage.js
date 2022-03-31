@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-03-30 17:06:03
+ * @LastEditTime: 2022-03-31 10:48:10
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -77,7 +77,7 @@ export default function() {
             {
               path: '/taskManage/ContractEntry/CustomerContractEntry',
               code: 'mdm_product_information',
-              name: 'Brand',
+              name: 'CustomerContractEntry',
               component: () => import('@/views/taskManage/ContractEntry/CustomerContractEntry.vue'),
               meta: { title: '客户合同录入', icon: 'apply',activeMenu: '/taskManage/ContractEntry' },
               redirect: '/taskManage/ContractEntry/CustomerContractEntry/StraightGiving',

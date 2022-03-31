@@ -857,6 +857,25 @@ div:focus {
     align-items: center;
     cursor: pointer;
   }
+  .haveText_editor {
+    color: #3694fe;
+    border-radius: 4px;
+    display: flex;
+    font-size: 14px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  .haveText_delete {
+    color: #cb2d32;
+    border-radius: 4px;
+    display: flex;
+    font-size: 14px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
 }
 .noClick {
   pointer-events: none;
@@ -920,4 +939,15 @@ div:focus {
 }
 .exportDataButton {
   padding: 0 33px;
+}
+//取消按钮样式  合同
+.cancelButton {
+  background-color: #fff !important;
+  color: #4192d3;
+  border: 1px solid #4192d3;
+  text-align: center;
+  .text {
+    color: inherit;
+    margin-left: 0;
+  }
 }
