@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-04-01 08:59:14
+ * @LastEditTime: 2022-04-01 10:05:04
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -69,9 +69,8 @@ export default function() {
         {
           path: '/taskManage/ContractEntry',
           name: 'ContractEntry',
-          alwaysShow: true,
           code: 'mdm_product_information',
-          meta: { title: '合同录入', icon: 'apply' },
+          meta: { title: '合同录入', icon: 'apply',activeMenu: '/taskManage' },
           component: () => import('@/views/taskManage/ContractEntry/ContractEntry.vue'),
           children: [
             {
@@ -141,6 +140,20 @@ export default function() {
                   meta: { title: '非直供', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/CustomerContractApproval'},
                 },
               ]
+            },
+            {
+              path: '/taskManage/ContractEntry/dealerContractEntry',
+              code: 'mdm_product_information',
+              name: 'dealerContractEntry',
+              component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry.vue'),
+              meta: { title: '经销商合同录入', icon: 'apply' },
+            },
+            {
+              path: '/taskManage/ContractEntry/dealerContractApproval',
+              code: 'mdm_product_information',
+              name: 'dealerContractApproval',
+              component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval.vue'),
+              meta: { title: '经销商合同审批', icon: 'apply' },
             },
           ]
         },
