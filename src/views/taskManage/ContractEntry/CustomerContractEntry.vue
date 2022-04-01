@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-03-30 17:21:16
+ * @LastEditTime: 2022-04-01 08:52:29
 -->
 <template>
   <div class="tabViewsWrap">
@@ -27,6 +27,7 @@ import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
   directives: { elDragDialog, permission },
+  name:'CustomerContractEntry',
   data() {
     return {
       // routerList: [

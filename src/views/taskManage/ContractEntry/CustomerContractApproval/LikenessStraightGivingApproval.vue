@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-01 08:49:31
+ * @LastEditTime: 2022-04-01 09:01:38
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -259,7 +259,7 @@ import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
-  name: 'UnStraightGiving',
+  name: 'LikenessStraightGivingApproval',
   data() {
     return {
       total: 1,
@@ -268,7 +268,7 @@ export default {
       maxheight: getContractEntry(),
       tableData: [
         {
-          customerName: '非直供孩子王',
+          customerName: '孩子王准直供-审批',
           noTaxIMK: '100W',
           Tax: 500000,
           NoTax: 500000,

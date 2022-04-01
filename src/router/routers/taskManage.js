@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-03-31 10:48:10
+ * @LastEditTime: 2022-04-01 08:59:14
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -109,11 +109,38 @@ export default function() {
               ]
             },
             {
-              path: '/ContractEntry/CustomerContractApproval',
-              code: 'mdm_brand',
-              name: 'Brand',
+              path: '/taskManage/ContractEntry/CustomerContractApproval',
+              code: 'mdm_product_information',
+              name: 'CustomerContractApproval',
               component: () => import('@/views/taskManage/ContractEntry/CustomerContractApproval.vue'),
-              meta: { title: '客户合同审批', icon: 'apply' }
+              meta: { title: '客户合同审批', icon: 'apply',activeMenu: '/taskManage/ContractEntry' },
+              redirect: '/taskManage/ContractEntry/CustomerContractApproval/StraightGivingApproval',
+              children: [
+                {
+                  hidden: true,
+                  path: '/taskManage/ContractEntry/CustomerContractApproval/StraightGivingApproval',
+                  code: 'mdm_product_information',
+                  name: 'StraightGivingApproval',
+                  component: () => import('@/views/taskManage/ContractEntry/CustomerContractApproval/StraightGivingApproval.vue'),
+                  meta: { title: '直供', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/CustomerContractApproval'},
+                },
+                {
+                  hidden: true,
+                  path: '/taskManage/ContractEntry/CustomerContractApproval/LikenessStraightGivingApproval',
+                  code: 'mdm_product_information',
+                  name: 'LikenessStraightGivingApproval',
+                  component: () => import('@/views/taskManage/ContractEntry/CustomerContractApproval/LikenessStraightGivingApproval.vue'),
+                  meta: { title: '准直供', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/CustomerContractApproval'},
+                },
+                {
+                  hidden: true,
+                  path: '/taskManage/ContractEntry/CustomerContractApproval/UnStraightGivingApproval',
+                  code: 'mdm_product_information',
+                  name: 'UnStraightGivingApproval',
+                  component: () => import('@/views/taskManage/ContractEntry/CustomerContractApproval/UnStraightGivingApproval.vue'),
+                  meta: { title: '非直供', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/CustomerContractApproval'},
+                },
+              ]
             },
           ]
         },
