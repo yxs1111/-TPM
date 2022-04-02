@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-02 09:30:40
+ * @LastEditTime: 2022-04-02 09:51:01
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -15,7 +15,7 @@
         <span class="text">取消</span>
       </div>
     </div>
-    <el-table :data="tableData" stripe :key="tableKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+    <el-table :data="tableData"  :key="tableKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       style="width: 100%">
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
