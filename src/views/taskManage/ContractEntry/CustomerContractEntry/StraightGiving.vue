@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-01 17:40:25
+ * @LastEditTime: 2022-04-02 09:30:40
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -245,7 +245,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="60%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="80%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">名称:孩子王</span>
@@ -267,18 +267,19 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="contractItem" align="center" label="contract item" width="180">
+            <el-table-column prop="contractItem" align="center" label="contract item" width="140">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
-                  <el-input v-model="scope.row.contractItem" clearable class="my-el-input_dialog" placeholder="请输入">
-                  </el-input>
+                  <el-select v-model="scope.row.contractItem" class="my-el-select_dialog" filterable clearable placeholder="请选择">
+                    <el-option v-for="(item,index) in ['有条件月返']" :key="index" :label="item" :value="index" />
+                  </el-select>
                 </div>
                 <div v-show="!scope.row.isNewData">
                   {{scope.row.contractItem}}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="conditionType" align="center" width="180" label="条件类型">
+            <el-table-column prop="conditionType" align="center" width="150" label="条件类型">
             </el-table-column>
             <el-table-column prop="pointCount" align="center" label="点数" width="120">
               <template slot-scope="scope">
@@ -291,7 +292,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="cost" align="center" label="费用" width="120">
+            <el-table-column prop="cost" align="center" label="费用" width="100">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
                   <el-input v-model.number="scope.row.cost" clearable class="my-el-inputNumber" placeholder="请输入">
@@ -302,13 +303,32 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="isHaveTax" align="center" width="180" label="是否含税">
+            <el-table-column prop="isHaveTax" align="center" width="100" label="是否含税">
+              <template slot-scope="scope">
+                <div v-show="scope.row.isNewData">
+                  <el-select v-model="scope.row.isHaveTax" class="my-el-inputNumber" filterable clearable placeholder="请选择">
+                    <el-option v-for="(item,index) in ['否','是']" :key="index" :label="item" :value="index" />
+                  </el-select>
+                </div>
+                <div v-show="!scope.row.isNewData">
+                  {{scope.row.isHaveTax?'是':'否'}}
+                </div>
+              </template>
             </el-table-column>
             <el-table-column prop="isWithholding" align="center" width="180" label="是否预提">
             </el-table-column>
             <el-table-column prop="taxRate" align="center" label="税率">
             </el-table-column>
             <el-table-column prop="detail" align="center" width="120" label="detail描述">
+              <template slot-scope="scope">
+                <div v-show="scope.row.isNewData">
+                  <el-input v-model.number="scope.row.detail" clearable class="my-el-inputNumber" placeholder="请输入">
+                  </el-input>
+                </div>
+                <div v-show="!scope.row.isNewData">
+                  {{scope.row.detail}}
+                </div>
+              </template>
             </el-table-column>
           </el-table>
           <div class="addNewRowWrap">
@@ -328,21 +348,68 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="contractItem" align="center" label="contract item" width="180">
+            <el-table-column prop="contractItem" align="center" label="contract item" width="140">
+              <template slot-scope="scope">
+                <div v-show="scope.row.isNewData">
+                  <el-select v-model="scope.row.contractItem" class="my-el-select_dialog" filterable clearable placeholder="请选择">
+                    <el-option v-for="(item,index) in ['有条件月返']" :key="index" :label="item" :value="index" />
+                  </el-select>
+                </div>
+                <div v-show="!scope.row.isNewData">
+                  {{scope.row.contractItem}}
+                </div>
+              </template>
             </el-table-column>
-            <el-table-column prop="conditionType" align="center" width="180" label="条件类型">
+            <el-table-column prop="conditionType" align="center" width="150" label="条件类型">
             </el-table-column>
-            <el-table-column prop="pointCount" align="center" label="点数">
+            <el-table-column prop="pointCount" align="center" label="点数" width="120">
+              <template slot-scope="scope">
+                <div v-show="scope.row.isNewData">
+                  <el-input v-model.number="scope.row.pointCount" clearable class="my-el-inputNumber" placeholder="请输入">
+                  </el-input>
+                </div>
+                <div v-show="!scope.row.isNewData">
+                  {{scope.row.pointCount}}%
+                </div>
+              </template>
             </el-table-column>
-            <el-table-column prop="cost" align="center" label="费用">
+            <el-table-column prop="cost" align="center" label="费用" width="100">
+              <template slot-scope="scope">
+                <div v-show="scope.row.isNewData">
+                  <el-input v-model.number="scope.row.cost" clearable class="my-el-inputNumber" placeholder="请输入">
+                  </el-input>
+                </div>
+                <div v-show="!scope.row.isNewData">
+                  {{scope.row.cost}}W
+                </div>
+              </template>
             </el-table-column>
-            <el-table-column prop="isHaveTax" align="center" width="180" label="是否含税">
+            <el-table-column prop="isHaveTax" align="center" width="100" label="是否含税">
+              <template slot-scope="scope">
+                <div v-show="scope.row.isNewData">
+                  <el-select v-model="scope.row.isHaveTax" class="my-el-inputNumber" filterable clearable placeholder="请选择">
+                    <el-option v-for="(item,index) in ['否','是']" :key="index" :label="item" :value="index" />
+                  </el-select>
+                </div>
+                <div v-show="!scope.row.isNewData">
+                  {{scope.row.isHaveTax?'是':'否'}}
+                </div>
+              </template>
             </el-table-column>
             <el-table-column prop="isWithholding" align="center" width="180" label="是否预提">
             </el-table-column>
             <el-table-column prop="taxRate" align="center" label="税率">
             </el-table-column>
             <el-table-column prop="detail" align="center" width="120" label="detail描述">
+              <template slot-scope="scope">
+                <div v-show="scope.row.isNewData">
+                  <el-input v-model.number="scope.row.detail" clearable class="my-el-inputNumber" placeholder="请输入">
+                  </el-input>
+                </div>
+                <div v-show="!scope.row.isNewData">
+                  {{scope.row.detail}}
+                </div>
+              </template>
             </el-table-column>
           </el-table>
           <div class="addNewRowWrap">
@@ -675,7 +742,7 @@ export default {
           isWithholding: 1,
           taxRate: '6%',
           detail: '描述',
-          isNewData: 0, //是否未新添数据
+          isNewData: 1, //是否未新添数据
         },
       ],
       termFixData: [
@@ -701,7 +768,7 @@ export default {
           isWithholding: 1,
           taxRate: '6%',
           detail: '描述',
-          isNewData: 0, //是否未新添数据
+          isNewData: 1, //是否未新添数据
         },
       ],
       //VariableData+FixData
@@ -741,13 +808,13 @@ export default {
       },
       deep: true,
     },
-    FixTotalData:{
-      handler:function() {
-        //设置两个total 的值，通过中间变量的形式
-        this.setAllTotalData()
-      },
-      deep:true
-    }
+    // FixTotalData: {
+    //   handler: function () {
+    //     //设置两个total 的值，通过中间变量的形式
+    //     this.setAllTotalData()
+    //   },
+    //   deep: true,
+    // },
   },
   directives: { elDragDialog, permission },
   methods: {
@@ -851,12 +918,12 @@ export default {
         name: 'Variable',
         contractItem: 0,
         conditionType: 'conditional',
-        pointCount: 3,
-        cost: 21,
+        pointCount: 0,
+        cost: 0,
         isHaveTax: 1,
         isWithholding: 1,
         taxRate: '6%',
-        detail: '描述',
+        detail: '',
         isNewData: 1, //是否未新添数据
       })
       //滚动条随着新增滚动到底部
@@ -872,12 +939,12 @@ export default {
         name: 'Fix',
         contractItem: 0,
         conditionType: 'conditional',
-        pointCount: 3,
-        cost: 21,
+        pointCount: 0,
+        cost: 0,
         isHaveTax: 1,
         isWithholding: 1,
         taxRate: '6%',
-        detail: '描述',
+        detail: '',
         isNewData: 1, //是否未新添数据
       })
       //滚动条随着新增滚动到底部
@@ -902,25 +969,30 @@ export default {
           this.VariableTotalData.totalCost += cost
         }
       })
-      this.termVariableData[1].pointCount=this.VariableTotalData.totalPoint
-      this.termVariableData[1].cost=this.VariableTotalData.totalCost
+      this.termVariableData[1].pointCount = this.VariableTotalData.totalPoint
+      this.termVariableData[1].cost = this.VariableTotalData.totalCost
       this.FixTotalData.totalPoint = 0
       this.FixTotalData.totalCost = 0
       //获取FixData Total
-      this.termFixData.forEach((item) => {
-        if (item.name.indexOf('total') == -1) {
+      this.termFixData.forEach((item,index) => {
+        if (index>0) {
           let { pointCount, cost } = item
           this.FixTotalData.totalPoint += pointCount
           this.FixTotalData.totalCost += cost
         }
       })
+      this.termFixData[0].pointCount = this.FixTotalData.totalPoint
+      this.termFixData[0].cost = this.FixTotalData.totalCost
       //获取所有VariableData Total+FixData Total
-      this.TotalData.totalCost=this.VariableTotalData.totalCost+this.FixTotalData.totalCost
-      this.TotalData.totalPoint=this.VariableTotalData.totalPoint+this.FixTotalData.totalPoint
+      this.TotalData.totalCost =
+        this.VariableTotalData.totalCost + this.FixTotalData.totalCost
+      this.TotalData.totalPoint =
+        this.VariableTotalData.totalPoint + this.FixTotalData.totalPoint
+      this.setAllTotalData()
     },
     setAllTotalData() {
-      this.termVariableData[0].cost=this.TotalData.totalCost
-      this.termVariableData[0].pointCount=this.TotalData.totalPoint
+      this.termVariableData[0].cost = this.TotalData.totalCost
+      this.termVariableData[0].pointCount = this.TotalData.totalPoint
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -1014,17 +1086,7 @@ export default {
     width: 150px !important;
   }
 }
-.my-el-inputNumber {
-  width: 100px !important;
-  border-radius: 5px;
-  .el-input__inner {
-    height: 37px;
-    width: 100px !important;
-  }
-  .el-input--suffix {
-    width: 100px !important;
-  }
-}
+
 .PopoverContent {
   .PopoverContentTop {
     display: flex;
@@ -1130,5 +1192,27 @@ export default {
 }
 .termTableWrap .hover-row .filstColumn {
   color: #666;
+}
+.my-el-inputNumber {
+  width: 80px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 80px;
+  }
+  .el-input--suffix {
+    width: 80px !important;
+  }
+}
+.my-el-select_dialog {
+  width: 120px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 120px;
+  }
+  .el-input--suffix {
+    width: 120px !important;
+  }
 }
 </style>

@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.deleteFlag" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ['正常','无效']" :key="index" :label="item" :value="index" />
+            <el-option v-for="item,index in ['有效','无效']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
@@ -72,7 +72,7 @@
       <el-table-column width="150" align="center" prop="deleteFlag" label="状态">
         <template slot-scope="{row}">
           <div>
-            {{row.deleteFlag?'无效':'正常'}}
+            {{row.deleteFlag?'无效':'有效'}}
           </div>
         </template>
       </el-table-column>

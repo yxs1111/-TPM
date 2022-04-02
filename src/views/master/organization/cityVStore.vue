@@ -39,7 +39,7 @@
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
           <div>
-            {{ row.state ? '正常' : '无效' }}
+            {{ row.state ? '有效' : '无效' }}
           </div>
         </template>
       </el-table-column>
