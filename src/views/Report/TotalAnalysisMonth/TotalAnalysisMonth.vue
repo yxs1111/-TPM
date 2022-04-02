@@ -443,6 +443,10 @@ export default {
           ColumWidthList.push({
             wpx: 150,
           })
+        } else if(index==0) {
+          ColumWidthList.push({
+            wpx: 150,
+          })
         } else {
           ColumWidthList.push({
             wpx: 100,

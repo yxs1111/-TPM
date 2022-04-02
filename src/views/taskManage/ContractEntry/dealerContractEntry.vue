@@ -1,18 +1,15 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-01 09:21:17
+ * @LastEditTime: 2022-04-02 14:34:18
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow">新增一行</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="showAddDialog">新增</el-button>
       <div class="TpmButtonBG">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
-      </div>
-      <div class="TpmButtonBG cancelButton" @click="cancelAddNewRow">
-        <span class="text">取消</span>
       </div>
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
@@ -161,77 +158,77 @@
       </el-table-column>
       <el-table-column prop="applyRemark" align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+          <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.applyRemark" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+          <div v-show="!scope.row.isEditor">
             {{scope.row.applyRemark}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+          <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.packageOwner" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+          <div v-show="!scope.row.isEditor">
             {{scope.row.packageOwner}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
-         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.finance" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+          <div v-show="!scope.row.isEditor">
             {{scope.row.finance}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="createBy" align="center" width="220" label="创建人">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+          <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.createBy" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+          <div v-show="!scope.row.isEditor">
             {{scope.row.createBy}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+          <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.createDate" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+          <div v-show="!scope.row.isEditor">
             {{scope.row.createDate}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="updateBy" align="center" width="220" label="修改人">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+          <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.updateBy" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+          <div v-show="!scope.row.isEditor">
             {{scope.row.updateBy}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="updateDate" align="center" width="220" label="修改时间">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&scope.row.isNewData">
+          <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.updateDate" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor||!scope.row.isNewData">
+          <div v-show="!scope.row.isEditor">
             {{scope.row.updateDate}}
           </div>
         </template>
@@ -242,6 +239,26 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
+    <!-- 导入 -->
+    <el-dialog width="80%" v-elDragDialog class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
+      <div class="dialogContent">
+        <div class="termInfo">
+          <div class="selectCustomer">
+            <span class="selectBar">客户合同</span>
+            <el-select v-model="addDialog.name" class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
+            </el-select>
+          </div>
+          <el-button type="primary" class="TpmButtonBG">查询</el-button>
+        </div>
+        <div class="termTableWrap">
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmAdd()">确 定</el-button>
+        <el-button @click="closeAddDialog">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -286,8 +303,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 1,
           contractTimeoutTime: '',
-          isNewData:0
-
         },
         {
           customerName: '孩子王',
@@ -308,7 +323,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -329,7 +343,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -350,7 +363,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -371,7 +383,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -392,7 +403,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -413,7 +423,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -434,7 +443,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -455,7 +463,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -476,7 +483,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -497,7 +503,6 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
         {
           customerName: '孩子王',
@@ -518,12 +523,16 @@ export default {
           isTimeout: 0,
           contractTimeoutStatus: 0,
           contractTimeoutTime: '',
-          isNewData:0
         },
       ],
       customerArr: [],
-      isAddCount: 0,
       tableKey: 0,
+      addDialog: {
+        id: '',
+        name: '',
+      },
+      addDialogCustomer:[],
+      isAddDialogVisible: false,
     }
   },
   mounted() {
@@ -560,40 +569,6 @@ export default {
         }
       })
     },
-    //新增一行数据
-    addNewRow() {
-      this.tableData.unshift({
-        customerName: '',
-        noTaxIMK: '',
-        Tax: '',
-        NoTax: '',
-        contractDate: '',
-        contractStatus: '',
-        systemStatus: '',
-        applyRemark: '',
-        packageOwner: '',
-        finance: '',
-        createBy: '',
-        createDate: '',
-        updateBy: '',
-        updateDate: '',
-        isEditor: 0, //是否 处于编辑状态
-        isNewData: 1, //是否 处于编辑状态
-        isTimeout: '',
-        contractTimeoutStatus: '',
-        contractTimeoutTime: '',
-      })
-      this.isAddCount++
-      // this.tableKey++
-    },
-    cancelAddNewRow() {
-      if (this.isAddCount <= 0) {
-        this.$message.info('当前没有新增的行')
-      } else {
-        this.tableData.shift()
-        this.isAddCount--
-      }
-    },
     //编辑行数据
     editorRow(index) {
       //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
@@ -617,6 +592,18 @@ export default {
     popoverCancel(index) {
       // console.log(this.$refs[`popover-` + index]);
       this.$refs[`popover-` + index].doClose()
+    },
+    //新增数据 --弹窗展示
+    showAddDialog() {
+      this.isAddDialogVisible = true
+    },
+    //新增数据--关闭弹窗
+    closeAddDialog() {
+      this.isAddDialogVisible = false
+    },
+    //确认新增
+    confirmAdd() {
+      this.isAddDialogVisible = false
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -736,6 +723,49 @@ export default {
       color: #4192d3;
       border: 1px solid #4192d3;
       text-align: center;
+    }
+  }
+}
+.dialogContent {
+  .termInfo {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    .termItem {
+      font-size: 14px;
+      color: #666;
+      margin-right: 20px;
+    }
+    .selectBar {
+      margin-right: 10px;
+    }
+    .selectCustomer {
+      margin-right: 10px;
+    }
+  }
+  .termTableWrap {
+    width: 100%;
+    border: 1px solid #e7e7e7;
+    .addNewRowWrap {
+      width: 100%;
+      height: 50px;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: #fff;
+      .addNewRow {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #f4f9ff;
+        color: #666;
+        cursor: pointer;
+        .addNewRowText {
+          margin-left: 10px;
+          color: #333;
+        }
+      }
     }
   }
 }

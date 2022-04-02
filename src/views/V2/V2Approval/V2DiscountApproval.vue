@@ -252,6 +252,7 @@ export default {
         yearAndMonth: '',
         channelCode: '',
         customerCode: '',
+        customerName: '',
         customerMdmCode: '',
         customerIndex: '',
         distributorCode: '',
@@ -311,6 +312,8 @@ export default {
         this.filterObj.customerMdmCode = ''
       } else {
         this.filterObj.customerCode =
+          this.customerArr[this.filterObj.customerIndex].customerCode
+        this.filterObj.customerName =
           this.customerArr[this.filterObj.customerIndex].customerCsName
         this.filterObj.customerMdmCode =
           this.customerArr[this.filterObj.customerIndex].customerMdmCode
@@ -342,7 +345,7 @@ export default {
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
+          customerName: this.filterObj.customerName,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           productName: this.filterObj.dim_product,

@@ -51,11 +51,11 @@
     <el-table :data="tableData" ref="multipleTable" border :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center" :selectable="checkSelectable" />
-      <el-table-column width="250" fixed="left" align="center" prop="customerCsName" label="客户名称" />
-      <el-table-column width="250" fixed="left" align="center" prop="customerMdmCode" label="客户MDM编码" />
-      <el-table-column align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="250" align="center" prop="sku" label="SKU" />
-      <el-table-column width="320" align="center" prop="yearAndMonth" label="年月" />
+      <el-table-column width="150" fixed="left" align="center" prop="customerCsName" label="客户名称" />
+      <el-table-column width="150" fixed="left" align="center" prop="customerMdmCode" label="客户MDM编码" />
+      <el-table-column align="center" fixed prop="channelCode" label="渠道" />
+      <el-table-column width="200" align="center" fixed prop="sku" label="SKU" />
+      <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column v-slot="{ row }" width="290" align="right" prop="ptc" label="平台指引含税价｜PTC （RMB/Tin）">
         {{ FormateNum(row.ptc)}}
       </el-table-column>
