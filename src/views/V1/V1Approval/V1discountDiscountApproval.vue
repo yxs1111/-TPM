@@ -100,6 +100,9 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）">
         {{ FormateNum(row.adjustedAmount) }}
       </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="distNoticeCost" label="经销商通知函费用（RMB）">
+        {{ FormateNum(row.distNoticeCost) }}
+      </el-table-column>
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
       <el-table-column width="120" align="center" prop="activityTheme" label="活动主题窗口" />
@@ -208,6 +211,9 @@
           </vxe-table-column>
           <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）">
             <template slot-scope="scope"> {{ FormateNum(scope.row.adjustedAmount) }}</template>
+          </vxe-table-column>
+          <vxe-table-column width="220" align="right" field="distNoticeCost" title="经销商通知函费用（RMB）">
+            <template slot-scope="scope"> {{ FormateNum(scope.row.distNoticeCost) }}</template>
           </vxe-table-column>
           <vxe-table-column width="120" align="center" field="mechanismType" title="机制类型" />
           <vxe-table-column width="120" align="center" field="mechanismName" title="机制名称" />

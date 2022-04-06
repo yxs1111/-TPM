@@ -4,11 +4,11 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-            <span class="SelectliTitle">活动月:</span>
-            <el-select v-model="localDate" filterable clearable placeholder="请选择">
-              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
-            </el-select>
-          </div>
+          <span class="SelectliTitle">活动月:</span>
+          <el-select v-model="localDate" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+          </el-select>
+        </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
@@ -60,6 +60,7 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
+      <el-button type="primary" class="TpmButtonBG" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
@@ -103,6 +104,9 @@
       </el-table-column> -->
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedAmount" label="调整后费用（RMB）">
         {{ FormateNum(row.adjustedAmount) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="distNoticeCost" label="经销商通知函费用（RMB）">
+        {{ FormateNum(row.distNoticeCost) }}
       </el-table-column>
       <el-table-column width="120" align="center" prop="mechanismType" label="机制类型" />
       <el-table-column width="120" align="center" prop="mechanismName" label="机制名称" />
@@ -219,6 +223,9 @@
           <vxe-table-column width="220" align="right" field="adjustedAmount" title="调整后费用（RMB）">
             <template slot-scope="scope"> {{ FormateNum(scope.row.adjustedAmount) }}</template>
           </vxe-table-column>
+          <vxe-table-column width="220" align="right" field="distNoticeCost" title="经销商通知函费用（RMB）">
+            <template slot-scope="scope"> {{ FormateNum(scope.row.distNoticeCost) }}</template>
+          </vxe-table-column>
           <vxe-table-column width="120" align="center" field="mechanismType" title="机制类型" />
           <vxe-table-column width="120" align="center" field="mechanismName" title="机制名称" />
           <vxe-table-column width="120" align="center" field="activityTheme" title="活动主题窗口" />
@@ -297,6 +304,7 @@ export default {
       btnStatus: true,
       usernameLocal: '',
       firstIsPass: false,
+      isCalculation: false,
       maxheight: getHeightHaveTab(),
     }
   },
@@ -345,7 +353,7 @@ export default {
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
-        this.monthList=res.data
+        this.monthList = res.data
       })
     },
     // 获取下拉框
@@ -598,6 +606,18 @@ export default {
         this.fileList = [fileList[fileList.length - 1]]
       }
     },
+    //计算
+    Calculation() {
+      API.calculation({
+        yearAndMonth: this.localDate,
+        channelName: this.filterObj.channelCode,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          this.$message.info(`${res.data}`)
+        }
+      })
+    },
     // 提交
     submitInfo() {
       if (this.tableData[0].judgmentType === null) {
@@ -715,14 +735,14 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == ''||this.localDate=='') {
+      if (this.filterObj.channelCode == '' || this.localDate == '') {
         if (this.localDate == '') {
           this.$message.info(messageObj.requireMonth)
           return
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getPageV1({
           pageNum: this.pageNum, // 当前页
@@ -739,6 +759,7 @@ export default {
               this.tableData = response.data.records
               this.mainIdLocal = response.data.records[0].mainId
               this.submitBtn = response.data.records[0].isSubmit
+              this.isCalculation = response.data.records[0].isCalculation
               this.infoByMainId()
             } else {
               this.tableData = []
@@ -762,7 +783,8 @@ export default {
             if (
               res.data.version === 'V1' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.submitBtn === 0
+              this.submitBtn === 0 &&
+              this.isCalculation === 1
             ) {
               this.btnStatus = true
             } else {

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-02 14:34:18
+ * @LastEditTime: 2022-04-06 15:54:43
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -11,9 +11,11 @@
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
       </div>
+      <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
     </div>
-    <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
-      style="width: 100%">
+    <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
+      :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -37,117 +39,69 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerName" align="center" width="220" label="名称">
+      <el-table-column prop="customerName" align="center" width="220" label="客户名称">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.customerName" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
-            </el-select>
-          </div>
-          <div v-show="!scope.row.isEditor">
+          <div>
             {{scope.row.customerName}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="noTaxIMK" align="center" width="220" label="未税IMK">
+      <el-table-column prop="targetSale" align="center" width="220" label="目标销售额">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.noTaxIMK" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.noTaxIMK}}
+          <div>
+            {{scope.row.targetSale}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="Tax" align="center" width="220" label="含税费用">
+      <el-table-column prop="dealerName" align="center" width="220" label="经销商名称">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.Tax" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.Tax}}
+          <div>
+            {{scope.row.dealerName}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="NoTax" align="center" width="220" label="未税费用">
+      <el-table-column prop="dealerTarget" align="center" width="220" label="目标销售额(¥)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.NoTax" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.dealerTarget" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{scope.row.NoTax}}
+            {{scope.row.dealerTarget}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="contractDate" align="center" width="220" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
-              end-placeholder="结束月份">
+            <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
+              end-placeholder="结束日期">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
-            <!-- {{scope.row.contractDate[0]+' 至 '+scope.row.contractDate[1]}} -->
-            {{scope.row.contractDate}}
+            {{scope.row.contractDate[0]+' - '+scope.row.contractDate[1]}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor">
+            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+              end-placeholder="结束月份">
+            </el-date-picker>
+          </div>
+          <div v-show="!scope.row.isEditor && scope.row.systemDate.length">
+            {{ scope.row.systemDate[0] + ' - ' + scope.row.systemDate[1] }}
+            <!-- {{scope.row.contractDate}} -->
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="contractStatus" align="center" width="240" label="合同状态">
         <template slot-scope="scope">
           <div class="contractStatusWrap">
-            <div v-show="scope.row.isEditor">
-              <el-select v-model="scope.row.contractStatus" class="my-el-input" filterable clearable placeholder="请选择">
-                <el-option v-for="(item,index) in ['生效中','未生效','中止','作废']" :key="index" :label="item" :value="index" />
-              </el-select>
+            <div>
+              {{ scope.row.contractStatus == 0 ? '草稿' : '提交' }}
             </div>
-            <div v-show="!scope.row.isEditor">
-              {{scope.row.contractStatus==0?'生效中':'未生效'}}
-            </div>
-            <div class="timeOutWrap">
-              <el-popover :ref="'popover-' + scope.$index" placement="right" width="300" trigger="click">
-                <div class="PopoverContent">
-                  <div class="PopoverContentTop">
-                    <span>定时更改状态</span>
-                    <el-switch v-model="scope.row.contractTimeoutStatus" :active-value="1" :inactive-value="0">
-                    </el-switch>
-                  </div>
-                  <div class="PopoverContentOption">
-                    <div class="PopoverContentOptionItem">
-                      <span class="PopoverContentOptionItemText">合同状态</span>
-                      <el-select v-model="scope.row.contractTimeoutStatus" class="my-el-input" filterable clearable placeholder="请选择">
-                        <el-option v-for="(item,index) in ['生效中','未生效','中止','作废']" :key="index" :label="item" :value="index" />
-                      </el-select>
-                    </div>
-                    <div class="PopoverContentOptionItem">
-                      <span class="PopoverContentOptionItemText">更改时间</span>
-                      <el-date-picker v-model="scope.row.contractTimeoutTime" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="date" placeholder="选择日期">
-                      </el-date-picker>
-                    </div>
-                  </div>
-                  <div class="PopoverContentFoot">
-                    <div class="TpmButtonBG" @click="popoverSubmit(scope.$index,scope.row)">保存</div>
-                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.$index)">取消</div>
-                  </div>
-                </div>
-                <svg-icon :icon-class="scope.row.contractTimeoutStatus==1?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
-                <!-- <svg-icon icon-class="timeout_dark" v- slot="reference" class="svgIcon" /> -->
-              </el-popover>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="systemStatus" align="center" width="220" label="系统状态">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.systemStatus" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="(item,index) in ['草稿','通过','提交','中止','作废']" :key="index" :label="item" :value="index" />
-            </el-select>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.systemStatus==0?'草稿':'通过'}}
           </div>
         </template>
       </el-table-column>
@@ -167,72 +121,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.packageOwner" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.packageOwner}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.finance" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.finance}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="createBy" align="center" width="220" label="创建人">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.createBy" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.createBy}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="createDate" align="center" width="220" label="创建时间">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.createDate" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.createDate}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="updateBy" align="center" width="220" label="修改人">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.updateBy" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.updateBy}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="updateDate" align="center" width="220" label="修改时间">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.updateDate" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{scope.row.updateDate}}
-          </div>
-        </template>
-      </el-table-column>
+      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
+      <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
+      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
+      <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
+      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
+      <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -240,7 +134,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="80%" v-elDragDialog class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
+    <el-dialog width="90%" v-elDragDialog class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
       <div class="dialogContent">
         <div class="termInfo">
           <div class="selectCustomer">
@@ -252,6 +146,83 @@
           <el-button type="primary" class="TpmButtonBG">查询</el-button>
         </div>
         <div class="termTableWrap">
+          <div class="TableWrap_dealer">
+            <el-table :data="addDialogCustomer" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+              <el-table-column prop="customerName" align="center" width="320" label="客户名称">
+              </el-table-column>
+              <el-table-column prop="targetSale" align="center" width="280" label="目标销售额">
+              </el-table-column>
+              <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
+                <template slot-scope="scope">
+                  <div>
+                    {{scope.row.contractDate[0]+' - '+scope.row.contractDate[1]}}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="systemDate" align="center" width="280" label="系统生效时间">
+                <template slot-scope="scope">
+                  <div v-show="!scope.row.isEditor && scope.row.systemDate.length">
+                    {{ scope.row.systemDate[0] + ' - ' + scope.row.systemDate[1] }}
+                    <!-- {{scope.row.contractDate}} -->
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="contractStatus" align="center" label="合同状态">
+                <template slot-scope="scope">
+                  <div class="contractStatusWrap">
+                    <div>
+                      {{ scope.row.contractStatus == 0 ? '失效' : '生效中' }}
+                    </div>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="space">
+          </div>
+          <div class="TableWrap_dealer">
+            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="280" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+              <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
+                <template slot-scope="scope">
+                  <div>
+                    <el-select v-model="scope.row.distributorName" class="my-el-input" filterable clearable placeholder="请选择">
+                      <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
+                    </el-select>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="targetSale" align="center" width="280" label="目标销售额(¥)">
+                <template slot-scope="scope">
+                  <div>
+                    <el-input v-model="scope.row.targetSale" clearable class="my-el-input" placeholder="请输入">
+                    </el-input>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
+                <template slot-scope="scope">
+                  <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column prop="systemDate" align="center" width="280" label="系统生效时间">
+                <template slot-scope="scope">
+                  <div>
+                    <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+                      end-placeholder="结束月份">
+                    </el-date-picker>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="addNewRowWrap">
+              <div class="addNewRow" @click="addNewDistributor">
+                <i class="el-icon-plus"></i>
+                <span class="addNewRowText">新增一行</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -269,7 +240,7 @@ import {
   getTextMap,
   parseTime,
   getContractEntry,
-  setSplitAssignee,
+  FormateThousandNum,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -286,10 +257,11 @@ export default {
       tableData: [
         {
           customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
+          targetSale: 100,
+          dealerName: '杭州华商贸易有限公司',
+          dealerTarget: 500000,
+          contractDate: ['20220110', '20220521'],
+          systemDate: ['202201', '202212'],
           contractStatus: 0,
           systemStatus: 0,
           applyRemark: '意见',
@@ -300,238 +272,36 @@ export default {
           updateBy: '更新人',
           updateDate: '202201',
           isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
-        },
-        {
-          customerName: '孩子王',
-          noTaxIMK: '100W',
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['202201', '202205'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 0,
-          contractTimeoutTime: '',
         },
       ],
       customerArr: [],
+      distributorArr: [],
+      checkArr: [], //选中的数据
       tableKey: 0,
       addDialog: {
         id: '',
         name: '',
       },
-      addDialogCustomer:[],
+      addDialogCustomer: [
+        {
+          customerName: '孩子王',
+          targetSale: 100,
+          contractDate: ['20220110', '20220521'],
+          systemDate: ['202201', '202212'],
+          contractStatus: 0,
+          systemStatus: 0,
+        },
+      ],
+      addDialogDealerList: [
+        {
+          distributorName: '上海映华食品有限公司',
+          targetSale: 100,
+          contractDate: ['20220110', '20220521'],
+          systemDate: ['202201', '202212'],
+          contractStatus: 0,
+          systemStatus: 0,
+        },
+      ],
       isAddDialogVisible: false,
     }
   },
@@ -542,6 +312,7 @@ export default {
       })()
     }
     this.getCustomerList()
+    this.getDistributorList()
   },
   directives: { elDragDialog, permission },
   methods: {
@@ -569,6 +340,18 @@ export default {
         }
       })
     },
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList({
+          // customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
+    },
     //编辑行数据
     editorRow(index) {
       //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
@@ -582,20 +365,27 @@ export default {
     },
     //删除该行数据
     deleteRow() {},
-    //定时任务确定
-    popoverSubmit(index, row) {
-      this.tableData[index].contractTimeoutTime = '2022-03-31'
-      let { id } = row
-      this.popoverCancel(index)
-    },
-    //定时任务取消
-    popoverCancel(index) {
-      // console.log(this.$refs[`popover-` + index]);
-      this.$refs[`popover-` + index].doClose()
-    },
+    //录入提交
+    submit() {},
     //新增数据 --弹窗展示
     showAddDialog() {
       this.isAddDialogVisible = true
+    },
+    // 新增经销商
+    addNewDistributor() {
+      this.addDialogDealerList.push({
+        distributorName: '',
+        targetSale: 0,
+        contractDate: [],
+        systemDate: [],
+        contractStatus: 0,
+        systemStatus: 0,
+      })
+      //滚动条随着新增滚动到底部
+      let scrollHeight = this.$refs.dealerTable.bodyWrapper.scrollHeight
+      this.$nextTick(function () {
+        this.$refs.dealerTable.bodyWrapper.scrollTop = scrollHeight
+      })
     },
     //新增数据--关闭弹窗
     closeAddDialog() {
@@ -625,6 +415,13 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
+    handleSelectionChange(val) {
+      this.checkArr = val
+    },
+    //格式化--千位分隔符、两位小数
+    FormateNum(num) {
+      return FormateThousandNum(num)
     },
   },
 }
@@ -746,7 +543,7 @@ export default {
   }
   .termTableWrap {
     width: 100%;
-    border: 1px solid #e7e7e7;
+    // border: 1px solid #e7e7e7;
     .addNewRowWrap {
       width: 100%;
       height: 50px;
@@ -766,6 +563,14 @@ export default {
           color: #333;
         }
       }
+    }
+    .space {
+      width: 100%;
+      height: 20px;
+    }
+    .TableWrap_dealer {
+      width: 100%;
+      border: 1px solid #e7e7e7;
     }
   }
 }

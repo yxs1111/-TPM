@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2021-12-10 20:18:49
+ * @LastEditTime: 2022-04-06 11:24:45
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -17,6 +17,9 @@ export default {
   },
   approveV1(params) {
     return requestApi.request_post('/cityplan/investCpVOneDetail/approve', params)
+  },
+  calculation(params) {
+    return requestApi.request_get('/cityplan/investCpVOneDetail/toCalculation', params)
   },
   submitV1(params) {
     return requestApi.request_post('/cityplan/investCpVOneDetail/submit', params)
