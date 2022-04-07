@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-06 15:54:43
+ * @LastEditTime: 2022-04-07 08:40:11
 -->
 <template>
-  <div class="MainContent" @keyup.enter="pageList">
+  <div class="MainContent">
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="showAddDialog">新增</el-button>
       <div class="TpmButtonBG">
@@ -106,7 +106,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" label="合同条款">
-        <div class="seeActivity">
+        <div class="seeActivity" @click="showTermDetailDialog">
           条款明细
         </div>
       </el-table-column>
@@ -133,8 +133,8 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <!-- 导入 -->
-    <el-dialog width="90%" v-elDragDialog class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
+    <!-- 新增 -->
+    <el-dialog width="95%" v-elDragDialog class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
       <div class="dialogContent">
         <div class="termInfo">
           <div class="selectCustomer">
@@ -230,6 +230,21 @@
         <el-button @click="closeAddDialog">取 消</el-button>
       </span>
     </el-dialog>
+    <!-- 导入 -->
+    <el-dialog width="90%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermDetailVisible" @close="closeTermDetailDialog">
+      <div class="dialogContent">
+        <div class="dealersWrap">
+          <div class="customerTable">
+          </div>
+          <div class="dealersTableWrap">
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmTermDetail()">确 定</el-button>
+        <el-button @click="closeTermDetailDialog">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -303,6 +318,7 @@ export default {
         },
       ],
       isAddDialogVisible: false,
+      isTermDetailVisible: false, //条款明细弹窗
     }
   },
   mounted() {
@@ -395,6 +411,19 @@ export default {
     confirmAdd() {
       this.isAddDialogVisible = false
     },
+
+    //打开条款明细弹窗
+    showTermDetailDialog() {
+      this.isTermDetailVisible = true
+    },
+    //关闭条款明细弹窗
+    closeTermDetailDialog() {
+      this.isTermDetailVisible = false
+    },
+    //条款明细 确认
+    confirmTermDetail() {
+      this.closeTermDetailDialog()
+    },
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size
@@ -422,6 +451,15 @@ export default {
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
       return FormateThousandNum(num)
+    },
+    //弹窗表格样式
+    tableRowClassNameDialog({ row, rowIndex }) {
+      if (row.name.indexOf('Total') === 0) {
+        return 'contract_firstRow'
+      }
+      if (row.name.indexOf('total') != -1) {
+        return 'first-row'
+      }
     },
   },
 }
@@ -573,5 +611,38 @@ export default {
       border: 1px solid #e7e7e7;
     }
   }
+  .dealersWrap {
+    width: 100%;
+    display: flex;
+    .customerTable {
+      border: 1px solid #e7e7e7;
+    }
+    .dealersTableWrap {
+      display: flex;
+      overflow-x: scroll;
+      .dealerItem {
+        display: flex;
+      }
+    }
+  }
+}
+.line {
+  height: 80%;
+  width: 4px;
+  background-color: #4192d3;
+}
+</style>
+<style lang="less">
+.contract_firstRow {
+  background-color: #4192d3 !important;
+  color: #fff;
+  font-size: 14px;
+}
+.hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+}
+.hover-row .filstColumn {
+  color: #666;
 }
 </style>

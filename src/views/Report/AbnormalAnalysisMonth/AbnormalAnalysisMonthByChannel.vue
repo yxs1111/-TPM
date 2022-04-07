@@ -5,7 +5,7 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">异常类别:</span>
-          <el-select v-model="filterObj.exception" placeholder="请选择">
+          <el-select v-model="filterObj.exception" clearable placeholder="请选择">
             <el-option v-for="(item, index) in ['数量','费用']" :key="index+1" :label="item" :value="index+1" />
           </el-select>
         </div>
@@ -17,7 +17,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Cost Type:</span>
-          <el-select v-model="filterObj.CostType" placeholder="请选择" class="my-el-select">
+          <el-select v-model="filterObj.CostType" clearable placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
@@ -198,10 +198,11 @@ export default {
   data() {
     return {
       filterObj: {
-        exception: 1,
-        month: getCurrentMonth(),
-        CostType: 'Disc',
-        MinePackage: 14,
+        exception: '',
+        month: '',
+        // month: getCurrentMonth(),
+        CostType: '',
+        MinePackage: '',
         regionCode: [],
         brandCode: [],
         productCode: [],
@@ -234,7 +235,7 @@ export default {
     this.getRegionList()
     this.getBrandList()
     this.getCostTypeList()
-    this.getTableData()
+    // this.getTableData()
     this.initColum()
   },
   watch: {
@@ -254,7 +255,7 @@ export default {
         this.dynamicColumn = dynamicColumnCost
         this.tableRender()
       }
-      this.getTableData()
+      // this.getTableData()
     },
   },
   methods: {

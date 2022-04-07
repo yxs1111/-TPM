@@ -116,7 +116,7 @@
             <el-table-column align="center" prop="yearAndMonth" label="年月" />
             <el-table-column align="center" prop="channelCode" label="渠道" />
             <el-table-column align="center" prop="productEsName" label="SKU" />
-            <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（箱/Tin）">
+            <el-table-column v-slot={row} width="150" align="center" prop="gear" label="档位（￥/Tin）">
               ¥{{row.gear}}
             </el-table-column>
             <el-table-column v-slot={row} width="150" align="center" prop="volMix" label="Vol Mix">

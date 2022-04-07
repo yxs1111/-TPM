@@ -199,10 +199,11 @@ export default {
   data() {
     return {
       filterObj: {
-        exception: 1,
-        month: getCurrentMonth(),
-        CostType: 'Disc',
-        MinePackage: 14,
+        exception: '',
+        month: '',
+        // month: getCurrentMonth(),
+        CostType: '',
+        MinePackage: '',
         regionCode: [],
         brandCode: [],
         productCode: [],
@@ -235,7 +236,7 @@ export default {
     this.getRegionList()
     this.getCostTypeList()
     this.getBrandList()
-    this.getTableData()
+    // this.getTableData()
   },
   watch: {
     //动态列渲染
@@ -254,7 +255,7 @@ export default {
         this.dynamicColumn = dynamicColumnCost
         this.tableRender()
       }
-      this.getTableData()
+      // this.getTableData()
     },
   },
   methods: {

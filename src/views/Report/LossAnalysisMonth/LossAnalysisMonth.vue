@@ -51,7 +51,7 @@
         <span class="text">下载报表</span>
       </div>
     </div>
-    <div class="ContentWrap">
+    <div class="ContentWrap" v-show="filterObj.yearAndMonthList.length">
       <div class="contentli">
         <div class="contentTop">
           <div class="SKUTitle">费用（k RMB）</div>
@@ -213,7 +213,8 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonthList: getCurrentMonth1(),
+        // yearAndMonthList: getCurrentMonth1(),
+        yearAndMonthList:[],
         type: '',
         regionCode: '',
         month: '',

@@ -267,8 +267,8 @@ export default {
   },
   computed: {},
   mounted() {
-    const yearAndMonth = getCurrentMonth()
-    this.filterObj.yearAndMonth = yearAndMonth[0]
+    // const yearAndMonth = getCurrentMonth()
+    // this.filterObj.yearAndMonth = yearAndMonth[0]
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeight()

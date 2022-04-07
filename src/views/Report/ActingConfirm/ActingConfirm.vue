@@ -136,8 +136,8 @@ export default {
   },
   computed: {},
   mounted() {
-    const yearAndMonth = getCurrentMonth()
-    this.filterObj.yearAndMonth = yearAndMonth[0]
+    // const yearAndMonth = getCurrentMonth()
+    // this.filterObj.yearAndMonth = yearAndMonth[0]
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeight()
@@ -199,7 +199,7 @@ export default {
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
-        this.filterObj.channelName = this.ChannelList[0].channelCode
+        // this.filterObj.channelName = this.ChannelList[0].channelCode
         this.getTableData()
       })
     },

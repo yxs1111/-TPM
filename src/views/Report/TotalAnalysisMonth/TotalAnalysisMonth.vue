@@ -121,7 +121,8 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        yearAndMonthList: getCurrentMonth1(),
+         yearAndMonthList: [],
+        // yearAndMonthList: getCurrentMonth1(),
         customerCode: [],
         channelCode: [],
         productName: [],
@@ -294,7 +295,7 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         this.channelOptions = res.data
         // this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
-        this.filterObj.channelCode = ['NKA']
+        // this.filterObj.channelCode = ['NKA']
         this.getCustomerList()
       })
     },
@@ -314,7 +315,7 @@ export default {
               // }
               list.push(item.customerCsName)
             })
-            this.filterObj.customerCode = list
+            // this.filterObj.customerCode = list
             this.AllCustomerList = list
             this.getSkuSelect()
           }
@@ -328,7 +329,7 @@ export default {
         this.skuList.forEach((item) => {
           list.push(item.productEsName)
         })
-        this.filterObj.productName = [...list]
+        // this.filterObj.productName = [...list]
         this.getTableData()
       })
     },
