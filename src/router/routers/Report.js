@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-03-09 17:37:37
+ * @LastEditTime: 2022-04-07 14:19:28
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -91,6 +91,21 @@ export default function() {
           component: () => import('@/views/Report/POSDifferenceAnalysis/POSDifferenceAnalysis.vue'),
           meta: { title: '月结POS差异分析报表', icon: 'approve' }
         },
+        //OverviewKA OverviewDist
+        // {
+        //   path: '/OverviewKA',
+        //   code: 'resource-report-pos',
+        //   name: 'OverviewKA',
+        //   component: () => import('@/views/Report/Overview/OverviewKA.vue'),
+        //   meta: { title: 'OverviewKA', icon: 'approve' }
+        // },
+        // {
+        //   path: '/OverviewDist',
+        //   code: 'resource-report-pos',
+        //   name: 'OverviewDist',
+        //   component: () => import('@/views/Report/Overview/OverviewDist.vue'),
+        //   meta: { title: 'OverviewDist', icon: 'approve' }
+        // },
       ]
     }
   ]
