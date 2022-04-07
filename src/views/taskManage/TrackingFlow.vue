@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-03-16 09:03:41
+ * @LastEditTime: 2022-04-07 13:48:09
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -15,7 +15,7 @@
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">Mine package:</span>
-          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.MinePackageName" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
@@ -92,7 +92,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
+        yearAndMonth: '',
+        MinePackageName: '',
         channelCode: '',
+        processStatus: '',
         state: '',
         category: '',
       },
@@ -126,6 +129,10 @@ export default {
       API.getInvestCpVList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        yearAndMonth:this.filterObj.yearAndMonth,
+        minePackageName:this.filterObj.MinePackageName,
+        channelCode:this.filterObj.channelCode,
+        processStatus:this.filterObj.processStatus,
       })
         .then((response) => {
           this.tableData = response.data.records
