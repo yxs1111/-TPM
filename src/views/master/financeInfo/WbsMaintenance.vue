@@ -93,7 +93,7 @@
             <el-input v-model="ruleForm.wbsCustomerCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="客户" prop="customerCsName">
+          <el-form-item label="客户名称" prop="customerCsName">
             <el-select v-model="ruleForm.customerCsName" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
             </el-select>
