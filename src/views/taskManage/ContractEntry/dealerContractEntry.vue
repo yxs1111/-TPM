@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-07 08:40:11
+ * @LastEditTime: 2022-04-08 13:34:09
 -->
 <template>
   <div class="MainContent">
@@ -49,7 +49,7 @@
       <el-table-column prop="targetSale" align="center" width="220" label="目标销售额">
         <template slot-scope="scope">
           <div>
-            {{scope.row.targetSale}}
+            {{FormateNum(scope.row.targetSale)}}
           </div>
         </template>
       </el-table-column>
@@ -67,7 +67,7 @@
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{scope.row.dealerTarget}}
+            {{FormateNum(scope.row.dealerTarget)}}
           </div>
         </template>
       </el-table-column>
@@ -184,36 +184,52 @@
             <el-table :data="addDialogDealerList" ref="dealerTable" max-height="280" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
                 <template slot-scope="scope">
-                  <div>
+                  <div v-if="scope.row.isEditor">
                     <el-select v-model="scope.row.distributorName" class="my-el-input" filterable clearable placeholder="请选择">
                       <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
                     </el-select>
+                  </div>
+                  <div v-else>
+                    {{scope.row.distributorName}}
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="targetSale" align="center" width="280" label="目标销售额(¥)">
                 <template slot-scope="scope">
-                  <div>
+                  <div v-if="scope.row.isEditor">
                     <el-input v-model="scope.row.targetSale" clearable class="my-el-input" placeholder="请输入">
                     </el-input>
+                  </div>
+                  <div v-else>
+                    {{FormateNum(scope.row.targetSale)}}
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
                 <template slot-scope="scope">
-                  <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
+                  <div v-if="scope.row.isEditor">
+                    <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
+                  </div>
+                  <div v-else>
+                    {{scope.row.contractDate}}
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column prop="systemDate" align="center" width="280" label="系统生效时间">
                 <template slot-scope="scope">
-                  <div>
+                  <div v-if="scope.row.isEditor">
                     <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
                       end-placeholder="结束月份">
                     </el-date-picker>
                   </div>
+                  <div v-else>
+                    {{scope.row.systemDate}}
+                  </div>
                 </template>
+              </el-table-column>
+               <el-table-column prop="isEditor" align="center" label="是否补录">
               </el-table-column>
             </el-table>
             <div class="addNewRowWrap">
@@ -241,6 +257,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="staging()">暂 存</el-button>
         <el-button type="primary" @click="confirmTermDetail()">确 定</el-button>
         <el-button @click="closeTermDetailDialog">取 消</el-button>
       </span>
@@ -315,6 +332,16 @@ export default {
           systemDate: ['202201', '202212'],
           contractStatus: 0,
           systemStatus: 0,
+          isEditor:0 ,//是否补录
+        },
+        {
+          distributorName: '上海映华食品有限公司',
+          targetSale: 100,
+          contractDate: ['20220110', '20220521'],
+          systemDate: ['202201', '202212'],
+          contractStatus: 0,
+          systemStatus: 0,
+          isEditor:1 ,//是否补录
         },
       ],
       isAddDialogVisible: false,
@@ -389,6 +416,7 @@ export default {
     },
     // 新增经销商
     addNewDistributor() {
+      //如何判断是否为补录
       this.addDialogDealerList.push({
         distributorName: '',
         targetSale: 0,
@@ -422,6 +450,10 @@ export default {
     },
     //条款明细 确认
     confirmTermDetail() {
+      this.closeTermDetailDialog()
+    },
+    //条款明细暂存
+    staging() {
       this.closeTermDetailDialog()
     },
     // 每页显示页面数变更

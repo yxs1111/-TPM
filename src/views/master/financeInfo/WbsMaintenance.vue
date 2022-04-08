@@ -53,8 +53,8 @@
       </el-table-column>
       <el-table-column width="120" align="center" prop="wbsCustomerCode" label="WBS客户编码"> </el-table-column>
       <el-table-column width="220" align="center" prop="customerCsName" label="客户名称"> </el-table-column>
-      <el-table-column width="150" align="center" prop="customerMdmCode" label="客户编码"> </el-table-column>
-      <el-table-column align="center" prop="channelCode" label="渠道"> </el-table-column>
+      <!-- <el-table-column width="150" align="center" prop="customerMdmCode" label="客户编码"> </el-table-column>
+      <el-table-column align="center" prop="channelCode" label="渠道"> </el-table-column> -->
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
@@ -98,15 +98,16 @@
               <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
             </el-select>
           </el-form-item>
-          <el-form-item label="渠道" prop="channelCode">
+          <!-- <el-form-item label="渠道" prop="channelCode">
             <el-select v-model="ruleForm.channelCode" class="my-el-input" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
-          </el-form-item>
+          </el-form-item> -->
           
           <el-form-item label="状态">
-              <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
               <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
+              <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
+              
             <!-- <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="(item,index) in ['无效','正常']" :key="item" :label="item" :value="index" />
             </el-select> -->
@@ -132,7 +133,7 @@ import {
   getDefaultPermissions,
   parseTime,
   getTextMap,
-  getHeightSingle,
+  getHeight,
   downloadFile,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
@@ -198,14 +199,14 @@ export default {
       editorId: '',
       checkArr: [], //批量删除,存放选中
       ChannelList: [],
-      maxheight: getHeightSingle(),
+      maxheight: getHeight(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightSingle()
+        this.maxheight = getHeight()
       })()
     }
     this.getTableData()
@@ -341,7 +342,7 @@ export default {
             wbsCustomerCode: this.ruleForm.wbsCustomerCode,
             customerCsName: this.ruleForm.customerCsName,
             customerMdmCode: this.ruleForm.customerMdmCode,
-            channelCode: this.ruleForm.channelCode,
+            // channelCode: this.ruleForm.channelCode,
             state: this.ruleForm.state,
             remark: this.ruleForm.remark,
           }).then((response) => {
