@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-03 12:05:39
+ * @LastEditTime: 2022-04-08 09:00:30
 -->
 <template>
   <div class="app-container">
@@ -145,7 +145,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Version" prop="dimVersion">
-              <el-select v-model="ruleForm.dimVersion" disabled placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.dimVersion"  placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -468,7 +468,7 @@ export default {
     getCPTData() {
       this.dialogVisible = true
       this.ruleForm.channelCode = this.filterObj.channelCode
-      this.ruleForm.dimVersion = 'Final'
+      this.ruleForm.dimVersion = ''
       // API.isExist({
       //   yearAndMonth: this.filterObj.month,
       //   channelCode: this.filterObj.channelCode,

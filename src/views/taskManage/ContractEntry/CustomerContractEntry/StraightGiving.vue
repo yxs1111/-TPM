@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-06 14:03:44
+ * @LastEditTime: 2022-04-07 16:00:03
 -->
 <template>
   <div class="MainContent">
@@ -82,7 +82,7 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyy-MM-dd" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
               end-placeholder="结束月份">
             </el-date-picker>
           </div>
@@ -381,7 +381,7 @@ export default {
           Tax: 500000,
           NoTax: 500000,
           contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
+          systemDate: ['202201', '202201'],
           contractStatus: 0,
           systemStatus: 0,
           applyRemark: '意见',

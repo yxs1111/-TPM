@@ -465,7 +465,8 @@ export function yearAndMonthList() {
 }
 //Version
 export function VersionList() {
-  return ['V1', 'V2', 'Final']
+  // return ['V1', 'V2', 'Final']
+  return ['Final']
 }
 //报表背景色
 export function ReportBgColorMap() {
