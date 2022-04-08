@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-08 13:34:09
+ * @LastEditTime: 2022-04-08 15:52:17
 -->
 <template>
   <div class="MainContent">
@@ -15,7 +15,7 @@
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <!-- <el-table-column type="selection" align="center" /> -->
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
