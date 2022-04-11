@@ -467,6 +467,9 @@ export default {
     },
     // 获取页面信息
     getReport() {
+      if (!this.filterObj.yearAndMonthList.length) {
+        return
+      }
       const yearAndMonthList = getYearAndMonthRange(
         this.filterObj.yearAndMonthList[0],
         this.filterObj.yearAndMonthList[1]
@@ -760,6 +763,16 @@ export default {
       }
     }
   }
+  // /*滚动条的宽度*/
+  // ::-webkit-scrollbar {
+  //   width: 16px;
+  //   height: 16px;
+  // }
+  // /* //滚动条的滑块 */
+  // ::-webkit-scrollbar-thumb {
+  //   background: #b9b9b9;
+  //   border-radius: 8px;
+  // }
 }
 </style>
 <style>

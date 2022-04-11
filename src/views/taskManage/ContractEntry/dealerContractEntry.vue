@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-08 15:52:17
+ * @LastEditTime: 2022-04-11 10:39:26
 -->
 <template>
   <div class="MainContent">
@@ -209,8 +209,8 @@
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
                     <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-                  </el-date-picker>
+                      end-placeholder="结束日期">
+                    </el-date-picker>
                   </div>
                   <div v-else>
                     {{scope.row.contractDate}}
@@ -229,7 +229,7 @@
                   </div>
                 </template>
               </el-table-column>
-               <el-table-column prop="isEditor" align="center" label="是否补录">
+              <el-table-column prop="isEditor" align="center" label="是否补录">
               </el-table-column>
             </el-table>
             <div class="addNewRowWrap">
@@ -246,13 +246,62 @@
         <el-button @click="closeAddDialog">取 消</el-button>
       </span>
     </el-dialog>
-    <!-- 导入 -->
-    <el-dialog width="90%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermDetailVisible" @close="closeTermDetailDialog">
+    <!--条款明细 -->
+    <el-dialog width="95%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermDetailVisible" @close="closeTermDetailDialog">
       <div class="dialogContent">
         <div class="dealersWrap">
-          <div class="customerTable">
+          <div class="dealerItem">
+            <div class="topInfo">
+              <span>客户名称：高鑫零售</span>
+              <span class="tax">目标销售额(含税，￥):{{FormateNum(100000)}}</span>
+            </div>
+            <el-table :data="termCustomerData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+              <el-table-column align="center" width="140">
+                <template v-slot:header></template>
+                <template slot-scope="{ row }">
+                  <div>
+                    {{ row.name }}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="contractItem" align="center" width="150" label="Contract item">
+              </el-table-column>
+              <el-table-column prop="conditionType" align="center" width="150" label="条件类型">
+              </el-table-column>
+              <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
+              </el-table-column>
+              <el-table-column prop="cost" align="center" width="150" label="含税金额（￥）">
+              </el-table-column>
+              <el-table-column prop="detail" align="center" width="150" label="描述"></el-table-column>
+            </el-table>
           </div>
           <div class="dealersTableWrap">
+            <div class="dealerItem" v-for="item,index in termDistData" :key="index">
+              <div class="topInfo">
+                <span>经销商名称：{{item.distName}}</span>
+                <span class="tax">目标销售额(含税，￥):{{item.targetSale}}</span>
+              </div>
+              <el-table :data="item.data" border :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+                <el-table-column align="center" width="140">
+                  <template v-slot:header></template>
+                  <template slot-scope="{ row }">
+                    <div>
+                      {{ row.name }}
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="contractItem" align="center" width="150" label="Contract item">
+                </el-table-column>
+                <el-table-column prop="conditionType" align="center" width="150" label="条件类型">
+                </el-table-column>
+                <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
+                </el-table-column>
+                <el-table-column prop="cost" align="center" width="150" label="含税金额（￥）">
+                </el-table-column>
+                <el-table-column prop="detail" align="center" width="150" label="描述">
+                </el-table-column>
+              </el-table>
+            </div>
           </div>
         </div>
       </div>
@@ -332,7 +381,7 @@ export default {
           systemDate: ['202201', '202212'],
           contractStatus: 0,
           systemStatus: 0,
-          isEditor:0 ,//是否补录
+          isEditor: 0, //是否补录
         },
         {
           distributorName: '上海映华食品有限公司',
@@ -341,11 +390,245 @@ export default {
           systemDate: ['202201', '202212'],
           contractStatus: 0,
           systemStatus: 0,
-          isEditor:1 ,//是否补录
+          isEditor: 1, //是否补录
         },
       ],
       isAddDialogVisible: false,
-      isTermDetailVisible: false, //条款明细弹窗
+      isTermDetailVisible: true, //条款明细弹窗
+      termCustomerData: [
+        {
+          name: 'Total',
+          contractItem: '',
+          conditionType: '',
+          pointCount: 3,
+          cost: 21,
+          isHaveTax: '',
+          isWithholding: '',
+          taxRate: '',
+          detail: '',
+        },
+        {
+          name: 'Variable total',
+          contractItem: '',
+          conditionType: '',
+          pointCount: 3,
+          cost: 21,
+          isHaveTax: '',
+          isWithholding: '',
+          taxRate: '',
+          detail: '',
+        },
+        {
+          name: 'Variable',
+          contractItem: 0,
+          conditionType: 'conditional',
+          pointCount: 3,
+          cost: 21,
+          isHaveTax: 1,
+          isWithholding: 1,
+          taxRate: '6%',
+          detail: '描述',
+        },
+        {
+          name: 'Fix total',
+          contractItem: '',
+          conditionType: '',
+          pointCount: 3,
+          cost: 21,
+          isHaveTax: '',
+          taxRate: '',
+          detail: '',
+        },
+        {
+          name: 'Fix',
+          contractItem: 0,
+          conditionType: 'conditional',
+          pointCount: 3,
+          cost: 21,
+          isHaveTax: 1,
+          taxRate: '6%',
+          detail: '描述',
+        },
+      ],
+      termDistData: [
+        {
+          distName: '成都华隆',
+          targetSale: 500000,
+          data: [
+            {
+              name: 'Total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              isWithholding: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Variable total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              isWithholding: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Variable',
+              contractItem: 0,
+              conditionType: 'conditional',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: 1,
+              isWithholding: 1,
+              taxRate: '6%',
+              detail: '描述',
+            },
+            {
+              name: 'Fix total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Fix',
+              contractItem: 0,
+              conditionType: 'conditional',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: 1,
+              taxRate: '6%',
+              detail: '描述',
+            },
+          ],
+        },
+        {
+          distName: '成都华隆',
+          targetSale: 500000,
+          data: [
+            {
+              name: 'Total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              isWithholding: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Variable total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              isWithholding: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Variable',
+              contractItem: 0,
+              conditionType: 'conditional',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: 1,
+              isWithholding: 1,
+              taxRate: '6%',
+              detail: '描述',
+            },
+            {
+              name: 'Fix total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Fix',
+              contractItem: 0,
+              conditionType: 'conditional',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: 1,
+              taxRate: '6%',
+              detail: '描述',
+            },
+          ],
+        },
+        {
+          distName: '成都华隆',
+          targetSale: 200000,
+          data: [
+            {
+              name: 'Total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              isWithholding: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Variable total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              isWithholding: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Variable',
+              contractItem: 0,
+              conditionType: 'conditional',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: 1,
+              isWithholding: 1,
+              taxRate: '6%',
+              detail: '描述',
+            },
+            {
+              name: 'Fix total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              taxRate: '',
+              detail: '',
+            },
+            {
+              name: 'Fix',
+              contractItem: 0,
+              conditionType: 'conditional',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: 1,
+              taxRate: '6%',
+              detail: '描述',
+            },
+          ],
+        },
+      ],
     }
   },
   mounted() {
@@ -646,17 +929,32 @@ export default {
   .dealersWrap {
     width: 100%;
     display: flex;
-    .customerTable {
-      border: 1px solid #e7e7e7;
-    }
     .dealersTableWrap {
       display: flex;
       overflow-x: scroll;
-      .dealerItem {
-        display: flex;
+    }
+  }
+  .dealerItem {
+    // display: flex;
+    .topInfo {
+      font-size: 16px;
+      color: #4192d3;
+      font-weight: 600;
+      .tax {
+        margin-left: 20px;
       }
     }
   }
+  // /*滚动条的宽度*/
+  // ::-webkit-scrollbar {
+  //   width: 16px;
+  //   height: 16px;
+  // }
+  // /* //滚动条的滑块 */
+  // ::-webkit-scrollbar-thumb {
+  //   background: #b9b9b9;
+  //   border-radius: 8px;
+  // }
 }
 .line {
   height: 80%;

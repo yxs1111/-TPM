@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-07 13:48:09
+ * @LastEditTime: 2022-04-11 10:20:41
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -12,6 +12,12 @@
           <span class="SelectliTitle">年月:</span>
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
+        </div>
+         <div class="Selectli">
+          <span class="SelectliTitle">Cost Type:</span>
+          <el-select v-model="filterObj.CostType" clearable placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">Mine package:</span>
@@ -93,6 +99,7 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
+        CostType: '',
         MinePackageName: '',
         channelCode: '',
         processStatus: '',
@@ -102,6 +109,7 @@ export default {
       categoryArr: [{ label: 'test', value: '19' }],
       permissions: getDefaultPermissions(),
       tableData: [],
+      CostTypeList: [],
       channelOptons: [],
       minePackageList: [],
       processStatusList: ["进行中",'已完成'],
@@ -117,12 +125,19 @@ export default {
   mounted() {
     this.getTableData()
     this.getQueryChannelSelect()
+    this.getCostTypeList()
     this.getMinePackageSelect()
   },
   components: {
     FlowDiagram,
   },
   directives: { elDragDialog, permission },
+  watch:{
+    'filterObj.CostType'() {
+      this.filterObj.MinePackageName = ''
+      this.getMinePackageSelect()
+    },
+  },
   methods: {
     //获取表格数据
     getTableData() {
@@ -142,6 +157,17 @@ export default {
         })
         .catch((error) => {})
     },
+    getCostTypeList() {
+      selectAPI
+        .getCostTypeList({
+          costLevel: 1,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.CostTypeList = res.data
+          }
+        })
+    },
     // 获取下拉框 渠道
     getQueryChannelSelect() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -151,7 +177,9 @@ export default {
       })
     },
     getMinePackageSelect() {
-      selectAPI.queryMinePackageSelect().then((res) => {
+      selectAPI.queryMinePackageSelect({
+        parentId: this.filterObj.CostType,
+      }).then((res) => {
         if (res.code == 1000) {
          
           this.minePackageList = res.data

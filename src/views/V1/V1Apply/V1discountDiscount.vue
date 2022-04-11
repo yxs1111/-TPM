@@ -61,7 +61,7 @@
         <span class="text">导入</span>
       </div>
       <el-button type="primary" class="TpmButtonBG" @click="Calculation">计算</el-button>
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="submitInfo">
+      <div class="TpmButtonBG" :class="btnStatus&&this.isCalculation === 1?'':'noClick'" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -783,8 +783,8 @@ export default {
             if (
               res.data.version === 'V1' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.submitBtn === 0 &&
-              this.isCalculation === 1
+              this.submitBtn === 0 
+              
             ) {
               this.btnStatus = true
             } else {
