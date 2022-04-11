@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-11 10:39:26
+ * @LastEditTime: 2022-04-11 13:40:44
 -->
 <template>
   <div class="MainContent">
@@ -265,12 +265,19 @@
                 </template>
               </el-table-column>
               <el-table-column prop="contractItem" align="center" width="150" label="Contract item">
+                <template slot-scope="{row}">
+                  <div v-if="row.contractItem!==''">
+                    {{row.isVariable?contractItemVariableList[row.contractItem].name:contractItemFixList[row.contractItem].name}}
+                  </div>
+                </template>
+
               </el-table-column>
               <el-table-column prop="conditionType" align="center" width="150" label="条件类型">
               </el-table-column>
               <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
               </el-table-column>
-              <el-table-column prop="cost" align="center" width="150" label="含税金额（￥）">
+              <el-table-column v-slot={row} prop="cost" align="center" width="150" label="含税金额（￥）">
+                {{FormateNum(row.cost)}}
               </el-table-column>
               <el-table-column prop="detail" align="center" width="150" label="描述"></el-table-column>
             </el-table>
@@ -395,6 +402,15 @@ export default {
       ],
       isAddDialogVisible: false,
       isTermDetailVisible: true, //条款明细弹窗
+      contractItemVariableList: [
+        { name: '有条件月返', code: 'Conditional' },
+        { name: '无条件月返', code: 'Unconditional' },
+      ],
+      contractItemFixList: [
+        { name: '路演', code: 'Conditional' },
+        { name: '陈列费', code: 'Conditional' },
+        { name: '数据费', code: 'Conditional' },
+      ],
       termCustomerData: [
         {
           name: 'Total',
@@ -402,21 +418,9 @@ export default {
           conditionType: '',
           pointCount: 3,
           cost: 21,
-          isHaveTax: '',
-          isWithholding: '',
           taxRate: '',
           detail: '',
-        },
-        {
-          name: 'Variable total',
-          contractItem: '',
-          conditionType: '',
-          pointCount: 3,
-          cost: 21,
-          isHaveTax: '',
-          isWithholding: '',
-          taxRate: '',
-          detail: '',
+          isVariable: 1, //total 、Fix 区分
         },
         {
           name: 'Variable',
@@ -424,20 +428,19 @@ export default {
           conditionType: 'conditional',
           pointCount: 3,
           cost: 21,
-          isHaveTax: 1,
-          isWithholding: 1,
           taxRate: '6%',
           detail: '描述',
+          isVariable: 1, //total 、Fix 区分
         },
         {
-          name: 'Fix total',
+          name: 'Variable total',
           contractItem: '',
           conditionType: '',
           pointCount: 3,
           cost: 21,
-          isHaveTax: '',
           taxRate: '',
           detail: '',
+          isVariable: 1, //total 、Fix 区分
         },
         {
           name: 'Fix',
@@ -448,6 +451,18 @@ export default {
           isHaveTax: 1,
           taxRate: '6%',
           detail: '描述',
+          isVariable: 0, //total 、Fix 区分
+        },
+        {
+          name: 'Fix total',
+          contractItem: '',
+          conditionType: '',
+          pointCount: 3,
+          cost: 21,
+          isHaveTax: '',
+          taxRate: '',
+          detail: '',
+          isVariable: 0, //total 、Fix 区分
         },
       ],
       termDistData: [
@@ -461,21 +476,9 @@ export default {
               conditionType: '',
               pointCount: 3,
               cost: 21,
-              isHaveTax: '',
-              isWithholding: '',
               taxRate: '',
               detail: '',
-            },
-            {
-              name: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: '',
-              isWithholding: '',
-              taxRate: '',
-              detail: '',
+              isVariable: 1, //total 、Fix 区分
             },
             {
               name: 'Variable',
@@ -483,20 +486,19 @@ export default {
               conditionType: 'conditional',
               pointCount: 3,
               cost: 21,
-              isHaveTax: 1,
-              isWithholding: 1,
               taxRate: '6%',
               detail: '描述',
+              isVariable: 1, //total 、Fix 区分
             },
             {
-              name: 'Fix total',
+              name: 'Variable total',
               contractItem: '',
               conditionType: '',
               pointCount: 3,
               cost: 21,
-              isHaveTax: '',
               taxRate: '',
               detail: '',
+              isVariable: 1, //total 、Fix 区分
             },
             {
               name: 'Fix',
@@ -507,6 +509,18 @@ export default {
               isHaveTax: 1,
               taxRate: '6%',
               detail: '描述',
+              isVariable: 0, //total 、Fix 区分
+            },
+            {
+              name: 'Fix total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              taxRate: '',
+              detail: '',
+              isVariable: 0, //total 、Fix 区分
             },
           ],
         },
@@ -520,21 +534,9 @@ export default {
               conditionType: '',
               pointCount: 3,
               cost: 21,
-              isHaveTax: '',
-              isWithholding: '',
               taxRate: '',
               detail: '',
-            },
-            {
-              name: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: '',
-              isWithholding: '',
-              taxRate: '',
-              detail: '',
+              isVariable: 1, //total 、Fix 区分
             },
             {
               name: 'Variable',
@@ -542,20 +544,19 @@ export default {
               conditionType: 'conditional',
               pointCount: 3,
               cost: 21,
-              isHaveTax: 1,
-              isWithholding: 1,
               taxRate: '6%',
               detail: '描述',
+              isVariable: 1, //total 、Fix 区分
             },
             {
-              name: 'Fix total',
+              name: 'Variable total',
               contractItem: '',
               conditionType: '',
               pointCount: 3,
               cost: 21,
-              isHaveTax: '',
               taxRate: '',
               detail: '',
+              isVariable: 1, //total 、Fix 区分
             },
             {
               name: 'Fix',
@@ -566,6 +567,18 @@ export default {
               isHaveTax: 1,
               taxRate: '6%',
               detail: '描述',
+              isVariable: 0, //total 、Fix 区分
+            },
+            {
+              name: 'Fix total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              taxRate: '',
+              detail: '',
+              isVariable: 0, //total 、Fix 区分
             },
           ],
         },
@@ -579,21 +592,9 @@ export default {
               conditionType: '',
               pointCount: 3,
               cost: 21,
-              isHaveTax: '',
-              isWithholding: '',
               taxRate: '',
               detail: '',
-            },
-            {
-              name: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: '',
-              isWithholding: '',
-              taxRate: '',
-              detail: '',
+              isVariable: 1, //total 、Fix 区分
             },
             {
               name: 'Variable',
@@ -601,20 +602,19 @@ export default {
               conditionType: 'conditional',
               pointCount: 3,
               cost: 21,
-              isHaveTax: 1,
-              isWithholding: 1,
               taxRate: '6%',
               detail: '描述',
+              isVariable: 1, //total 、Fix 区分
             },
             {
-              name: 'Fix total',
+              name: 'Variable total',
               contractItem: '',
               conditionType: '',
               pointCount: 3,
               cost: 21,
-              isHaveTax: '',
               taxRate: '',
               detail: '',
+              isVariable: 1, //total 、Fix 区分
             },
             {
               name: 'Fix',
@@ -625,6 +625,18 @@ export default {
               isHaveTax: 1,
               taxRate: '6%',
               detail: '描述',
+              isVariable: 0, //total 、Fix 区分
+            },
+            {
+              name: 'Fix total',
+              contractItem: '',
+              conditionType: '',
+              pointCount: 3,
+              cost: 21,
+              isHaveTax: '',
+              taxRate: '',
+              detail: '',
+              isVariable: 0, //total 、Fix 区分
             },
           ],
         },
