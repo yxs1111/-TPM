@@ -415,13 +415,11 @@ export default {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
-            this.$message.success(this.messageMap.importSuccess)
+            this.$message.info(`${response.message}`)
             this.ImportData = response.data
             this.isCheck = response.data[0].judgmentType !== 'Error'
           }
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
+        } 
       })
     },
     // 关闭导入

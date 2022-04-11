@@ -552,10 +552,7 @@ export default {
           if (response.code === 1000) {
             this.event.srcElement.value = '' // 置空
             // this.uploadFile = ''
-            this.$message({
-              type: 'success',
-              message: messageMap().importSuccess,
-            })
+            this.$message.info(`${response.message}`)
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({

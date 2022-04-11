@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-03-09 09:08:46
+ * @LastEditTime: 2022-04-11 11:32:06
 -->
 <template>
   <div class="app-container">
@@ -412,6 +412,7 @@ export default {
       API.exceptionImport(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
+        this.$message.info(`${response.message}`)
         if (response.code == 1000) {
           this.ImportData = response.data
           this.saveBtn = this.ImportData.length ? true : false
