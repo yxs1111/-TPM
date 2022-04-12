@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-11 13:40:44
+ * @LastEditTime: 2022-04-12 08:54:42
 -->
 <template>
   <div class="MainContent">
@@ -401,7 +401,7 @@ export default {
         },
       ],
       isAddDialogVisible: false,
-      isTermDetailVisible: true, //条款明细弹窗
+      isTermDetailVisible: false, //条款明细弹窗
       contractItemVariableList: [
         { name: '有条件月返', code: 'Conditional' },
         { name: '无条件月返', code: 'Unconditional' },
@@ -737,7 +737,8 @@ export default {
 
     //打开条款明细弹窗
     showTermDetailDialog() {
-      this.isTermDetailVisible = true
+      this.$router.push("/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail")
+      // this.isTermDetailVisible = true
     },
     //关闭条款明细弹窗
     closeTermDetailDialog() {

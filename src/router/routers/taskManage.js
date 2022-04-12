@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-04-01 10:05:04
+ * @LastEditTime: 2022-04-12 08:57:04
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -147,6 +147,24 @@ export default function() {
               name: 'dealerContractEntry',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry.vue'),
               meta: { title: '经销商合同录入', icon: 'apply' },
+              // children:[
+              //   {
+              //     hidden: true,
+              //     path: '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
+              //     code: 'mdm_product_information',
+              //     name: 'dealerTermDetail',
+              //     component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail.vue'),
+              //     meta: { title: '经销商合同录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractEntry'},
+              //   },
+              // ],
+            },
+            {
+              hidden: true,
+              path: '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
+              code: 'mdm_product_information',
+              name: 'dealerTermDetail',
+              component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail.vue'),
+              meta: { title: '经销商合同录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractEntry'},
             },
             {
               path: '/taskManage/ContractEntry/dealerContractApproval',
