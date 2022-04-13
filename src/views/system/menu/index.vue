@@ -48,27 +48,27 @@
         <el-collapse-item title="菜单信息" name="menuInfo">
           <el-form ref="menuInfoForm" size="small" :rules="rules" :model="menuInfoProps" label-width="150px" border>
             <el-form-item label="父级编码" prop="parentCode">
-              <el-input v-if="editState === 'update'" v-model="menuInfoProps.parentCode" maxlength="50" placeholder="父级编码" show-word-limit />
+              <el-input v-if="editState === 'update'" class="permissionInput" v-model="menuInfoProps.parentCode" maxlength="50" placeholder="父级编码" show-word-limit />
               <span v-else>{{ menuInfoProps.parentCode }}</span>
             </el-form-item>
             <el-form-item label="菜单名称" prop="name">
-              <el-input v-model="menuInfoProps.name" maxlength="100" :clearable="true" placeholder="菜单名称" show-word-limit />
+              <el-input v-model="menuInfoProps.name" class="permissionInput" maxlength="100" :clearable="true" placeholder="菜单名称" show-word-limit />
             </el-form-item>
             <el-form-item label="菜单编码" prop="code">
-              <el-input v-if="editState === 'create'" v-model="menuInfoProps.code" maxlength="50" :clearable="true" placeholder="菜单编码" show-word-limit />
+              <el-input v-if="editState === 'create'" class="permissionInput" v-model="menuInfoProps.code" maxlength="50" :clearable="true" placeholder="菜单编码" show-word-limit />
               <span v-else>{{ menuInfoProps.code }}</span>
             </el-form-item>
             <el-form-item label="后台url" prop="url">
-              <el-input v-model="menuInfoProps.url" maxlength="200" :clearable="true" placeholder="url" show-word-limit />
+              <el-input v-model="menuInfoProps.url" class="permissionInput" maxlength="200" :clearable="true" placeholder="url" show-word-limit />
             </el-form-item>
             <el-form-item label="前台router" prop="router">
-              <el-input v-model="menuInfoProps.router" maxlength="200" :clearable="true" placeholder="router" show-word-limit />
+              <el-input v-model="menuInfoProps.router" class="permissionInput" maxlength="200" :clearable="true" placeholder="router" show-word-limit />
             </el-form-item>
             <el-form-item label="排序" prop="sorting">
-              <el-input-number v-model="menuInfoProps.sorting" :min="0" :max="999999" :clearable="true" />
+              <el-input-number v-model="menuInfoProps.sorting" class="permissionInput" :min="0" :max="999999" :clearable="true" />
             </el-form-item>
             <el-form-item label="描述" prop="remark">
-              <el-input v-model="menuInfoProps.remark" type="textarea" maxlength="120" show-word-limit :clearable="true" placeholder="描述" />
+              <el-input v-model="menuInfoProps.remark" class="permissionInput" type="textarea" maxlength="120" show-word-limit :clearable="true" placeholder="描述" />
             </el-form-item>
             <el-form-item label="锁定状态" prop="locked">
               <el-switch v-model="menuInfoProps.locked" active-text="已锁定" inactive-text="未锁定" :active-value="1" :inactive-value="0" active-color="#ff4949"
@@ -138,6 +138,14 @@
 
 <script src="./index.js">
 </script>
+<style lang="scss">
+.permissionInput {
+  width: 300px !important;
+  .el-input--suffix {
+    width: 300px !important;
+  }
+}
+</style>
 <style scoped>
 .ContentWrap {
     width: 100%;

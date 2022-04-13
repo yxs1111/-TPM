@@ -220,7 +220,9 @@ export function getDefaultPermissions() {
     delete: 3,
     import: 4,
     export: 5,
-    getCPT: 6
+    getCPT: 6,
+    submit: 7,
+    rejected: 8,
   }
 }
 

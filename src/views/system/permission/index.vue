@@ -94,30 +94,30 @@
     </div>
 
     <!--信息框-->
-    <el-dialog v-el-drag-dialog :title="textMap[permissionDialog.state]" :visible.sync="permissionDialog.visible" @dragDialog="handleDrag">
+    <el-dialog v-el-drag-dialog :title="textMap[permissionDialog.state]" :visible.sync="permissionDialog.visible" @dragDialog="handleDrag" class="my-el-dialog">
       <el-form ref="permissionDataForm" :rules="rules" :model="permissionDialog.data" label-position="left" label-width="120px" style="width: 600px; margin-left:50px;">
-        <el-form-item label="权限名称" prop="name">
+        <el-form-item label="权限名称" prop="name" >
           <span v-if="permissionDialog.state === 'info'">{{ permissionDialog.data.name }}</span>
-          <el-input v-else v-model="permissionDialog.data.name" maxlength="50" :clearable="true" placeholder="权限名称" show-word-limit />
+          <el-input v-else v-model="permissionDialog.data.name"  class="permissionInput" maxlength="50" :clearable="true" placeholder="权限名称" show-word-limit />
         </el-form-item>
         <el-form-item label="权限编码" prop="code">
-          <el-input v-if="permissionDialog.state === 'create'" v-model="permissionDialog.data.code" maxlength="50" :clearable="true" placeholder="权限编码" show-word-limit />
+          <el-input v-if="permissionDialog.state === 'create'" class="permissionInput" v-model="permissionDialog.data.code" maxlength="50" :clearable="true" placeholder="权限编码" show-word-limit />
           <span v-else>{{ permissionDialog.data.code }}</span>
         </el-form-item>
         <el-form-item label="所属系统" prop="osCode">
           <span v-if="permissionDialog.state === 'info'">{{ permissionDialog.data.osName }}</span>
-          <el-select v-else v-model="permissionDialog.data.osCode" filterable clearable placeholder="所属系统" @change="handleOsChange">
+          <el-select v-else v-model="permissionDialog.data.osCode" class="permissionInput" filterable clearable placeholder="所属系统" @change="handleOsChange">
             <el-option v-for="item in osSelectOption" :key="item.code" :label="item.name" :value="item.code" />
           </el-select>
         </el-form-item>
         <el-form-item label="所属菜单" prop="menuCode">
           <span v-if="permissionDialog.state === 'info'">{{ permissionDialog.data.menuName }}</span>
-          <el-select v-else v-model="permissionDialog.data.menuCode" filterable clearable placeholder="所属菜单">
+          <el-select v-else v-model="permissionDialog.data.menuCode" class="permissionInput" filterable clearable placeholder="所属菜单">
             <el-option v-for="item in menuSelectOption" :key="item.code" :label="item.name" :value="item.code" />
           </el-select>
         </el-form-item>
         <el-form-item label="位移值" prop="bitDigit">
-          <el-input-number v-if="permissionDialog.state === 'create'" v-model="permissionDialog.data.bitDigit" :min="0" :max="25" :clearable="true" />
+          <el-input-number v-if="permissionDialog.state === 'create'" class="permissionInput" v-model="permissionDialog.data.bitDigit" :min="0" :max="25" :clearable="true" />
           <span v-else>{{ permissionDialog.data.bitDigit }}</span>
         </el-form-item>
         <el-form-item v-if="permissionDialog.state !== 'create'" label="创建人" prop="createBy">
@@ -154,3 +154,11 @@
 
 <script src="./index.js">
 </script>
+<style lang="scss">
+.permissionInput {
+  width: 250px !important;
+  .el-input--suffix {
+    width: 250px !important;
+  }
+}
+</style>

@@ -204,13 +204,6 @@ export default {
         state: '',
       },
       rules: {
-        supplierCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
         supplierBiCode: [
           {
             required: true,

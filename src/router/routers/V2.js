@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-12 11:53:09
+ * @LastEditTime: 2022-04-13 11:22:02
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -26,6 +26,7 @@ export default function() {
           meta: { title: '申请', icon: 'apply' },
           redirect: '/V2/V2Apply/V2discountAll',
           children: [
+            //页面权限配置，需要再菜单管理新添新的PP、NU 页，而不是只有一个申请页（新增页面的时候是否得添加一个该页面的getList,login 的时候才返回数据）
             {
               hidden: true,
               path: '/V2/V2Apply/V2discountAll',
