@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-12 08:54:42
+ * @LastEditTime: 2022-04-14 16:38:22
 -->
 <template>
   <div class="MainContent">
@@ -715,10 +715,11 @@ export default {
       this.addDialogDealerList.push({
         distributorName: '',
         targetSale: 0,
-        contractDate: [],
-        systemDate: [],
+        contractDate: ['20220110', '20220521'],
+        systemDate: ['202201', '202212'],
         contractStatus: 0,
         systemStatus: 0,
+        isEditor: 1, //是否补录
       })
       //滚动条随着新增滚动到底部
       let scrollHeight = this.$refs.dealerTable.bodyWrapper.scrollHeight
@@ -737,7 +738,9 @@ export default {
 
     //打开条款明细弹窗
     showTermDetailDialog() {
-      this.$router.push("/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail")
+      this.$router.push(
+        '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail'
+      )
       // this.isTermDetailVisible = true
     },
     //关闭条款明细弹窗
