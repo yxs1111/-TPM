@@ -528,7 +528,10 @@ export default {
             this.saveBtn = false
             this.event.srcElement.value = '' // 置空
             this.uploadFile = ''
-            this.$message.info(`${response.message}`)
+            this.$message({
+              type: 'success',
+              message: '导入成功',
+            })
             if (response.data != null) {
               if (response.data.length === 0) {
                 this.$message({

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-11 11:39:41
+ * @LastEditTime: 2022-04-14 09:27:10
 -->
 <template>
   <div class="app-container">
@@ -528,11 +528,13 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          this.$message.info(`${response.message}`)
+          this.$message.success(this.messageMap.importSuccess)
           this.ImportData = response.data
           this.isCheck =
             response.data[0].judgmentType === 'Error' ? false : true
-        } 
+        } else {
+          this.$message.info(this.messageMap.importError)
+        }
       })
     },
     //校验数据

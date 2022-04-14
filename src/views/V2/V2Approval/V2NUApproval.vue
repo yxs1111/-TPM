@@ -413,7 +413,7 @@ export default {
           } else {
             this.ImportData = response.data
             this.saveBtn = this.ImportData.length ? true : false
-            this.$message.info(`${response.message}`)
+            this.$message.success('导入成功！')
           }
         }
       })
