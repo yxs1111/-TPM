@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-14 14:13:54
+ * @LastEditTime: 2022-04-14 14:33:13
 -->
 <template>
   <div class="ContentDetail">
@@ -540,7 +540,7 @@ export default {
               exceptionList.push({
                 rowIndex: index,
                 dealerIndex,
-                ...dealerItem
+                ...dealerItem,
               })
             }
           })
@@ -548,22 +548,18 @@ export default {
         if (!item.isTotal && !item.isVariable) {
           let customerTaxPrice = item.customerInfo.taxPrice
           let dealerList = item.dealerList
-          let dealerTaxPrice= dealerList.reduce((total,current)=>{
-           return total+Number(current.taxPrice)
-          })
-          console.log(dealerTaxPrice);
-          // dealerList.forEach((dealerItem, dealerIndex) => {
-          //   if (dealerItem.pointCount > customerPointCount) {
-          //     errorList.push({
-          //       rowIndex: index,
-          //       dealerIndex,
-          //       ...dealerItem
-          //     })
-          //   }
-          // })
+          let dealerTaxPrice = dealerList.reduce((total, current) => {
+            return total + Number(current.taxPrice)
+          }, 0)
+          if (dealerTaxPrice > customerTaxPrice) {
+            errorList.push({
+              rowIndex: index,
+            })
+          }
         }
       })
-      // console.log(exceptionList);
+      console.log(exceptionList);
+      console.log(errorList);
     },
     cancelSubmit() {
       this.$router.go(-1)

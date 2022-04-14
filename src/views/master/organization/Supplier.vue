@@ -463,7 +463,7 @@ export default {
       // 导出数据筛选
       var data = {}
       data = { ...this.filterObj }
-      API.exportSupplier().then((res) => {
+      API.exportSupplier(data).then((res) => {
         this.downloadFile(res, '供应商信息' + '.xlsx') // 自定义Excel文件名
         this.$message.success('导出成功!')
       })
