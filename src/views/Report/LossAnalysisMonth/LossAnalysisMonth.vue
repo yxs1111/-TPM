@@ -214,7 +214,7 @@ export default {
       pageNum: 1,
       filterObj: {
         // yearAndMonthList: getCurrentMonth1(),
-        yearAndMonthList:[],
+        yearAndMonthList: [],
         type: '',
         regionCode: '',
         month: '',
@@ -306,6 +306,8 @@ export default {
           { origin: { c: 0, r: 9 } }
         )
       }
+      //获取列宽数组
+      ws['!cols'] = this.getColumWidth()
       let borderAll = {
         color: { auto: 1 },
         top: { style: 'thin' },
@@ -313,11 +315,6 @@ export default {
         left: { style: 'thin' },
         right: { style: 'thin' },
       }
-      ws['!cols'] = [
-        {
-          wpx: 150,
-        },
-      ]
       Object.keys(ws).forEach((key) => {
         //这里遍历单元格给单元格对象设置属性,s为控制样式的属性
         if (key.indexOf('!') < 0) {
@@ -330,6 +327,12 @@ export default {
             },
           }
         }
+        if (ws[key].t == 'n') {
+          // let number=(ws[key].t.v).toFixed(2)
+          ws[key].v = ws[key].v.toFixed(2)
+          ws[key].s.numFmt = '0.00'
+        }
+
         if (
           key.replace(/[^0-9]/gi, '') === '4' ||
           key.replace(/[^0-9]/gi, '') === '2' ||
@@ -356,6 +359,7 @@ export default {
           }
         }
       })
+      console.log(ws)
       this.addRangeBorder(ws['!merges'], ws)
       //把worksheet对象添加进workbook对象，第三个参数是excel中sheet的名字
       XLSX.utils.book_append_sheet(wb, ws, 'sheet1')
@@ -386,6 +390,31 @@ export default {
         n = Math.floor(n / len) - 1
       }
       return s
+    },
+    //获取数组宽度列表
+    getColumWidth() {
+      //得到渠道下所有客户的数量
+      let channelObj = this.tableData[0].channel
+      let customerCount = 0
+      for (const key in channelObj) {
+        if (Object.hasOwnProperty.call(channelObj, key)) {
+          const channelItem = channelObj[key]
+          customerCount += channelItem.length
+        }
+      }
+      let columnCount = (customerCount + 1) * 4
+      console.log(columnCount);
+      let ColumWidthList = []
+      ColumWidthList.push({
+          wpx: 150,
+      })
+      for (let index = 0; index < columnCount; index++) {
+        ColumWidthList.push({
+          wpx: 100,
+        })
+      }
+      console.log(ColumWidthList);
+      return ColumWidthList
     },
     //需要传入列的总数 count default 26
     initColum() {
