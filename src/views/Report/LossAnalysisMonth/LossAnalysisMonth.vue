@@ -160,16 +160,16 @@
                     <template>
                       <el-table-column v-slot="{row}" align="center" width="150" label="CPT">
                         <!-- {{ FormateNum(row.channel[key][index].vthreeCost) }} -->
-                        {{ row.channel[key][index].cptFabe===null?'':row.channel[key][index].cptFabe + '%' }}
+                        {{ row.channel[key][index].cptFabe===null?'':FormateNum(row.channel[key][index].cptFabe) + '%' }}
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V1">
-                        {{ row.channel[key][index].voneFabe===null?'':row.channel[key][index].voneFabe + '%' }}
+                        {{ row.channel[key][index].voneFabe===null?'':FormateNum(row.channel[key][index].voneFabe) + '%' }}
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V2">
-                        {{ row.channel[key][index].vtwoFabe===null?'':row.channel[key][index].vtwoFabe + '%' }}
+                        {{ row.channel[key][index].vtwoFabe===null?'':FormateNum(row.channel[key][index].vtwoFabe) + '%' }}
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V3">
-                        {{ row.channel[key][index].vthreeFabe===null?'':row.channel[key][index].vthreeFabe + '%' }}
+                        {{ row.channel[key][index].vthreeFabe===null?'':FormateNum(row.channel[key][index].vthreeFabe) + '%' }}
                       </el-table-column>
                     </template>
 
@@ -327,12 +327,23 @@ export default {
             },
           }
         }
+        //费用数字格式化
         if (ws[key].t == 'n') {
           // let number=(ws[key].t.v).toFixed(2)
-          ws[key].v = ws[key].v.toFixed(2)
+          // ws[key].v = ws[key].v.toFixed(2)
           ws[key].s.numFmt = '0.00'
         }
-
+        //费比数字格式化
+        if (ws[key].t == 'n') {
+          if (key.replace(/[^0-9]/gi, '') === '13' ||
+          key.replace(/[^0-9]/gi, '') === '14' ) {
+            // let number=(ws[key].t.v).toFixed(2)
+          // ws[key].v = ws[key].v.toFixed(2)
+          ws[key].s.numFmt = '0.00%'
+          }
+          
+        }
+        //表头样式
         if (
           key.replace(/[^0-9]/gi, '') === '4' ||
           key.replace(/[^0-9]/gi, '') === '2' ||
@@ -359,7 +370,6 @@ export default {
           }
         }
       })
-      console.log(ws)
       this.addRangeBorder(ws['!merges'], ws)
       //把worksheet对象添加进workbook对象，第三个参数是excel中sheet的名字
       XLSX.utils.book_append_sheet(wb, ws, 'sheet1')
