@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-07 16:00:03
+ * @LastEditTime: 2022-04-15 11:06:30
 -->
 <template>
   <div class="MainContent">
@@ -54,15 +54,15 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="targetSales" align="center" width="220" label="目标销售额">
+      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.targetSales" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{FormateNum(scope.row.targetSales ? scope.row.targetSales : 0)}}
-            <!-- {{ scope.row.targetSales ? scope.row.targetSales : 0 }} -->
+            {{FormateNum(scope.row.saleAmount ? scope.row.saleAmount : 0)}}
+            <!-- {{ scope.row.saleAmount ? scope.row.saleAmount : 0 }} -->
           </div>
         </template>
       </el-table-column>
@@ -82,12 +82,12 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyy-MM-dd" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyy-MM-dd" format="yyyy-MM" range-separator="至" start-placeholder="开始月份"
               end-placeholder="结束月份">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor && scope.row.systemDate.length">
-            {{ scope.row.systemDate[0] + ' - ' + scope.row.systemDate[1] }}
+            {{ scope.row.systemDate[0].substring(0,7) + ' - ' + scope.row.systemDate[1].substring(0,7) }}
             <!-- {{scope.row.contractDate}} -->
           </div>
         </template>
@@ -377,11 +377,11 @@ export default {
       tableData: [
         {
           customerName: '孩子王',
-          targetSales: 100,
+          saleAmount: 100,
           Tax: 500000,
           NoTax: 500000,
           contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202201'],
+          systemDate: ['2022-01-01', '2022-03-08'],
           contractStatus: 0,
           systemStatus: 0,
           applyRemark: '意见',
@@ -399,209 +399,11 @@ export default {
         },
         {
           customerName: '孩子王',
-          targetSales: 100,
+          saleAmount: 100,
           Tax: 500000,
           NoTax: 500000,
           contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          targetSales: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['202201', '202212'],
+          systemDate: ['2022-01-01', '2022-01-08'],
           contractStatus: 0,
           systemStatus: 0,
           applyRemark: '意见',
@@ -766,7 +568,7 @@ export default {
     addNewRow() {
       this.tableData.unshift({
         customerName: '',
-        targetSales: '',
+        saleAmount: '',
         Tax: '',
         NoTax: '',
         contractDate: ['20220101', '20221201'],
