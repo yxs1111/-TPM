@@ -80,8 +80,11 @@
           <el-form-item label="供应商CP编码" v-show="isEditor" prop="supplierCode">
             <el-input v-model="ruleForm.supplierCode" disabled class="my-el-input" placeholder="请输入" />
           </el-form-item>
-          <el-form-item label="供应商COUPA编码" prop="supplierBiCode">
-            <el-input v-model="ruleForm.supplierBiCode" class="my-el-input" placeholder="请输入" />
+          <el-form-item label="供应商COUPA编码" v-show="isEditor" prop="supplierBiCode">
+            <el-input v-model="ruleForm.supplierBiCode" disabled class="my-el-input" placeholder="请输入" />
+          </el-form-item>
+          <el-form-item label="供应商COUPA编码" v-show="!isEditor" prop="supplierBiCode">
+            <el-input v-model="ruleForm.supplierBiCode"  class="my-el-input" placeholder="请输入" />
           </el-form-item>
           <el-form-item label="供应商名称" prop="supplierName">
             <el-input v-model="ruleForm.supplierName" class="my-el-input" placeholder="请输入" />
