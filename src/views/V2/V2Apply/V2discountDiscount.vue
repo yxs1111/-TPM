@@ -510,7 +510,7 @@ export default {
     // 校验数据
     checkImport() {
       const formData = new FormData()
-      formData.append('file', this.uploadFile)
+      // formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
       formData.append('channelCode', this.filterObj.channelCode)
       API.exceptionCheckTwo(formData).then((response) => {

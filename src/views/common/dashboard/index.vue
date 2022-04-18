@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-03-29 15:10:49
+ * @LastEditTime: 2022-04-18 11:59:40
 -->
 <template>
   <div class="dashboard-container">
@@ -666,6 +666,7 @@ export default {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
+        overflow-y: scroll;
         .monthBar {
           width: 100%;
           // height: 110px;
