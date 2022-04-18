@@ -176,7 +176,9 @@ export default {
       )
       this.tableKey++
     },
-
+    'filterObj.channelCode'() {
+      this.getCustomerList()
+    },
     'filterObj.customerCode'(Value, oldValue) {
       
     },
