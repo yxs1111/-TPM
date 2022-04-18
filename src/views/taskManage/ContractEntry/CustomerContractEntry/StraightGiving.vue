@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-15 11:06:30
+ * @LastEditTime: 2022-04-18 16:50:41
 -->
 <template>
   <div class="MainContent">
@@ -66,10 +66,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractDate" align="center" width="220" label="合同期间">
+      <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
+            <el-date-picker v-model="scope.row.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期"
               end-placeholder="结束日期">
             </el-date-picker>
           </div>
@@ -155,9 +155,9 @@
       </el-table-column>
       <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
       <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
-      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
+      <el-table-column prop="createUserName" align="center" width="220" label="创建人"></el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
-      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
+      <el-table-column prop="updateUserName" align="center" width="220" label="修改人"></el-table-column>
       <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -352,19 +352,15 @@
 </template>
 
 <script>
-import API from '@/api/taskManage/taskManage.js'
+import API from '@/api/ContractEntry/customer'
 import {
   getDefaultPermissions,
-  getTextMap,
-  parseTime,
   getContractEntry,
   FormateThousandNum,
-  setSplitAssignee,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
 export default {
   name: 'StraightGiving',
   data() {
@@ -387,9 +383,9 @@ export default {
           applyRemark: '意见',
           packageOwner: '意见',
           finance: '意见',
-          createBy: '创建人',
+          createUserName: '创建人',
           createDate: '202201',
-          updateBy: '更新人',
+          updateUserName: '更新人',
           updateDate: '202201',
           isEditor: 0,
           isTimeout: 0,
@@ -409,9 +405,9 @@ export default {
           applyRemark: '意见',
           packageOwner: '意见',
           finance: '意见',
-          createBy: '创建人',
+          createUserName: '创建人',
           createDate: '202201',
-          updateBy: '更新人',
+          updateUserName: '更新人',
           updateDate: '202201',
           isEditor: 0,
           isTimeout: 0,
@@ -514,6 +510,7 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
+    this.getTableData()
     this.getCustomerList()
   },
   watch: {
@@ -542,15 +539,11 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      API.getList({
+      API.getPage({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        version: this.filterObj.version,
-        channelCode: this.filterObj.channelCode,
-        minePackageCode: this.filterObj.MinePackage,
       }).then((response) => {
-        this.tableData = response.data.records
+        // this.tableData = response.data.records
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
@@ -558,7 +551,7 @@ export default {
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList().then((res) => {
+      selectAPI.getCustomerListByType({type:'1'}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
@@ -578,9 +571,9 @@ export default {
         applyRemark: '',
         packageOwner: '',
         finance: '',
-        createBy: '',
+        createUserName: '',
         createDate: '',
-        updateBy: '',
+        updateUserName: '',
         updateDate: '',
         isEditor: 0, //是否 处于编辑状态
         isNewData: 1, //是否 处于编辑状态
@@ -1006,6 +999,13 @@ export default {
   }
   .el-input--suffix {
     width: 120px !important;
+  }
+  
+}
+.MainContent .select_date {
+   width: 240px !important;
+  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 240px !important;
   }
 }
 </style>

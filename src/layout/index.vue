@@ -6,6 +6,7 @@
       @click="handleClickOutside"
     />
     <navbar />
+    <!-- <tags-view  /> -->
     <div class="content">
       <!-- <div class="sidebarWrap"> -->
         <sidebar class="sidebar-container" />

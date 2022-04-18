@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-03-08 17:42:14
+ * @LastEditTime: 2022-04-18 11:52:45
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -68,5 +68,9 @@ export default {
   // 客户组
   getCustomerGroupList(data) {
     return requestApi.request_get('/mdm/mdCustomer/getCustomerGroupList', data)
+  },
+  // 合同录入-客户
+  getCustomerListByType(data) {
+    return requestApi.request_post('/mdm/common/getCustomerListByType', data)
   },
 }
