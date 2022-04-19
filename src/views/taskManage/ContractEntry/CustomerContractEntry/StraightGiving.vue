@@ -1,17 +1,50 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-18 16:50:41
+ * @LastEditTime: 2022-04-19 13:54:35
 -->
 <template>
   <div class="MainContent">
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">客户名称:</span>
+          <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in customerArr" :key="index" :label="item.customer_cs_name" :value="item.customer_mdm_code" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同期间:</span>
+          <el-date-picker v-model="filterObj.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期">
+          </el-date-picker>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">系统生效时间:</span>
+          <el-date-picker v-model="filterObj.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份">
+          </el-date-picker>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态:</span>
+          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG">
+          <img src="@/assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow">新增一行</el-button>
-      <div class="TpmButtonBG">
+      <div class="TpmButtonBG" @click="save">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
       </div>
-      <el-button type="primary"  class="TpmButtonBG" @click="submit">提交</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
       <!-- <div class="TpmButtonBG cancelButton" @click="cancelAddNewRow">
         <span class="text">取消</span>
       </div> -->
@@ -31,22 +64,26 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isEditor" @click="editorRow(scope.$index)">
+            <div class="haveText_editor" v-show="!scope.row.isNewData&&scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
+              <svg-icon icon-class="save-light" class="svgIcon" />
+              <span>保存</span>
+            </div>
+            <div class="haveText_editor" v-show="!scope.row.isEditor&&!scope.row.isNewData" @click="editorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
-            <div class="haveText_editor" v-show="scope.row.isEditor" @click="CancelEditorRow(scope.$index)">
+            <div class="haveText_editor" v-show="scope.row.isEditor &&!scope.row.isNewData" @click="CancelEditorRow(scope.$index)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>取消编辑</span>
             </div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerName" align="center" width="220" label="客户名称">
+      <el-table-column prop="customerMdmCode" align="center" width="220" label="客户名称">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.customerName" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
+            <el-select v-model="scope.row.customerMdmCode" class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in customerArr" :key="index" :label="item.customer_cs_name" :value="item.customer_mdm_code" />
             </el-select>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -69,39 +106,32 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期">
+            <el-date-picker v-model="scope.row.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
-          <div v-show="!scope.row.isEditor && scope.row.contractDate.length">
-            {{ scope.row.contractDate[0] + ' - ' + scope.row.contractDate[1] }}
-            <!-- {{scope.row.contractDate}} -->
+          <div v-show="!scope.row.isEditor">
+            {{ scope.row.contractBeginDate + ' - ' + scope.row.contractEndDate }}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyy-MM-dd" format="yyyy-MM" range-separator="至" start-placeholder="开始月份"
+            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
               end-placeholder="结束月份">
             </el-date-picker>
           </div>
-          <div v-show="!scope.row.isEditor && scope.row.systemDate.length">
-            {{ scope.row.systemDate[0].substring(0,7) + ' - ' + scope.row.systemDate[1].substring(0,7) }}
-            <!-- {{scope.row.contractDate}} -->
+          <div v-show="!scope.row.isEditor">
+            {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractStatus" align="center" width="240" label="合同状态">
+      <el-table-column align="center" width="240" label="合同状态">
         <template slot-scope="scope">
           <div class="contractStatusWrap">
-            <!-- <div v-show="scope.row.isEditor">
-              <el-select v-model="scope.row.contractStatus" class="my-el-input" filterable clearable placeholder="请选择">
-                <el-option v-for="(item,index) in ['草稿','提交']" :key="index" :label="item" :value="index" />
-              </el-select>
-            </div> -->
             <div>
-              {{ scope.row.contractStatus == 0 ? '草稿' : '提交' }}
+              {{ scope.row.contractStateName }}
             </div>
             <!-- <div class="timeOutWrap">
               <el-popover :ref="'popover-' + scope.$index" placement="right" width="300" trigger="click">
@@ -142,22 +172,22 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="applyRemark" align="center" width="220" label="申请人备注">
+      <el-table-column align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor && scope.row.isNewData">
-            <el-input v-model="scope.row.applyRemark" clearable class="my-el-input" placeholder="请输入">
+          <div v-show="scope.row.isEditor">
+            <el-input v-model="scope.row.remark" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor || !scope.row.isNewData">
-            {{ scope.row.applyRemark }}
+          <div v-show="!scope.row.isEditor">
+            {{ scope.row.remark }}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
       <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
-      <el-table-column prop="createUserName" align="center" width="220" label="创建人"></el-table-column>
+      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
-      <el-table-column prop="updateUserName" align="center" width="220" label="修改人"></el-table-column>
+      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
       <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -199,7 +229,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column  align="center" width="160" label="条件类型">
+            <el-table-column align="center" width="160" label="条件类型">
               <template slot-scope="scope">
                 <div v-if="scope.row.name.indexOf('Total')==-1&&scope.row.name.indexOf('total')==-1">
                   <!-- {{ contractItemVariableList[scope.row.contractItem].name }} -->
@@ -218,7 +248,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column  align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(¥)" width="150">
               <template slot-scope="scope">
                 <div>
                   <!-- {{ termInfo.saleNumber*(scope.row.pointCount/100) }} -->
@@ -242,7 +272,7 @@
             </el-table-column>
             <el-table-column prop="taxRate" align="center" label="税率">
             </el-table-column> -->
-            <el-table-column prop="detail" align="center"  label="描述">
+            <el-table-column prop="detail" align="center" label="描述">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
                   <el-input v-model.number="scope.row.detail" clearable class="my-el-detail" placeholder="请输入描述">
@@ -282,7 +312,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column  align="center" width="160" label="条件类型">
+            <el-table-column align="center" width="160" label="条件类型">
               <template slot-scope="scope">
                 <div v-if="scope.row.name.indexOf('Total')==-1&&scope.row.name.indexOf('total')==-1">
                   <!-- {{ contractItemVariableList[scope.row.contractItem].name }} -->
@@ -298,7 +328,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column  align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(¥)" width="150">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
                   <el-input v-model.number="scope.row.cost" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCost(scope.$index,scope.row)">
@@ -323,7 +353,7 @@
             </el-table-column>
             <el-table-column prop="taxRate" align="center" label="税率">
             </el-table-column> -->
-            <el-table-column prop="detail" align="center"  label="描述">
+            <el-table-column prop="detail" align="center" label="描述">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
                   <el-input v-model.number="scope.row.detail" clearable class="my-el-detail" placeholder="请输入描述">
@@ -357,10 +387,12 @@ import {
   getDefaultPermissions,
   getContractEntry,
   FormateThousandNum,
+  contractList,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
+import axios from 'axios'
 export default {
   name: 'StraightGiving',
   data() {
@@ -368,46 +400,35 @@ export default {
       total: 1,
       pageSize: 10,
       pageNum: 1,
+      filterObj: {
+        customerMdmCode: '',
+        contractDate: [],
+        contractBeginDate: '',
+        contractEndDate: '',
+        systemDate: [],
+        effectiveBeginDate: '',
+        effectiveEndDate: '',
+        state: '',
+      },
       maxheight: getContractEntry(),
       checkArr: [], //选中的数据
       tableData: [
         {
-          customerName: '孩子王',
+          customerName: '爱亲',
+          customerMdmCode: '2174',
           saleAmount: 100,
           Tax: 500000,
           NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['2022-01-01', '2022-03-08'],
+          contractDate: ['2022-01-01', '2022-12-01'],
+          systemDate: ['202201', '202203'],
           contractStatus: 0,
           systemStatus: 0,
-          applyRemark: '意见',
+          remark: '意见',
           packageOwner: '意见',
           finance: '意见',
-          createUserName: '创建人',
+          createBy: '创建人',
           createDate: '202201',
-          updateUserName: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-          isTimeout: 0,
-          contractTimeoutStatus: 1,
-          contractTimeoutTime: '',
-          isNewData: 0,
-        },
-        {
-          customerName: '孩子王',
-          saleAmount: 100,
-          Tax: 500000,
-          NoTax: 500000,
-          contractDate: ['20220101', '20221201'],
-          systemDate: ['2022-01-01', '2022-01-08'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createUserName: '创建人',
-          createDate: '202201',
-          updateUserName: '更新人',
+          updateBy: '更新人',
           updateDate: '202201',
           isEditor: 0,
           isTimeout: 0,
@@ -417,14 +438,22 @@ export default {
         },
       ],
       customerArr: [],
-      contractItemVariableList: [{name:'有条件月返',code:'Conditional'},{name:'无条件月返',code:'Unconditional'}],
-      contractItemFixList: [{name:'路演',code:'Conditional'},{name:'陈列费',code:'Conditional'},{name:'数据费',code:'Conditional'}],
+      contractList: contractList,
+      contractItemVariableList: [
+        { name: '有条件月返', code: 'Conditional' },
+        { name: '无条件月返', code: 'Unconditional' },
+      ],
+      contractItemFixList: [
+        { name: '路演', code: 'Conditional' },
+        { name: '陈列费', code: 'Conditional' },
+        { name: '数据费', code: 'Conditional' },
+      ],
       isAddCount: 0,
       tableKey: 0,
       isTermsDetailVisible: false, //条款明细弹窗
-      termInfo:{
-        saleNumber:100
-      },//条款明细信息
+      termInfo: {
+        saleNumber: 100,
+      }, //条款明细信息
       termVariableData: [
         {
           name: 'Total',
@@ -502,6 +531,11 @@ export default {
         totalPoint: 0,
         totalCost: 0,
       },
+      //取消编辑 --》数据重置（不保存）
+      tempObj: {
+        rowIndex: 0,
+        tempInfo: null,
+      },
     }
   },
   mounted() {
@@ -513,7 +547,26 @@ export default {
     this.getTableData()
     this.getCustomerList()
   },
+  computed: {},
   watch: {
+    'filterObj.contractDate'(value) {
+      if (value) {
+        this.filterObj.contractBeginDate = value[0]
+        this.filterObj.contractEndDate = value[1]
+      } else {
+        this.filterObj.contractBeginDate = ''
+        this.filterObj.contractEndDate = ''
+      }
+    },
+    'filterObj.systemDate'(value) {
+      if (value) {
+        this.filterObj.effectiveBeginDate = value[0]
+        this.filterObj.effectiveEndDate = value[1]
+      } else {
+        this.filterObj.effectiveBeginDate = ''
+        this.filterObj.effectiveEndDate = ''
+      }
+    },
     // termVariableData: {
     //   handler: function () {
     //     //获取Variable和fix
@@ -542,20 +595,39 @@ export default {
       API.getPage({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        customerType: 1,
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
       }).then((response) => {
-        // this.tableData = response.data.records
+        let list = response.data.records
+        list.forEach((item) => {
+          item.isEditor = 0
+          item.isNewData = 0
+          item.contractDate = [item.contractBeginDate, item.contractEndDate]
+          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+        })
+        this.tableData = [...list]
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
+        this.tempObj.tempInfo = null
       })
     },
     // 客户
     getCustomerList() {
-      selectAPI.getCustomerListByType({type:'1'}).then((res) => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      })
+      selectAPI
+        .getCustomerListByType({
+          type: 1,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArr = res.data
+          }
+        })
     },
     //新增一行数据
     addNewRow() {
@@ -564,19 +636,23 @@ export default {
         saleAmount: '',
         Tax: '',
         NoTax: '',
-        contractDate: ['20220101', '20221201'],
-        systemDate: ['202201', '202212'],
+        contractDate: [],
+        contractBeginDate: '',
+        contractEndDate: '',
+        systemDate: [],
+        effectiveBeginDate: '',
+        effectiveEndDate: '',
         contractStatus: 0,
         systemStatus: '',
-        applyRemark: '',
+        remark: '',
         packageOwner: '',
         finance: '',
-        createUserName: '',
+        createBy: '',
         createDate: '',
-        updateUserName: '',
+        updateBy: '',
         updateDate: '',
-        isEditor: 0, //是否 处于编辑状态
-        isNewData: 1, //是否 处于编辑状态
+        isEditor: 1, //是否 处于编辑状态
+        isNewData: 1, //是否 是新增的数据
         isTimeout: '',
         contractTimeoutStatus: '',
         contractTimeoutTime: '',
@@ -592,20 +668,70 @@ export default {
         this.isAddCount--
       }
     },
-    //录入提交
-    submit() {
+    //新增保存
+    save() {
+      let addList = this.tableData.filter((item) => item.isNewData == 1)
+      let list = []
 
+      addList.forEach((item) => {
+        let obj = {
+          customerMdmCode: '', //客户编号
+          saleAmount: '', //目标销售额
+          contractBeginDate: '', //合同区间-开始
+          contractEndDate: '', //合同区间-结束
+          effectiveBeginDate: '', //系统生效-开始时间
+          effectiveEndDate: '', //系统生效-结束时间
+          remark: '', //备注
+        }
+        obj.customerMdmCode = item.customerMdmCode
+        obj.saleAmount = item.saleAmount
+        obj.contractBeginDate = item.contractDate[0]
+        obj.contractEndDate = item.contractDate[1]
+        obj.effectiveBeginDate = item.systemDate[0]
+        obj.effectiveEndDate = item.systemDate[1]
+        obj.remark = item.remark
+        list.push(obj)
+      })
+      API.addCustomerContract(list).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+        }
+      })
+    },
+    //录入提交
+    submit() {},
+    search() {
+      this.pageNum = 1
+      this.getTableData()
     },
     //编辑行数据
-    editorRow(index) {
+    editorRow(index, { isNewData }) {
+      if (this.tempObj.tempInfo && !isNewData) {
+        this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
+      }
+      //不存新增的数据，新增没有取消编辑
+      if (!isNewData) {
+        //存编辑之前的数据
+        this.tempObj.rowIndex = index
+        this.tempObj.tempInfo = { ...this.tableData[index] }
+      }
       //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
-      this.tableData.forEach((item) => (item.isEditor = 0))
+      this.tableData.forEach((item) => {
+        if (!item.isNewData) {
+          item.isEditor = 0
+        }
+      })
       this.tableData[index].isEditor = 1
       this.$forceUpdate()
     },
     CancelEditorRow(index) {
       // this.tableData.forEach((item) => (item.isEditor = 0))
-      this.tableData[index].isEditor = 0
+      if (this.tableData[index].isNewData) {
+        //新增的不能取消编辑，只有删除
+      } else {
+        this.tableData[index].isEditor = 0
+        this.tableData[index] = this.tempObj.tempInfo
+      }
     },
     //删除该行数据
     deleteRow(row, index) {
@@ -632,13 +758,53 @@ export default {
           cancelButtonText: '取消',
           type: 'warning',
         })
-          .then(() => {})
+          .then(() => {
+            console.log([this.tableData[index].id])
+            API.deleteCustomerContract([this.tableData[index].id]).then(
+              (res) => {
+                if (res.code === 1000) {
+                  this.getTableData()
+                  if (res.data) {
+                    this.$message.success('删除成功')
+                  } else {
+                    this.$message.info(`${res.message}`)
+                  }
+                }
+              }
+            )
+          })
           .catch(() => {
             this.$message({
               type: 'info',
               message: '已取消',
             })
           })
+      }
+    },
+    //保存 该行
+    saveRow(row, index) {
+      if (row.saleAmount > 9999999999) {
+        this.$message.info('超出最大数值')
+      } else {
+        API.updateCustomerContract({
+          id: row.id,
+          customerMdmCode: row.customerMdmCode,
+          saleAmount: row.saleAmount,
+          contractBeginDate: row.contractDate[0],
+          contractEndDate: row.contractDate[1],
+          effectiveBeginDate: row.systemDate[0],
+          effectiveEndDate: row.systemDate[1],
+          remark: row.remark,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.getTableData()
+            if (res.data) {
+              this.$message.success('修改成功')
+            } else {
+              this.$message.info(`${res.message}`)
+            }
+          }
+        })
       }
     },
     //定时任务确定
@@ -667,7 +833,7 @@ export default {
     //新增条款--variable
     addNewRowToVariable() {
       //新添元素更改位置
-      this.termVariableData.splice(-1,0,{
+      this.termVariableData.splice(-1, 0, {
         name: 'Variable',
         contractItem: 0,
         conditionType: 'conditional',
@@ -688,7 +854,7 @@ export default {
     },
     //新增条款--fix
     addNewRowToFix() {
-      this.termFixData.splice(-1,0,{
+      this.termFixData.splice(-1, 0, {
         name: 'Fix',
         contractItem: 0,
         conditionType: 'conditional',
@@ -707,14 +873,16 @@ export default {
       })
     },
     //费比更改
-    changeCostRate(index,row) {
-      this.termVariableData[index].cost=this.termInfo.saleNumber*(row.pointCount/100)
+    changeCostRate(index, row) {
+      this.termVariableData[index].cost =
+        this.termInfo.saleNumber * (row.pointCount / 100)
       this.getNewTotalData()
     },
     //含税费用更改
-    changeCost(index,row) {
+    changeCost(index, row) {
       // {{ (termInfo.saleNumber/scope.row.cost) }}%
-      this.termFixData[index].pointCount=(row.cost/this.termInfo.saleNumber)*100
+      this.termFixData[index].pointCount =
+        (row.cost / this.termInfo.saleNumber) * 100
       this.getNewTotalData()
     },
     // 获取total 数据
@@ -726,24 +894,26 @@ export default {
       this.VariableTotalData.totalPoint = 0
       this.VariableTotalData.totalCost = 0
       //汇总行索引
-      let variableTotalIndex=this.termVariableData.length-1
+      let variableTotalIndex = this.termVariableData.length - 1
       //获取VariableData Total
       this.termVariableData.forEach((item, index) => {
-        if (index > 0&&index<variableTotalIndex) {
+        if (index > 0 && index < variableTotalIndex) {
           let { pointCount, cost } = item
           this.VariableTotalData.totalPoint += pointCount
           this.VariableTotalData.totalCost += cost
         }
       })
-      this.termVariableData[variableTotalIndex].pointCount = this.VariableTotalData.totalPoint
-      this.termVariableData[variableTotalIndex].cost = this.VariableTotalData.totalCost
+      this.termVariableData[variableTotalIndex].pointCount =
+        this.VariableTotalData.totalPoint
+      this.termVariableData[variableTotalIndex].cost =
+        this.VariableTotalData.totalCost
       this.FixTotalData.totalPoint = 0
       this.FixTotalData.totalCost = 0
       //汇总行索引
-      let FixTotalIndex=this.termFixData.length-1
+      let FixTotalIndex = this.termFixData.length - 1
       //获取FixData Total
       this.termFixData.forEach((item, index) => {
-        if (index<FixTotalIndex) {
+        if (index < FixTotalIndex) {
           let { pointCount, cost } = item
           this.FixTotalData.totalPoint += pointCount
           this.FixTotalData.totalCost += cost
@@ -1000,11 +1170,11 @@ export default {
   .el-input--suffix {
     width: 120px !important;
   }
-  
 }
 .MainContent .select_date {
-   width: 240px !important;
-  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+  width: 240px !important;
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
     width: 240px !important;
   }
 }

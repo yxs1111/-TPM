@@ -604,7 +604,7 @@ export function getHeightSingle() {
  * @returns el-table max-height
  */
 export function getContractEntry() {
-  return window.innerHeight - 350
+  return window.innerHeight - 400
 }
 /**
  * 
@@ -694,6 +694,7 @@ export function setSplitAssignee(value) {
   }
   return formatString
 }
+export let contractList=['草稿','提交','生效中','失效','过期']
 
 
 
