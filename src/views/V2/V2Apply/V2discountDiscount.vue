@@ -509,11 +509,10 @@ export default {
     },
     // 校验数据
     checkImport() {
-      const formData = new FormData()
-      // formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelCode', this.filterObj.channelCode)
-      API.exceptionCheckTwo(formData).then((response) => {
+      API.exceptionCheckTwo({
+        yearAndMonth:this.filterObj.yearAndMonth,
+        channelCode:this.filterObj.channelCode
+      }).then((response) => {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data

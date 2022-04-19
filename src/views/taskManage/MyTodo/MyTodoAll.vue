@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-03-16 09:19:05
+ * @LastEditTime: 2022-04-19 10:39:25
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -26,7 +26,7 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">类型:</span>
+          <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber"  />
           </el-select>
