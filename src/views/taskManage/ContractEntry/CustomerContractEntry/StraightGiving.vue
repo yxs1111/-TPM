@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-20 14:28:43
+ * @LastEditTime: 2022-04-20 15:04:29
 -->
 <template>
   <div class="MainContent">
@@ -206,7 +206,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="150" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -277,7 +277,7 @@
               <span class="addNewRowText">新增一行</span>
             </div>
           </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="160" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="100" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -852,9 +852,15 @@ export default {
     //通过code 获取ContractItem索引展示
     getContractItemByCode(flag,code) {
       if (!flag) {
+        if(!code) {
+          return 0
+        }
         //variable 
         return this.contractItemVariableList.findIndex(item=>item.code==code)
       } else {
+        if(!code) {
+          return 0
+        }
         //fix
         return this.contractItemFixList.findIndex(item=>item.code==code)
       }

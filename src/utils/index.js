@@ -604,7 +604,7 @@ export function getHeightSingle() {
  * @returns el-table max-height
  */
 export function getContractEntry() {
-  return window.innerHeight - 400
+  return window.innerHeight - 480
 }
 /**
  * 
