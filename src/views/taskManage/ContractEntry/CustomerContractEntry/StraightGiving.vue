@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-20 15:04:29
+ * @LastEditTime: 2022-04-20 16:04:47
 -->
 <template>
   <div class="MainContent">
@@ -26,7 +26,7 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">状态:</span>
+          <span class="SelectliTitle">合同状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
           </el-select>

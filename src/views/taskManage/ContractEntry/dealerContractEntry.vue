@@ -1,10 +1,49 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-14 16:38:22
+ * @LastEditTime: 2022-04-20 16:37:20
 -->
 <template>
   <div class="MainContent">
+    <div class="SelectBarWrap">
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">客户名称:</span>
+          <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
+            <el-option v-for="item,key in customerArr" :key="key" :label="key" :value="item" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商名称:</span>
+          <el-select v-model="filterObj.distributorMdmCode" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in distributorArr" :key="index" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同期间:</span>
+          <el-date-picker v-model="filterObj.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+            start-placeholder="开始日期" end-placeholder="结束日期">
+          </el-date-picker>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">系统生效时间:</span>
+          <el-date-picker v-model="filterObj.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+            end-placeholder="结束月份">
+          </el-date-picker>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同状态:</span>
+          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG">
+          <img src="@/assets/images/export.png" alt="">
+          <span class="text">导出</span>
+        </div>
+      </div>
+    </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="showAddDialog">新增</el-button>
       <div class="TpmButtonBG">
@@ -53,33 +92,33 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="dealerName" align="center" width="220" label="经销商名称">
+      <el-table-column prop="distributorName" align="center" width="220" label="经销商名称">
         <template slot-scope="scope">
           <div>
-            {{scope.row.dealerName}}
+            {{scope.row.distributorName}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="dealerTarget" align="center" width="220" label="目标销售额(¥)">
+      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额(¥)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.dealerTarget" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{FormateNum(scope.row.dealerTarget)}}
+            {{FormateNum(scope.row.saleAmount)}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractDate" align="center" width="220" label="合同期间">
+      <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
-              end-placeholder="结束日期">
+            <el-date-picker v-model="scope.row.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{scope.row.contractDate[0]+' - '+scope.row.contractDate[1]}}
+            {{ scope.row.contractBeginDate + ' - ' + scope.row.contractEndDate }}
           </div>
         </template>
       </el-table-column>
@@ -90,9 +129,8 @@
               end-placeholder="结束月份">
             </el-date-picker>
           </div>
-          <div v-show="!scope.row.isEditor && scope.row.systemDate.length">
-            {{ scope.row.systemDate[0] + ' - ' + scope.row.systemDate[1] }}
-            <!-- {{scope.row.contractDate}} -->
+          <div v-show="!scope.row.isEditor">
+            {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
           </div>
         </template>
       </el-table-column>
@@ -322,12 +360,13 @@
 </template>
 
 <script>
-import API from '@/api/taskManage/taskManage.js'
+import API from '@/api/ContractEntry/dealer'
 import {
   getDefaultPermissions,
   getTextMap,
   parseTime,
   getContractEntry,
+  contractList,
   FormateThousandNum,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -341,14 +380,25 @@ export default {
       total: 1,
       pageSize: 10,
       pageNum: 1,
+      filterObj: {
+        customerMdmCode: '',
+        distributorMdmCode: '',
+        contractDate: [],
+        contractBeginDate: '',
+        contractEndDate: '',
+        systemDate: [],
+        effectiveBeginDate: '',
+        effectiveEndDate: '',
+        state: '',
+      },
       maxheight: getContractEntry(),
       tableData: [
-        {
+        { 
           customerName: '孩子王',
           targetSale: 100,
-          dealerName: '杭州华商贸易有限公司',
-          dealerTarget: 500000,
-          contractDate: ['20220110', '20220521'],
+          distributorName: '杭州华商贸易有限公司',
+          saleAmount: 500000,
+          contractDate: ['2022-01-10', '2022-05-21'],
           systemDate: ['202201', '202212'],
           contractStatus: 0,
           systemStatus: 0,
@@ -364,6 +414,7 @@ export default {
       ],
       customerArr: [],
       distributorArr: [],
+      contractList: [],
       checkArr: [], //选中的数据
       tableKey: 0,
       addDialog: {
@@ -649,46 +700,65 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
+    this.getTableData()
     this.getCustomerList()
     this.getDistributorList()
   },
   directives: { elDragDialog, permission },
+  watch: {
+    'filterObj.contractDate'(value) {
+      if (value) {
+        this.filterObj.contractBeginDate = value[0]
+        this.filterObj.contractEndDate = value[1]
+      } else {
+        this.filterObj.contractBeginDate = ''
+        this.filterObj.contractEndDate = ''
+      }
+    },
+    'filterObj.systemDate'(value) {
+      if (value) {
+        this.filterObj.effectiveBeginDate = value[0]
+        this.filterObj.effectiveEndDate = value[1]
+      } else {
+        this.filterObj.effectiveBeginDate = ''
+        this.filterObj.effectiveEndDate = ''
+      }
+    },
+  },
   methods: {
     //获取表格数据
     getTableData() {
-      API.getList({
+      API.getPage({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        yearAndMonth: this.filterObj.yearAndMonth,
-        version: this.filterObj.version,
-        channelCode: this.filterObj.channelCode,
-        minePackageCode: this.filterObj.MinePackage,
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        distributorMdmCode: this.filterObj.distributorMdmCode,
+        contractState: this.filterObj.state,
       }).then((response) => {
-        this.tableData = response.data.records
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
+        // this.tableData = response.data.records
+        // this.pageNum = response.data.pageNum
+        // this.pageSize = response.data.pageSize
+        // this.total = response.data.total
       })
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList().then((res) => {
+      API.getCustomerContract({}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
       })
     },
     getDistributorList() {
-      selectAPI
-        .queryDistributorList({
-          // customerMdmCode: this.filterObj.customerMdmCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.distributorArr = res.data
-          }
-        })
-        .catch()
+      selectAPI.getDistributorService({}).then((res) => {
+        if (res.code === 1000) {
+          this.distributorArr = res.data
+        }
+      })
     },
     //编辑行数据
     editorRow(index) {
@@ -705,6 +775,10 @@ export default {
     deleteRow() {},
     //录入提交
     submit() {},
+    search() {
+      this.pageNum = 1
+      this.getTableData()
+    },
     //新增数据 --弹窗展示
     showAddDialog() {
       this.isAddDialogVisible = true
@@ -990,5 +1064,12 @@ export default {
 }
 .hover-row .filstColumn {
   color: #666;
+}
+.MainContent .select_date {
+  width: 240px !important;
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 240px !important;
+  }
 }
 </style>

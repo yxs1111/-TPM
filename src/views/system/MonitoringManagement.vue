@@ -31,7 +31,7 @@
       </el-table-column>
       <el-table-column align="center" prop="success" label="是否成功"> </el-table-column>
       <el-table-column align="center" prop="dataNum" label="数据条数"> </el-table-column>
-      <el-table-column align="center" prop="inData" label="接口参数"> </el-table-column>
+      <!-- <el-table-column align="center" prop="inData" label="接口参数"> </el-table-column> -->
       <el-table-column align="center" prop="details" label="详情(失败原因)"> </el-table-column>
     </el-table>
     <!-- 分页 -->
