@@ -85,6 +85,9 @@
       <el-table-column width="220" v-slot={row} align="right" prop="forecastSales" label="V2预测销量（CTN）">
         {{FormateNum(row.forecastSales)}}
       </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="adjustedVol" label="V2调整后销量（CTN）">
+        {{FormateNum(row.adjustedVol)}}
+      </el-table-column>
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
         {{FormateNum(row.adjustedPriceAve)}}
       </el-table-column>
@@ -184,6 +187,9 @@
             </el-table-column>
             <el-table-column width="220" v-slot={row} align="right" prop="forecastSales" label="V2预测销量（CTN）">
               {{FormateNum(row.forecastSales)}}
+            </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="adjustedVol" label="V2调整后销量（CTN）">
+              {{FormateNum(row.adjustedVol)}}
             </el-table-column>
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
               {{FormateNum(row.adjustedPriceAve)}}
