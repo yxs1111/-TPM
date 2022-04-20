@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-04-18 11:59:40
+ * @LastEditTime: 2022-04-20 18:46:02
 -->
 <template>
   <div class="dashboard-container">
@@ -35,15 +35,15 @@
           <!-- 活动月 -->
           <div class="monthBarWrap">
             <!-- 流程 -->
-            <div class="monthBar" v-for="(channelItem,key) in ActivityList" :key="key">
+            <div class="monthBar" v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex">
               <div class="monthBg">
-                <div class="monthName">{{getCPTMonth(key)}}</div>
-                <div class="monthName">({{key}})</div>
+                <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div>
+                <div class="monthName">({{MonthItem.month}})</div>
                
               </div>
               <div class="monthPoint">
                 <!-- 渠道 -->
-                <div v-for="(value,ckey) in channelItem" :key="ckey">
+                <div v-for="(value,ckey) in MonthItem.channelList" :key="ckey">
                   <div v-for="item,index in value" :key="index">
                     <!-- PP -->
                     <div class="PPBar" v-if="item.minePackageName=='Price Promotion'">
@@ -422,8 +422,22 @@ export default {
         //     }
         //   }
         // }
-        console.log(data)
-        this.ActivityList = data
+        let list=[]
+        for (const key in data) {
+          if (Object.hasOwnProperty.call(data, key)) {
+            const element = data[key];
+            let obj={
+              month:'',
+              channelList:[]
+            }
+            obj.month=key
+            obj.channelList=element
+            list.push(obj)
+          }
+        }
+        let reverseList=[]
+        reverseList=list.reverse()
+        this.ActivityList = [...reverseList]
         //日期处理
         let DateArray = res.data.calendar
         let DateData = {}
