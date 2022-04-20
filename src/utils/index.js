@@ -694,7 +694,156 @@ export function setSplitAssignee(value) {
   }
   return formatString
 }
-export let contractList=['草稿','提交','生效中','失效','过期']
+export let contractList=['草稿','待审批','被拒绝','通过','终止']
+export let contractItemVariableList=[
+  {
+    name:'月度返利',
+    code:'monthly_rebate',
+    conditionalIsTwo:2 //两者均有可能
+  },
+  {
+    name:'季度返利',
+    code:'quarterly_rebate',
+    conditionalIsTwo:2 //两者均有可能
+  },
+  {
+    name:'年度返利',
+    code:'yearly_rebate',
+    conditionalIsTwo:2 //两者均有可能
+  },
+  {
+    name:'线上生意返利',
+    code:'online_business_rebates',
+    conditionalIsTwo:2 //两者均有可能
+  },
+  {
+    name:'深度分销',
+    code:'depth_distribution',
+    conditionalIsTwo:2 //两者均有可能
+  },
+  {
+    name:'不退货返利',
+    code:'no_return_rebate',
+    conditionalIsTwo:2 //两者均有可能
+  },
+  {
+    name:'主货架陈列',
+    code:'main_rack_display',
+    conditionalIsTwo:1 //conditional
+  },
+  {
+    name:'嵌柜陈列费',
+    code:'inlaid_cabinet_display_fee',
+    conditionalIsTwo:1 //conditional
+  },
+  {
+    name:'生动化陈列',
+    code:'vivid_display',
+    conditionalIsTwo:1 //conditional
+  },
+  {
+    name:'物流费',
+    code:'logistics_cost',
+    conditionalIsTwo:0 //unconditional
+  },
+  {
+    name:'数据服务费',
+    code:'Data_service_fee',
+    conditionalIsTwo:2 
+  },
+  {
+    name:'新店进场费',
+    code:'New_store_entry_fee',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'新品上架费',
+    code:'New_product_launching_fee',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'周年庆/主推',
+    code:'anniversary_or_main_promotion',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'DM海报',
+    code:'DM_posters',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'会员营销费',
+    code:'Membership_marketing_fee',
+    conditionalIsTwo:2 
+  },
+  {
+    name:'促销员管理费',
+    code:'Management_fee_of_promoters',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'展会/嘉年华/妈妈班等',
+    code:'Fairs_or_carnivals_or_mom_classes_etc',
+    conditionalIsTwo:1 
+  },
+]
+export let contractItemFixList=[
+  {
+    name:'主货架陈列',
+    code:'main_rack_display',
+    conditionalIsTwo:1 //conditional
+  },
+  {
+    name:'嵌柜陈列费',
+    code:'inlaid_cabinet_display_fee',
+    conditionalIsTwo:1 //conditional
+  },
+  {
+    name:'生动化陈列',
+    code:'vivid_display',
+    conditionalIsTwo:1 //conditional
+  },
+  {
+    name:'数据服务费',
+    code:'Data_service_fee',
+    conditionalIsTwo:2 
+  },
+  {
+    name:'新店进场费',
+    code:'New_store_entry_fee',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'新品上架费',
+    code:'New_product_launching_fee',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'周年庆/主推',
+    code:'anniversary_or_main_promotion',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'DM海报',
+    code:'DM_posters',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'会员营销费',
+    code:'Membership_marketing_fee',
+    conditionalIsTwo:2 
+  },
+  {
+    name:'促销员管理费',
+    code:'Management_fee_of_promoters',
+    conditionalIsTwo:1 
+  },
+  {
+    name:'展会/嘉年华/妈妈班等',
+    code:'Fairs_or_carnivals_or_mom_classes_etc',
+    conditionalIsTwo:1 
+  },
+]
 
 
 
