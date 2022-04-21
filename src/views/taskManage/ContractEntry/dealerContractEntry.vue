@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-20 16:37:20
+ * @LastEditTime: 2022-04-21 17:22:47
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,key in customerArr" :key="key" :label="key" :value="item" />
+            <el-option v-for="item in customerArr" :key="item.customerMdmCode" :label="item.customerName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -46,10 +46,10 @@
     </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="showAddDialog">新增</el-button>
-      <div class="TpmButtonBG">
+      <!-- <div class="TpmButtonBG">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
-      </div>
+      </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
@@ -67,7 +67,11 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isEditor" @click="editorRow(scope.$index)">
+            <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
+              <svg-icon icon-class="save-light" class="svgIcon" />
+              <span>保存</span>
+            </div>
+            <div class="haveText_editor" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
@@ -85,10 +89,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="targetSale" align="center" width="220" label="目标销售额">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="客户目标销售额">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.targetSale)}}
+            {{FormateNum(scope.row.customerContractSaleAmount)}}
           </div>
         </template>
       </el-table-column>
@@ -138,7 +142,7 @@
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
-              {{ scope.row.contractStatus == 0 ? '草稿' : '提交' }}
+              {{ contractList[scope.row.contractState] }}
             </div>
           </div>
         </template>
@@ -148,14 +152,14 @@
           条款明细
         </div>
       </el-table-column>
-      <el-table-column prop="applyRemark" align="center" width="220" label="申请人备注">
+      <el-table-column prop="remark" align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.applyRemark" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.remark" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{scope.row.applyRemark}}
+            {{scope.row.remark}}
           </div>
         </template>
       </el-table-column>
@@ -177,40 +181,42 @@
         <div class="termInfo">
           <div class="selectCustomer">
             <span class="selectBar">客户合同</span>
-            <el-select v-model="addDialog.name" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
+            <el-select v-model="addDialog.index" class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in customerArr" :key="item.customerMdmCode" :label="item.customerName" :value="index" />
             </el-select>
           </div>
-          <el-button type="primary" class="TpmButtonBG">查询</el-button>
+          <el-button type="primary" class="TpmButtonBG" @click="getDetail">查询</el-button>
         </div>
         <div class="termTableWrap">
           <div class="TableWrap_dealer">
             <el-table :data="addDialogCustomer" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="customerName" align="center" width="320" label="客户名称">
               </el-table-column>
-              <el-table-column prop="targetSale" align="center" width="280" label="目标销售额">
+              <el-table-column prop="saleAmount" align="center" width="280" label="目标销售额">
+                <template slot-scope="scope">
+                  <div>
+                    {{FormateNum(scope.row.saleAmount)}}
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
                 <template slot-scope="scope">
                   <div>
-                    {{scope.row.contractDate[0]+' - '+scope.row.contractDate[1]}}
+                    {{scope.row.contractBeginDate+' - '+scope.row.contractEndDate}}
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="systemDate" align="center" width="280" label="系统生效时间">
                 <template slot-scope="scope">
-                  <div v-show="!scope.row.isEditor && scope.row.systemDate.length">
-                    {{ scope.row.systemDate[0] + ' - ' + scope.row.systemDate[1] }}
-                    <!-- {{scope.row.contractDate}} -->
+                  <div>
+                    {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="contractStatus" align="center" label="合同状态">
                 <template slot-scope="scope">
                   <div class="contractStatusWrap">
-                    <div>
-                      {{ scope.row.contractStatus == 0 ? '失效' : '生效中' }}
-                    </div>
+                    {{ contractList[scope.row.contractState] }}
                   </div>
                 </template>
               </el-table-column>
@@ -219,12 +225,12 @@
           <div class="space">
           </div>
           <div class="TableWrap_dealer">
-            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="280" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
-                    <el-select v-model="scope.row.distributorName" class="my-el-input" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
+                    <el-select v-model="scope.row.distributorMdmCode" class="my-el-input" filterable clearable placeholder="请选择">
+                      <el-option v-for="item,index in distributorArrDialog" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
                     </el-select>
                   </div>
                   <div v-else>
@@ -246,12 +252,12 @@
               <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
-                    <el-date-picker v-model="scope.row.contractDate" type="daterange" value-format="yyyyMMdd" format="yyyyMMdd" range-separator="至" start-placeholder="开始日期"
-                      end-placeholder="结束日期">
+                    <el-date-picker v-model="scope.row.contractDate" type="daterange" class="select_date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+                      start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                   </div>
                   <div v-else>
-                    {{scope.row.contractDate}}
+                    {{scope.row.contractDate[0]+'-'+scope.row.contractDate[1]}}
                   </div>
                 </template>
               </el-table-column>
@@ -263,11 +269,16 @@
                     </el-date-picker>
                   </div>
                   <div v-else>
-                    {{scope.row.systemDate}}
+                    {{scope.row.systemDate[0]+'-'+scope.row.systemDate[1]}}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="isEditor" align="center" label="是否补录">
+              <el-table-column prop="contractState" align="center" label="合同状态">
+                <template slot-scope="scope">
+                  <div class="contractStatusWrap">
+                    {{ scope.row.contractStateName }}
+                  </div>
+                </template>
               </el-table-column>
             </el-table>
             <div class="addNewRowWrap">
@@ -282,78 +293,6 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmAdd()">确 定</el-button>
         <el-button @click="closeAddDialog">取 消</el-button>
-      </span>
-    </el-dialog>
-    <!--条款明细 -->
-    <el-dialog width="95%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermDetailVisible" @close="closeTermDetailDialog">
-      <div class="dialogContent">
-        <div class="dealersWrap">
-          <div class="dealerItem">
-            <div class="topInfo">
-              <span>客户名称：高鑫零售</span>
-              <span class="tax">目标销售额(含税，￥):{{FormateNum(100000)}}</span>
-            </div>
-            <el-table :data="termCustomerData" border :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
-              <el-table-column align="center" width="140">
-                <template v-slot:header></template>
-                <template slot-scope="{ row }">
-                  <div>
-                    {{ row.name }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="contractItem" align="center" width="150" label="Contract item">
-                <template slot-scope="{row}">
-                  <div v-if="row.contractItem!==''">
-                    {{row.isVariable?contractItemVariableList[row.contractItem].name:contractItemFixList[row.contractItem].name}}
-                  </div>
-                </template>
-
-              </el-table-column>
-              <el-table-column prop="conditionType" align="center" width="150" label="条件类型">
-              </el-table-column>
-              <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
-              </el-table-column>
-              <el-table-column v-slot={row} prop="cost" align="center" width="150" label="含税金额（￥）">
-                {{FormateNum(row.cost)}}
-              </el-table-column>
-              <el-table-column prop="detail" align="center" width="150" label="描述"></el-table-column>
-            </el-table>
-          </div>
-          <div class="dealersTableWrap">
-            <div class="dealerItem" v-for="item,index in termDistData" :key="index">
-              <div class="topInfo">
-                <span>经销商名称：{{item.distName}}</span>
-                <span class="tax">目标销售额(含税，￥):{{item.targetSale}}</span>
-              </div>
-              <el-table :data="item.data" border :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
-                <el-table-column align="center" width="140">
-                  <template v-slot:header></template>
-                  <template slot-scope="{ row }">
-                    <div>
-                      {{ row.name }}
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="contractItem" align="center" width="150" label="Contract item">
-                </el-table-column>
-                <el-table-column prop="conditionType" align="center" width="150" label="条件类型">
-                </el-table-column>
-                <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
-                </el-table-column>
-                <el-table-column prop="cost" align="center" width="150" label="含税金额（￥）">
-                </el-table-column>
-                <el-table-column prop="detail" align="center" width="150" label="描述">
-                </el-table-column>
-              </el-table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="staging()">暂 存</el-button>
-        <el-button type="primary" @click="confirmTermDetail()">确 定</el-button>
-        <el-button @click="closeTermDetailDialog">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -392,306 +331,41 @@ export default {
         state: '',
       },
       maxheight: getContractEntry(),
-      tableData: [
-        { 
-          customerName: '孩子王',
-          targetSale: 100,
-          distributorName: '杭州华商贸易有限公司',
-          saleAmount: 500000,
-          contractDate: ['2022-01-10', '2022-05-21'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          applyRemark: '意见',
-          packageOwner: '意见',
-          finance: '意见',
-          createBy: '创建人',
-          createDate: '202201',
-          updateBy: '更新人',
-          updateDate: '202201',
-          isEditor: 0,
-        },
-      ],
+      tableData: [],
+      editMaxTargetSale: 0, //修改可填最大值
+      editIsCollection: 0, //编辑--判断是否补录 --是否跳过验证
       customerArr: [],
       distributorArr: [],
-      contractList: [],
+      distributorArrDialog: [],
+      contractList: contractList,
       checkArr: [], //选中的数据
       tableKey: 0,
       addDialog: {
         id: '',
         name: '',
+        index: '',
+        customerMdmCode: '',
+        maxTargetSale: '',
+        isCollection: '', //是否补录
       },
-      addDialogCustomer: [
-        {
-          customerName: '孩子王',
-          targetSale: 100,
-          contractDate: ['20220110', '20220521'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-        },
-      ],
+      addDialogCustomer: [],
       addDialogDealerList: [
-        {
-          distributorName: '上海映华食品有限公司',
-          targetSale: 100,
-          contractDate: ['20220110', '20220521'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          isEditor: 0, //是否补录
-        },
-        {
-          distributorName: '上海映华食品有限公司',
-          targetSale: 100,
-          contractDate: ['20220110', '20220521'],
-          systemDate: ['202201', '202212'],
-          contractStatus: 0,
-          systemStatus: 0,
-          isEditor: 1, //是否补录
-        },
+        // {
+        //   distributorName: '上海映华食品有限公司',
+        //   targetSale: 100,
+        //   contractDate: ['20220110', '20220521'],
+        //   systemDate: ['202201', '202212'],
+        //   contractStatus: 0,
+        //   systemStatus: 0,
+        //   isEditor: 1, //是否补录
+        // },
       ],
       isAddDialogVisible: false,
-      isTermDetailVisible: false, //条款明细弹窗
-      contractItemVariableList: [
-        { name: '有条件月返', code: 'Conditional' },
-        { name: '无条件月返', code: 'Unconditional' },
-      ],
-      contractItemFixList: [
-        { name: '路演', code: 'Conditional' },
-        { name: '陈列费', code: 'Conditional' },
-        { name: '数据费', code: 'Conditional' },
-      ],
-      termCustomerData: [
-        {
-          name: 'Total',
-          contractItem: '',
-          conditionType: '',
-          pointCount: 3,
-          cost: 21,
-          taxRate: '',
-          detail: '',
-          isVariable: 1, //total 、Fix 区分
-        },
-        {
-          name: 'Variable',
-          contractItem: 0,
-          conditionType: 'conditional',
-          pointCount: 3,
-          cost: 21,
-          taxRate: '6%',
-          detail: '描述',
-          isVariable: 1, //total 、Fix 区分
-        },
-        {
-          name: 'Variable total',
-          contractItem: '',
-          conditionType: '',
-          pointCount: 3,
-          cost: 21,
-          taxRate: '',
-          detail: '',
-          isVariable: 1, //total 、Fix 区分
-        },
-        {
-          name: 'Fix',
-          contractItem: 0,
-          conditionType: 'conditional',
-          pointCount: 3,
-          cost: 21,
-          isHaveTax: 1,
-          taxRate: '6%',
-          detail: '描述',
-          isVariable: 0, //total 、Fix 区分
-        },
-        {
-          name: 'Fix total',
-          contractItem: '',
-          conditionType: '',
-          pointCount: 3,
-          cost: 21,
-          isHaveTax: '',
-          taxRate: '',
-          detail: '',
-          isVariable: 0, //total 、Fix 区分
-        },
-      ],
-      termDistData: [
-        {
-          distName: '成都华隆',
-          targetSale: 500000,
-          data: [
-            {
-              name: 'Total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '',
-              detail: '',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Variable',
-              contractItem: 0,
-              conditionType: 'conditional',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '6%',
-              detail: '描述',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '',
-              detail: '',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Fix',
-              contractItem: 0,
-              conditionType: 'conditional',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: 1,
-              taxRate: '6%',
-              detail: '描述',
-              isVariable: 0, //total 、Fix 区分
-            },
-            {
-              name: 'Fix total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: '',
-              taxRate: '',
-              detail: '',
-              isVariable: 0, //total 、Fix 区分
-            },
-          ],
-        },
-        {
-          distName: '成都华隆',
-          targetSale: 500000,
-          data: [
-            {
-              name: 'Total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '',
-              detail: '',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Variable',
-              contractItem: 0,
-              conditionType: 'conditional',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '6%',
-              detail: '描述',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '',
-              detail: '',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Fix',
-              contractItem: 0,
-              conditionType: 'conditional',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: 1,
-              taxRate: '6%',
-              detail: '描述',
-              isVariable: 0, //total 、Fix 区分
-            },
-            {
-              name: 'Fix total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: '',
-              taxRate: '',
-              detail: '',
-              isVariable: 0, //total 、Fix 区分
-            },
-          ],
-        },
-        {
-          distName: '成都华隆',
-          targetSale: 200000,
-          data: [
-            {
-              name: 'Total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '',
-              detail: '',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Variable',
-              contractItem: 0,
-              conditionType: 'conditional',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '6%',
-              detail: '描述',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              taxRate: '',
-              detail: '',
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              name: 'Fix',
-              contractItem: 0,
-              conditionType: 'conditional',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: 1,
-              taxRate: '6%',
-              detail: '描述',
-              isVariable: 0, //total 、Fix 区分
-            },
-            {
-              name: 'Fix total',
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              cost: 21,
-              isHaveTax: '',
-              taxRate: '',
-              detail: '',
-              isVariable: 0, //total 、Fix 区分
-            },
-          ],
-        },
-      ],
+      //取消编辑 --》数据重置（不保存）
+      tempObj: {
+        rowIndex: 0,
+        tempInfo: null,
+      },
     }
   },
   mounted() {
@@ -724,6 +398,13 @@ export default {
         this.filterObj.effectiveEndDate = ''
       }
     },
+    'addDialog.id'(value) {
+      if (value == '') {
+        //客户合同置空，下方数据置空
+        this.addDialogCustomer = []
+        this.addDialogDealerList = []
+      }
+    },
   },
   methods: {
     //获取表格数据
@@ -739,10 +420,18 @@ export default {
         distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,
       }).then((response) => {
-        // this.tableData = response.data.records
-        // this.pageNum = response.data.pageNum
-        // this.pageSize = response.data.pageSize
-        // this.total = response.data.total
+        let list = response.data.records
+        list.forEach((item) => {
+          item.isEditor = 0
+          item.expireDate = '' //定时任务--终止日期字段
+          item.contractDate = [item.contractBeginDate, item.contractEndDate]
+          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+        })
+        this.tableData = [...list]
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+        this.tempObj.tempInfo = null
       })
     },
     // 客户
@@ -762,6 +451,11 @@ export default {
     },
     //编辑行数据
     editorRow(index) {
+      if (this.tempObj.tempInfo) {
+        this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
+      }
+      this.tempObj.rowIndex = index
+      this.tempObj.tempInfo = { ...this.tableData[index] }
       //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
       this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 1
@@ -770,11 +464,99 @@ export default {
     CancelEditorRow(index) {
       // this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 0
+      this.tableData[index] = this.tempObj.tempInfo
     },
     //删除该行数据
-    deleteRow() {},
+    deleteRow(row) {
+      //删除数据库中的数据
+      this.$confirm('确定要删除数据吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          API.delete([row.id]).then((res) => {
+            if (res.code === 1000) {
+              this.getTableData()
+              if (res.data) {
+                this.$message.success('删除成功')
+              } else {
+                this.$message.info(`${res.message}`)
+              }
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消',
+          })
+        })
+    },
     //录入提交
     submit() {},
+    //保存 该行
+    saveRow(row, index) {
+      API.findOne({
+        id: row.id,
+        isCustomerContract: 1, //是否查询客户合同（1是0否）
+        isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
+        isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
+      }).then((res) => {
+        let distList = res.data.distributorContract
+        this.editMaxTargetSale =
+          row.saleAmount - this.getMaxTargetSale(distList)
+        let flag = distList.findIndex((item) => {
+          return item.contractState == '3' || item.contractState == '4'
+        })
+        //是否补录，补录状态判断
+        this.editIsCollection = flag === -1 ? 0 : 1
+        if (row.saleAmount > 9999999999) {
+          this.$message.info('超出最大数值')
+          return
+        }
+        if (this.editIsCollection) {
+          //是补录-- 跳过验证
+          console.log('noLimit')
+          return
+          this.updateRowFunction(row)
+        } else {
+          //不是补录，数值验证
+          if (row.saleAmount > this.editMaxTargetSale) {
+            this.$message.info(
+              `经销商目标销售额之和应不大于${this.editMaxTargetSale}`
+            )
+          } else {
+            console.log('save')
+            return
+            this.updateRowFunction(row)
+          }
+        }
+      })
+    },
+    //编辑一行 API
+    updateRowFunction(row) {
+      API.update({
+        id: row.id,
+        ccId: row.ccId,
+        distributorMdmCode: row.distributorMdmCode,
+        saleAmount: row.saleAmount,
+        contractBeginDate: row.contractDate[0],
+        contractEndDate: row.contractDate[1],
+        effectiveBeginDate: row.systemDate[0],
+        effectiveEndDate: row.systemDate[1],
+        remark: row.remark,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          if (res.data) {
+            this.$message.success('修改成功')
+          } else {
+            this.$message.info(`${res.message}`)
+          }
+        }
+      })
+    },
     search() {
       this.pageNum = 1
       this.getTableData()
@@ -783,17 +565,80 @@ export default {
     showAddDialog() {
       this.isAddDialogVisible = true
     },
+    //新增经销商 -- 获取客户数据
+    getDetail() {
+      API.findOne({
+        id: this.customerArr[this.addDialog.index].id,
+        isCustomerContract: 1, //是否查询客户合同（1是0否）
+        isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
+        isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.addDialogCustomer = []
+          this.addDialogDealerList = []
+          let {
+            customerContract: customerContractOrigin,
+            distributorContract: distList,
+          } = res.data
+          let obj = {
+            customerName: customerContractOrigin.customerName,
+            saleAmount: customerContractOrigin.saleAmount,
+            contractBeginDate: customerContractOrigin.contractBeginDate, //合同生效开始时间
+            contractEndDate: customerContractOrigin.contractEndDate, //合同生效结束时间
+            effectiveBeginDate: customerContractOrigin.effectiveBeginDate, //系统生效开始时间
+            effectiveEndDate: customerContractOrigin.effectiveEndDate, //系统生效结束时间
+            contractState: customerContractOrigin.contractState,
+          }
+          this.addDialogCustomer.push(obj)
+          this.getDistributorListByCustomer()
+          this.addDialog.maxTargetSale =
+            this.addDialogCustomer[0].saleAmount -
+            this.getMaxTargetSale(distList)
+          console.log(this.addDialog.maxTargetSale)
+          let flag = distList.findIndex((item) => {
+            return item.contractState == '3' || item.contractState == '4'
+          })
+          //是否补录，补录状态判断
+          this.addDialog.isCollection = flag === -1 ? 0 : 1
+        }
+      })
+    },
+    getDistributorListByCustomer() {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode:
+            this.customerArr[this.addDialog.index].customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArrDialog = res.data
+          }
+        })
+    },
+    //获取能填写的最大 目标销售额
+    getMaxTargetSale(distList) {
+      let distTotalTargetSale = 0
+      distList.forEach((item) => {
+        distTotalTargetSale += item.saleAmount
+      })
+      return distTotalTargetSale
+    },
     // 新增经销商
     addNewDistributor() {
+      if (this.addDialog.index === '') {
+        this.$message.info('请先选择客户合同')
+        return
+      }
       //如何判断是否为补录
       this.addDialogDealerList.push({
+        distributorMdmCode: '',
         distributorName: '',
-        targetSale: 0,
-        contractDate: ['20220110', '20220521'],
-        systemDate: ['202201', '202212'],
-        contractStatus: 0,
-        systemStatus: 0,
-        isEditor: 1, //是否补录
+        targetSale: '',
+        contractDate: [],
+        systemDate: [],
+        contractState: '',
+        contractStateName: '',
+        isEditor: 1, //是否能编辑
       })
       //滚动条随着新增滚动到底部
       let scrollHeight = this.$refs.dealerTable.bodyWrapper.scrollHeight
@@ -804,30 +649,65 @@ export default {
     //新增数据--关闭弹窗
     closeAddDialog() {
       this.isAddDialogVisible = false
+      this.addDialogCustomer = []
+      this.addDialogDealerList = []
+      this.addDialog = {
+        id: '',
+        name: '',
+        index: '',
+        customerMdmCode: '',
+      }
     },
     //确认新增
     confirmAdd() {
-      this.isAddDialogVisible = false
+      if (!this.addDialogDealerList.length) {
+        this.$message.info('请先添加数据')
+        return
+      }
+      let list = []
+      let targetSaleLimit = 0
+      this.addDialogDealerList.forEach((item) => {
+        let obj = {
+          ccId: this.customerArr[this.addDialog.index].id,
+          distributorMdmCode: item.distributorMdmCode,
+          saleAmount: item.targetSale,
+          contractBeginDate: item.contractDate[0],
+          contractEndDate: item.contractDate[1],
+          effectiveBeginDate: item.systemDate[0],
+          effectiveEndDate: item.systemDate[1],
+        }
+        targetSaleLimit += Number(item.targetSale)
+        list.push(obj)
+      })
+      //补录验证，不补录不验证（经销商之和可以大于客户合同目标销售额）
+      if (this.addDialog.isCollection) {
+        API.add(list).then((res) => {
+          if (res.code === 1000) {
+            this.isAddDialogVisible = false
+            this.getTableData()
+          }
+        })
+      } else {
+        if (targetSaleLimit > this.addDialog.maxTargetSale) {
+          this.$message.info(
+            `经销商目标销售额之和应不大于${this.addDialog.maxTargetSale}`
+          )
+          return
+        } else {
+          API.add(list).then((res) => {
+            if (res.code === 1000) {
+              this.isAddDialogVisible = false
+              this.getTableData()
+            }
+          })
+        }
+      }
     },
-
     //打开条款明细弹窗
     showTermDetailDialog() {
       this.$router.push(
         '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail'
       )
-      // this.isTermDetailVisible = true
-    },
-    //关闭条款明细弹窗
-    closeTermDetailDialog() {
-      this.isTermDetailVisible = false
-    },
-    //条款明细 确认
-    confirmTermDetail() {
-      this.closeTermDetailDialog()
-    },
-    //条款明细暂存
-    staging() {
-      this.closeTermDetailDialog()
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -871,6 +751,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.MainContent {
+  height: 100% !important;
+  background-color: #fff;
+  padding: 20px;
+  overflow-y: auto;
+}
 .seeActivity {
   height: 32px;
   background: #dcefe7;

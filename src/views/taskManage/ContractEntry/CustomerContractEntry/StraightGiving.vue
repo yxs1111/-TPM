@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-20 16:04:47
+ * @LastEditTime: 2022-04-21 09:49:32
 -->
 <template>
   <div class="MainContent">
@@ -196,7 +196,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="90%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="90%" top="2vh" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
@@ -206,7 +206,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="150" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="240" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -277,7 +277,7 @@
               <span class="addNewRowText">新增一行</span>
             </div>
           </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="100" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="240" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -730,6 +730,7 @@ export default {
         this.$message.info('该数据为新增数据,请选择其它数据')
       } else {
         //草稿、被拒绝可以编辑，其他仅查看
+        this.$refs.termDialog.$el.firstChild.style.height = '90%';
         API.findOneSaveDetail({
           id: this.customerId,
           isMain: 1,

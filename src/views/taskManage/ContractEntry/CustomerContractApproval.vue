@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-20 17:22:28
+ * @LastEditTime: 2022-04-21 09:58:04
 -->
 <template>
   <div class="MainContent">
@@ -120,7 +120,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="90%" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="90%"  top="2vh" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
@@ -130,7 +130,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="150" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="180" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -141,8 +141,8 @@
             </el-table-column>
             <el-table-column prop="contractItem" align="center" label="contract item" width="160">
               <template slot-scope="scope">
-                <div v-show="scope.row.isTotal">
-                  {{ scope.row.conditionsItem }}
+                <div v-if="!scope.row.isTotal">
+                  {{ contractItemVariableList[scope.row.contractItem].name }}
                 </div>
               </template>
             </el-table-column>
@@ -150,7 +150,7 @@
             </el-table-column>
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
-                <div v-show="scope.row.isTotal">
+                <div v-if="scope.row.isTotal">
                   {{ scope.row.costRatio }}%
                 </div>
               </template>
@@ -158,7 +158,7 @@
             <el-table-column align="center" label="含税费用(¥)" width="150">
               <template slot-scope="scope">
                 <div>
-                  {{scope.row.taxCost}}
+                  {{FormateNum(scope.row.taxCost)}}
                 </div>
               </template>
             </el-table-column>
@@ -167,7 +167,7 @@
           </el-table>
           <div class="addNewRowWrap">
           </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="100" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="160" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -177,7 +177,12 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="conditionsItem" align="center" label="contract item" width="160">
+            <el-table-column prop="contractItem" align="center" label="contract item" width="160">
+              <template slot-scope="scope">
+                <div v-if="!scope.row.isTotal">
+                  {{contractItemFixList[scope.row.contractItem].name}}
+                </div>
+              </template>
             </el-table-column>
             <el-table-column prop="conditions" align="center" width="160" label="条件类型">
             </el-table-column>
@@ -220,7 +225,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'StraightGiving',
+  name: 'CustomerContractApproval',
   data() {
     return {
       total: 1,
@@ -314,20 +319,21 @@ export default {
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
         contractState: this.filterObj.state,
+        minePackageCode:'CUSTOMER-CONTRACT'
       }).then((response) => {
-        let list = response.data.records
-        list.forEach((item) => {
-          item.isEditor = 0
-          item.isNewData = 0
-          item.expireDate = '' //定时任务--终止日期字段
-          item.contractDate = [item.contractBeginDate, item.contractEndDate]
-          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
-        })
-        this.tableData = [...list]
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
-        this.tempObj.tempInfo = null
+        // let list = response.data.records
+        // list.forEach((item) => {
+        //   item.isEditor = 0
+        //   item.isNewData = 0
+        //   item.expireDate = '' //定时任务--终止日期字段
+        //   item.contractDate = [item.contractBeginDate, item.contractEndDate]
+        //   item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+        // })
+        // this.tableData = [...list]
+        // this.pageNum = response.data.pageNum
+        // this.pageSize = response.data.pageSize
+        // this.total = response.data.total
+        // this.tempObj.tempInfo = null
       })
     },
     // 客户
@@ -489,6 +495,8 @@ export default {
       if (this.tableData[index].isNewData) {
         this.$message.info('该数据为新增数据,请选择其它数据')
       } else {
+        // 设置屏幕高度90%
+        this.$refs.termDialog.$el.firstChild.style.height = '90%';
         //草稿、被拒绝可以编辑，其他仅查看
         API.findOneSaveDetail({
           id: this.customerId,
