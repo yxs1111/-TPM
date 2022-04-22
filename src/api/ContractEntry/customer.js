@@ -1,7 +1,7 @@
 /*
  * @Description: 客户合同录入
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-04-15 09:32:27
+ * @LastEditTime: 2022-04-22 10:06:19
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -27,6 +27,15 @@ export default {
   //客户合同 编辑
   updateCustomerContract(params) {
     return requestApi.request_post(this.url+'/update', params)
+  },
+  //客户合同 导出
+  export(params) {
+    return request({
+      url: this.url+'/exportCustomerContract',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
   //客户合同明细 --保存
   saveDetail(params) {

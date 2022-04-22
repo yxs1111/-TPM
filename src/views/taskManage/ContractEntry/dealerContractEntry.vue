@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-21 17:22:47
+ * @LastEditTime: 2022-04-22 10:17:43
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item in customerArr" :key="item.customerMdmCode" :label="item.customerName" :value="item.customerMdmCode" />
+            <el-option v-for="item in customerArr" :key="item.id" :label="item.customerName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -38,7 +38,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG">
+        <div class="TpmButtonBG" @click="exportData">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
@@ -147,8 +147,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" label="合同条款">
-        <div class="seeActivity" @click="showTermDetailDialog">
+      <el-table-column v-slot={row} width="220" align="center" label="合同条款">
+        <div class="seeActivity" @click="showTermDetailDialog(row)">
           条款明细
         </div>
       </el-table-column>
@@ -182,7 +182,7 @@
           <div class="selectCustomer">
             <span class="selectBar">客户合同</span>
             <el-select v-model="addDialog.index" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in customerArr" :key="item.customerMdmCode" :label="item.customerName" :value="index" />
+              <el-option v-for="item,index in customerArr" :key="item.id" :label="item.customerName" :value="index" />
             </el-select>
           </div>
           <el-button type="primary" class="TpmButtonBG" @click="getDetail">查询</el-button>
@@ -307,6 +307,7 @@ import {
   getContractEntry,
   contractList,
   FormateThousandNum,
+  downloadFile
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -450,7 +451,11 @@ export default {
       })
     },
     //编辑行数据
-    editorRow(index) {
+    editorRow(index,row) {
+      if(row.contractState == '3' || row.contractState == '4') {
+        this.$message.info('该经销商已经通过，不能进行编辑')
+        return 
+      }
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
@@ -497,19 +502,20 @@ export default {
     submit() {},
     //保存 该行
     saveRow(row, index) {
+      
       API.findOne({
-        id: row.id,
+        id: row.ccId,
         isCustomerContract: 1, //是否查询客户合同（1是0否）
         isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
         isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
       }).then((res) => {
         let distList = res.data.distributorContract
         this.editMaxTargetSale =
-          row.saleAmount - this.getMaxTargetSale(distList)
+          Number(row.customerContractSaleAmount) - this.getMaxTargetSale(distList)
         let flag = distList.findIndex((item) => {
           return item.contractState == '3' || item.contractState == '4'
         })
-        //是否补录，补录状态判断
+        //是否补录，补录状态判断(该客户合同下已经有经销商通过则证明是补录)
         this.editIsCollection = flag === -1 ? 0 : 1
         if (row.saleAmount > 9999999999) {
           this.$message.info('超出最大数值')
@@ -518,7 +524,6 @@ export default {
         if (this.editIsCollection) {
           //是补录-- 跳过验证
           console.log('noLimit')
-          return
           this.updateRowFunction(row)
         } else {
           //不是补录，数值验证
@@ -528,7 +533,6 @@ export default {
             )
           } else {
             console.log('save')
-            return
             this.updateRowFunction(row)
           }
         }
@@ -560,6 +564,22 @@ export default {
     search() {
       this.pageNum = 1
       this.getTableData()
+    },
+    //导出数据
+    exportData() {
+      API.export({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        distributorMdmCode: this.filterObj.distributorMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '经销商合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     //新增数据 --弹窗展示
     showAddDialog() {
@@ -704,10 +724,17 @@ export default {
       }
     },
     //打开条款明细弹窗
-    showTermDetailDialog() {
-      this.$router.push(
-        '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail'
-      )
+    showTermDetailDialog({ccId}) {
+      // sessionStorage.setItem('ccId',row.ccId)
+      this.$router.push({
+        name:'dealerTermDetail',
+        query:{
+          ccId
+        }
+      })
+      // this.$router.push(
+      //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
+      // )
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

@@ -614,7 +614,9 @@ export default {
       }).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
-          this.$message.info(`${res.data}`)
+          this.$message.success(`计算成功`)
+        } else {
+           this.$message.info(`计算失败`)
         }
       })
     },

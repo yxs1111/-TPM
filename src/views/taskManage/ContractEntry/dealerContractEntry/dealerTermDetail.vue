@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-14 14:33:13
+ * @LastEditTime: 2022-04-22 16:14:22
 -->
 <template>
   <div class="ContentDetail">
@@ -18,7 +18,7 @@
         <span class="text">取消</span>
       </div>
     </div>
-    <el-table :data="AllTableData" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle" :row-class-name="tableRowClassName"
+    <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle" :row-class-name="tableRowClassName"
       style="width: 100%">
       <!-- 客户 -->
       <el-table-column align="center" width="760" fixed="left">
@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import API from '@/api/taskManage/taskManage.js'
+import API from '@/api/ContractEntry/dealer'
 import {
   getDefaultPermissions,
   getTextMap,
@@ -519,12 +519,293 @@ export default {
         },
       ],
       TaxDeductionsPoint: ['6%', '13%'],
+      ccId: null,
+      tabKey:0,
+      isShow:false
     }
   },
 
-  mounted() {},
+  mounted() {
+    if (this.$route.query.ccId) {
+      this.ccId = this.$route.query.ccId
+      sessionStorage.setItem('ccId', this.$route.query.ccId)
+    } else {
+      this.ccId = sessionStorage.getItem('ccId')
+    }
+    this.getTermInfo()
+  },
 
   methods: {
+    //获取条款明细信息
+    getTermInfo() {
+      API.findOne({
+        id: this.ccId,
+        isCustomerContract: 1, //是否查询客户合同（1是0否）
+        isCustomerContractDetail: 1, //是否查询客户合同条款（1是0否）
+        isDistributorContractDetail: 1, //是否查询经销商合同详情（1是0否）
+      }).then((res) => {
+        let { variable: customerVariableList, fixed: customerFixList } =
+          res.data.customerContract
+        let customerContract = res.data.customerContract
+        //copy  属性--》单个的客户variable
+        customerVariableList.forEach((item) => {
+          item.customerName = customerContract.customerName
+          item.customerMdmCode = customerContract.customerMdmCode
+          item.saleAmount = customerContract.saleAmount
+        })
+        let distributorList = res.data.distributorContract
+        //经销商添加对应数量的variable /fixed
+        distributorList.forEach((item) => {
+          if (item.fixed.length == 0) {
+            for (let index = 0; index < customerVariableList.length; index++) {
+              let obj = {
+                dcId: item.id,
+                dealerName: item.distributorName,
+                distributorMdmCode: item.distributorMdmCode,
+                targetSale: item.saleAmount,
+                isSupplement: '',
+                ccDetailId: '',
+                costRatio: '',
+                taxCost: '',
+                remark: '',
+                fcCostRatio: '',
+                fcTaxCost: '',
+                distributorCostRatio: '',
+                distributorTaxCost: '',
+                deductionTaxRate: '',
+                payType: '',
+              }
+              item.variable.push(obj)
+            }
+            for (let index = 0; index < customerFixList.length; index++) {
+              let obj = {
+                dcId: item.id,
+                dealerName: item.distributorName,
+                distributorMdmCode: item.distributorMdmCode,
+                targetSale: item.saleAmount,
+                isSupplement: '',
+                ccDetailId: '',
+                costRatio: '',
+                taxCost: '',
+                remark: '',
+                fcCostRatio: '',
+                fcTaxCost: '',
+                distributorCostRatio: '',
+                distributorTaxCost: '',
+                deductionTaxRate: '',
+                payType: '',
+              }
+              item.fixed.push(obj)
+            }
+          }
+        })
+        let AllTotalTableData = []
+        let VariableTotalTableData = []
+        let VariableTableData = []
+        let FixedTotalTableData = []
+        let FixedTableData = []
+        //添加variable-->获得表格variable部分数据（维度：行，行中数据保留客户和经销商）
+        for (let index = 0; index < customerVariableList.length; index++) {
+          const customerVariableObj = customerVariableList[index]
+          let variableObj = {
+            name: 'Variable',
+            isTotal: 0,
+            isVariable: 1, //total 、Fix 区分
+            customerInfo: {
+              customerName: customerVariableObj.customerName, //客户名称
+              targetSale: customerVariableObj.saleAmount, //客户目标销售额
+              contractItem: customerVariableObj.contractItem,
+              conditionType: customerVariableObj.conditions,
+              pointCount: customerVariableObj.costRatio,
+              taxPrice: customerVariableObj.taxCost,
+              detail: customerVariableObj.remark,
+            },
+            dealerList: [],
+          }
+          //初始化variable 汇总行
+          let variableTotalObj = {
+            name: 'Variable total',
+            isTotal: 1,
+            customerInfo: {
+              conditionType: '',
+              contractItem: '',
+              customerName: customerVariableObj.customerName, //客户名称,
+              detail: '',
+              isVariable: 1,
+              pointCount: 0,
+              targetSale: customerVariableObj.saleAmount, //客户目标销售额,
+              taxPrice: 0,
+            },
+            dealerList: [],
+          }
+          let variableAndFixObj={
+            name: 'Total',
+            isTotal: 1,
+            isVariable: 1,
+            customerInfo: {
+              conditionType: '',
+              contractItem: '',
+              customerName: customerVariableObj.customerName, //客户名称,,
+              detail: '',
+              isVariable: 1,
+              pointCount: 0,
+              targetSale: customerVariableObj.saleAmount, //客户目标销售额,,
+              taxPrice: 0,
+            },
+            dealerList: [],
+          }
+          //取经销商对应的variable
+          distributorList.forEach((item) => {
+            let distVariableObj = item.variable[index]
+            variableObj.dealerList.push({
+              dealerName: distVariableObj.dealerName,
+              targetSale: distVariableObj.targetSale,
+              contractItem: variableObj.customerInfo.contractItem,
+              conditionType: variableObj.customerInfo.conditionType,
+              pointCount: distVariableObj.costRatio,
+              taxPrice: distVariableObj.taxCost,
+              detail: distVariableObj.remark,
+              frieslandPointCount: distVariableObj.fcCostRatio, //菲仕兰承担费比
+              frieslandTaxPrice: distVariableObj.fcTaxCost, //菲仕兰承担--含税金额
+              dealerPointCount: distVariableObj.distributorCostRatio, //经销商承担费比
+              dealerTaxPrice: distVariableObj.distributorTaxCost, //经销商承担--含税金额
+              customerTaxPoint: distVariableObj.deductionTaxRate, //客户扣款税点
+              payType: distVariableObj.payType, //支付方式
+            })
+            //设置 variable 汇总行
+            variableTotalObj.dealerList.push({
+              dealerName: distVariableObj.dealerName,
+              targetSale: distVariableObj.targetSale,
+              contractItem: '',
+              conditionType: '',
+              pointCount: 0,
+              taxPrice: 0,
+              detail: '',
+              frieslandPointCount: '',
+              frieslandTaxPrice: '',
+              dealerPointCount: '',
+              dealerTaxPrice: '',
+              customerTaxPoint: '',
+              payType: '',
+            })
+            variableAndFixObj.dealerList.push({
+              dealerName: distVariableObj.dealerName,
+              targetSale: distVariableObj.targetSale,
+              contractItem: '',
+              conditionType: '',
+              pointCount: 0,
+              taxPrice: 0,
+              detail: '',
+              frieslandPointCount: '',
+              frieslandTaxPrice: '',
+              dealerPointCount: '',
+              dealerTaxPrice: '',
+              customerTaxPoint: '',
+              payType: '',
+            })
+          })
+          //variable+fix Total 
+          if(AllTotalTableData.length===0) {
+            AllTotalTableData.push(variableAndFixObj)
+          }
+          //初始化variable 汇总行--添加经销商
+          if(VariableTotalTableData.length===0) {
+            VariableTotalTableData.push(variableTotalObj)
+          }
+          VariableTableData.push(variableObj)
+        }
+        //添加 fixed -->获得表格中fix 部分数据
+        for (let index = 0; index < customerFixList.length; index++) {
+          const customerFixObj = customerFixList[index]
+          let FixedObj = {
+            name: 'Fixed',
+            isTotal: 0,
+            isVariable: 0, //Variable 、Fix 区分
+            customerInfo: {
+              customerName: customerFixObj.customerName, //客户名称
+              targetSale: customerFixObj.saleAmount, //客户目标销售额
+              contractItem: customerFixObj.contractItem,
+              conditionType: customerFixObj.conditions,
+              pointCount: customerFixObj.costRatio,
+              taxPrice: customerFixObj.taxCost,
+              detail: customerFixObj.remark,
+            },
+            dealerList: [],
+          }
+          let FixedTotalObj = {
+            name: 'Fixed total',
+            isTotal: 1,
+            isVariable: 0, //Variable 、Fix 区分
+            customerInfo: {
+              conditionType: '',
+              contractItem: '',
+              customerName: '',
+              detail: '',
+              isVariable: 1,
+              pointCount: 0,
+              targetSale: 0,
+              taxPrice: 0,
+            },
+            dealerList: [],
+          }
+          //取经销商对应的variable
+          distributorList.forEach((item) => {
+            let distFixObj = item.fixed[index]
+            FixedObj.dealerList.push({
+              dealerName: distFixObj.dealerName,
+              targetSale: distFixObj.targetSale,
+              contractItem: FixedObj.customerInfo.contractItem,
+              conditionType: FixedObj.customerInfo.conditionType,
+              pointCount: distFixObj.costRatio,
+              taxPrice: distFixObj.taxCost,
+              detail: distFixObj.remark,
+              frieslandPointCount: distFixObj.fcCostRatio, //菲仕兰承担费比
+              frieslandTaxPrice: distFixObj.fcTaxCost, //菲仕兰承担--含税金额
+              dealerPointCount: distFixObj.distributorCostRatio, //经销商承担费比
+              dealerTaxPrice: distFixObj.distributorTaxCost, //经销商承担--含税金额
+              customerTaxPoint: distFixObj.deductionTaxRate, //客户扣款税点
+              payType: distFixObj.payType, //支付方式
+            })
+            FixedTotalObj.dealerList.push({
+              dealerName: distFixObj.dealerName,
+              targetSale: distFixObj.targetSale,
+              contractItem: '',
+              conditionType: '',
+              pointCount: 0,
+              taxPrice: 0,
+              detail: '',
+              frieslandPointCount: '',
+              frieslandTaxPrice: '',
+              dealerPointCount: '',
+              dealerTaxPrice: '',
+              customerTaxPoint: '',
+              payType: '',
+            })
+          })
+          //初始化variable 汇总行--添加经销商
+          if(FixedTotalTableData.length===0) {
+            FixedTotalTableData.push(FixedTotalObj)
+          }
+          FixedTableData.push(FixedObj)
+        }
+        //计算variable 汇总行数据--客户维度
+        VariableTableData.forEach(item=>{
+          VariableTotalTableData[0].customerInfo.pointCount+=Number(item.customerInfo.pointCount)
+          VariableTotalTableData[0].customerInfo.taxPrice+=Number(item.customerInfo.taxPrice)
+        })
+        //计算Fixed 汇总行数据--客户维度
+        FixedTableData.forEach(item=>{
+          FixedTotalTableData[0].customerInfo.pointCount+=Number(item.customerInfo.pointCount)
+          FixedTotalTableData[0].customerInfo.taxPrice+=Number(item.customerInfo.taxPrice)
+        })
+        //variable + fix 汇总行
+        AllTotalTableData[0].customerInfo.pointCount=VariableTotalTableData[0].customerInfo.pointCount+FixedTotalTableData[0].customerInfo.pointCount
+        AllTotalTableData[0].customerInfo.taxPrice=VariableTotalTableData[0].customerInfo.taxPrice+FixedTotalTableData[0].customerInfo.taxPrice
+        this.AllTableData=[...AllTotalTableData,...VariableTableData,...VariableTotalTableData,...FixedTableData,...FixedTotalTableData]
+        this.isShow=true
+        this.tabKey++
+      })
+    },
     // 暂存
     staging() {},
     submit() {
@@ -558,8 +839,8 @@ export default {
           }
         }
       })
-      console.log(exceptionList);
-      console.log(errorList);
+      console.log(exceptionList)
+      console.log(errorList)
     },
     cancelSubmit() {
       this.$router.go(-1)
