@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-24 11:17:36
+ * @LastEditTime: 2022-04-24 16:35:16
 -->
 <template>
   <div class="MainContent">
@@ -628,6 +628,10 @@ export default {
     },
     //编辑行数据
     editorRow(index, { isNewData }) {
+      if(this.tableData[index].contractState=='3'||this.tableData[index].contractState=='4') {
+        this.$message.info('合同状态已经通过，不能进行编辑操作')
+        return
+      }
       if (this.tempObj.tempInfo && !isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
@@ -904,6 +908,11 @@ export default {
     },
     //条款明细保存
     confirmTermsDetail() {
+      if(!this.isEditor) {
+        //已经通过不能进行编辑，仅能查看
+        this.closeTermsDetail()
+        return
+      }
       let obj = {
         ccId: this.customerId,
         variable: [],
@@ -1254,6 +1263,28 @@ export default {
     }
   }
 }
+.MainContent .my-el-inputNumber {
+  width: 120px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 120px;
+  }
+  .el-input--suffix {
+    width: 120px !important;
+  }
+}
+.MainContent .my-el-detail {
+  width: 280px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 280px;
+  }
+  .el-input--suffix {
+    width: 280px !important;
+  }
+}
 </style>
 <style lang="less">
 .contract_firstRow {
@@ -1275,28 +1306,7 @@ export default {
 .termTableWrap .hover-row .filstColumn {
   color: #666;
 }
-.my-el-inputNumber {
-  width: 120px !important;
-  border-radius: 5px;
-  .el-input__inner {
-    height: 37px;
-    width: 120px;
-  }
-  .el-input--suffix {
-    width: 120px !important;
-  }
-}
-.my-el-detail {
-  width: 280px !important;
-  border-radius: 5px;
-  .el-input__inner {
-    height: 37px;
-    width: 280px;
-  }
-  .el-input--suffix {
-    width: 280px !important;
-  }
-}
+
 .my-el-select_dialog {
   width: 120px !important;
   border-radius: 5px;

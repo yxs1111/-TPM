@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-24 16:01:56
+ * @LastEditTime: 2022-04-24 16:30:14
 -->
 <template>
   <div class="ContentDetail">
@@ -100,7 +100,6 @@
               </el-table-column>
               <el-table-column prop="detail" align="center" width="180" label="描述">
                 <template slot-scope="scope">
-                  <div>
                     <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].isEditor">
                       <el-input v-model="scope.row.dealerList[dealerIndex].detail" clearable class="my-el-detail" placeholder="请输入">
                       </el-input>
@@ -108,7 +107,6 @@
                     <div v-else>
                       {{scope.row.dealerList[dealerIndex].detail}}
                     </div>
-                  </div>
                 </template>
               </el-table-column>
             </template>
@@ -896,7 +894,6 @@ export default {
     },
     //根据客户扣缴税点 查index
     getCustomerTaxPoint(rate) {
-      console.log(this.TaxDeductionsPoint.findIndex(item=> item==rate));
       return this.TaxDeductionsPoint.findIndex(item=> item==rate)
     },
     // 暂存
@@ -908,6 +905,7 @@ export default {
     submit(flag) {
       let exceptionList = []
       let errorList = []
+      //补录跳过验证--若之前经销商已经通过&&当前状态是草稿的 说明是补录
       this.AllTableData.forEach((item, index) => {
         //对 Variable 异常处理 各经销商费比大于客户费比
         if (!item.isTotal && item.isVariable) {
@@ -937,6 +935,9 @@ export default {
           }
         }
       })
+      console.log(exceptionList);
+      console.log(errorList);
+      return
       let Obj = {
         ccId: this.ccId,
         isTempStorage: flag, //0 否(参与校验)/1是(不参与校验)

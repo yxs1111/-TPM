@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-24 13:48:01
+ * @LastEditTime: 2022-04-24 16:38:22
 -->
 <template>
   <div class="MainContent">
@@ -378,7 +378,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'StraightGiving',
+  name: 'UnStraightGiving',
   data() {
     return {
       total: 1,
@@ -628,6 +628,10 @@ export default {
     },
     //编辑行数据
     editorRow(index, { isNewData }) {
+      if(this.tableData[index].contractState=='3'||this.tableData[index].contractState=='4') {
+        this.$message.info('合同状态已经通过，不能进行编辑操作')
+        return
+      }
       if (this.tempObj.tempInfo && !isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
@@ -904,6 +908,11 @@ export default {
     },
     //条款明细保存
     confirmTermsDetail() {
+      if(!this.isEditor) {
+        //已经通过不能进行编辑，仅能查看
+        this.closeTermsDetail()
+        return
+      }
       let obj = {
         ccId: this.customerId,
         variable: [],
@@ -1254,27 +1263,6 @@ export default {
     }
   }
 }
-</style>
-<style lang="less">
-.contract_firstRow {
-  background-color: #4192d3 !important;
-  color: #fff;
-  font-size: 14px;
-}
-.hover-row {
-  color: #666 !important;
-  background-color: #f3f7f8;
-}
-.hover-row .filstColumn {
-  color: #666;
-}
-.termTableWrap .hover-row {
-  color: #666 !important;
-  background-color: #f3f7f8;
-}
-.termTableWrap .hover-row .filstColumn {
-  color: #666;
-}
 .my-el-inputNumber {
   width: 120px !important;
   border-radius: 5px;
@@ -1297,6 +1285,28 @@ export default {
     width: 280px !important;
   }
 }
+</style>
+<style lang="less">
+.contract_firstRow {
+  background-color: #4192d3 !important;
+  color: #fff;
+  font-size: 14px;
+}
+.hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+}
+.hover-row .filstColumn {
+  color: #666;
+}
+.termTableWrap .hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+}
+.termTableWrap .hover-row .filstColumn {
+  color: #666;
+}
+
 .my-el-select_dialog {
   width: 120px !important;
   border-radius: 5px;

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-22 10:17:43
+ * @LastEditTime: 2022-04-24 16:46:09
 -->
 <template>
   <div class="MainContent">
@@ -16,7 +16,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商名称:</span>
           <el-select v-model="filterObj.distributorMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in distributorArr" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -399,6 +399,14 @@ export default {
         this.filterObj.effectiveEndDate = ''
       }
     },
+    'filterObj.customerMdmCode'(value) {
+      if (value=='') {
+        this.filterObj.distributorMdmCode=''
+      } else {
+        this.getDistributorList()
+      }
+      
+    },
     'addDialog.id'(value) {
       if (value == '') {
         //客户合同置空，下方数据置空
@@ -444,7 +452,9 @@ export default {
       })
     },
     getDistributorList() {
-      selectAPI.getDistributorService({}).then((res) => {
+      selectAPI.queryDistributorList({
+        customerMdmCode:this.filterObj.customerMdmCode
+      }).then((res) => {
         if (res.code === 1000) {
           this.distributorArr = res.data
         }
