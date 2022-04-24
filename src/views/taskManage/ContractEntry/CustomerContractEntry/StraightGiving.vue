@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-22 10:00:33
+ * @LastEditTime: 2022-04-24 11:17:36
 -->
 <template>
   <div class="MainContent">
@@ -217,21 +217,24 @@
             </el-table-column>
             <el-table-column prop="contractItem" align="center" label="contract item" width="160">
               <template slot-scope="scope">
-                <div v-show="!scope.row.isTotal">
-                  <el-select v-model="scope.row.contractItem" class="my-el-select_dialog" filterable clearable placeholder="请选择"
-                    @change="changeContractItem(0,scope.row,scope.row.contractItem)">
-                    <el-option v-for="(item, index) in contractItemVariableList" :key="index" :label="item.name" :value="index" />
-                  </el-select>
-                </div>
-                <div v-show="scope.row.isTotal">
-                  {{ scope.row.conditionsItem }}
+                <div v-if="!scope.row.isTotal">
+                  <div v-if="scope.row.isNewData">
+                    <el-select v-model="scope.row.contractItem" class="my-el-select_dialog" filterable clearable placeholder="请选择"
+                      @change="changeContractItem(0,scope.row,scope.row.contractItem)">
+                      <el-option v-for="(item, index) in contractItemVariableList" :key="index" :label="item.name" :value="index" />
+                    </el-select>
+                  </div>
+                  <div v-if="!scope.row.isNewData">
+                    {{ scope.row.conditionsItem }}
+                    {{contractItemVariableList[scope.row.contractItem].name}}
+                  </div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column align="center" width="160" label="条件类型">
               <template slot-scope="scope">
                 <div v-if="!scope.row.isTotal">
-                  <div v-if="contractItemVariableList[scope.row.contractItem].conditionalIsTwo===2">
+                  <div v-if="contractItemVariableList[scope.row.contractItem].conditionalIsTwo===2&&scope.row.isNewData">
                     <el-select v-model="scope.row.conditions" class="my-el-select_dialog" filterable clearable placeholder="请选择">
                       <el-option v-for="(item, index) in ['condition','uncondition']" :key="index" :label="item" :value="item" />
                     </el-select>
@@ -242,11 +245,11 @@
             </el-table-column>
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
-                <div v-show="!scope.row.isTotal">
+                <div v-show="scope.row.isNewData">
                   <el-input v-model="scope.row.costRatio" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
                   </el-input>
                 </div>
-                <div v-show="scope.row.isTotal">
+                <div v-show="!scope.row.isNewData">
                   {{ scope.row.costRatio }}%
                 </div>
               </template>
@@ -272,7 +275,7 @@
             </el-table-column>
           </el-table>
           <div class="addNewRowWrap">
-            <div class="addNewRow" @click="addNewRowToVariable">
+            <div class="addNewRow" @click="addNewRowToVariable" v-if="isEditor">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
@@ -289,14 +292,17 @@
             </el-table-column>
             <el-table-column prop="contractItem" align="center" label="contract item" width="160">
               <template slot-scope="scope">
-                <div v-show="scope.row.isNewData">
-                  <el-select v-model="scope.row.contractItem" class="my-el-select_dialog" filterable clearable placeholder="请选择"
-                    @change="changeContractItem(1,scope.row,scope.row.contractItem)">
-                    <el-option v-for="(item, index) in contractItemFixList" :key="index" :label="item.name" :value="index" />
-                  </el-select>
-                </div>
-                <div v-show="!scope.row.isNewData">
-                  {{ scope.row.conditionsItem}}
+                <div>
+                  <div v-if="scope.row.isNewData">
+                    <el-select v-model="scope.row.contractItem" class="my-el-select_dialog" filterable clearable placeholder="请选择"
+                      @change="changeContractItem(1,scope.row,scope.row.contractItem)">
+                      <el-option v-for="(item, index) in contractItemFixList" :key="index" :label="item.name" :value="index" />
+                    </el-select>
+                  </div>
+                  <div v-if="!scope.row.isNewData">
+                    <!-- {{ scope.row.contractItem}} -->
+                    {{contractItemFixList[Number(scope.row.contractItem)].name}}
+                  </div>
                 </div>
               </template>
             </el-table-column>
@@ -342,7 +348,7 @@
             </el-table-column>
           </el-table>
           <div class="addNewRowWrap">
-            <div class="addNewRow" @click="addNewRowToFix">
+            <div class="addNewRow" @click="addNewRowToFix" v-if="isEditor">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
@@ -420,6 +426,7 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
+      isEditor: 0,
     }
   },
   mounted() {
@@ -743,6 +750,12 @@ export default {
     //条款明细--弹窗展示
     showTermsDetail(index) {
       this.customerId = this.tableData[index].id
+      let isEditor =
+        this.tableData[index].contractState == '3' ||
+        this.tableData[index].contractState == '4'
+          ? 0
+          : 1
+      this.isEditor = isEditor
       if (this.tableData[index].isNewData) {
         this.$message.info('该数据为新增数据,请选择其它数据')
       } else {
@@ -754,7 +767,7 @@ export default {
           isDetail: 1,
         }).then((res) => {
           if (res.code === 1000) {
-            this.isTermsDetailVisible = true
+            
             this.termVariableData = []
             this.termFixData = []
             let data = res.data
@@ -774,7 +787,7 @@ export default {
                 costRatio: item.costRatio,
                 taxCost: item.taxCost,
                 remark: item.remark,
-                isNewData: 1, //是否未新添数据
+                isNewData: isEditor, //是否未新添数据
                 isTotal: 0, //是否total 行
               }
               variableList.push(obj)
@@ -798,7 +811,7 @@ export default {
                 costRatio: item.costRatio,
                 taxCost: item.taxCost,
                 remark: item.remark,
-                isNewData: 1, //是否未新添数据
+                isNewData: isEditor, //是否未新添数据
                 isTotal: 0, //是否total 行
               }
               fixList.push(obj)
@@ -844,6 +857,7 @@ export default {
               isNewData: 0, //是否未新添数据
               isTotal: 1,
             })
+            this.isTermsDetailVisible = true
           }
         })
       }

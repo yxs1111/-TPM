@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-15 13:29:35
- * @LastEditTime: 2022-04-22 10:11:08
+ * @LastEditTime: 2022-04-24 10:15:30
  */
 /*
  * @Description: 客户合同录入
@@ -48,7 +48,8 @@ export default {
   },
   //条款明细保存
   saveContractDetail(params) {
-    return requestApi.request_post(this.url+'/saveContractDetail', params)
+    //saveContractDetail
+    return requestApi.request_post(this.url+'/saveDetail', params)
   },
 }
 
