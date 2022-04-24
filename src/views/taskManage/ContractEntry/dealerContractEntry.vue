@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-24 16:46:09
+ * @LastEditTime: 2022-04-24 16:56:36
 -->
 <template>
   <div class="MainContent">
@@ -307,7 +307,7 @@ import {
   getContractEntry,
   contractList,
   FormateThousandNum,
-  downloadFile
+  downloadFile,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -400,12 +400,11 @@ export default {
       }
     },
     'filterObj.customerMdmCode'(value) {
-      if (value=='') {
-        this.filterObj.distributorMdmCode=''
+      if (value == '') {
+        this.filterObj.distributorMdmCode = ''
       } else {
         this.getDistributorList()
       }
-      
     },
     'addDialog.id'(value) {
       if (value == '') {
@@ -452,19 +451,21 @@ export default {
       })
     },
     getDistributorList() {
-      selectAPI.queryDistributorList({
-        customerMdmCode:this.filterObj.customerMdmCode
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.distributorArr = res.data
-        }
-      })
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
     },
     //编辑行数据
-    editorRow(index,row) {
-      if(row.contractState == '3' || row.contractState == '4') {
+    editorRow(index, row) {
+      if (row.contractState == '3' || row.contractState == '4') {
         this.$message.info('该经销商已经通过，不能进行编辑')
-        return 
+        return
       }
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
@@ -508,11 +509,17 @@ export default {
           })
         })
     },
-    //录入提交
-    submit() {},
+    //经销商提交
+    submit() {
+      API.submit([]).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          this.$message.success('提交成功')
+        }
+      })
+    },
     //保存 该行
     saveRow(row, index) {
-      
       API.findOne({
         id: row.ccId,
         isCustomerContract: 1, //是否查询客户合同（1是0否）
@@ -521,7 +528,8 @@ export default {
       }).then((res) => {
         let distList = res.data.distributorContract
         this.editMaxTargetSale =
-          Number(row.customerContractSaleAmount) - this.getMaxTargetSale(distList)
+          Number(row.customerContractSaleAmount) -
+          this.getMaxTargetSale(distList)
         let flag = distList.findIndex((item) => {
           return item.contractState == '3' || item.contractState == '4'
         })
@@ -734,13 +742,13 @@ export default {
       }
     },
     //打开条款明细弹窗
-    showTermDetailDialog({ccId}) {
+    showTermDetailDialog({ ccId }) {
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
-        name:'dealerTermDetail',
-        query:{
-          ccId
-        }
+        name: 'dealerTermDetail',
+        query: {
+          ccId,
+        },
       })
       // this.$router.push(
       //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',

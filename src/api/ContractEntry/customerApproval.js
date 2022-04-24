@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-04-21 09:58:48
+ * @LastEditTime: 2022-04-24 17:07:55
  */
 /*
  * @Description: 客户合同录入
@@ -13,9 +13,27 @@ import request from '@/utils/request'
 
 export default {
   url: '/cityplan/customerContract',
-  //客户合同查询列表
-  pageApproveTaskList(params) {
+  distUrl: '/cityplan/distributorContract',
+  //客户合同审批--查询列表
+  getApproveList(params) {
     return requestApi.request_get(this.url+'/pageApproveTaskList', params)
+  },
+  //客户合同审批--导出
+  exportApprove(params) {
+    return request({
+      url: this.url+'/exportApproveTask',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //客户合同审批--审批
+  approveCustomerContract(params) {
+    return requestApi.request_post(this.url+'/approve', params)
+  },
+  //经销商合同审批--审批
+  approveDistContract(params) {
+    return requestApi.request_post(this.distUrl+'/approve', params)
   },
 }
 

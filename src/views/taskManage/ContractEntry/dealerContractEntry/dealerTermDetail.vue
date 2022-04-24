@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-24 16:30:14
+ * @LastEditTime: 2022-04-24 17:30:18
 -->
 <template>
   <div class="ContentDetail">
@@ -641,12 +641,14 @@ export default {
               variableItem.dealerName = item.distributorName
               variableItem.distributorMdmCode = item.distributorMdmCode
               variableItem.targetSale = item.saleAmount
+              variableItem.contractState = item.contractState  //合同状态
             })
             item.fixed.forEach((fixedItem) => {
               fixedItem.dcId = item.id
               fixedItem.dealerName = item.distributorName
               fixedItem.distributorMdmCode = item.distributorMdmCode
               fixedItem.targetSale = item.saleAmount
+              fixedItem.contractState = item.contractState ////合同状态
             })
           }
         })
@@ -937,7 +939,6 @@ export default {
       })
       console.log(exceptionList);
       console.log(errorList);
-      return
       let Obj = {
         ccId: this.ccId,
         isTempStorage: flag, //0 否(参与校验)/1是(不参与校验)

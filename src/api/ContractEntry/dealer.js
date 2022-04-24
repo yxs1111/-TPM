@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-15 13:29:35
- * @LastEditTime: 2022-04-24 10:15:30
+ * @LastEditTime: 2022-04-24 16:57:55
  */
 /*
  * @Description: 客户合同录入
@@ -29,7 +29,7 @@ export default {
   update(params) {
     return requestApi.request_post(this.url+'/update', params)
   },
-  //客户合同 导出
+  //经销商合同 导出
   export(params) {
     return request({
       url: this.url+'/exportDistributorContract',
@@ -37,6 +37,10 @@ export default {
       params: params,
       responseType: 'blob'
     })
+  },
+  //经销商合同提交
+  submit(params) {
+    return requestApi.request_post(this.url+'/submit', params)
   },
   //信息查询
   findOne(params) {

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-21 09:58:04
+ * @LastEditTime: 2022-04-24 17:17:21
 -->
 <template>
   <div class="MainContent">
@@ -822,27 +822,6 @@ export default {
     }
   }
 }
-</style>
-<style lang="less">
-.contract_firstRow {
-  background-color: #4192d3 !important;
-  color: #fff;
-  font-size: 14px;
-}
-.hover-row {
-  color: #666 !important;
-  background-color: #f3f7f8;
-}
-.hover-row .filstColumn {
-  color: #666;
-}
-.termTableWrap .hover-row {
-  color: #666 !important;
-  background-color: #f3f7f8;
-}
-.termTableWrap .hover-row .filstColumn {
-  color: #666;
-}
 .my-el-inputNumber {
   width: 120px !important;
   border-radius: 5px;
@@ -865,6 +844,28 @@ export default {
     width: 280px !important;
   }
 }
+</style>
+<style lang="less">
+.contract_firstRow {
+  background-color: #4192d3 !important;
+  color: #fff;
+  font-size: 14px;
+}
+.hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+}
+.hover-row .filstColumn {
+  color: #666;
+}
+.termTableWrap .hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+}
+.termTableWrap .hover-row .filstColumn {
+  color: #666;
+}
+
 .my-el-select_dialog {
   width: 120px !important;
   border-radius: 5px;
