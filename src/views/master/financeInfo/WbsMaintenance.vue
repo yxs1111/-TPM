@@ -8,18 +8,8 @@
           <el-input v-model="filterObj.wbsCustomerCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">渠道</span>
-          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
           <span class="SelectliTitle">客户名称</span>
           <el-input v-model="filterObj.customerCsName" clearable placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">客户编码</span>
-          <el-input v-model="filterObj.customerMdmCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
@@ -179,13 +169,6 @@ export default {
             trigger: 'blur',
           },
         ],
-        channelCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
         customerCsName: [
           {
             required: true,
@@ -231,8 +214,6 @@ export default {
         pageSize: this.pageSize, //每页条数
         wbsCustomerCode: this.filterObj.wbsCustomerCode,
         customerCsName: this.filterObj.customerCsName,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        channelCode: this.filterObj.channelCode,
         state: this.filterObj.state,
       })
         .then((response) => {

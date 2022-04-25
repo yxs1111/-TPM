@@ -266,14 +266,14 @@ export default function() {
                 import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
               meta: { title: '费用科目', icon: 'apply' }
             },
-            // {
-            //   path: '/WBSCodeEntity',
-            //   code: 'mdm_WbsMaintenance',
-            //   name: 'WBSCodeEntity',
-            //   component: () =>
-            //     import('@/views/master/financeInfo/WBSCodeEntity.vue'),
-            //   meta: { title: 'WBS Code - Entity', icon: 'apply' }
-            // },
+            {
+              path: '/WBSCodeEntity',
+              code: 'mdm_WbsMaintenance',
+              name: 'WBSCodeEntity',
+              component: () =>
+                import('@/views/master/financeInfo/WBSCodeEntity.vue'),
+              meta: { title: 'WBS Code - Entity', icon: 'apply' }
+            },
             // {
             //   path: '/WBSCodeYear',
             //   code: 'mdm_WbsMaintenance',
@@ -282,29 +282,29 @@ export default function() {
             //     import('@/views/master/financeInfo/WBSCodeYear.vue'),
             //   meta: { title: 'WBS Code - Year', icon: 'apply' }
             // },
-            // {
-            //   path: '/WBSCodeBrand',
-            //   code: 'mdm_WbsMaintenance',
-            //   name: 'WBSCodeBrand',
-            //   component: () =>
-            //     import('@/views/master/financeInfo/WBSCodeBrand.vue'),
-            //   meta: { title: 'WBS Code - Brand', icon: 'apply' }
-            // },
-            // {
-            //   path: '/WBSCodeDepartment',
-            //   code: 'mdm_WbsMaintenance',
-            //   name: 'WBSCodeDepartment',
-            //   component: () =>
-            //     import('@/views/master/financeInfo/WBSCodeDepartment.vue'),
-            //   meta: { title: 'WBS Code - Department', icon: 'apply' }
-            // },
+            {
+              path: '/WBSCodeBrand',
+              code: 'mdm_WbsMaintenance',
+              name: 'WBSCodeBrand',
+              component: () =>
+                import('@/views/master/financeInfo/WBSCodeBrand.vue'),
+              meta: { title: 'WBS Code - Brand', icon: 'apply' }
+            },
+            {
+              path: '/WBSCodeDepartment',
+              code: 'mdm_WbsMaintenance',
+              name: 'WBSCodeDepartment',
+              component: () =>
+                import('@/views/master/financeInfo/WBSCodeDepartment.vue'),
+              meta: { title: 'WBS Code - Department', icon: 'apply' }
+            },
             {
               path: '/WbsMaintenance',
               code: 'mdm_WbsMaintenance',
               name: 'WbsMaintenance',
               component: () =>
                 import('@/views/master/financeInfo/WbsMaintenance.vue'),
-              meta: { title: 'WBS维护', icon: 'apply' }
+              meta: { title: 'WBS Code - Customer', icon: 'apply' }
             },
             {
               path: '/IoMaintenance',
@@ -421,7 +421,15 @@ export default function() {
             //   }
             // }
           ]
-        }
+        },
+        // 产品信息
+        {
+          path: '/contractItem',
+          name: 'contractItem',
+          code: 'mdm_product_information',
+          component: () => import('@/views/master/contractItem/contractItem.vue'),
+          meta: { title: 'Contract Item', icon: 'apply' },
+        },
       ]
     }
   ]

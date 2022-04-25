@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-24 17:17:21
+ * @LastEditTime: 2022-04-25 08:48:43
 -->
 <template>
   <div class="MainContent">
@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import API from '@/api/ContractEntry/customer'
+import API from '@/api/ContractEntry/customerApproval'
 import {
   getDefaultPermissions,
   getContractEntry,
@@ -309,16 +309,14 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      API.getPage({
+      API.getApproveList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        customerType: 1,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
         minePackageCode:'CUSTOMER-CONTRACT'
       }).then((response) => {
         // let list = response.data.records

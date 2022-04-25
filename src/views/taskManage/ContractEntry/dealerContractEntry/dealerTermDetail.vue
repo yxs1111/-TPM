@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-24 17:30:18
+ * @LastEditTime: 2022-04-25 08:44:08
 -->
 <template>
   <div class="ContentDetail">
@@ -177,7 +177,7 @@
                       %
                     </div>
                     <div v-else>
-                      {{scope.row.dealerList[dealerIndex].customerTaxPoint}}%
+                      {{TaxDeductionsPoint[scope.row.dealerList[dealerIndex].customerTaxPoint]}}%
                       <!-- {{TaxDeductionsPoint[Number(scope.row.dealerList[dealerIndex].customerTaxPoint)]}} -->
                     </div>
 

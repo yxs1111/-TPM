@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-04-13 11:51:00
+ * @LastEditTime: 2022-04-25 11:01:22
 -->
 <template>
   <div class="app-container">
@@ -9,22 +9,16 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">WBS客户编码</span>
-          <el-input v-model="filterObj.wbsCustomerCode" clearable placeholder="请输入" />
+          <span class="SelectliTitle">Entity Name</span>
+          <el-input v-model="filterObj.entityName" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">渠道</span>
-          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
-          </el-select>
+          <span class="SelectliTitle">Entity ID</span>
+          <el-input v-model="filterObj.entityID" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户名称</span>
-          <el-input v-model="filterObj.customerCsName" clearable placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">客户编码</span>
-          <el-input v-model="filterObj.customerMdmCode" clearable placeholder="请输入" />
+          <span class="SelectliTitle">Profit Center</span>
+          <el-input v-model="filterObj.profitCenter" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
@@ -34,7 +28,7 @@
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
-        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
+        <div class="TpmButtonBG" @click="exportData" >
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
@@ -56,10 +50,16 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="wbsCustomerCode" label="WBS客户编码"> </el-table-column>
-      <el-table-column width="220" align="center" prop="customerCsName" label="客户名称"> </el-table-column>
-      <!-- <el-table-column width="150" align="center" prop="customerMdmCode" label="客户编码"> </el-table-column>
-      <el-table-column align="center" prop="channelCode" label="渠道"> </el-table-column> -->
+      <el-table-column width="120" align="center" prop="entityName" label="Entity Name"> </el-table-column>
+      <el-table-column width="220" align="center" prop="entityID" label="Entity ID"> </el-table-column>
+      <el-table-column width="220" align="center" prop="profitCenter" label="Profit Center"> </el-table-column>
+      <el-table-column width="220" align="center" prop="expiryDate" label="有效期至">
+        <template slot-scope="{row}">
+          <div>
+            {{ row.expiryDate ? row.expiryDate.replace("T"," ") : '' }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
@@ -84,42 +84,35 @@
           </div>
         </template>
       </el-table-column>
-      
+
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS维护'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS Code-Entity'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="WBS客户编码" prop="wbsCustomerCode">
-            <el-input v-model="ruleForm.wbsCustomerCode" class="my-el-input" placeholder="请输入">
+          <el-form-item label="Entity ID" prop="entityID" v-if="isEditor">
+            <el-input v-model="ruleForm.entityID" disabled class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="客户名称" prop="customerCsName">
-            <el-select v-model="ruleForm.customerCsName" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
-            </el-select>
-          </el-form-item>
-          <!-- <el-form-item label="渠道" prop="channelCode">
-            <el-select v-model="ruleForm.channelCode" class="my-el-input" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
-          </el-select>
-          </el-form-item> -->
-          
-          <el-form-item label="状态">
-              <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
-              <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
-              
-            <!-- <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item,index) in ['无效','正常']" :key="item" :label="item" :value="index" />
-            </el-select> -->
-          </el-form-item>
-          <el-form-item label="备注">
-            <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
+          <el-form-item label="Entity ID" prop="entityID" v-if="!isEditor">
+            <el-input v-model="ruleForm.entityID" class="my-el-input" placeholder="请输入">
             </el-input>
+          </el-form-item>
+          <el-form-item label="Entity Name" prop="entityName">
+            <el-input v-model="ruleForm.entityName" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Profit Center" prop="profitCenter">
+            <el-input v-model="ruleForm.profitCenter" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Profit Center" prop="expiryDate">
+            <el-date-picker v-model="ruleForm.expiryDate" class="my-el-input" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="date" placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
         </el-form>
       </div>
@@ -152,46 +145,42 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        wbsCustomerCode: '',
-        customerCsName: '',
-        channelCode: '',
-        customerMdmCode: '',
+        entityName: '',
+        entityID: '',
+        profitCenter: '',
         state: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
-      customerArr: [],
       ruleForm: {
-        wbsCustomerCode: '',
-        customerMdmCode: '',
-        customerCsName: '',
-        channelCode: '',
-        state: '1',
-        remark: '',
+        entityID: '',
+        entityName: '',
+        profitCenter: '',
+        expiryDate: '',
       },
       rules: {
-        wbsCustomerCode: [
+        entityID: [
           {
             required: true,
             message: 'This field is required',
             trigger: 'blur',
           },
         ],
-        customerMdmCode: [
+        entityName: [
           {
             required: true,
             message: 'This field is required',
             trigger: 'blur',
           },
         ],
-        channelCode: [
+        profitCenter: [
           {
             required: true,
             message: 'This field is required',
             trigger: 'blur',
           },
         ],
-        customerCsName: [
+        expiryDate: [
           {
             required: true,
             message: 'This field is required',
@@ -215,38 +204,26 @@ export default {
       })()
     }
     this.getTableData()
-    this.getChannelList()
-    this.getCustomerList()
   },
   computed: {},
-  watch: {
-    'ruleForm.customerCsName'() {
-      let obj = this.customerArr.find(
-        (item) => item.customerCsName == this.ruleForm.customerCsName
-      )
-      if (obj) this.ruleForm.customerMdmCode = obj.customerMdmCode
-    },
-  },
+  watch: {},
   methods: {
     //获取表格数据
     getTableData() {
       this.tableData = []
-      API.getPageByWbs({
+      API.getPageEntityWbs({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        wbsCustomerCode: this.filterObj.wbsCustomerCode,
-        customerCsName: this.filterObj.customerCsName,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        channelCode: this.filterObj.channelCode,
-        state: this.filterObj.state,
+        entityName: this.filterObj.entityName, 
+        entityID: this.filterObj.entityID, 
+        profitCenter: this.filterObj.profitCenter, 
+        state: this.filterObj.state, 
+      }).then((response) => {
+        this.tableData = response.data.records
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
       })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
-        .catch((error) => {})
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -255,23 +232,12 @@ export default {
         }
       })
     },
-    // 客户
-    getCustomerList() {
-      selectAPI.queryCustomerList().then((res) => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      })
-    },
     add() {
-      this.getCustomerList()
       this.ruleForm = {
-        wbsCustomerCode: '',
-        customerMdmCode: '',
-        customerCsName: '',
-        channelCode: '',
-        state: '1',
-        remark: '',
+        entityID: '',
+        entityName: '',
+        profitCenter: '',
+        expiryDate: '',
       }
       this.dialogVisible = true
     },
@@ -281,25 +247,18 @@ export default {
     },
     Reset() {
       this.filterObj = {
-        channelCode: '',
-        wbsCustomerCode: '',
-        customerCsName: '',
-        customerMdmCode: '',
+        entityName: '',
+        entityID: '',
+        profitCenter: '',
         state: '',
       }
       this.getTableData()
     },
     //导出数据
     exportData() {
-      API.exportWbs({
-        channelCode: this.filterObj.channelCode,
-        wbsCustomerCode: this.filterObj.wbsCustomerCode,
-        customerCsName: this.filterObj.customerCsName,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        state: this.filterObj.state,
-      }).then((res) => {
+      API.exportEntityWbs({}).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, 'WBS维护 -' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, 'WBS Code - Entity -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
@@ -308,55 +267,55 @@ export default {
       this.isEditor = false
       this.editorId = ''
       this.ruleForm = {
-        wbsCustomerCode: '',
-        customerMdmCode: '',
-        customerCsName: '',
-        channelCode: '',
-        state: '',
-        remark: '',
+        entityID: '',
+        entityName: '',
+        profitCenter: '',
+        expiryDate: '',
       }
     },
     editor(obj) {
-      console.log(obj);
-      
       this.isEditor = true
       this.dialogVisible = true
       this.ruleForm = {
-        wbsCustomerCode: obj.wbsCustomerCode,
-        customerMdmCode: obj.customerMdmCode,
-        customerCsName: obj.customerCsName,
-        channelCode: obj.channelCode,
-        state: String(obj.state),
-        remark: obj.remark,
+        entityID: obj.entityID,
+        entityName: obj.entityName,
+        profitCenter: obj.profitCenter,
+        expiryDate: obj.expiryDate,
       }
-      //若客户下拉框数据没有当前则置空
-      let isExistCustom=this.customerArr.find(item=>item.customerCsName == this.ruleForm.customerCsName)
-      if (!isExistCustom) {
-        this.ruleForm.customerCsName=''
-        this.ruleForm.customerMdmCode=''
-      } 
       this.editorId = obj.id
     },
     //提交form
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let url = this.isEditor ? API.updateWbs : API.insertWbs
-          url({
-            id: this.editorId,
-            wbsCustomerCode: this.ruleForm.wbsCustomerCode,
-            customerCsName: this.ruleForm.customerCsName,
-            customerMdmCode: this.ruleForm.customerMdmCode,
-            // channelCode: this.ruleForm.channelCode,
-            state: this.ruleForm.state,
-            remark: this.ruleForm.remark,
-          }).then((response) => {
-            if (response.code === 1000) {
-              this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
-              this.resetForm(formName)
-              this.getTableData()
-            }
-          })
+          if (this.isEditor) {
+            API.updateEntityWbs({
+              id: this.editorId,
+              entityName: this.ruleForm.entityName,
+              profitCenter: this.ruleForm.profitCenter,
+              expiryDate: this.ruleForm.expiryDate,
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success(`修改成功`)
+                this.resetForm(formName)
+                this.getTableData()
+              }
+            })
+          } else {
+            API.insertEntityWbs({
+              id: this.editorId,
+              entityID: this.ruleForm.entityID,
+              entityName: this.ruleForm.entityName,
+              profitCenter: this.ruleForm.profitCenter,
+              expiryDate: this.ruleForm.expiryDate,
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success(`添加成功`)
+                this.resetForm(formName)
+                this.getTableData()
+              }
+            })
+          }
         } else {
           this.$message.error('提交失败')
           return false
@@ -377,7 +336,7 @@ export default {
           type: 'warning',
         })
           .then(() => {
-            API.deleteWbs(IdList).then((response) => {
+            API.deleteEntityWbs(IdList).then((response) => {
               if (response.code === 1000) {
                 this.getTableData()
                 this.$message.success('删除成功!')

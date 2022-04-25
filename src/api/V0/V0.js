@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-01-03 17:34:43
+ * @LastEditTime: 2022-04-25 14:33:56
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -31,7 +31,7 @@ export default {
   exportExcel(params) {
     //二进制数据流转blob
     return request({
-      url:this.url+'/downExcel',
+      url:this.url+'/downExcelTemplate',
       method:'post',
       data:params,
       responseType:'blob'
