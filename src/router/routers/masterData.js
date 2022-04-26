@@ -268,7 +268,7 @@ export default function() {
             },
             {
               path: '/WBSCodeEntity',
-              code: 'mdm_WbsMaintenance',
+              code: 'mdm_wbsCode_Entity',
               name: 'WBSCodeEntity',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeEntity.vue'),
@@ -284,7 +284,7 @@ export default function() {
             // },
             {
               path: '/WBSCodeBrand',
-              code: 'mdm_WbsMaintenance',
+              code: 'mdm_wbsCode_Brand',
               name: 'WBSCodeBrand',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeBrand.vue'),
@@ -292,7 +292,7 @@ export default function() {
             },
             {
               path: '/WBSCodeDepartment',
-              code: 'mdm_WbsMaintenance',
+              code: 'mdm_wbsCode_Department',
               name: 'WBSCodeDepartment',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeDepartment.vue'),
