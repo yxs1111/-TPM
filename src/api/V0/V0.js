@@ -31,7 +31,7 @@ export default {
   exportExcel(params) {
     //二进制数据流转blob
     return request({
-      url:this.url+'/downExcelTemplate',
+      url:this.url+'/downExcel',
       method:'post',
       data:params,
       responseType:'blob'
