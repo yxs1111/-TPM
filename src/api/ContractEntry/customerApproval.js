@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-04-26 10:49:54
+ * @LastEditTime: 2022-04-26 15:31:54
  */
 /*
  * @Description: 客户合同录入
@@ -38,6 +38,9 @@ export default {
   //经销商合同审批--审批
   approveDistContract(params) {
     return requestApi.request_post(this.distUrl+'/approve', params)
+  },
+  getContractItemList(params) {
+    return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)
   },
 }
 

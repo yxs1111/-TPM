@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-26 11:17:35
+ * @LastEditTime: 2022-04-26 15:34:10
 -->
 <template>
   <div class="MainContent">
@@ -142,7 +142,7 @@
             </el-table-column>
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
-                <div v-if="scope.row.isTotal">
+                <div>
                   {{ scope.row.costRatio }}%
                 </div>
               </template>
@@ -275,6 +275,7 @@ export default {
     }
     this.getTableData()
     this.getCustomerList()
+    this.getContractItemList()
   },
   computed: {},
   watch: {
@@ -328,6 +329,76 @@ export default {
       selectAPI.getCustomerContract({}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
+        }
+      })
+    },
+    // 获取ContractItem
+    getContractItemList() {
+      API.getContractItemList().then((res) => {
+        if (res.code === 1000) {
+          this.contractItemFixList = []
+          this.contractItemVariableList = []
+          let list = res.data
+          //区分variable 和 fixed
+          list.forEach((item) => {
+            item.name = item.contractItem
+            item.code = item.contractItemCode
+            item.conditionType = item.conditionType
+            if (item.conditionType.indexOf(',') != -1) {
+              item.conditionalIsTwo = 2
+            } else {
+              item.conditionalIsTwo = 1
+            }
+            if (item.variablePoint.indexOf('variable') != -1) {
+              item.isVariableOrFix = 0
+            }
+            if (item.variablePoint.indexOf('fix') != -1) {
+              item.isVariableOrFix = 1
+            }
+            if (
+              item.variablePoint.indexOf('fix') != -1 &&
+              item.variablePoint.indexOf('variable') != -1
+            ) {
+              item.isVariableOrFix = 2
+            }
+          })
+          console.log(list)
+          list.forEach((item) => {
+            if (item.isVariableOrFix === 0) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+            if (item.isVariableOrFix === 1) {
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+            if (item.isVariableOrFix === 2) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+          })
         }
       })
     },
