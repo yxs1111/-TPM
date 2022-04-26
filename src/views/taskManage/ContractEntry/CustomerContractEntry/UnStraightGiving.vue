@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-24 16:38:22
+ * @LastEditTime: 2022-04-26 15:18:15
 -->
 <template>
   <div class="MainContent">
@@ -225,7 +225,6 @@
                     </el-select>
                   </div>
                   <div v-if="!scope.row.isNewData">
-                    {{ scope.row.conditionsItem }}
                     {{contractItemVariableList[scope.row.contractItem].name}}
                   </div>
                 </div>
@@ -236,10 +235,10 @@
                 <div v-if="!scope.row.isTotal">
                   <div v-if="contractItemVariableList[scope.row.contractItem].conditionalIsTwo===2&&scope.row.isNewData">
                     <el-select v-model="scope.row.conditions" class="my-el-select_dialog" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in ['condition','uncondition']" :key="index" :label="item" :value="item" />
+                      <el-option v-for="(item, index) in ['condition','unconditional']" :key="index" :label="item" :value="item" />
                     </el-select>
                   </div>
-                  <div v-else>{{contractItemVariableList[scope.row.contractItem].conditionalIsTwo===1?'condition':'uncondition'}}</div>
+                  <div v-else>{{scope.row.conditions}}</div>
                 </div>
               </template>
             </el-table-column>
@@ -258,7 +257,7 @@
               <template slot-scope="scope">
                 <div>
                   <!-- {{ termInfo.saleNumber*(scope.row.costRatio/100) }} -->
-                  {{scope.row.taxCost}}
+                  {{FormateNum(scope.row.taxCost)}}
                 </div>
               </template>
             </el-table-column>
@@ -299,8 +298,7 @@
                       <el-option v-for="(item, index) in contractItemFixList" :key="index" :label="item.name" :value="index" />
                     </el-select>
                   </div>
-                  <div v-if="!scope.row.isNewData">
-                    <!-- {{ scope.row.contractItem}} -->
+                  <div v-if="!scope.row.isNewData">>
                     {{contractItemFixList[Number(scope.row.contractItem)].name}}
                   </div>
                 </div>
@@ -309,12 +307,12 @@
             <el-table-column align="center" width="160" label="条件类型">
               <template slot-scope="scope">
                 <div v-if="!scope.row.isTotal">
-                  <div v-if="contractItemFixList[scope.row.contractItem].conditionalIsTwo===2">
+                  <div v-if="contractItemFixList[scope.row.contractItem].conditionalIsTwo===2&&scope.row.isNewData">
                     <el-select v-model="scope.row.conditions" class="my-el-select_dialog" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in ['condition','uncondition']" :key="index" :label="item" :value="item" />
+                      <el-option v-for="(item, index) in ['condition','unconditional']" :key="index" :label="item" :value="item" />
                     </el-select>
                   </div>
-                  <div v-else>{{contractItemFixList[scope.row.contractItem].conditionalIsTwo===1?'condition':'uncondition'}}</div>
+                  <div v-else>{{scope.row.conditions}}</div>
                 </div>
               </template>
             </el-table-column>
@@ -437,6 +435,7 @@ export default {
     }
     this.getTableData()
     this.getCustomerList()
+    this.getContractItemList()
   },
   computed: {},
   watch: {
@@ -458,26 +457,6 @@ export default {
         this.filterObj.effectiveEndDate = ''
       }
     },
-    // termVariableData: {
-    //   handler: function () {
-    //     //获取Variable和fix
-    //     this.getNewTotalData()
-    //   },
-    //   deep: true,
-    // },
-    // termFixData: {
-    //   handler: function () {
-    //     this.getNewTotalData()
-    //   },
-    //   deep: true,
-    // },
-    // FixTotalData: {
-    //   handler: function () {
-    //     //设置两个total 的值，通过中间变量的形式
-    //     this.setAllTotalData()
-    //   },
-    //   deep: true,
-    // },
   },
   directives: { elDragDialog, permission },
   methods: {
@@ -520,6 +499,81 @@ export default {
             this.customerArr = res.data
           }
         })
+    },
+    // 获取ContractItem
+    getContractItemList() {
+      API.getContractItemList().then((res) => {
+        if (res.code === 1000) {
+          this.contractItemFixList=[]
+          this.contractItemVariableList=[]
+          let list = res.data
+          //区分variable 和 fixed
+          list.forEach((item) => {
+            item.name=item.contractItem
+            item.code=item.contractItemCode
+            item.conditionType=item.conditionType
+            if(item.conditionType.indexOf(',')!=-1) {
+              item.conditionalIsTwo=2
+            } else {
+              item.conditionalIsTwo=1
+            }
+            if(item.variablePoint.indexOf('variable')!=-1) {
+              item.isVariableOrFix=0
+            }
+            if(item.variablePoint.indexOf('fix')!=-1) {
+              item.isVariableOrFix=1
+            }
+            if(item.variablePoint.indexOf('fix')!=-1&&item.variablePoint.indexOf('variable')!=-1) {
+              item.isVariableOrFix=2
+            }
+          })
+          console.log(list);
+          list.forEach(item=>{
+            if(item.isVariableOrFix===0) {
+              this.contractItemVariableList.push(
+                {
+                  code:item.code,
+                  name:item.name,
+                  conditionalIsTwo:item.conditionalIsTwo,
+                  isVariableOrFix:item.isVariableOrFix,
+                  conditionType:item.conditionType,
+                }
+              )
+            }
+            if(item.isVariableOrFix===1) {
+              this.contractItemFixList.push(
+                {
+                  code:item.code,
+                  name:item.name,
+                  conditionalIsTwo:item.conditionalIsTwo,
+                  isVariableOrFix:item.isVariableOrFix,
+                  conditionType:item.conditionType,
+                }
+              )
+            }
+            if(item.isVariableOrFix===2) {
+              this.contractItemVariableList.push(
+                {
+                  code:item.code,
+                  name:item.name,
+                  conditionalIsTwo:item.conditionalIsTwo,
+                  isVariableOrFix:item.isVariableOrFix,
+                  conditionType:item.conditionType,
+                }
+              )
+              this.contractItemFixList.push(
+                {
+                  code:item.code,
+                  name:item.name,
+                  conditionalIsTwo:item.conditionalIsTwo,
+                  isVariableOrFix:item.isVariableOrFix,
+                  conditionType:item.conditionType,
+                }
+              )
+            }
+          })
+        }
+      })
     },
     //新增一行数据
     addNewRow() {
@@ -869,23 +923,18 @@ export default {
     //更改ContractItem --》改变条件类型
     changeContractItem(flag, row, value) {
       if (!flag) {
-        row.conditions =
-          this.contractItemVariableList[value].conditionalIsTwo === 1
-            ? 'condition'
-            : this.contractItemVariableList[value].conditionalIsTwo === 0
-            ? 'uncondition'
-            : ''
-        // row = Object.assign({}, row)
-        // this.$forceUpdate()
+        if(this.contractItemVariableList[value].conditionalIsTwo===2) {
+          row.conditions=''
+        } else {
+          row.conditions =this.contractItemVariableList[value].conditionType
+        }
+        
       } else {
-        row.conditions =
-          this.contractItemFixList[value].conditionalIsTwo === 1
-            ? 'condition'
-            : this.contractItemFixList[value].conditionalIsTwo === 0
-            ? 'uncondition'
-            : ''
-        // row = Object.assign({}, row)
-        // this.$forceUpdate()
+        if(this.contractItemFixList[value].conditionalIsTwo===2) {
+          row.conditions=''
+        } else {
+           row.conditions =this.contractItemFixList[value].conditionType
+        }
       }
     },
     //通过code 获取ContractItem索引展示
@@ -924,7 +973,7 @@ export default {
             type: item.type, //明细类型 variable和fixed
             conditionsItem:
               this.contractItemVariableList[item.contractItem].code,
-            conditions: item.conditions, //条件类型condition和uncondition
+            conditions: item.conditions, //条件类型condition和unconditional
             costRatio: item.costRatio, //费比
             taxCost: item.taxCost, //费用
             remark: item.remark, //备注
@@ -937,7 +986,7 @@ export default {
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
             conditionsItem: this.contractItemFixList[item.contractItem].code,
-            conditions: item.conditions, //条件类型condition和uncondition
+            conditions: item.conditions, //条件类型condition和unconditional
             costRatio: item.costRatio, //费比
             taxCost: item.taxCost, //费用
             remark: item.remark, //备注
@@ -954,6 +1003,7 @@ export default {
         this.$message.info('Total 含税费用应该小于目标销售额')
         return
       }
+      console.log(obj);
       API.saveDetail(obj).then((res) => {
         if (res.code === 1000) {
           this.closeTermsDetail()

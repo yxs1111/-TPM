@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-25 08:48:43
+ * @LastEditTime: 2022-04-26 11:17:35
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in customerArr" :key="index" :label="item.customer_cs_name" :value="item.customer_mdm_code" />
+            <el-option v-for="item,index in customerArr" :key="index" :label="item.customerName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -26,15 +26,15 @@
           </el-date-picker>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG">
+        <div class="TpmButtonBG" @click="exportData">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG">通过</el-button>
-      <el-button type="primary" class="TpmButtonBG">驳回</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="submit">通过</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="reject">驳回</el-button>
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
@@ -47,10 +47,6 @@
       <el-table-column fixed align="center" width="220" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
-            <div class="haveText_delete" @click="deleteRow(scope.row, scope.$index)">
-              <svg-icon icon-class="delete" class="svgIcon" />
-              <span>删除</span>
-            </div>
             <div class="haveText_editor" v-show="!scope.row.isNewData&&scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
@@ -68,10 +64,10 @@
       </el-table-column>
       <el-table-column prop="customerName" align="center" width="220" label="客户名称">
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.saleAmount ? scope.row.saleAmount : 0)}}
+            {{FormateNum(scope.row.customerContractSaleAmount ? scope.row.customerContractSaleAmount : 0)}}
           </div>
         </template>
       </el-table-column>
@@ -109,18 +105,14 @@
       </el-table-column>
       <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
       <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
-      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
-      <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
-      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
-      <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <!-- 导入 -->
-    <el-dialog width="90%"  top="2vh" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <!-- 条款明细 -->
+    <el-dialog width="90%" top="2vh" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
@@ -317,36 +309,29 @@ export default {
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
-        minePackageCode:'CUSTOMER-CONTRACT'
+        minePackageCode: 'CUSTOMER-CONTRACT',
       }).then((response) => {
-        // let list = response.data.records
-        // list.forEach((item) => {
-        //   item.isEditor = 0
-        //   item.isNewData = 0
-        //   item.expireDate = '' //定时任务--终止日期字段
-        //   item.contractDate = [item.contractBeginDate, item.contractEndDate]
-        //   item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
-        // })
-        // this.tableData = [...list]
-        // this.pageNum = response.data.pageNum
-        // this.pageSize = response.data.pageSize
-        // this.total = response.data.total
-        // this.tempObj.tempInfo = null
+        let list = response.data.records
+        list.forEach((item) => {
+          item.contractDate = [item.contractBeginDate, item.contractEndDate]
+          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+        })
+        this.tableData = [...list]
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+        this.tempObj.tempInfo = null
       })
     },
     // 客户
     getCustomerList() {
-      selectAPI
-        .getCustomerListByType({
-          type: 1,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.customerArr = res.data
-          }
-        })
+      selectAPI.getCustomerContract({}).then((res) => {
+        if (res.code === 1000) {
+          this.customerArr = res.data
+        }
+      })
     },
-    //录入提交
+    //审批提交
     submit() {
       if (this.checkArr.length === 0) return this.$message.info('请选择数据')
       else {
@@ -354,13 +339,42 @@ export default {
         this.checkArr.forEach((item) => {
           IdList.push(item.id)
         })
-        API.submitCustomerContract(IdList).then((res) => {
-          if (res.code === 1000) {
-            this.getTableData()
-            this.$message.success('提交成功')
-          }
-        })
+        // API.approveCustomerContract(IdList).then((res) => {
+        //   if (res.code === 1000) {
+        //     this.getTableData()
+        //     this.$message.success('提交成功')
+        //   }
+        // })
       }
+    },
+    //驳回操作
+    reject() {
+      if (this.checkArr.length === 0) return this.$message.info('请选择数据')
+      else {
+        let IdList = []
+        this.checkArr.forEach((item) => {
+          IdList.push(item.id)
+        })
+        // API.approveCustomerContract(IdList).then((res) => {
+        //   if (res.code === 1000) {
+        //     this.getTableData()
+        //     this.$message.success('提交成功')
+        //   }
+        // })
+      }
+    },
+    exportData() {
+      API.exportApprove({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        minePackageCode: 'CUSTOMER-CONTRACT',
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '客户合同审批 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
     },
     search() {
       this.pageNum = 1
@@ -395,54 +409,6 @@ export default {
         this.tableData[index] = this.tempObj.tempInfo
       }
     },
-    //删除该行数据
-    deleteRow(row, index) {
-      //删除新增的
-      if (row.isNewData) {
-        this.$confirm('确定要删除新增的数据吗？此操作不可逆', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            this.tableData.splice(index, 1)
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消',
-            })
-          })
-      } else {
-        //删除数据库中的数据
-        this.$confirm('确定要删除数据吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            console.log([this.tableData[index].id])
-            API.deleteCustomerContract([this.tableData[index].id]).then(
-              (res) => {
-                if (res.code === 1000) {
-                  this.getTableData()
-                  if (res.data) {
-                    this.$message.success('删除成功')
-                  } else {
-                    this.$message.info(`${res.message}`)
-                  }
-                }
-              }
-            )
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消',
-            })
-          })
-      }
-    },
     //保存 该行
     saveRow(row, index) {
       if (row.saleAmount > 9999999999) {
@@ -469,132 +435,104 @@ export default {
         })
       }
     },
-    //定时任务确定--终止合同
-    popoverSubmit(index, row) {
-      API.termination({
-        id: row.id,
-        contractEndDate: row.expireDate,
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.$message.success('终止成功')
-          this.popoverCancel(index)
-          this.getTableData()
-        }
-      })
-    },
-    //定时任务取消
-    popoverCancel(index) {
-      // console.log(this.$refs[`popover-` + index]);
-      this.$refs[`popover-` + index].doClose()
-    },
     //条款明细--弹窗展示
     showTermsDetail(index) {
-      this.customerId = this.tableData[index].id
-      if (this.tableData[index].isNewData) {
-        this.$message.info('该数据为新增数据,请选择其它数据')
-      } else {
-        // 设置屏幕高度90%
-        this.$refs.termDialog.$el.firstChild.style.height = '90%';
-        //草稿、被拒绝可以编辑，其他仅查看
-        API.findOneSaveDetail({
-          id: this.customerId,
-          isMain: 1,
-          isDetail: 1,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.isTermsDetailVisible = true
-            this.termVariableData = []
-            this.termFixData = []
-            let data = res.data
-            this.termInfo = { ...data }
-            let variableListOrigin = this.termInfo.variable
-            let variableList = []
-            //获取total +variable total
-            variableListOrigin.forEach((item) => {
-              let obj = {
-                type: item.type,
-                contractItem: this.getContractItemByCode(
-                  0,
-                  item.conditionsItem
-                ),
-                conditionType: item.conditions,
-                conditions: item.conditions,
-                costRatio: item.costRatio,
-                taxCost: item.taxCost,
-                remark: item.remark,
-                isNewData: 1, //是否未新添数据
-                isTotal: 0, //是否total 行
-              }
-              variableList.push(obj)
-              this.TotalData.totalCost += item.taxCost
-              this.TotalData.totalPoint += item.costRatio
-              this.VariableTotalData.totalCost += item.taxCost
-              this.VariableTotalData.totalPoint += item.costRatio
-            })
-            let fixedListOrigin = this.termInfo.fixed
-            let fixList = []
-            //获取total +fixed total
-            fixedListOrigin.forEach((item) => {
-              let obj = {
-                type: item.type,
-                contractItem: this.getContractItemByCode(
-                  1,
-                  item.conditionsItem
-                ),
-                conditionType: item.conditions,
-                conditions: item.conditions,
-                costRatio: item.costRatio,
-                taxCost: item.taxCost,
-                remark: item.remark,
-                isNewData: 1, //是否未新添数据
-                isTotal: 0, //是否total 行
-              }
-              fixList.push(obj)
-              this.TotalData.totalCost += item.taxCost
-              this.TotalData.totalPoint += item.costRatio
-              this.FixTotalData.totalCost += item.taxCost
-              this.FixTotalData.totalPoint += item.costRatio
-            })
-            //variable  -- 设置Total
-            this.termVariableData.unshift({
-              type: 'Total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.TotalData.totalPoint,
-              taxCost: this.TotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1, //是否total 行
-            })
-            //variable  -- 设置variable
-            this.termVariableData = [...this.termVariableData, ...variableList]
-            //variable  -- 设置variable total
-            this.termVariableData.push({
-              type: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.VariableTotalData.totalPoint,
-              taxCost: this.VariableTotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1,
-            })
-            //Fixed  -- Fixed
-            this.termFixData = [...this.termFixData, ...fixList]
-            //Fixed  -- Fixed total
-            this.termFixData.push({
-              type: 'Fixed total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.FixTotalData.totalPoint,
-              taxCost: this.FixTotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1,
-            })
-          }
-        })
-      }
+      this.customerId = this.tableData[index].ccId
+      // 设置屏幕高度90%
+      this.$refs.termDialog.$el.firstChild.style.height = '90%'
+      //草稿、被拒绝可以编辑，其他仅查看
+      API.findOneSaveDetail({
+        id: this.customerId,
+        isMain: 1,
+        isDetail: 1,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.isTermsDetailVisible = true
+          this.termVariableData = []
+          this.termFixData = []
+          let data = res.data
+          this.termInfo = { ...data }
+          let variableListOrigin = this.termInfo.variable
+          let variableList = []
+          //获取total +variable total
+          variableListOrigin.forEach((item) => {
+            let obj = {
+              type: item.type,
+              contractItem: this.getContractItemByCode(0, item.conditionsItem),
+              conditionType: item.conditions,
+              conditions: item.conditions,
+              costRatio: item.costRatio,
+              taxCost: item.taxCost,
+              remark: item.remark,
+              isNewData: 1, //是否未新添数据
+              isTotal: 0, //是否total 行
+            }
+            variableList.push(obj)
+            this.TotalData.totalCost += item.taxCost
+            this.TotalData.totalPoint += item.costRatio
+            this.VariableTotalData.totalCost += item.taxCost
+            this.VariableTotalData.totalPoint += item.costRatio
+          })
+          let fixedListOrigin = this.termInfo.fixed
+          let fixList = []
+          //获取total +fixed total
+          fixedListOrigin.forEach((item) => {
+            let obj = {
+              type: item.type,
+              contractItem: this.getContractItemByCode(1, item.conditionsItem),
+              conditionType: item.conditions,
+              conditions: item.conditions,
+              costRatio: item.costRatio,
+              taxCost: item.taxCost,
+              remark: item.remark,
+              isNewData: 1, //是否未新添数据
+              isTotal: 0, //是否total 行
+            }
+            fixList.push(obj)
+            this.TotalData.totalCost += item.taxCost
+            this.TotalData.totalPoint += item.costRatio
+            this.FixTotalData.totalCost += item.taxCost
+            this.FixTotalData.totalPoint += item.costRatio
+          })
+          //variable  -- 设置Total
+          this.termVariableData.unshift({
+            type: 'Total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.TotalData.totalPoint,
+            taxCost: this.TotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1, //是否total 行
+          })
+          //variable  -- 设置variable
+          this.termVariableData = [...this.termVariableData, ...variableList]
+          //variable  -- 设置variable total
+          this.termVariableData.push({
+            type: 'Variable total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.VariableTotalData.totalPoint,
+            taxCost: this.VariableTotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1,
+          })
+          //Fixed  -- Fixed
+          this.termFixData = [...this.termFixData, ...fixList]
+          //Fixed  -- Fixed total
+          this.termFixData.push({
+            type: 'Fixed total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.FixTotalData.totalPoint,
+            taxCost: this.FixTotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1,
+          })
+        }
+      })
     },
     //通过code 获取ContractItem索引展示
     getContractItemByCode(flag, code) {
@@ -633,7 +571,8 @@ export default {
     },
     //处于草稿状态可提交
     checkSelectable(row) {
-      return row.contractState === '0'
+      // return row.contractState === '0'
+      return 1
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

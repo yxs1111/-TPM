@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-04-20 16:00:28
+ * @LastEditTime: 2022-04-26 10:41:16
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -72,6 +72,10 @@ export default {
   // 合同录入-客户
   getCustomerListByType(data) {
     return requestApi.request_post('/mdm/common/getCustomerListByType', data)
+  },
+  // 合同录入-客户
+  getCustomerContract(data) {
+    return requestApi.request_post('/cityplan/customerContract/customerContract', data)
   },
   // 合同录入-经销商
   getDistributorService(data) {

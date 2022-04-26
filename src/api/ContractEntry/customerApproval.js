@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-04-24 17:07:55
+ * @LastEditTime: 2022-04-26 10:49:54
  */
 /*
  * @Description: 客户合同录入
@@ -17,6 +17,10 @@ export default {
   //客户合同审批--查询列表
   getApproveList(params) {
     return requestApi.request_get(this.url+'/pageApproveTaskList', params)
+  },
+  //客户合同明细 --查询
+  findOneSaveDetail(params) {
+    return requestApi.request_post(this.url+'/findOne', params)
   },
   //客户合同审批--导出
   exportApprove(params) {
