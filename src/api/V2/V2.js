@@ -19,7 +19,7 @@ export default {
   exportExcel(params) {
     //二进制数据流转blob
     return request({
-      url:this.url+'/downExcel',
+      url:this.url+'/downExcelTemplate',
       method:'post',
       data:params,
       responseType:'blob'
@@ -71,7 +71,7 @@ export default {
   exportNUExcel(params) {
     //二进制数据流转blob
     return request({
-      url:this.NUUrl+'/downExcel',
+      url:this.NUUrl+'/downExcelTemplate',
       method:'post',
       data:params,
       responseType:'blob'
