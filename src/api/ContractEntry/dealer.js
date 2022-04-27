@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-15 13:29:35
- * @LastEditTime: 2022-04-24 16:57:55
+ * @LastEditTime: 2022-04-26 16:41:28
  */
 /*
  * @Description: 客户合同录入
@@ -54,6 +54,9 @@ export default {
   saveContractDetail(params) {
     //saveContractDetail
     return requestApi.request_post(this.url+'/saveDetail', params)
+  },
+  getContractItemList(params) {
+    return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)
   },
 }
 

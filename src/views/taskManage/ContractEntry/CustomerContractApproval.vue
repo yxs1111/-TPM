@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-26 15:34:10
+ * @LastEditTime: 2022-04-26 16:28:11
 -->
 <template>
   <div class="MainContent">
@@ -47,15 +47,15 @@
       <el-table-column fixed align="center" width="220" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
-            <div class="haveText_editor" v-show="!scope.row.isNewData&&scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
+            <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isEditor&&!scope.row.isNewData" @click="editorRow(scope.$index,scope.row)">
+            <div class="haveText_editor" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
-            <div class="haveText_editor" v-show="scope.row.isEditor &&!scope.row.isNewData" @click="CancelEditorRow(scope.$index)">
+            <div class="haveText_editor" v-show="scope.row.isEditor" @click="CancelEditorRow(scope.$index)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>取消编辑</span>
             </div>
@@ -92,19 +92,30 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="220" label="申请人备注">
+      <el-table-column prop="remark" align="center" width="220" label="申请人备注">
+      </el-table-column>
+      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.remark" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.packageOwner" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{ scope.row.remark }}
+            {{ scope.row.packageOwner }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
+      <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor">
+            <el-input v-model="scope.row.finance" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-show="!scope.row.isEditor">
+            {{ scope.row.finance }}
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -212,6 +223,7 @@ import {
   contractList,
   contractItemVariableList,
   contractItemFixList,
+  downloadFile,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -314,6 +326,9 @@ export default {
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
+          item.isEditor = 0
+          item.packageOwner = ''
+          item.finance = ''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -406,16 +421,20 @@ export default {
     submit() {
       if (this.checkArr.length === 0) return this.$message.info('请选择数据')
       else {
-        let IdList = []
+        let obj = {
+          opinion: 'agree',
+          approveDetail: {},
+        }
         this.checkArr.forEach((item) => {
-          IdList.push(item.id)
+          obj.approveDetail[item.businessKey] = item.packageOwner
         })
-        // API.approveCustomerContract(IdList).then((res) => {
-        //   if (res.code === 1000) {
-        //     this.getTableData()
-        //     this.$message.success('提交成功')
-        //   }
-        // })
+        console.log(obj);
+        API.approveCustomerContract(obj).then((res) => {
+          if (res.code === 1000) {
+            this.getTableData()
+            this.$message.success('提交成功')
+          }
+        })
       }
     },
     //驳回操作
@@ -452,59 +471,44 @@ export default {
       this.getTableData()
     },
     //编辑行数据
-    editorRow(index, { isNewData }) {
-      if (this.tempObj.tempInfo && !isNewData) {
+    editorRow(index, row) {
+      if (row.contractState == '3' || row.contractState == '4') {
+        this.$message.info('该经销商已经通过，不能进行编辑')
+        return
+      }
+      if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
-      //不存新增的数据，新增没有取消编辑
-      if (!isNewData) {
-        //存编辑之前的数据
-        this.tempObj.rowIndex = index
-        this.tempObj.tempInfo = { ...this.tableData[index] }
-      }
+      //存编辑之前的数据
+      this.tempObj.rowIndex = index
+      this.tempObj.tempInfo = { ...this.tableData[index] }
       //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
       this.tableData.forEach((item) => {
-        if (!item.isNewData) {
-          item.isEditor = 0
-        }
+        item.isEditor = 0
       })
       this.tableData[index].isEditor = 1
       this.$forceUpdate()
     },
     CancelEditorRow(index) {
-      // this.tableData.forEach((item) => (item.isEditor = 0))
-      if (this.tableData[index].isNewData) {
-        //新增的不能取消编辑，只有删除
-      } else {
-        this.tableData[index].isEditor = 0
-        this.tableData[index] = this.tempObj.tempInfo
-      }
+      this.tableData[index].isEditor = 0
+      this.tableData[index] = this.tempObj.tempInfo
     },
     //保存 该行
     saveRow(row, index) {
-      if (row.saleAmount > 9999999999) {
-        this.$message.info('超出最大数值')
-      } else {
-        API.updateCustomerContract({
-          id: row.id,
-          customerMdmCode: row.customerMdmCode,
-          saleAmount: row.saleAmount,
-          contractBeginDate: row.contractDate[0],
-          contractEndDate: row.contractDate[1],
-          effectiveBeginDate: row.systemDate[0],
-          effectiveEndDate: row.systemDate[1],
-          remark: row.remark,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.getTableData()
-            if (res.data) {
-              this.$message.success('修改成功')
-            } else {
-              this.$message.info(`${res.message}`)
-            }
+      let obj = {}
+      console.log(row)
+      obj[row.businessKey] = row.packageOwner
+      console.log(obj);
+      API.saveApproveComments(obj).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          if (res.data) {
+            this.$message.success('修改成功')
+          } else {
+            this.$message.info(`${res.message}`)
           }
-        })
-      }
+        }
+      })
     },
     //条款明细--弹窗展示
     showTermsDetail(index) {

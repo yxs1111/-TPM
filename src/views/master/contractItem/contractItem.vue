@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-04-25 17:26:09
+ * @LastEditTime: 2022-04-27 10:24:53
 -->
 <template>
   <div class="app-container">
@@ -128,8 +128,8 @@
       <el-table-column width="220" align="center" prop="profitCenter" label="支付方式">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.paymentMethod" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in CustomerDeductionsAndPayType[scope.row.deductionPointIndex]['payTypeList']" :key="index" :label="item" :value="item" />
+            <el-select v-model="scope.row.paymentMethodIndex" class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in CustomerDeductionsAndPayType[scope.row.deductionPointIndex]['payTypeList']" :key="index" :label="item.label" :value="item.value" />
             </el-select>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -360,6 +360,7 @@ export default {
           item.isEditor = 0
           item.conditionTypeText = item.conditionType
           item.variablePointText = item.variablePoint
+          item.paymentMethodIndex = this.getPaymentMethodIndex(item.paymentMethod)
           if (item.conditionType != '') {
             item.conditionTypeList = item.conditionType.split(',')
           }
@@ -374,6 +375,15 @@ export default {
         this.total = response.data.total
       })
     },
+    //获取支付方式value ，1、2、3
+    getPaymentMethodIndex(label) {
+      this.CustomerDeductionsAndPayType.forEach(item=>{
+        let index=item.payTypeList.findIndex(pItem=>pItem.label==label)
+        if(index!=-1) {
+          return index
+        }
+      })
+    },
     getPointIndex(value) {
       let index = this.CustomerDeductionsAndPayType.findIndex((item) => {
         return item.CustomerDeduction == value
@@ -382,7 +392,7 @@ export default {
     },
     //更改支付方式
     changeDeductionPointIndex(row, index) {
-      this.tableData[index].paymentMethod = ''
+      this.tableData[index].paymentMethodIndex = ''
     },
     add() {
       this.dialogVisible = true

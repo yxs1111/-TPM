@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-25 08:44:08
+ * @LastEditTime: 2022-04-27 11:12:30
 -->
 <template>
   <div class="ContentDetail">
@@ -100,13 +100,13 @@
               </el-table-column>
               <el-table-column prop="detail" align="center" width="180" label="描述">
                 <template slot-scope="scope">
-                    <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].isEditor">
-                      <el-input v-model="scope.row.dealerList[dealerIndex].detail" clearable class="my-el-detail" placeholder="请输入">
-                      </el-input>
-                    </div>
-                    <div v-else>
-                      {{scope.row.dealerList[dealerIndex].detail}}
-                    </div>
+                  <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].isEditor">
+                    <el-input v-model="scope.row.dealerList[dealerIndex].detail" clearable class="my-el-detail" placeholder="请输入">
+                    </el-input>
+                  </div>
+                  <div v-else>
+                    {{scope.row.dealerList[dealerIndex].detail}}
+                  </div>
                 </template>
               </el-table-column>
             </template>
@@ -172,12 +172,11 @@
                   <div v-if="!scope.row.isTotal">
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor">
                       <el-select v-model="scope.row.dealerList[dealerIndex].customerTaxPoint" class="my-el-select_dialog" filterable clearable placeholder="请选择">
-                        <el-option v-for="(item, index) in TaxDeductionsPoint" :key="index" :label="item" :value="index" />
+                        <el-option v-for="(item, index) in CustomerDeductionsAndPayType" :key="index" :label="item.CustomerDeduction+'%'" :value="index" />
                       </el-select>
-                      %
                     </div>
                     <div v-else>
-                      {{TaxDeductionsPoint[scope.row.dealerList[dealerIndex].customerTaxPoint]}}%
+                      {{CustomerDeductionsAndPayType[scope.row.dealerList[dealerIndex].customerTaxPoint].CustomerDeduction}}%
                       <!-- {{TaxDeductionsPoint[Number(scope.row.dealerList[dealerIndex].customerTaxPoint)]}} -->
                     </div>
 
@@ -190,11 +189,12 @@
                 <div v-if="!row.isTotal">
                   <div v-if="row.dealerList[dealerIndex].isEditor">
                     <el-select v-model="row.dealerList[dealerIndex].payType" class="my-el-select_dialog" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in payTypeList" :key="index" :label="item" :value="index+1" />
+                      <el-option v-for="(item, index) in CustomerDeductionsAndPayType[row.dealerList[dealerIndex].customerTaxPoint].payTypeList" :key="index" :label="item.label"
+                        :value="item.value" />
                     </el-select>
                   </div>
                   <div v-else>
-                    {{payTypeList[row.dealerList[dealerIndex].payType]}}
+                    {{getPaymentMethodText(row.dealerList[dealerIndex].customerTaxPoint,row.dealerList[dealerIndex].payType)}}
                   </div>
 
                 </div>
@@ -221,6 +221,7 @@ import {
   getContractEntry,
   FormateThousandNum,
   setSplitAssignee,
+  CustomerDeductionsAndPayType,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -560,6 +561,9 @@ export default {
       ccId: null,
       tabKey: 0,
       isShow: false,
+      contractItemVariableList: [],
+      contractItemFixList: [],
+      CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
     }
   },
 
@@ -570,7 +574,7 @@ export default {
     } else {
       this.ccId = sessionStorage.getItem('ccId')
     }
-    this.getTermInfo()
+    this.getContractItemList()
   },
 
   methods: {
@@ -601,6 +605,7 @@ export default {
                 dealerName: item.distributorName,
                 distributorMdmCode: item.distributorMdmCode,
                 targetSale: item.saleAmount,
+                contractState: item.contractState,
                 isSupplement: '',
                 ccDetailId: '',
                 costRatio: '',
@@ -621,6 +626,7 @@ export default {
                 dealerName: item.distributorName,
                 distributorMdmCode: item.distributorMdmCode,
                 targetSale: item.saleAmount,
+                contractState: item.contractState,
                 isSupplement: '',
                 ccDetailId: '',
                 costRatio: '',
@@ -641,7 +647,7 @@ export default {
               variableItem.dealerName = item.distributorName
               variableItem.distributorMdmCode = item.distributorMdmCode
               variableItem.targetSale = item.saleAmount
-              variableItem.contractState = item.contractState  //合同状态
+              variableItem.contractState = item.contractState //合同状态
             })
             item.fixed.forEach((fixedItem) => {
               fixedItem.dcId = item.id
@@ -669,7 +675,10 @@ export default {
             customerInfo: {
               customerName: customerVariableObj.customerName, //客户名称
               targetSale: customerVariableObj.saleAmount, //客户目标销售额
-              contractItem: customerVariableObj.conditionsItem,
+              contractItem: this.getContractItemByCode(
+                customerVariableObj.conditionsItem,
+                0
+              ),
               conditionType: customerVariableObj.conditions,
               pointCount: customerVariableObj.costRatio,
               taxPrice: customerVariableObj.taxCost,
@@ -725,7 +734,9 @@ export default {
               frieslandTaxPrice: distVariableObj.fcTaxCost, //菲仕兰承担--含税金额
               dealerPointCount: distVariableObj.distributorCostRatio, //经销商承担费比
               dealerTaxPrice: distVariableObj.distributorTaxCost, //经销商承担--含税金额
-              customerTaxPoint: this.getCustomerTaxPoint(distVariableObj.deductionTaxRate), //客户扣款税点
+              customerTaxPoint: this.getCustomerTaxPoint(
+                distVariableObj.deductionTaxRate
+              ), //客户扣款税点
               payType: Number(distVariableObj.payType), //支付方式
               isEditor:
                 distVariableObj.contractState == '3' ||
@@ -786,7 +797,10 @@ export default {
             customerInfo: {
               customerName: customerFixObj.customerName, //客户名称
               targetSale: customerFixObj.saleAmount, //客户目标销售额
-              contractItem: customerFixObj.conditionsItem,
+              contractItem: this.getContractItemByCode(
+                customerFixObj.conditionsItem,
+                0
+              ),
               conditionType: customerFixObj.conditions,
               pointCount: customerFixObj.costRatio,
               taxPrice: customerFixObj.taxCost,
@@ -826,7 +840,9 @@ export default {
               frieslandTaxPrice: distFixObj.fcTaxCost, //菲仕兰承担--含税金额
               dealerPointCount: distFixObj.distributorCostRatio, //经销商承担费比
               dealerTaxPrice: distFixObj.distributorTaxCost, //经销商承担--含税金额
-              customerTaxPoint: this.getCustomerTaxPoint(distFixObj.deductionTaxRate), //客户扣款税点
+              customerTaxPoint: this.getCustomerTaxPoint(
+                distFixObj.deductionTaxRate
+              ), //客户扣款税点
               payType: Number(distFixObj.payType), //支付方式
               isEditor:
                 distFixObj.contractState == '3' ||
@@ -894,9 +910,112 @@ export default {
         this.tabKey++
       })
     },
+    // 获取ContractItem 列表
+    getContractItemList() {
+      API.getContractItemList().then((res) => {
+        if (res.code === 1000) {
+          this.contractItemFixList = []
+          this.contractItemVariableList = []
+          let list = res.data
+          //区分variable 和 fixed
+          list.forEach((item) => {
+            item.name = item.contractItem
+            item.code = item.contractItemCode
+            item.conditionType = item.conditionType
+            if (item.conditionType.indexOf(',') != -1) {
+              item.conditionalIsTwo = 2
+            } else {
+              item.conditionalIsTwo = 1
+            }
+            if (item.variablePoint.indexOf('variable') != -1) {
+              item.isVariableOrFix = 0
+            }
+            if (item.variablePoint.indexOf('fix') != -1) {
+              item.isVariableOrFix = 1
+            }
+            if (
+              item.variablePoint.indexOf('fix') != -1 &&
+              item.variablePoint.indexOf('variable') != -1
+            ) {
+              item.isVariableOrFix = 2
+            }
+          })
+          console.log(list)
+          list.forEach((item) => {
+            if (item.isVariableOrFix === 0) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+            if (item.isVariableOrFix === 1) {
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+            if (item.isVariableOrFix === 2) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+          })
+          this.getTermInfo()
+        }
+      })
+    },
+    //通过code 来查ContractItem
+    getContractItemByCode(code, flag) {
+      if (flag == 0) {
+        let index = this.contractItemVariableList.findIndex(
+          (item) => item.code === code
+        )
+        if (index != -1) {
+          return this.contractItemVariableList[index].name
+        }
+      } else {
+        let index = this.contractItemFixList.findIndex(
+          (item) => item.code === code
+        )
+        if (index != -1) {
+          return this.contractItemFixList[index].name
+        }
+      }
+    },
     //根据客户扣缴税点 查index
     getCustomerTaxPoint(rate) {
-      return this.TaxDeductionsPoint.findIndex(item=> item==rate)
+      let num = this.CustomerDeductionsAndPayType.findIndex(
+        (item) => item.CustomerDeduction == rate
+      )
+      if (num != -1) {
+        return num
+      } else {
+        return 0
+      }
+    },
+    //根据1/2/3 查名字
+    getPaymentMethodText(index,MethodValue) {
+      let num=this.CustomerDeductionsAndPayType[index].payTypeList.findIndex(item=>item.value==MethodValue)
+      if(num!=-1) {
+        return this.CustomerDeductionsAndPayType[index].payTypeList[num].label
+      }
     },
     // 暂存
     staging() {
@@ -937,8 +1056,8 @@ export default {
           }
         }
       })
-      console.log(exceptionList);
-      console.log(errorList);
+      console.log(exceptionList)
+      console.log(errorList)
       let Obj = {
         ccId: this.ccId,
         isTempStorage: flag, //0 否(参与校验)/1是(不参与校验)
@@ -961,7 +1080,8 @@ export default {
                 distributorCostRatio: distItem.dealerPointCount,
                 distributorTaxCost: distItem.dealerTaxPrice,
                 deductionTaxRate:
-                  this.TaxDeductionsPoint[distItem.customerTaxPoint],
+                  this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
+                    .CustomerDeduction,
                 payType: distItem.payType,
               })
             } else {
@@ -976,7 +1096,8 @@ export default {
                 distributorCostRatio: distItem.dealerPointCount,
                 distributorTaxCost: distItem.dealerTaxPrice,
                 deductionTaxRate:
-                  this.TaxDeductionsPoint[distItem.customerTaxPoint],
+                  this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
+                    .CustomerDeduction,
                 payType: distItem.payType,
               })
             }
@@ -986,14 +1107,13 @@ export default {
       console.log(Obj)
       API.saveContractDetail(Obj).then((res) => {
         if (res.code === 1000) {
-          if(flag) {
+          if (flag) {
             this.$message.success('暂存成功')
             this.cancelSubmit()
           } else {
             this.$message.success('保存成功')
             this.cancelSubmit()
           }
-          
         } else {
           this.$message.info(`${res.message}`)
         }

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-26 15:18:15
+ * @LastEditTime: 2022-04-27 11:24:16
 -->
 <template>
   <div class="MainContent">
@@ -235,7 +235,7 @@
                 <div v-if="!scope.row.isTotal">
                   <div v-if="contractItemVariableList[scope.row.contractItem].conditionalIsTwo===2&&scope.row.isNewData">
                     <el-select v-model="scope.row.conditions" class="my-el-select_dialog" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in ['condition','unconditional']" :key="index" :label="item" :value="item" />
+                      <el-option v-for="(item, index) in ['conditional','unconditional']" :key="index" :label="item" :value="item" />
                     </el-select>
                   </div>
                   <div v-else>{{scope.row.conditions}}</div>
@@ -309,7 +309,7 @@
                 <div v-if="!scope.row.isTotal">
                   <div v-if="contractItemFixList[scope.row.contractItem].conditionalIsTwo===2&&scope.row.isNewData">
                     <el-select v-model="scope.row.conditions" class="my-el-select_dialog" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in ['condition','unconditional']" :key="index" :label="item" :value="item" />
+                      <el-option v-for="(item, index) in ['conditional','unconditional']" :key="index" :label="item" :value="item" />
                     </el-select>
                   </div>
                   <div v-else>{{scope.row.conditions}}</div>
@@ -1049,7 +1049,7 @@ export default {
       this.termFixData.splice(-1, 0, {
         type: 'Fixed',
         contractItem: 0,
-        conditions: '',
+        conditions: this.contractItemFixList[0].conditionalIsTwo==2?'':this.contractItemFixList[0].conditionType,
         costRatio: 0,
         taxCost: 0,
         remark: '',

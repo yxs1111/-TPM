@@ -848,10 +848,10 @@ export let contractItemFixList = [
 export let CustomerDeductionsAndPayType = [
   {
     CustomerDeduction: 6,
-    payTypeList: ['PO']
+    payTypeList: [{label:'PO',value:1}]
   },
   {
     CustomerDeduction: 13,
-    payTypeList: ['红票', '票扣']
+    payTypeList: [{label:'红票',value:2},{label:'票扣',value:3}]
   }
 ]
