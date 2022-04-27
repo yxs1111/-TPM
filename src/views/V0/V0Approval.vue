@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-11 11:32:06
+ * @LastEditTime: 2022-04-27 12:12:57
 -->
 <template>
   <div class="app-container">
@@ -456,8 +456,9 @@ export default {
     downloadTemplate() {
       if (Object.keys(this.ContentData).length) {
         //导出数据筛选
-        API.exportExcel({
+        API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
+          dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
           this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0审批.xlsx`) //自定义Excel文件名

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-26 16:28:11
+ * @LastEditTime: 2022-04-27 11:48:06
 -->
 <template>
   <div class="MainContent">
@@ -96,22 +96,22 @@
       </el-table-column>
       <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
+          <div v-show="scope.row.isEditor&&permissionsNum!=1">
             <el-input v-model="scope.row.packageOwner" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor">
+          <div v-show="!scope.row.isEditor&&permissionsNum!=1">
             {{ scope.row.packageOwner }}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
+          <div v-show="scope.row.isEditor&&permissionsNum!=0">
             <el-input v-model="scope.row.finance" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor">
+          <div v-show="!scope.row.isEditor&&permissionsNum!=0">
             {{ scope.row.finance }}
           </div>
         </template>
@@ -277,6 +277,7 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
+      permissionsNum: null, // 权限区分 ，0:Package Owner 1:finance 2:Package Owner or finance
     }
   },
   mounted() {
@@ -337,7 +338,24 @@ export default {
         this.pageSize = response.data.pageSize
         this.total = response.data.total
         this.tempObj.tempInfo = null
+        this.getPermissions()
       })
+    },
+    //获取权限 ，package owner || Finance
+    getPermissions() {
+      let packageOwnerList = this.tableData.filter(
+        (item) => item.name.indexOf('Package Owner') != -1
+      )
+      let FinanceList = this.tableData.filter(
+        (item) => item.name.indexOf('Finance') != -1
+      )
+      if (packageOwnerList.length) {
+        this.permissionsNum = 0
+      } else if (FinanceList.length) {
+        this.permissionsNum = 1
+      } else if (FinanceList.length && packageOwnerList.length) {
+        this.permissionsNum = 2
+      }
     },
     // 客户
     getCustomerList() {
@@ -428,7 +446,7 @@ export default {
         this.checkArr.forEach((item) => {
           obj.approveDetail[item.businessKey] = item.packageOwner
         })
-        console.log(obj);
+        console.log(obj)
         API.approveCustomerContract(obj).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
@@ -498,7 +516,7 @@ export default {
       let obj = {}
       console.log(row)
       obj[row.businessKey] = row.packageOwner
-      console.log(obj);
+      console.log(obj)
       API.saveApproveComments(obj).then((res) => {
         if (res.code === 1000) {
           this.getTableData()

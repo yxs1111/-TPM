@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-04-20 18:46:02
+ * @LastEditTime: 2022-04-27 11:56:12
 -->
 <template>
   <div class="dashboard-container">
@@ -332,9 +332,13 @@ export default {
           msg: '',
         }
         res.data.forEach((item) => {
-          obj.time = item.substring(1, 11)
-          obj.msg = item.substring(13)
-          if (this.MessageList.length < 5) this.MessageList.push(obj)
+          obj.time = item.substring(1, 10)
+          obj.msg = item.substring(12)
+          if (this.MessageList.length < 5) this.MessageList.push(
+            {
+              ...obj
+            }
+          )
         })
       })
     },
