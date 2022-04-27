@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-27 11:48:06
+ * @LastEditTime: 2022-04-27 16:10:54
 -->
 <template>
   <div class="MainContent">
@@ -94,25 +94,25 @@
       </el-table-column>
       <el-table-column prop="remark" align="center" width="220" label="申请人备注">
       </el-table-column>
-      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见">
+      <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&permissionsNum!=1">
-            <el-input v-model="scope.row.packageOwner" clearable class="my-el-input" placeholder="请输入">
+          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
+            <el-input v-model="scope.row.poApprovalComments" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor&&permissionsNum!=1">
-            {{ scope.row.packageOwner }}
+          <div v-else>
+            {{ scope.row.poApprovalComments }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
+      <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor&&permissionsNum!=0">
-            <el-input v-model="scope.row.finance" clearable class="my-el-input" placeholder="请输入">
+          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
+            <el-input v-model="scope.row.finApprovalComments" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
-          <div v-show="!scope.row.isEditor&&permissionsNum!=0">
-            {{ scope.row.finance }}
+          <div v-else>
+            {{ scope.row.finApprovalComments }}
           </div>
         </template>
       </el-table-column>
@@ -277,7 +277,6 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      permissionsNum: null, // 权限区分 ，0:Package Owner 1:finance 2:Package Owner or finance
     }
   },
   mounted() {
@@ -329,7 +328,6 @@ export default {
         list.forEach((item) => {
           item.isEditor = 0
           item.packageOwner = ''
-          item.finance = ''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -338,24 +336,7 @@ export default {
         this.pageSize = response.data.pageSize
         this.total = response.data.total
         this.tempObj.tempInfo = null
-        this.getPermissions()
       })
-    },
-    //获取权限 ，package owner || Finance
-    getPermissions() {
-      let packageOwnerList = this.tableData.filter(
-        (item) => item.name.indexOf('Package Owner') != -1
-      )
-      let FinanceList = this.tableData.filter(
-        (item) => item.name.indexOf('Finance') != -1
-      )
-      if (packageOwnerList.length) {
-        this.permissionsNum = 0
-      } else if (FinanceList.length) {
-        this.permissionsNum = 1
-      } else if (FinanceList.length && packageOwnerList.length) {
-        this.permissionsNum = 2
-      }
     },
     // 客户
     getCustomerList() {
@@ -437,38 +418,59 @@ export default {
     },
     //审批提交
     submit() {
+      this.$confirm('确定要提交吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.handleFunction(1)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消',
+          })
+        })
+    },
+    //驳回操作
+    reject() {
+      this.$confirm('确定要驳回吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.handleFunction(0)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消',
+          })
+        })
+    },
+    handleFunction(flag) {
       if (this.checkArr.length === 0) return this.$message.info('请选择数据')
       else {
         let obj = {
-          opinion: 'agree',
+          opinion: flag ? 'agree' : 'reject',
           approveDetail: {},
         }
+        //判断当前数据 所属角色审批
         this.checkArr.forEach((item) => {
-          obj.approveDetail[item.businessKey] = item.packageOwner
+          if (item.name.indexOf('Package Owner') != -1) {
+            obj.approveDetail[item.businessKey] = item.poApprovalComments
+          } else if (item.name.indexOf('Finance') != -1) {
+            obj.approveDetail[item.businessKey] = item.finApprovalComments
+          }
         })
-        console.log(obj)
         API.approveCustomerContract(obj).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
             this.$message.success('提交成功')
           }
         })
-      }
-    },
-    //驳回操作
-    reject() {
-      if (this.checkArr.length === 0) return this.$message.info('请选择数据')
-      else {
-        let IdList = []
-        this.checkArr.forEach((item) => {
-          IdList.push(item.id)
-        })
-        // API.approveCustomerContract(IdList).then((res) => {
-        //   if (res.code === 1000) {
-        //     this.getTableData()
-        //     this.$message.success('提交成功')
-        //   }
-        // })
       }
     },
     exportData() {
@@ -512,11 +514,13 @@ export default {
       this.tableData[index] = this.tempObj.tempInfo
     },
     //保存 该行
-    saveRow(row, index) {
+    saveRow(row) {
       let obj = {}
-      console.log(row)
-      obj[row.businessKey] = row.packageOwner
-      console.log(obj)
+      if (row.name.indexOf('Package Owner') != -1) {
+        obj[row.businessKey] = row.poApprovalComments
+      } else if (row.name.indexOf('Finance') != -1) {
+        obj[row.businessKey] = row.finApprovalComments
+      }
       API.saveApproveComments(obj).then((res) => {
         if (res.code === 1000) {
           this.getTableData()

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-27 11:29:18
+ * @LastEditTime: 2022-04-27 15:32:47
 -->
 <template>
   <div class="MainContent">
@@ -183,8 +183,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
+      <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见" />
+      <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见"></el-table-column>
       <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
       <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>

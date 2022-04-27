@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-26 10:23:12
+ * @LastEditTime: 2022-04-27 17:30:30
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item in customerArr" :key="item.id" :label="item.customerName" :value="item.customerMdmCode" />
+            <el-option v-for="value,key in customerArr" :key="key" :label="value" :value="key" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -83,10 +83,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额(¥)">
+      <el-table-column prop="distributorSaleAmount" align="center" width="220" label="目标销售额(¥)">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.saleAmount)}}
+            {{FormateNum(scope.row.distributorSaleAmount)}}
           </div>
         </template>
       </el-table-column>
@@ -104,15 +104,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractStatus" align="center" width="240" label="合同状态">
-        <template slot-scope="scope">
-          <div class="contractStatusWrap">
-            <div>
-              {{ contractList[scope.row.contractState] }}
-            </div>
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column v-slot={row} width="220" align="center" label="合同条款">
         <div class="seeActivity" @click="showTermDetailDialog(row)">
           条款明细
@@ -120,12 +111,28 @@
       </el-table-column>
       <el-table-column prop="remark" align="center" width="220" label="申请人备注">
       </el-table-column>
-      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
-      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
-      <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
-      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
-      <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
+      <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
+        <template slot-scope="scope">
+          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
+            <el-input v-model="scope.row.poApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-else>
+            {{ scope.row.poApprovalComments }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
+        <template slot-scope="scope">
+          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
+            <el-input v-model="scope.row.finApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            </el-input>
+          </div>
+          <div v-else>
+            {{ scope.row.finApprovalComments }}
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -158,14 +165,13 @@ export default {
       pageSize: 10,
       pageNum: 1,
       filterObj: {
-        customerMdmCode: '',
         contractDate: [],
         contractBeginDate: '',
         contractEndDate: '',
         systemDate: [],
         effectiveBeginDate: '',
         effectiveEndDate: '',
-        state: '',
+        customerMdmCode: '',
       },
       maxheight: getContractEntry(),
       tableData: [],
@@ -178,6 +184,7 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
+      ccId:null
     }
   },
   mounted() {
@@ -186,7 +193,7 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
-    this.getTableData()
+    // this.getTableData()
     this.getCustomerList()
   },
   directives: { elDragDialog, permission },
@@ -213,6 +220,10 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
+      if (this.filterObj.customerMdmCode=='') {
+        this.$message.info('请选择客户')
+        return
+      }
       API.getApproveList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -223,26 +234,83 @@ export default {
         customerMdmCode: this.filterObj.customerMdmCode,
         minePackageCode: 'DISTRIBUTOR-CONTRACT',
       }).then((response) => {
-        // let list = response.data.records
-        // list.forEach((item) => {
-        //   item.isEditor = 0
-        //   item.isNewData = 0
-        //   item.expireDate = '' //定时任务--终止日期字段
-        //   item.contractDate = [item.contractBeginDate, item.contractEndDate]
-        //   item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
-        // })
-        // this.tableData = [...list]
-        // this.pageNum = response.data.pageNum
-        // this.pageSize = response.data.pageSize
-        // this.total = response.data.total
-        // this.tempObj.tempInfo = null
+        let list = response.data.records
+        list.forEach((item) => {
+          item.isEditor = 0
+          item.contractDate = [item.contractBeginDate, item.contractEndDate]
+          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+        })
+        this.tableData = [...list]
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+        this.ccId=this.tableData[0].ccId
+        this.tempObj.tempInfo = null
       })
     },
     // 客户
     getCustomerList() {
-      selectAPI.getCustomerListByType({}).then((res) => {
+      API.getDistributorApproveConsumer({
+        minePackageCode: 'DISTRIBUTOR-CONTRACT',
+      }).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
+        }
+      })
+    },
+    //经销商审批通过
+    submit() {
+      this.$confirm('确定要提交吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.handleFunction(1)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消',
+          })
+        })
+    },
+    //经销商审批通过
+    reject() {
+      this.$confirm('确定要驳回吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.handleFunction(0)
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消',
+          })
+        })
+    },
+    handleFunction(flag) {
+      let obj = {
+        opinion: flag ? 'agree' : 'reject',
+        ccId: this.ccId,
+        approveDetail: {},
+      }
+      //判断当前数据 所属角色审批
+      this.tableData.forEach((item) => {
+        if (item.name.indexOf('Package Owner') != -1) {
+          obj.approveDetail[item.distributorId] = item.poApprovalComments
+        } else if (item.name.indexOf('Finance') != -1) {
+          obj.approveDetail[item.distributorId] = item.finApprovalComments
+        }
+      })
+      console.log(obj)
+      API.approveDistContract(obj).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          this.$message.success('提交成功')
         }
       })
     },
@@ -267,12 +335,25 @@ export default {
       this.tableData[index].isEditor = 0
       this.tableData[index] = this.tempObj.tempInfo
     },
-    //经销商审批通过
-    submit() {},
-    //经销商审批通过
-    reject() {},
     //保存 该行
-    saveRow(row, index) {},
+    saveRow(row) {
+      let obj = {}
+      if (row.name.indexOf('Package Owner') != -1) {
+        obj[row.distributorId] = row.poApprovalComments
+      } else if (row.name.indexOf('Finance') != -1) {
+        obj[row.distributorId] = row.finApprovalComments
+      }
+      API.saveDistApproveComments(obj).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          if (res.data) {
+            this.$message.success('修改成功')
+          } else {
+            this.$message.info(`${res.message}`)
+          }
+        }
+      })
+    },
     search() {
       this.pageNum = 1
       this.getTableData()

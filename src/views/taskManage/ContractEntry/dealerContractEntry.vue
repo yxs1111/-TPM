@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-24 16:56:36
+ * @LastEditTime: 2022-04-27 15:18:25
 -->
 <template>
   <div class="MainContent">
@@ -347,6 +347,7 @@ export default {
         index: '',
         customerMdmCode: '',
         maxTargetSale: '',
+        nowTargetSale: '', //现阶段所有经销商目标销售额之和
         isCollection: '', //是否补录
       },
       addDialogCustomer: [],
@@ -527,9 +528,16 @@ export default {
         isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
       }).then((res) => {
         let distList = res.data.distributorContract
+        //除去该经销商 其他经销商的目标销售额之和
+        let otherDist = 0
+        distList.forEach((item) => {
+          if (item.id != row.id) {
+            otherDist += item.saleAmount
+          }
+        })
+        //计算目前可填值 （经销商目标销售额之和等于客户目标销售额）
         this.editMaxTargetSale =
-          Number(row.customerContractSaleAmount) -
-          this.getMaxTargetSale(distList)
+          Number(row.customerContractSaleAmount) - otherDist
         let flag = distList.findIndex((item) => {
           return item.contractState == '3' || item.contractState == '4'
         })
@@ -545,12 +553,11 @@ export default {
           this.updateRowFunction(row)
         } else {
           //不是补录，数值验证
-          if (row.saleAmount > this.editMaxTargetSale) {
+          if (row.saleAmount != this.editMaxTargetSale) {
             this.$message.info(
-              `经销商目标销售额之和应不大于${this.editMaxTargetSale}`
+              `经销商目标销售额之和应等于客户目标销售额`
             )
           } else {
-            console.log('save')
             this.updateRowFunction(row)
           }
         }
@@ -629,10 +636,11 @@ export default {
           }
           this.addDialogCustomer.push(obj)
           this.getDistributorListByCustomer()
-          this.addDialog.maxTargetSale =
-            this.addDialogCustomer[0].saleAmount -
-            this.getMaxTargetSale(distList)
-          console.log(this.addDialog.maxTargetSale)
+          //查该现阶段客户下所有经销商的和，新增经销商之和应等于客户目标销售额
+          this.addDialog.nowTargetSale=0
+          distList.forEach(item=>{
+            this.addDialog.nowTargetSale+=item.saleAmount
+          })
           let flag = distList.findIndex((item) => {
             return item.contractState == '3' || item.contractState == '4'
           })
@@ -652,14 +660,6 @@ export default {
             this.distributorArrDialog = res.data
           }
         })
-    },
-    //获取能填写的最大 目标销售额
-    getMaxTargetSale(distList) {
-      let distTotalTargetSale = 0
-      distList.forEach((item) => {
-        distTotalTargetSale += item.saleAmount
-      })
-      return distTotalTargetSale
     },
     // 新增经销商
     addNewDistributor() {
@@ -726,9 +726,9 @@ export default {
           }
         })
       } else {
-        if (targetSaleLimit > this.addDialog.maxTargetSale) {
+        if (targetSaleLimit+this.addDialog.nowTargetSale != this.addDialogCustomer[0].saleAmount) {
           this.$message.info(
-            `经销商目标销售额之和应不大于${this.addDialog.maxTargetSale}`
+            `经销商目标销售额之和应等于客户目标销售额之和`
           )
           return
         } else {

@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-04-26 16:26:03
+ * @LastEditTime: 2022-04-27 16:49:00
  */
 /*
  * @Description: 客户合同录入
@@ -20,6 +20,9 @@ export default {
   },
   saveApproveComments(params) {
     return requestApi.request_post(this.url+'/saveApproveComments', params)
+  },
+  saveDistApproveComments(params) {
+    return requestApi.request_post(this.distUrl+'/saveApproveComments', params)
   },
   //客户合同明细 --查询
   findOneSaveDetail(params) {
@@ -44,6 +47,10 @@ export default {
   },
   getContractItemList(params) {
     return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)
+  },
+  //经销商合同录入--客户下拉
+  getDistributorApproveConsumer(params) {
+    return requestApi.request_get('/cityplan/customerContract/getDistributorApproveConsumer', params)
   },
 }
 

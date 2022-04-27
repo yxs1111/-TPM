@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-27 11:12:30
+ * @LastEditTime: 2022-04-27 14:27:49
 -->
 <template>
   <div class="ContentDetail">
@@ -171,7 +171,7 @@
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal">
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor">
-                      <el-select v-model="scope.row.dealerList[dealerIndex].customerTaxPoint" class="my-el-select_dialog" filterable clearable placeholder="请选择">
+                      <el-select v-model="scope.row.dealerList[dealerIndex].customerTaxPoint"  @change="changeCustomerTaxPoint(scope.row,dealerIndex)" class="my-el-select_dialog" filterable clearable placeholder="请选择">
                         <el-option v-for="(item, index) in CustomerDeductionsAndPayType" :key="index" :label="item.CustomerDeduction+'%'" :value="index" />
                       </el-select>
                     </div>
@@ -658,7 +658,6 @@ export default {
             })
           }
         })
-        console.log(distributorList)
         let AllTotalTableData = []
         let VariableTotalTableData = []
         let VariableTableData = []
@@ -737,7 +736,7 @@ export default {
               customerTaxPoint: this.getCustomerTaxPoint(
                 distVariableObj.deductionTaxRate
               ), //客户扣款税点
-              payType: Number(distVariableObj.payType), //支付方式
+              payType:distVariableObj.payType==''? null:Number(distVariableObj.payType), //支付方式
               isEditor:
                 distVariableObj.contractState == '3' ||
                 distVariableObj.contractState == '4'
@@ -799,7 +798,7 @@ export default {
               targetSale: customerFixObj.saleAmount, //客户目标销售额
               contractItem: this.getContractItemByCode(
                 customerFixObj.conditionsItem,
-                0
+                1
               ),
               conditionType: customerFixObj.conditions,
               pointCount: customerFixObj.costRatio,
@@ -843,7 +842,7 @@ export default {
               customerTaxPoint: this.getCustomerTaxPoint(
                 distFixObj.deductionTaxRate
               ), //客户扣款税点
-              payType: Number(distFixObj.payType), //支付方式
+              payType:distFixObj.payType==''? null:Number(distFixObj.payType), //支付方式
               isEditor:
                 distFixObj.contractState == '3' ||
                 distFixObj.contractState == '4'
@@ -940,7 +939,6 @@ export default {
               item.isVariableOrFix = 2
             }
           })
-          console.log(list)
           list.forEach((item) => {
             if (item.isVariableOrFix === 0) {
               this.contractItemVariableList.push({
@@ -1016,6 +1014,11 @@ export default {
       if(num!=-1) {
         return this.CustomerDeductionsAndPayType[index].payTypeList[num].label
       }
+    },
+    //更改客户扣缴税点--》支付方式 置空
+    changeCustomerTaxPoint(row,dealerIndex) {
+      row.dealerList[dealerIndex].payType=null
+      this.$forceUpdate()
     },
     // 暂存
     staging() {
