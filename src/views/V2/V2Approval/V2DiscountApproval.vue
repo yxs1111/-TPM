@@ -358,8 +358,8 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
+          distributorName: this.filterObj.distributorCode,
+          regionName: this.filterObj.regionCode,
           productName: this.filterObj.dim_product,
         })
           .then((response) => {
