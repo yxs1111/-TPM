@@ -132,7 +132,7 @@ export default {
 
   data() {
     return {
-      total: 1,
+      total: 0,
       pageSize: 10,
       pageNum: 1,
       filterObj: {
