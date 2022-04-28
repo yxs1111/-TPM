@@ -67,16 +67,16 @@
                 <!-- <el-table-column v-for="(item,index) in totalArr" :key="index" align="center"> -->
                 <template>
                   <el-table-column v-slot="{row}" align="center" width="150" label="CPT" prop="CPT">
-                    {{ FormateNum(row.CPT) }}
+                    {{ FormateNum(row.CPT/1000) }}
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V1" prop="one">
-                    {{ FormateNum(row.one) }}
+                    {{ FormateNum(row.one/1000) }}
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V2" prop="two">
-                    {{ FormateNum(row.two) }}
+                    {{ FormateNum(row.two/1000) }}
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V3" prop="three">
-                    {{ FormateNum(row.three) }}
+                    {{ FormateNum(row.three/1000) }}
                   </el-table-column>
                 </template>
                 <!-- </el-table-column> -->
@@ -98,19 +98,19 @@
                     <template>
                       <el-table-column v-slot="{row}" align="center" width="150" label="CPT">
                         <!-- {{ FormateNum(item.cptCost) }} -->
-                        {{ FormateNum(row.channel[key][index].cptCost) }}
+                        {{ FormateNum(row.channel[key][index].cptCost/1000) }}
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V1">
                         <!-- {{ FormateNum(item.voneCost) }} -->
-                        {{ FormateNum(row.channel[key][index].voneCost) }}
+                        {{ FormateNum(row.channel[key][index].voneCost/1000) }}
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V2">
                         <!-- {{ FormateNum(item.vtwoCost) }} -->
-                        {{ FormateNum(row.channel[key][index].vtwoCost) }}
+                        {{ FormateNum(row.channel[key][index].vtwoCost/1000) }}
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V3">
                         <!-- {{ FormateNum(item.vthreeCost) }} -->
-                        {{ FormateNum(row.channel[key][index].vthreeCost) }}
+                        {{ FormateNum(row.channel[key][index].vthreeCost/1000) }}
                       </el-table-column>
                     </template>
 
@@ -256,6 +256,9 @@ export default {
   watch: {
     'filterObj.channelCode'() {
       this.getCustomerList()
+    },
+    'filterObj.yearAndMonthList'() {
+      this.getReport()
     },
   },
   methods: {

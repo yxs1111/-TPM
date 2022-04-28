@@ -298,11 +298,15 @@ export default {
         this.channelOptions = res.data
         // this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
         // this.filterObj.channelCode = ['NKA']
-        this.getCustomerList()
+        // this.getCustomerList()
       })
     },
     // 客户
     getCustomerList() {
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道')
+        return
+      }
       selectAPI
         .getCustomerListByChannels({
           channelCodes: this.filterObj.channelCode,

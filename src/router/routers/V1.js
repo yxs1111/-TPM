@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-12 11:53:04
+ * @LastEditTime: 2022-04-28 15:07:54
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -48,7 +48,23 @@ export default function() {
               name: 'V1discountNU',
               component: () => import('@/views/V1/V1Apply/V1discountNU.vue'),
               meta: { title: '折扣项-新客', icon: 'form', activeMenu: '/V1/V1Apply' }
-            }
+            },
+            {
+              hidden: true,
+              path: '/V1/V1Apply/V1HIHRebate',
+              code: 'price_nka_v1_apply',
+              name: 'V1HIHRebate',
+              component: () => import('@/views/V1/V1Apply/V1HIHRebate.vue'),
+              meta: { title: '折扣项-HIH rebate', icon: 'form', activeMenu: '/V1/V1Apply' }
+            },
+            {
+              hidden: true,
+              path: '/V1/V1Apply/V1KARebate',
+              code: 'price_nka_v1_apply',
+              name: 'V1KARebate',
+              component: () => import('@/views/V1/V1Apply/V1KARebate.vue'),
+              meta: { title: '折扣项-KA rebate', icon: 'form', activeMenu: '/V1/V1Apply' }
+            },
           ]
         },
         {
@@ -82,7 +98,23 @@ export default function() {
               name: 'V1discountNUApproval',
               component: () => import('@/views/V1/V1Approval/V1discountNUApproval.vue'),
               meta: { title: '折扣项-新客', icon: 'form', activeMenu: '/V1/V1Approval' }
-            }
+            },
+            {
+              hidden: true,
+              path: '/V1/V1Approval/V1HIHRebate',
+              code: 'price_nka_v1_apply',
+              name: 'V1HIHRebate',
+              component: () => import('@/views/V1/V1Approval/V1HIHRebate.vue'),
+              meta: { title: '折扣项-HIH rebate', icon: 'form', activeMenu: '/V1/V1Approval' }
+            },
+            {
+              hidden: true,
+              path: '/V1/V1Approval/V1KARebate',
+              code: 'price_nka_v1_apply',
+              name: 'V1KARebate',
+              component: () => import('@/views/V1/V1Approval/V1KARebate.vue'),
+              meta: { title: '折扣项-KA rebate', icon: 'form', activeMenu: '/V1/V1Approval' }
+            },
           ]
         }
       ]

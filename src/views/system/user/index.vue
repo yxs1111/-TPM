@@ -107,15 +107,19 @@
       <el-form ref="userDataForm" :rules="rules" :model="userInfoDialog.data" label-position="left" label-width="90px" style="width: 600px; margin-left:50px;">
         <el-form-item label="用户名" prop="name">
           <span v-if="userInfoDialog.state === 'info'">{{ userInfoDialog.data.name }}</span>
-          <el-input v-else v-model="userInfoDialog.data.name" maxlength="50" :clearable="true" placeholder="用户名" show-word-limit />
+          <el-input v-else v-model="userInfoDialog.data.name" class="my_elInput" maxlength="50" :clearable="true" placeholder="用户名" show-word-limit />
         </el-form-item>
         <el-form-item label="登录名" prop="loginName">
-          <el-input v-if="userInfoDialog.state === 'create'" v-model="userInfoDialog.data.loginName" maxlength="50" :clearable="true" placeholder="登录名" show-word-limit />
+          <el-input v-if="userInfoDialog.state === 'create'" class="my_elInput" v-model="userInfoDialog.data.loginName" maxlength="50" :clearable="true" placeholder="登录名" show-word-limit />
           <span v-else>{{ userInfoDialog.data.loginName }}</span>
         </el-form-item>
         <el-form-item label="电话号码" prop="phone">
           <span v-if="userInfoDialog.state === 'info'">{{ userInfoDialog.data.phone }}</span>
-          <el-input v-else v-model="userInfoDialog.data.phone" maxlength="20" :clearable="true" placeholder="电话号码" show-word-limit />
+          <el-input v-else v-model="userInfoDialog.data.phone" class="my_elInput" maxlength="20" :clearable="true" placeholder="电话号码" show-word-limit />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <span v-if="userInfoDialog.state === 'info'">{{ userInfoDialog.data.email }}</span>
+          <el-input v-else v-model="userInfoDialog.data.email" maxlength="50" class="my_elInput" :clearable="true" placeholder="邮箱" show-word-limit />
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-radio v-if="userInfoDialog.state !== 'info'" v-model="userInfoDialog.data.gender" :label="0">男</el-radio>
@@ -139,7 +143,7 @@
         <el-form-item label="过期时间" prop="expireAt">
           <em v-if="userInfoDialog.state === 'info'" class="el-icon-time" />
           <span v-if="userInfoDialog.state === 'info'">{{ parseJson(userInfoDialog.data.expireAt, '{y}-{m}-{d} {h}:{i}') }}</span>
-          <el-date-picker v-else v-model="userInfoDialog.data.expireAt" type="datetime" placeholder="请选择过期时间" format="yyyy-MM-dd HH:mm" />
+          <el-date-picker v-else v-model="userInfoDialog.data.expireAt" class="my_elInput" type="datetime" placeholder="请选择过期时间" format="yyyy-MM-dd HH:mm" />
         </el-form-item>
         <el-form-item v-if="userInfoDialog.state !== 'create'" label="创建人" prop="createBy">
           <span>{{ userInfoDialog.data.createBy }}</span>
@@ -193,6 +197,9 @@
 <script src="./index.js">
 </script>
 <style scoped>
+.app-container .my_elInput {
+  width: 360px !important;
+}
 .danger {
   color: #f56c6c;
 }

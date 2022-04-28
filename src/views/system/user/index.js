@@ -207,6 +207,10 @@ export default {
         name: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
         loginName: [{ required: true, message: '登录名不能为空', trigger: 'blur' }],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+        ],
         orgId: [{ required: true, message: '所属组织不能为空', trigger: 'blur' }],
         gender: [{ required: true, message: '请选择性别', trigger: 'blur' }]
       },

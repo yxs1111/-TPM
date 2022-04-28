@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-28 11:24:29
+ * @LastEditTime: 2022-04-28 13:47:10
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -11,15 +11,25 @@
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.minePackageCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.label" :value="item.code"  />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.label" :value="item.code" />
           </el-select>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">客户:</span>
+          <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerMdmCode" />
+          </el-select>
+        </div>
+
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
+
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" type="selection" />
@@ -28,16 +38,15 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="yearAndMonth" label="待办项"> </el-table-column>
-      <el-table-column align="center" prop="version" label="客户名称"> </el-table-column>
-      <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人"> 
-         <span v-html="setSplitAssignee(row.assignee)"></span>
+      <el-table-column align="center" prop="processType" label="待办项"> </el-table-column>
+      <el-table-column align="center" prop="customerName" label="客户名称"> </el-table-column>
+      <el-table-column align="center" width="180" prop="name" label="当前节点"> </el-table-column>
+      <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人">
+        <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
         {{row.createTime?row.createTime.substring(0,10):""}}
       </el-table-column>
-      <!-- <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column> -->
       <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
@@ -47,7 +56,7 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
-          <div class="operation" @click="operateProcess(row.version,row.activityName,row.channelCode)">
+          <div class="operation" @click="operateProcess(row.minePackageCode,row.name)">
             <svg-icon icon-class="submit_l" class="submit_icon" />
             办理
           </div>
@@ -68,7 +77,14 @@
 
 <script>
 import API from '@/api/taskManage/taskManage.js'
-import { getDefaultPermissions, getTextMap, parseTime,getHeightHaveTab ,setSplitAssignee} from '@/utils'
+import {
+  getDefaultPermissions,
+  getTextMap,
+  parseTime,
+  getHeightHaveTab,
+  setSplitAssignee,
+  downloadFile
+} from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
@@ -87,14 +103,15 @@ export default {
       },
       permissions: getDefaultPermissions(),
       tableData: [],
+      customerArr: [],
       MinePackageList: [
         {
-          label:'客户合同',
-          code:'CUSTOMER-CONTRACT',
+          label: '客户合同',
+          code: 'CUSTOMER-CONTRACT',
         },
         {
-          label:'经销商分摊协议',
-          code:'DISTRIBUTOR-CONTRACT',
+          label: '经销商分摊协议',
+          code: 'DISTRIBUTOR-CONTRACT',
         },
       ],
       versionList: ['Final'],
@@ -122,6 +139,7 @@ export default {
       })()
     }
     this.getTableData()
+    this.getCustomerList()
   },
   components: {
     FlowDiagram,
@@ -135,13 +153,19 @@ export default {
         pageSize: this.pageSize, //每页条数
         customerMdmCode: this.filterObj.customerMdmCode,
         minePackageCode: this.filterObj.minePackageCode,
+      }).then((response) => {
+        this.tableData = response.data.records
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
       })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
+    },
+    getCustomerList() {
+      selectAPI.queryCustomerList().then((res) => {
+        if (res.code === 1000) {
+          this.customerArr = res.data
+        }
+      })
     },
     search() {
       this.pageNum = 1
@@ -150,77 +174,20 @@ export default {
     setSplitAssignee(value) {
       return setSplitAssignee(value)
     },
-    operateProcess(version, name, channelCode) {
-      // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})
-      // sessionStorage.setItem('currentIndex',2)
-      // return
-      if (version == 'V0') {
-        console.log(version, name)
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V0/V0Apply', params: { channelCode } })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V0/V0Approval', params: { channelCode } })
+    operateProcess(version, name) {
+      if(version=='DISTRIBUTOR-CONTRACT') {
+        if(name.indexOf('审批') != -1) {
+          this.$router.push('/taskManage/ContractEntry/dealerContractApproval')
+        } else {
+          this.$router.push('/taskManage/ContractEntry/dealerContractEntry')
+        }
+      } else if(version=='CUSTOMER-CONTRACT') {
+        if(name.indexOf('审批') != -1) {
+          this.$router.push('/taskManage/ContractEntry/CustomerContractApproval')
+        } else {
+          this.$router.push('/taskManage/ContractEntry/CustomerContractEntry')
         }
       }
-      if (version == 'V1') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V1/V1Apply', params: { channelCode } })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V1/V1Approval', params: { channelCode } })
-        }
-      }
-      if (version == 'NUV1') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/V1/V1Apply/V1discountNU',
-            params: { channelCode },
-          })
-          sessionStorage.setItem('currentIndex', 2)
-        }
-      }
-      if (version == 'V2') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V2/V2Apply', params: { channelCode } })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V2/V2Approval', params: { channelCode } })
-        }
-      }
-      if (version == 'NUV2') {
-        sessionStorage.setItem('currentIndex', 2)
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/V2/V2Apply/V2discountNU',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/V2/V2Approval/V2NUApproval',
-            params: { channelCode },
-          })
-        }
-      }
-      if (version == 'V3') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V3/V3Apply', params: { channelCode } })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V3/V3Approval', params: { channelCode } })
-        }
-      }
-      if (version == 'NUV3') {
-        sessionStorage.setItem('currentIndex', 2)
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/V3/V3Apply/V3discountNU',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/V3/V3Approval/V3discountNUApproval',
-            params: { channelCode },
-          })
-        }
-      }
-      //this.$router.push({ path: '/process', query: currentRow })
     },
     //查看流程
     openFlowDiagram(row) {
@@ -229,7 +196,16 @@ export default {
       this.flowDiagram.visible = true
     },
     // 导出数据
-    exportExcel() {},
+    exportExcel() {
+      API.contractExport({
+        customerMdmCode: this.filterObj.customerMdmCode,
+        minePackageCode: this.filterObj.minePackageCode,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, 'Contract 待办 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+    },
     // 每页显示页面数变更
     handleSizeChange(size) {
       this.pageSize = size
