@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-27 15:32:47
+ * @LastEditTime: 2022-04-28 10:41:51
 -->
 <template>
   <div class="MainContent">
@@ -134,29 +134,21 @@
               {{ contractList[scope.row.contractState] }}
             </div>
             <div class="timeOutWrap">
-              <el-popover :ref="'popover-' + scope.$index" placement="right" width="300" trigger="click">
+              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
                     <span>合同终止</span>
-                    <!-- <el-switch v-model="scope.row.contractTimeoutStatus" :active-value="1" :inactive-value="0">
-                    </el-switch> -->
                   </div>
                   <div class="PopoverContentOption">
-                    <!-- <div class="PopoverContentOptionItem">
-                      <span class="PopoverContentOptionItemText">合同状态</span>
-                      <el-select v-model="scope.row.contractTimeoutStatus" class="my-el-input" filterable clearable placeholder="请选择">
-                        <el-option v-for="(item,index) in ['生效中','未生效','中止','作废']" :key="index" :label="item" :value="index" />
-                      </el-select>
-                    </div> -->
                     <div class="PopoverContentOptionItem">
                       <span class="PopoverContentOptionItemText">更改时间</span>
-                      <el-date-picker v-model="scope.row.expireDate" value-format="yyyy-MM" format="yyyy-MM" type="month" placeholder="选择日期">
+                      <el-date-picker v-model="scope.row.expireDate" value-format="yyyyMM" format="yyyyMM" type="month" placeholder="选择日期">
                       </el-date-picker>
                     </div>
                   </div>
                   <div class="PopoverContentFoot">
                     <div class="TpmButtonBG" @click="popoverSubmit(scope.$index,scope.row)">保存</div>
-                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.$index)">取消</div>
+                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id)">取消</div>
                   </div>
                 </div>
                 <svg-icon :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
@@ -298,7 +290,7 @@
                       <el-option v-for="(item, index) in contractItemFixList" :key="index" :label="item.name" :value="index" />
                     </el-select>
                   </div>
-                  <div v-if="!scope.row.isNewData">>
+                  <div v-if="!scope.row.isNewData">
                     {{contractItemFixList[Number(scope.row.contractItem)].name}}
                   </div>
                 </div>
@@ -376,7 +368,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'LikenessStraightGiving',
+  name: 'UnStraightGiving',
   data() {
     return {
       total: 1,
@@ -425,6 +417,7 @@ export default {
         tempInfo: null,
       },
       isEditor: 0,
+      isShowPopover: false,
     }
   },
   mounted() {
@@ -477,7 +470,8 @@ export default {
         list.forEach((item) => {
           item.isEditor = 0
           item.isNewData = 0
-          item.expireDate = '' //定时任务--终止日期字段
+          // item.earlyExpireDate =item.earlyExpireDate!=''
+          item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -504,72 +498,67 @@ export default {
     getContractItemList() {
       API.getContractItemList().then((res) => {
         if (res.code === 1000) {
-          this.contractItemFixList=[]
-          this.contractItemVariableList=[]
+          this.contractItemFixList = []
+          this.contractItemVariableList = []
           let list = res.data
           //区分variable 和 fixed
           list.forEach((item) => {
-            item.name=item.contractItem
-            item.code=item.contractItemCode
-            item.conditionType=item.conditionType
-            if(item.conditionType.indexOf(',')!=-1) {
-              item.conditionalIsTwo=2
+            item.name = item.contractItem
+            item.code = item.contractItemCode
+            item.conditionType = item.conditionType
+            if (item.conditionType.indexOf(',') != -1) {
+              item.conditionalIsTwo = 2
             } else {
-              item.conditionalIsTwo=1
+              item.conditionalIsTwo = 1
             }
-            if(item.variablePoint.indexOf('variable')!=-1) {
-              item.isVariableOrFix=0
+            if (item.variablePoint.indexOf('variable') != -1) {
+              item.isVariableOrFix = 0
             }
-            if(item.variablePoint.indexOf('fix')!=-1) {
-              item.isVariableOrFix=1
+            if (item.variablePoint.indexOf('fix') != -1) {
+              item.isVariableOrFix = 1
             }
-            if(item.variablePoint.indexOf('fix')!=-1&&item.variablePoint.indexOf('variable')!=-1) {
-              item.isVariableOrFix=2
+            if (
+              item.variablePoint.indexOf('fix') != -1 &&
+              item.variablePoint.indexOf('variable') != -1
+            ) {
+              item.isVariableOrFix = 2
             }
           })
-          console.log(list);
-          list.forEach(item=>{
-            if(item.isVariableOrFix===0) {
-              this.contractItemVariableList.push(
-                {
-                  code:item.code,
-                  name:item.name,
-                  conditionalIsTwo:item.conditionalIsTwo,
-                  isVariableOrFix:item.isVariableOrFix,
-                  conditionType:item.conditionType,
-                }
-              )
+          console.log(list)
+          list.forEach((item) => {
+            if (item.isVariableOrFix === 0) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
             }
-            if(item.isVariableOrFix===1) {
-              this.contractItemFixList.push(
-                {
-                  code:item.code,
-                  name:item.name,
-                  conditionalIsTwo:item.conditionalIsTwo,
-                  isVariableOrFix:item.isVariableOrFix,
-                  conditionType:item.conditionType,
-                }
-              )
+            if (item.isVariableOrFix === 1) {
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
             }
-            if(item.isVariableOrFix===2) {
-              this.contractItemVariableList.push(
-                {
-                  code:item.code,
-                  name:item.name,
-                  conditionalIsTwo:item.conditionalIsTwo,
-                  isVariableOrFix:item.isVariableOrFix,
-                  conditionType:item.conditionType,
-                }
-              )
-              this.contractItemFixList.push(
-                {
-                  code:item.code,
-                  name:item.name,
-                  conditionalIsTwo:item.conditionalIsTwo,
-                  isVariableOrFix:item.isVariableOrFix,
-                  conditionType:item.conditionType,
-                }
-              )
+            if (item.isVariableOrFix === 2) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
             }
           })
         }
@@ -682,7 +671,10 @@ export default {
     },
     //编辑行数据
     editorRow(index, { isNewData }) {
-      if(this.tableData[index].contractState=='3'||this.tableData[index].contractState=='4') {
+      if (
+        this.tableData[index].contractState == '3' ||
+        this.tableData[index].contractState == '4'
+      ) {
         this.$message.info('合同状态已经通过，不能进行编辑操作')
         return
       }
@@ -791,19 +783,19 @@ export default {
     popoverSubmit(index, row) {
       API.termination({
         id: row.id,
-        contractEndDate: row.expireDate,
+        date: row.expireDate,
       }).then((res) => {
         if (res.code === 1000) {
           this.$message.success('终止成功')
-          this.popoverCancel(index)
+          this.popoverCancel(row.id)
           this.getTableData()
         }
       })
     },
     //定时任务取消
-    popoverCancel(index) {
-      // console.log(this.$refs[`popover-` + index]);
-      this.$refs[`popover-` + index].doClose()
+    popoverCancel(id) {
+      this.$refs[`popover-` + id].doClose()
+      this.tableKey++
     },
     //条款明细--弹窗展示
     showTermsDetail(index) {
@@ -825,7 +817,6 @@ export default {
           isDetail: 1,
         }).then((res) => {
           if (res.code === 1000) {
-            
             this.termVariableData = []
             this.termFixData = []
             let data = res.data
@@ -923,17 +914,16 @@ export default {
     //更改ContractItem --》改变条件类型
     changeContractItem(flag, row, value) {
       if (!flag) {
-        if(this.contractItemVariableList[value].conditionalIsTwo===2) {
-          row.conditions=''
+        if (this.contractItemVariableList[value].conditionalIsTwo === 2) {
+          row.conditions = ''
         } else {
-          row.conditions =this.contractItemVariableList[value].conditionType
+          row.conditions = this.contractItemVariableList[value].conditionType
         }
-        
       } else {
-        if(this.contractItemFixList[value].conditionalIsTwo===2) {
-          row.conditions=''
+        if (this.contractItemFixList[value].conditionalIsTwo === 2) {
+          row.conditions = ''
         } else {
-           row.conditions =this.contractItemFixList[value].conditionType
+          row.conditions = this.contractItemFixList[value].conditionType
         }
       }
     },
@@ -957,7 +947,7 @@ export default {
     },
     //条款明细保存
     confirmTermsDetail() {
-      if(!this.isEditor) {
+      if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
         return
@@ -1003,7 +993,7 @@ export default {
         this.$message.info('Total 含税费用应该小于目标销售额')
         return
       }
-      console.log(obj);
+      console.log(obj)
       API.saveDetail(obj).then((res) => {
         if (res.code === 1000) {
           this.closeTermsDetail()
@@ -1049,7 +1039,10 @@ export default {
       this.termFixData.splice(-1, 0, {
         type: 'Fixed',
         contractItem: 0,
-        conditions: this.contractItemFixList[0].conditionalIsTwo==2?'':this.contractItemFixList[0].conditionType,
+        conditions:
+          this.contractItemFixList[0].conditionalIsTwo == 2
+            ? ''
+            : this.contractItemFixList[0].conditionType,
         costRatio: 0,
         taxCost: 0,
         remark: '',
@@ -1063,7 +1056,6 @@ export default {
     },
     //费比更改
     changeCostRate(index, row) {
-      console.log(row)
       this.termVariableData[index].taxCost =
         this.termInfo.saleAmount * (Number(row.costRatio) / 100)
       this.getNewTotalData()

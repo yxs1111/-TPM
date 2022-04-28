@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-27 15:18:25
+ * @LastEditTime: 2022-04-28 10:49:01
 -->
 <template>
   <div class="MainContent">
@@ -82,14 +82,14 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerName" align="center" width="220" label="客户名称">
+      <el-table-column prop="customerName" align="center" width="160" label="客户名称">
         <template slot-scope="scope">
           <div>
             {{scope.row.customerName}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="客户目标销售额">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount)}}
@@ -103,7 +103,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额(¥)">
+      <el-table-column prop="saleAmount" align="center" width="160" label="目标销售额(¥)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
@@ -114,7 +114,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
+      <el-table-column prop="contractDate" align="center" width="200" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-date-picker v-model="scope.row.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
@@ -126,7 +126,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
+      <el-table-column prop="systemDate" align="center" width="160" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
@@ -138,11 +138,32 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractStatus" align="center" width="240" label="合同状态">
+      <el-table-column prop="contractStatus" align="center" width="160" label="合同状态">
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
               {{ contractList[scope.row.contractState] }}
+            </div>
+            <div class="timeOutWrap">
+              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
+                <div class="PopoverContent">
+                  <div class="PopoverContentTop">
+                    <span>合同终止</span>
+                  </div>
+                  <div class="PopoverContentOption">
+                    <div class="PopoverContentOptionItem">
+                      <span class="PopoverContentOptionItemText">更改时间</span>
+                      <el-date-picker v-model="scope.row.expireDate" value-format="yyyyMM" format="yyyyMM" type="month" placeholder="选择日期">
+                      </el-date-picker>
+                    </div>
+                  </div>
+                  <div class="PopoverContentFoot">
+                    <div class="TpmButtonBG" @click="popoverSubmit(scope.$index,scope.row)">保存</div>
+                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id)">取消</div>
+                  </div>
+                </div>
+                <svg-icon :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
+              </el-popover>
             </div>
           </div>
         </template>
@@ -163,8 +184,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="packageOwner" align="center" width="220" label="Package Owner意见" />
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见"></el-table-column>
+      <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见" />
+      <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见"></el-table-column>
       <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
       <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
@@ -432,7 +453,7 @@ export default {
         let list = response.data.records
         list.forEach((item) => {
           item.isEditor = 0
-          item.expireDate = '' //定时任务--终止日期字段
+          item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -589,6 +610,24 @@ export default {
     search() {
       this.pageNum = 1
       this.getTableData()
+    },
+    //定时任务确定--终止合同
+    popoverSubmit(index, row) {
+      API.termination({
+        id: row.id,
+        date: row.expireDate,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.$message.success('终止成功')
+          this.popoverCancel(row.id)
+          this.getTableData()
+        }
+      })
+    },
+    //定时任务取消
+    popoverCancel(id) {
+      this.$refs[`popover-` + id].doClose()
+      this.tableKey++
     },
     //导出数据
     exportData() {

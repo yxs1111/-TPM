@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-27 16:10:54
+ * @LastEditTime: 2022-04-28 09:10:23
 -->
 <template>
   <div class="MainContent">
@@ -206,10 +206,10 @@
           </el-table>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <!-- <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmTermsDetail()">确 定</el-button>
         <el-button @click="closeTermsDetail">取 消</el-button>
-      </span>
+      </span> -->
     </el-dialog>
   </div>
 </template>

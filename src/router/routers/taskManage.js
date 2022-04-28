@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-04-20 19:10:12
+ * @LastEditTime: 2022-04-28 08:43:21
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -135,6 +135,14 @@ export default function() {
               name: 'dealerContractApproval',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval.vue'),
               meta: { title: '经销商合同审批', icon: 'apply' },
+            },
+            {
+              hidden: true,
+              path: '/taskManage/ContractEntry/dealerContractApproval/dealerTermView',
+              code: 'mdm_product_information',
+              name: 'dealerTermView',
+              component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval/dealerTermView.vue'),
+              meta: { title: '经销商合同录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractApproval'},
             },
           ]
         },

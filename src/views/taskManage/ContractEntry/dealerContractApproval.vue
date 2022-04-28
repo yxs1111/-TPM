@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-27 17:30:30
+ * @LastEditTime: 2022-04-28 09:05:05
 -->
 <template>
   <div class="MainContent">
@@ -44,7 +44,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column fixed align="center" width="220" label="操作">
+      <el-table-column fixed align="center" width="180" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
             <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
@@ -62,14 +62,14 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerName" align="center" width="220" label="客户名称">
+      <el-table-column prop="customerName" align="center" width="180" label="客户名称">
         <template slot-scope="scope">
           <div>
             {{scope.row.customerName}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="客户目标销售额">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount)}}
@@ -83,21 +83,21 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="distributorSaleAmount" align="center" width="220" label="目标销售额(¥)">
+      <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(¥)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.distributorSaleAmount)}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
+      <el-table-column prop="contractDate" align="center" width="200" label="合同期间">
         <template slot-scope="scope">
           <div>
             {{ scope.row.contractBeginDate + ' - ' + scope.row.contractEndDate }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
+      <el-table-column prop="systemDate" align="center" width="160" label="系统生效时间">
         <template slot-scope="scope">
           <div>
             {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
@@ -376,14 +376,11 @@ export default {
     showTermDetailDialog({ ccId }) {
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
-        name: 'dealerTermDetail',
+        name: 'dealerTermView',
         query: {
           ccId,
         },
       })
-      // this.$router.push(
-      //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
-      // )
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
