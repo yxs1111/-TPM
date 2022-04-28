@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-20 16:37:20
+ * @LastEditTime: 2022-04-28 11:44:27
 -->
 <template>
   <div class="MainContent">
@@ -224,7 +224,7 @@
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
                     <el-select v-model="scope.row.distributorName" class="my-el-input" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
+                      <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
                     </el-select>
                   </div>
                   <div v-else>

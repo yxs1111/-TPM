@@ -24,7 +24,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item" :value="item" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -361,8 +361,8 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
+          distributorName: this.filterObj.distributorCode,
+          regionName: this.filterObj.regionCode,
           productName: this.filterObj.dim_product,
         }).then((response) => {
           if (response.code == 1000) {
