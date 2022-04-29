@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-03-09 15:14:24
+ * @LastEditTime: 2022-04-29 10:39:18
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -54,6 +54,10 @@ export default {
   // 月结POS差异分析报表
   getMonthlyAnalysisExport(params) {
     return requestApi.request_post(this.url + '/monthlyAnalysis/export', params)
-  }
+  },
+  //查询当前节点
+  getTaskNode(params) {
+    return requestApi.request_get(this.url + '/investCpV/getTaskNode', params)
+  },
 }
 
