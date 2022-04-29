@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-01-14 16:26:55
+ * @LastEditTime: 2022-04-29 16:41:25
 -->
 <template>
   <div class="tabViewsWrap">
@@ -130,6 +130,25 @@ export default {
             }
           ]
         }
+        this.routerList = [
+            ...this.routerList,
+            {
+              name: '折扣项-HIH rebate',
+              path: '/V3/V3Approval/V3HIHRebateApproval',
+              img: {
+                dark: require('@/assets/images/tab/tab2.png'),
+                light: require('@/assets/images/tab/tab2_l.png')
+              }
+            },
+            {
+              name: '折扣项-KA rebate',
+              path: '/V3/V3Approval/V3KARebateApproval',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            }
+          ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
         } else {

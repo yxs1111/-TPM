@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-04-28 16:56:47
+ * @LastEditTime: 2022-04-29 16:20:28
 -->
 <template>
   <div class="MainContent">
@@ -53,7 +53,7 @@
           <div>
             V1计划合同点数(%)
             <br>
-            (kA+Contract Item)
+            <span class="subTitle">kA+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -70,7 +70,7 @@
           <div>
             V1计划合同费用(RMB)
             <br>
-            (kA+Contract Item)
+            <span class="subTitle">kA+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">

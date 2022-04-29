@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2021-12-12 11:53:14
+ * @LastEditTime: 2022-04-29 17:10:48
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -24,7 +24,6 @@ export default function() {
           name: 'V3Apply',
           component: () => import('@/views/V3/V3Apply.vue'),
           meta: { title: '申请', icon: 'apply' },
-          redirect: '/V3/V3Apply/V3discountAll',
           children: [
             {
               hidden: true,
@@ -50,6 +49,22 @@ export default function() {
               component: () => import('@/views/V3/V3Apply/V3discountNU.vue'),
               meta: { title: '折扣项-新客', icon: 'form' ,activeMenu: '/V3/V3Apply'},
             },
+            {
+              hidden: true,
+              path: '/V3/V3Apply/V3HIHRebate',
+              code: 'price_nka_v3_apply',
+              name: 'V3HIHRebate',
+              component: () => import('@/views/V3/V3Apply/V3HIHRebate.vue'),
+              meta: { title: '折扣项-HIH rebate', icon: 'form' ,activeMenu: '/V3/V3Apply'},
+            },
+            {
+              hidden: true,
+              path: '/V3/V3Apply/V3KARebate',
+              code: 'price_nka_v3_apply',
+              name: 'V3KARebate',
+              component: () => import('@/views/V3/V3Apply/V3KARebate.vue'),
+              meta: { title: '折扣项-KA rebate', icon: 'form' ,activeMenu: '/V3/V3Apply'},
+            },
           ]
         },
         {
@@ -58,7 +73,6 @@ export default function() {
           name: 'V3Approval',
           component: () => import('@/views/V3/V3ApprovalModel.vue'),
           meta: { title: '审批', icon: 'approve' },
-          redirect: '/V3/V3Approval/V3discountAllApproval',
           children: [
             {
               hidden: true,
@@ -83,6 +97,22 @@ export default function() {
               name: 'V3discountNUApproval',
               component: () => import('@/views/V3/V3Approval/V3discountNUApproval.vue'),
               meta: { title: '折扣项-新客', icon: 'form' ,activeMenu: '/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/V3/V3Approval/V3HIHRebateApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3HIHRebateApproval',
+              component: () => import('@/views/V3/V3Approval/V3HIHRebateApproval.vue'),
+              meta: { title: '折扣项-HIH rebate', icon: 'form' ,activeMenu: '/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/V3/V3Approval/V3KARebateApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3KARebateApproval',
+              component: () => import('@/views/V3/V3Approval/V3KARebateApproval.vue'),
+              meta: { title: '折扣项-KA rebate', icon: 'form' ,activeMenu: '/V3/V3Approval'},
             },
           ]
         },

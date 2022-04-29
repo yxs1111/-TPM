@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-04-28 17:11:45
+ * @LastEditTime: 2022-04-29 17:00:47
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -100,6 +100,22 @@ export default function() {
               name: 'V2NUApproval',
               component: () => import('@/views/V2/V2Approval/V2NUApproval.vue'),
               meta: { title: '折扣项-新客', icon: 'form' ,activeMenu: '/V2/V2Approval'},
+            },
+            {
+              hidden: true,
+              path: '/V2/V2Approval/V2HIHRebateApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2HIHRebateApproval',
+              component: () => import('@/views/V2/V2Approval/V2HIHRebateApproval.vue'),
+              meta: { title: '折扣项-HIH rebate', icon: 'form' ,activeMenu: '/V2/V2Approval'},
+            },
+            {
+              hidden: true,
+              path: '/V2/V2Approval/V2KARebate',
+              code: 'price_nka_v2_approve',
+              name: 'V2KARebateApprove',
+              component: () => import('@/views/V2/V2Apply/V2KARebate.vue'),
+              meta: { title: '折扣项-KA rebate', icon: 'form' ,activeMenu: '/V2/V2Approval'},
             },
           ]
         },
