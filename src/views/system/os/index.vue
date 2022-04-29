@@ -62,6 +62,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
+          <el-button  type="primary" size="mini" @click="bindDataRow(row)">
+            数据权限绑定
+          </el-button>
           <el-button v-permission="permissions['update']" type="primary" size="mini" @click="editRowData(row)">
             {{ $t('table.edit') }}
           </el-button>
@@ -124,26 +127,6 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">关 闭</el-button>
         <el-button v-if="multipleSelection && multipleSelection.length>0" type="primary" @click="handleDeleteRows">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- 数据权限绑定 -->
-    <el-dialog width="55%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
-      <div class="roleBindWrap">
-        <div class="roleName">{{roleName}}</div>
-        <el-input placeholder="输入关键字进行过滤" v-model="RoleTreeFilter">
-        </el-input>
-        <div class="roleTree">
-          <el-tree v-show="permissionType === 'Mine Package'||permissionType === null"  :data="RoleTreeData_Mine" ref="RoleTree_Mine" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true"
-            node-key="mid" highlight-current :props="treeProps_Mine">
-          </el-tree>
-          <el-tree v-show="permissionType !== 'Mine Package'||permissionType === null"  :data="RoleTreedata" ref="RoleTree" :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="NodeKey"
-            highlight-current :props="Role_KA">
-          </el-tree>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmRoleDialog()">保 存</el-button>
-        <el-button @click="closeRoleDialog">取 消</el-button>
       </span>
     </el-dialog>
   </div>

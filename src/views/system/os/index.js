@@ -97,7 +97,6 @@ export default {
       },
       Role_KAData: {}, //KA 权限数据
       RoleTreeData_Mine: [], //Mine-package tree data
-      permissionType: '', //角色数据权限类型
       roleCode: '',
       roleName: '' //角色数据权限--角色名称
     }
@@ -112,21 +111,10 @@ export default {
   },
   methods: {
     //数据权限绑定--弹窗显示
-    showRoleDialog(obj) {
-      this.roleName = obj.name
-      this.permissionType = obj.permissionType
-      if (obj.permissionType == 'KA') {
-        this.getKAList()
-      } else if (obj.permissionType == 'Mine Package') {
-        this.getMinePackage()
-      } else if (obj.permissionType == 'Field sales') {
-        this.getFieldSales()
-      } else if (!obj.permissionType) {
-        this.getKAList()
-        this.getMinePackage()
-        this.getFieldSales()
-      }
-      this.roleCode = obj.code
+    bindDataRow(obj) {
+      this.getKAList()
+      this.getMinePackage()
+      this.getFieldSales()
     },
     //数据权限绑定--确认
     confirmRoleDialog() {
@@ -139,13 +127,13 @@ export default {
           dataSecCode: list[m].dataSecCode,
           dataSecId: list[m].dataSecId,
           dataTerCode: list[m].dataTerCode,
-          dataTerId: list[m].dataTerId,
+          dataTerId: list[m].dataTerId
         }
         dataList.push(obj)
       }
       roleApi
         .bindDataPermissions({ roleCode: this.roleCode, dataList })
-        .then((res) => {
+        .then(res => {
           console.log(res)
           this.$message.success('权限绑定成功')
           this.closeRoleDialog()
@@ -161,119 +149,26 @@ export default {
     },
     //获取默认权限
     getDefaultRolePermissions(roleCode) {
-      roleApi.getDefaultRolePermissions({ roleCode }).then((res) => {
-        let list = res.data
-        for (let i = 0; i < list.length; i++) {
-          list[i].label=list[i].dataTerCode
-          list[i].id=list[i].dataTerId
-          list[i].mid=list[i].dataSecId+'-'+list[i].dataTerCode
-          list[i].NodeKey=list[i].dataFirCode+'-'+list[i].dataSecCode+'-'+list[i].dataTerCode
-        }
-        //分成两个板块
-        if (this.permissionType === 'Mine Package'||this.permissionType ===null) {
-          this.$refs.RoleTree_Mine.setCheckedNodes([...list])
-        } else if(this.permissionType != 'Mine Package') {
-          this.$refs.RoleTree.setCheckedNodes([...list])
-        }
-        this.$forceUpdate()
+      roleApi.getDefaultRolePermissions({ roleCode }).then(res => {
+        console.log(res.data);
       })
     },
     //获取KA 权限  NodeKey: "KA-EC-007"
     getKAList() {
-      roleApi.getKAList().then((res) => {
-        let list = res.data.channelList
-        for (let i = 0; i < list.length; i++) {
-          list[i]['label'] = list[i].channelCode
-          if (list[i].customerList) {
-            list[i]['children'] = list[i].customerList
-            for (let j = 0; j < list[i].children.length; j++) {
-              list[i].children[j]['dataFirCode'] = res.data.ka
-              list[i].children[j]['label'] = list[i].children[j].customerCsName
-              list[i].children[j]['dataTerId'] = list[i].children[j].id
-              list[i].children[j]['dataTerCode'] =
-                list[i].children[j].customerCode
-              list[i].children[j]['dataSecId'] = list[i].id
-              list[i].children[j]['dataSecCode'] = list[i].channelCode
-              list[i].children[j]['NodeKey'] = list[i].children[j]['dataFirCode']+'-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
-            }
-          } else {
-            list[i]['children'] = []
-          }
-        }
-        var obj = {
-          label: 'KA',
-          children: [...list],
-        }
-        this.RoleTreedata.push(obj)
-        this.roleVisible = true
-        //获取已绑定权限
-        this.getDefaultRolePermissions(this.roleCode)
+      roleApi.getKAList().then(res => {
+        console.log(res.data);
       })
     },
-    //获取Mine Package 权限  
+    //获取Mine Package 权限
     getMinePackage() {
-      roleApi.getMinePackage().then((res) => {
-        let list = res.data.mdCostTypeDTOList
-        for (let i = 0; i < list.length; i++) {
-          list[i]['label'] = list[i].costType
-          if (list[i].channelList) {
-            list[i]['children'] = list[i].channelList
-            for (let j = 0; j < list[i].children.length; j++) {
-              list[i].children[j]['label'] = list[i].children[j].channelCode
-              list[i].children[j]['dataTerId'] = list[i].children[j].id
-              list[i].children[j]['dataTerCode'] =
-                list[i].children[j].channelCode
-              list[i].children[j]['dataSecId'] = list[i].id
-              list[i].children[j]['dataSecCode'] = list[i].costTypeNumber
-              list[i].children[j]['dataFircode'] = 'MinePackage'
-              list[i].children[j]['mid'] =
-                list[i].id + '-' + list[i].children[j].channelCode
-            }
-          } else {
-            list[i]['children'] = []
-          }
-        }
-        var obj = {
-          label: 'Mine Package',
-          children: [...list],
-        }
-        this.RoleTreeData_Mine = []
-        this.RoleTreeData_Mine.push(obj)
-        //将tree 分成两个板块 ，minePackage层用  3-NKA作为辨别id（mid），其他正常
-        // this.RoleTreedata.push(obj)
-        this.roleVisible = true
-        //获取已绑定权限
-        this.getDefaultRolePermissions(this.roleCode)
+      roleApi.getMinePackage().then(res => {
+        console.log(res.data);
       })
     },
     //获取Field sales 权限  NodeKey: "FieldSales-zone-4678"
     getFieldSales() {
-      roleApi.getFieldSales().then((res) => {
-        let list = res.data.children
-        for (let i = 0; i < list.length; i++) {
-          list[i]['label'] = list[i].name
-          if (list[i].children) {
-            for (let j = 0; j < list[i].children.length; j++) {
-              list[i].children[j]['label'] = list[i].children[j].name
-              list[i].children[j]['dataTerId'] = list[i].children[j].id
-              list[i].children[j]['dataTerCode'] = list[i].children[j].code
-              list[i].children[j]['dataSecId'] = list[i].id
-              list[i].children[j]['dataSecCode'] = list[i].name
-              list[i].children[j]['dataFircode'] = 'FieldSales'
-              list[i].children[j]['NodeKey'] = 'FieldSales-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
-            }
-          } else {
-            list[i]['children'] = []
-          }
-        }
-        var obj = {
-          label: 'Field sales',
-          children: [...list],
-        }
-        this.RoleTreedata.push(obj)
-        this.roleVisible = true
-        //获取已绑定权限
-        this.getDefaultRolePermissions(this.roleCode)
+      roleApi.getFieldSales().then(res => {
+        console.log(res.data);
       })
     },
     //筛选

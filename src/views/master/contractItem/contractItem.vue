@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-04-28 11:04:35
+ * @LastEditTime: 2022-04-29 11:47:13
 -->
 <template>
   <div class="app-container">
@@ -100,43 +100,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" label="费用承担方">
-        <template slot-scope="scope">
-          <div v-if="scope.row.isEditor">
-            <el-select v-model="scope.row.costBearingRoom" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ['菲仕兰','经销商']" :key="index" :label="item" :value="item" />
-            </el-select>
-          </div>
-          <div v-if="!scope.row.isEditor">
-            {{ scope.row.costBearingRoom }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="customer" label="客户扣款点数">
-        <template slot-scope="scope">
-          <div v-if="scope.row.isEditor">
-            <el-select v-model="scope.row.deductionPointIndex" class="my-el-input" filterable clearable placeholder="请选择"
-              @change="changeDeductionPointIndex(scope.row,scope.$index)">
-              <el-option v-for="item,index in CustomerDeductionsAndPayType" :key="index" :label="item.CustomerDeduction+'%'" :value="index" />
-            </el-select>
-          </div>
-          <div v-if="!scope.row.isEditor">
-            {{ CustomerDeductionsAndPayType[scope.row.deductionPointIndex].CustomerDeduction }}%
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="profitCenter" label="支付方式">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.paymentMethodIndex" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in CustomerDeductionsAndPayType[scope.row.deductionPointIndex]['payTypeList']" :key="index" :label="item.label" :value="item.value" />
-            </el-select>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{ scope.row.paymentMethod }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="220" align="center" prop="profitCenter" label="状态">
         <template slot-scope="{ row }">
           <div>
@@ -165,22 +128,6 @@
           <el-form-item label="固定值/点数" prop="variablePoint">
             <el-select v-model="ruleForm.variablePoint" multiple class="my-el-input" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in FixOrPointList" :key="index" :label="item" :value="item" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="费用承担方" prop="costBearingRoom">
-            <el-select v-model="ruleForm.costBearingRoom" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ['菲仕兰','经销商']" :key="index" :label="item" :value="item" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户扣款点数" prop="deductionPoints">
-            <el-select v-model="ruleForm.deductionPoints" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in CustomerDeductionsAndPayType" :key="index" :label="item.CustomerDeduction+'%'" :value="index" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="支付方式" prop="paymentMethod">
-            <el-select v-model="ruleForm.paymentMethod" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in CustomerDeductionsAndPayType[ruleForm.deductionPoints?ruleForm.deductionPoints:0]['payTypeList']" :key="index" :label="item"
-                :value="item" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -253,9 +200,6 @@ export default {
         contractItem: '',
         conditionType: [],
         variablePoint: [],
-        costBearingRoom: '',
-        deductionPoints: '',
-        paymentMethod: '',
       },
       rules: {
         contractItemCode: [
@@ -280,27 +224,6 @@ export default {
           },
         ],
         variablePoint: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        costBearingRoom: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        deductionPoints: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        paymentMethod: [
           {
             required: true,
             message: 'This field is required',
@@ -453,11 +376,6 @@ export default {
             contractItem: this.ruleForm.contractItem,
             conditionType: this.ruleForm.conditionType.join(','),
             variablePoint: this.ruleForm.variablePoint.join(','),
-            costBearingRoom: this.ruleForm.costBearingRoom,
-            deductionPoints:
-              this.CustomerDeductionsAndPayType[this.ruleForm.deductionPoints]
-                .CustomerDeduction,
-            paymentMethod: this.ruleForm.paymentMethod,
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`添加成功`)
@@ -506,11 +424,6 @@ export default {
         contractItem: row.contractItem,
         conditionType: row.conditionTypeList.join(','),
         variablePoint: row.variablePointList.join(','),
-        costBearingRoom: row.costBearingRoom,
-        deductionPoints:
-          this.CustomerDeductionsAndPayType[row.deductionPointIndex]
-            .CustomerDeduction,
-        paymentMethod: row.paymentMethod,
       }).then((response) => {
         if (response.code === 1000) {
           this.$message.success(`保存成功`)

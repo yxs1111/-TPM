@@ -1,8 +1,15 @@
 import requestApi from '@/api/request-api'
+import roleApi from '@/api/system/role-api'
 import userApi from '@/api/system/user-api'
 import authTenantApi from '@/api/system/auth-tenant-api'
 import organizationApi from '@/api/system/organization-api'
-import { getFormatPickerOptions, getTextMap, parseTime, getDefaultPermissions,getHeight } from '@/utils'
+import {
+  getFormatPickerOptions,
+  getTextMap,
+  parseTime,
+  getDefaultPermissions,
+  getHeight
+} from '@/utils'
 import { Message, MessageBox } from 'element-ui'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -29,9 +36,7 @@ function getDate(hours) {
   return new Date(timeStamp + hours * 60 * 60 * 1000).getTime()
 }
 
-var tasks = [
-
-]
+var tasks = []
 const options = {
   taskMapping: {
     progress: 'percent'
@@ -117,10 +122,15 @@ const options = {
     weekdays: '周日_周一_周二_周三_周四_周五_周六'.split('_'),
     weekdaysShort: '日_一_二_三_四_五_六'.split('_'),
     weekdaysMin: '日_一_二_三_四_五_六'.split('_'),
-    months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
-    monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
+    months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split(
+      '_'
+    ),
+    monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split(
+      '_'
+    ),
     ordinal: n => `${n}`, // ordinal Function (number) => return number + output
-    relativeTime: { // relative time format strings, keep %s %d as the same
+    relativeTime: {
+      // relative time format strings, keep %s %d as the same
       future: 'za %s', // e.g. in 2 hours, %s been replaced with 2hours
       past: '%s temu',
       s: 'kilka sekund',
@@ -205,13 +215,21 @@ export default {
       textMap: getTextMap(),
       rules: {
         name: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
-        loginName: [{ required: true, message: '登录名不能为空', trigger: 'blur' }],
+        loginName: [
+          { required: true, message: '登录名不能为空', trigger: 'blur' }
+        ],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          {
+            type: 'email',
+            message: '请输入正确的邮箱地址',
+            trigger: ['blur', 'change']
+          }
         ],
-        orgId: [{ required: true, message: '所属组织不能为空', trigger: 'blur' }],
+        orgId: [
+          { required: true, message: '所属组织不能为空', trigger: 'blur' }
+        ],
         gender: [{ required: true, message: '请选择性别', trigger: 'blur' }]
       },
       lockedStateOptions: [
@@ -278,6 +296,24 @@ export default {
       authTenantList: [],
       user_org_map: {},
       maxheight: getHeight(),
+      //数据权限绑定
+      roleVisible: false, //数据权限绑定弹窗
+      RoleTreedata: [], //数据权限
+      RoleTreeFilter: '', //数据权限过滤
+      Role_KA: {
+        children: 'children',
+        label: 'label'
+      },
+      treeProps_Mine: {
+        children: 'children',
+        label: 'label'
+      },
+      Role_KAData: {}, //KA 权限数据
+      RoleTreeData_Mine: [], //Mine-package tree data
+      RoleTreeData_KA: [], //KA tree data
+      RoleTreeData_FieldSales: [], //FieldSales tree data
+      roleCode: '',
+      roleName: '' //角色数据权限--角色名称
     }
   },
   created() {
@@ -306,50 +342,72 @@ export default {
         this.userQuery.startDate = ''
         this.userQuery.endDate = ''
       }
-      requestApi.getPage(url, { name: this.userQuery.name, locked: this.userQuery.locked,
-        expireState: this.userQuery.expireState, startDate: this.userQuery.startDate, endDate: this.userQuery.endDate, tenantId: this.userQuery.tenantId,
-        pageSize: this.userPageProps.pageSize, pageNum: this.userPageProps.pageNum }).then(response => {
-        const { data } = response
-        this.userPageProps.records = data.records
-        this.userPageProps.total = data.total
-        this.userPageProps.pageNum = data.pageNum
-        this.userPageProps.pageSize = data.pageSize
-      }).catch(error => {
-        console.log(error)
-      })
+      requestApi
+        .getPage(url, {
+          name: this.userQuery.name,
+          locked: this.userQuery.locked,
+          expireState: this.userQuery.expireState,
+          startDate: this.userQuery.startDate,
+          endDate: this.userQuery.endDate,
+          tenantId: this.userQuery.tenantId,
+          pageSize: this.userPageProps.pageSize,
+          pageNum: this.userPageProps.pageNum
+        })
+        .then(response => {
+          const { data } = response
+          this.userPageProps.records = data.records
+          this.userPageProps.total = data.total
+          this.userPageProps.pageNum = data.pageNum
+          this.userPageProps.pageSize = data.pageSize
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 保存方法
     saveOrUpdate() {
-      this.$refs['userDataForm'].validate((valid) => {
+      this.$refs['userDataForm'].validate(valid => {
         if (valid) {
           const params = Object.assign({}, this.userInfoDialog.data)
           if (this.userInfoDialog.state === 'create') {
-            requestApi.save(url, params).then((res) => {
-              if (res && res.code === 1000) {
-                this.userInfoDialog.visible = false
-                Message.success({
-                  message: '新增成功',
-                  duration: 5 * 1000
-                })
-                this.fetchData()
-              }
-            }).catch(() => {  })
-          } else {
-            requestApi.update(url, params).then((res) => {
-              if (res && res.code === 1000) {
-                this.$delete(this.user_org_map, this.userInfoDialog.data.id)
-                if (this.userInfoDialog.data.version) {
-                  this.userInfoDialog.data.version++
+            requestApi
+              .save(url, params)
+              .then(res => {
+                if (res && res.code === 1000) {
+                  this.userInfoDialog.visible = false
+                  Message.success({
+                    message: '新增成功',
+                    duration: 5 * 1000
+                  })
+                  this.fetchData()
                 }
-                const index = this.userPageProps.records.findIndex(v => v.id === this.userInfoDialog.data.id)
-                this.userPageProps.records.splice(index, 1, this.userInfoDialog.data)
-                this.userInfoDialog.visible = false
-                Message.success({
-                  message: '更新成功',
-                  duration: 5 * 1000
-                })
-              }
-            }).catch(() => {  })
+              })
+              .catch(() => {})
+          } else {
+            requestApi
+              .update(url, params)
+              .then(res => {
+                if (res && res.code === 1000) {
+                  this.$delete(this.user_org_map, this.userInfoDialog.data.id)
+                  if (this.userInfoDialog.data.version) {
+                    this.userInfoDialog.data.version++
+                  }
+                  const index = this.userPageProps.records.findIndex(
+                    v => v.id === this.userInfoDialog.data.id
+                  )
+                  this.userPageProps.records.splice(
+                    index,
+                    1,
+                    this.userInfoDialog.data
+                  )
+                  this.userInfoDialog.visible = false
+                  Message.success({
+                    message: '更新成功',
+                    duration: 5 * 1000
+                  })
+                }
+              })
+              .catch(() => {})
           }
         }
       })
@@ -366,7 +424,7 @@ export default {
         this.multipleSelection.map(row => {
           ids.push(row.id)
         })
-        requestApi.remove(url, ids).then((res) => {
+        requestApi.remove(url, ids).then(res => {
           if (res && res.code === 1000) {
             Message.success({
               message: '删除成功',
@@ -409,7 +467,11 @@ export default {
     },
     // 单击行，切换选中状态
     handleCurrentRowClick(row, column) {
-      if (column.label !== '操作' && column.label !== '用户名' && column.label !== '登录名') {
+      if (
+        column.label !== '操作' &&
+        column.label !== '用户名' &&
+        column.label !== '登录名'
+      ) {
         this.$refs['userInfoTable'].toggleRowSelection(row)
       }
     },
@@ -516,7 +578,9 @@ export default {
     },
     // 值发生变更
     onInputChange(node) {
-      this.$nextTick(() => { this.$refs['userDataForm'].validateField('orgId') })
+      this.$nextTick(() => {
+        this.$refs['userDataForm'].validateField('orgId')
+      })
     },
     getOrgByUser(userId) {
       let orgId = this.user_org_map[userId]
@@ -539,23 +603,31 @@ export default {
       if (this.multipleSelection && this.multipleSelection.length === 1) {
         this.transferRoleProps.userId = this.multipleSelection[0].id
         this.userRoleDialog.visible = true
-        userApi.getRolePage({ pageSize: 100, pageNum: 1 }).then(res => {
-          if (res.data) {
-            this.transferRoleProps.data = res.data.records
-            userApi.listBindRoles({ userId: this.transferRoleProps.userId })
-              .then(role => {
-                if (role.data) {
-                  this.transferRoleProps.value = role.data
-                }
-              })
-          }
-        }).catch(error => console.log(error))
+        userApi
+          .getRolePage({ pageSize: 100, pageNum: 1 })
+          .then(res => {
+            if (res.data) {
+              this.transferRoleProps.data = res.data.records
+              userApi
+                .listBindRoles({ userId: this.transferRoleProps.userId })
+                .then(role => {
+                  if (role.data) {
+                    this.transferRoleProps.value = role.data
+                  }
+                })
+            }
+          })
+          .catch(error => console.log(error))
       }
     },
     // 保存用户角色
     saveRoles() {
       this.userRoleDialog.visible = false
-      userApi.bindRole({ userId: this.transferRoleProps.userId, roleCodes: this.transferRoleProps.value })
+      userApi
+        .bindRole({
+          userId: this.transferRoleProps.userId,
+          roleCodes: this.transferRoleProps.value
+        })
         .then(res => {
           if (res && res.code === 1000) {
             Message.success({
@@ -563,14 +635,22 @@ export default {
               duration: 5 * 1000
             })
           }
-        }).catch(error => { console.log(error) })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getAllTenant() {
-      authTenantApi.getAllTenant().then(res => {
-        if (res && res.code === 1000) {
-          this.authTenantList = res.data
-        }
-      }).catch(error => { console.log(error) })
+      authTenantApi
+        .getAllTenant()
+        .then(res => {
+          if (res && res.code === 1000) {
+            this.authTenantList = res.data
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     // 重置密码
     resetPw(row) {
@@ -582,14 +662,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        requestApi.request_post(userApi.url + '/resetPassword', { id: id }).then((res) => {
-          if (res && res.code === 1000) {
-            Message.success({
-              message: '重置成功',
-              duration: 5 * 1000
-            })
-          }
-        })
+        requestApi
+          .request_post(userApi.url + '/resetPassword', { id: id })
+          .then(res => {
+            if (res && res.code === 1000) {
+              Message.success({
+                message: '重置成功',
+                duration: 5 * 1000
+              })
+            }
+          })
       })
     },
     addTask() {
@@ -625,6 +707,136 @@ export default {
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
+    //数据权限绑定--弹窗显示
+    bindDataRow(obj) {
+      this.roleVisible=true
+      this.getKAList()
+      this.getMinePackage()
+      this.getFieldSales()
+    },
+    //数据权限绑定--确认
+    confirmRoleDialog() {
+      let MinePackageList = this.$refs.MinePackageTree.getCheckedNodes()
+      let FileSalesList = this.$refs.FileSalesTree.getCheckedNodes()
+      let KAlist = this.$refs.KATree.getCheckedNodes()
+      
+    },
+    //数据权限绑定--关闭
+    closeRoleDialog() {
+      this.roleVisible = false
+      this.roleCode = ''
+      this.RoleTreedata = []
+      this.RoleTreeData_Mine = []
+      this.permissionType = ''
+    },
+    //获取默认权限
+    getDefaultRolePermissions(roleCode) {
+      roleApi.getDefaultRolePermissions({ roleCode }).then(res => {
+        console.log(res.data);
+      })
+    },
+    //获取KA 权限  NodeKey: "KA-EC-007"
+    getKAList() {
+      roleApi.getKAList().then(res => {
+        let list = res.data.channelList
+        for (let i = 0; i < list.length; i++) {
+          list[i]['label'] = list[i].channelCode
+          if (list[i].customerList) {
+            list[i]['children'] = list[i].customerList
+            for (let j = 0; j < list[i].children.length; j++) {
+              list[i].children[j]['dataFirCode'] = res.data.ka
+              list[i].children[j]['label'] = list[i].children[j].customerCsName
+              list[i].children[j]['dataTerId'] = list[i].children[j].id
+              list[i].children[j]['dataTerCode'] =
+                list[i].children[j].customerCode
+              list[i].children[j]['dataSecId'] = list[i].id
+              list[i].children[j]['dataSecCode'] = list[i].channelCode
+              list[i].children[j]['NodeKey'] = list[i].children[j]['dataFirCode']+'-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
+            }
+          } else {
+            list[i]['children'] = []
+          }
+        }
+        var obj = {
+          label: 'KA',
+          children: [...list],
+        }
+        this.RoleTreeData_KA.push(obj)
+      })
+    },
+    //获取Mine Package 权限
+    getMinePackage() {
+      roleApi.getMinePackage().then(res => {
+        let list = res.data.mdCostTypeDTOList
+        for (let i = 0; i < list.length; i++) {
+          list[i]['label'] = list[i].costType
+          if (list[i].channelList) {
+            list[i]['children'] = list[i].channelList
+            for (let j = 0; j < list[i].children.length; j++) {
+              list[i].children[j]['label'] = list[i].children[j].channelCode
+              list[i].children[j]['dataTerId'] = list[i].children[j].id
+              list[i].children[j]['dataTerCode'] =
+                list[i].children[j].channelCode
+              list[i].children[j]['dataSecId'] = list[i].id
+              list[i].children[j]['dataSecCode'] = list[i].costTypeNumber
+              list[i].children[j]['dataFircode'] = 'MinePackage'
+              list[i].children[j]['mid'] =
+                list[i].id + '-' + list[i].children[j].channelCode
+            }
+          } else {
+            list[i]['children'] = []
+          }
+        }
+        var obj = {
+          label: 'Mine Package',
+          children: [...list],
+        }
+        this.RoleTreeData_Mine = []
+        this.RoleTreeData_Mine.push(obj)
+        //将tree 分成两个板块 ，minePackage层用  3-NKA作为辨别id（mid），其他正常
+      })
+    },
+    //获取Field sales 权限  NodeKey: "FieldSales-zone-4678"
+    getFieldSales() {
+      roleApi.getFieldSales().then(res => {
+        let list = res.data.children
+        for (let i = 0; i < list.length; i++) {
+          list[i]['label'] = list[i].name
+          if (list[i].children) {
+            for (let j = 0; j < list[i].children.length; j++) {
+              list[i].children[j]['label'] = list[i].children[j].name
+              list[i].children[j]['dataTerId'] = list[i].children[j].id
+              list[i].children[j]['dataTerCode'] = list[i].children[j].code
+              list[i].children[j]['dataSecId'] = list[i].id
+              list[i].children[j]['dataSecCode'] = list[i].name
+              list[i].children[j]['dataFircode'] = 'FieldSales'
+              list[i].children[j]['NodeKey'] = 'FieldSales-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
+            }
+          } else {
+            list[i]['children'] = []
+          }
+        }
+        var obj = {
+          label: 'Field sales',
+          children: [...list],
+        }
+        this.RoleTreeData_FieldSales.push(obj)
+      })
+    },
+    //筛选
+    RoleTreeFilterMethod(value, data, node) {
+      return this.getHasKeyword(value, node)
+    },
+    //筛选的时候显示子数据
+    getHasKeyword(value, node) {
+      if (node.data instanceof Array) {
+        node.data = node.data.length > 0 ? node.data[0] : {}
+      }
+      if (node.data.label && node.data.label.indexOf(value) !== -1) {
+        return true
+      } else {
+        return node.parent && this.getHasKeyword(value, node.parent)
+      }
+    },
   }
 }
-

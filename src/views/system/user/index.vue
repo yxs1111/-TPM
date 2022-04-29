@@ -36,7 +36,7 @@
       </el-button>
     </div>
     <!--查询结果-->
-    <el-table ref="userInfoTable"  :data="userPageProps.records"  border fit :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :max-height="maxheight" highlight-current-row
+    <el-table ref="userInfoTable"  :data="userPageProps.records"  border  :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :max-height="maxheight" highlight-current-row
       @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" fixed="left" type="selection" width="55" />
       <el-table-column align="center" fixed="left" label="序号" width="55">
@@ -54,14 +54,13 @@
           <span>{{ row.loginName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人" align="center" width="380">
+      <el-table-column label="创建人" align="center" width="180">
         <template slot-scope="{row}">
           {{ row.createBy }}
         </template>
       </el-table-column>
       <el-table-column  width="180" align="center" prop="created_date" label="创建时间">
         <template slot-scope="{row}">
-          <!-- <em class="el-icon-time" /> -->
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
@@ -79,8 +78,11 @@
           <el-tag :type="row.locked | lockedStatusFilter">{{ row.locked | lockedWordFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="350" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="550" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="bindDataRow(row)">
+            数据权限绑定
+          </el-button>
           <el-button type="primary" size="mini" @click="editRowData(row)">
             {{ $t('table.edit') }}
           </el-button>
@@ -131,10 +133,6 @@
             <span v-show="userInfoDialog.data.gender === 2">其他</span>
           </span>
         </el-form-item>
-        <!-- <el-form-item label="组织权限" prop="orgId">
-          <treeselect v-model="userInfoDialog.data.orgId" :disabled="userInfoDialog.state === 'info'" :multiple="false" :options="allOrg" :normalizer="normalizer"
-            clear-value-text="清除" placeholder=" " @input="onInputChange" />
-        </el-form-item> -->
         <el-form-item label="锁定状态" prop="locked">
           <span v-if="userInfoDialog.state === 'info'">{{ userInfoDialog.data.locked | lockedWordFilter }}</span>
           <el-switch v-else v-model="userInfoDialog.data.locked" active-text="已锁定" inactive-text="未锁定" :active-value="1" :inactive-value="0" active-color="#ff4949"
@@ -166,14 +164,13 @@
       </div>
     </el-dialog>
     <el-dialog v-el-drag-dialog title="提示" :visible.sync="centerDialogVisible" width="30%" center @dragDialog="handleDrag">
-      <span v-if="multipleSelection && multipleSelection.length>0">确认删除选中的{{ multipleSelection.length }}项？</span>
+      <span v-if="multipleSelection.length">确认删除选中的{{ multipleSelection.length }}项？</span>
       <span v-else>未选中任何内容。</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">关 闭</el-button>
-        <el-button v-if="multipleSelection && multipleSelection.length>0" type="primary" @click="handleDeleteRows">确 定</el-button>
+        <el-button v-if="multipleSelection.length" type="primary" @click="handleDeleteRows">确 定</el-button>
       </span>
     </el-dialog>
-
     <!--用户-角色管理框-->
     <el-dialog width="80%" v-el-drag-dialog title="用户-角色管理" :visible.sync="userRoleDialog.visible" @dragDialog="handleDrag">
       <div style="text-align: center">
@@ -191,12 +188,35 @@
         </el-button>
       </div>
     </el-dialog>
+    <!-- 数据权限绑定 -->
+    <el-dialog width="75%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
+      <div class="roleBindWrap">
+        <div class="roleTree">
+          <!-- <el-tree  :data="RoleTreeData_Mine" ref="RoleTree_Mine" :filter-node-method="RoleTreeFilterMethod"
+            :show-checkbox="true" node-key="mid" highlight-current :props="treeProps_Mine">
+          </el-tree> -->
+          <el-tree  :data="RoleTreeData_Mine" class="roleTreeLi" ref="MinePackageTree" accordion :filter-node-method="RoleTreeFilterMethod"
+            :show-checkbox="true" node-key="mid" highlight-current :props="Role_KA">
+          </el-tree> 
+          <el-tree  :data="RoleTreeData_FieldSales" class="roleTreeLi" ref="FileSalesTree" accordion :filter-node-method="RoleTreeFilterMethod"
+            :show-checkbox="true" node-key="NodeKey" highlight-current :props="Role_KA">
+          </el-tree> 
+          <el-tree  :data="RoleTreeData_KA" class="roleTreeLi" ref="KATree" accordion :filter-node-method="RoleTreeFilterMethod"
+            :show-checkbox="true" node-key="NodeKey" highlight-current :props="Role_KA">
+          </el-tree> 
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmRoleDialog()">保 存</el-button>
+        <el-button @click="closeRoleDialog">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script src="./index.js">
 </script>
-<style scoped>
+<style scoped lang="scss">
 .app-container .my_elInput {
   width: 360px !important;
 }
@@ -220,7 +240,24 @@
   justify-content: center;
   align-items: center;
 }
-
+.roleBindWrap {
+  width: 100%;
+  height: 600px;
+  .roleName {
+    color: #4192d3;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .roleTree {
+    width: 100%;
+    display: flex;
+    .roleTreeLi {
+      width: 33%;
+      height: 600px;
+      overflow-y: auto;
+    }
+  }
+}
 </style>
 <style>
 .el-transfer-panel {
