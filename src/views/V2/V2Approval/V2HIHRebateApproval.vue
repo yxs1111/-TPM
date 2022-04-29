@@ -1,5 +1,10 @@
 <!--
  * @Description: 
+ * @Date: 2022-04-29 09:37:59
+ * @LastEditTime: 2022-04-29 09:39:11
+-->
+<!--
+ * @Description: 
  * @Date: 2022-04-28 14:44:18
  * @LastEditTime: 2022-04-29 09:04:30
 -->
@@ -37,6 +42,20 @@
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
+      </div>
+    </div>
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG">
+        <img src="@/assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG">
+        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
+        <span class="text">通过</span>
+      </div>
+      <div class="TpmButtonBG">
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
+        <span class="text">驳回</span>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
