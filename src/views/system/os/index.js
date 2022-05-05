@@ -163,6 +163,7 @@ export default {
     getMinePackage() {
       roleApi.getMinePackage().then(res => {
         console.log(res.data);
+        
       })
     },
     //获取Field sales 权限  NodeKey: "FieldSales-zone-4678"

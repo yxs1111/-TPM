@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-04-29 14:17:29
+ * @LastEditTime: 2022-05-05 14:50:20
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -36,7 +36,7 @@ export default {
   },
   //角色数据权限--MinePackage权限
   getMinePackage(params) {
-    return requestApi.request_get(this.roleUrl + '/getCostItemLists', params)
+    return requestApi.request_get(this.roleUrl + '/getCostItemList', params)
   },
   //角色数据权限--FieldSales权限
   getFieldSales(params) {
@@ -44,11 +44,11 @@ export default {
   },
   //角色数据权限--已绑定权限
   getDefaultRolePermissions(params) {
-    return requestApi.request_get(this.roleUrl + '/getDataPermissionList', params)
+    return requestApi.request_get(this.roleUrl + '/getUserRoleDataPermission', params)
   },
   //角色数据权限--绑定权限
   bindDataPermissions(params) {
-    return requestApi.request_put(this.roleUrl + '/bindDataPermissions', params)
+    return requestApi.request_post(this.roleUrl + '/bindUserDataPermissions', params)
   },
 
   

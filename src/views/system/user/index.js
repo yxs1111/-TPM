@@ -313,7 +313,9 @@ export default {
       RoleTreeData_KA: [], //KA tree data
       RoleTreeData_FieldSales: [], //FieldSales tree data
       roleCode: '',
-      roleName: '' //角色数据权限--角色名称
+      roleName: '', //角色数据权限--角色名称,
+      bindId:'',
+      bindUserName:'',
     }
   },
   created() {
@@ -709,30 +711,92 @@ export default {
     },
     //数据权限绑定--弹窗显示
     bindDataRow(obj) {
-      this.roleVisible=true
+      this.roleVisible = true
       this.getKAList()
       this.getMinePackage()
       this.getFieldSales()
+      this.getDefaultRolePermissions(obj.loginName)
+      this.bindId=obj.id
+      this.bindUserName=obj.loginName
     },
     //数据权限绑定--确认
     confirmRoleDialog() {
-      let MinePackageList = this.$refs.MinePackageTree.getCheckedNodes()
+      let ContractItemList = this.$refs.MinePackageTree.getCheckedNodes()
       let FileSalesList = this.$refs.FileSalesTree.getCheckedNodes()
       let KAlist = this.$refs.KATree.getCheckedNodes()
-      
+      console.log(ContractItemList);
+      console.log(FileSalesList);
+      console.log(KAlist);
+      let obj = {
+        id:this.bindId,
+        userName:this.bindUserName,
+        kaDataList: [],
+        ciDataList: [],
+        fsDatalist: []
+      }
+      ContractItemList.forEach(item => {
+        obj.ciDataList.push({
+          ciDataFirCode: item.dataFirCode,
+          ciDataSecCode: item.dataSecCode,
+          ciDataTerCode: item.dataTerCode
+        })
+      })
+      FileSalesList.forEach(item => {
+        obj.fsDatalist.push({
+          fsDataFirCode: item.dataFirCode,
+          fsDataSecId: item.dataSecId,
+          fsDataSecCode: item.dataSecCode,
+          fsDataTerId: item.dataTerId,
+          fsDataTerCode: item.dataTerCode
+        })
+      })
+      KAlist.forEach(item => {
+        obj.kaDataList.push({
+          kaDataFirCode: item.dataFirCode,
+          kaDataSecId: item.dataSecId,
+          kaDataSecCode: item.dataSecCode,
+          kaDataTerId: item.dataTerId,
+          kaDataTerCode: item.dataTerCode
+        })
+      })
+      console.log(obj)
+      roleApi.bindDataPermissions(obj).then(res => {
+        this.closeRoleDialog()
+        this.$message.success('权限绑定成功')
+      })
     },
     //数据权限绑定--关闭
     closeRoleDialog() {
       this.roleVisible = false
       this.roleCode = ''
-      this.RoleTreedata = []
+      this.RoleTreeData_KA = []
       this.RoleTreeData_Mine = []
+      this.RoleTreeData_FieldSales = []
       this.permissionType = ''
     },
     //获取默认权限
-    getDefaultRolePermissions(roleCode) {
-      roleApi.getDefaultRolePermissions({ roleCode }).then(res => {
-        console.log(res.data);
+    getDefaultRolePermissions(userName) {
+      roleApi.getDefaultRolePermissions({ userName }).then(res => {
+        let {ciDataList,fsDatalist,kaDataList}=res.data
+        ciDataList.forEach(item=>{
+          item.dataFirCode= 'Cost Item',
+          item.dataSecCode= item.ciDataSecCode,
+          item.dataTerCode= item.ciDataTerCode,
+          item.label= item.ciDataTerCode,
+          item.mid= item.ciDataSecCode + '-' + item.ciDataTerCode
+        })
+        this.$refs.MinePackageTree.setCheckedNodes([...ciDataList])
+        fsDatalist.forEach(item=>{
+          //NodeKey:"FieldSales-zone-4539"
+          item.NodeKey= 'FieldSales-' +item.fsDataSecCode+'-'+item.fsDataTerCode
+        })
+        this.$refs.FileSalesTree.setCheckedNodes([...fsDatalist])
+        kaDataList.forEach(item=>{
+          //NodeKey:"KA-LKA-1003"
+          item.NodeKey= 'KA-' +item.kaDataSecCode+'-'+item.kaDataTerCode
+        })
+        this.$refs.KATree.setCheckedNodes([...kaDataList])
+        this.$forceUpdate()
       })
     },
     //获取KA 权限  NodeKey: "KA-EC-007"
@@ -741,8 +805,12 @@ export default {
         let list = res.data.channelList
         for (let i = 0; i < list.length; i++) {
           list[i]['label'] = list[i].channelCode
+          list[i]['children'] = list[i].customerList
+          list[i]['dataFirCode'] = res.data.ka
+          list[i]['dataSecCode'] = list[i].channelCode
+          list[i]['dataSecId'] = list[i].id
           if (list[i].customerList) {
-            list[i]['children'] = list[i].customerList
+            
             for (let j = 0; j < list[i].children.length; j++) {
               list[i].children[j]['dataFirCode'] = res.data.ka
               list[i].children[j]['label'] = list[i].children[j].customerCsName
@@ -751,7 +819,12 @@ export default {
                 list[i].children[j].customerCode
               list[i].children[j]['dataSecId'] = list[i].id
               list[i].children[j]['dataSecCode'] = list[i].channelCode
-              list[i].children[j]['NodeKey'] = list[i].children[j]['dataFirCode']+'-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
+              list[i].children[j]['NodeKey'] =
+                list[i].children[j]['dataFirCode'] +
+                '-' +
+                list[i].children[j]['dataSecCode'] +
+                '-' +
+                list[i].children[j]['dataTerCode']
             }
           } else {
             list[i]['children'] = []
@@ -759,7 +832,7 @@ export default {
         }
         var obj = {
           label: 'KA',
-          children: [...list],
+          children: [...list]
         }
         this.RoleTreeData_KA.push(obj)
       })
@@ -767,33 +840,35 @@ export default {
     //获取Mine Package 权限
     getMinePackage() {
       roleApi.getMinePackage().then(res => {
-        let list = res.data.mdCostTypeDTOList
-        for (let i = 0; i < list.length; i++) {
-          list[i]['label'] = list[i].costType
-          if (list[i].channelList) {
-            list[i]['children'] = list[i].channelList
-            for (let j = 0; j < list[i].children.length; j++) {
-              list[i].children[j]['label'] = list[i].children[j].channelCode
-              list[i].children[j]['dataTerId'] = list[i].children[j].id
-              list[i].children[j]['dataTerCode'] =
-                list[i].children[j].channelCode
-              list[i].children[j]['dataSecId'] = list[i].id
-              list[i].children[j]['dataSecCode'] = list[i].costTypeNumber
-              list[i].children[j]['dataFircode'] = 'MinePackage'
-              list[i].children[j]['mid'] =
-                list[i].id + '-' + list[i].children[j].channelCode
-            }
-          } else {
-            list[i]['children'] = []
+        let list = []
+        let secondObj = res.data.secAndTerData[0]
+        for (const key in secondObj) {
+          let obj = {
+            children: [],
+            label: key,
+            dataFirCode: 'Cost Item',
+            dataSecCode: key,
           }
+          const thirdList = secondObj[key]
+          thirdList.forEach(thirdItem => {
+            obj.children.push({
+              dataFirCode: 'Cost Item',
+              dataSecCode: key,
+              dataTerCode: thirdItem,
+              label: thirdItem,
+              mid: key + '-' + thirdItem
+            })
+          })
+          list.push({
+            ...obj
+          })
         }
         var obj = {
-          label: 'Mine Package',
-          children: [...list],
+          label: 'Cost Item',
+          children: [...list]
         }
         this.RoleTreeData_Mine = []
         this.RoleTreeData_Mine.push(obj)
-        //将tree 分成两个板块 ，minePackage层用  3-NKA作为辨别id（mid），其他正常
       })
     },
     //获取Field sales 权限  NodeKey: "FieldSales-zone-4678"
@@ -802,15 +877,23 @@ export default {
         let list = res.data.children
         for (let i = 0; i < list.length; i++) {
           list[i]['label'] = list[i].name
+          list[i]['dataFirCode'] = 'FieldSales'
+          list[i]['dataSecCode'] = list[i].name
+          list[i]['dataSecId'] = list[i].id
           if (list[i].children) {
+            
             for (let j = 0; j < list[i].children.length; j++) {
               list[i].children[j]['label'] = list[i].children[j].name
               list[i].children[j]['dataTerId'] = list[i].children[j].id
               list[i].children[j]['dataTerCode'] = list[i].children[j].code
               list[i].children[j]['dataSecId'] = list[i].id
               list[i].children[j]['dataSecCode'] = list[i].name
-              list[i].children[j]['dataFircode'] = 'FieldSales'
-              list[i].children[j]['NodeKey'] = 'FieldSales-'+list[i].children[j]['dataSecCode']+'-'+list[i].children[j]['dataTerCode']
+              list[i].children[j]['dataFirCode'] = 'FieldSales'
+              list[i].children[j]['NodeKey'] =
+                'FieldSales-' +
+                list[i].children[j]['dataSecCode'] +
+                '-' +
+                list[i].children[j]['dataTerCode']
             }
           } else {
             list[i]['children'] = []
@@ -818,7 +901,7 @@ export default {
         }
         var obj = {
           label: 'Field sales',
-          children: [...list],
+          children: [...list]
         }
         this.RoleTreeData_FieldSales.push(obj)
       })
@@ -837,6 +920,6 @@ export default {
       } else {
         return node.parent && this.getHasKeyword(value, node.parent)
       }
-    },
+    }
   }
 }
