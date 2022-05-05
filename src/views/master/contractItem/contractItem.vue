@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-04-29 11:47:13
+ * @LastEditTime: 2022-05-05 16:44:28
 -->
 <template>
   <div class="app-container">
@@ -76,10 +76,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="conditionType" label="条件类型">
+      <el-table-column  align="center" prop="conditionType" label="条件类型">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.conditionTypeList" multiple class="my-el-input" filterable clearable placeholder="请选择">
+            <el-select v-model="scope.row.conditionTypeList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in ConditionsTypeList" :key="index" :label="item" :value="item" />
             </el-select>
           </div>
@@ -88,10 +88,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" label="固定值/点数">
+      <el-table-column  align="center" label="固定值/点数">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.variablePointList" multiple class="my-el-input" filterable clearable placeholder="请选择">
+            <el-select v-model="scope.row.variablePointList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in FixOrPointList" :key="index" :label="item" :value="item" />
             </el-select>
           </div>
@@ -522,5 +522,20 @@ export default {
 .svgIcon {
   width: 20px;
   height: 20px;
+}
+
+</style>
+<style lang="scss">
+.mutiInput {
+  width: 300px !important;
+    border-radius: 5px;
+    margin-right: 20px;
+    .el-input__inner {
+      height: 37px;
+      width: 300px !important;
+    }
+    .el-input--suffix {
+      width: 300px !important;
+    }
 }
 </style>
