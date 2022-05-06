@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-06 09:55:59
+ * @LastEditTime: 2022-05-06 10:33:50
 -->
 <template>
   <div class="app-container">
@@ -48,13 +48,6 @@
       </el-table-column>
       <el-table-column fixed width="140" align="center" prop="deptID" label="Department ID"> </el-table-column>
       <el-table-column fixed width="280" align="center" prop="deptName" label="Department"> </el-table-column>
-      <el-table-column width="140" align="center" prop="expiryDate" label="有效期至">
-        <template slot-scope="{row}">
-          <div>
-            {{ row.expiryDate ? row.expiryDate.substring(0,10) : '' }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
@@ -101,9 +94,10 @@
             <el-input v-model="ruleForm.deptName" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="有效期至" prop="expiryDate">
-            <el-date-picker v-model="ruleForm.expiryDate" value-format="yyyy-MM-dd" format="yyyy-MM-dd" class="my-el-input" type="date" placeholder="选择日期">
-            </el-date-picker>
+          <el-form-item label="状态">
+            <el-select v-model="ruleForm.state" class="my-el-input" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
+          </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -145,7 +139,7 @@ export default {
       ruleForm: {
         deptID: '',
         deptName: '',
-        expiryDate: '',
+        state:1
       },
       rules: {
         deptID: [
@@ -156,13 +150,6 @@ export default {
           },
         ],
         deptName: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        expiryDate: [
           {
             required: true,
             message: 'This field is required',
@@ -217,7 +204,7 @@ export default {
       this.ruleForm = {
         deptID: '',
         deptName: '',
-        expiryDate: '9999-12-31',
+        state:1
       }
       this.dialogVisible = true
     },
@@ -248,7 +235,6 @@ export default {
       this.ruleForm = {
         deptID: '',
         deptName: '',
-        expiryDate: '',
       }
     },
     editor(obj) {
@@ -257,7 +243,7 @@ export default {
       this.ruleForm = {
         deptID: obj.deptID,
         deptName: obj.deptName,
-        expiryDate: obj.expiryDate,
+        state:Number(obj.state)
       }
       this.editorId = obj.id
     },
@@ -270,7 +256,6 @@ export default {
               id: this.editorId,
               deptID: this.ruleForm.deptID,
               deptName: this.ruleForm.deptName,
-              expiryDate: this.ruleForm.expiryDate,
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`修改成功`)
@@ -283,7 +268,6 @@ export default {
               id: this.editorId,
               deptID: this.ruleForm.deptID,
               deptName: this.ruleForm.deptName,
-              expiryDate: this.ruleForm.expiryDate,
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`添加成功`)

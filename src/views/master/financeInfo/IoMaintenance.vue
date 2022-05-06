@@ -102,8 +102,11 @@
             </el-select>
           </el-form-item>
           <el-form-item label="状态">
-            <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
-            <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
+            <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item,index) in ['无效','有效']" :key="item" :label="item" :value="index" />
+            </el-select>
+            <!-- <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
+            <el-radio v-model="ruleForm.state" label="1">有效</el-radio> -->
           </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
@@ -347,7 +350,7 @@ export default {
         regionName: '',
         largeAreaName: '',
         largeAreaCode: '',
-        state: '1',
+        state: 1,
         remark: '',
       }
     },
@@ -361,7 +364,7 @@ export default {
         largeAreaName: obj.largeAreaName,
         largeAreaCode: obj.largeAreaCode,
         remark: obj.remark,
-        state: String(obj.state),
+        state: Number(obj.state),
       }
       this.editorId = obj.id
     },

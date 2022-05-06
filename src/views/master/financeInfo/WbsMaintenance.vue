@@ -95,12 +95,12 @@
           </el-form-item> -->
           
           <el-form-item label="状态">
-              <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
+              <!-- <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
               <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
-              
-            <!-- <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item,index) in ['无效','正常']" :key="item" :label="item" :value="index" />
-            </el-select> -->
+               -->
+            <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item,index) in ['无效','有效']" :key="item" :label="item" :value="index" />
+            </el-select>
           </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
@@ -246,7 +246,7 @@ export default {
         customerMdmCode: '',
         customerCsName: '',
         channelCode: '',
-        state: '1',
+        state: 1,
         remark: '',
       }
       this.dialogVisible = true
@@ -288,7 +288,7 @@ export default {
         customerMdmCode: '',
         customerCsName: '',
         channelCode: '',
-        state: '',
+        state: 1,
         remark: '',
       }
     },
@@ -302,7 +302,7 @@ export default {
         customerMdmCode: obj.customerMdmCode,
         customerCsName: obj.customerCsName,
         channelCode: obj.channelCode,
-        state: String(obj.state),
+        state: Number(obj.state),
         remark: obj.remark,
       }
       //若客户下拉框数据没有当前则置空
