@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-04-26 08:42:39
+ * @LastEditTime: 2022-05-06 09:45:05
 -->
 <template>
   <div class="app-container">
@@ -110,7 +110,7 @@
             <el-input v-model="ruleForm.profitCenter" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="Profit Center" prop="expiryDate">
+          <el-form-item label="有效期至" prop="expiryDate">
             <el-date-picker v-model="ruleForm.expiryDate" class="my-el-input" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="date" placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -156,7 +156,7 @@ export default {
         entityID: '',
         entityName: '',
         profitCenter: '',
-        expiryDate: '',
+        expiryDate: '9999-12-31',
       },
       rules: {
         entityID: [
@@ -237,7 +237,7 @@ export default {
         entityID: '',
         entityName: '',
         profitCenter: '',
-        expiryDate: '',
+        expiryDate: "9999-12-31",
       }
       this.dialogVisible = true
     },
@@ -270,7 +270,7 @@ export default {
         entityID: '',
         entityName: '',
         profitCenter: '',
-        expiryDate: '',
+        expiryDate: '9999-12-31',
       }
     },
     editor(obj) {

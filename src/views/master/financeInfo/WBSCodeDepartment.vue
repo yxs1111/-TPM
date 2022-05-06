@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-04-26 08:59:06
+ * @LastEditTime: 2022-05-06 09:55:59
 -->
 <template>
   <div class="app-container">
@@ -86,7 +86,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS Code-Entity'" :visible="dialogVisible" width="30%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS Code-Department'" :visible="dialogVisible" width="30%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="el-form-row">
           <el-form-item label="Department ID" prop="deptID" v-if="isEditor">
@@ -217,7 +217,7 @@ export default {
       this.ruleForm = {
         deptID: '',
         deptName: '',
-        expiryDate: '',
+        expiryDate: '9999-12-31',
       }
       this.dialogVisible = true
     },
@@ -235,7 +235,7 @@ export default {
     },
     //导出数据
     exportData() {
-      API.exportBrandWbs({}).then((res) => {
+      API.exportDeptWbs({}).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, 'WBS Code - Department -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
