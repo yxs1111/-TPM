@@ -499,7 +499,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })

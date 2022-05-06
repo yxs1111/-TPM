@@ -123,7 +123,7 @@ export default {
         this.routerList = [
             ...this.routerList,
             {
-              name: '折扣项-HIH rebate',
+              name: '折扣项-HIH Rebate',
               path: '/V1/V1Apply/V1HIHRebate',
               img: {
                 dark: require('@/assets/images/tab/tab2.png'),
@@ -131,7 +131,7 @@ export default {
               }
             },
             {
-              name: '折扣项-KA rebate',
+              name: '折扣项-KA Rebate',
               path: '/V1/V1Apply/V1KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
