@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-06 09:36:09
+ * @LastEditTime: 2022-05-06 09:58:26
 -->
 <template>
   <div class="MainContent">
@@ -468,7 +468,11 @@ export default {
         API.approveCustomerContract(obj).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
-            this.$message.success('提交成功')
+            if(flag) {
+              this.$message.success('审批成功！')
+            } else {
+              this.$message.success('驳回成功！')
+            }
           }
         })
       }

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-06 09:07:07
+ * @LastEditTime: 2022-05-06 10:05:19
 -->
 <template>
   <div class="MainContent">
@@ -634,32 +634,48 @@ export default {
       })
     },
     //录入提交
-   async submit() {
+    async submit() {
       if (this.checkArr.length === 0) return this.$message.info('请选择数据')
       else {
-        let IdList = []
-        let isSubmit = 1
-        for (let index = 0; index < this.checkArr.length; index++) {
-          const item = this.checkArr[index]
-          IdList.push(item.id)
-          await API.findOneSaveDetail({
-            id: item.id,
-            isMain: 1,
-            isDetail: 1,
-          }).then((res) => {
-            if (res.data.fixed.length === 0 && res.data.variable.length === 0) {
-              isSubmit = 0
+        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(async() => {
+            let IdList = []
+            let isSubmit = 1
+            for (let index = 0; index < this.checkArr.length; index++) {
+              const item = this.checkArr[index]
+              IdList.push(item.id)
+              await API.findOneSaveDetail({
+                id: item.id,
+                isMain: 1,
+                isDetail: 1,
+              }).then((res) => {
+                if (
+                  res.data.fixed.length === 0 &&
+                  res.data.variable.length === 0
+                ) {
+                  isSubmit = 0
+                }
+              })
             }
+            //提交合同明细
+            this.submitHandler(IdList, isSubmit)
           })
-        }
-        //提交合同明细
-        this.submitHandler(IdList,isSubmit)
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
       }
     },
     //提交合同明细
     submitHandler(IdList, isSubmit) {
       if (isSubmit) {
-         API.submitCustomerContract(IdList).then((res) => {
+        API.submitCustomerContract(IdList).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
             this.$message.success('提交成功')

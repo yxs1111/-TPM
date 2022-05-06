@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-06 09:39:00
+ * @LastEditTime: 2022-05-06 10:16:58
 -->
 <template>
   <div class="MainContent">
@@ -202,7 +202,7 @@
         <div class="termInfo">
           <div class="selectCustomer">
             <span class="selectBar">客户合同</span>
-            <el-select v-model="addDialog.index" class="my-el-input" filterable  @change="getDetail" clearable placeholder="请选择">
+            <el-select v-model="addDialog.index" class="my-el-input" filterable @change="getDetail" clearable placeholder="请选择">
               <el-option v-for="item,index in customerArr" :key="item.id" :label="item.customerName" :value="index" />
             </el-select>
           </div>
@@ -533,12 +533,25 @@ export default {
     },
     //经销商提交
     submit() {
-      API.submit([]).then((res) => {
-        if (res.code === 1000) {
-          this.getTableData()
-          this.$message.success('提交成功')
-        }
+      this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       })
+        .then(() => {
+          API.submit([]).then((res) => {
+            if (res.code === 1000) {
+              this.getTableData()
+              this.$message.success('提交成功')
+            }
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消',
+          })
+        })
     },
     //保存 该行
     saveRow(row, index) {
@@ -575,9 +588,7 @@ export default {
         } else {
           //不是补录，数值验证
           if (row.saleAmount != this.editMaxTargetSale) {
-            this.$message.info(
-              `经销商目标销售额之和应等于客户目标销售额`
-            )
+            this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
           } else {
             this.updateRowFunction(row)
           }
@@ -676,9 +687,9 @@ export default {
           this.addDialogCustomer.push(obj)
           this.getDistributorListByCustomer()
           //查该现阶段客户下所有经销商的和，新增经销商之和应等于客户目标销售额
-          this.addDialog.nowTargetSale=0
-          distList.forEach(item=>{
-            this.addDialog.nowTargetSale+=item.saleAmount
+          this.addDialog.nowTargetSale = 0
+          distList.forEach((item) => {
+            this.addDialog.nowTargetSale += item.saleAmount
           })
           let flag = distList.findIndex((item) => {
             return item.contractState == '3' || item.contractState == '4'
@@ -765,10 +776,11 @@ export default {
           }
         })
       } else {
-        if (targetSaleLimit+this.addDialog.nowTargetSale != this.addDialogCustomer[0].saleAmount) {
-          this.$message.info(
-            `经销商目标销售额之和应等于客户目标销售额之和`
-          )
+        if (
+          targetSaleLimit + this.addDialog.nowTargetSale !=
+          this.addDialogCustomer[0].saleAmount
+        ) {
+          this.$message.info(`经销商目标销售额之和应等于客户目标销售额之和`)
           return
         } else {
           API.add(list).then((res) => {
