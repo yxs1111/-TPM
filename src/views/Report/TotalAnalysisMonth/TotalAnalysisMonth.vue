@@ -305,21 +305,10 @@ export default {
         channelCode: this.filterObj.channelCode.join(','),
       }).then((res) => {
         if (res.code === 1000) {
-          console.log(res.data)
-          //获取最大的活动月
-          let maxActivityMonth = 0
-          let list = res.data
-          list.forEach((item) => {
-            if (Number(item.yearAndMonth) > maxActivityMonth) {
-              maxActivityMonth = item.yearAndMonth
-            }
-          })
-          //取最大的活动月数据进行比对
-          let compareList = list.filter((item) => {
-            return item.yearAndMonth == maxActivityMonth
-          })
-          compareList.forEach((ietm) => {
-            this.TaskNode.push(`${item.yearAndMonth}-${item.channelCode}-${item.version}`)
+          let compareList = res.data
+          this.TaskNode=[]
+          compareList.forEach((item) => {
+            this.TaskNode.push(`${item.yearAndMonth}-${item.version}`)
           })
           console.log(compareList)
         }

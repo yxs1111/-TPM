@@ -242,7 +242,7 @@ export default {
       RegionList: [],
       tableKey: 0, //el-table key
       tableKey2: 0, //el-table key
-      TaskNode: ['NKA-V1', 'NKA-V2', 'NKA-NUV3','EC-V0',],
+      TaskNode: [],
     }
   },
   computed: {},
@@ -287,11 +287,12 @@ export default {
               maxActivityMonth = item.yearAndMonth
             }
           })
+          this.TaskNode=[]
           //取最大的活动月数据进行比对
           let compareList = list.filter((item) => {
             return item.yearAndMonth == maxActivityMonth
           })
-          compareList.forEach((ietm) => {
+          compareList.forEach((item) => {
             this.TaskNode.push(`${item.channelCode}-${item.version}`)
           })
           console.log(compareList)
