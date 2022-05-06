@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-28 10:40:42
+ * @LastEditTime: 2022-05-06 09:07:07
 -->
 <template>
   <div class="MainContent">
@@ -241,7 +241,7 @@
                   </el-input>
                 </div>
                 <div v-show="!scope.row.isNewData">
-                  {{ scope.row.costRatio }}%
+                  {{ FormateNum(scope.row.costRatio) }}%
                 </div>
               </template>
             </el-table-column>
@@ -312,7 +312,7 @@
               <template slot-scope="scope">
                 <div>
                   <!-- {{ (termInfo.saleNumber/scope.row.cost) }}% -->
-                  {{scope.row.costRatio}}%
+                  {{FormateNum(scope.row.costRatio)}}%
                 </div>
               </template>
             </el-table-column>
@@ -634,19 +634,39 @@ export default {
       })
     },
     //录入提交
-    submit() {
+   async submit() {
       if (this.checkArr.length === 0) return this.$message.info('请选择数据')
       else {
         let IdList = []
-        this.checkArr.forEach((item) => {
+        let isSubmit = 1
+        for (let index = 0; index < this.checkArr.length; index++) {
+          const item = this.checkArr[index]
           IdList.push(item.id)
-        })
-        API.submitCustomerContract(IdList).then((res) => {
+          await API.findOneSaveDetail({
+            id: item.id,
+            isMain: 1,
+            isDetail: 1,
+          }).then((res) => {
+            if (res.data.fixed.length === 0 && res.data.variable.length === 0) {
+              isSubmit = 0
+            }
+          })
+        }
+        //提交合同明细
+        this.submitHandler(IdList,isSubmit)
+      }
+    },
+    //提交合同明细
+    submitHandler(IdList, isSubmit) {
+      if (isSubmit) {
+         API.submitCustomerContract(IdList).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
             this.$message.success('提交成功')
           }
         })
+      } else {
+        this.$message.info('合同条款明细不能为空')
       }
     },
     search() {
@@ -1118,7 +1138,7 @@ export default {
     },
     //处于草稿状态可提交
     checkSelectable(row) {
-      return row.contractState === '0'
+      return row.contractState === '0' || row.contractState === '2'
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
