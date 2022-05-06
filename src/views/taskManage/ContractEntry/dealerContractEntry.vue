@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-28 10:49:01
+ * @LastEditTime: 2022-05-06 09:39:00
 -->
 <template>
   <div class="MainContent">
@@ -202,7 +202,7 @@
         <div class="termInfo">
           <div class="selectCustomer">
             <span class="selectBar">客户合同</span>
-            <el-select v-model="addDialog.index" class="my-el-input" filterable clearable placeholder="请选择">
+            <el-select v-model="addDialog.index" class="my-el-input" filterable  @change="getDetail" clearable placeholder="请选择">
               <el-option v-for="item,index in customerArr" :key="item.id" :label="item.customerName" :value="index" />
             </el-select>
           </div>

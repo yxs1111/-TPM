@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-28 09:05:05
+ * @LastEditTime: 2022-05-06 09:36:22
 -->
 <template>
   <div class="MainContent">
@@ -260,7 +260,7 @@ export default {
     },
     //经销商审批通过
     submit() {
-      this.$confirm('确定要提交吗?', '提示', {
+      this.$confirm('此操作将审批通过, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -277,7 +277,7 @@ export default {
     },
     //经销商审批通过
     reject() {
-      this.$confirm('确定要驳回吗?', '提示', {
+      this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
