@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-06 10:45:30
+ * @LastEditTime: 2022-05-06 16:07:27
 -->
 <template>
   <div class="app-container">
@@ -135,8 +135,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         entityName: '',
@@ -243,7 +243,7 @@ export default {
     },
     //导出数据
     exportData() {
-      API.exportEntityWbs({}).then((res) => {
+      API.exportEntityWbs().then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, 'WBS Code - Entity -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')

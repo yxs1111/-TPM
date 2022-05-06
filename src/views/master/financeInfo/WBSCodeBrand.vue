@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-06 10:45:28
+ * @LastEditTime: 2022-05-06 15:33:05
 -->
 <template>
   <div class="app-container">
@@ -222,7 +222,7 @@ export default {
     },
     //导出数据
     exportData() {
-      API.exportBrandWbs({}).then((res) => {
+      API.exportBrandWbs().then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, 'WBS Code - Brand -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')

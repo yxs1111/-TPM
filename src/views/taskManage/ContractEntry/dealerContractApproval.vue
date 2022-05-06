@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-06 09:59:20
+ * @LastEditTime: 2022-05-06 14:48:49
 -->
 <template>
   <div class="MainContent">
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="submit">通过</el-button>
       <el-button type="primary" class="TpmButtonBG" @click="reject">驳回</el-button>
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
@@ -161,8 +161,8 @@ export default {
   name: 'dealerContractEntry',
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         contractDate: [],

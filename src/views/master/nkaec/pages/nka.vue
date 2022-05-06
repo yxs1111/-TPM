@@ -114,8 +114,8 @@ export default {
       skuArr: [],
       warningShow: false,
       importVisibleNKA: false,
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         product: '',

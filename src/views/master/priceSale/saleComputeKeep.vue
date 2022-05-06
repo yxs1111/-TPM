@@ -62,7 +62,8 @@
       <el-table-column v-slot={row} width="160" align="center" prop="updateDate" label="更新时间">
          {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="deleteFlg" label="状态">
+      <el-table-column v-slot={row} width="150" align="center" prop="deleteFlg" label="状态">
+        {{row.deleteFlag==0?'有效':'无效'}}
       </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
@@ -126,8 +127,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',

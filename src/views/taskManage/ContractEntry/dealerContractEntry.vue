@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-06 10:16:58
+ * @LastEditTime: 2022-05-06 16:11:34
 -->
 <template>
   <div class="MainContent">
@@ -52,9 +52,9 @@
       </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
     </div>
-    <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
+    <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :span-method="objectSpanMethod" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <!-- <el-table-column type="selection" align="center" /> -->
+      <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -338,8 +338,8 @@ export default {
   name: 'dealerContractEntry',
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         customerMdmCode: '',
@@ -389,6 +389,7 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
+      spanArr: [], //行合并
     }
   },
   mounted() {
@@ -458,6 +459,7 @@ export default {
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
         this.tableData = [...list]
+        this.getSpanArr(this.tableData)
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
@@ -533,13 +535,21 @@ export default {
     },
     //经销商提交
     submit() {
+      if(this.checkArr.length==0) {
+        this.$message.info("请先选择数据")
+        return
+      }
+      let ccIdList=[]
+      this.checkArr.forEach(item=>{
+        ccIdList.push(item.ccId)
+      })
       this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
         .then(() => {
-          API.submit([]).then((res) => {
+          API.submit(ccIdList).then((res) => {
             if (res.code === 1000) {
               this.getTableData()
               this.$message.success('提交成功')
@@ -804,6 +814,40 @@ export default {
       // this.$router.push(
       //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
       // )
+    },
+    //合并行
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      // columnIndex === xx 找到第xx列，实现合并随机出现的行数
+      if (columnIndex === 0) {
+        const _row = this.spanArr[rowIndex]
+        const _col = _row > 0 ? 1 : 0
+        return {
+          rowspan: _row,
+          colspan: _col,
+        }
+      }
+    },
+    // 因为要合并的行数是不固定的，此函数是实现合并随意行数的功能
+    getSpanArr(data) {
+      this.spanArr = []
+      this.pos = 0
+      for (var i = 0; i < data.length; i++) {
+        if (i === 0) {
+          // 如果是第一条记录（即索引是0的时候），向数组中加入１
+          this.spanArr.push(1)
+          this.pos = 0
+        } else {
+          if (data[i].customerName === data[i - 1].customerName) {
+            // 如果id相等就累加，并且push 0
+            this.spanArr[this.pos] += 1
+            this.spanArr.push(0)
+          } else {
+            // 不相等push 1
+            this.spanArr.push(1)
+            this.pos = i
+          }
+        }
+      }
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

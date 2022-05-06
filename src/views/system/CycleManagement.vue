@@ -143,8 +143,8 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         activityMonth: '',

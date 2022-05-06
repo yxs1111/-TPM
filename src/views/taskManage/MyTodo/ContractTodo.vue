@@ -94,8 +94,8 @@ import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         minePackageCode: '',

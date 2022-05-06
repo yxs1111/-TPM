@@ -221,8 +221,8 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       input: '',
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         channelCode: '',

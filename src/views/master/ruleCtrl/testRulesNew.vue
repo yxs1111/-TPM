@@ -150,8 +150,8 @@ export default {
         newYear: [{ required: true, message: '请输入新年月', trigger: 'blur' }],
       },
       url: '@/assets/images/selectError.png',
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         minePackage: '',

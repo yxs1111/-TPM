@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-04-25 10:25:17
+ * @LastEditTime: 2022-05-06 16:07:31
 -->
 <template>
   <div class="app-container">
@@ -66,8 +66,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {},
       permissions: getDefaultPermissions(),

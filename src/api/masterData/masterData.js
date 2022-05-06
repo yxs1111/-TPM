@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-05-06 10:07:44
+ * @LastEditTime: 2022-05-06 15:34:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -547,7 +547,7 @@ export default {
     return request({
       url: '/cityplan/mdEntityWbs/exportExcel',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },
@@ -573,7 +573,7 @@ export default {
     return request({
       url: '/cityplan/mdBrandWbs/exportExcel',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },
