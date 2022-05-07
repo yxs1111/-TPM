@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 11:37:39
+ * @LastEditTime: 2022-05-07 11:54:11
 -->
 <template>
   <div class="MainContent">
@@ -188,7 +188,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="90%" top="2vh" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="90%"  ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
@@ -846,7 +846,7 @@ export default {
         this.$message.info('该数据为新增数据,请选择其它数据')
       } else {
         //草稿、被拒绝可以编辑，其他仅查看
-        this.$refs.termDialog.$el.firstChild.style.height = '90%'
+        // this.$refs.termDialog.$el.firstChild.style.height = '90%'
         API.findOneSaveDetail({
           id: this.customerId,
           isMain: 1,

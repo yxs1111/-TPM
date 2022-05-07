@@ -3,7 +3,7 @@ export default {
     const dialogHeaderEl = el.querySelector('.el-dialog__header')
     const dragDom = el.querySelector('.el-dialog')
     dialogHeaderEl.style.cssText += ';cursor:move;'
-    dragDom.style.cssText += ';top:0px;'
+    dragDom.style.cssText += ';'
 
     // 获取原有属性 ie dom元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
     const getStyle = (function() {

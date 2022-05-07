@@ -160,7 +160,7 @@ export default {
         regionName: '',
         largeAreaName: '',
         largeAreaCode: '',
-        state: '1',
+        state: 1,
         remark: '',
       },
       rules: {
