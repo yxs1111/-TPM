@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 13:49:28
+ * @LastEditTime: 2022-05-07 15:47:25
 -->
 <template>
   <div class="MainContent">
@@ -368,7 +368,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'UnStraightGiving',
+  name: 'StraightGiving',
   data() {
     return {
       total: 0,

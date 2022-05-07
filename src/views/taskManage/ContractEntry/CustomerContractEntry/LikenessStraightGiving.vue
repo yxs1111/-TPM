@@ -368,7 +368,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
-  name: 'UnStraightGiving',
+  name: 'LikenessStraightGiving',
   data() {
     return {
       total: 0,
