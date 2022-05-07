@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-28 15:08:24
+ * @LastEditTime: 2022-05-07 14:36:57
 -->
 <template>
   <div class="tabViewsWrap">
@@ -97,7 +97,7 @@ export default {
           if (element.costType === 'Price Promotion' && signP === 0) {
             this.routerList.push({
               name: '折扣项-价促',
-              path: '/V1/V1Approval/V1discountDiscountApproval',
+              path: '/costManagement/V1/V1Approval/V1discountDiscountApproval',
               img: {
                 dark: require('@/assets/images/tab/tab2.png'),
                 light: require('@/assets/images/tab/tab2_l.png')
@@ -107,7 +107,7 @@ export default {
           } else if (element.costType === 'New User' && signN === 0) {
             this.routerList.push({
               name: '折扣项-新客',
-              path: '/V1/V1Approval/V1discountNUApproval',
+              path: '/costManagement/V1/V1Approval/V1discountNUApproval',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')
@@ -120,7 +120,7 @@ export default {
           this.routerList = [
             {
               name: '折扣项-价促',
-              path: '/V1/V1Approval/V1discountDiscountApproval',
+              path: '/costManagement/V1/V1Approval/V1discountDiscountApproval',
               img: {
                 dark: require('@/assets/images/tab/tab2.png'),
                 light: require('@/assets/images/tab/tab2_l.png')
@@ -128,7 +128,7 @@ export default {
             },
             {
               name: '折扣项-新客',
-              path: '/V1/V1Approval/V1discountNUApproval',
+              path: '/costManagement/V1/V1Approval/V1discountNUApproval',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')
@@ -140,7 +140,7 @@ export default {
             ...this.routerList,
             {
               name: '折扣项-HIH Rebate',
-              path: '/V1/V1Approval/V1HIHRebate',
+              path: '/costManagement/V1/V1Approval/V1HIHRebate',
               img: {
                 dark: require('@/assets/images/tab/tab2.png'),
                 light: require('@/assets/images/tab/tab2_l.png')
@@ -148,7 +148,7 @@ export default {
             },
             {
               name: '折扣项-KA Rebate',
-              path: '/V1/V1Approval/V1KARebate',
+              path: '/costManagement/V1/V1Approval/V1KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')

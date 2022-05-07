@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-27 12:12:57
+ * @LastEditTime: 2022-05-07 14:24:28
 -->
 <template>
-  <div class="app-container">
+  <div class="V0Content">
     <div class="Maincontent" @keyup.enter="search">
       <div class="SelectBarWrap">
         <div class="SelectBar">
@@ -666,6 +666,12 @@ export default {
   width: 100%;
   height: calc(100% - 50px);
   overflow-y: auto;
+}
+.V0Content {
+  height: calc(100% - 0px);
+  background-color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
 }
 </style>
 <style>

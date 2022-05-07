@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-07 11:28:08
+ * @LastEditTime: 2022-05-07 13:40:40
 -->
 <template>
   <div class="app-container">
@@ -17,9 +17,15 @@
           <el-input v-model="filterObj.contractItem" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">条件类型</span>
+          <span class="SelectliTitle">条款类型</span>
           <el-select v-model="filterObj.conditionType" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in ConditionsTypeList" :key="index" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">预提类型</span>
+          <el-select v-model="filterObj.variablePoint" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in ['variable','fixed']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -28,6 +34,7 @@
             <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
+        
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData">
@@ -77,7 +84,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column  align="center" prop="conditionType" label="条件类型">
+      <el-table-column width="360" align="center" prop="conditionType" label="条件类型">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.conditionTypeList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
@@ -89,7 +96,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column  align="center" label="固定值/点数">
+      <el-table-column width="360" align="center" label="固定值/点数">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.variablePointList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
@@ -107,6 +114,13 @@
             {{ row.deleteFlag==0 ? '有效' : '无效' }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
+        {{ row.createDate ? row.createDate.replace("T"," ") : '' }} </el-table-column>
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人"> </el-table-column>
+      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
+        {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -193,6 +207,7 @@ export default {
         contractItemCode: '',
         contractItem: '',
         conditionType: '',
+        variablePoint: '',
         state: '',
       },
       permissions: getDefaultPermissions(),

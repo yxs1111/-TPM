@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2021-12-23 20:41:41
+ * @LastEditTime: 2022-05-07 14:48:12
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -15,6 +15,7 @@ import common from '@/router/routers/common'
 import system from '@/router/routers/system'
 import sample from '@/router/routers/sample'
 import activiti from '@/router/routers/activiti'
+import cost from '@/router/routers/cost'
 import V0 from '@/router/routers/V0'
 import V1 from '@/router/routers/V1'
 import V2 from '@/router/routers/V2'
@@ -67,11 +68,11 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  
-  ...V0(),
-  ...V1(),
-  ...V2(),
-  ...V3(),
+  ...cost(),
+  // ...V0(),
+  // ...V1(),
+  // ...V2(),
+  // ...V3(),
   ...masterData(),
   ...Report(),
   ...taskManage(),
