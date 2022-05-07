@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-05 16:44:28
+ * @LastEditTime: 2022-05-07 08:34:28
 -->
 <template>
   <div class="app-container">
@@ -29,6 +29,7 @@
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportData">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
@@ -326,9 +327,9 @@ export default {
     },
     Reset() {
       this.filterObj = {
-        entityName: '',
-        entityID: '',
-        profitCenter: '',
+        contractItemCode: '',
+        contractItem: '',
+        conditionType: '',
         state: '',
       }
       this.getTableData()
