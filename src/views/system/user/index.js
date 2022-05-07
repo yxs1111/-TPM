@@ -846,13 +846,13 @@ export default {
           let obj = {
             children: [],
             label: key,
-            dataFirCode: 'Cost Item',
+            dataFirCode: 'Mine Package',
             dataSecCode: key,
           }
           const thirdList = secondObj[key]
           thirdList.forEach(thirdItem => {
             obj.children.push({
-              dataFirCode: 'Cost Item',
+              dataFirCode: 'Mine Package',
               dataSecCode: key,
               dataTerCode: thirdItem,
               label: thirdItem,
@@ -864,7 +864,7 @@ export default {
           })
         }
         var obj = {
-          label: 'Cost Item',
+          label: 'Mine Package',
           children: [...list]
         }
         this.RoleTreeData_Mine = []

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-07 15:16:16
+ * @LastEditTime: 2022-05-07 16:19:38
 -->
 <template>
   <div class="tabViewsWrap">
@@ -53,7 +53,7 @@ export default {
           },
         },
         {
-          name: '非直供',
+          name: '间供',
           path: '/contractManagement/ContractEntry/CustomerContractEntry/UnStraightGiving',
           img: {
             dark: require('@/assets/images/tab/tab3.png'),

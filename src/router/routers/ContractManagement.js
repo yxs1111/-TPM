@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 15:44:26
+ * @LastEditTime: 2022-05-07 16:27:54
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -71,7 +71,7 @@ export default function() {
           name: 'dealerContract',
           code: 'mdm_product_information',
           component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '分摊协议', icon: 'apply',activeMenu: '/contractManagement' },
+          meta: { title: '经销商分摊协议', icon: 'apply',activeMenu: '/contractManagement' },
           children: [
             {
               path: '/contractManagement/dealer/dealerContractEntry',
