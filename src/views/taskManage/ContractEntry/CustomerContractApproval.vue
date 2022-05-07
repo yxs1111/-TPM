@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 10:52:42
+ * @LastEditTime: 2022-05-07 13:51:09
 -->
 <template>
   <div class="MainContent">
@@ -641,16 +641,18 @@ export default {
         if (!code) {
           return 0
         }
-        //variable
-        return this.contractItemVariableList.findIndex(
+        let index=this.contractItemVariableList.findIndex(
           (item) => item.code == code
         )
+        //variable
+        return index!=-1?index:0
       } else {
         if (!code) {
           return 0
         }
+        let index=this.contractItemFixList.findIndex((item) => item.code == code)
         //fix
-        return this.contractItemFixList.findIndex((item) => item.code == code)
+        return index!=-1?index:0
       }
     },
     //条款明细保存
