@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 11:10:00
+ * @LastEditTime: 2022-05-07 15:57:58
 -->
 <template>
   <div class="MainContent">
@@ -82,7 +82,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerName" align="center" width="160" label="客户名称">
+      <el-table-column prop="customerName" fixed align="center" width="160" label="客户名称">
         <template slot-scope="scope">
           <div>
             {{scope.row.customerName}}
@@ -168,7 +168,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="220" align="center" label="合同条款">
+      <el-table-column v-slot={row} width="120" align="center" label="合同条款">
         <div class="seeActivity" @click="showTermDetailDialog(row)">
           条款明细
         </div>
@@ -899,10 +899,10 @@ export default {
 }
 .seeActivity {
   height: 32px;
-  background: #dcefe7;
+  background: #D7E8F2;
   border-radius: 6px;
   font-size: 16px;
-  color: #59be87;
+  color: #4192d3;
   font-weight: 600;
   line-height: 32px;
   cursor: pointer;

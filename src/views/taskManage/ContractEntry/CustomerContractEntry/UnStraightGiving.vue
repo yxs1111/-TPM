@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 15:47:36
+ * @LastEditTime: 2022-05-07 15:53:37
 -->
 <template>
   <div class="MainContent">
@@ -79,7 +79,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerMdmCode" align="center" width="220" label="客户名称">
+      <el-table-column prop="customerMdmCode" fixed align="center" width="220" label="客户名称">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.customerMdmCode" class="my-el-input" filterable clearable placeholder="请选择">
@@ -91,7 +91,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额">
+      <el-table-column prop="saleAmount" align="center" width="180" label="目标销售额">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
@@ -127,7 +127,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="240" label="合同状态">
+      <el-table-column align="center" width="160" label="合同状态">
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
@@ -157,7 +157,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" label="合同条款">
+      <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
           <div class="seeActivity" @click="showTermsDetail(scope.$index)">
             条款明细
@@ -1202,10 +1202,10 @@ export default {
 <style lang="scss" scoped>
 .seeActivity {
   height: 32px;
-  background: #dcefe7;
+  background: #D7E8F2;
   border-radius: 6px;
   font-size: 16px;
-  color: #59be87;
+  color: #4192d3;
   font-weight: 600;
   line-height: 32px;
   cursor: pointer;
