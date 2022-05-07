@@ -78,12 +78,12 @@
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" label="更新时间">
+      <el-table-column width="180" align="center" label="修改时间">
         <template slot-scope="scope">
           {{ scope.row.updateDate==null ? '': scope.row.updateDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="180" align="center" prop="updateBy" label="修改人" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->

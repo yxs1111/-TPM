@@ -1,17 +1,17 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-07 08:34:28
+ * @LastEditTime: 2022-05-07 11:28:08
 -->
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
-        <div class="Selectli">
+        <!-- <div class="Selectli">
           <span class="SelectliTitle" style="width:200px">Contract Item 编码</span>
           <el-input v-model="filterObj.contractItemCode" clearable placeholder="请输入" />
-        </div>
+        </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">Contract Item</span>
           <el-input v-model="filterObj.contractItem" clearable placeholder="请输入" />
@@ -139,7 +139,7 @@
       </span>
     </el-dialog>
     <!-- 导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="35%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">模板</div>
         <div class="my-search selectFile" @click="downloadTemplate">
@@ -285,10 +285,10 @@ export default {
           item.conditionTypeText = item.conditionType
           item.variablePointText = item.variablePoint
           item.paymentMethodIndex = this.getPaymentMethodIndex(item.paymentMethod)
-          if (item.conditionType != '') {
+          if (item.conditionType) {
             item.conditionTypeList = item.conditionType.split(',')
           }
-          if (item.variablePoint != '') {
+          if (item.variablePoint) {
             item.variablePointList = item.variablePoint.split(',')
           }
         })

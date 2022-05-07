@@ -128,7 +128,7 @@
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
           <span class="termItem">目标销售额:{{FormateNum(termInfo.saleAmount)}}</span>
-          <span class="termItem">合同期间:{{termInfo.contractBeginDate.replaceAll('-','/')}}-{{termInfo.contractEndDate.replaceAll('-','/')}}</span>
+          <span class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
           <span class="termItem">系统生效时间:{{termInfo.effectiveBeginDate}}-{{termInfo.effectiveEndDate}}</span>
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>

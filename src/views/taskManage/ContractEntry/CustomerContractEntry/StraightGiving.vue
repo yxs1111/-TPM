@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 10:52:01
+ * @LastEditTime: 2022-05-07 11:37:28
 -->
 <template>
   <div class="MainContent">
@@ -193,7 +193,7 @@
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
           <span class="termItem">目标销售额:{{FormateNum(termInfo.saleAmount)}}</span>
-          <span class="termItem">合同期间:{{termInfo.contractBeginDate.replaceAll('-','/')}}-{{termInfo.contractEndDate.replaceAll('-','/')}}</span>
+          <span class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
           <span class="termItem">系统生效时间:{{termInfo.effectiveBeginDate}}-{{termInfo.effectiveEndDate}}</span>
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>

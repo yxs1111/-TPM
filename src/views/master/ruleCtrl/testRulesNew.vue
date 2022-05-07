@@ -52,8 +52,8 @@
       <el-table-column width="100" align="left" prop="channelEsName" label="渠道" />
       <!-- <el-table-column width="180" align="left" prop="costType" label="Mine Package" /> -->
       <el-table-column width="150" align="left" prop="yearAndMonth" label="年月" />
-      <el-table-column width="" align="left" prop="updateBy" label="更新人" />
-      <el-table-column width="180" align="left" prop="updateDate" label="更新时间">
+      <el-table-column width="" align="left" prop="updateBy" label="修改人" />
+      <el-table-column width="180" align="left" prop="updateDate" label="修改时间">
         <template slot-scope="{row}">
           {{ row.updateDate === null? '':row.updateDate.replace('T',' ') }}
         </template>

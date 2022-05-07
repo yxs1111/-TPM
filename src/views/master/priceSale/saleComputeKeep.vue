@@ -58,8 +58,8 @@
       <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
         {{(row.platformRebate*1).toFixed(4)}}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
-      <el-table-column v-slot={row} width="160" align="center" prop="updateDate" label="更新时间">
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
+      <el-table-column v-slot={row} width="160" align="center" prop="updateDate" label="修改时间">
          {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
       <el-table-column v-slot={row} width="150" align="center" prop="deleteFlg" label="状态">

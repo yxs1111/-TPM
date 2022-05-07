@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 10:54:36
+ * @LastEditTime: 2022-05-07 11:10:00
 -->
 <template>
   <div class="MainContent">
@@ -89,7 +89,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额(¥)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount)}}
@@ -103,7 +103,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="160" label="目标销售额(¥)">
+      <el-table-column prop="saleAmount" align="center" width="160" label="协议目标销售额(¥)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
@@ -213,7 +213,7 @@
             <el-table :data="addDialogCustomer" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="customerName" align="center" width="320" label="客户名称">
               </el-table-column>
-              <el-table-column prop="saleAmount" align="center" width="280" label="客户目标销售额">
+              <el-table-column prop="saleAmount" align="center" width="280" label="客户目标销售额(¥)">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.saleAmount)}}
