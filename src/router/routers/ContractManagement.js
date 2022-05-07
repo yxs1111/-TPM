@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 16:27:54
+ * @LastEditTime: 2022-05-07 17:13:35
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -14,7 +14,7 @@ export default function() {
       code: 'price_nka_v0',
       name: 'costManagement',
       alwaysShow: true,
-      meta: { title: '合同管理', icon: 'V0' },
+      meta: { title: '合同管理', icon: 'contractManagement' },
       children: [
         {
           path: '/contractManagement/ContractEntry',
@@ -62,7 +62,7 @@ export default function() {
               code: 'mdm_product_information',
               name: 'CustomerContractApproval',
               component: () => import('@/views/taskManage/ContractEntry/CustomerContractApproval.vue'),
-              meta: { title: '审批', icon: 'apply',activeMenu: '/contractManagement/ContractEntry/CustomerContractApproval' },
+              meta: { title: '审批', icon: 'approve',activeMenu: '/contractManagement/ContractEntry/CustomerContractApproval' },
             },
           ]
         },
@@ -93,7 +93,7 @@ export default function() {
               code: 'mdm_product_information',
               name: 'dealerContractApproval',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval.vue'),
-              meta: { title: '审批', icon: 'apply' },
+              meta: { title: '审批', icon: 'approve' },
             },
             {
               hidden: true,

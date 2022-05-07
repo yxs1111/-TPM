@@ -71,7 +71,7 @@ export default function() {
               name: 'Channel',
               component: () =>
                 import('@/views/master/organization/Channel.vue'),
-              meta: { title: '渠道', icon: 'apply' }
+              meta: { title: '渠道', icon: 'approve' }
             },
             {
               path: '/organization/Customer',
@@ -79,7 +79,7 @@ export default function() {
               name: 'Customer',
               component: () =>
                 import('@/views/master/organization/Customer.vue'),
-              meta: { title: '客户', icon: 'apply' }
+              meta: { title: '客户', icon: 'approve' }
             },
             // {
             //   path: '/organization/CustomerTeam',
@@ -94,7 +94,7 @@ export default function() {
               code: 'mdm_store',
               name: 'Store',
               component: () => import('@/views/master/organization/Store.vue'),
-              meta: { title: '门店', icon: 'apply' }
+              meta: { title: '门店', icon: 'approve' }
             },
             {
               path: '/organization/Dealers',
@@ -102,7 +102,7 @@ export default function() {
               name: 'Dealers',
               component: () =>
                 import('@/views/master/organization/Dealers.vue'),
-              meta: { title: '经销商', icon: 'apply' }
+              meta: { title: '经销商', icon: 'approve' }
             },
             {
               path: '/organization/Supplier',
@@ -110,14 +110,14 @@ export default function() {
               name: 'Supplier',
               component: () =>
                 import('@/views/master/organization/Supplier.vue'),
-              meta: { title: '供应商', icon: 'apply' }
+              meta: { title: '供应商', icon: 'approve' }
             },
             {
               path: '/organization/SaleKJ',
               code: 'mdm_Sales_structure',
               name: 'SaleKJ',
               component: () => import('@/views/master/organization/saleKJ.vue'),
-              meta: { title: '销售架构', icon: 'apply' }
+              meta: { title: '销售架构', icon: 'approve' }
             },
             // {
             //   path: '/organization/CustomerSupplier',
@@ -144,14 +144,14 @@ export default function() {
               code: 'mdm_brand',
               name: 'Brand',
               component: () => import('@/views/master/itemInfo/Brand.vue'),
-              meta: { title: '品牌', icon: 'apply' }
+              meta: { title: '品牌', icon: 'approve' }
             },
             {
               path: '/itemInfo/SKU',
               code: 'mdm_product',
               name: 'SKU',
               component: () => import('@/views/master/itemInfo/SKU.vue'),
-              meta: { title: '产品', icon: 'apply' }
+              meta: { title: '产品', icon: 'approve' }
             }
           ]
         },
@@ -162,7 +162,7 @@ export default function() {
           alwaysShow: true,
           code: 'mdm_Prices_and_promotions',
           component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '价格和促销', icon: 'approve' },
+          meta: { title: '价格和促销', icon: 'apply' },
           // redirect: '/priceSale/saleComputeKeep',
           children: [
             // 价格主数据
@@ -174,7 +174,7 @@ export default function() {
                 import('@/views/master/priceSale/priceMasterData.vue'),
               meta: {
                 title: '价格主数据',
-                icon: 'apply'
+                icon: 'approve'
               }
             },
             {
@@ -186,7 +186,7 @@ export default function() {
                 import('@/views/master/priceSale/priceLevelKeep.vue'),
               meta: {
                 title: '价格档位维护',
-                icon: 'apply'
+                icon: 'approve'
               }
             },
             // 促销计算维护
@@ -198,7 +198,7 @@ export default function() {
                 import('@/views/master/priceSale/saleComputeKeep.vue'),
               meta: {
                 title: '价促计算维护',
-                icon: 'apply'
+                icon: 'approve'
               }
             },
             // {
@@ -214,7 +214,7 @@ export default function() {
               name: 'SystemPool',
               component: () =>
                 import('@/views/master/priceSale/model/sysPool.vue'),
-              meta: { title: '机制池', icon: 'apply' },
+              meta: { title: '机制池', icon: 'approve' },
               redirect: '/master/priceSale/systemPool',
               children: [
                 {
@@ -254,7 +254,7 @@ export default function() {
           alwaysShow: true,
           code: 'mdm_Financial_Information',
           component: () => import('@/views/master/modelIndex.vue'),
-          meta: { title: '财务信息', icon: 'approve' },
+          meta: { title: '财务信息', icon: 'apply' },
           alwaysShow: true,
           // redirect: '/priceSale/saleComputeKeep',
           children: [
@@ -264,7 +264,7 @@ export default function() {
               name: 'RoleCostSubjectControl',
               component: () =>
                 import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
-              meta: { title: '费用科目', icon: 'apply' }
+              meta: { title: '费用科目', icon: 'approve' }
             },
             {
               path: '/WBSCodeEntity',
@@ -272,7 +272,7 @@ export default function() {
               name: 'WBSCodeEntity',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeEntity.vue'),
-              meta: { title: 'WBS Code - Entity', icon: 'apply' }
+              meta: { title: 'WBS Code - Entity', icon: 'approve' }
             },
             // {
             //   path: '/WBSCodeYear',
@@ -288,7 +288,7 @@ export default function() {
               name: 'WBSCodeBrand',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeBrand.vue'),
-              meta: { title: 'WBS Code - Brand', icon: 'apply' }
+              meta: { title: 'WBS Code - Brand', icon: 'approve' }
             },
             {
               path: '/WBSCodeDepartment',
@@ -296,7 +296,7 @@ export default function() {
               name: 'WBSCodeDepartment',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeDepartment.vue'),
-              meta: { title: 'WBS Code - Department', icon: 'apply' }
+              meta: { title: 'WBS Code - Department', icon: 'approve' }
             },
             {
               path: '/WbsMaintenance',
@@ -304,7 +304,7 @@ export default function() {
               name: 'WbsMaintenance',
               component: () =>
                 import('@/views/master/financeInfo/WbsMaintenance.vue'),
-              meta: { title: 'WBS Code - Customer', icon: 'apply' }
+              meta: { title: 'WBS Code - Customer', icon: 'approve' }
             },
             {
               path: '/IoMaintenance',
@@ -312,7 +312,7 @@ export default function() {
               name: 'IoMaintenance',
               component: () =>
                 import('@/views/master/financeInfo/IoMaintenance.vue'),
-              meta: { title: 'IO维护', icon: 'apply' }
+              meta: { title: 'IO维护', icon: 'approve' }
             },
           ]
         },

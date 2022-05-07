@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 14:50:43
+ * @LastEditTime: 2022-05-07 16:55:53
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -18,7 +18,7 @@ export default function() {
       code: 'price_nka_v0',
       name: 'costManagement',
       alwaysShow: true,
-      meta: { title: '费用管理', icon: 'V0' },
+      meta: { title: '费用管理', icon: 'costManagement' },
       children: [
         ...V0(),
         ...V1(),
