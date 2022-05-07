@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-06 16:11:34
+ * @LastEditTime: 2022-05-07 10:54:36
 -->
 <template>
   <div class="MainContent">
@@ -122,7 +122,7 @@
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
-            {{ scope.row.contractBeginDate + ' - ' + scope.row.contractEndDate }}
+            {{ scope.row.contractBeginDate.replaceAll('-','/') + ' - ' + scope.row.contractEndDate.replaceAll('-','/') }}
           </div>
         </template>
       </el-table-column>
@@ -213,7 +213,7 @@
             <el-table :data="addDialogCustomer" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="customerName" align="center" width="320" label="客户名称">
               </el-table-column>
-              <el-table-column prop="saleAmount" align="center" width="280" label="目标销售额">
+              <el-table-column prop="saleAmount" align="center" width="280" label="客户目标销售额">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.saleAmount)}}
@@ -223,7 +223,7 @@
               <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
                 <template slot-scope="scope">
                   <div>
-                    {{scope.row.contractBeginDate+' - '+scope.row.contractEndDate}}
+                    {{scope.row.contractBeginDate.replaceAll('-','/')+' - '+scope.row.contractEndDate.replaceAll('-','/')}}
                   </div>
                 </template>
               </el-table-column>
@@ -259,7 +259,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="targetSale" align="center" width="280" label="目标销售额(¥)">
+              <el-table-column prop="targetSale" align="center" width="280" label="协议目标销售额(¥)">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
                     <el-input v-model="scope.row.targetSale" clearable class="my-el-input" placeholder="请输入">
@@ -278,7 +278,7 @@
                     </el-date-picker>
                   </div>
                   <div v-else>
-                    {{scope.row.contractDate[0]+'-'+scope.row.contractDate[1]}}
+                    {{scope.row.contractDate[0].replaceAll('-','/')+'-'+scope.row.contractDate[1].replaceAll('-','/')}}
                   </div>
                 </template>
               </el-table-column>

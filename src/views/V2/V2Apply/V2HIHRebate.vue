@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-04-29 16:30:41
+ * @LastEditTime: 2022-05-07 10:01:00
 -->
 <template>
   <div class="MainContent">
@@ -64,7 +64,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.planSalesAmount) }}
           </div>
         </template>
       </el-table-column>
@@ -74,7 +74,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.planCost) }}
           </div>
         </template>
       </el-table-column>
@@ -84,7 +84,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.forecastRatio) }}
           </div>
         </template>
       </el-table-column>
@@ -94,7 +94,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.forecastSalesAmount) }}
           </div>
         </template>
       </el-table-column>
@@ -104,7 +104,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.forecastCost) }}
           </div>
         </template>
       </el-table-column>
@@ -114,7 +114,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.adjustedRatio) }}
           </div>
         </template>
       </el-table-column>
@@ -124,7 +124,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.adjustedSalesAmount) }}
           </div>
         </template>
       </el-table-column>
@@ -134,12 +134,11 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.adjustedCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="费用归属部门">
-        {{ formatNum(row.planCost) }}费用归属部门
+      <el-table-column  width="220" align="right" prop="costBelongDept" label="费用归属部门">
       </el-table-column>
       <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
         <template v-slot:header>
@@ -147,7 +146,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.ratioDifference) }}
           </div>
         </template>
       </el-table-column>
@@ -157,7 +156,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.costDifference) }}
           </div>
         </template>
       </el-table-column>
@@ -174,7 +173,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="系统判定内容">
+      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />

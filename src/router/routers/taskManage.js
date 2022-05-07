@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-04-28 13:15:19
+ * @LastEditTime: 2022-05-07 10:29:50
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -127,7 +127,7 @@ export default function() {
               code: 'mdm_product_information',
               name: 'dealerContractEntry',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry.vue'),
-              meta: { title: '经销商合同录入', icon: 'apply' },
+              meta: { title: '经销商分摊协议录入', icon: 'apply' },
             },
             {
               hidden: true,
@@ -135,14 +135,14 @@ export default function() {
               code: 'mdm_product_information',
               name: 'dealerTermDetail',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail.vue'),
-              meta: { title: '经销商合同录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractEntry'},
+              meta: { title: '经销商分摊协议录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractEntry'},
             },
             {
               path: '/taskManage/ContractEntry/dealerContractApproval',
               code: 'mdm_product_information',
               name: 'dealerContractApproval',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval.vue'),
-              meta: { title: '经销商合同审批', icon: 'apply' },
+              meta: { title: '经销商分摊协议审批', icon: 'apply' },
             },
             {
               hidden: true,
@@ -150,7 +150,7 @@ export default function() {
               code: 'mdm_product_information',
               name: 'dealerTermView',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval/dealerTermView.vue'),
-              meta: { title: '经销商合同录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractApproval'},
+              meta: { title: '经销商分摊协议录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractApproval'},
             },
           ]
         },
