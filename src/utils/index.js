@@ -855,3 +855,28 @@ export let CustomerDeductionsAndPayType = [
     payTypeList: [{label:'红票',value:2},{label:'票扣',value:3}]
   }
 ]
+/**
+ * 合同--获取合同期间（同一年）
+ * @returns 今年开始日期--今年结束日期
+ */
+export function getCurrentYearRange() {
+  let date=new Date()
+  let year=date.getFullYear()
+  let startDate=year+'-'+'01-01'
+  let endDate=year+'-'+'12-31'
+  return [startDate,endDate]
+}
+/**
+ * el-date-picker 限制范围 今年
+ */
+export let pickerOptions={
+  // 限制年月
+  disabledDate: (time) => {
+    const date = new Date() 
+    const year = date.getFullYear()
+    return (
+      //日期限制（同一年）
+      time.getFullYear() == year ?false:true
+    )
+  },
+}

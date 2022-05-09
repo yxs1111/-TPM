@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 15:53:37
+ * @LastEditTime: 2022-05-09 15:50:13
 -->
 <template>
   <div class="MainContent">
@@ -40,10 +40,10 @@
     </div>
     <div class="TpmButtonBGWrap">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow">新增一行</el-button>
-      <div class="TpmButtonBG" @click="save">
+      <!-- <div class="TpmButtonBG" @click="save">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
-      </div>
+      </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
       <!-- <div class="TpmButtonBG cancelButton" @click="cancelAddNewRow">
         <span class="text">取消</span>
@@ -64,7 +64,7 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isNewData&&scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
+            <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
             </div>
@@ -91,7 +91,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="180" label="目标销售额">
+      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
@@ -106,8 +106,8 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
-              start-placeholder="开始日期" end-placeholder="结束日期">
+            <el-date-picker v-model="scope.row.contractDate" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -188,12 +188,13 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="90%"  ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="90%" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
           <span class="termItem">目标销售额:{{FormateNum(termInfo.saleAmount)}}</span>
-          <span class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
+          <span
+            class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
           <span class="termItem">系统生效时间:{{termInfo.effectiveBeginDate}}-{{termInfo.effectiveEndDate}}</span>
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
@@ -363,6 +364,8 @@ import {
   contractItemVariableList,
   contractItemFixList,
   downloadFile,
+  getCurrentYearRange,
+  pickerOptions
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -418,6 +421,7 @@ export default {
       },
       isEditor: 0,
       isShowPopover: false,
+      pickerOptions: pickerOptions,
     }
   },
   mounted() {
@@ -571,7 +575,7 @@ export default {
         saleAmount: '',
         Tax: '',
         NoTax: '',
-        contractDate: [],
+        contractDate: getCurrentYearRange(),
         contractBeginDate: '',
         contractEndDate: '',
         systemDate: [],
@@ -607,7 +611,6 @@ export default {
     save() {
       let addList = this.tableData.filter((item) => item.isNewData == 1)
       let list = []
-
       addList.forEach((item) => {
         let obj = {
           customerMdmCode: '', //客户编号
@@ -633,6 +636,29 @@ export default {
         }
       })
     },
+    saveSingle(row) {
+      let obj = {
+        customerMdmCode: '', //客户编号
+        saleAmount: '', //目标销售额
+        contractBeginDate: '', //合同区间-开始
+        contractEndDate: '', //合同区间-结束
+        effectiveBeginDate: '', //系统生效-开始时间
+        effectiveEndDate: '', //系统生效-结束时间
+        remark: '', //备注
+      }
+      obj.customerMdmCode = row.customerMdmCode
+      obj.saleAmount = row.saleAmount
+      obj.contractBeginDate = row.contractDate[0]
+      obj.contractEndDate = row.contractDate[1]
+      obj.effectiveBeginDate = row.systemDate[0]
+      obj.effectiveEndDate = row.systemDate[1]
+      obj.remark = row.remark
+      API.addCustomerContract([obj]).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+        }
+      })
+    },
     //录入提交
     async submit() {
       if (this.checkArr.length === 0) return this.$message.info('请选择数据')
@@ -642,7 +668,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning',
         })
-          .then(async() => {
+          .then(async () => {
             let IdList = []
             let isSubmit = 1
             for (let index = 0; index < this.checkArr.length; index++) {
@@ -794,25 +820,31 @@ export default {
       if (row.saleAmount > 9999999999) {
         this.$message.info('超出最大数值')
       } else {
-        API.updateCustomerContract({
-          id: row.id,
-          customerMdmCode: row.customerMdmCode,
-          saleAmount: row.saleAmount,
-          contractBeginDate: row.contractDate[0],
-          contractEndDate: row.contractDate[1],
-          effectiveBeginDate: row.systemDate[0],
-          effectiveEndDate: row.systemDate[1],
-          remark: row.remark,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.getTableData()
-            if (res.data) {
-              this.$message.success('修改成功')
-            } else {
-              this.$message.info(`${res.message}`)
+        if (row.isNewData) {
+          //新增数据保存
+          this.saveSingle(row)
+        } else if (row.isEditor) {
+          //修改操作
+          API.updateCustomerContract({
+            id: row.id,
+            customerMdmCode: row.customerMdmCode,
+            saleAmount: row.saleAmount,
+            contractBeginDate: row.contractDate[0],
+            contractEndDate: row.contractDate[1],
+            effectiveBeginDate: row.systemDate[0],
+            effectiveEndDate: row.systemDate[1],
+            remark: row.remark,
+          }).then((res) => {
+            if (res.code === 1000) {
+              this.getTableData()
+              if (res.data) {
+                this.$message.success('修改成功')
+              } else {
+                this.$message.info(`${res.message}`)
+              }
             }
-          }
-        })
+          })
+        }
       }
     },
     //定时任务确定--终止合同
@@ -969,18 +1001,20 @@ export default {
         if (!code) {
           return 0
         }
-        let index=this.contractItemVariableList.findIndex(
+        let index = this.contractItemVariableList.findIndex(
           (item) => item.code == code
         )
         //variable
-        return index!=-1?index:0
+        return index != -1 ? index : 0
       } else {
         if (!code) {
           return 0
         }
-        let index=this.contractItemFixList.findIndex((item) => item.code == code)
+        let index = this.contractItemFixList.findIndex(
+          (item) => item.code == code
+        )
         //fix
-        return index!=-1?index:0
+        return index != -1 ? index : 0
       }
     },
     //条款明细保存
@@ -1202,7 +1236,7 @@ export default {
 <style lang="scss" scoped>
 .seeActivity {
   height: 32px;
-  background: #D7E8F2;
+  background: #d7e8f2;
   border-radius: 6px;
   font-size: 16px;
   color: #4192d3;

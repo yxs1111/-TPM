@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 16:38:52
+ * @LastEditTime: 2022-05-09 15:49:48
 -->
 <template>
   <div class="MainContent">
@@ -103,7 +103,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="160" label="协议目标销售额(¥)">
+      <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(¥)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
@@ -114,10 +114,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractDate" align="center" width="200" label="合同期间">
+      <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+            <el-date-picker v-model="scope.row.contractDate" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
@@ -126,7 +126,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="systemDate" align="center" width="160" label="系统生效时间">
+      <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
@@ -273,7 +273,7 @@
               <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
-                    <el-date-picker v-model="scope.row.contractDate" type="daterange" class="select_date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
+                    <el-date-picker v-model="scope.row.contractDate" type="daterange" class="select_date" :picker-options="pickerOptions" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
                       start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                   </div>
@@ -329,6 +329,7 @@ import {
   contractList,
   FormateThousandNum,
   downloadFile,
+  pickerOptions
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -390,6 +391,7 @@ export default {
         tempInfo: null,
       },
       spanArr: [], //行合并
+      pickerOptions:pickerOptions
     }
   },
   mounted() {
