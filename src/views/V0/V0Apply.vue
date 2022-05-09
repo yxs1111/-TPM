@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-07 14:23:26
+ * @LastEditTime: 2022-05-09 09:20:37
 -->
 <template>
   <div class="V0Content">
@@ -131,7 +131,7 @@
         <img src="@/assets/images/null_content.jpg" alt="">
         <div class="null_content_tit">暂无数据</div>
       </div>
-      <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+      <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
         <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">

@@ -740,8 +740,10 @@ div:focus {
 }
 .el-form-row {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
   /* 自定义el-select样式 */
   .my-el-select {
     width: 226px !important;

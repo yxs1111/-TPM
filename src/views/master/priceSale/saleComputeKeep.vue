@@ -77,7 +77,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <!-- <el-button type="primary" class="my-search selectFile" @click="TemplateDownload">
             <svg-icon icon-class="download_white" style="font-size: 16px;" />
@@ -111,7 +111,7 @@
       </div>
     </el-dialog>
     <!-- 错误弹窗 -->
-    <el-dialog width="25%" class="my-el-dialog" title="错误信息" :visible="errorVisible" @close="closeErrorDialog">
+    <el-dialog width="50%" class="my-el-dialog" title="错误信息" :visible="errorVisible" @close="closeErrorDialog">
       <div style="height: 300px;overflow: scroll;overflow-x: hidden;margin-top:15px;">
         <el-alert v-for="(item, index) in errorList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
       </div>

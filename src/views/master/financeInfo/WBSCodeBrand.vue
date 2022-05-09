@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-06 15:33:05
+ * @LastEditTime: 2022-05-09 09:17:55
 -->
 <template>
   <div class="app-container">
@@ -79,7 +79,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS Code-Brand'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS Code-Brand'" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
           <el-form-item label="Brand ID" prop="brandID" v-if="isEditor">

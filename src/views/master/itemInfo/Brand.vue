@@ -56,7 +56,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '品牌信息'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '品牌信息'" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
           <el-form-item label="品牌编码" v-show="!isEditor">

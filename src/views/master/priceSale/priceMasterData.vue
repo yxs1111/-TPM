@@ -84,7 +84,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="35%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">模板</div>
         <div class="my-search selectFile" @click="downloadMdprice">

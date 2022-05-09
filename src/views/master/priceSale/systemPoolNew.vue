@@ -179,7 +179,7 @@
       </span>
     </el-dialog>
     <!-- 导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <!-- <div style="color:#4192d3;text-align:center;cursor:pointer;" @click="downLoadElxModel">下 载 模 板</div> -->
       <div class="fileInfo ImportContent">
         <div class="fileTitle">模板</div>

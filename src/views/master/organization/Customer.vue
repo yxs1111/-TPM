@@ -75,7 +75,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- NKA导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="NKA导入" :visible="importVisibleNKA" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="NKA导入" :visible="importVisibleNKA" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
@@ -91,7 +91,7 @@
       </span>
     </el-dialog>
     <!-- EC导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="EC导入" :visible="importVisibleEC" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="EC导入" :visible="importVisibleEC" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
@@ -107,7 +107,7 @@
       </span>
     </el-dialog>
     <!-- NKALine导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="NKALine导入" :visible="importVisibleNKALine" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="NKALine导入" :visible="importVisibleNKALine" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>
@@ -123,7 +123,7 @@
       </span>
     </el-dialog>
     <!-- ECLine导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="ECLine导入" :visible="importVisibleECLine" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="ECLine导入" :visible="importVisibleECLine" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">文件</div>
         <el-button size="mini" class="my-search selectFile" @click="parsingExcelBtn">选择文件</el-button>

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-07 13:40:40
+ * @LastEditTime: 2022-05-09 09:11:44
 -->
 <template>
   <div class="app-container">
@@ -128,7 +128,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" title="新增ContractItem" :visible="dialogVisible" width="35%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" title="新增ContractItem" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="el-form-row">
           <el-form-item label="Contract Item" prop="contractItem">
@@ -153,7 +153,7 @@
       </span>
     </el-dialog>
     <!-- 导入 -->
-    <el-dialog width="35%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <div class="fileTitle">模板</div>
         <div class="my-search selectFile" @click="downloadTemplate">

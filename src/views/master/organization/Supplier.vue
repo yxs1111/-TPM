@@ -74,7 +74,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '供应商信息'" :visible="dialogVisible" width="25%" @close="closeDialog">
+    <el-dialog v-el-drag-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + '供应商信息'" :visible="dialogVisible" width="50%" @close="closeDialog">
       <div class="el-dialogContent">
         <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140px" class="el-form-row">
           <el-form-item label="供应商CP编码" v-show="isEditor" prop="supplierCode">
