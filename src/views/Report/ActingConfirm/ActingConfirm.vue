@@ -58,6 +58,7 @@
     <el-table :data="tableData" ref="multipleTable" border :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column width="450" align="center" prop="cpId" label="确认函代垫编号" />
+      <el-table-column width="450" align="center" prop="onlyCode" label="oneDT确认函编码" />
       <el-table-column width="150" align="center" prop="yearAndMonth" label="实际发生月" />
       <el-table-column width="150" align="center" prop="deptCode" label="部门代码" />
       <el-table-column width="150" align="center" prop="deptName" label="部门" />

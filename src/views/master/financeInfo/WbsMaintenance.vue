@@ -83,21 +83,16 @@
             <el-input v-model="ruleForm.wbsCustomerCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="客户名称" prop="customerCsName">
-            <el-select v-model="ruleForm.customerCsName" class="my-el-input" clearable filterable placeholder="请选择">
+          <el-form-item label="客户名称" prop="customerCsName" v-if="!isEditor">
+            <el-select v-model="ruleForm.customerCsName"  class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label="渠道" prop="channelCode">
-            <el-select v-model="ruleForm.channelCode" class="my-el-input" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
-          </el-select>
-          </el-form-item> -->
-          
+          <el-form-item label="客户名称" prop="customerCsName" v-if="isEditor">
+            <el-input v-model="ruleForm.customerCsName" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
           <el-form-item label="状态">
-              <!-- <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
-              <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
-               -->
             <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="(item,index) in ['无效','有效']" :key="item" :label="item" :value="index" />
             </el-select>
@@ -306,11 +301,11 @@ export default {
         remark: obj.remark,
       }
       //若客户下拉框数据没有当前则置空
-      let isExistCustom=this.customerArr.find(item=>item.customerCsName == this.ruleForm.customerCsName)
-      if (!isExistCustom) {
-        this.ruleForm.customerCsName=''
-        this.ruleForm.customerMdmCode=''
-      } 
+      // let isExistCustom=this.customerArr.find(item=>item.customerCsName == this.ruleForm.customerCsName)
+      // if (!isExistCustom) {
+      //   this.ruleForm.customerCsName=''
+      //   this.ruleForm.customerMdmCode=''
+      // } 
       this.editorId = obj.id
     },
     //提交form
