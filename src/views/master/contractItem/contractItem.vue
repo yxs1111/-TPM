@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-09 09:11:44
+ * @LastEditTime: 2022-05-09 16:36:53
 -->
 <template>
   <div class="app-container">
@@ -18,14 +18,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">条款类型</span>
-          <el-select v-model="filterObj.conditionType" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.conditionType" multiple clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in ConditionsTypeList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">预提类型</span>
-          <el-select v-model="filterObj.variablePoint" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in ['variable','fixed']" :key="index" :label="item" :value="index" />
+          <el-select v-model="filterObj.variablePoint" multiple  clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in FixOrPointList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -84,7 +84,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="360" align="center" prop="conditionType" label="条件类型">
+      <el-table-column width="360" align="center" prop="conditionType" label="条款类型">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.conditionTypeList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
@@ -96,7 +96,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="360" align="center" label="固定值/点数">
+      <el-table-column width="360" align="center" label="预提类型">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.variablePointList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
@@ -135,14 +135,19 @@
             <el-input v-model="ruleForm.contractItem" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="条件类型" prop="conditionType">
+          <el-form-item label="条款类型" prop="conditionType">
             <el-select v-model="ruleForm.conditionType" multiple class="my-el-input" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in ConditionsTypeList" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="固定值/点数" prop="variablePoint">
+          <el-form-item label="预提类型" prop="variablePoint">
             <el-select v-model="ruleForm.variablePoint" multiple class="my-el-input" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in FixOrPointList" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="状态" prop="state">
+            <el-select v-model="ruleForm.state" class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -206,8 +211,8 @@ export default {
       filterObj: {
         contractItemCode: '',
         contractItem: '',
-        conditionType: '',
-        variablePoint: '',
+        conditionType: [],
+        variablePoint: [],
         state: '',
       },
       permissions: getDefaultPermissions(),
@@ -216,15 +221,9 @@ export default {
         contractItem: '',
         conditionType: [],
         variablePoint: [],
+        state:1
       },
       rules: {
-        contractItemCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
         contractItem: [
           {
             required: true,
@@ -240,6 +239,13 @@ export default {
           },
         ],
         variablePoint: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        state: [
           {
             required: true,
             message: 'This field is required',
@@ -277,9 +283,6 @@ export default {
   },
   computed: {},
   watch: {
-    'ruleForm.deductionPoints'(value) {
-      this.ruleForm.paymentMethod=''
-    }
   },
   methods: {
     //获取表格数据
@@ -290,7 +293,8 @@ export default {
         pageSize: this.pageSize, //每页条数
         contractItemCode: this.filterObj.contractItemCode,
         contractItem: this.filterObj.contractItem,
-        conditionType: this.filterObj.conditionType,
+        conditionType: this.filterObj.conditionType.join(','),
+        variablePoint: this.filterObj.variablePoint.join(','),
         state: this.filterObj.state,
       }).then((response) => {
         let list = response.data.records
@@ -299,7 +303,6 @@ export default {
           item.isEditor = 0
           item.conditionTypeText = item.conditionType
           item.variablePointText = item.variablePoint
-          item.paymentMethodIndex = this.getPaymentMethodIndex(item.paymentMethod)
           if (item.conditionType) {
             item.conditionTypeList = item.conditionType.split(',')
           }
@@ -314,24 +317,11 @@ export default {
         this.total = response.data.total
       })
     },
-    //获取支付方式value ，1、2、3
-    getPaymentMethodIndex(label) {
-      this.CustomerDeductionsAndPayType.forEach(item=>{
-        let index=item.payTypeList.findIndex(pItem=>pItem.label==label)
-        if(index!=-1) {
-          return index
-        }
-      })
-    },
     getPointIndex(value) {
       let index = this.CustomerDeductionsAndPayType.findIndex((item) => {
         return item.CustomerDeduction == value
       })
       return index!=-1?index:0
-    },
-    //更改支付方式
-    changeDeductionPointIndex(row, index) {
-      this.tableData[index].paymentMethodIndex = ''
     },
     add() {
       this.dialogVisible = true
@@ -376,11 +366,9 @@ export default {
       this.editorId = ''
       this.ruleForm = {
         contractItem: '',
-        conditionType: '',
-        variablePoint: '',
-        costBearingRoom: '',
-        deductionPoints: '',
-        paymentMethod: '',
+        conditionType: [],
+        variablePoint: [],
+        state:1
       }
     },
     //提交form
@@ -392,6 +380,7 @@ export default {
             contractItem: this.ruleForm.contractItem,
             conditionType: this.ruleForm.conditionType.join(','),
             variablePoint: this.ruleForm.variablePoint.join(','),
+            state: this.ruleForm.state,
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`添加成功`)
