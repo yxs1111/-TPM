@@ -710,12 +710,12 @@ export default {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     //数据权限绑定--弹窗显示
-    bindDataRow(obj) {
+    async bindDataRow(obj) {
       this.roleVisible = true
-      this.getKAList()
-      this.getMinePackage()
-      this.getFieldSales()
-      this.getDefaultRolePermissions(obj.loginName)
+     await this.getKAList()
+     await this.getMinePackage()
+     await this.getFieldSales()
+     await this.getDefaultRolePermissions(obj.loginName)
       this.bindId=obj.id
       this.bindUserName=obj.loginName
     },
@@ -772,11 +772,10 @@ export default {
       this.RoleTreeData_KA = []
       this.RoleTreeData_Mine = []
       this.RoleTreeData_FieldSales = []
-      this.permissionType = ''
     },
     //获取默认权限
-    getDefaultRolePermissions(userName) {
-      roleApi.getDefaultRolePermissions({ userName }).then(res => {
+    async getDefaultRolePermissions(userName) {
+      await roleApi.getDefaultRolePermissions({ userName }).then(res => {
         let {ciDataList,fsDatalist,kaDataList}=res.data
         ciDataList.forEach(item=>{
           item.dataFirCode= 'Cost Item',
@@ -795,13 +794,14 @@ export default {
           //NodeKey:"KA-LKA-1003"
           item.NodeKey= 'KA-' +item.kaDataSecCode+'-'+item.kaDataTerCode
         })
-        this.$refs.KATree.setCheckedNodes([...kaDataList])
-        this.$forceUpdate()
+        // this.$refs.KATree.setCheckedKeys(['KA-2B-1000','KA-JBP'])
+        this.$refs.KATree.setCheckedKeys([...kaDataList])
+        // this.$forceUpdate()
       })
     },
     //获取KA 权限  NodeKey: "KA-EC-007"
-    getKAList() {
-      roleApi.getKAList().then(res => {
+    async getKAList() {
+     await roleApi.getKAList().then(res => {
         let list = res.data.channelList
         for (let i = 0; i < list.length; i++) {
           list[i]['label'] = list[i].channelCode
@@ -809,6 +809,7 @@ export default {
           list[i]['dataFirCode'] = res.data.ka
           list[i]['dataSecCode'] = list[i].channelCode
           list[i]['dataSecId'] = list[i].id
+          list[i]['NodeKey'] = list[i]['dataFirCode']+'-'+list[i].channelCode
           if (list[i].customerList) {
             
             for (let j = 0; j < list[i].children.length; j++) {
@@ -838,8 +839,8 @@ export default {
       })
     },
     //获取Mine Package 权限
-    getMinePackage() {
-      roleApi.getMinePackage().then(res => {
+    async getMinePackage() {
+     await roleApi.getMinePackage().then(res => {
         let list = []
         let secondObj = res.data.secAndTerData[0]
         for (const key in secondObj) {
@@ -872,8 +873,8 @@ export default {
       })
     },
     //获取Field sales 权限  NodeKey: "FieldSales-zone-4678"
-    getFieldSales() {
-      roleApi.getFieldSales().then(res => {
+    async getFieldSales() {
+     await roleApi.getFieldSales().then(res => {
         let list = res.data.children
         for (let i = 0; i < list.length; i++) {
           list[i]['label'] = list[i].name

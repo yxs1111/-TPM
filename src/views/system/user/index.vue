@@ -201,7 +201,7 @@
           <el-tree  :data="RoleTreeData_FieldSales" class="roleTreeLi" ref="FileSalesTree" accordion :filter-node-method="RoleTreeFilterMethod"
             :show-checkbox="true" node-key="NodeKey" highlight-current :props="Role_KA">
           </el-tree> 
-          <el-tree  :data="RoleTreeData_KA" class="roleTreeLi" ref="KATree" accordion :filter-node-method="RoleTreeFilterMethod"
+          <el-tree  :data="RoleTreeData_KA"  class="roleTreeLi" ref="KATree" accordion :filter-node-method="RoleTreeFilterMethod"
             :show-checkbox="true" node-key="NodeKey" highlight-current :props="Role_KA">
           </el-tree> 
         </div>
