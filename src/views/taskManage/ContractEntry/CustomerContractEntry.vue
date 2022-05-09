@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-07 16:19:38
+ * @LastEditTime: 2022-05-09 11:20:36
 -->
 <template>
   <div class="tabViewsWrap">
@@ -40,36 +40,28 @@ export default {
           name: '直供',
           path: '/contractManagement/ContractEntry/CustomerContractEntry/StraightGiving',
           img: {
-            dark: require('@/assets/images/tab/tab1.png'),
-            light: require('@/assets/images/tab/tab1_l.png'),
+            dark: require('@/assets/images/tab/StraightGiving.png'),
+            light: require('@/assets/images/tab/StraightGiving_l.png'),
           },
         },
         {
           name: '准直供',
           path: '/contractManagement/ContractEntry/CustomerContractEntry/LikenessStraightGiving',
           img: {
-            dark: require('@/assets/images/tab/tab2.png'),
-            light: require('@/assets/images/tab/tab2_l.png'),
+            dark: require('@/assets/images/tab/LikeStraightGiving.png'),
+            light: require('@/assets/images/tab/LikeStraightGiving_l.png'),
           },
         },
         {
           name: '间供',
           path: '/contractManagement/ContractEntry/CustomerContractEntry/UnStraightGiving',
           img: {
-            dark: require('@/assets/images/tab/tab3.png'),
-            light: require('@/assets/images/tab/tab3_l.png'),
+            dark: require('@/assets/images/tab/UnStraightGiving.png'),
+            light: require('@/assets/images/tab/UnStraightGiving_l.png'),
           },
         },
       ],
       currentIndex: 0,
-      imgSrcList: [
-        require('@/assets/images/tab/tab1_l.png'),
-        require('@/assets/images/tab/tab2_l.png'),
-        require('@/assets/images/tab/tab3_l.png'),
-        require('@/assets/images/tab/tab1.png'),
-        require('@/assets/images/tab/tab2.png'),
-        require('@/assets/images/tab/tab3.png'),
-      ],
     }
   },
   computed: {},

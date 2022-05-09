@@ -9,7 +9,7 @@ export default function() {
       component: Layout,
       code: 'mdm',
       name: 'master',
-      meta: { title: '主数据管理', icon: 'mainData' },
+      meta: { title: '主数据管理', icon: 'masterData' },
       alwaysShow: true,
       children: [
         {

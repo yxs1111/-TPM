@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-04-27 12:04:53
+ * @LastEditTime: 2022-05-09 10:34:04
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -26,6 +26,10 @@ export default {
   //获取Nu数据
   getNuData(params) {
     return requestApi.request_post('/cityplan/investCpNuVOneDetail/createCPT', params)
+  },
+  //获取Contract数据
+  getContractData(params) {
+    return requestApi.request_post('/cityplan/investCpContractVOneDetail/createCPT', params)
   },
   //excel 导出
   exportExcel(params) {

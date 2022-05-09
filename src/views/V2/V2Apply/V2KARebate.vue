@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-07 09:40:08
+ * @LastEditTime: 2022-05-09 14:15:33
 -->
 <template>
   <div class="MainContent">
@@ -213,15 +213,12 @@ export default {
         customerCode: '',
         month: '',
       },
-      categoryArr: [],
       permissions: getDefaultPermissions(),
       channelArr: [],
-      skuArr: [],
       monthList: [],
       customerArr: [],
       tableData: [],
       ContractItemList: [],
-      BrandList: [],
       maxheight: getHeightHaveTab(),
     }
   },
@@ -327,7 +324,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
