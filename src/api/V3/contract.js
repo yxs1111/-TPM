@@ -1,7 +1,7 @@
 /*
  * @Description: V3合同
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-10 13:59:33
+ * @LastEditTime: 2022-05-10 14:54:55
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -51,6 +51,15 @@ export default {
   exportApproveExcel(params) {
     return request({
       url: this.url+'/exportApproveExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  // 审批-HIH/KA 模板下载
+  downApproveExcelTemplate(params) {
+    return request({
+      url: this.url+'/downApproveExcelTemplate',
       method: 'get',
       params: params,
       responseType: 'blob'

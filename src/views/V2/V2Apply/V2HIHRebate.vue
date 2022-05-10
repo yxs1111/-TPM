@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-09 14:44:49
+ * @LastEditTime: 2022-05-10 15:28:42
 -->
 <template>
   <div class="MainContent">
@@ -39,14 +39,18 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve()">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe&&isCalculation === 1?'':'noClick'" @click="approve()">
         <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
         <span class="text">提交</span>
+      </div>
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+          <span class="tipStar">*</span>
+          注意事项：若未获取到LE销量，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -148,7 +152,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门">
+      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门">
       </el-table-column>
       <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
         <template v-slot:header>
@@ -398,7 +402,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
 export default {
-  name: 'V1HIHRebate',
+  name: 'V2HIHRebate',
   directives: { elDragDialog, permission },
 
   data() {
@@ -421,7 +425,9 @@ export default {
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
+      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
+      usernameLocal: '',
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
@@ -444,6 +450,7 @@ export default {
         this.maxheight = getHeightHaveTab()
       })()
     }
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
     this.getContractItemList()
@@ -471,6 +478,7 @@ export default {
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
+          this.isGainLe = this.tableData[0].isGainLe
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -735,9 +743,31 @@ export default {
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+.tip {
+  color: #eb4f48;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #eb4f48;
+}
 </style>

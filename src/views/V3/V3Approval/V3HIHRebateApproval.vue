@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-10 10:32:50
+ * @LastEditTime: 2022-05-10 15:04:43
 -->
 <!--
  * @Description: 
@@ -50,6 +50,20 @@
         </div>
       </div>
     </div>
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG" @click="importData">
+        <img src="@/assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG"  @click="approve(1)">
+        <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
+        <span class="text">通过</span>
+      </div>
+      <div class="TpmButtonBG"  @click="approve(0)">
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
+        <span class="text">驳回</span>
+      </div>
+    </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
@@ -70,13 +84,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planNewUserNum" label="V1计划销售额IMK(RMB)">
+      <el-table-column width="220" align="right" prop="planSalesAmount" label="V1计划销售额IMK(RMB)">
         <template v-slot:header>
           <div>V1计划销售额IMK(RMB)<br>(kA)</div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.planSalesAmount) }}
           </div>
         </template>
       </el-table-column>
@@ -86,37 +100,37 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.planCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V2预估合同点数(%)">
+      <el-table-column width="220" align="right" prop="forecastRatio" label="V2预估合同点数(%)">
         <template v-slot:header>
           <div>V2预估合同点数(%)<br>(kA+Contract Item)</div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.forecastRatio) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="V2预估销售额IMK(RMB)">
+      <el-table-column width="240" align="right" prop="forecastSalesAmount" label="V2预估销售额IMK(RMB)">
         <template v-slot:header>
           <div>V2预估销售额IMK(RMB)<br>(kA)</div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.forecastSalesAmount) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V2预估合同费用(RMB)">
+      <el-table-column width="220" align="right" prop="forecastCost" label="V2预估合同费用(RMB)">
         <template v-slot:header>
           <div>V2预估合同费用(RMB)<br>(kA+Contract Item)</div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.forecastCost) }}
           </div>
         </template>
       </el-table-column>
@@ -387,6 +401,9 @@ export default {
       tableData: [],
       ContractItemList: [],
       maxheight: getHeightHaveTab(),
+      isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSelf: 0, //是否是当前审批人
+      mainId: '',
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
@@ -441,20 +458,46 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getApprovePage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
+          distributorCode: this.filterObj.distributorCode,
+          costItemCode:'HIH rebate'
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          this.isSubmit = this.tableData[0].isSubmit
+          this.mainId = this.tableData[0].mainId
+          this.infoByMainId()
         })
       }
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V3' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
+            }
+          }
+        })
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
@@ -517,15 +560,16 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIH({
-          customerName: this.filterObj.customerName,
+        API.exportApproveExcel({
+          customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          brandCode: this.filterObj.brandCode,
+          distributorCode: this.filterObj.distributorCode,
           yearAndMonth: this.filterObj.month,
+          costItemCode: 'HIH rebate',
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V3_审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -629,7 +673,7 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportApplyExcel({
+        API.exportApproveExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
