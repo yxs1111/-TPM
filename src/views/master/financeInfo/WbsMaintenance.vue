@@ -83,12 +83,7 @@
             <el-input v-model="ruleForm.wbsCustomerCode" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="客户名称" prop="customerCsName" v-if="!isEditor">
-            <el-select v-model="ruleForm.customerCsName"  class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户名称" prop="customerCsName" v-if="isEditor">
+          <el-form-item label="客户名称" prop="customerCsName">
             <el-input v-model="ruleForm.customerCsName" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
@@ -317,8 +312,6 @@ export default {
             id: this.editorId,
             wbsCustomerCode: this.ruleForm.wbsCustomerCode,
             customerCsName: this.ruleForm.customerCsName,
-            customerMdmCode: this.ruleForm.customerMdmCode,
-            // channelCode: this.ruleForm.channelCode,
             state: this.ruleForm.state,
             remark: this.ruleForm.remark,
           }).then((response) => {
