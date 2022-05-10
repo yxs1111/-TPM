@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-10 09:39:57
+ * @LastEditTime: 2022-05-10 10:48:44
 -->
 <template>
   <div class="app-container">
@@ -97,7 +97,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="Cost Type">
-            <el-select v-model="ruleForm.CostType" placeholder="请选择" class="my-el-select">
+            <el-select v-model="ruleForm.costType" placeholder="请选择" class="my-el-select">
               <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
             </el-select>
           </el-form-item>
@@ -153,7 +153,7 @@ export default {
       ruleForm: {
         deptID: '',
         deptName: '',
-        CostType: '',
+        costType: '',
         minePackage: '',
         state: 1,
       },
@@ -201,7 +201,7 @@ export default {
   },
   computed: {},
   watch: {
-    'ruleForm.CostType'() {
+    'ruleForm.costType'() {
       this.ruleForm.minePackage = ''
       this.getMinePackage()
     },
@@ -226,7 +226,7 @@ export default {
     getMinePackage() {
       selectAPI
         .queryMinePackageSelect({
-          parentId: this.ruleForm.CostType,
+          parentId: this.ruleForm.costType,
         })
         .then((res) => {
           this.MinePackageList = res.data
@@ -285,7 +285,7 @@ export default {
       this.ruleForm = {
         deptID: '',
         deptName: '',
-        CostType: '',
+        costType: '',
         minePackage: '',
         state: 1,
       }
@@ -309,6 +309,8 @@ export default {
               id: this.editorId,
               deptID: this.ruleForm.deptID,
               deptName: this.ruleForm.deptName,
+              costType: this.ruleForm.costType,
+              minePackage: this.ruleForm.minePackage,
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`修改成功`)

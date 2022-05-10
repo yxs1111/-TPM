@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-09 10:34:34
+ * @LastEditTime: 2022-05-10 10:45:56
 -->
 <template>
   <div class="V0Content">
@@ -330,6 +330,7 @@ export default {
       isCheck: false, //检测数据按钮显示或隐藏
       // yearAndMonthList: yearAndMonthList(),
       yearAndMonthList: [
+        '2022 3+9',
         '2022 2+10',
         '2022 0+12',
         '2021 11+1',

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-04-29 10:25:19
+ * @LastEditTime: 2022-05-10 10:12:06
 -->
 <template>
   <div class="MainContent">
@@ -22,8 +22,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.customerIndex" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="index" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商:</span>
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -349,7 +355,7 @@ import {
   downloadFile,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V1/contract'
+import API from '@/api/V3/contract'
 export default {
   name: 'V1HIHRebate',
   directives: { elDragDialog, permission },
@@ -363,6 +369,9 @@ export default {
         channelCode: '',
         contractItemCode: '',
         customerCode: '',
+        customerMdmCode: '',
+        customerIndex: '',
+        distributorCode: '',
         month: '',
       },
       categoryArr: [],
@@ -373,7 +382,7 @@ export default {
       customerArr: [],
       tableData: [],
       ContractItemList: [],
-      BrandList: [],
+      distributorArr: [],
       maxheight: getHeightHaveTab(),
       // 导入
       importVisible: false, // 导入弹窗
@@ -391,9 +400,18 @@ export default {
   },
   computed: {},
   watch: {
-    'filterObj.channelCode'() {
-      this.filterObj.customerName = ''
-      this.getCustomerList()
+    'filterObj.customerIndex'(value) {
+      if (value === '') {
+        this.filterObj.customerCode = ''
+        this.filterObj.customerMdmCode = ''
+      } else {
+        this.filterObj.customerCode =
+          this.customerArr[this.filterObj.customerIndex].customerCode
+        this.filterObj.customerMdmCode =
+          this.customerArr[this.filterObj.customerIndex].customerMdmCode
+      }
+      this.filterObj.distributorCode = ''
+      this.getDistributorList()
     },
   },
   mounted() {
@@ -404,8 +422,9 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
     this.getContractItemList()
+    this.getDistributorList()
+    this.getCustomerList()
   },
   methods: {
     // 获取表格数据
@@ -427,6 +446,8 @@ export default {
           channelCode: this.filterObj.channelCode,
           contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
+          distributorCode: this.filterObj.distributorCode,
+          costItemCode: 'KA rebate',
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -469,13 +490,6 @@ export default {
           }
         })
     },
-    getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
-        if (res.code === 1000) {
-          this.BrandList = res.data
-        }
-      })
-    },
     //千分位分隔符+两位小数
     formatNum(num) {
       const money = num * 1
@@ -492,14 +506,15 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportHIH({
-          customerName: this.filterObj.customerName,
+          customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          brandCode: this.filterObj.brandCode,
+          distributorCode: this.filterObj.distributorCode,
           yearAndMonth: this.filterObj.month,
+          costItemCode: 'KA rebate',
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -526,25 +541,6 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelCode', this.filterObj.channelCode)
-      // API.importExcel(formData).then((response) => {
-      //   //清除input的value ,上传一样的
-      //   event.srcElement.value = '' // 置空
-      //   if (response.code == 1000) {
-      //     if (!Array.isArray(response.data)) {
-      //       this.$message.info('导入数据为空，请检查模板')
-      //     } else {
-      //       this.$message.success(this.messageMap.importSuccess)
-      //       this.ImportData = response.data
-      //       this.isCheck = response.data[0].judgmentType !== 'Error'
-      //     }
-      //   } else {
-      //     this.$message.info(this.messageMap.importError)
-      //   }
-      // })
     },
     // 关闭导入
     closeImportDialog() {
@@ -557,32 +553,46 @@ export default {
     },
     // 校验数据
     checkImport() {
-      // API.exceptionCheckTwo({
-      //   yearAndMonth:this.filterObj.yearAndMonth,
-      //   channelCode:this.filterObj.channelCode
-      // }).then((response) => {
-      //   if (response.code == 1000) {
-      //     this.$message.success(this.messageMap.checkSuccess)
-      //     this.ImportData = response.data
-      //     this.saveBtn = response.data[0].judgmentType !== 'Error'
-      //   } else {
-      //     this.$message.info(this.messageMap.checkError)
-      //   }
-      // })
+      const formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.month)
+      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('isSubmit', 0)
+      formData.append('costItemCode', 'KA rebate')
+      API.formatCheck(formData).then((response) => {
+        //清除input的value ,上传一样的
+        if (response.code == 1000) {
+          if (!Array.isArray(response.data)) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.$message.success(this.messageMap.importSuccess)
+            this.ImportData = response.data
+            let isError = this.ImportData.findIndex((item) => {
+              item.judgmentType == 'error'
+            })
+            this.isCheck = isError == -1 ? 1 : 0
+          }
+        } else {
+          this.$message.info(this.messageMap.importError)
+        }
+      })
     },
     // 确认导入
     confirmImport() {
-      // API.exceptionSave({
-      //   mainId: this.tableData[0].mainId,
-      // }).then((res) => {
-      //   if (res.code == 1000) {
-      //     this.$message.success(this.messageMap.saveSuccess)
-      //     this.getTableData()
-      //     this.closeImportDialog()
-      //   } else {
-      //     this.$message.info(this.messageMap.saveError)
-      //   }
-      // })
+      API.importSave({
+        yearAndMonth:this.filterObj.month,
+        channelCode:this.filterObj.channelCode,
+        costItemCode:'KA rebate',
+        isSubmit: 0,
+      }).then((res) => {
+        if (res.code == 1000) {
+          this.$message.success(this.messageMap.saveSuccess)
+          this.getTableData()
+          this.closeImportDialog()
+        } else {
+          this.$message.info(this.messageMap.saveError)
+        }
+      })
     },
     // 导出异常信息
     exportErrorList() {
@@ -607,20 +617,20 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        // API.exportTemplateExcel({
-        //   yearAndMonth: this.filterObj.yearAndMonth,
-        //   channelCode: this.filterObj.channelCode,
-        //   customerCode: this.filterObj.customerCode,
-        //   distributorCode: this.filterObj.distributorCode,
-        //   regionCode: this.filterObj.regionCode,
-        //   dimProduct: this.filterObj.dim_product,
-        // }).then((res) => {
-        //   this.downloadFile(
-        //     res,
-        //     `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2申请.xlsx`
-        //   ) //自定义Excel文件名
-        //   this.$message.success(this.messageMap.exportSuccess)
-        // })
+        API.exportApplyExcel({
+          yearAndMonth: this.filterObj.month,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          contractItemCode: this.filterObj.contractItemCode,
+          distributorCode: this.filterObj.distributorCode,
+          costItemCode:'KA rebate'
+        }).then((res) => {
+          this.downloadFile(
+            res,
+            `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V3申请.xlsx`
+          ) //自定义Excel文件名
+          this.$message.success(this.messageMap.exportSuccess)
+        })
       } else {
         this.$message.info('数据不能为空')
       }

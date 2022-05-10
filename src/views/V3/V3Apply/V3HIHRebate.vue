@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-09 14:41:07
+ * @LastEditTime: 2022-05-10 10:25:23
 -->
 <template>
   <div class="MainContent">
@@ -43,6 +43,16 @@
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
+      </div>
+    </div>
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG" @click="importData">
+        <img src="@/assets/images/import.png" alt="">
+        <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG"  @click="approve">
+        <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
+        <span class="text">提交</span>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -451,6 +461,8 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getContractItemList()
+    this.getDistributorList()
+    this.getCustomerList()
   },
   methods: {
     // 获取表格数据
@@ -472,6 +484,8 @@ export default {
           channelCode: this.filterObj.channelCode,
           contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
+          distributorCode: this.filterObj.distributorCode,
+          costItemCode:'HIH rebate'
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -678,22 +692,57 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        // API.exportTemplateExcel({
-        //   yearAndMonth: this.filterObj.yearAndMonth,
-        //   channelCode: this.filterObj.channelCode,
-        //   customerCode: this.filterObj.customerCode,
-        //   distributorCode: this.filterObj.distributorCode,
-        //   regionCode: this.filterObj.regionCode,
-        //   dimProduct: this.filterObj.dim_product,
-        // }).then((res) => {
-        //   this.downloadFile(
-        //     res,
-        //     `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2申请.xlsx`
-        //   ) //自定义Excel文件名
-        //   this.$message.success(this.messageMap.exportSuccess)
-        // })
+        API.exportApplyExcel({
+          yearAndMonth: this.filterObj.month,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          contractItemCode: this.filterObj.contractItemCode,
+          distributorCode: this.filterObj.distributorCode,
+          costItemCode:'HIH rebate'
+        }).then((res) => {
+          this.downloadFile(
+            res,
+            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V3申请.xlsx`
+          ) //自定义Excel文件名
+          this.$message.success(this.messageMap.exportSuccess)
+        })
       } else {
         this.$message.info('数据不能为空')
+      }
+    },
+    approve() {
+      if (this.tableData.length) {
+        const judgmentType = this.tableData[0].judgmentType
+        if (judgmentType != null) {
+          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(() => {
+              const mainId = this.tableData[0].mainId
+              API.approve({
+                mainId: mainId, // 主表id
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                isSubmit:0,//申请0,审批1
+              }).then((response) => {
+                if (response.code === 1000) {
+                  this.$message.success('提交成功')
+                  this.getTableData()
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
+        } else {
+          this.$message.info('数据未校验，请先进行导入验证')
+        }
+      } else {
+        this.$message.warning('数据不能为空')
       }
     },
     // 每页显示页面数变更
