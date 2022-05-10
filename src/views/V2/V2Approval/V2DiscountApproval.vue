@@ -94,6 +94,9 @@
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
         {{FormateNum(row.adjustedCost)}}
       </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="distNoticeCost" label="经销商通知函费用（RMB）">
+        {{FormateNum(row.distNoticeCost)}}
+      </el-table-column>
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
       </el-table-column>
       <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
@@ -115,7 +118,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="300" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>
@@ -197,6 +200,9 @@
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
               {{FormateNum(row.adjustedCost)}}
             </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="distNoticeCost" label="经销商通知函费用（RMB）">
+              {{FormateNum(row.distNoticeCost)}}
+            </el-table-column>
             <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
             </el-table-column>
             <el-table-column width="160" align="right" prop="salesDifference" label="销量差值（%）">
@@ -251,8 +257,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
@@ -543,9 +549,13 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportExcel({
+        API.exportTemplateExcel({
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          dimProduct: this.filterObj.dim_product,
         }).then((res) => {
           this.downloadFile(res, `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2审批.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)

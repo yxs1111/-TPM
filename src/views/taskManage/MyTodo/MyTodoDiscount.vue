@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-04-19 10:39:29
+ * @LastEditTime: 2022-05-07 14:52:29
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -65,7 +65,7 @@
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
         {{row.createTime?row.createTime.substring(0,10):""}}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column>
+      <!-- <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column> -->
       <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
@@ -106,8 +106,8 @@ import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
@@ -196,22 +196,22 @@ export default {
       if (version == 'V0') {
         console.log(version, name)
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V0/V0Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V0/V0Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
         }
       }
       if (version == 'V1') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V1/V1Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V1/V1Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V1/V1Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V1/V1Approval', params: { channelCode } })
         }
       }
       if (version == 'NUV1') {
         if (name.indexOf('调整') != -1) {
           this.$router.push({
-            path: '/V1/V1Apply/V1discountNU',
+            path: '/costManagement/V1/V1Apply/V1discountNU',
             params: { channelCode },
           })
           sessionStorage.setItem('currentIndex', 2)
@@ -219,42 +219,42 @@ export default {
       }
       if (version == 'V2') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V2/V2Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V2/V2Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V2/V2Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V2/V2Approval', params: { channelCode } })
         }
       }
       if (version == 'NUV2') {
         sessionStorage.setItem('currentIndex', 2)
         if (name.indexOf('调整') != -1) {
           this.$router.push({
-            path: '/V2/V2Apply/V2discountNU',
+            path: '/costManagement/V2/V2Apply/V2discountNU',
             params: { channelCode },
           })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({
-            path: '/V2/V2Approval/V2NUApproval',
+            path: '/costManagement/V2/V2Approval/V2NUApproval',
             params: { channelCode },
           })
         }
       }
       if (version == 'V3') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V3/V3Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V3/V3Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V3/V3Approval', params: { channelCode } })
         }
       }
       if (version == 'NUV3') {
         sessionStorage.setItem('currentIndex', 2)
         if (name.indexOf('调整') != -1) {
           this.$router.push({
-            path: '/V3/V3Apply/V3discountNU',
+            path: '/costManagement/V3/V3Apply/V3discountNU',
             params: { channelCode },
           })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({
-            path: '/V3/V3Approval/V3discountNUApproval',
+            path: '/costManagement/V3/V3Approval/V3discountNUApproval',
             params: { channelCode },
           })
         }

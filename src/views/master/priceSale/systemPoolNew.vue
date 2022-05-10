@@ -78,12 +78,12 @@
         </template>
       </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
-      <el-table-column width="180" align="center" label="更新时间">
+      <el-table-column width="180" align="center" label="修改时间">
         <template slot-scope="scope">
           {{ scope.row.updateDate==null ? '': scope.row.updateDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="updateBy" label="更新人" />
+      <el-table-column width="180" align="center" prop="updateBy" label="修改人" />
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
@@ -179,7 +179,7 @@
       </span>
     </el-dialog>
     <!-- 导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <!-- <div style="color:#4192d3;text-align:center;cursor:pointer;" @click="downLoadElxModel">下 载 模 板</div> -->
       <div class="fileInfo ImportContent">
         <div class="fileTitle">模板</div>
@@ -221,8 +221,8 @@ export default {
       uploadFileName: '',
       uploadFile: '',
       input: '',
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         channelCode: '',

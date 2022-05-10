@@ -60,7 +60,7 @@
         <em class="el-icon-time" />
         <span>{{ parseJson(row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" label="最后更新时间" width="255">
+      <el-table-column v-slot="{row}" align="center" label="最后修改时间" width="255">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.lastUpdateTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>

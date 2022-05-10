@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-04-18 11:59:40
+ * @LastEditTime: 2022-05-07 14:53:28
 -->
 <template>
   <div class="dashboard-container">
@@ -35,15 +35,15 @@
           <!-- 活动月 -->
           <div class="monthBarWrap">
             <!-- 流程 -->
-            <div class="monthBar" v-for="(channelItem,key) in ActivityList" :key="key">
+            <div class="monthBar" v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex">
               <div class="monthBg">
-                <div class="monthName">{{getCPTMonth(key)}}</div>
-                <div class="monthName">({{key}})</div>
+                <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div>
+                <div class="monthName">({{MonthItem.month}})</div>
                
               </div>
               <div class="monthPoint">
                 <!-- 渠道 -->
-                <div v-for="(value,ckey) in channelItem" :key="ckey">
+                <div v-for="(value,ckey) in MonthItem.channelList" :key="ckey">
                   <div v-for="item,index in value" :key="index">
                     <!-- PP -->
                     <div class="PPBar" v-if="item.minePackageName=='Price Promotion'">
@@ -152,6 +152,58 @@
                             <div class="delayPoint" v-if="item.version=='NUV3'&&item.workDateFlag!=='0'&&(item.version=='NUV3'&&item.processStatus==1)"></div>
                           </el-tooltip>
                           <div class="pointCircle" v-if="item.version!='NUV3'"></div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="NU" v-if="item.minePackageName=='合同流程-hih rebate'">
+                      <div class="PointTitle">HIH Rebate-{{item.channelCode}}</div>
+                      <div class="NuPoint">
+                        <div class="V1">
+                          <div class="passIcon" v-if="item.version=='V2'||item.version=='V3'||(item.version=='V1'&&item.processStatus==2)"></div>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='V1'&&item.workDateFlag==='0'&&(item.version=='V1'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="currentPoint" v-if="item.version=='V1'&&item.workDateFlag==='0'&&(item.version=='V1'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='V1'&&item.workDateFlag!=='0'&&(item.version=='V1'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="delayPoint" v-if="item.version=='V1'&&item.workDateFlag!=='0'&&(item.version=='V1'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <div class="pointCircle" v-if="item.version!='V1'&&item.version!='V2'&&item.version!='V3'"></div>
+                          <div class="line" v-if="item.version=='V2'||item.version=='V3'"></div>
+                          <div class="lineDark" v-if="(item.version!='V2'&&item.version!='V3')||item.version=='V1'"></div>
+                        </div>
+                        <div class="V2">
+                          <div class="passIcon" v-if="item.version=='V3'||(item.version=='V2'&&item.processStatus==2)"></div>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='V2'&&item.workDateFlag=='0'&&(item.version=='V2'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="currentPoint" v-if="item.version=='V2'&&item.workDateFlag=='0'&&(item.version=='V2'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='V2'&&item.workDateFlag!=='0'&&(item.version=='V2'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="delayPoint" v-if="item.version=='V2'&&item.workDateFlag!=='0'&&(item.version=='V2'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <div class="pointCircle" v-if="item.version!='V2'&&item.version!='V3'"></div>
+                          <div class="line" v-if="item.version=='V3'"></div>
+                          <div class="lineDark" v-if="(item.version=='V1')||item.version=='V2'"></div>
+                        </div>
+                        <div class="V3">
+                          <div class="passIcon" v-if="item.version=='V3'&&item.processStatus==2"></div>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.version=='V3'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="currentPoint" v-if="item.version=='V3'&&item.workDateFlag=='0'&&(item.version=='V3'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.version=='V3'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="delayPoint" v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.version=='V3'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <div class="pointCircle" v-if="item.version!='V3'"></div>
                         </div>
                       </div>
 
@@ -332,9 +384,13 @@ export default {
           msg: '',
         }
         res.data.forEach((item) => {
-          obj.time = item.substring(1, 11)
-          obj.msg = item.substring(13)
-          if (this.MessageList.length < 5) this.MessageList.push(obj)
+          obj.time = item.substring(1, 10)
+          obj.msg = item.substring(12)
+          if (this.MessageList.length < 5) this.MessageList.push(
+            {
+              ...obj
+            }
+          )
         })
       })
     },
@@ -422,8 +478,22 @@ export default {
         //     }
         //   }
         // }
-        console.log(data)
-        this.ActivityList = data
+        let list=[]
+        for (const key in data) {
+          if (Object.hasOwnProperty.call(data, key)) {
+            const element = data[key];
+            let obj={
+              month:'',
+              channelList:[]
+            }
+            obj.month=key
+            obj.channelList=element
+            list.push(obj)
+          }
+        }
+        let reverseList=[]
+        reverseList=list.reverse()
+        this.ActivityList = [...reverseList]
         //日期处理
         let DateArray = res.data.calendar
         let DateData = {}
@@ -509,22 +579,22 @@ export default {
     goAssignee(version, name, channelCode) {
       if (version == 'V0') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V0/V0Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V0/V0Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
         }
       }
       if (version == 'V1') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V1/V1Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V1/V1Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V1/V1Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V1/V1Approval', params: { channelCode } })
         }
       }
       if (version == 'NUV1') {
         if (name.indexOf('调整') != -1) {
           this.$router.push({
-            path: '/V1/V1Apply/V1discountNU',
+            path: '/costManagement/V1/V1Apply/V1discountNU',
             params: { channelCode },
           })
           sessionStorage.setItem('currentIndex', 2)
@@ -532,42 +602,42 @@ export default {
       }
       if (version == 'V2') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V2/V2Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V2/V2Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V2/V2Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V2/V2Approval', params: { channelCode } })
         }
       }
       if (version == 'NUV2') {
         sessionStorage.setItem('currentIndex', 2)
         if (name.indexOf('调整') != -1) {
           this.$router.push({
-            path: '/V2/V2Apply/V2discountNU',
+            path: '/costManagement/V2/V2Apply/V2discountNU',
             params: { channelCode },
           })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({
-            path: '/V2/V2Approval/V2NUApproval',
+            path: '/costManagement/V2/V2Approval/V2NUApproval',
             params: { channelCode },
           })
         }
       }
       if (version == 'V3') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/V3/V3Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/V3/V3Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V3/V3Approval', params: { channelCode } })
         }
       }
       if (version == 'NUV3') {
         sessionStorage.setItem('currentIndex', 2)
         if (name.indexOf('调整') != -1) {
           this.$router.push({
-            path: '/V3/V3Apply/V3discountNU',
+            path: '/costManagement/V3/V3Apply/V3discountNU',
             params: { channelCode },
           })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({
-            path: '/V3/V3Approval/V3discountNUApproval',
+            path: '/costManagement/V3/V3Approval/V3discountNUApproval',
             params: { channelCode },
           })
         }
@@ -617,7 +687,7 @@ export default {
       .CityPlanTop {
         width: 100%;
         height: 52px;
-        padding-left: 280px;
+        padding-left: 320px;
         box-sizing: border-box;
         font-size: 16px;
         font-weight: 600;
@@ -733,7 +803,7 @@ export default {
               // background-color: pink;
             }
             .PointTitle {
-              width: 88px;
+              width: 145px;
               font-size: 16px;
               font-family: Source Han Sans CN;
               font-weight: 500;

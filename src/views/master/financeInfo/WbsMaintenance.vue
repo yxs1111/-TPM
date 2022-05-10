@@ -8,18 +8,8 @@
           <el-input v-model="filterObj.wbsCustomerCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">渠道</span>
-          <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
           <span class="SelectliTitle">客户名称</span>
           <el-input v-model="filterObj.customerCsName" clearable placeholder="请输入" />
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">客户编码</span>
-          <el-input v-model="filterObj.customerMdmCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
@@ -63,8 +53,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
-      <el-table-column width="180" align="center" prop="updateDate" label="更新时间">
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
+      <el-table-column width="180" align="center" prop="updateDate" label="修改时间">
         <template slot-scope="{row}">
           <div>
             {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
@@ -86,7 +76,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS维护'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'WBS Code-Customer'" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
           <el-form-item label="WBS客户编码" prop="wbsCustomerCode">
@@ -94,23 +84,13 @@
             </el-input>
           </el-form-item>
           <el-form-item label="客户名称" prop="customerCsName">
-            <el-select v-model="ruleForm.customerCsName" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerCsName" />
-            </el-select>
+            <el-input v-model="ruleForm.customerCsName" class="my-el-input" placeholder="请输入">
+            </el-input>
           </el-form-item>
-          <!-- <el-form-item label="渠道" prop="channelCode">
-            <el-select v-model="ruleForm.channelCode" class="my-el-input" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
-          </el-select>
-          </el-form-item> -->
-          
           <el-form-item label="状态">
-              <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
-              <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
-              
-            <!-- <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="(item,index) in ['无效','正常']" :key="item" :label="item" :value="index" />
-            </el-select> -->
+            <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item,index) in ['无效','有效']" :key="item" :label="item" :value="index" />
+            </el-select>
           </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
@@ -143,8 +123,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         wbsCustomerCode: '',
@@ -173,13 +153,6 @@ export default {
           },
         ],
         customerMdmCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        channelCode: [
           {
             required: true,
             message: 'This field is required',
@@ -231,8 +204,6 @@ export default {
         pageSize: this.pageSize, //每页条数
         wbsCustomerCode: this.filterObj.wbsCustomerCode,
         customerCsName: this.filterObj.customerCsName,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        channelCode: this.filterObj.channelCode,
         state: this.filterObj.state,
       })
         .then((response) => {
@@ -265,7 +236,7 @@ export default {
         customerMdmCode: '',
         customerCsName: '',
         channelCode: '',
-        state: '1',
+        state: 1,
         remark: '',
       }
       this.dialogVisible = true
@@ -307,7 +278,7 @@ export default {
         customerMdmCode: '',
         customerCsName: '',
         channelCode: '',
-        state: '',
+        state: 1,
         remark: '',
       }
     },
@@ -321,15 +292,15 @@ export default {
         customerMdmCode: obj.customerMdmCode,
         customerCsName: obj.customerCsName,
         channelCode: obj.channelCode,
-        state: String(obj.state),
+        state: Number(obj.state),
         remark: obj.remark,
       }
       //若客户下拉框数据没有当前则置空
-      let isExistCustom=this.customerArr.find(item=>item.customerCsName == this.ruleForm.customerCsName)
-      if (!isExistCustom) {
-        this.ruleForm.customerCsName=''
-        this.ruleForm.customerMdmCode=''
-      } 
+      // let isExistCustom=this.customerArr.find(item=>item.customerCsName == this.ruleForm.customerCsName)
+      // if (!isExistCustom) {
+      //   this.ruleForm.customerCsName=''
+      //   this.ruleForm.customerMdmCode=''
+      // } 
       this.editorId = obj.id
     },
     //提交form
@@ -341,8 +312,6 @@ export default {
             id: this.editorId,
             wbsCustomerCode: this.ruleForm.wbsCustomerCode,
             customerCsName: this.ruleForm.customerCsName,
-            customerMdmCode: this.ruleForm.customerMdmCode,
-            // channelCode: this.ruleForm.channelCode,
             state: this.ruleForm.state,
             remark: this.ruleForm.remark,
           }).then((response) => {

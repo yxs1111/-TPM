@@ -34,8 +34,8 @@
         <span class="text">导入</span>
       </div>
       <div class="tip">
-          <span class="tipStar">*</span>
-         注意事项：建议先进行价格主数据维护，后进行价格档位维护
+        <span class="tipStar">*</span>
+        注意事项：建议先进行价格主数据维护，后进行价格档位维护
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" :cell-style="columnStyle" :span-method="objectSpanMethod" border :header-cell-style="HeadTable"
@@ -52,7 +52,7 @@
       <el-table-column width="150" align="center" prop="yearAndMonth" label="年月" />
       <el-table-column width="280" align="center" prop="createBy" label="创建人" />
       <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
-         {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+        {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
       </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{row}">
@@ -133,7 +133,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, FormateThousandNum,getHeight } from '@/utils'
+import { getDefaultPermissions, FormateThousandNum, getHeight } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
@@ -142,8 +142,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: null,

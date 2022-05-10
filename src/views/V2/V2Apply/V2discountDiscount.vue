@@ -52,7 +52,8 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
+      <el-button type="primary" class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="Calculation">计算</el-button>
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe&&isCalculation === 1?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -94,6 +95,9 @@
       <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
         {{FormateNum(row.adjustedCost)}}
       </el-table-column>
+      <el-table-column width="220" v-slot={row} align="right" prop="distNoticeCost" label="经销商通知函费用（RMB）">
+        {{FormateNum(row.distNoticeCost)}}
+      </el-table-column>
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
 
       </el-table-column>
@@ -116,7 +120,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="300" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>
@@ -203,6 +207,9 @@
             <el-table-column width="220" v-slot={row} align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
               {{FormateNum(row.adjustedCost)}}
             </el-table-column>
+            <el-table-column width="220" v-slot={row} align="right" prop="distNoticeCost" label="经销商通知函费用（RMB）">
+              {{FormateNum(row.distNoticeCost)}}
+            </el-table-column>
             <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
 
             </el-table-column>
@@ -256,8 +263,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
@@ -296,6 +303,7 @@ export default {
       usernameLocal: '',
       messageMap: messageMap(),
       maxheight: getHeightHaveTab(),
+      isCalculation:false
     }
   },
   computed: {},
@@ -371,6 +379,7 @@ export default {
               this.isSubmit = this.tableData[0].isSubmit
               this.isGainLe = this.tableData[0].isGainLe
               this.mainId = this.tableData[0].mainId
+              this.isCalculation = this.tableData[0].isCalculation
               this.infoByMainId()
             } else {
               this.isSubmit = 1
@@ -587,9 +596,13 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportExcel({
+        API.exportTemplateExcel({
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
+          dimProduct: this.filterObj.dim_product,
         }).then((res) => {
           this.downloadFile(
             res,
@@ -654,6 +667,20 @@ export default {
       } else {
         this.$message.warning('数据不能为空')
       }
+    },
+    //计算
+    Calculation() {
+      API.calculation({
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelName: this.filterObj.channelCode,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          this.$message.success(`计算成功`)
+        } else {
+           this.$message.info(`计算失败`)
+        }
+      })
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

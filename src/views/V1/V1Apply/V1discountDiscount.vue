@@ -60,8 +60,8 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <el-button type="primary" class="TpmButtonBG" @click="Calculation">计算</el-button>
-      <div class="TpmButtonBG" :class="btnStatus&&this.isCalculation === 1?'':'noClick'" @click="submitInfo">
+      <el-button type="primary" class="TpmButtonBG" :class="submitBtn === 1?'noClick':''" @click="Calculation">计算</el-button>
+      <div class="TpmButtonBG" :class="btnStatus&&isCalculation === 1?'':'noClick'" @click="submitInfo">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -274,8 +274,8 @@ export default {
       uploadFileName: '',
       importVisible: false, // 导入弹窗
       filterImportData: { sku: '' }, // 筛选导入数据
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         customerMdmCode: '',
@@ -614,7 +614,9 @@ export default {
       }).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
-          this.$message.info(`${res.data}`)
+          this.$message.success(`计算成功`)
+        } else {
+           this.$message.info(`计算失败`)
         }
       })
     },

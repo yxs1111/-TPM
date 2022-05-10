@@ -408,8 +408,8 @@ export default {
       uploadFileName: '',
       importVisible: false, // 导入弹窗
       filterImportData: { sku: '' }, // 筛选导入数据
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         customerCode: '',

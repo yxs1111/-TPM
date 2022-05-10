@@ -35,7 +35,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="更新时间">
+      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
         {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
     </el-table>
@@ -63,8 +63,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         distributorCode: '',

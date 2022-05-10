@@ -68,8 +68,8 @@
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="updateBy" label="更新人" />
-      <el-table-column align="center" prop="updateDate" label="更新时间">
+      <el-table-column align="center" prop="updateBy" label="修改人" />
+      <el-table-column align="center" prop="updateDate" label="修改时间">
         <template slot-scope="{row}">
           <span>{{ parseJson(row.updateDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>

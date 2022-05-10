@@ -1,15 +1,15 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2021-12-14 22:04:41
+ * @LastEditTime: 2022-04-28 13:20:44
 -->
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
       <router-link :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" v-for="(item, index) in routerList" :key="index"
         @click.native="changeTab(index)">
-        <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
-        <img :src="imgSrcList[index+2]" alt="" v-if="index == currentIndex"> 
+        <img v-if="index != currentIndex" :src="item.img.light" alt="">
+        <img v-if="index == currentIndex" :src="item.img.dark" alt="">
         {{ item.name }}
       </router-link>
     </div>
@@ -27,17 +27,32 @@ export default {
   data() {
     return {
       routerList: [
-        { name: '汇总', path: '/taskManage/MyTodo/MyTodoAll' },
-        { name: '折扣项', path: '/taskManage/MyTodo/MyTodoDiscount' },
+        {
+          name: '汇总',
+          path: '/taskManage/MyTodo/MyTodoAll',
+          img: {
+            dark: require('@/assets/images/tab/tab1.png'),
+            light: require('@/assets/images/tab/tab1_l.png'),
+          },
+        },
+        {
+          name: '折扣项',
+          path: '/taskManage/MyTodo/MyTodoDiscount',
+          img: {
+            dark: require('@/assets/images/tab/tab2.png'),
+            light: require('@/assets/images/tab/tab2_l.png'),
+          },
+        },
+        {
+          name: 'Contract',
+          path: '/taskManage/MyTodo/ContractTodo',
+          img: {
+            dark: require('@/assets/images/tab/tab3.png'),
+            light: require('@/assets/images/tab/tab3_l.png'),
+          },
+        },
       ],
       currentIndex: 0,
-      imgSrcList: [
-        require('@/assets/images/tab/all_l.png'),
-        require('@/assets/images/tab/tab1_l.png'),
-        require('@/assets/images/tab/all.png'), 
-        require('@/assets/images/tab/tab1.png'),
-        
-      ],
     }
   },
   directives: { elDragDialog, permission },

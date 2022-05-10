@@ -58,11 +58,16 @@
       <el-table-column v-slot={row} width="150" align="right" prop="platformRebate" label="平台返利">
         {{(row.platformRebate*1).toFixed(4)}}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
-      <el-table-column v-slot={row} width="160" align="center" prop="updateDate" label="更新时间">
+      <el-table-column prop="createBy" align="center" width="250" label="创建人"></el-table-column>
+      <el-table-column v-slot={row} prop="createDate" align="center" width="160" label="创建时间">
+         {{ row.createDate ? row.createDate.replace("T"," ") : '' }}
+      </el-table-column>
+      <el-table-column width="250" align="center" prop="updateBy" label="修改人" />
+      <el-table-column v-slot={row} width="160" align="center" prop="updateDate" label="修改时间">
          {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="deleteFlg" label="状态">
+      <el-table-column v-slot={row} width="150" align="center" prop="deleteFlg" label="状态">
+        {{row.deleteFlag==0?'有效':'无效'}}
       </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
@@ -72,7 +77,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="25%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
+    <el-dialog width="50%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
       <div class="fileInfo ImportContent">
         <!-- <el-button type="primary" class="my-search selectFile" @click="TemplateDownload">
             <svg-icon icon-class="download_white" style="font-size: 16px;" />
@@ -106,7 +111,7 @@
       </div>
     </el-dialog>
     <!-- 错误弹窗 -->
-    <el-dialog width="25%" class="my-el-dialog" title="错误信息" :visible="errorVisible" @close="closeErrorDialog">
+    <el-dialog width="50%" class="my-el-dialog" title="错误信息" :visible="errorVisible" @close="closeErrorDialog">
       <div style="height: 300px;overflow: scroll;overflow-x: hidden;margin-top:15px;">
         <el-alert v-for="(item, index) in errorList" :key="index" :title="item" style="margin-bottom:5px;" type="warning" effect="dark" />
       </div>
@@ -126,8 +131,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',

@@ -254,8 +254,8 @@ export default {
       passImg: require('@/assets/images/success.png'),
       BrandList: [],
       btnStatus: true,
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         channelCode: '',

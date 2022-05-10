@@ -11,30 +11,18 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
           <MutiSelect v-model="filterObj.channelCode" :list="channelOptions" :props="{value:'channelEsName',label:'channelEsName',key:'channelCode'}" />
-          <!-- <el-select v-model="filterObj.channelCode" multiple placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
-          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称：</span>
           <MutiSelect v-model="filterObj.customerCode" :list="customerArr" :props="{value:'customerCsName',label:'customerCsName',key:'customerCode'}" />
-          <!-- <el-select v-model="filterObj.customerCode" clearable multiple collapse-tags filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCsName" />
-          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域：</span>
           <MutiSelect v-model="filterObj.regionName" :list="RegionList" :props="{value:'nameAbridge',label:'name',key:'nameAbridge'}" />
-          <!-- <el-select v-model="filterObj.regionName" clearable multiple collapse-tags filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
-          </el-select> -->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
           <MutiSelect v-model="filterObj.brandName" :list="BrandList" :props="{value:'brandName',label:'brandName',key:'brandName'}" />
-          <!-- <el-select v-model="filterObj.brandName" clearable multiple filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
-          </el-select> -->
         </div>
         <div class="Selectli">
           <el-button type="primary" class="TpmButtonBG my-search" style="margin-bottom:0px;" @click="getReport">查询</el-button>
@@ -67,16 +55,20 @@
                 <!-- <el-table-column v-for="(item,index) in totalArr" :key="index" align="center"> -->
                 <template>
                   <el-table-column v-slot="{row}" align="center" width="150" label="CPT" prop="CPT">
-                    {{ FormateNum(row.CPT) }}
+                    <div v-if="compareNodeTotal('V0',row.name)">{{ FormateNum(row.CPT/1000) }}</div>
+                    <!-- {{ FormateNum(row.CPT/1000) }} -->
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V1" prop="one">
-                    {{ FormateNum(row.one) }}
+                    <div v-if="compareNodeTotal('V1',row.name)">{{ FormateNum(row.one/1000) }}</div>
+                    <!-- {{ FormateNum(row.one/1000) }} -->
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V2" prop="two">
-                    {{ FormateNum(row.two) }}
+                    <div v-if="compareNodeTotal('V2',row.name)">{{ FormateNum(row.two/1000) }}</div>
+                    <!-- {{ FormateNum(row.two/1000) }} -->
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V3" prop="three">
-                    {{ FormateNum(row.three) }}
+                    <div v-if="compareNodeTotal('V3',row.name)">{{ FormateNum(row.three/1000) }}</div>
+                    <!-- {{ FormateNum(row.three/1000) }} -->
                   </el-table-column>
                 </template>
                 <!-- </el-table-column> -->
@@ -97,20 +89,20 @@
                     </template>
                     <template>
                       <el-table-column v-slot="{row}" align="center" width="150" label="CPT">
-                        <!-- {{ FormateNum(item.cptCost) }} -->
-                        {{ FormateNum(row.channel[key][index].cptCost) }}
+                        <!-- {{ FormateNum(row.channel[key][index].cptCost/1000) }} -->
+                        <div v-if="compareNode(key,'V0',row.name)"> {{ FormateNum(row.channel[key][index].cptCost/1000) }}</div>
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V1">
-                        <!-- {{ FormateNum(item.voneCost) }} -->
-                        {{ FormateNum(row.channel[key][index].voneCost) }}
+                        <!-- {{ FormateNum(row.channel[key][index].voneCost/1000) }} -->
+                        <div v-if="compareNode(key,'V1',row.name)"> {{ FormateNum(row.channel[key][index].voneCost/1000) }}</div>
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V2">
-                        <!-- {{ FormateNum(item.vtwoCost) }} -->
-                        {{ FormateNum(row.channel[key][index].vtwoCost) }}
+                        <!-- {{ FormateNum(row.channel[key][index].vtwoCost/1000) }} -->
+                        <div v-if="compareNode(key,'V2',row.name)"> {{ FormateNum(row.channel[key][index].vtwoCost/1000) }}</div>
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V3">
-                        <!-- {{ FormateNum(item.vthreeCost) }} -->
-                        {{ FormateNum(row.channel[key][index].vthreeCost) }}
+                        <!-- {{ FormateNum(row.channel[key][index].vthreeCost/1000) }} -->
+                        <div v-if="compareNode(key,'V3',row.name)"> {{ FormateNum(row.channel[key][index].vthreeCost/1000) }}</div>
                       </el-table-column>
                     </template>
 
@@ -135,16 +127,20 @@
               <el-table-column align="center" label="Total">
                 <template>
                   <el-table-column v-slot="{row}" align="center" width="150" label="CPT" prop="CPT">
-                    {{ FormateNum(row.CPTFabe) }}
+                    <!-- {{ FormateNum(row.CPTFabe) }} -->
+                    <div v-if="compareNodeTotal('V0',row.name)">{{ FormateNum(row.CPTFabe) }}%</div>
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V1" prop="one">
-                    {{ FormateNum(row.oneFabe) }}
+                    <!-- {{ FormateNum(row.oneFabe) }} -->
+                    <div v-if="compareNodeTotal('V1',row.name)">{{ FormateNum(row.oneFabe) }}%</div>
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V2" prop="two">
-                    {{ FormateNum(row.twoFabe) }}
+                    <!-- {{ FormateNum(row.twoFabe) }} -->
+                    <div v-if="compareNodeTotal('V2',row.name)">{{ FormateNum(row.twoFabe) }}%</div>
                   </el-table-column>
                   <el-table-column v-slot="{row}" align="center" width="150" label="V3" prop="three">
-                    {{ FormateNum(row.threeFabe) }}
+                    <!-- {{ FormateNum(row.threeFabe) }} -->
+                    <div v-if="compareNodeTotal('V3',row.name)">{{ FormateNum(row.threeFabe) }}%</div>
                   </el-table-column>
                 </template>
               </el-table-column>
@@ -159,17 +155,20 @@
                     </template>
                     <template>
                       <el-table-column v-slot="{row}" align="center" width="150" label="CPT">
-                        <!-- {{ FormateNum(row.channel[key][index].vthreeCost) }} -->
-                        {{ row.channel[key][index].cptFabe===null?'':FormateNum(row.channel[key][index].cptFabe) + '%' }}
+                        <!-- {{ row.channel[key][index].cptFabe===null?'':FormateNum(row.channel[key][index].cptFabe) + '%' }} -->
+                        <div v-if="compareNode(key,'V0',row.name)"> {{ row.channel[key][index].cptFabe===null?'':FormateNum(row.channel[key][index].cptFabe) + '%' }}</div>
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V1">
-                        {{ row.channel[key][index].voneFabe===null?'':FormateNum(row.channel[key][index].voneFabe) + '%' }}
+                        <!-- {{ row.channel[key][index].voneFabe===null?'':FormateNum(row.channel[key][index].voneFabe) + '%' }} -->
+                        <div v-if="compareNode(key,'V1',row.name)"> {{ row.channel[key][index].voneFabe===null?'':FormateNum(row.channel[key][index].voneFabe) + '%' }}</div>
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V2">
-                        {{ row.channel[key][index].vtwoFabe===null?'':FormateNum(row.channel[key][index].vtwoFabe) + '%' }}
+                        <!-- {{ row.channel[key][index].vtwoFabe===null?'':FormateNum(row.channel[key][index].vtwoFabe) + '%' }} -->
+                        <div v-if="compareNode(key,'V2',row.name)"> {{ row.channel[key][index].vtwoFabe===null?'':FormateNum(row.channel[key][index].vtwoFabe) + '%' }}</div>
                       </el-table-column>
                       <el-table-column v-slot="{row}" align="center" width="150" label="V3">
-                        {{ row.channel[key][index].vthreeFabe===null?'':FormateNum(row.channel[key][index].vthreeFabe) + '%' }}
+                        <!-- {{ row.channel[key][index].vthreeFabe===null?'':FormateNum(row.channel[key][index].vthreeFabe) + '%' }} -->
+                        <div v-if="compareNode(key,'V3',row.name)"> {{ row.channel[key][index].vthreeFabe===null?'':FormateNum(row.channel[key][index].vthreeFabe) + '%' }}</div>
                       </el-table-column>
                     </template>
 
@@ -209,8 +208,8 @@ export default {
     return {
       customerArr: [],
       channelOptions: [],
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         // yearAndMonthList: getCurrentMonth1(),
@@ -243,6 +242,7 @@ export default {
       RegionList: [],
       tableKey: 0, //el-table key
       tableKey2: 0, //el-table key
+      TaskNode: [],
     }
   },
   computed: {},
@@ -257,6 +257,9 @@ export default {
     'filterObj.channelCode'() {
       this.getCustomerList()
     },
+    'filterObj.yearAndMonthList'() {
+      this.getReport()
+    },
   },
   methods: {
     getRegionList() {
@@ -265,6 +268,131 @@ export default {
           this.RegionList = res.data
         }
       })
+    },
+    getTaskNode() {
+      APIReport.getTaskNode({
+        startDate: this.filterObj.yearAndMonthList[0].replace('-', ''),
+        endDate: this.filterObj.yearAndMonthList[
+          this.filterObj.yearAndMonthList.length - 1
+        ].replace('-', ''),
+        channelCode: this.filterObj.channelCode.join(','),
+      }).then((res) => {
+        if (res.code === 1000) {
+          console.log(res.data)
+          //获取最大的活动月
+          let maxActivityMonth = 0
+          let list = res.data
+          list.forEach((item) => {
+            if (Number(item.yearAndMonth) > maxActivityMonth) {
+              maxActivityMonth = item.yearAndMonth
+            }
+          })
+          this.TaskNode=[]
+          //取最大的活动月数据进行比对
+          let compareList = list.filter((item) => {
+            return item.yearAndMonth == maxActivityMonth
+          })
+          compareList.forEach((item) => {
+            this.TaskNode.push(`${item.channelCode}-${item.version}`)
+          })
+          console.log(compareList)
+        }
+      })
+    },
+    compareNode(channel, version, minePackage) {
+      if (version == 'V0') {
+        return (
+          this.findVersion(channel, 'V0', minePackage) ||
+          this.findVersion(channel, 'V1', minePackage) ||
+          this.findVersion(channel, 'V2', minePackage) ||
+          this.findVersion(channel, 'V3', minePackage)
+        )
+      }
+      if (version == 'V1') {
+        return (
+          this.findVersion(channel, 'V1', minePackage) ||
+          this.findVersion(channel, 'V2', minePackage) ||
+          this.findVersion(channel, 'V3', minePackage)
+        )
+      }
+      if (version == 'V2') {
+        return (
+          this.findVersion(channel, 'V2', minePackage) ||
+          this.findVersion(channel, 'V3', minePackage)
+        )
+      }
+      if (version == 'V3') {
+        return this.findVersion(channel, 'V3', minePackage)
+      }
+    },
+    //Total 部分  汇总行 -- 根据 渠道、节点进行比对，需同时满足筛选的多个渠道同时存在才存在Total
+    compareNodeTotal(version, minePackage) {
+      let channelList=this.filterObj.channelCode
+      if (version == 'V0') {
+        let flag=1
+        channelList.forEach(item=>{
+          let isHaveNode= this.findVersion(item, 'V0', minePackage)||this.findVersion(item, 'V1', minePackage)|| this.findVersion(item, 'V2', minePackage) || this.findVersion(item, 'V3', minePackage)
+          //两个渠道之中若一个没有，则不展示
+          if(!isHaveNode) {
+            flag=0
+          }
+        })
+        return flag
+      }
+      if (version == 'V1') {
+        let flag=1
+        channelList.forEach(item=>{
+          let isHaveNode= this.findVersion(item, 'V1', minePackage)|| this.findVersion(item, 'V2', minePackage) || this.findVersion(item, 'V3', minePackage)
+          //两个渠道之中若一个没有，则不展示
+          if(!isHaveNode) {
+            flag=0
+          }
+        })
+        return flag
+      }
+      if (version == 'V2') {
+        let flag=1
+        channelList.forEach(item=>{
+          let isHaveNode=  this.findVersion(item, 'V2', minePackage) || this.findVersion(item, 'V3', minePackage)
+          //两个渠道之中若一个没有，则不展示
+          if(!isHaveNode) {
+            flag=0
+          }
+        })
+        return flag
+      }
+      if (version == 'V3') {
+        let flag=1
+        channelList.forEach(item=>{
+          let isHaveNode=  this.findVersion(item, 'V3', minePackage)
+          //两个渠道之中若一个没有，则不展示
+          if(!isHaveNode) {
+            flag=0
+          }
+        })
+        return flag
+      }
+    },
+    // 与节点数组进行比对
+    findVersion(channel, version, minePackage) {
+      let MinePackageAndVersion =
+        minePackage === 'Price Promotion'
+          ? version
+          : minePackage === 'New User'
+          ? 'NU' + version
+          : ''
+     
+      if (MinePackageAndVersion != '') {
+          //对minePackage 和 渠道 区分
+          let index = this.TaskNode.indexOf(
+            `${channel}-${MinePackageAndVersion}`
+          )
+          return index != -1
+        } else {
+          // 对渠道进行区分
+          let index = this.TaskNode.indexOf(`${channel}-${version}`)
+          return index != -1
+        }
     },
     getBrandList() {
       selectAPI.getBrand({}).then((res) => {
@@ -335,13 +463,14 @@ export default {
         }
         //费比数字格式化
         if (ws[key].t == 'n') {
-          if (key.replace(/[^0-9]/gi, '') === '13' ||
-          key.replace(/[^0-9]/gi, '') === '14' ) {
+          if (
+            key.replace(/[^0-9]/gi, '') === '13' ||
+            key.replace(/[^0-9]/gi, '') === '14'
+          ) {
             // let number=(ws[key].t.v).toFixed(2)
-          // ws[key].v = ws[key].v.toFixed(2)
-          ws[key].s.numFmt = '0.00%'
+            // ws[key].v = ws[key].v.toFixed(2)
+            ws[key].s.numFmt = '0.00%'
           }
-          
         }
         //表头样式
         if (
@@ -413,17 +542,17 @@ export default {
         }
       }
       let columnCount = (customerCount + 1) * 4
-      console.log(columnCount);
+      console.log(columnCount)
       let ColumWidthList = []
       ColumWidthList.push({
-          wpx: 150,
+        wpx: 150,
       })
       for (let index = 0; index < columnCount; index++) {
         ColumWidthList.push({
           wpx: 100,
         })
       }
-      console.log(ColumWidthList);
+      console.log(ColumWidthList)
       return ColumWidthList
     },
     //需要传入列的总数 count default 26
@@ -521,6 +650,10 @@ export default {
         brandName: this.filterObj.brandName,
         regionName: this.filterObj.regionName,
       }
+      if (this.filterObj.channelCode.length) {
+        this.getTaskNode()
+      }
+
       APIReport.profitAndLossReport(params)
         .then((response) => {
           this.tableData = [

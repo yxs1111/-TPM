@@ -1,6 +1,12 @@
 import requestApi from '@/api/request-api'
 import osApi from '@/api/system/os-api'
-import { getFormatPickerOptions, getTextMap, parseTime, getDefaultPermissions } from '@/utils'
+import roleApi from '@/api/system/role-api'
+import {
+  getFormatPickerOptions,
+  getTextMap,
+  parseTime,
+  getDefaultPermissions
+} from '@/utils'
 import { Message } from 'element-ui'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -77,7 +83,22 @@ export default {
       pickerOptions: getFormatPickerOptions(),
       // 对话框
       centerDialogVisible: false,
-      permissions: getDefaultPermissions()
+      permissions: getDefaultPermissions(),
+      roleVisible: false, //数据权限绑定弹窗
+      RoleTreedata: [], //数据权限
+      RoleTreeFilter: '', //数据权限过滤
+      Role_KA: {
+        children: 'children',
+        label: 'label'
+      },
+      treeProps_Mine: {
+        children: 'children',
+        label: 'label'
+      },
+      Role_KAData: {}, //KA 权限数据
+      RoleTreeData_Mine: [], //Mine-package tree data
+      roleCode: '',
+      roleName: '' //角色数据权限--角色名称
     }
   },
   created() {
@@ -89,6 +110,83 @@ export default {
     }
   },
   methods: {
+    //数据权限绑定--弹窗显示
+    bindDataRow(obj) {
+      this.getKAList()
+      this.getMinePackage()
+      this.getFieldSales()
+    },
+    //数据权限绑定--确认
+    confirmRoleDialog() {
+      let list = this.$refs.RoleTree.getCheckedNodes()
+      console.log(list)
+      let dataList = []
+      for (let m = 0; m < list.length; m++) {
+        let obj = {
+          dataFirCode: list[m].dataFircode,
+          dataSecCode: list[m].dataSecCode,
+          dataSecId: list[m].dataSecId,
+          dataTerCode: list[m].dataTerCode,
+          dataTerId: list[m].dataTerId
+        }
+        dataList.push(obj)
+      }
+      roleApi
+        .bindDataPermissions({ roleCode: this.roleCode, dataList })
+        .then(res => {
+          console.log(res)
+          this.$message.success('权限绑定成功')
+          this.closeRoleDialog()
+        })
+    },
+    //数据权限绑定--关闭
+    closeRoleDialog() {
+      this.roleVisible = false
+      this.roleCode = ''
+      this.RoleTreedata = []
+      this.RoleTreeData_Mine = []
+      this.permissionType = ''
+    },
+    //获取默认权限
+    getDefaultRolePermissions(roleCode) {
+      roleApi.getDefaultRolePermissions({ roleCode }).then(res => {
+        console.log(res.data);
+      })
+    },
+    //获取KA 权限  NodeKey: "KA-EC-007"
+    getKAList() {
+      roleApi.getKAList().then(res => {
+        console.log(res.data);
+      })
+    },
+    //获取Mine Package 权限
+    getMinePackage() {
+      roleApi.getMinePackage().then(res => {
+        console.log(res.data);
+        
+      })
+    },
+    //获取Field sales 权限  NodeKey: "FieldSales-zone-4678"
+    getFieldSales() {
+      roleApi.getFieldSales().then(res => {
+        console.log(res.data);
+      })
+    },
+    //筛选
+    RoleTreeFilterMethod(value, data, node) {
+      return this.getHasKeyword(value, node)
+    },
+    //筛选的时候显示子数据
+    getHasKeyword(value, node) {
+      if (node.data instanceof Array) {
+        node.data = node.data.length > 0 ? node.data[0] : {}
+      }
+      if (node.data.label && node.data.label.indexOf(value) !== -1) {
+        return true
+      } else {
+        return node.parent && this.getHasKeyword(value, node.parent)
+      }
+    },
     // 查询方法
     fetchData() {
       this.searchLoading = true
@@ -99,28 +197,36 @@ export default {
         this.osQuery.startDate = ''
         this.osQuery.endDate = ''
       }
-      requestApi.getPage(url, { name: this.osQuery.name, locked: this.osQuery.locked,
-        startDate: this.osQuery.startDate, endDate: this.osQuery.endDate,
-        pageSize: this.osInfoPageProps.pageSize, pageNum: this.osInfoPageProps.pageNum }).then(response => {
-        const { data } = response
-        this.osInfoPageProps.records = data.records
-        this.osInfoPageProps.total = data.total
-        this.osInfoPageProps.pageNum = data.pageNum
-        this.osInfoPageProps.pageSize = data.pageSize
-        this.searchLoading = false
-      }).catch(error => {
-        this.searchLoading = false
-        console.log(error)
-      })
+      requestApi
+        .getPage(url, {
+          name: this.osQuery.name,
+          locked: this.osQuery.locked,
+          startDate: this.osQuery.startDate,
+          endDate: this.osQuery.endDate,
+          pageSize: this.osInfoPageProps.pageSize,
+          pageNum: this.osInfoPageProps.pageNum
+        })
+        .then(response => {
+          const { data } = response
+          this.osInfoPageProps.records = data.records
+          this.osInfoPageProps.total = data.total
+          this.osInfoPageProps.pageNum = data.pageNum
+          this.osInfoPageProps.pageSize = data.pageSize
+          this.searchLoading = false
+        })
+        .catch(error => {
+          this.searchLoading = false
+          console.log(error)
+        })
     },
     // 保存方法
     saveOrUpdate() {
-      this.$refs['osDataForm'].validate((valid) => {
+      this.$refs['osDataForm'].validate(valid => {
         if (valid) {
           this.saveLoading = true
           const params = Object.assign({}, this.osInfoDialog.data)
           if (this.osInfoDialog.state === 'create') {
-            requestApi.save(url, params).then((res) => {
+            requestApi.save(url, params).then(res => {
               this.saveLoading = false
               if (res && res.code === 1000) {
                 this.osInfoDialog.visible = false
@@ -132,14 +238,20 @@ export default {
               }
             })
           } else {
-            requestApi.update(url, params).then((res) => {
+            requestApi.update(url, params).then(res => {
               this.saveLoading = false
               if (res && res.code === 1000) {
                 if (this.osInfoDialog.data.version) {
                   this.osInfoDialog.data.version++
                 }
-                const index = this.osInfoPageProps.records.findIndex(v => v.id === this.osInfoDialog.data.id)
-                this.osInfoPageProps.records.splice(index, 1, this.osInfoDialog.data)
+                const index = this.osInfoPageProps.records.findIndex(
+                  v => v.id === this.osInfoDialog.data.id
+                )
+                this.osInfoPageProps.records.splice(
+                  index,
+                  1,
+                  this.osInfoDialog.data
+                )
                 this.osInfoDialog.visible = false
                 Message.success({
                   message: '更新成功',
@@ -163,7 +275,7 @@ export default {
         this.multipleSelection.map(row => {
           codes.push(row.code)
         })
-        requestApi.remove(url, codes).then((res) => {
+        requestApi.remove(url, codes).then(res => {
           if (res && res.code === 1000) {
             Message.success({
               message: '删除成功',

@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-14 09:27:10
+ * @LastEditTime: 2022-05-10 11:57:35
 -->
 <template>
-  <div class="app-container">
+  <div class="V0Content">
     <div class="Maincontent">
       <div class="SelectBarWrap" @keyup.enter="search">
         <div class="SelectBar">
@@ -131,12 +131,12 @@
         <img src="@/assets/images/null_content.jpg" alt="">
         <div class="null_content_tit">暂无数据</div>
       </div>
-      <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+      <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
         <div class="el-dialogContent">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">
               <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in ['Price Promotion','New User']" :key="index" :label="item" :value="item" />
+                <el-option v-for="item,index in ['Price Promotion','New User','Contract']" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
@@ -330,6 +330,7 @@ export default {
       isCheck: false, //检测数据按钮显示或隐藏
       // yearAndMonthList: yearAndMonthList(),
       yearAndMonthList: [
+        '2022 3+9',
         '2022 2+10',
         '2022 0+12',
         '2021 11+1',
@@ -466,34 +467,13 @@ export default {
       this.getList()
     },
     getCPTData() {
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道')
+        return
+      }
       this.dialogVisible = true
       this.ruleForm.channelCode = this.filterObj.channelCode
       this.ruleForm.dimVersion = ''
-      // API.isExist({
-      //   yearAndMonth: this.filterObj.month,
-      //   channelCode: this.filterObj.channelCode,
-      // }).then((res) => {
-      //   if (res.data) {
-      //     this.$confirm('此操作将覆盖CPT数据, 是否继续?', '提示', {
-      //       confirmButtonText: '确定',
-      //       cancelButtonText: '取消',
-      //       type: 'info',
-      //     })
-      //       .then(() => {
-      //         this.dialogVisible = true
-      //         this.ruleForm.channelCode = this.filterObj.channelCode
-      //       })
-      //       .catch(() => {
-      //         this.$message({
-      //           type: 'info',
-      //           message: '已取消',
-      //         })
-      //       })
-      //   } else {
-      //     this.dialogVisible = true
-      //     this.ruleForm.channelCode = this.filterObj.channelCode
-      //   }
-      // })
     },
     //导入数据弹窗显示
     importData() {
@@ -603,8 +583,9 @@ export default {
     downloadTemplate() {
       if (Object.keys(this.ContentData).length) {
         //导出数据筛选
-        API.exportExcel({
+        API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
+          dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
           this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0申请.xlsx`) //自定义Excel文件名
@@ -640,7 +621,9 @@ export default {
           var url =
             this.ruleForm.Minepackage == 'Price Promotion'
               ? API.getCPTData
-              : API.getNuData
+              : this.ruleForm.Minepackage == 'New User'
+              ? API.getNuData:API.getContractData
+               
           url({
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
@@ -832,6 +815,12 @@ export default {
   width: 100%;
   // height: calc(100% - 50px);
   overflow-y: auto;
+}
+.V0Content {
+  height: calc(100% - 0px);
+  background-color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
 }
 </style>
 <style>

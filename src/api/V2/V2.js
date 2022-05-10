@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2021-12-30 18:44:31
+ * @LastEditTime: 2022-04-27 12:05:53
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -20,6 +20,16 @@ export default {
     //二进制数据流转blob
     return request({
       url:this.url+'/downExcel',
+      method:'post',
+      data:params,
+      responseType:'blob'
+    })
+  },
+  //下载模板
+  exportTemplateExcel(params) {
+    //二进制数据流转blob
+    return request({
+      url:this.url+'/downExcelTemplate',
       method:'post',
       data:params,
       responseType:'blob'
@@ -77,6 +87,16 @@ export default {
       responseType:'blob'
     })
   },
+  //downExcel NU下载模板
+  exportNUTemplateExcel(params) {
+    //二进制数据流转blob
+    return request({
+      url:this.NUUrl+'/downExcelTemplate',
+      method:'post',
+      data:params,
+      responseType:'blob'
+    })
+  },
   /**
    * V2NU-导入excel
    * @param {params} params 
@@ -113,6 +133,9 @@ export default {
   //v1数据异常项保存
   exceptionNUSave(params) {
     return requestApi.request_post(this.ImportNuUrl+'/save', params)
+  },
+  calculation(params) {
+    return requestApi.request_get('/cityplan/investCpVTwoDetail/toCalculation', params)
   },
   
 }

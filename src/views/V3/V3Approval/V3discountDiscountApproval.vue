@@ -282,8 +282,8 @@ export default {
       saveBtn: false,
       importVisible: false, // 导入弹窗
       mainIdLocal: '',
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         customerMdmCode: '',

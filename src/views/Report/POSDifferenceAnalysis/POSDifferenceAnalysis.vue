@@ -42,10 +42,10 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
-        
+
         <div class="Selectli">
           <span class="SelectliTitle">品牌：</span>
-          <el-select v-model="filterObj.brandName" clearable  filterable placeholder="请选择">
+          <el-select v-model="filterObj.brandName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-    <el-table :data="tableData"  :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -69,40 +69,64 @@
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划销量（CTN）">
-        {{ FormateNum((row.planSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V1',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.planSales*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
-        {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V1',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
-        {{ FormateNum((row.planCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V1',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.planCost*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
-        {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V2',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
-        {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V2',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
-        {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V2',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
-        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualSalesTin" label="V3实际销量(TIN)">
-        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.actualSalesTin*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）">
-        {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
-        {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
-        {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
-        {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
         <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
@@ -129,7 +153,8 @@
       <el-table-column width="220" align="center" prop="realChannelName" label="MDM最新渠道" />
       <el-table-column width="220" align="center" prop="realRegionName" label="MDM最新区域" />
     </el-table>
-    <el-table :data="AllTableData" id="outTable" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%; display: none;">
+    <el-table :data="AllTableData" id="outTable" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
+      style="width: 100%; display: none;">
       <el-table-column align="center" width="400" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="160" align="center" prop="costTypeName" label="费用类型" />
@@ -142,40 +167,71 @@
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划销量（CTN）">
-        {{ FormateNum((row.planSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V1',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.planSales*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
-        {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V1',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
+        </div>
+
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
-        {{ FormateNum((row.planCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V1',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.planCost*1).toFixed(2)) }}
+        </div>
+
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
-        {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V2',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+        </div>
+
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
-        {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V2',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
+        </div>
+
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
-        {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V2',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+        </div>
+
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
-        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        </div>
+
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualSalesTin" label="V3实际销量(TIN)">
-        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.actualSalesTin*1).toFixed(2)) }}
+        </div>
+
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）">
-        {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
-        {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
-        {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
-        {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+        <div v-if="compareNode(row.yearAndMonth,'V3',row.channelName,row.minePackageName)">
+          {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+        </div>
       </el-table-column>
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
         <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
@@ -219,7 +275,7 @@ import {
   getHeight,
   getCurrentMonth,
   messageObj,
-  s2ab
+  s2ab,
 } from '@/utils'
 import API from '@/api/report/report.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -232,8 +288,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
@@ -259,6 +315,7 @@ export default {
       RegionList: [],
       BrandList: [],
       checkArr: [], //批量删除,存放选中
+      TaskNode: [], //节点数组
       maxheight: getHeight(),
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
@@ -274,7 +331,7 @@ export default {
         this.maxheight = getHeight()
       })()
     }
-    
+
     this.getChannelList()
     this.getQuerySkuSelect()
     this.getDistributorList()
@@ -310,72 +367,122 @@ export default {
     getTableData() {
       this.tableData = []
       API.getMonthlyAnalysis({
-          pageNum: this.pageNum, // 当前页
-          pageSize: this.pageSize, // 每页条数
-          cpId: this.filterObj.cpId === ''
-              ? null
-              : this.filterObj.cpId,
-          channelName:
-            this.filterObj.channelName === ''
-              ? null
-              : this.filterObj.channelName,
-          customerName:
-            this.filterObj.customerName === ''
-              ? null
-              : this.filterObj.customerName,
-          distributorName:
-            this.filterObj.distributorName === ''
-              ? null
-              : this.filterObj.distributorName,
-          brandName:
-            this.filterObj.brandName === '' ? null : this.filterObj.brandName,
-          minePackageName:
-            this.filterObj.minePackageName === ''
-              ? null
-              : this.filterObj.minePackageName,
-          yearAndMonth: this.filterObj.yearAndMonth,
-          regionName:
-            this.filterObj.regionName === '' ? null : this.filterObj.regionName,
-        }).then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-          this.getAllTableData()
-        })
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        cpId: this.filterObj.cpId === '' ? null : this.filterObj.cpId,
+        channelName:
+          this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+        customerName:
+          this.filterObj.customerName === ''
+            ? null
+            : this.filterObj.customerName,
+        distributorName:
+          this.filterObj.distributorName === ''
+            ? null
+            : this.filterObj.distributorName,
+        brandName:
+          this.filterObj.brandName === '' ? null : this.filterObj.brandName,
+        minePackageName:
+          this.filterObj.minePackageName === ''
+            ? null
+            : this.filterObj.minePackageName,
+        yearAndMonth: this.filterObj.yearAndMonth,
+        regionName:
+          this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+      }).then((response) => {
+        this.tableData = response.data.records
+        this.pageNum = response.data.current
+        this.pageSize = response.data.size
+        this.total = response.data.total
+        if (
+          this.filterObj.yearAndMonth != '' &&
+          this.filterObj.channelName != ''
+        ) {
+          this.getTaskNode()
+        }
+        this.getAllTableData()
+      })
     },
     getAllTableData() {
-      this.AllTableData=[]
+      this.AllTableData = []
       API.getMonthlyAnalysisExport({
-        cpId: this.filterObj.cpId === ''
-              ? null
-              : this.filterObj.cpId,
-          channelName:
-            this.filterObj.channelName === ''
-              ? null
-              : this.filterObj.channelName,
-          customerName:
-            this.filterObj.customerName === ''
-              ? null
-              : this.filterObj.customerName,
-          distributorName:
-            this.filterObj.distributorName === ''
-              ? null
-              : this.filterObj.distributorName,
-          brandName:
-            this.filterObj.brandName === '' ? null : this.filterObj.brandName,
-          minePackageName:
-            this.filterObj.minePackageName === ''
-              ? null
-              : this.filterObj.minePackageName,
-          yearAndMonth: this.filterObj.yearAndMonth,
-          regionName:
-            this.filterObj.regionName === '' ? null : this.filterObj.regionName,
-        }).then((response) => {
-          this.AllTableData = response.data
-        })
+        cpId: this.filterObj.cpId === '' ? null : this.filterObj.cpId,
+        channelName:
+          this.filterObj.channelName === '' ? null : this.filterObj.channelName,
+        customerName:
+          this.filterObj.customerName === ''
+            ? null
+            : this.filterObj.customerName,
+        distributorName:
+          this.filterObj.distributorName === ''
+            ? null
+            : this.filterObj.distributorName,
+        brandName:
+          this.filterObj.brandName === '' ? null : this.filterObj.brandName,
+        minePackageName:
+          this.filterObj.minePackageName === ''
+            ? null
+            : this.filterObj.minePackageName,
+        yearAndMonth: this.filterObj.yearAndMonth,
+        regionName:
+          this.filterObj.regionName === '' ? null : this.filterObj.regionName,
+      }).then((response) => {
+        this.AllTableData = response.data
+      })
     },
+    getTaskNode() {
+      API.getTaskNode({
+        startDate: this.filterObj.yearAndMonth,
+        endDate: this.filterObj.yearAndMonth,
+        channelCode: this.filterObj.channelName,
+      }).then((res) => {
+        if (res.code === 1000) {
+          let compareList = res.data
+          this.TaskNode = []
+          compareList.forEach((item) => {
+            this.TaskNode.push(
+              `${item.yearAndMonth}-${item.channelCode}-${item.version}`
+            )
+          })
+          console.log(compareList)
+        }
+      })
+    },
+    compareNode(yearAndMonth, version, channel, minePackage) {
+      if(this.filterObj.yearAndMonth==''||this.filterObj.channelName=='') {
+        return true
+      }
+      if (version == 'V1') {
+        return (
+          this.findVersion(yearAndMonth, 'V1', channel, minePackage) ||
+          this.findVersion(yearAndMonth, 'V2', channel, minePackage) ||
+          this.findVersion(yearAndMonth, 'V3', channel, minePackage)
+        )
+      }
+      if (version == 'V2') {
+        return (
+          this.findVersion(yearAndMonth, 'V2', channel, minePackage) ||
+          this.findVersion(yearAndMonth, 'V3', channel, minePackage)
+        )
+      }
+      if (version == 'V3') {
+        return this.findVersion(yearAndMonth, 'V3', channel, minePackage)
+      }
+    },
+    // 与节点数组进行比对
+    findVersion(yearAndMonth, version, channel, minePackage) {
+      let MinePackageAndVersion =
+        minePackage === 'Price Promotion'
+          ? version
+          : minePackage === 'New User'
+          ? 'NU' + version
+          : ''
 
+      let index = this.TaskNode.indexOf(
+        `${yearAndMonth}-${channel}-${MinePackageAndVersion}`
+      )
+      return index != -1
+    },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         this.ChannelList = res.data
@@ -467,7 +574,7 @@ export default {
         right: { style: 'thin' },
       }
       ws['!cols'] = this.getColumWidth()
-      console.log(ws);
+      console.log(ws)
       Object.keys(ws).forEach((key) => {
         //这里遍历单元格给单元格对象设置属性,s为控制样式的属性
         if (key.indexOf('!') < 0) {
@@ -480,9 +587,7 @@ export default {
             },
           }
         }
-        if (
-          key.replace(/[^0-9]/gi, '') === '1' 
-        ) {
+        if (key.replace(/[^0-9]/gi, '') === '1') {
           ws[key].s = {
             border: borderAll,
             fill: {
@@ -520,11 +625,12 @@ export default {
     },
     //获取数组宽度列表
     getColumWidth() {
-      let ColumWidthList = [{
+      let ColumWidthList = [
+        {
           wpx: 250,
-        }]
+        },
+      ]
       for (let index = 1; index < 50; index++) {
-
         ColumWidthList.push({
           wpx: 150,
         })
@@ -548,8 +654,8 @@ export default {
     //需要传入列的总数 count default 26
     initColum() {
       //所有列：(客户+1)*4+1
-      let columCount=40
-      let AllColum=[]
+      let columCount = 40
+      let AllColum = []
       for (let index = 0; index < columCount; index++) {
         AllColum.push(this.createCellPos(index))
       }
@@ -557,7 +663,7 @@ export default {
     },
     addRangeBorder(range, ws) {
       //得到所有列名
-      let cols=this.initColum() 
+      let cols = this.initColum()
       range.forEach((item) => {
         //添加单元格border样式
         let style = {

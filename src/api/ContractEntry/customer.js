@@ -1,7 +1,7 @@
 /*
  * @Description: 客户合同录入
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-04-15 09:32:27
+ * @LastEditTime: 2022-04-26 11:25:48
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -28,6 +28,15 @@ export default {
   updateCustomerContract(params) {
     return requestApi.request_post(this.url+'/update', params)
   },
+  //客户合同 导出
+  export(params) {
+    return request({
+      url: this.url+'/exportCustomerContract',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
   //客户合同明细 --保存
   saveDetail(params) {
     return requestApi.request_post(this.url+'/saveDetail', params)
@@ -47,6 +56,9 @@ export default {
    */
   termination(params) {
     return requestApi.request_post(this.url+'/termination', params)
+  },
+  getContractItemList(params) {
+    return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)
   },
 }
 

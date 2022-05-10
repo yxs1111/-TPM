@@ -216,7 +216,7 @@
               </template>
             </el-table-column>
             <el-table-column label="权重" align="center" prop="cdmName">
-              <template slot-scope="scope">
+              <template>
                 <span>{{ 60 }}</span>
               </template>
             </el-table-column>
@@ -279,8 +279,8 @@ export default {
         remark: ''
       },
       dialogVisible: false,
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         channelCode: '',

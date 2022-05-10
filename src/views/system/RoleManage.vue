@@ -58,21 +58,27 @@
           <el-tag :type="row.locked | lockedStatusFilter">{{ row.locked | lockedWordFilter }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="480" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <div class="table_operation">
-            <span class="table_operationText" @click="showRoleDialog(row)">
+            <!-- <span class="table_operationText" @click="showRoleDialog(row)">
               数据权限绑定
-            </span>
-            <span class="table_operationText" @click="showPermission(row)">
-              功能权限绑定
-            </span>
-            <span class="table_operationText" @click="editRowData(row)">
+            </span> -->
+            <el-button type="primary" size="mini" @click="showPermission(row)">
+            功能权限绑定
+            </el-button>
+            <el-button type="primary" size="mini" @click="editRowData(row)">
+             {{ $t('table.edit') }}
+            </el-button>
+            <el-button type="danger" size="mini" @click="handleDelete(row)">
+              {{ $t('table.delete') }}
+            </el-button>
+            <!-- <span class="table_operationText" @click="editRowData(row)">
               {{ $t('table.edit') }}
             </span>
             <span class="table_operationText" @click="handleDelete(row)">
               {{ $t('table.delete') }}
-            </span>
+            </span> -->
           </div>
 
         </template>
@@ -369,7 +375,7 @@ export default {
       rolePageProps: {
         records: null,
         total: 0,
-        pageSize: 10,
+        pageSize: 100,
         pageNum: 1,
       },
       perQuery: {

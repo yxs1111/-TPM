@@ -222,8 +222,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
@@ -501,9 +501,11 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportNUExcel({
+        API.exportNUTemplateExcel({
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
+          customerName: this.filterObj.customerCode,
+          brandName: this.filterObj.brandCode,
         }).then((res) => {
           this.downloadFile(res, `${this.filterObj.yearAndMonth}_NU_${this.filterObj.channelCode}_V2申请.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)

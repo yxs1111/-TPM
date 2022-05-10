@@ -482,7 +482,10 @@ div:focus {
   border-radius: 6px;
 
   .el-dialog {
-    margin-top: 16vh !important;
+    // margin-top: 8vh !important;
+    top: 50%;
+    margin-top: 0px!important;
+    transform: translateY(-50%);
   }
   .el-dialog__header {
     height: 50px;
@@ -737,8 +740,10 @@ div:focus {
 }
 .el-form-row {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
   /* 自定义el-select样式 */
   .my-el-select {
     width: 226px !important;
@@ -952,4 +957,16 @@ div:focus {
     color: inherit;
     margin-left: 0;
   }
+}
+.subTitle {
+  color: #ccc;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+.el-submenu .svg-icon {
+  width: 1.5em;
+  height: 1.5em;
+  /* vertical-align: -0.15em; */
+  fill: currentColor;
+  overflow: hidden;
 }

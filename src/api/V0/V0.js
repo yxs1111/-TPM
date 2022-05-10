@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-01-03 17:34:43
+ * @LastEditTime: 2022-05-09 10:34:04
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -27,11 +27,25 @@ export default {
   getNuData(params) {
     return requestApi.request_post('/cityplan/investCpNuVOneDetail/createCPT', params)
   },
+  //获取Contract数据
+  getContractData(params) {
+    return requestApi.request_post('/cityplan/investCpContractVOneDetail/createCPT', params)
+  },
   //excel 导出
   exportExcel(params) {
     //二进制数据流转blob
     return request({
       url:this.url+'/downExcel',
+      method:'post',
+      data:params,
+      responseType:'blob'
+    })
+  },
+  //下载模板导出
+  exportTemplateExcel(params) {
+    //二进制数据流转blob
+    return request({
+      url:this.url+'/downExcelTemplate',
       method:'post',
       data:params,
       responseType:'blob'

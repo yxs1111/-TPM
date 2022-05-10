@@ -10,7 +10,7 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">更新时间</span>
+          <span class="SelectliTitle">修改时间</span>
           <el-date-picker v-model="filterObj.invokeDateSting" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期">
           </el-date-picker>
         </div>
@@ -26,7 +26,7 @@
       style="width: 100%">
       <el-table-column align="center" prop="interfaceName" label="接口名称"> </el-table-column>
       <el-table-column align="center" prop="upstreamData" label="表名"> </el-table-column>
-      <el-table-column v-slot={row} align="center" prop="invokeDate" label="更新时间">
+      <el-table-column v-slot={row} align="center" prop="invokeDate" label="修改时间">
          {{ row.createDate ? row.createDate.replace("T"," ") : '' }}  
       </el-table-column>
       <el-table-column align="center" prop="success" label="是否成功"> </el-table-column>
@@ -59,8 +59,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         interfaceName: '',

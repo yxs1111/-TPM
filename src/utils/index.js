@@ -222,7 +222,7 @@ export function getDefaultPermissions() {
     export: 5,
     getCPT: 6,
     submit: 7,
-    rejected: 8,
+    rejected: 8
   }
 }
 
@@ -493,12 +493,12 @@ export function messageMap() {
     exportErrorError: '导出错误信息失败',
     saveSuccess: '保存成功',
     saveError: '保存失败',
-    requireChannel:'渠道不能为空，请选择渠道'
+    requireChannel: '渠道不能为空，请选择渠道'
   }
 }
-export const messageObj={
-  requireChannel:'渠道不能为空，请选择渠道',
-  requireMonth:'活动月不能为空，请选择活动月'
+export const messageObj = {
+  requireChannel: '渠道不能为空，请选择渠道',
+  requireMonth: '活动月不能为空，请选择活动月'
 }
 //报表动态列
 export function ReportCheckList() {
@@ -538,16 +538,16 @@ export function dynamicColumn() {
     { title: 'Exception3占比', value: 'exceptionThreeRange' }
   ]
 }
-export const dynamicColumnCost= [
-    { title: 'Pass费用', value: 'passNum' },
-    { title: 'Exception1费用', value: 'exceptionOneNum' },
-    { title: 'Exception2费用', value: 'exceptionTwoNum' },
-    { title: 'Exception3费用', value: 'exceptionThreeNum' },
-    { title: 'Pass占比', value: 'passRange' },
-    { title: 'Exception1占比', value: 'exceptionOneRange' },
-    { title: 'Exception2占比', value: 'exceptionTwoRange' },
-    { title: 'Exception3占比', value: 'exceptionThreeRange' }
-  ]
+export const dynamicColumnCost = [
+  { title: 'Pass费用', value: 'passNum' },
+  { title: 'Exception1费用', value: 'exceptionOneNum' },
+  { title: 'Exception2费用', value: 'exceptionTwoNum' },
+  { title: 'Exception3费用', value: 'exceptionThreeNum' },
+  { title: 'Pass占比', value: 'passRange' },
+  { title: 'Exception1占比', value: 'exceptionOneRange' },
+  { title: 'Exception2占比', value: 'exceptionTwoRange' },
+  { title: 'Exception3占比', value: 'exceptionThreeRange' }
+]
 
 export function FormateThousandNum(num) {
   //千分位分隔符+两位小数
@@ -607,9 +607,9 @@ export function getContractEntry() {
   return window.innerHeight - 480
 }
 /**
- * 
- * @param {*数据流} res 
- * @param {*文件名称} fileName 
+ *
+ * @param {*数据流} res
+ * @param {*文件名称} fileName
  */
 //下载文件
 export function downloadFile(res, fileName) {
@@ -632,8 +632,8 @@ export function downloadFile(res, fileName) {
 }
 
 /**
- * 
- * @param {数字} n 
+ *
+ * @param {数字} n
  * @returns 列名
  * 数字向列名转换
  */
@@ -649,7 +649,7 @@ export function createCellPos(n) {
     n = Math.floor(n / len) - 1
   }
   return s
-} 
+}
 //字符串转ArrayBuffer
 export function s2ab(s) {
   var buf = new ArrayBuffer(s.length)
@@ -658,192 +658,225 @@ export function s2ab(s) {
   return buf
 }
 //-[获取两个日期中所有的月份中]
-export function getMonthBetween(start,end){  
- var result = [];  
- var s = start.split("-");  
- var e = end.split("-");  
- var min = new Date();  
- var max = new Date();  
- min.setFullYear(s[0],s[1]);  
- max.setFullYear(e[0],e[1]);  
- var curr = min;  
- while(curr <= max){  
-     var month = curr.getMonth();  
-     //month=month==0?12:month;
-     var str=curr.getFullYear()+"-"+(month);
-     var s=curr.getFullYear()+"-0";
-     if(str==s){
-       str=curr.getFullYear()+"-12";
-     }
-     result.push(str);  
-     curr.setMonth(month+1);
- }  
- return result;  
-} 
+export function getMonthBetween(start, end) {
+  var result = []
+  var s = start.split('-')
+  var e = end.split('-')
+  var min = new Date()
+  var max = new Date()
+  min.setFullYear(s[0], s[1])
+  max.setFullYear(e[0], e[1])
+  var curr = min
+  while (curr <= max) {
+    var month = curr.getMonth()
+    //month=month==0?12:month;
+    var str = curr.getFullYear() + '-' + month
+    var s = curr.getFullYear() + '-0'
+    if (str == s) {
+      str = curr.getFullYear() + '-12'
+    }
+    result.push(str)
+    curr.setMonth(month + 1)
+  }
+  return result
+}
 /**
  * 字符串根据逗号分割换行显示
- * @param {字符串} value 
+ * @param {字符串} value
  * @returns 换行
  */
 export function setSplitAssignee(value) {
-  let list=value.split(',')
-  let formatString=''
-  for (let index = 0; index <list.length; index++) {
-    formatString+=`${list[index]}<br>`
-    
+  let list = value.split(',')
+  let formatString = ''
+  for (let index = 0; index < list.length; index++) {
+    formatString += `${list[index]}<br>`
   }
   return formatString
 }
-export let contractList=['草稿','待审批','被拒绝','通过','终止']
-export let contractItemVariableList=[
+export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止']
+export let contractItemVariableList = [
   {
-    name:'月度返利',
-    code:'monthly_rebate',
-    conditionalIsTwo:2 //两者均有可能
+    name: '月度返利',
+    code: 'monthly_rebate',
+    conditionalIsTwo: 2 //两者均有可能
   },
   {
-    name:'季度返利',
-    code:'quarterly_rebate',
-    conditionalIsTwo:2 //两者均有可能
+    name: '季度返利',
+    code: 'quarterly_rebate',
+    conditionalIsTwo: 2 //两者均有可能
   },
   {
-    name:'年度返利',
-    code:'yearly_rebate',
-    conditionalIsTwo:2 //两者均有可能
+    name: '年度返利',
+    code: 'yearly_rebate',
+    conditionalIsTwo: 2 //两者均有可能
   },
   {
-    name:'线上生意返利',
-    code:'online_business_rebates',
-    conditionalIsTwo:2 //两者均有可能
+    name: '线上生意返利',
+    code: 'online_business_rebates',
+    conditionalIsTwo: 2 //两者均有可能
   },
   {
-    name:'深度分销',
-    code:'depth_distribution',
-    conditionalIsTwo:2 //两者均有可能
+    name: '深度分销',
+    code: 'depth_distribution',
+    conditionalIsTwo: 2 //两者均有可能
   },
   {
-    name:'不退货返利',
-    code:'no_return_rebate',
-    conditionalIsTwo:2 //两者均有可能
+    name: '不退货返利',
+    code: 'no_return_rebate',
+    conditionalIsTwo: 2 //两者均有可能
   },
   {
-    name:'主货架陈列',
-    code:'main_rack_display',
-    conditionalIsTwo:1 //conditional
+    name: '主货架陈列',
+    code: 'main_rack_display',
+    conditionalIsTwo: 1 //conditional
   },
   {
-    name:'嵌柜陈列费',
-    code:'inlaid_cabinet_display_fee',
-    conditionalIsTwo:1 //conditional
+    name: '嵌柜陈列费',
+    code: 'inlaid_cabinet_display_fee',
+    conditionalIsTwo: 1 //conditional
   },
   {
-    name:'生动化陈列',
-    code:'vivid_display',
-    conditionalIsTwo:1 //conditional
+    name: '生动化陈列',
+    code: 'vivid_display',
+    conditionalIsTwo: 1 //conditional
   },
   {
-    name:'物流费',
-    code:'logistics_cost',
-    conditionalIsTwo:0 //unconditional
+    name: '物流费',
+    code: 'logistics_cost',
+    conditionalIsTwo: 0 //unconditional
   },
   {
-    name:'数据服务费',
-    code:'Data_service_fee',
-    conditionalIsTwo:2 
+    name: '数据服务费',
+    code: 'Data_service_fee',
+    conditionalIsTwo: 2
   },
   {
-    name:'新店进场费',
-    code:'New_store_entry_fee',
-    conditionalIsTwo:1 
+    name: '新店进场费',
+    code: 'New_store_entry_fee',
+    conditionalIsTwo: 1
   },
   {
-    name:'新品上架费',
-    code:'New_product_launching_fee',
-    conditionalIsTwo:1 
+    name: '新品上架费',
+    code: 'New_product_launching_fee',
+    conditionalIsTwo: 1
   },
   {
-    name:'周年庆/主推',
-    code:'anniversary_or_main_promotion',
-    conditionalIsTwo:1 
+    name: '周年庆/主推',
+    code: 'anniversary_or_main_promotion',
+    conditionalIsTwo: 1
   },
   {
-    name:'DM海报',
-    code:'DM_posters',
-    conditionalIsTwo:1 
+    name: 'DM海报',
+    code: 'DM_posters',
+    conditionalIsTwo: 1
   },
   {
-    name:'会员营销费',
-    code:'Membership_marketing_fee',
-    conditionalIsTwo:2 
+    name: '会员营销费',
+    code: 'Membership_marketing_fee',
+    conditionalIsTwo: 2
   },
   {
-    name:'促销员管理费',
-    code:'Management_fee_of_promoters',
-    conditionalIsTwo:1 
+    name: '促销员管理费',
+    code: 'Management_fee_of_promoters',
+    conditionalIsTwo: 1
   },
   {
-    name:'展会/嘉年华/妈妈班等',
-    code:'Fairs_or_carnivals_or_mom_classes_etc',
-    conditionalIsTwo:1 
-  },
+    name: '展会/嘉年华/妈妈班等',
+    code: 'Fairs_or_carnivals_or_mom_classes_etc',
+    conditionalIsTwo: 1
+  }
 ]
-export let contractItemFixList=[
+export let contractItemFixList = [
   {
-    name:'主货架陈列',
-    code:'main_rack_display',
-    conditionalIsTwo:1 //conditional
+    name: '主货架陈列',
+    code: 'main_rack_display',
+    conditionalIsTwo: 1 //conditional
   },
   {
-    name:'嵌柜陈列费',
-    code:'inlaid_cabinet_display_fee',
-    conditionalIsTwo:1 //conditional
+    name: '嵌柜陈列费',
+    code: 'inlaid_cabinet_display_fee',
+    conditionalIsTwo: 1 //conditional
   },
   {
-    name:'生动化陈列',
-    code:'vivid_display',
-    conditionalIsTwo:1 //conditional
+    name: '生动化陈列',
+    code: 'vivid_display',
+    conditionalIsTwo: 1 //conditional
   },
   {
-    name:'数据服务费',
-    code:'Data_service_fee',
-    conditionalIsTwo:2 
+    name: '数据服务费',
+    code: 'Data_service_fee',
+    conditionalIsTwo: 2
   },
   {
-    name:'新店进场费',
-    code:'New_store_entry_fee',
-    conditionalIsTwo:1 
+    name: '新店进场费',
+    code: 'New_store_entry_fee',
+    conditionalIsTwo: 1
   },
   {
-    name:'新品上架费',
-    code:'New_product_launching_fee',
-    conditionalIsTwo:1 
+    name: '新品上架费',
+    code: 'New_product_launching_fee',
+    conditionalIsTwo: 1
   },
   {
-    name:'周年庆/主推',
-    code:'anniversary_or_main_promotion',
-    conditionalIsTwo:1 
+    name: '周年庆/主推',
+    code: 'anniversary_or_main_promotion',
+    conditionalIsTwo: 1
   },
   {
-    name:'DM海报',
-    code:'DM_posters',
-    conditionalIsTwo:1 
+    name: 'DM海报',
+    code: 'DM_posters',
+    conditionalIsTwo: 1
   },
   {
-    name:'会员营销费',
-    code:'Membership_marketing_fee',
-    conditionalIsTwo:2 
+    name: '会员营销费',
+    code: 'Membership_marketing_fee',
+    conditionalIsTwo: 2
   },
   {
-    name:'促销员管理费',
-    code:'Management_fee_of_promoters',
-    conditionalIsTwo:1 
+    name: '促销员管理费',
+    code: 'Management_fee_of_promoters',
+    conditionalIsTwo: 1
   },
   {
-    name:'展会/嘉年华/妈妈班等',
-    code:'Fairs_or_carnivals_or_mom_classes_etc',
-    conditionalIsTwo:1 
-  },
+    name: '展会/嘉年华/妈妈班等',
+    code: 'Fairs_or_carnivals_or_mom_classes_etc',
+    conditionalIsTwo: 1
+  }
 ]
 
-
-
+//contract 合同 客户扣款点数与支付方式对应关系
+export let CustomerDeductionsAndPayType = [
+  {
+    CustomerDeduction: 6,
+    payTypeList: [{label:'PO',value:1}]
+  },
+  {
+    CustomerDeduction: 13,
+    payTypeList: [{label:'红票',value:2},{label:'票扣',value:3}]
+  }
+]
+/**
+ * 合同--获取合同期间（同一年）
+ * @returns 今年开始日期--今年结束日期
+ */
+export function getCurrentYearRange() {
+  let date=new Date()
+  let year=date.getFullYear()
+  let startDate=year+'-'+'01-01'
+  let endDate=year+'-'+'12-31'
+  return [startDate,endDate]
+}
+/**
+ * el-date-picker 限制范围 今年
+ */
+export let pickerOptions={
+  // 限制年月
+  disabledDate: (time) => {
+    const date = new Date() 
+    const year = date.getFullYear()
+    return (
+      //日期限制（同一年）
+      time.getFullYear() == year ?false:true
+    )
+  },
+}

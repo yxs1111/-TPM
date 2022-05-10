@@ -76,7 +76,8 @@
                   </template>
                   <template slot-scope="{row}">
                     <div class="NumWrap">
-                      {{ FormateNum(row.month[key][CustomerKey][titleItem.value]) }}{{ titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':'' }}
+                      <div v-if="compareNode(key,index)">  {{ FormateNum(row.month[key][CustomerKey][titleItem.value]) }}{{ titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':'' }}</div>
+                      <!-- {{ FormateNum(row.month[key][CustomerKey][titleItem.value]) }}{{ titleItem.value=='priceExecutionRate1'?'%':titleItem.value=='priceExecutionRate2'?'%':'' }} -->
                     </div>
                   </template>
                 </el-table-column>
@@ -117,8 +118,8 @@ export default {
   directives: { elDragDialog, permission },
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
          yearAndMonthList: [],
@@ -165,6 +166,7 @@ export default {
       maxheight: window.innerHeight - 380,
       selectIsAll: false, //选择框是否全选
       columCount: 0, //下载报表所有列=》确定width 和 合并单元格
+      TaskNode: ['202203-V1', '202203-V2', '202203-NUV3','202203-V0',],
     }
   },
   computed: {},
@@ -217,6 +219,7 @@ export default {
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
+        this.getTaskNode()
         // 按SKU,customer拆分
         const allList = []
         for (const key in AllObj) {
@@ -279,6 +282,7 @@ export default {
         //   return b.name.indexOf('Total') - a.name.indexOf('Total')
         // })
         this.tableData = AllDataList
+        
       })
     },
     sortByCustomer(array) {
@@ -292,17 +296,62 @@ export default {
       })
       return newList
     },
+    getTaskNode() {
+      API.getTaskNode({
+        startDate: this.filterObj.yearAndMonthList[0].replace('-', ''),
+        endDate: this.filterObj.yearAndMonthList[
+          this.filterObj.yearAndMonthList.length - 1
+        ].replace('-', ''),
+        channelCode: this.filterObj.channelCode.join(','),
+      }).then((res) => {
+        if (res.code === 1000) {
+          let compareList = res.data
+          this.TaskNode=[]
+          compareList.forEach((item) => {
+            this.TaskNode.push(`${item.yearAndMonth}-${item.version}`)
+          })
+          console.log(compareList)
+        }
+      })
+    },
+    compareNode(yearAndMonth, version) {
+      if (version == 0) {
+        return (
+          this.findVersion(yearAndMonth, 'V1') ||
+          this.findVersion(yearAndMonth, 'V2') ||
+          this.findVersion(yearAndMonth, 'V3')
+        )
+      }
+      if (version == 1) {
+        return (
+          this.findVersion(yearAndMonth, 'V2') ||
+          this.findVersion(yearAndMonth, 'V3')
+        )
+      }
+      if (version >= 2) {
+        return this.findVersion(yearAndMonth, 'V3')
+      }
+    },
+    // 与节点数组进行比对
+    findVersion(yearAndMonth, version) {
+      let index = this.TaskNode.indexOf(`${yearAndMonth}-${version}`)
+      return index != -1
+    },
     // 获取渠道
     getQueryChannelSelect() {
       selectAPI.queryChannelSelect().then((res) => {
         this.channelOptions = res.data
         // this.filterObj.channelCode = [this.channelOptions[0].channelEsName]
         // this.filterObj.channelCode = ['NKA']
-        this.getCustomerList()
+        // this.getCustomerList()
       })
     },
     // 客户
     getCustomerList() {
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道')
+        return
+      }
       selectAPI
         .getCustomerListByChannels({
           channelCodes: this.filterObj.channelCode,

@@ -62,8 +62,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="更新人" />
-      <el-table-column width="180" align="center" prop="updateDate" label="更新时间">
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人" />
+      <el-table-column width="180" align="center" prop="updateDate" label="修改时间">
         <template slot-scope="{row}">
           <div>
             {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
@@ -84,7 +84,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'IO维护'" :visible="dialogVisible" width="25%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" :title="(isEditor ? '修改' : '新增') + 'IO维护'" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
           <el-form-item label="IO编码" prop="ioNumber">
@@ -102,8 +102,11 @@
             </el-select>
           </el-form-item>
           <el-form-item label="状态">
-            <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
-            <el-radio v-model="ruleForm.state" label="1">有效</el-radio>
+            <el-select v-model="ruleForm.state" class="my-el-input" clearable filterable placeholder="请选择">
+              <el-option v-for="(item,index) in ['无效','有效']" :key="item" :label="item" :value="index" />
+            </el-select>
+            <!-- <el-radio v-model="ruleForm.state" label="0">无效</el-radio>
+            <el-radio v-model="ruleForm.state" label="1">有效</el-radio> -->
           </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="ruleForm.remark" class="my-el-input" placeholder="请输入">
@@ -136,8 +139,8 @@ export default {
 
   data() {
     return {
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         ioNumber: '',
@@ -157,7 +160,7 @@ export default {
         regionName: '',
         largeAreaName: '',
         largeAreaCode: '',
-        state: '1',
+        state: 1,
         remark: '',
       },
       rules: {
@@ -347,7 +350,7 @@ export default {
         regionName: '',
         largeAreaName: '',
         largeAreaCode: '',
-        state: '1',
+        state: 1,
         remark: '',
       }
     },
@@ -361,7 +364,7 @@ export default {
         largeAreaName: obj.largeAreaName,
         largeAreaCode: obj.largeAreaCode,
         remark: obj.remark,
-        state: String(obj.state),
+        state: Number(obj.state),
       }
       this.editorId = obj.id
     },

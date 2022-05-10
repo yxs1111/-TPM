@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-11 11:32:06
+ * @LastEditTime: 2022-05-07 14:24:28
 -->
 <template>
-  <div class="app-container">
+  <div class="V0Content">
     <div class="Maincontent" @keyup.enter="search">
       <div class="SelectBarWrap">
         <div class="SelectBar">
@@ -456,8 +456,9 @@ export default {
     downloadTemplate() {
       if (Object.keys(this.ContentData).length) {
         //导出数据筛选
-        API.exportExcel({
+        API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
+          dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
           this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0审批.xlsx`) //自定义Excel文件名
@@ -665,6 +666,12 @@ export default {
   width: 100%;
   height: calc(100% - 50px);
   overflow-y: auto;
+}
+.V0Content {
+  height: calc(100% - 0px);
+  background-color: #fff;
+  border-radius: 16px;
+  overflow: hidden;
 }
 </style>
 <style>

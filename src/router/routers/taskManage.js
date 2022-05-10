@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-04-20 17:35:25
+ * @LastEditTime: 2022-05-07 15:49:58
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -49,6 +49,14 @@ export default function() {
               component: () => import('@/views/taskManage/MyTodo/MyTodoDiscount.vue'),
               meta: { title: '折扣项', icon: 'form' ,activeMenu: '/taskManage/MyTodo'},
             },
+            {
+              hidden: true,
+              path: '/taskManage/MyTodo/ContractTodo',
+              code: 'resource-task_wddb',
+              name: 'Contract',
+              component: () => import('@/views/taskManage/MyTodo/ContractTodo.vue'),
+              meta: { title: '折扣项', icon: 'form' ,activeMenu: '/taskManage/MyTodo'},
+            },
           ]
         },
         {
@@ -65,7 +73,7 @@ export default function() {
           component: () => import('@/views/taskManage/TaskList.vue'),
           meta: { title: '任务列表', icon: 'approve' },
         },
-        // 合同录入
+        // // 合同录入
         // {
         //   path: '/taskManage/ContractEntry',
         //   name: 'ContractEntry',
@@ -112,14 +120,14 @@ export default function() {
         //       code: 'mdm_product_information',
         //       name: 'CustomerContractApproval',
         //       component: () => import('@/views/taskManage/ContractEntry/CustomerContractApproval.vue'),
-        //       meta: { title: '客户合同审批', icon: 'apply',activeMenu: '/taskManage/ContractEntry' },
+        //       meta: { title: '客户合同审批', icon: 'apply',activeMenu: '/taskManage/ContractEntry/CustomerContractApproval' },
         //     },
         //     {
         //       path: '/taskManage/ContractEntry/dealerContractEntry',
         //       code: 'mdm_product_information',
         //       name: 'dealerContractEntry',
         //       component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry.vue'),
-        //       meta: { title: '经销商合同录入', icon: 'apply' },
+        //       meta: { title: '经销商分摊协议录入', icon: 'apply' },
         //     },
         //     {
         //       hidden: true,
@@ -127,14 +135,22 @@ export default function() {
         //       code: 'mdm_product_information',
         //       name: 'dealerTermDetail',
         //       component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail.vue'),
-        //       meta: { title: '经销商合同录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractEntry'},
+        //       meta: { title: '经销商分摊协议录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractEntry'},
         //     },
         //     {
         //       path: '/taskManage/ContractEntry/dealerContractApproval',
         //       code: 'mdm_product_information',
         //       name: 'dealerContractApproval',
         //       component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval.vue'),
-        //       meta: { title: '经销商合同审批', icon: 'apply' },
+        //       meta: { title: '经销商分摊协议审批', icon: 'apply' },
+        //     },
+        //     {
+        //       hidden: true,
+        //       path: '/taskManage/ContractEntry/dealerContractApproval/dealerTermView',
+        //       code: 'mdm_product_information',
+        //       name: 'dealerTermView',
+        //       component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval/dealerTermView.vue'),
+        //       meta: { title: '经销商分摊协议录入-条款明细', icon: 'form' ,activeMenu: '/taskManage/ContractEntry/dealerContractApproval'},
         //     },
         //   ]
         // },

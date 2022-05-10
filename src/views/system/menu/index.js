@@ -70,7 +70,7 @@ export default {
       perPageProps: {
         records: null,
         total: 0,
-        pageSize: 10,
+        pageSize: 100,
         pageNum: 1
       },
       permissionDialog: {

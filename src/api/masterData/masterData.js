@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-03-28 16:37:03
+ * @LastEditTime: 2022-05-06 15:34:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -468,7 +468,7 @@ export default {
       responseType: 'blob'
     })
   },
-  // WBS
+  // WBS-customer
   getPageByWbs(params) {
     return requestApi.request_get('/cityplan/mdCustomerWbs/getPage', params)
   },
@@ -526,6 +526,110 @@ export default {
       url: '/mdm/mdDataInterface/exportMdData',
       method: 'post',
       data: data,
+      responseType: 'blob'
+    })
+  },
+  // WBSCodeEntity
+  getPageEntityWbs(params) {
+    return requestApi.request_get('/cityplan/mdEntityWbs/getPage', params)
+  },
+  insertEntityWbs(params) {
+    return requestApi.request_post('/cityplan/mdEntityWbs/insert', params)
+  },
+  updateEntityWbs(params) {
+    return requestApi.request_put('/cityplan/mdEntityWbs/update', params)
+  },
+  deleteEntityWbs(params) {
+    return requestApi.request_delete('/cityplan/mdEntityWbs/deleteByID', params)
+  },
+  //导出
+  exportEntityWbs(params) {
+    return request({
+      url: '/cityplan/mdEntityWbs/exportExcel',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
+  },
+  // WBSCodeYear
+  getPageYearWbs(params) {
+    return requestApi.request_get('/cityplan/mdYearWbs/getPage', params)
+  },
+  // WBSCodeBrand
+  getPageBrandWbs(params) {
+    return requestApi.request_get('/cityplan/mdBrandWbs/getPage', params)
+  },
+  insertBrandWbs(params) {
+    return requestApi.request_post('/cityplan/mdBrandWbs/insert', params)
+  },
+  updateBrandWbs(params) {
+    return requestApi.request_put('/cityplan/mdBrandWbs/update', params)
+  },
+  deleteBrandWbs(params) {
+    return requestApi.request_delete('/cityplan/mdBrandWbs/deleteByID', params)
+  },
+  //导出
+  exportBrandWbs(params) {
+    return request({
+      url: '/cityplan/mdBrandWbs/exportExcel',
+      method: 'post',
+      data: params,
+      responseType: 'blob'
+    })
+  },
+  // WBS Code - Department
+  getPageDeptWbs(params) {
+    return requestApi.request_get('/cityplan/mdDeptWbs/getPage', params)
+  },
+  insertDeptWbs(params) {
+    return requestApi.request_post('/cityplan/mdDeptWbs/insert', params)
+  },
+  updateDeptWbs(params) {
+    return requestApi.request_put('/cityplan/mdDeptWbs/update', params)
+  },
+  deleteDeptWbs(params) {
+    return requestApi.request_delete('/cityplan/mdDeptWbs/deleteByID', params)
+  },
+  //导出
+  exportDeptWbs(params) {
+    return request({
+      url: '/cityplan/mdDeptWbs/exportExcel',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+
+  // contract Item
+  getPageContractItem(params) {
+    return requestApi.request_get('/mdm/mdContractItem/getPage', params)
+  },
+  insertContractItem(params) {
+    return requestApi.request_post('/mdm/mdContractItem/insert', params)
+  },
+  updateContractItem(params) {
+    return requestApi.request_put('/mdm/mdContractItem/update', params)
+  },
+  deleteContractItem(params) {
+    return requestApi.request_post('/mdm/mdContractItem/deleteByIds', params)
+  },
+  //导出
+  exportContractItem(params) {
+    return request({
+      url: '/mdm/mdContractItem/exportContractItem',
+      method: 'post',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  importContractItem(params) {
+    return requestApi.request_post('/mdm/mdContractItem/importContractItem', params)
+  },
+  downloadContractItemTemplate(params) {
+    return request({
+      url: '/mdm/mdContractItem/exportContractItemTemplate',
+      method: 'post',
+      params: params,
       responseType: 'blob'
     })
   },

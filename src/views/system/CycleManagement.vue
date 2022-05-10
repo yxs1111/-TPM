@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-03-16 15:57:53
+ * @LastEditTime: 2022-04-21 09:17:05
 -->
 <template>
   <div class="app-container">
@@ -109,10 +109,8 @@
                 <span class="ParticleSize">粒度：{{item.particle}}</span>
               </div>
               <div class="statusTopRight">
-                <span v-if="item.isOpen">收起</span>
-                <span v-if="!item.isOpen">展开</span>
-                <i class="el-icon-arrow-up" v-if="item.isOpen" @click="PackUp(key)"></i>
-                <i class="el-icon-arrow-down" v-if="!item.isOpen" @click="PackDown(key)"></i>
+                <span v-if="item.isOpen" @click="PackUp(key)">收起<i class="el-icon-arrow-up"></i></span>
+                <span v-if="!item.isOpen" @click="PackDown(key)">展开<i class="el-icon-arrow-down"></i></span>
               </div>
             </div>
             <div class="detailContent" v-show="item.isOpen">
@@ -145,8 +143,8 @@ export default {
       errorImg: require('@/assets/images/selectError.png'),
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         activityMonth: '',
@@ -522,6 +520,9 @@ export default {
         padding: 0 15px;
         box-sizing: border-box;
       }
+    }
+    .statusTopRight {
+      cursor: pointer;
     }
   }
 }

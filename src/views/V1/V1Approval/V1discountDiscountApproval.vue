@@ -255,8 +255,8 @@ export default {
       RegionList: [],
       monthList: [],
       submitBtn: 0,
-      total: 1,
-      pageSize: 10,
+      total: 0,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         customerMdmCode: '',
