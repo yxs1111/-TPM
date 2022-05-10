@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-10 10:45:56
+ * @LastEditTime: 2022-05-10 11:57:35
 -->
 <template>
   <div class="V0Content">
@@ -467,34 +467,13 @@ export default {
       this.getList()
     },
     getCPTData() {
+      if(this.filterObj.channelCode=='') {
+        this.$message.info('请先选择渠道')
+        return
+      }
       this.dialogVisible = true
       this.ruleForm.channelCode = this.filterObj.channelCode
       this.ruleForm.dimVersion = ''
-      // API.isExist({
-      //   yearAndMonth: this.filterObj.month,
-      //   channelCode: this.filterObj.channelCode,
-      // }).then((res) => {
-      //   if (res.data) {
-      //     this.$confirm('此操作将覆盖CPT数据, 是否继续?', '提示', {
-      //       confirmButtonText: '确定',
-      //       cancelButtonText: '取消',
-      //       type: 'info',
-      //     })
-      //       .then(() => {
-      //         this.dialogVisible = true
-      //         this.ruleForm.channelCode = this.filterObj.channelCode
-      //       })
-      //       .catch(() => {
-      //         this.$message({
-      //           type: 'info',
-      //           message: '已取消',
-      //         })
-      //       })
-      //   } else {
-      //     this.dialogVisible = true
-      //     this.ruleForm.channelCode = this.filterObj.channelCode
-      //   }
-      // })
     },
     //导入数据弹窗显示
     importData() {
