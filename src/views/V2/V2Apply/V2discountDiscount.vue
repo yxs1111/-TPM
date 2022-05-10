@@ -52,8 +52,8 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <el-button type="primary" class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="Calculation">计算</el-button>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe&&isCalculation === 1?'':'noClick'" @click="approve">
+      <!-- <el-button type="primary" class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="Calculation">计算</el-button> -->
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>

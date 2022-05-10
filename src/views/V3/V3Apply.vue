@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-07 14:46:44
+ * @LastEditTime: 2022-05-10 13:22:37
 -->
 <template>
   <div class="tabViewsWrap">
@@ -130,25 +130,25 @@ export default {
             }
           ]
         }
-        this.routerList = [
-            ...this.routerList,
-            {
-              name: '折扣项-HIH Rebate',
-              path: '/costManagement/V3/V3Apply/V3HIHRebate',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
-            },
-            {
-              name: '折扣项-KA Rebate',
-              path: '/costManagement/V3/V3Apply/V3KARebate',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
-            }
-          ]
+        // this.routerList = [
+        //     ...this.routerList,
+        //     {
+        //       name: '折扣项-HIH Rebate',
+        //       path: '/costManagement/V3/V3Apply/V3HIHRebate',
+        //       img: {
+        //         dark: require('@/assets/images/tab/tab2.png'),
+        //         light: require('@/assets/images/tab/tab2_l.png')
+        //       }
+        //     },
+        //     {
+        //       name: '折扣项-KA Rebate',
+        //       path: '/costManagement/V3/V3Apply/V3KARebate',
+        //       img: {
+        //         dark: require('@/assets/images/tab/tab3.png'),
+        //         light: require('@/assets/images/tab/tab3_l.png')
+        //       }
+        //     }
+        //   ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
         } else {
