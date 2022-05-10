@@ -121,7 +121,7 @@
     <div class="block">
       <el-pagination
         :current-page="queryParams.start"
-        :page-sizes="[5, 10, 50, 100]"
+        :page-sizes="[100, 200, 500, 1000]"
         :page-size="queryParams.size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="queryParams.total"

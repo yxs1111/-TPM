@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2021-11-16 14:01:16
 <<<<<<< HEAD
- * @LastEditTime: 2022-04-28 11:44:27
+ * @LastEditTime: 2022-05-10 15:50:14
 =======
  * @LastEditTime: 2022-05-09 15:49:48
 >>>>>>> dev
@@ -197,7 +197,7 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+      <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 新增 -->
@@ -254,13 +254,8 @@
               <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
-<<<<<<< HEAD
-                    <el-select v-model="scope.row.distributorName" class="my-el-input" filterable clearable placeholder="请选择">
-                      <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
-=======
                     <el-select v-model="scope.row.distributorMdmCode" class="my-el-input" filterable clearable placeholder="请选择">
                       <el-option v-for="item,index in distributorArrDialog" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
->>>>>>> dev
                     </el-select>
                   </div>
                   <div v-else>

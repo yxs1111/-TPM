@@ -423,13 +423,13 @@ export default function() {
           ]
         },
         // 产品信息
-        {
-          path: '/contractItem',
-          name: 'contractItem',
-          code: 'mdm_product_information',
-          component: () => import('@/views/master/contractItem/contractItem.vue'),
-          meta: { title: 'Contract Item', icon: 'apply' },
-        },
+        // {
+        //   path: '/contractItem',
+        //   name: 'contractItem',
+        //   code: 'mdm_product_information',
+        //   component: () => import('@/views/master/contractItem/contractItem.vue'),
+        //   meta: { title: 'Contract Item', icon: 'apply' },
+        // },
       ]
     }
   ]

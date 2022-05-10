@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-04-28 13:20:44
+ * @LastEditTime: 2022-05-10 15:42:10
 -->
 <template>
   <div class="tabViewsWrap">
@@ -43,14 +43,14 @@ export default {
             light: require('@/assets/images/tab/tab2_l.png'),
           },
         },
-        {
-          name: 'Contract',
-          path: '/taskManage/MyTodo/ContractTodo',
-          img: {
-            dark: require('@/assets/images/tab/tab3.png'),
-            light: require('@/assets/images/tab/tab3_l.png'),
-          },
-        },
+        // {
+        //   name: 'Contract',
+        //   path: '/taskManage/MyTodo/ContractTodo',
+        //   img: {
+        //     dark: require('@/assets/images/tab/tab3.png'),
+        //     light: require('@/assets/images/tab/tab3_l.png'),
+        //   },
+        // },
       ],
       currentIndex: 0,
     }
