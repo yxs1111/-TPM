@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-09 16:36:53
+ * @LastEditTime: 2022-05-10 17:35:14
 -->
 <template>
   <div class="app-container">
@@ -111,7 +111,7 @@
       <el-table-column width="220" align="center" prop="profitCenter" label="状态">
         <template slot-scope="{ row }">
           <div>
-            {{ row.deleteFlag==0 ? '有效' : '无效' }}
+            {{ row.state==0 ? '无效' : '有效' }}
           </div>
         </template>
       </el-table-column>

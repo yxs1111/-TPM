@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-10 15:28:42
+ * @LastEditTime: 2022-05-10 17:03:33
 -->
 <template>
   <div class="MainContent">
@@ -44,7 +44,7 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe&&isCalculation === 1?'':'noClick'" @click="approve()">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
         <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
@@ -204,7 +204,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -398,6 +398,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
+  messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
@@ -428,6 +429,7 @@ export default {
       isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
+      messageMap: messageMap(),
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
@@ -671,13 +673,14 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.downApplyHIHExcelTemplate({
+        API.downApplyExcelTemplate({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           contractItemCode: this.filterObj.contractItemCode,
+          costItemCode:'HIH rebate',
         }).then((res) => {
-          this.downloadFile(
+          downloadFile(
             res,
             `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2申请.xlsx`
           ) //自定义Excel文件名

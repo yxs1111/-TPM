@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-07 09:35:09
+ * @LastEditTime: 2022-05-10 17:05:02
  */
 /*
  * @Description: V1 合同
@@ -13,6 +13,7 @@ import request from '@/utils/request'
 
 export default {
   url: '/cityplan/investCpContractVTwoDetail',
+  importUrl: '/cityplan/investCpContractVTwoEbDetail',
   // V2HIH-申请-分页查询接口
   getPageHIH(params) {
     return requestApi.request_get(this.url+'/getApplyHIHPage', params)
@@ -27,9 +28,9 @@ export default {
     })
   },
   // V2HIH-申请-下载模板
-  downApplyHIHExcelTemplate(params) {
+  downApplyExcelTemplate(params) {
     return request({
-      url: this.url+'/downApplyHIHExcelTemplate',
+      url: this.url+'/downApplyExcelTemplate',
       method: 'get',
       params: params,
       responseType: 'blob'
@@ -49,9 +50,9 @@ export default {
     })
   },
   // V2HIH-审批-下载模板
-  downApproveHIHExcelTemplate(params) {
+  downApproveExcelTemplate(params) {
     return request({
-      url: this.url+'/downApproveHIHExcelTemplate',
+      url: this.url+'/downApproveExcelTemplate',
       method: 'get',
       params: params,
       responseType: 'blob'
@@ -85,7 +86,7 @@ export default {
   },
   // V2申请、审批导入 
   formatCheck(params) {
-    return requestApi.request_post(this.url+'/formatCheck', params)
+    return requestApi.request_post(this.importUrl+'/formatCheck', params)
   },
   // V2申请、审批保存
   importSave(params) {
