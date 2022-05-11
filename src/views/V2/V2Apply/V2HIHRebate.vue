@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-10 17:03:33
+ * @LastEditTime: 2022-05-11 09:53:55
 -->
 <template>
   <div class="MainContent">
@@ -237,11 +237,17 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
-              <template slot-scope="scope">
-                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
-                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                  <div slot="content" v-html="getTip(row)" />
+                  <div class="statusWrap">
+                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                  </div>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
@@ -365,20 +371,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
+            <el-table-column width="400" align="right" prop="judgmentContent" label="系统判定内容">
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -622,11 +615,13 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
+            debugger
             this.ImportData = response.data
             let isError=this.ImportData.findIndex(item=>{
               item.judgmentType=='error'
             })
-            this.isCheck = isError==-1?1:0
+            this.saveBtn = isError==-1?1:0
+            console.log(this.saveBtn);
           }
         } else {
           this.$message.info(this.messageMap.importError)
