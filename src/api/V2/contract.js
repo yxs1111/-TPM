@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-10 17:05:02
+ * @LastEditTime: 2022-05-11 15:27:48
  */
 /*
  * @Description: V1 合同
@@ -96,4 +96,13 @@ export default {
   approve(params) {
     return requestApi.request_post(this.url+'/approve', params)
   },
+  // 导出校验数据
+  downCheckData(params){
+    return request({
+      url: this.url+'/downCheckData',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  }
 }

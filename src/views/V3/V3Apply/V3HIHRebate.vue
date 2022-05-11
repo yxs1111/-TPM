@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-11 11:27:57
+ * @LastEditTime: 2022-05-11 15:44:20
 -->
 <template>
   <div class="MainContent">
@@ -665,18 +665,19 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        // API.exceptionDownExcel({
-        //   yearAndMonth: this.filterObj.yearAndMonth,
-        //   channelCode: this.filterObj.channelCode,
-        //   customerCode: this.filterObj.customerCode,
-        //   distributorCode: this.filterObj.distributorCode,
-        //   regionCode: this.filterObj.regionCode,
-        //   dimProduct: this.filterObj.dim_product,
-        // }).then((res) => {
-        //   const timestamp = Date.parse(new Date())
-        //   this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-        //   this.$message.success(this.messageMap.exportErrorSuccess)
-        // })
+        API.downCheckData({
+          yearAndMonth: this.filterObj.month,
+          channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          contractItemCode: this.filterObj.contractItemCode,
+          distributorCode: this.filterObj.distributorCode,
+          costItemCode: 'HIH rebate',
+          isSubmit: 0,
+        }).then((res) => {
+          const timestamp = Date.parse(new Date())
+          this.downloadFile(res, 'V3_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success(this.messageMap.exportErrorSuccess)
+        })
       } else {
         this.$message.info('异常数据为空!')
       }
