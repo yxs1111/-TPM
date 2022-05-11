@@ -599,6 +599,10 @@ export function getHeightHaveTab() {
 export function getHeightSingle() {
   return window.innerHeight - 340
 }
+// 合同同款明细
+export function contractView() {
+  return window.innerHeight - 280
+}
 /**
  * 合同录入表格最大高度
  * @returns el-table max-height

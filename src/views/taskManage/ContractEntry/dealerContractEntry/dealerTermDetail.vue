@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-04-27 14:27:49
+ * @LastEditTime: 2022-05-11 18:13:05
 -->
 <template>
   <div class="ContentDetail">
@@ -218,7 +218,7 @@ import {
   getDefaultPermissions,
   getTextMap,
   parseTime,
-  getContractEntry,
+  contractView,
   FormateThousandNum,
   setSplitAssignee,
   CustomerDeductionsAndPayType,
@@ -234,7 +234,7 @@ export default {
       total: 0,
       pageSize: 100,
       pageNum: 1,
-      maxheight: getContractEntry(),
+      maxheight: contractView(),
       AllTableData: [
         {
           name: 'Total',

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 08:37:50
- * @LastEditTime: 2022-04-28 09:04:22
+ * @LastEditTime: 2022-05-11 18:14:42
 -->
 <!--
  * @Description: 
@@ -214,7 +214,7 @@ import {
   getDefaultPermissions,
   getTextMap,
   parseTime,
-  getContractEntry,
+  contractView,
   FormateThousandNum,
   setSplitAssignee,
   CustomerDeductionsAndPayType,
@@ -230,7 +230,7 @@ export default {
       total: 0,
       pageSize: 100,
       pageNum: 1,
-      maxheight: getContractEntry(),
+      maxheight: contractView(),
       AllTableData: [],
       ccId: null,
       tabKey: 0,
