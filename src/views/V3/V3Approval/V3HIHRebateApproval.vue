@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-10 15:04:43
+ * @LastEditTime: 2022-05-11 08:53:37
 -->
 <!--
  * @Description: 
@@ -254,7 +254,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -404,10 +404,11 @@ export default {
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
       mainId: '',
+      usernameLocal: '',
+      messageMap: messageMap(),
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
-      RegionList: [],
       uploadFileName: '',
       event: '',
       uploadFile: '',
@@ -440,6 +441,7 @@ export default {
         this.maxheight = getHeightHaveTab()
       })()
     }
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
     this.getContractItemList()

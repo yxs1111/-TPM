@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-10 16:45:50
+ * @LastEditTime: 2022-05-11 08:52:20
 -->
 <template>
   <div class="MainContent">
@@ -245,7 +245,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -387,17 +387,18 @@ export default {
       categoryArr: [],
       permissions: getDefaultPermissions(),
       channelArr: [],
-      skuArr: [],
       monthList: [],
       customerArr: [],
       tableData: [],
       ContractItemList: [],
       distributorArr: [],
       maxheight: getHeightHaveTab(),
+      mainId: '',
+      usernameLocal: '',
+      messageMap: messageMap(),
       // 导入
       importVisible: false, // 导入弹窗
       ImportData: [],
-      RegionList: [],
       uploadFileName: '',
       event: '',
       uploadFile: '',
@@ -430,6 +431,7 @@ export default {
         this.maxheight = getHeightHaveTab()
       })()
     }
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
     this.getContractItemList()
@@ -449,7 +451,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getApplyPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
@@ -463,8 +465,32 @@ export default {
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          this.isSubmit = this.tableData[0].isSubmit
+          this.mainId = this.tableData[0].mainId
+          this.infoByMainId()
         })
       }
+    },
+    // 通过与审批按钮控制
+    infoByMainId() {
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version === 'V3' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
+            }
+          }
+        })
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
