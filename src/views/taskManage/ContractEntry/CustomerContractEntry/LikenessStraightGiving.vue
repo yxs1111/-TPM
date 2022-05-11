@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-09 15:50:59
+ * @LastEditTime: 2022-05-11 12:00:42
 -->
 <template>
   <div class="MainContent">
@@ -256,9 +256,10 @@
             </el-table-column>
             <el-table-column prop="remark" align="center" label="描述">
               <template slot-scope="scope">
-                <div v-show="scope.row.isNewData">
+                <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
+                  <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(0,scope.$index)">
                 </div>
                 <div v-show="!scope.row.isNewData">
                   {{ scope.row.remark }}
@@ -328,9 +329,10 @@
             </el-table-column>
             <el-table-column prop="remark" align="center" label="描述">
               <template slot-scope="scope">
-                <div v-show="scope.row.isNewData">
+                <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
+                  <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(1,scope.$index)">
                 </div>
                 <div v-show="!scope.row.isNewData">
                   {{ scope.row.remark }}
@@ -1126,6 +1128,15 @@ export default {
         this.$refs.termFixTable.bodyWrapper.scrollTop = scrollHeight
       })
     },
+    deleteTerm(flag,index) {
+      //variable 明细删除
+      if(flag==0) {
+        this.termVariableData.splice(index,1)
+      } else {
+        //fixed 明细删除
+        this.termFixData.splice(index,1)
+      }
+    },
     //费比更改
     changeCostRate(index, row) {
       this.termVariableData[index].taxCost =
@@ -1397,6 +1408,15 @@ export default {
   }
   .el-input--suffix {
     width: 280px !important;
+  }
+}
+.TermDetail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .my-el-detail {
+    width: 400px !important;
+    margin: 0 auto;
   }
 }
 </style>
