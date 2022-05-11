@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-11 09:53:55
+ * @LastEditTime: 2022-05-11 10:48:41
 -->
 <template>
   <div class="MainContent">
@@ -370,8 +370,6 @@
                   {{ formatNum(scope.row.costDifference) }}
                 </div>
               </template>
-            </el-table-column>
-            <el-table-column width="400" align="right" prop="judgmentContent" label="系统判定内容">
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
