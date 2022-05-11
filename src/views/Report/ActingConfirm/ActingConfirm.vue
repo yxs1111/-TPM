@@ -73,8 +73,8 @@
       <el-table-column width="200" align="center" prop="productName" label="活动SKU" />
       <el-table-column width="150" align="center" prop="brandName" label="产品线" />
       <el-table-column width="150" align="center" prop="afterNegotiationPriceAve" label="促销价格" />
-      <el-table-column width="200" align="center" prop="actualSales" label="预计活动销量（箱）" />
-      <el-table-column width="200" align="center" prop="actualSalesTin" label="预计活动销量（听）" />
+      <el-table-column width="200" align="center" prop="actualSales" label="活动销量（箱）" />
+      <el-table-column width="200" align="center" prop="actualSalesTin" label="活动销量（听）" />
       <el-table-column width="150" align="center" prop="afterNegotiationCost" label="支持额度（元）" />
       <el-table-column width="280" align="center" prop="costItemName" label="费用项目" />
       <el-table-column width="150" align="center" prop="glAccount" label="GL Account" />
