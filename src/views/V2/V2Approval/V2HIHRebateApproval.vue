@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 09:37:59
- * @LastEditTime: 2022-05-11 11:05:40
+ * @LastEditTime: 2022-05-11 11:27:42
 -->
 <!--
  * @Description: 
@@ -394,6 +394,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
+  messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
