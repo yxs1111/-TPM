@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-11 18:13:05
+ * @LastEditTime: 2022-05-11 18:43:23
 -->
 <template>
   <div class="ContentDetail">
@@ -48,7 +48,7 @@
                 {{row.customerInfo.conditionType}}
               </el-table-column>
               <el-table-column v-slot={row} prop="pointCount" align="center" width="100" label="费比（%）">
-                {{row.customerInfo.pointCount}}%
+                {{FormateNum(row.customerInfo.pointCount)}}%
               </el-table-column>
               <el-table-column v-slot={row} prop="taxPrice" align="center" width="150" label="含税金额（￥）">
                 {{FormateNum(row.customerInfo.taxPrice)}}
@@ -83,7 +83,7 @@
                       @blur="changePointCount(scope.row,scope.$index,dealerIndex)">
                     </el-input>
                   </div>
-                  <div v-else>{{scope.row.dealerList[dealerIndex].pointCount}}%</div>
+                  <div v-else>{{FormateNum(scope.row.dealerList[dealerIndex].pointCount)}}%</div>
                 </template>
               </el-table-column>
               <el-table-column prop="taxPrice" align="center" width="150" label="含税金额（￥）">
@@ -718,6 +718,7 @@ export default {
             dealerList: [],
           }
           //取经销商对应的variable
+          console.log(distributorList);
           distributorList.forEach((item) => {
             let distVariableObj = item.variable[index]
             variableObj.dealerList.push({

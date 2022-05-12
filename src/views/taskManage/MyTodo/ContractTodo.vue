@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-11 10:10:12
+ * @LastEditTime: 2022-05-12 08:47:49
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -192,7 +192,7 @@ export default {
     //查看流程
     openFlowDiagram(row) {
       this.flowDiagram.businessId = row.businessKey
-      this.flowDiagram.processId = row.processId
+      this.flowDiagram.processId = row.procInstId
       this.flowDiagram.visible = true
     },
     // 导出数据
