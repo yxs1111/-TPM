@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-12 14:46:26
+ * @LastEditTime: 2022-05-12 18:50:21
 -->
 <template>
   <div class="MainContent">
@@ -184,7 +184,7 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      ccId:null
+      ccId: null,
     }
   },
   mounted() {
@@ -230,18 +230,22 @@ export default {
         customerMdmCode: this.filterObj.customerMdmCode,
         minePackageCode: 'DISTRIBUTOR-CONTRACT',
       }).then((response) => {
-        let list = response.data.records
-        list.forEach((item) => {
-          item.isEditor = 0
-          item.contractDate = [item.contractBeginDate, item.contractEndDate]
-          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
-        })
-        this.tableData = [...list]
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
-        this.ccId=this.tableData[0].ccId
-        this.tempObj.tempInfo = null
+        if (response.data.code == 1000) {
+          if (response.data.records.length) {
+            let list = response.data.records
+            list.forEach((item) => {
+              item.isEditor = 0
+              item.contractDate = [item.contractBeginDate, item.contractEndDate]
+              item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+            })
+            this.tableData = [...list]
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+            this.ccId = this.tableData[0].ccId
+            this.tempObj.tempInfo = null
+          }
+        }
       })
     },
     // 客户
@@ -305,11 +309,11 @@ export default {
       API.approveDistContract(obj).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
-          if(flag) {
-              this.$message.success('审批成功！')
-            } else {
-              this.$message.success('驳回成功！')
-            }
+          if (flag) {
+            this.$message.success('审批成功！')
+          } else {
+            this.$message.success('驳回成功！')
+          }
         }
       })
     },
@@ -431,7 +435,7 @@ export default {
 }
 .seeActivity {
   height: 32px;
-  background: #D7E8F2;
+  background: #d7e8f2;
   border-radius: 6px;
   font-size: 16px;
   color: #4192d3;

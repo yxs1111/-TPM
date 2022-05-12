@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 17:59:21
+ * @LastEditTime: 2022-05-12 18:52:43
 -->
 <template>
   <div class="ContentDetail">
@@ -1189,27 +1189,33 @@ export default {
       console.log(errorList)
       //补录跳过校验
       if (!this.isMakeUp) {
-        if (exceptionList.length) {
-          exceptionList.forEach((item) => {
-            this.$message({
-              showClose: true,
-              message: `${item.dealerName} ${item.contractItem} 经销商费比不等于客户合同费比`,
-              type: 'warning',
-            })
-          })
-        }
         if (errorList.length) {
           errorList.forEach((item) => {
-            this.$notify.error({
-              title: '错误',
-              message: `第${item.rowIndex + 1}行${
-                this.AllTableData[item.rowIndex].customerInfo.contractItem
-              }  经销商含税金额total 不等于客户含税金额`,
-            })
+            setTimeout(() => {
+              this.$notify.error({
+                title: '错误',
+                message: `第${item.rowIndex + 1}行${
+                  this.AllTableData[item.rowIndex].customerInfo.contractItem
+                }  经销商含税金额total 不等于客户含税金额`,
+                duration:0
+              })
+            }, 50)
           })
           return
         }
       }
+      if (exceptionList.length) {
+          exceptionList.forEach((item) => {
+            setTimeout(() => {
+              this.$message({
+                showClose: true,
+                message: `${item.dealerName} ${item.contractItem} 经销商费比不等于客户合同费比`,
+                type: 'warning',
+              })
+            }, 50)
+          })
+        }
+      console.log("submit");
       let Obj = {
         ccId: this.ccId,
         isTempStorage: flag, //0 否(参与校验)/1是(不参与校验)
@@ -1299,7 +1305,7 @@ export default {
           })
         }
       })
-      console.log(Obj);
+      console.log(Obj)
       API.saveContractDetail(Obj).then((res) => {
         if (res.code === 1000) {
           if (flag) {

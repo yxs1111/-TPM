@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-11 11:55:26
+ * @LastEditTime: 2022-05-12 18:56:35
 -->
 <template>
   <div class="MainContent">
@@ -267,8 +267,8 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="addNewRowWrap">
-            <div class="addNewRow" @click="addNewRowToVariable" v-if="isEditor">
+          <div class="addNewRowWrap" v-if="isEditor">
+            <div class="addNewRow" @click="addNewRowToVariable">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
@@ -340,8 +340,8 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="addNewRowWrap">
-            <div class="addNewRow" @click="addNewRowToFix" v-if="isEditor">
+          <div class="addNewRowWrap" v-if="isEditor">
+            <div class="addNewRow" @click="addNewRowToFix">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>

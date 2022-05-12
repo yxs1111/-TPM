@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 15:58:43
+ * @LastEditTime: 2022-05-12 19:47:29
 -->
 <template>
   <div class="MainContent">
@@ -123,7 +123,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 条款明细 -->
-    <el-dialog width="90%" top="2vh" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="90%"  ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
@@ -540,7 +540,7 @@ export default {
     showTermsDetail(index) {
       this.customerId = this.tableData[index].ccId
       // 设置屏幕高度90%
-      this.$refs.termDialog.$el.firstChild.style.height = '90%'
+      // this.$refs.termDialog.$el.firstChild.style.height = '50%'
       //草稿、被拒绝可以编辑，其他仅查看
       API.findOneSaveDetail({
         id: this.customerId,
@@ -840,6 +840,7 @@ export default {
   .termTableWrap {
     width: 100%;
     border: 1px solid #e7e7e7;
+    margin-bottom: 20px;
     .addNewRowWrap {
       width: 100%;
       height: 50px;
