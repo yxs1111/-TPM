@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 11:10:02
+ * @LastEditTime: 2022-05-12 13:15:36
 -->
 <template>
   <div class="ContentDetail">
@@ -130,18 +130,18 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column  prop="frieslandTaxPrice" align="center" width="150" label="含税金额（￥）">
+              <el-table-column prop="frieslandTaxPrice" align="center" width="150" label="含税金额（￥）">
                 <template slot-scope="scope">
-                <div v-if="!scope.row.isTotal">
-                  <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
-                    <el-input v-model="scope.row.dealerList[dealerIndex].frieslandTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
-                       @blur="changeFrieslandTaxPrice(scope.row,scope.$index,dealerIndex)"  >
+                  <div v-if="!scope.row.isTotal">
+                    <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
+                      <el-input v-model="scope.row.dealerList[dealerIndex].frieslandTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
+                        @blur="changeFrieslandTaxPrice(scope.row,scope.$index,dealerIndex)">
                       </el-input>
+                    </div>
+                    <div v-else>
+                      {{FormateNum(scope.row.dealerList[dealerIndex].frieslandTaxPrice)}}
+                    </div>
                   </div>
-                  <div v-else>
-                    {{FormateNum(scope.row.dealerList[dealerIndex].frieslandTaxPrice)}}
-                  </div>
-                </div>
                 </template>
               </el-table-column>
             </template>
@@ -165,18 +165,18 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column  prop="dealerTaxPrice" align="center" width="150" label="含税金额（￥）">
+              <el-table-column prop="dealerTaxPrice" align="center" width="150" label="含税金额（￥）">
                 <template slot-scope="scope">
-                <div v-if="!scope.row.isTotal">
-                  <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
-                    <el-input v-model="scope.row.dealerList[dealerIndex].dealerTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
-                       @blur="changeDealerTaxPrice(scope.row,scope.$index,dealerIndex)"  >
+                  <div v-if="!scope.row.isTotal">
+                    <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
+                      <el-input v-model="scope.row.dealerList[dealerIndex].dealerTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
+                        @blur="changeDealerTaxPrice(scope.row,scope.$index,dealerIndex)">
                       </el-input>
+                    </div>
+                    <div v-else>
+                      {{FormateNum(scope.row.dealerList[dealerIndex].dealerTaxPrice)}}
+                    </div>
                   </div>
-                  <div v-else>
-                    {{FormateNum(scope.row.dealerList[dealerIndex].dealerTaxPrice)}}
-                  </div>
-                </div>
                 </template>
                 <!-- <div v-if="!row.isTotal">
                   {{FormateNum(row.dealerList[dealerIndex].dealerTaxPrice)}}
@@ -742,32 +742,38 @@ export default {
           //取经销商对应的variable
           console.log(distributorList)
           distributorList.forEach((item) => {
-            let distVariableObj = item.variable[index]
-            variableObj.dealerList.push({
-              dcId: distVariableObj.dcId, //经销商合同id
-              dealerName: distVariableObj.dealerName,
-              targetSale: distVariableObj.targetSale,
-              contractItem: variableObj.customerInfo.contractItem,
-              conditionType: variableObj.customerInfo.conditionType,
-              pointCount: distVariableObj.costRatio,
-              taxPrice: distVariableObj.taxCost,
-              detail: distVariableObj.remark,
-              frieslandPointCount: distVariableObj.fcCostRatio, //菲仕兰承担费比
-              frieslandTaxPrice: distVariableObj.fcTaxCost, //菲仕兰承担--含税金额
-              dealerPointCount: distVariableObj.distributorCostRatio, //经销商承担费比
-              dealerTaxPrice: distVariableObj.distributorTaxCost, //经销商承担--含税金额
-              customerTaxPoint: this.getCustomerTaxPoint(
-                distVariableObj.deductionTaxRate
-              ), //客户扣款税点
-              payType:
-                distVariableObj.payType == ''
-                  ? null
-                  : Number(distVariableObj.payType), //支付方式
-              isEditor:
-                distVariableObj.contractState == '3' ||
-                distVariableObj.contractState == '4'
-                  ? 0
-                  : 1,
+            let distVariableObj = null
+            item.variable.forEach((variableItem) => {
+              //根据明细id来进行匹配
+              if (variableItem.ccDetailId == customerVariableList[index].id) {
+                distVariableObj = variableItem
+                variableObj.dealerList.push({
+                  dcId: variableItem.dcId, //经销商合同id
+                  dealerName: variableItem.dealerName,
+                  targetSale: variableItem.targetSale,
+                  contractItem: variableObj.customerInfo.contractItem,
+                  conditionType: variableObj.customerInfo.conditionType,
+                  pointCount: variableItem.costRatio,
+                  taxPrice: variableItem.taxCost,
+                  detail: variableItem.remark,
+                  frieslandPointCount: variableItem.fcCostRatio, //菲仕兰承担费比
+                  frieslandTaxPrice: variableItem.fcTaxCost, //菲仕兰承担--含税金额
+                  dealerPointCount: variableItem.distributorCostRatio, //经销商承担费比
+                  dealerTaxPrice: variableItem.distributorTaxCost, //经销商承担--含税金额
+                  customerTaxPoint: this.getCustomerTaxPoint(
+                    variableItem.deductionTaxRate
+                  ), //客户扣款税点
+                  payType:
+                    variableItem.payType == ''
+                      ? null
+                      : Number(variableItem.payType), //支付方式
+                  isEditor:
+                    variableItem.contractState == '3' ||
+                    variableItem.contractState == '4'
+                      ? 0
+                      : 1,
+                })
+              }
             })
             //设置 variable 汇总行
             variableTotalObj.dealerList.push({
@@ -851,31 +857,40 @@ export default {
           }
           //取经销商对应的variable
           distributorList.forEach((item) => {
-            let distFixObj = item.fixed[index]
-            FixedObj.dealerList.push({
-              dcId: distFixObj.dcId, //经销商合同id
-              dealerName: distFixObj.dealerName,
-              targetSale: distFixObj.targetSale,
-              contractItem: FixedObj.customerInfo.contractItem,
-              conditionType: FixedObj.customerInfo.conditionType,
-              pointCount: distFixObj.costRatio,
-              taxPrice: distFixObj.taxCost,
-              detail: distFixObj.remark,
-              frieslandPointCount: distFixObj.fcCostRatio, //菲仕兰承担费比
-              frieslandTaxPrice: distFixObj.fcTaxCost, //菲仕兰承担--含税金额
-              dealerPointCount: distFixObj.distributorCostRatio, //经销商承担费比
-              dealerTaxPrice: distFixObj.distributorTaxCost, //经销商承担--含税金额
-              customerTaxPoint: this.getCustomerTaxPoint(
-                distFixObj.deductionTaxRate
-              ), //客户扣款税点
-              payType:
-                distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
-              isEditor:
-                distFixObj.contractState == '3' ||
-                distFixObj.contractState == '4'
-                  ? 0
-                  : 1,
+            let distFixObj = null
+            item.fixed.forEach((fixedItem) => {
+              //根据明细id来进行匹配
+              if (fixedItem.ccDetailId == customerFixList[index].id) {
+                distFixObj = fixedItem
+                FixedObj.dealerList.push({
+                  dcId: distFixObj.dcId, //经销商合同id
+                  dealerName: distFixObj.dealerName,
+                  targetSale: distFixObj.targetSale,
+                  contractItem: FixedObj.customerInfo.contractItem,
+                  conditionType: FixedObj.customerInfo.conditionType,
+                  pointCount: distFixObj.costRatio,
+                  taxPrice: distFixObj.taxCost,
+                  detail: distFixObj.remark,
+                  frieslandPointCount: distFixObj.fcCostRatio, //菲仕兰承担费比
+                  frieslandTaxPrice: distFixObj.fcTaxCost, //菲仕兰承担--含税金额
+                  dealerPointCount: distFixObj.distributorCostRatio, //经销商承担费比
+                  dealerTaxPrice: distFixObj.distributorTaxCost, //经销商承担--含税金额
+                  customerTaxPoint: this.getCustomerTaxPoint(
+                    distFixObj.deductionTaxRate
+                  ), //客户扣款税点
+                  payType:
+                    distFixObj.payType == ''
+                      ? null
+                      : Number(distFixObj.payType), //支付方式
+                  isEditor:
+                    distFixObj.contractState == '3' ||
+                    distFixObj.contractState == '4'
+                      ? 0
+                      : 1,
+                })
+              }
             })
+
             FixedTotalObj.dealerList.push({
               dealerName: distFixObj.dealerName,
               targetSale: distFixObj.targetSale,
@@ -1103,8 +1118,10 @@ export default {
         errorList.forEach((item) => {
           this.$notify.error({
             title: '错误',
-            message: `第${item.rowIndex+1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  经销商含税金额total 不等于客户含税金额`,
-          });
+            message: `第${item.rowIndex + 1}行${
+              this.AllTableData[item.rowIndex].customerInfo.contractItem
+            }  经销商含税金额total 不等于客户含税金额`,
+          })
         })
         return
       }
@@ -1178,7 +1195,8 @@ export default {
       this.AllTableData[index].dealerList[dealerIndex].taxPrice =
         (pointCount * targetSale) / 100
       this.setVariableTotal()
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount=pointCount
+      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
+        pointCount
       this.changeFrieslandPointCount(Obj, index, dealerIndex)
       // this.AllTableData[index].dealerList[dealerIndex].dealerPointCount=0
     },
@@ -1187,7 +1205,8 @@ export default {
       let { taxPrice, targetSale } = Obj.dealerList[dealerIndex]
       this.AllTableData[index].dealerList[dealerIndex].pointCount =
         (100 * taxPrice) / targetSale
-      this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice=taxPrice
+      this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice =
+        taxPrice
       this.changeFrieslandTaxPrice(Obj, index, dealerIndex)
       // this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice=0
       this.setVariableTotal()
@@ -1322,15 +1341,16 @@ export default {
       frieslandPointCount = Number(frieslandPointCount)
       if (0 <= frieslandPointCount && frieslandPointCount <= pointCount) {
         this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =
-            pointCount - frieslandPointCount
-          this.changeDealerPointCount(Obj, index, dealerIndex)
+          pointCount - frieslandPointCount
+        this.changeDealerPointCount(Obj, index, dealerIndex)
         this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice =
           (frieslandPointCount * targetSale) / 100
       } else {
         this.$message.info(
           `第${index}行 ${this.AllTableData[index].name} ${this.AllTableData[index].dealerList[dealerIndex].dealerName}  菲仕兰承担费比+经销商承担费比应该等于客户费比`
         )
-        this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = pointCount
+        this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
+          pointCount
         this.changeDealerPointCount(Obj, index, dealerIndex)
         // this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = 0
         // this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = 0
@@ -1338,25 +1358,36 @@ export default {
     },
     //更改菲仕兰承担含税金额==》 菲仕兰承担费比
     changeFrieslandTaxPrice(Obj, index, dealerIndex) {
-      let { frieslandTaxPrice, targetSale,taxPrice } =
+      let { frieslandTaxPrice, targetSale, taxPrice } =
         Obj.dealerList[dealerIndex]
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount=(Number(frieslandTaxPrice)/targetSale)*100
-      this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice=Number(taxPrice)-Number(frieslandTaxPrice)
+      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
+        (Number(frieslandTaxPrice) / targetSale) * 100
+      this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice =
+        Number(taxPrice) - Number(frieslandTaxPrice)
       this.changeDealerTaxPrice(Obj, index, dealerIndex)
     },
     //更改经销商承担费比--》经销商承担含税金额
     changeDealerPointCount(Obj, index, dealerIndex) {
-      let { dealerPointCount, targetSale,pointCount } = Obj.dealerList[dealerIndex]
+      let { dealerPointCount, targetSale, pointCount } =
+        Obj.dealerList[dealerIndex]
       this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice =
         (dealerPointCount * targetSale) / 100
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount=Number(pointCount)-Number(dealerPointCount)
+      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
+        Number(pointCount) - Number(dealerPointCount)
     },
     //更改经销商含税金额--》经销商承担承担费比
     changeDealerTaxPrice(Obj, index, dealerIndex) {
-      let { dealerTaxPrice, targetSale,taxPrice } = Obj.dealerList[dealerIndex]
-      this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =(Number(dealerTaxPrice)/targetSale)*100
-      this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice=Number(taxPrice)-Number(dealerTaxPrice)
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount=(Number(this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice)/targetSale)*100
+      let { dealerTaxPrice, targetSale, taxPrice } = Obj.dealerList[dealerIndex]
+      this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =
+        (Number(dealerTaxPrice) / targetSale) * 100
+      this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice =
+        Number(taxPrice) - Number(dealerTaxPrice)
+      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
+        (Number(
+          this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice
+        ) /
+          targetSale) *
+        100
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

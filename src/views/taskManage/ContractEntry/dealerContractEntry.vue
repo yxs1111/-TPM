@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-12 09:03:05
+ * @LastEditTime: 2022-05-12 13:22:29
 -->
 <template>
   <div class="MainContent">
@@ -54,7 +54,7 @@
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight"  :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -539,9 +539,9 @@ export default {
         this.$message.info("请先选择数据")
         return
       }
-      let ccIdList=[]
+      let IdList=[]
       this.checkArr.forEach(item=>{
-        ccIdList.push(item.ccId)
+        IdList.push(item.id)
       }) 
       this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -549,7 +549,7 @@ export default {
         type: 'warning',
       })
         .then(() => {
-          API.submit(ccIdList).then((res) => {
+          API.submit(IdList).then((res) => {
             if (res.code === 1000) {
               this.getTableData()
               this.$message.success('提交成功')
@@ -814,6 +814,10 @@ export default {
       // this.$router.push(
       //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
       // )
+    },
+    //处于草稿状态可提交
+    checkSelectable(row) {
+      return row.contractState === '0' || row.contractState === '2'
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
