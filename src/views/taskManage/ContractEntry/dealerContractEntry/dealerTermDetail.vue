@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 16:40:58
+ * @LastEditTime: 2022-05-12 17:59:21
 -->
 <template>
   <div class="ContentDetail">
@@ -765,7 +765,7 @@ export default {
             dealerList: [],
           }
           //取经销商对应的variable
-          console.log(distributorList)
+          // console.log(distributorList)
           distributorList.forEach((item) => {
             let distVariableObj = item.variable[index]
             //根据明细id来进行匹配
@@ -1219,43 +1219,87 @@ export default {
         if (!row.isTotal) {
           row.dealerList.forEach((distItem) => {
             //没有该经销商，添加该经销商对应的条款明细
-            if (!Obj.details[distItem.dcId]) {
-              Obj.details[distItem.dcId] = []
-              Obj.details[distItem.dcId].push({
-                dcId: distItem.dcId,
-                ccDetailId: row.ccDetailId,
-                costRatio: distItem.pointCount,
-                taxCost: distItem.taxPrice,
-                remark: distItem.detail,
-                fcCostRatio: distItem.frieslandPointCount,
-                fcTaxCost: distItem.frieslandTaxPrice,
-                distributorCostRatio: distItem.dealerPointCount,
-                distributorTaxCost: distItem.dealerTaxPrice,
-                deductionTaxRate:
-                  this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
-                    .CustomerDeduction,
-                payType: distItem.payType,
-              })
+            if (this.isMakeUp) {
+              //补录只提补录
+              if (distItem.isEditor) {
+                if (!Obj.details[distItem.dcId]) {
+                  Obj.details[distItem.dcId] = []
+                  Obj.details[distItem.dcId].push({
+                    dcId: distItem.dcId,
+                    ccDetailId: row.ccDetailId,
+                    costRatio: distItem.pointCount,
+                    taxCost: distItem.taxPrice,
+                    remark: distItem.detail,
+                    fcCostRatio: distItem.frieslandPointCount,
+                    fcTaxCost: distItem.frieslandTaxPrice,
+                    distributorCostRatio: distItem.dealerPointCount,
+                    distributorTaxCost: distItem.dealerTaxPrice,
+                    deductionTaxRate:
+                      this.CustomerDeductionsAndPayType[
+                        distItem.customerTaxPoint
+                      ].CustomerDeduction,
+                    payType: distItem.payType,
+                  })
+                } else {
+                  Obj.details[distItem.dcId].push({
+                    dcId: distItem.dcId,
+                    ccDetailId: row.ccDetailId,
+                    costRatio: distItem.pointCount,
+                    taxCost: distItem.taxPrice,
+                    remark: distItem.detail,
+                    fcCostRatio: distItem.frieslandPointCount,
+                    fcTaxCost: distItem.frieslandTaxPrice,
+                    distributorCostRatio: distItem.dealerPointCount,
+                    distributorTaxCost: distItem.dealerTaxPrice,
+                    deductionTaxRate:
+                      this.CustomerDeductionsAndPayType[
+                        distItem.customerTaxPoint
+                      ].CustomerDeduction,
+                    payType: distItem.payType,
+                  })
+                }
+              }
             } else {
-              Obj.details[distItem.dcId].push({
-                dcId: distItem.dcId,
-                ccDetailId: row.ccDetailId,
-                costRatio: distItem.pointCount,
-                taxCost: distItem.taxPrice,
-                remark: distItem.detail,
-                fcCostRatio: distItem.frieslandPointCount,
-                fcTaxCost: distItem.frieslandTaxPrice,
-                distributorCostRatio: distItem.dealerPointCount,
-                distributorTaxCost: distItem.dealerTaxPrice,
-                deductionTaxRate:
-                  this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
-                    .CustomerDeduction,
-                payType: distItem.payType,
-              })
+              //非补录状态全部提交
+              if (!Obj.details[distItem.dcId]) {
+                Obj.details[distItem.dcId] = []
+                Obj.details[distItem.dcId].push({
+                  dcId: distItem.dcId,
+                  ccDetailId: row.ccDetailId,
+                  costRatio: distItem.pointCount,
+                  taxCost: distItem.taxPrice,
+                  remark: distItem.detail,
+                  fcCostRatio: distItem.frieslandPointCount,
+                  fcTaxCost: distItem.frieslandTaxPrice,
+                  distributorCostRatio: distItem.dealerPointCount,
+                  distributorTaxCost: distItem.dealerTaxPrice,
+                  deductionTaxRate:
+                    this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
+                      .CustomerDeduction,
+                  payType: distItem.payType,
+                })
+              } else {
+                Obj.details[distItem.dcId].push({
+                  dcId: distItem.dcId,
+                  ccDetailId: row.ccDetailId,
+                  costRatio: distItem.pointCount,
+                  taxCost: distItem.taxPrice,
+                  remark: distItem.detail,
+                  fcCostRatio: distItem.frieslandPointCount,
+                  fcTaxCost: distItem.frieslandTaxPrice,
+                  distributorCostRatio: distItem.dealerPointCount,
+                  distributorTaxCost: distItem.dealerTaxPrice,
+                  deductionTaxRate:
+                    this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
+                      .CustomerDeduction,
+                  payType: distItem.payType,
+                })
+              }
             }
           })
         }
       })
+      console.log(Obj);
       API.saveContractDetail(Obj).then((res) => {
         if (res.code === 1000) {
           if (flag) {
