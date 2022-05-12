@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 15:52:06
+ * @LastEditTime: 2022-05-12 16:05:39
 -->
 <template>
   <div class="ContentDetail">
@@ -630,7 +630,7 @@ export default {
         //经销商添加对应数量的variable /fixed
         distributorList.forEach((item) => {
           if (item.fixed.length == 0) {
-            this.isEmpty=1
+            item.isEmpty=1
             for (let index = 0; index < customerVariableList.length; index++) {
               let obj = {
                 dcId: item.id,
@@ -674,7 +674,7 @@ export default {
               item.fixed.push(obj)
             }
           } else {
-            this.isEmpty=0
+            item.isEmpty=0
             item.variable.forEach((variableItem) => {
               variableItem.dcId = item.id
               variableItem.dealerName = item.distributorName
@@ -763,7 +763,7 @@ export default {
           distributorList.forEach((item) => {
             let distVariableObj = item.variable[index]
             //根据明细id来进行匹配
-            if (!this.isEmpty) {
+            if (!item.isEmpty) {
               //不是第一次进入
               //对每一个经销商 variable 和 客户 variable  比对
               item.variable.forEach((variableItem) => {
@@ -908,7 +908,7 @@ export default {
           distributorList.forEach((item) => {
             let distFixObj = item.fixed[index]
             //根据明细id来进行匹配
-            if (!this.isEmpty) {
+            if (!item.isEmpty) {
               //不是第一次进入
               //对每一个经销商 fixed 和 客户 fixed  比对
               item.fixed.forEach((fixedItem) => {
