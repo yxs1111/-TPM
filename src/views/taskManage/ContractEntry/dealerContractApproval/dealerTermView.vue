@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 08:37:50
- * @LastEditTime: 2022-05-11 18:14:42
+ * @LastEditTime: 2022-05-12 08:52:41
 -->
 <!--
  * @Description: 
@@ -45,7 +45,7 @@
                 {{row.customerInfo.conditionType}}
               </el-table-column>
               <el-table-column v-slot={row} prop="pointCount" align="center" width="100" label="费比（%）">
-                {{row.customerInfo.pointCount}}%
+                {{FormateNum(row.customerInfo.pointCount)}}%
               </el-table-column>
               <el-table-column v-slot={row} prop="taxPrice" align="center" width="150" label="含税金额（￥）">
                 {{FormateNum(row.customerInfo.taxPrice)}}
@@ -80,7 +80,7 @@
                       @blur="changePointCount(scope.row,scope.$index,dealerIndex)">
                     </el-input>
                   </div>
-                  <div v-else>{{scope.row.dealerList[dealerIndex].pointCount}}%</div>
+                  <div v-else>{{FormateNum(scope.row.dealerList[dealerIndex].pointCount)}}%</div>
                 </template>
               </el-table-column>
               <el-table-column prop="taxPrice" align="center" width="150" label="含税金额（￥）">

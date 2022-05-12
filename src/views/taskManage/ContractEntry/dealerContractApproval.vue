@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 16:38:34
+ * @LastEditTime: 2022-05-12 09:10:14
 -->
 <template>
   <div class="MainContent">
@@ -38,7 +38,7 @@
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <!-- <el-table-column type="selection" align="center" /> -->
+      <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -220,10 +220,6 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      if (this.filterObj.customerMdmCode=='') {
-        this.$message.info('请选择客户')
-        return
-      }
       API.getApproveList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -295,11 +291,10 @@ export default {
     handleFunction(flag) {
       let obj = {
         opinion: flag ? 'agree' : 'reject',
-        ccId: this.ccId,
         approveDetail: {},
       }
       //判断当前数据 所属角色审批
-      this.tableData.forEach((item) => {
+      this.checkArr.forEach((item) => {
         if (item.name.indexOf('Package Owner') != -1) {
           obj.approveDetail[item.distributorId] = item.poApprovalComments
         } else if (item.name.indexOf('Finance') != -1) {
