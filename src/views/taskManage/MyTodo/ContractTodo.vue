@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-12 08:47:49
+ * @LastEditTime: 2022-05-12 16:51:33
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -177,9 +177,9 @@ export default {
     operateProcess(version, name) {
       if(version=='DISTRIBUTOR-CONTRACT') {
         if(name.indexOf('审批') != -1) {
-          this.$router.push('/contractManagement/ContractEntry/dealerContractApproval')
+          this.$router.push('/contractManagement/dealer/dealerContractApproval')
         } else {
-          this.$router.push('/contractManagement/ContractEntry/dealerContractEntry')
+          this.$router.push('/contractManagement/dealer/dealerContractEntry')
         }
       } else if(version=='CUSTOMER-CONTRACT') {
         if(name.indexOf('审批') != -1) {
