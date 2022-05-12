@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 13:15:36
+ * @LastEditTime: 2022-05-12 15:52:06
 -->
 <template>
   <div class="ContentDetail">
@@ -586,6 +586,7 @@ export default {
       contractItemVariableList: [],
       contractItemFixList: [],
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
+      isEmpty:null
     }
   },
 
@@ -617,10 +618,19 @@ export default {
           item.customerMdmCode = customerContract.customerMdmCode
           item.saleAmount = customerContract.saleAmount
         })
+        //排序 匹配variable 行
+        customerVariableList.sort((item, nItem) => {
+          return item.id - nItem.id
+        })
+        //排序 匹配variable 行
+        customerFixList.sort((item, nItem) => {
+          return item.id - nItem.id
+        })
         let distributorList = res.data.distributorContract
         //经销商添加对应数量的variable /fixed
         distributorList.forEach((item) => {
           if (item.fixed.length == 0) {
+            this.isEmpty=1
             for (let index = 0; index < customerVariableList.length; index++) {
               let obj = {
                 dcId: item.id,
@@ -664,6 +674,7 @@ export default {
               item.fixed.push(obj)
             }
           } else {
+            this.isEmpty=0
             item.variable.forEach((variableItem) => {
               variableItem.dcId = item.id
               variableItem.dealerName = item.distributorName
@@ -671,12 +682,20 @@ export default {
               variableItem.targetSale = item.saleAmount
               variableItem.contractState = item.contractState //合同状态
             })
+            //排序 匹配variable 行
+            item.variable.sort((item, nItem) => {
+              return item.ccDetailId - nItem.ccDetailId
+            })
             item.fixed.forEach((fixedItem) => {
               fixedItem.dcId = item.id
               fixedItem.dealerName = item.distributorName
               fixedItem.distributorMdmCode = item.distributorMdmCode
               fixedItem.targetSale = item.saleAmount
               fixedItem.contractState = item.contractState ////合同状态
+            })
+            //排序 匹配variable 行
+            item.fixed.sort((item, nItem) => {
+              return item.ccDetailId - nItem.ccDetailId
             })
           }
         })
@@ -742,39 +761,69 @@ export default {
           //取经销商对应的variable
           console.log(distributorList)
           distributorList.forEach((item) => {
-            let distVariableObj = null
-            item.variable.forEach((variableItem) => {
-              //根据明细id来进行匹配
-              if (variableItem.ccDetailId == customerVariableList[index].id) {
-                distVariableObj = variableItem
-                variableObj.dealerList.push({
-                  dcId: variableItem.dcId, //经销商合同id
-                  dealerName: variableItem.dealerName,
-                  targetSale: variableItem.targetSale,
-                  contractItem: variableObj.customerInfo.contractItem,
-                  conditionType: variableObj.customerInfo.conditionType,
-                  pointCount: variableItem.costRatio,
-                  taxPrice: variableItem.taxCost,
-                  detail: variableItem.remark,
-                  frieslandPointCount: variableItem.fcCostRatio, //菲仕兰承担费比
-                  frieslandTaxPrice: variableItem.fcTaxCost, //菲仕兰承担--含税金额
-                  dealerPointCount: variableItem.distributorCostRatio, //经销商承担费比
-                  dealerTaxPrice: variableItem.distributorTaxCost, //经销商承担--含税金额
-                  customerTaxPoint: this.getCustomerTaxPoint(
-                    variableItem.deductionTaxRate
-                  ), //客户扣款税点
-                  payType:
-                    variableItem.payType == ''
-                      ? null
-                      : Number(variableItem.payType), //支付方式
-                  isEditor:
-                    variableItem.contractState == '3' ||
-                    variableItem.contractState == '4'
-                      ? 0
-                      : 1,
-                })
-              }
-            })
+            let distVariableObj = item.variable[index]
+            //根据明细id来进行匹配
+            if (!this.isEmpty) {
+              //不是第一次进入
+              //对每一个经销商 variable 和 客户 variable  比对
+              item.variable.forEach((variableItem) => {
+                if (variableItem.ccDetailId == customerVariableList[index].id) {
+                  variableObj.dealerList.push({
+                    dcId: variableItem.dcId, //经销商合同id
+                    dealerName: variableItem.dealerName,
+                    targetSale: variableItem.targetSale,
+                    contractItem: variableObj.customerInfo.contractItem,
+                    conditionType: variableObj.customerInfo.conditionType,
+                    pointCount: variableItem.costRatio,
+                    taxPrice: variableItem.taxCost,
+                    detail: variableItem.remark,
+                    frieslandPointCount: variableItem.fcCostRatio, //菲仕兰承担费比
+                    frieslandTaxPrice: variableItem.fcTaxCost, //菲仕兰承担--含税金额
+                    dealerPointCount: variableItem.distributorCostRatio, //经销商承担费比
+                    dealerTaxPrice: variableItem.distributorTaxCost, //经销商承担--含税金额
+                    customerTaxPoint: this.getCustomerTaxPoint(
+                      variableItem.deductionTaxRate
+                    ), //客户扣款税点
+                    payType:
+                      variableItem.payType == ''
+                        ? null
+                        : Number(variableItem.payType), //支付方式
+                    isEditor:
+                      variableItem.contractState == '3' ||
+                      variableItem.contractState == '4'
+                        ? 0
+                        : 1,
+                  })
+                }
+              })
+            } else {
+              variableObj.dealerList.push({
+                dcId: distVariableObj.dcId, //经销商合同id
+                dealerName: distVariableObj.dealerName,
+                targetSale: distVariableObj.targetSale,
+                contractItem: variableObj.customerInfo.contractItem,
+                conditionType: variableObj.customerInfo.conditionType,
+                pointCount: distVariableObj.costRatio,
+                taxPrice: distVariableObj.taxCost,
+                detail: distVariableObj.remark,
+                frieslandPointCount: distVariableObj.fcCostRatio, //菲仕兰承担费比
+                frieslandTaxPrice: distVariableObj.fcTaxCost, //菲仕兰承担--含税金额
+                dealerPointCount: distVariableObj.distributorCostRatio, //经销商承担费比
+                dealerTaxPrice: distVariableObj.distributorTaxCost, //经销商承担--含税金额
+                customerTaxPoint: this.getCustomerTaxPoint(
+                  distVariableObj.deductionTaxRate
+                ), //客户扣款税点
+                payType:
+                  distVariableObj.payType == ''
+                    ? null
+                    : Number(distVariableObj.payType), //支付方式
+                isEditor:
+                  distVariableObj.contractState == '3' ||
+                  distVariableObj.contractState == '4'
+                    ? 0
+                    : 1,
+              })
+            }
             //设置 variable 汇总行
             variableTotalObj.dealerList.push({
               dealerName: distVariableObj.dealerName,
@@ -857,40 +906,67 @@ export default {
           }
           //取经销商对应的variable
           distributorList.forEach((item) => {
-            let distFixObj = null
-            item.fixed.forEach((fixedItem) => {
-              //根据明细id来进行匹配
-              if (fixedItem.ccDetailId == customerFixList[index].id) {
-                distFixObj = fixedItem
-                FixedObj.dealerList.push({
-                  dcId: distFixObj.dcId, //经销商合同id
-                  dealerName: distFixObj.dealerName,
-                  targetSale: distFixObj.targetSale,
-                  contractItem: FixedObj.customerInfo.contractItem,
-                  conditionType: FixedObj.customerInfo.conditionType,
-                  pointCount: distFixObj.costRatio,
-                  taxPrice: distFixObj.taxCost,
-                  detail: distFixObj.remark,
-                  frieslandPointCount: distFixObj.fcCostRatio, //菲仕兰承担费比
-                  frieslandTaxPrice: distFixObj.fcTaxCost, //菲仕兰承担--含税金额
-                  dealerPointCount: distFixObj.distributorCostRatio, //经销商承担费比
-                  dealerTaxPrice: distFixObj.distributorTaxCost, //经销商承担--含税金额
-                  customerTaxPoint: this.getCustomerTaxPoint(
-                    distFixObj.deductionTaxRate
-                  ), //客户扣款税点
-                  payType:
-                    distFixObj.payType == ''
-                      ? null
-                      : Number(distFixObj.payType), //支付方式
-                  isEditor:
-                    distFixObj.contractState == '3' ||
-                    distFixObj.contractState == '4'
-                      ? 0
-                      : 1,
-                })
-              }
-            })
-
+            let distFixObj = item.fixed[index]
+            //根据明细id来进行匹配
+            if (!this.isEmpty) {
+              //不是第一次进入
+              //对每一个经销商 fixed 和 客户 fixed  比对
+              item.fixed.forEach((fixedItem) => {
+                if (fixedItem.ccDetailId == customerFixList[index].id) {
+                  FixedObj.dealerList.push({
+                    dcId: fixedItem.dcId, //经销商合同id
+                    dealerName: fixedItem.dealerName,
+                    targetSale: fixedItem.targetSale,
+                    contractItem: FixedObj.customerInfo.contractItem,
+                    conditionType: FixedObj.customerInfo.conditionType,
+                    pointCount: fixedItem.costRatio,
+                    taxPrice: fixedItem.taxCost,
+                    detail: fixedItem.remark,
+                    frieslandPointCount: fixedItem.fcCostRatio, //菲仕兰承担费比
+                    frieslandTaxPrice: fixedItem.fcTaxCost, //菲仕兰承担--含税金额
+                    dealerPointCount: fixedItem.distributorCostRatio, //经销商承担费比
+                    dealerTaxPrice: fixedItem.distributorTaxCost, //经销商承担--含税金额
+                    customerTaxPoint: this.getCustomerTaxPoint(
+                      fixedItem.deductionTaxRate
+                    ), //客户扣款税点
+                    payType:
+                      fixedItem.payType == ''
+                        ? null
+                        : Number(fixedItem.payType), //支付方式
+                    isEditor:
+                      fixedItem.contractState == '3' ||
+                      fixedItem.contractState == '4'
+                        ? 0
+                        : 1,
+                  })
+                }
+              })
+            } else {
+              FixedObj.dealerList.push({
+                dcId: distFixObj.dcId, //经销商合同id
+                dealerName: distFixObj.dealerName,
+                targetSale: distFixObj.targetSale,
+                contractItem: FixedObj.customerInfo.contractItem,
+                conditionType: FixedObj.customerInfo.conditionType,
+                pointCount: distFixObj.costRatio,
+                taxPrice: distFixObj.taxCost,
+                detail: distFixObj.remark,
+                frieslandPointCount: distFixObj.fcCostRatio, //菲仕兰承担费比
+                frieslandTaxPrice: distFixObj.fcTaxCost, //菲仕兰承担--含税金额
+                dealerPointCount: distFixObj.distributorCostRatio, //经销商承担费比
+                dealerTaxPrice: distFixObj.distributorTaxCost, //经销商承担--含税金额
+                customerTaxPoint: this.getCustomerTaxPoint(
+                  distFixObj.deductionTaxRate
+                ), //客户扣款税点
+                payType:
+                  distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
+                isEditor:
+                  distFixObj.contractState == '3' ||
+                  distFixObj.contractState == '4'
+                    ? 0
+                    : 1,
+              })
+            }
             FixedTotalObj.dealerList.push({
               dealerName: distFixObj.dealerName,
               targetSale: distFixObj.targetSale,
