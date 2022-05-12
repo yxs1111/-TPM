@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-12 09:10:14
+ * @LastEditTime: 2022-05-12 14:46:26
 -->
 <template>
   <div class="MainContent">
@@ -193,7 +193,7 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
-    // this.getTableData()
+    this.getTableData()
     this.getCustomerList()
   },
   directives: { elDragDialog, permission },

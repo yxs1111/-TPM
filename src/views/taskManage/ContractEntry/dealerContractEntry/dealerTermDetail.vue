@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 16:05:39
+ * @LastEditTime: 2022-05-12 16:40:58
 -->
 <template>
   <div class="ContentDetail">
@@ -586,7 +586,7 @@ export default {
       contractItemVariableList: [],
       contractItemFixList: [],
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
-      isEmpty:null
+      isMakeUp: 0, //是否补录
     }
   },
 
@@ -630,7 +630,7 @@ export default {
         //经销商添加对应数量的variable /fixed
         distributorList.forEach((item) => {
           if (item.fixed.length == 0) {
-            item.isEmpty=1
+            item.isEmpty = 1
             for (let index = 0; index < customerVariableList.length; index++) {
               let obj = {
                 dcId: item.id,
@@ -674,7 +674,7 @@ export default {
               item.fixed.push(obj)
             }
           } else {
-            item.isEmpty=0
+            item.isEmpty = 0
             item.variable.forEach((variableItem) => {
               variableItem.dcId = item.id
               variableItem.dealerName = item.distributorName
@@ -699,6 +699,12 @@ export default {
             })
           }
         })
+        let index = distributorList.findIndex((item) => {
+          return item.contractState == '3'
+        })
+        console.log(index)
+        //没有通过则是正常，若有之前通过的经销商则为补录
+        this.isMakeUp = index == -1 ? 0 : 1
         let AllTotalTableData = []
         let VariableTotalTableData = []
         let VariableTableData = []
@@ -1181,25 +1187,28 @@ export default {
       })
       console.log(exceptionList)
       console.log(errorList)
-      if (exceptionList.length) {
-        exceptionList.forEach((item) => {
-          this.$message({
-            showClose: true,
-            message: `${item.dealerName} ${item.contractItem} 经销商费比不等于客户合同费比`,
-            type: 'warning',
+      //补录跳过校验
+      if (!this.isMakeUp) {
+        if (exceptionList.length) {
+          exceptionList.forEach((item) => {
+            this.$message({
+              showClose: true,
+              message: `${item.dealerName} ${item.contractItem} 经销商费比不等于客户合同费比`,
+              type: 'warning',
+            })
           })
-        })
-      }
-      if (errorList.length) {
-        errorList.forEach((item) => {
-          this.$notify.error({
-            title: '错误',
-            message: `第${item.rowIndex + 1}行${
-              this.AllTableData[item.rowIndex].customerInfo.contractItem
-            }  经销商含税金额total 不等于客户含税金额`,
+        }
+        if (errorList.length) {
+          errorList.forEach((item) => {
+            this.$notify.error({
+              title: '错误',
+              message: `第${item.rowIndex + 1}行${
+                this.AllTableData[item.rowIndex].customerInfo.contractItem
+              }  经销商含税金额total 不等于客户含税金额`,
+            })
           })
-        })
-        return
+          return
+        }
       }
       let Obj = {
         ccId: this.ccId,
@@ -1247,7 +1256,6 @@ export default {
           })
         }
       })
-      console.log(Obj)
       API.saveContractDetail(Obj).then((res) => {
         if (res.code === 1000) {
           if (flag) {
