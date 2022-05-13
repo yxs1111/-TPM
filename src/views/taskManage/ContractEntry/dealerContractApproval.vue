@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-12 18:50:21
+ * @LastEditTime: 2022-05-13 16:37:22
 -->
 <template>
   <div class="MainContent">
@@ -230,22 +230,18 @@ export default {
         customerMdmCode: this.filterObj.customerMdmCode,
         minePackageCode: 'DISTRIBUTOR-CONTRACT',
       }).then((response) => {
-        if (response.data.code == 1000) {
-          if (response.data.records.length) {
-            let list = response.data.records
-            list.forEach((item) => {
-              item.isEditor = 0
-              item.contractDate = [item.contractBeginDate, item.contractEndDate]
-              item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
-            })
-            this.tableData = [...list]
-            this.pageNum = response.data.pageNum
-            this.pageSize = response.data.pageSize
-            this.total = response.data.total
-            this.ccId = this.tableData[0].ccId
-            this.tempObj.tempInfo = null
-          }
-        }
+        let list = response.data.records
+        list.forEach((item) => {
+          item.isEditor = 0
+          item.contractDate = [item.contractBeginDate, item.contractEndDate]
+          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+        })
+        this.tableData = [...list]
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+        this.ccId = this.tableData[0].ccId
+        this.tempObj.tempInfo = null
       })
     },
     // 客户

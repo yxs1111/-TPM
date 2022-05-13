@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 18:52:43
+ * @LastEditTime: 2022-05-13 16:10:06
 -->
 <template>
   <div class="ContentDetail">
@@ -795,6 +795,7 @@ export default {
                         ? null
                         : Number(variableItem.payType), //支付方式
                     isEditor:
+                      variableItem.contractState == '1' ||
                       variableItem.contractState == '3' ||
                       variableItem.contractState == '4'
                         ? 0
@@ -940,6 +941,7 @@ export default {
                         ? null
                         : Number(fixedItem.payType), //支付方式
                     isEditor:
+                      fixedItem.contractState == '1' ||
                       fixedItem.contractState == '3' ||
                       fixedItem.contractState == '4'
                         ? 0
@@ -967,6 +969,7 @@ export default {
                 payType:
                   distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
                 isEditor:
+                  distFixObj.contractState == '1' ||
                   distFixObj.contractState == '3' ||
                   distFixObj.contractState == '4'
                     ? 0
