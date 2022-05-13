@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-13 09:31:22
+ * @LastEditTime: 2022-05-13 10:21:22
 -->
 <template>
   <div class="MainContent">
@@ -273,7 +273,7 @@
               <span class="addNewRowText">新增一行</span>
             </div>
           </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="240" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -1021,6 +1021,7 @@ export default {
     },
     //条款明细保存
     confirmTermsDetail() {
+      let isCheck=1 //费比校验
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -1033,6 +1034,9 @@ export default {
       }
       this.termVariableData.forEach((item) => {
         if (item.isNewData) {
+          if(item.costRatio==''||item.costRatio==0) {
+            isCheck=0
+          }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
             conditionsItem:
@@ -1047,6 +1051,9 @@ export default {
       })
       this.termFixData.forEach((item) => {
         if (item.isNewData) {
+          if(item.costRatio==''||item.costRatio==0) {
+            isCheck=0
+          }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
             conditionsItem: this.contractItemFixList[item.contractItem].code,
@@ -1065,6 +1072,10 @@ export default {
       }
       if (this.TotalData.totalCost > this.termInfo.saleAmount) {
         this.$message.info('Total 含税费用应该小于目标销售额')
+        return
+      }
+      if(!isCheck) {
+        this.$message.info('费比不能为空,请填写费比')
         return
       }
       console.log(obj)

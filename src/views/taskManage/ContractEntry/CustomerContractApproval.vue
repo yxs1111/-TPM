@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-13 09:30:59
+ * @LastEditTime: 2022-05-13 10:24:40
 -->
 <template>
   <div class="MainContent">
@@ -73,8 +73,8 @@
       </el-table-column>
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
-          <div>
-            {{ scope.row.contractBeginDate.replaceAll('-','/') + ' - ' + scope.row.contractEndDate.replaceAll('-','/') }}
+          <div v-if="scope.row.contractBeginDate">
+            {{ scope.row.contractBeginDate?scope.row.contractBeginDate.replaceAll('-','/'):'' + ' - ' + scope.row.contractBeginDate?scope.row.contractEndDate.replaceAll('-','/'):'' }}
           </div>
         </template>
       </el-table-column>
@@ -133,7 +133,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="180" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="240" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -168,9 +168,7 @@
             <el-table-column prop="remark" align="center" label="描述">
             </el-table-column>
           </el-table>
-          <div class="addNewRowWrap">
-          </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="160" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -540,7 +538,7 @@ export default {
     showTermsDetail(index) {
       this.customerId = this.tableData[index].ccId
       // 设置屏幕高度90%
-      // this.$refs.termDialog.$el.firstChild.style.height = '50%'
+      // this.$refs.termDialog.$el.firstChild.style.height = '90%'
       //草稿、被拒绝可以编辑，其他仅查看
       API.findOneSaveDetail({
         id: this.customerId,
