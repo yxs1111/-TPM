@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-12 19:47:29
+ * @LastEditTime: 2022-05-13 09:30:59
 -->
 <template>
   <div class="MainContent">
@@ -64,7 +64,7 @@
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="220" label="客户名称">
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount ? scope.row.customerContractSaleAmount : 0)}}
@@ -127,7 +127,7 @@
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
-          <span class="termItem">目标销售额:{{FormateNum(termInfo.saleAmount)}}</span>
+          <span class="termItem">目标销售额(RMB):{{FormateNum(termInfo.saleAmount)}}</span>
           <span class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
           <span class="termItem">系统生效时间:{{termInfo.effectiveBeginDate}}-{{termInfo.effectiveEndDate}}</span>
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
