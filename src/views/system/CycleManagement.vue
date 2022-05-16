@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-04-21 09:17:05
+ * @LastEditTime: 2022-05-16 16:49:47
 -->
 <template>
   <div class="app-container">
@@ -525,5 +525,9 @@ export default {
       cursor: pointer;
     }
   }
+}
+.app-container {
+  border-radius: 16px;
+  overflow: hidden;
 }
 </style>
