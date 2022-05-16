@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-13 10:22:59
+ * @LastEditTime: 2022-05-16 15:02:43
 -->
 <template>
   <div class="MainContent">
@@ -423,7 +423,29 @@ export default {
       },
       isEditor: 0,
       isShowPopover: false,
-      pickerOptions: pickerOptions,
+      selectDate:'', 
+      pickerOptions: {
+        onPick: (obj) => {
+          this.selectDate=obj.minDate
+          //若存在最大值，将已选中的值置空（下次可选另一年（且保证同年））
+          if(obj.maxDate) {
+            this.selectDate=''
+          }
+        },
+        // 限制年月
+        disabledDate: (time) => {
+          const date=new Date(this.selectDate)
+          const year = date.getFullYear()
+          //未选择初始日期时，不做限制
+          if (this.selectDate=='') {
+            return false
+          }
+          return (
+            //日期限制（同一年）
+            time.getFullYear() == year ? false : true
+          )
+        },
+      },
     }
   },
   mounted() {

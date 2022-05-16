@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-12 13:22:29
+ * @LastEditTime: 2022-05-16 15:03:13
 -->
 <template>
   <div class="MainContent">
@@ -202,8 +202,8 @@
         <div class="termInfo">
           <div class="selectCustomer">
             <span class="selectBar">客户合同</span>
-            <el-select v-model="addDialog.index" class="my-el-input" filterable @change="getDetail" clearable placeholder="请选择">
-              <el-option v-for="item,index in customerArr" :key="item.id" :label="item.customerName" :value="index" />
+            <el-select v-model="addDialog.index" class="my-el-selectCustomer" filterable @change="getDetail" clearable placeholder="请选择">
+              <el-option v-for="item,index in customerArr" :key="item.id" :label="item.label" :value="index" />
             </el-select>
           </div>
           <el-button type="primary" class="TpmButtonBG" @click="getDetail">查询</el-button>
@@ -390,7 +390,29 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      pickerOptions:pickerOptions
+      selectDate:'', 
+      pickerOptions: {
+        onPick: (obj) => {
+          this.selectDate=obj.minDate
+          //若存在最大值，将已选中的值置空（下次可选另一年（且保证同年））
+          if(obj.maxDate) {
+            this.selectDate=''
+          }
+        },
+        // 限制年月
+        disabledDate: (time) => {
+          const date=new Date(this.selectDate)
+          const year = date.getFullYear()
+          //未选择初始日期时，不做限制
+          if (this.selectDate=='') {
+            return false
+          }
+          return (
+            //日期限制（同一年）
+            time.getFullYear() == year ? false : true
+          )
+        },
+      },
     }
   },
   mounted() {
@@ -470,7 +492,12 @@ export default {
     getCustomerList() {
       API.getCustomerContract({}).then((res) => {
         if (res.code === 1000) {
-          this.customerArr = res.data
+          let list=res.data
+            list.forEach(item=>{
+              item.contractDate=item.contractBeginDate.replaceAll('-','/')+' - '+item.contractEndDate.replaceAll('-','/')
+              item.label=`${item.customerName}(${item.contractDate})`
+            })
+            this.customerArr = list
         }
       })
     },
@@ -913,6 +940,7 @@ export default {
     width: 180px !important;
   }
 }
+
 .PopoverContent {
   .PopoverContentTop {
     display: flex;
@@ -1066,6 +1094,17 @@ export default {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 240px !important;
+  }
+}
+.my-el-dialog .dialogContent .selectCustomer .my-el-selectCustomer {
+  width: 300px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 300px !important;
+  }
+  .el-input--suffix {
+    width: 300px !important;
   }
 }
 </style>
