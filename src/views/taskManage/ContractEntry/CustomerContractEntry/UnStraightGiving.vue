@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-13 10:21:25
+ * @LastEditTime: 2022-05-16 09:21:23
 -->
 <template>
   <div class="MainContent">
@@ -268,7 +268,7 @@
             </el-table-column>
           </el-table>
           <div class="addNewRowWrap" v-if="isEditor">
-            <div class="addNewRow" @click="addNewRowToVariable" >
+            <div class="addNewRow" @click="addNewRowToVariable">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
@@ -367,7 +367,7 @@ import {
   contractItemFixList,
   downloadFile,
   getCurrentYearRange,
-  pickerOptions
+  pickerOptions,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -423,7 +423,29 @@ export default {
       },
       isEditor: 0,
       isShowPopover: false,
-      pickerOptions: pickerOptions,
+      selectDate:'', 
+      pickerOptions: {
+        onPick: (obj) => {
+          this.selectDate=obj.minDate
+          //若存在最大值，将已选中的值置空（下次可选另一年（且保证同年））
+          if(obj.maxDate) {
+            this.selectDate=''
+          }
+        },
+        // 限制年月
+        disabledDate: (time) => {
+          const date=new Date(this.selectDate)
+          const year = date.getFullYear()
+          //未选择初始日期时，不做限制
+          if (this.selectDate=='') {
+            return false
+          }
+          return (
+            //日期限制（同一年）
+            time.getFullYear() == year ? false : true
+          )
+        },
+      },
     }
   },
   mounted() {
@@ -1021,7 +1043,7 @@ export default {
     },
     //条款明细保存
     confirmTermsDetail() {
-      let isCheck=1 //费比校验
+      let isCheck = 1 //费比校验
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -1034,8 +1056,8 @@ export default {
       }
       this.termVariableData.forEach((item) => {
         if (item.isNewData) {
-          if(item.costRatio==''||item.costRatio==0) {
-            isCheck=0
+          if (item.costRatio == '' || item.costRatio == 0) {
+            isCheck = 0
           }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
@@ -1051,8 +1073,8 @@ export default {
       })
       this.termFixData.forEach((item) => {
         if (item.isNewData) {
-          if(item.costRatio==''||item.costRatio==0) {
-            isCheck=0
+          if (item.costRatio == '' || item.costRatio == 0) {
+            isCheck = 0
           }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
@@ -1074,7 +1096,7 @@ export default {
         this.$message.info('Total 含税费用应该小于目标销售额')
         return
       }
-      if(!isCheck) {
+      if (!isCheck) {
         this.$message.info('费比不能为空,请填写费比')
         return
       }
@@ -1139,13 +1161,13 @@ export default {
         this.$refs.termFixTable.bodyWrapper.scrollTop = scrollHeight
       })
     },
-    deleteTerm(flag,index) {
+    deleteTerm(flag, index) {
       //variable 明细删除
-      if(flag==0) {
-        this.termVariableData.splice(index,1)
+      if (flag == 0) {
+        this.termVariableData.splice(index, 1)
       } else {
         //fixed 明细删除
-        this.termFixData.splice(index,1)
+        this.termFixData.splice(index, 1)
       }
     },
     //费比更改
