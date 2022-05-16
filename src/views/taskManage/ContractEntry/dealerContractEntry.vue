@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-16 15:03:13
+ * @LastEditTime: 2022-05-16 15:08:46
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item in customerArr" :key="item.id" :label="item.customerName" :value="item.customerMdmCode" />
+            <el-option v-for="item in customerArr" :key="item.id" :label="item.label" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
