@@ -1114,6 +1114,7 @@ export default {
       })
         .then((res) => {
           if (res.code === 1000) {
+            this.currentIsCalculation=0
             if (
               res.data.version === 'V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
