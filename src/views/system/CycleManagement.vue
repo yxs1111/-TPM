@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-05-17 09:15:23
+ * @LastEditTime: 2022-05-17 11:34:55
 -->
 <template>
   <div class="app-container">
@@ -95,7 +95,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="实际销量日期" prop="leDate" class="el_Dialog_dateRange el-form_le">
-            <el-date-picker v-model="ruleForm.leDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyyMMdd" format="yyyy/MM/dd">
+            <el-date-picker v-model="ruleForm.leDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>
         </el-form>
