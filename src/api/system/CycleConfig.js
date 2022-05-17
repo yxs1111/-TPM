@@ -1,7 +1,7 @@
 /*
  * @Description: 周期管理
  * @Date: 2022-03-01 16:46:15
- * @LastEditTime: 2022-03-16 10:53:14
+ * @LastEditTime: 2022-05-17 13:57:42
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -22,6 +22,10 @@ export default {
   //确认新增
   confirmCycleConfig(params) {
     return requestApi.request_post('/cityplan/mdCycleConfig/insert', params)
+  },
+  //确认修改
+  updateCycleConfig(params) {
+    return requestApi.request_put('/cityplan/mdCycleConfig/update', params)
   },
   
   //关账

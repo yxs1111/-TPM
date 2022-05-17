@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-05-17 11:34:55
+ * @LastEditTime: 2022-05-17 14:17:10
 -->
 <template>
   <div class="app-container">
@@ -30,11 +30,22 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column fixed align="center" label="操作" width="100">
+        <template slot-scope="{ row }">
+          <div class="table_operation">
+            <div class="table_operation_detail" @click="editor(row)">
+              <i class="el-icon-edit-outline"></i>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="150" align="center" fixed="left" prop="activityMonth" label="活动月" />
       <el-table-column width="280" align="center" prop="startAndEndVZero" label="V0" />
       <el-table-column width="280" align="center" prop="startAndEndVOne" label="V1" />
       <el-table-column width="280" align="center" prop="startAndEndVTwo" label="V2" />
       <el-table-column width="280" align="center" prop="startAndEndVThree" label="V3" />
+      <el-table-column width="150" align="center" prop="leWeek" label="Le销量Week" />
+      <el-table-column width="120" align="center" prop="leDate" label="实际销量日期" />
       <el-table-column width="150" align="center" prop="openingStatus" label="开启状态">
         <template slot-scope="scope">
           <div>
@@ -53,8 +64,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-
-    <el-dialog width="55%" title="新增账期" :visible="addVisible" @close="closeDialog" class="my-el-dialog">
+    <el-dialog width="55%"  :title="(isEditor ? '修改' : '新增') + '账期'" :visible="addVisible" @close="closeDialog" class="my-el-dialog">
       <div class="el-dialogContent">
         <el-form class="el-form-row">
           <div class="Selectli el_Dialog_dateRange" style="margin-bottom: 10px;width:50%">
@@ -69,32 +79,52 @@
           </div>
         </el-form>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="el-form-row">
-          <el-form-item label="V0" prop="startAndEndVZero" class="el_Dialog_dateRange">
+          <el-form-item label="V0" v-if="!isEditor" prop="startAndEndVZero" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVZero" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="V1" prop="startAndEndVOne" class="el_Dialog_dateRange">
+          <el-form-item label="V1" v-if="!isEditor" prop="startAndEndVOne" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVOne" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="V2" prop="startAndEndVTwo" class="el_Dialog_dateRange">
+          <el-form-item label="V2" v-if="!isEditor" prop="startAndEndVTwo" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVTwo" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="V3" prop="startAndEndVThree" class="el_Dialog_dateRange">
+          <el-form-item label="V3" v-if="!isEditor" prop="startAndEndVThree" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVThree" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="Le销量Week" prop="leWeek" class="el_Dialog_dateRange el-form_le">
+          <el-form-item label="V0" v-if="isEditor" prop="startAndEndVZero" class="el_Dialog_dateRange">
+            <el-date-picker v-model="ruleForm.startAndEndVZero" disabled class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="V1" v-if="isEditor" prop="startAndEndVOne" class="el_Dialog_dateRange">
+            <el-date-picker v-model="ruleForm.startAndEndVOne" disabled class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="V2" v-if="isEditor" prop="startAndEndVTwo" class="el_Dialog_dateRange">
+            <el-date-picker v-model="ruleForm.startAndEndVTwo" disabled class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="V3" v-if="isEditor" prop="startAndEndVThree" class="el_Dialog_dateRange">
+            <el-date-picker v-model="ruleForm.startAndEndVThree" disabled class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="Le销量Week"  class="el_Dialog_dateRange el-form_le">
             <el-select v-model="ruleForm.leWeek" clearable filterable class="my-el-dateRange" placeholder="请选择">
               <el-option v-for="item,index in ['W1','W2','W3','W4',]" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="实际销量日期" prop="leDate" class="el_Dialog_dateRange el-form_le">
+          <el-form-item label="实际销量日期"  class="el_Dialog_dateRange el-form_le">
             <el-date-picker v-model="ruleForm.leDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>
@@ -166,7 +196,7 @@ export default {
         startAndEndVOne: '',
         startAndEndVTwo: '',
         startAndEndVThree: '',
-        leWeek: '',
+        leWeek: 'W3',
         leDate: '',
       },
       rules: {
@@ -205,20 +235,6 @@ export default {
             trigger: 'blur',
           },
         ],
-        leWeek: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        leDate: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
       },
       // 导入
       addVisible: false, // 导入弹窗
@@ -231,6 +247,8 @@ export default {
       checkArr: [],
       isConfirm: 0,
       statusList: [],
+      isEditor: '',
+      editorId:'',
     }
   },
   computed: {},
@@ -301,12 +319,15 @@ export default {
       this.addVisible = false
       this.statusList = []
       this.isConfirm = 0
+      this.isEditor = false
       this.ruleForm = {
         activityMonth: '',
         startAndEndVZero: '',
         startAndEndVOne: '',
         startAndEndVTwo: '',
         startAndEndVThree: '',
+        leWeek: 'W3',
+        leDate: '',
       }
     },
     //提交form
@@ -314,8 +335,9 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.isConfirm) {
-            console.log('isConfirm')
-            API.confirmCycleConfig({
+            let url=this.isEditor?API.updateCycleConfig:API.confirmCycleConfig
+            url({
+              id: this.editorId,
               activityMonth: this.ruleForm.activityMonth,
               startAndEndVZero: this.FormDataRangeTransfer(
                 this.ruleForm.startAndEndVZero
@@ -333,7 +355,7 @@ export default {
               leDate:this.ruleForm.leDate,
             }).then((response) => {
               if (response.code === 1000) {
-                this.$message.success(`添加成功`)
+                this.$message.success(`${this.isEditor?'修改':'添加'}成功`)
                 this.resetForm(formName)
                 this.getTableData()
               }
@@ -377,6 +399,27 @@ export default {
           return false
         }
       })
+    },
+    getFormatDateRange(dateStr) {
+      if(dateStr) {
+        let list=dateStr.split(' - ')
+        console.log(list);
+        return list
+      }
+    },
+    editor(obj) {
+      this.isEditor = true
+      this.addVisible = true
+      this.editorId = obj.id
+      this.ruleForm = {
+        activityMonth: obj.activityMonth,
+        startAndEndVZero: this.getFormatDateRange(obj.startAndEndVZero),
+        startAndEndVOne: this.getFormatDateRange(obj.startAndEndVOne),
+        startAndEndVTwo: this.getFormatDateRange(obj.startAndEndVTwo),
+        startAndEndVThree: this.getFormatDateRange(obj.startAndEndVThree),
+        leWeek: obj.leWeek,
+        leDate: obj.leDate,
+      }
     },
     //取消
     resetForm(formName) {
