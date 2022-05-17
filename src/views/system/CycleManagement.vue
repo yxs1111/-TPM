@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-05-16 16:49:47
+ * @LastEditTime: 2022-05-17 09:15:23
 -->
 <template>
   <div class="app-container">
@@ -54,7 +54,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
 
-    <el-dialog width="48%" title="新增账期" :visible="addVisible" @close="closeDialog" class="my-el-dialog">
+    <el-dialog width="55%" title="新增账期" :visible="addVisible" @close="closeDialog" class="my-el-dialog">
       <div class="el-dialogContent">
         <el-form class="el-form-row">
           <div class="Selectli el_Dialog_dateRange" style="margin-bottom: 10px;width:50%">
@@ -87,6 +87,15 @@
           <el-form-item label="V3" prop="startAndEndVThree" class="el_Dialog_dateRange">
             <el-date-picker v-model="ruleForm.startAndEndVThree" class="my-el-dateRange" type="daterange" value-format="yyyy/MM/dd" format="yyyy/MM/dd" range-separator="至"
               start-placeholder="开始日期" end-placeholder="结束日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="Le销量Week" prop="leWeek" class="el_Dialog_dateRange el-form_le">
+            <el-select v-model="ruleForm.leWeek" clearable filterable class="my-el-dateRange" placeholder="请选择">
+              <el-option v-for="item,index in ['W1','W2','W3','W4',]" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="实际销量日期" prop="leDate" class="el_Dialog_dateRange el-form_le">
+            <el-date-picker v-model="ruleForm.leDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyyMMdd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>
         </el-form>
@@ -157,6 +166,8 @@ export default {
         startAndEndVOne: '',
         startAndEndVTwo: '',
         startAndEndVThree: '',
+        leWeek: '',
+        leDate: '',
       },
       rules: {
         activityMonth: [
@@ -188,6 +199,20 @@ export default {
           },
         ],
         startAndEndVThree: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        leWeek: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        leDate: [
           {
             required: true,
             message: 'This field is required',
@@ -275,7 +300,7 @@ export default {
     closeDialog() {
       this.addVisible = false
       this.statusList = []
-      this.isConfirm=0
+      this.isConfirm = 0
       this.ruleForm = {
         activityMonth: '',
         startAndEndVZero: '',
@@ -289,7 +314,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.isConfirm) {
-            console.log('isConfirm');
+            console.log('isConfirm')
             API.confirmCycleConfig({
               activityMonth: this.ruleForm.activityMonth,
               startAndEndVZero: this.FormDataRangeTransfer(
@@ -304,6 +329,8 @@ export default {
               startAndEndVThree: this.FormDataRangeTransfer(
                 this.ruleForm.startAndEndVThree
               ),
+              leWeek:this.ruleForm.leWeek,
+              leDate:this.ruleForm.leDate,
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`添加成功`)
@@ -454,6 +481,13 @@ export default {
   width: 242px !important;
   border-radius: 5px;
   margin-right: 20px;
+  .el-input__inner {
+    height: 37px;
+    width: 242px!important;
+  }
+  .el-input--suffix {
+    width: 242px !important;
+  }
 }
 .el_Dialog_dateRange {
   width: 50%;
@@ -529,5 +563,29 @@ export default {
 .app-container {
   border-radius: 16px;
   overflow: hidden;
+}
+.app-container .el-form-row {
+    display: flex;
+    justify-content: center;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    align-items: center;
+}
+</style>
+<style lang="scss">
+.el-form-row .my-el-dateRange {
+  width: 242px !important;
+  border-radius: 5px;
+  margin-right: 20px;
+  .el-input__inner {
+    height: 37px;
+    width: 242px!important;
+  }
+  .el-input--suffix {
+    width: 242px !important;
+  }
+}
+.el-form_le .el-form-item__label {
+  margin-left: -65px;
 }
 </style>

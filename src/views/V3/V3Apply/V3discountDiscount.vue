@@ -1114,11 +1114,11 @@ export default {
               this.submitBtn === 0
             ) {
               this.btnStatus = true
-              if(res.data.activityName=='V3谈判前'||res.data.activityName=='V3谈判后') {
+              if(res.data.activityName=='V3谈判前调整'||res.data.activityName=='V3谈判后调整') {
                 this.currentIsCalculation=1
-                if(res.data.activityName=='V3谈判前') {
+                if(res.data.activityName=='V3谈判前调整') {
                   this.isCalculation=this.tableData[0].isCalculationBefore==0?0:1
-                } else if(res.data.activityName=='V3谈判后') {
+                } else if(res.data.activityName=='V3谈判后调整') {
                   this.isCalculation=this.tableData[0].isCalculationAfter==0?0:1
                 }
               }
