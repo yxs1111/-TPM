@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-10 11:57:35
+ * @LastEditTime: 2022-05-18 17:26:36
 -->
 <template>
   <div class="V0Content">
@@ -358,6 +358,7 @@ export default {
     this.getAllMonth()
     // this.getList()
     this.getQuerySkuSelect()
+    
   },
   watch: {
     'filterObj.channelCode'() {
@@ -369,6 +370,13 @@ export default {
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
         this.monthList=res.data
+      })
+    },
+    getScenarioList() {
+      API.getScenarioList({
+        channelName: this.filterObj.channelCode,
+      }).then((res) => {
+        this.yearAndMonthList=res.data
       })
     },
     getList() {
@@ -471,6 +479,7 @@ export default {
         this.$message.info('请先选择渠道')
         return
       }
+      this.getScenarioList()
       this.dialogVisible = true
       this.ruleForm.channelCode = this.filterObj.channelCode
       this.ruleForm.dimVersion = ''

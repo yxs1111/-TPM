@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-05-10 17:35:14
+ * @LastEditTime: 2022-05-18 17:22:09
 -->
 <template>
   <div class="app-container">
@@ -178,6 +178,9 @@
           <span>{{ uploadFileName }}</span>
         </div>
       </div>
+      <div v-if="warningShow" class="warningWrap">
+        <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin:10px 0;" type="warning" effect="dark" />
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmImport()">确 定</el-button>
         <el-button @click="closeImport">取 消</el-button>
@@ -270,6 +273,8 @@ export default {
       },
       uploadFile:'',
       uploadFileName:'',
+      warningList: [],
+      warningShow: false,
     }
   },
   directives: { elDragDialog, permission },
@@ -460,16 +465,22 @@ export default {
     },
     //确认
     confirmImport() {
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      API.importContractItem(formData).then((response) => {
-        if (response.code == 1000) {
-          this.closeImport()
-          this.getTableData()
-        }
-        this.event.srcElement.value = '' // 置空
-      })
-      
+      this.closeImport()
+      this.getTableData()
+      // var formData = new FormData()
+      // formData.append('file', this.uploadFile)
+      // API.importContractItem(formData).then((response) => {
+      //   if (response.code == 1000) {
+      //     if(response.data) {
+      //       this.warningShow = true
+      //       this.warningList = response.data.split(";")
+      //     } else {
+      //       this.closeImport()
+      //       this.getTableData()
+      //     }
+      //   }
+      //   this.event.srcElement.value = '' // 置空
+      // })
     },
     parsingExcelBtn() {
       this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
@@ -479,7 +490,17 @@ export default {
       this.event = event
       this.uploadFile = event.target.files[0]
       this.uploadFileName = event.target.files[0].name
-      
+      var formData = new FormData()
+      formData.append('file', this.uploadFile)
+      this.warningShow = false
+      this.warningList = []
+      API.importContractItem(formData).then((response) => {
+        if (response.code == 1000) {
+          this.warningShow = true
+          this.warningList = response.data
+        }
+        this.event.srcElement.value = '' // 置空
+      })
     },
     //关闭导入
     closeImport() {
@@ -528,7 +549,24 @@ export default {
   width: 20px;
   height: 20px;
 }
-
+.message {
+  color: #eb4f48;
+  text-align: center;
+  margin: 10px 0;
+  white-space: normal;
+}
+.warningWrap {
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
+}
+.tip {
+  color: #666;
+  font-size: 14px;
+}
+.tipStar{
+  color: #eb4f48;
+}
 </style>
 <style lang="scss">
 .mutiInput {
