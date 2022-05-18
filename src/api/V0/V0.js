@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-05-09 10:34:04
+ * @LastEditTime: 2022-05-18 13:11:23
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -92,6 +92,10 @@ export default {
   //获取CPT 数据是否存在
   isExist(params) {
     return requestApi.request_post(this.url+'/isExist', params)
+  },
+  //获取CPT 数据  ScenarioList 下拉数据
+  getScenarioList(params) {
+    return requestApi.request_get(this.url+'/getScenarioList', params)
   },
   
 }
