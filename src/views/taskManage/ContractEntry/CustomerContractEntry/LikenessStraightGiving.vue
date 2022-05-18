@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-16 15:02:50
+ * @LastEditTime: 2022-05-18 10:01:14
 -->
 <template>
   <div class="MainContent">
@@ -740,8 +740,8 @@ export default {
       this.getTableData()
     },
     //导出数据
-    exportData() {
-      API.export({
+    async exportData() {
+     await API.exportCustomerContractInfo({
         customerType: 2,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
@@ -751,8 +751,21 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        downloadFile(res, '准直供客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('客户合同录入导出成功!')
+      })
+      await API.exportCustomerContractDetail({
+        customerType: 2,
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '准直供客户合同录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('客户合同录入明细导出成功!')
       })
     },
     //编辑行数据

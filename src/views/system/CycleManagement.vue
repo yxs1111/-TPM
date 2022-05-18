@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-05-17 14:17:10
+ * @LastEditTime: 2022-05-18 10:07:42
 -->
 <template>
   <div class="app-container">
@@ -119,12 +119,12 @@
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="Le销量Week"  class="el_Dialog_dateRange el-form_le">
+          <el-form-item label="Le销量Week" prop="leWeek"  class="el_Dialog_dateRange el-form_le">
             <el-select v-model="ruleForm.leWeek" clearable filterable class="my-el-dateRange" placeholder="请选择">
-              <el-option v-for="item,index in ['W1','W2','W3','W4',]" :key="index" :label="item" :value="item" />
+              <el-option v-for="item,index in ['W1','W2','W3','W4','W5']" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="实际销量日期"  class="el_Dialog_dateRange el-form_le">
+          <el-form-item label="实际销量日期" prop="leDate"  class="el_Dialog_dateRange el-form_le">
             <el-date-picker v-model="ruleForm.leDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>
@@ -229,6 +229,20 @@ export default {
           },
         ],
         startAndEndVThree: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        leWeek: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        leDate: [
           {
             required: true,
             message: 'This field is required',

@@ -1,7 +1,7 @@
 /*
  * @Description: 客户合同录入
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-04-26 11:25:48
+ * @LastEditTime: 2022-05-18 09:50:36
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -32,6 +32,23 @@ export default {
   export(params) {
     return request({
       url: this.url+'/exportCustomerContract',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //录入 客户合同导出
+  exportCustomerContractInfo(params) {
+    return request({
+      url: this.url+'/exportCustomerContractInfo',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  exportCustomerContractDetail(params) {
+    return request({
+      url: this.url+'/exportCustomerContractDetail',
       method: 'get',
       params: params,
       responseType: 'blob'
