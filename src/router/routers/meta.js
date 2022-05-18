@@ -1,3 +1,8 @@
+/*
+ * @Description: 
+ * @Date: 2021-11-17 19:38:49
+ * @LastEditTime: 2022-05-18 11:16:10
+ */
 import Layout from '@/layout/index'
 
 const meta = [
@@ -22,34 +27,6 @@ const meta = [
         component: () => import('@/views/meta/dict/type/index.vue'),
         meta: { title: '字典类型', icon: 'form' }
       },
-      {
-        path: '/pConShift',
-        code: 'pConShift',
-        name: 'pConShift',
-        component: () => import('@/views/base/p-con-shift/index.vue'),
-        meta: { title: '班次管理', icon: 'form' }
-      },
-      {
-        path: '/pConTrack',
-        code: 'pConTrack',
-        name: 'pConTrack',
-        meta: { title: '股道管理', icon: 'form' },
-        component: () => import('@/views/pConTrack/index.vue')
-      },
-      {
-        path: '/meta/pConTrainType',
-        code: 'pConTrainType',
-        name: 'pConTrainType',
-        component: () => import('@/views/meta/pConTrainType/index.vue'),
-        meta: { title: '车型管理', icon: 'form' }
-      },
-      // {
-      //   path: '/base/mConLocation',
-      //   code: 'mConLocation',
-      //   name: 'mConLocation',
-      //   component: () => import('@/views/base/m-con-location/index.vue'),
-      //   meta: { title: '位置BOM', icon: 'form' }
-      // },
       {
         path: '/base/rfid',
         component: () => import('@/views/shell/index.vue'),
