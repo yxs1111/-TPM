@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 09:37:59
- * @LastEditTime: 2022-05-11 15:42:38
+ * @LastEditTime: 2022-05-19 16:00:59
 -->
 <!--
  * @Description: 
@@ -169,9 +169,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="costDifference" label="费用差值(%)">
+      <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -366,9 +366,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(%)">
+            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>

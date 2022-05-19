@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 13:39:35
+ * @LastEditTime: 2022-05-19 16:01:31
 -->
 <template>
   <div class="MainContent">
@@ -225,10 +225,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="费用差值(%)">
+      <el-table-column width="240" align="right" prop="planCost" label="费用差值(RMB)">
         <template v-slot:header>
           <div>
-            费用差值(%)<br /><span class="subTitle">KA+经销商+Contract item</span>
+            费用差值(RMB)<br /><span class="subTitle">KA+经销商+Contract item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -358,7 +358,7 @@
             <el-table-column v-slot="{ row }" width="220" align="right" prop="planCost" label="点数差值(%)">
               {{ formatNum(row.planCost) }}点数差值
             </el-table-column>
-            <el-table-column v-slot="{ row }" width="220" align="right" prop="planCost" label="费用差值(%)">
+            <el-table-column v-slot="{ row }" width="220" align="right" prop="planCost" label="费用差值(RMB)">
               {{ formatNum(row.planCost) }}费用差值
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
