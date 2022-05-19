@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-11 15:44:20
+ * @LastEditTime: 2022-05-19 13:39:35
 -->
 <template>
   <div class="MainContent">
@@ -133,7 +133,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V3实际合同点数-默认(%)">
+      <el-table-column width="240" align="right" prop="planCost" label="V3实际合同点数-默认(%)">
         <template v-slot:header>
           <div>
             V3实际合同点数-默认(%)<br /><span class="subTitle">KA+经销商+Contract item</span>
@@ -147,7 +147,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="planCost" label="V3实际销售额IMK-默认(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额IMK-默认(RMB)<br />(KA+经销商)</div>
+          <div>V3实际销售额IMK-默认(RMB)<br /><span class="subTitle">KA+经销商</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -167,7 +167,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V3实际合同点数-调整后(%)">
+      <el-table-column width="240" align="right" prop="planCost" label="V3实际合同点数-调整后(%)">
         <template v-slot:header>
           <div>
             V3实际合同点数-调整后(%)<br /><span class="subTitle">KA+经销商+Contract item</span>
@@ -181,7 +181,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="planCost" label="V3实际销售额IMK-调整后(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额IMK-调整后(RMB)<br />(KA+经销商)</div>
+          <div>V3实际销售额IMK-调整后(RMB)<br /><span class="subTitle">KA+经销商</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -201,7 +201,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="费用归属部门">
+      <el-table-column width="240" align="right" prop="planCost" label="费用归属部门">
         <template v-slot:header>
           <div>
             费用归属部门(%)<br /><span class="subTitle">KA+经销商+Contract item</span>
@@ -213,7 +213,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
+      <el-table-column width="240" align="right" prop="planCost" label="点数差值(%)">
         <template v-slot:header>
           <div>
             点数差值(%)<br /><span class="subTitle">KA+经销商+Contract item</span>
@@ -225,7 +225,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="费用差值(%)">
+      <el-table-column width="240" align="right" prop="planCost" label="费用差值(%)">
         <template v-slot:header>
           <div>
             费用差值(%)<br /><span class="subTitle">KA+经销商+Contract item</span>
