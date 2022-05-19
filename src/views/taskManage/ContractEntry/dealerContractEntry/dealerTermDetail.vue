@@ -1,16 +1,16 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-13 16:10:06
+ * @LastEditTime: 2022-05-19 10:15:26
 -->
 <template>
   <div class="ContentDetail">
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="staging">
+      <div v-if="isOtherEditor" class="TpmButtonBG" @click="staging">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">暂存</span>
       </div>
-      <div class="TpmButtonBG" @click="submit(0)">
+      <div v-if="isOtherEditor" class="TpmButtonBG" @click="submit(0)">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -587,6 +587,7 @@ export default {
       contractItemFixList: [],
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       isMakeUp: 0, //是否补录
+      isOtherEditor:0, //是否有可编辑
     }
   },
 
@@ -682,10 +683,6 @@ export default {
               variableItem.targetSale = item.saleAmount
               variableItem.contractState = item.contractState //合同状态
             })
-            //排序 匹配variable 行
-            item.variable.sort((item, nItem) => {
-              return item.ccDetailId - nItem.ccDetailId
-            })
             item.fixed.forEach((fixedItem) => {
               fixedItem.dcId = item.id
               fixedItem.dealerName = item.distributorName
@@ -693,18 +690,18 @@ export default {
               fixedItem.targetSale = item.saleAmount
               fixedItem.contractState = item.contractState ////合同状态
             })
-            //排序 匹配variable 行
-            item.fixed.sort((item, nItem) => {
-              return item.ccDetailId - nItem.ccDetailId
-            })
           }
         })
         let index = distributorList.findIndex((item) => {
           return item.contractState == '3'
         })
-        console.log(index)
+        // 是否有可编辑的，若没有则只显示关闭按钮
+        let isOtherEditor=distributorList.findIndex((item) => {
+          return item.contractState == '0'
+        })
         //没有通过则是正常，若有之前通过的经销商则为补录
         this.isMakeUp = index == -1 ? 0 : 1
+        this.isOtherEditor = isOtherEditor == -1 ? 0 : 1
         let AllTotalTableData = []
         let VariableTotalTableData = []
         let VariableTableData = []
@@ -1156,6 +1153,7 @@ export default {
     },
     //保存||提交
     submit(flag) {
+      let isTaxPriceEmpty=false
       let exceptionList = []
       let errorList = []
       //补录跳过验证--若之前经销商已经通过&&当前状态是草稿的 说明是补录
@@ -1171,6 +1169,9 @@ export default {
                 dealerIndex,
                 ...dealerItem,
               })
+            }
+            if(dealerItem.taxPrice=='') {
+              isTaxPriceEmpty=true
             }
           })
         }
@@ -1190,6 +1191,10 @@ export default {
       })
       console.log(exceptionList)
       console.log(errorList)
+      if(isTaxPriceEmpty) {
+        this.$message.info('经销商费比或经销商含税金额不能为空,请进行填写')
+        return
+      }
       //补录跳过校验
       if (!this.isMakeUp) {
         if (errorList.length) {
@@ -1218,7 +1223,6 @@ export default {
             }, 50)
           })
         }
-      console.log("submit");
       let Obj = {
         ccId: this.ccId,
         isTempStorage: flag, //0 否(参与校验)/1是(不参与校验)
