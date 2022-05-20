@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-20 14:50:01
+ * @LastEditTime: 2022-05-20 17:08:32
 -->
 <template>
   <div>
@@ -64,25 +64,25 @@ export default {
             { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
           ]
         }
-        this.routerList = [
-            ...this.routerList,
-            {
-              name: 'HIH Rebate',
-              path: '/master/ruleCtrl/model/splitRulesHIH',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
-            },
-            {
-              name: 'KA Rebate',
-              path: '/master/ruleCtrl/model/splitRulesKA',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
-            }
-          ]
+        // this.routerList = [
+        //     ...this.routerList,
+        //     {
+        //       name: 'HIH Rebate',
+        //       path: '/master/ruleCtrl/model/splitRulesHIH',
+        //       img: {
+        //         dark: require('@/assets/images/tab/tab2.png'),
+        //         light: require('@/assets/images/tab/tab2_l.png')
+        //       }
+        //     },
+        //     {
+        //       name: 'KA Rebate',
+        //       path: '/master/ruleCtrl/model/splitRulesKA',
+        //       img: {
+        //         dark: require('@/assets/images/tab/tab3.png'),
+        //         light: require('@/assets/images/tab/tab3_l.png')
+        //       }
+        //     }
+        //   ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
         } else {
