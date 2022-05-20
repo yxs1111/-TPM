@@ -1,12 +1,7 @@
 <!--
  * @Description: 
- * @Date: 2022-04-29 09:37:59
- * @LastEditTime: 2022-05-19 16:00:59
--->
-<!--
- * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-04-29 09:04:30
+ * @LastEditTime: 2022-05-20 14:39:51
 -->
 <template>
   <div class="MainContent">
@@ -37,7 +32,9 @@
             <el-option v-for="(item, index) in ContractItemList" :key="index" :label="item.contractItem" :value="item.contractItemCode" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
@@ -45,15 +42,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(1)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'"  @click="approve(1)">
         <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(0)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'"  @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -184,15 +181,15 @@
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-              <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
+              <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
               <span class="judgmentText">{{ row.judgmentType }}</span>
             </div>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="420" align="center" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -314,7 +311,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="forecastCost" label="V2预估合同费用-默认(RMB)">
+            <el-table-column width="240" align="right" prop="forecastCost" label="V2预估合同费用-默认(RMB)">
               <template v-slot:header>
                 <div>V2预估合同费用-默认(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
               </template>
@@ -324,7 +321,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="adjustedRatio" label="V2预估合同点数-调整后(%)">
+            <el-table-column width="240" align="right" prop="adjustedRatio" label="V2预估合同点数-调整后(%)">
               <template v-slot:header>
                 <div>V2预估合同点数-调整后(%)<br><span class="subTitle">kA+Contract Item</span></div>
               </template>
@@ -334,7 +331,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="adjustedSalesAmount" label="V2预估销售额IMK-调整后(RMB)">
+            <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V2预估销售额IMK-调整后(RMB)">
               <template v-slot:header>
                 <div>V2预估销售额IMK-调整后(RMB)<br><span class="subTitle">kA</span></div>
               </template>
@@ -344,7 +341,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估合同费用-调整后(RMB)">
+            <el-table-column width="260" align="right" prop="adjustedCost" label="V2预估合同费用-调整后(RMB)">
               <template v-slot:header>
                 <div>V2预估合同费用-调整后(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
               </template>
@@ -354,9 +351,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门">
+            <el-table-column width="240" align="right" prop="costBelongDept" label="费用归属部门">
             </el-table-column>
-            <el-table-column width="220" align="right" prop="ratioDifference" label="点数差值(%)">
+            <el-table-column width="240" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
                 <div>点数差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
               </template>
@@ -464,7 +461,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getApproveHIH({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
@@ -474,7 +471,6 @@ export default {
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
-          this.isSubmit = this.tableData[0].isSubmit
           this.pageSize = response.data.pageSize
           this.total = response.data.total
           this.mainId = this.tableData[0].mainId
@@ -492,13 +488,13 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V2' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&this.tableData[0].isSubmit
             ) {
-              //本人可以提交
-              this.isSelf = true
+              //本人可以提交、已经是提交（申请过）、节点
+              this.isSubmit = false
             } else {
               //其他人禁用
-              this.isSelf = false
+              this.isSubmit = true
             }
           }
         })

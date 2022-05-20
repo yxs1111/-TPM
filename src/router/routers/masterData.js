@@ -405,7 +405,33 @@ export default function() {
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
-                }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesHIH',
+                  code: 'mdm_Split_rules',
+                  name: 'splitRulesHIH',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesHIH.vue'),
+                  meta: {
+                    title: 'HIH',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesKA',
+                  code: 'mdm_Split_rules',
+                  name: 'splitRulesKA',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesKA.vue'),
+                  meta: {
+                    title: 'KA',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
               ]
             }
             // {
