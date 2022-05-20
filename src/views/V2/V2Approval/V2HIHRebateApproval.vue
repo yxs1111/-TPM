@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-20 14:39:51
+ * @LastEditTime: 2022-05-20 16:14:34
 -->
 <template>
   <div class="MainContent">
@@ -114,7 +114,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="forecastCost" label="V2预估合同费用-默认(RMB)">
+      <el-table-column width="260" align="right" prop="forecastCost" label="V2预估合同费用-默认(RMB)">
         <template v-slot:header>
           <div>V2预估合同费用-默认(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
         </template>
@@ -124,7 +124,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedRatio" label="V2预估合同点数-调整后(%)">
+      <el-table-column width="260" align="right" prop="adjustedRatio" label="V2预估合同点数-调整后(%)">
         <template v-slot:header>
           <div>V2预估合同点数-调整后(%)<br><span class="subTitle">kA+Contract Item</span></div>
         </template>
@@ -134,7 +134,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="adjustedSalesAmount" label="V2预估销售额IMK-调整后(RMB)">
+      <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V2预估销售额IMK-调整后(RMB)">
         <template v-slot:header>
           <div>V2预估销售额IMK-调整后(RMB)<br><span class="subTitle">kA</span></div>
         </template>
@@ -144,7 +144,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估合同费用-调整后(RMB)">
+      <el-table-column width="260" align="right" prop="adjustedCost" label="V2预估合同费用-调整后(RMB)">
         <template v-slot:header>
           <div>V2预估合同费用-调整后(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
         </template>
@@ -189,7 +189,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="420" align="center" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="600" align="center" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -649,7 +649,7 @@ export default {
           isSubmit: 1,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -667,7 +667,7 @@ export default {
           contractItemCode: this.filterObj.contractItemCode,
           costItemCode: 'HIH rebate',
         }).then((res) => {
-          this.downloadFile(
+          downloadFile(
             res,
             `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2审批.xlsx`
           ) //自定义Excel文件名

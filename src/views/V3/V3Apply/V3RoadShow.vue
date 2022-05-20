@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 17:07:56
+ * @LastEditTime: 2022-05-20 16:30:11
 -->
 <template>
   <div class="MainContent">
@@ -713,7 +713,7 @@ export default {
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
