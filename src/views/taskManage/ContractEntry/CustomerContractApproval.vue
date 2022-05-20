@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 15:58:43
+ * @LastEditTime: 2022-05-13 10:24:40
 -->
 <template>
   <div class="MainContent">
@@ -64,7 +64,7 @@
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="220" label="客户名称">
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount ? scope.row.customerContractSaleAmount : 0)}}
@@ -73,8 +73,8 @@
       </el-table-column>
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
-          <div>
-            {{ scope.row.contractBeginDate.replaceAll('-','/') + ' - ' + scope.row.contractEndDate.replaceAll('-','/') }}
+          <div v-if="scope.row.contractBeginDate">
+            {{ scope.row.contractBeginDate?scope.row.contractBeginDate.replaceAll('-','/'):'' + ' - ' + scope.row.contractBeginDate?scope.row.contractEndDate.replaceAll('-','/'):'' }}
           </div>
         </template>
       </el-table-column>
@@ -123,17 +123,17 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 条款明细 -->
-    <el-dialog width="90%" top="2vh" ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="90%"  ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
-          <span class="termItem">目标销售额:{{FormateNum(termInfo.saleAmount)}}</span>
+          <span class="termItem">目标销售额(RMB):{{FormateNum(termInfo.saleAmount)}}</span>
           <span class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
           <span class="termItem">系统生效时间:{{termInfo.effectiveBeginDate}}-{{termInfo.effectiveEndDate}}</span>
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="180" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="240" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -168,9 +168,7 @@
             <el-table-column prop="remark" align="center" label="描述">
             </el-table-column>
           </el-table>
-          <div class="addNewRowWrap">
-          </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="160" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -540,7 +538,7 @@ export default {
     showTermsDetail(index) {
       this.customerId = this.tableData[index].ccId
       // 设置屏幕高度90%
-      this.$refs.termDialog.$el.firstChild.style.height = '90%'
+      // this.$refs.termDialog.$el.firstChild.style.height = '90%'
       //草稿、被拒绝可以编辑，其他仅查看
       API.findOneSaveDetail({
         id: this.customerId,
@@ -840,6 +838,7 @@ export default {
   .termTableWrap {
     width: 100%;
     border: 1px solid #e7e7e7;
+    margin-bottom: 20px;
     .addNewRowWrap {
       width: 100%;
       height: 50px;

@@ -1,7 +1,7 @@
 <!--
- * @Description: 
+ * @Description: V1RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 16:00:16
+ * @LastEditTime: 2022-05-19 15:42:18
 -->
 <template>
   <div class="MainContent">
@@ -21,15 +21,27 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户:</span>
+          <span class="SelectliTitle">客户系统名称:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Contract Item:</span>
-          <el-select v-model="filterObj.contractItemCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in ContractItemList" :key="index" :label="item.contractItem" :value="item.contractItemCode" />
+          <span class="SelectliTitle">供应商:</span>
+          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">区域:</span>
+          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">活动类型:</span>
+          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
@@ -47,137 +59,54 @@
       <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="brandName" label="Contract Item" />
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
+      <el-table-column width="220" align="center" prop="contractItemName" label="供应商" />
+      <el-table-column width="220" align="center" prop="contractItemName" label="大区" />
+      <el-table-column width="220" align="center" prop="contractItemName" label="区域" />
+      <el-table-column width="220" align="center" prop="contractItemName" label="活动类型" />
+      <el-table-column width="220" align="right" prop="planRatio" label="V1计划单价(RMB/场)">
         <template v-slot:header>
-          <div>V1计划合同点数(%)<br><span class="subTitle">kA+Contract Item</span></div>
+          <div>
+            V1计划单价(RMB/人)
+            <br>
+            <span class="subTitle">KA+供应商+Region</span>
+          </div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ FormatNum(scope.row.planRatio) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planNewUserNum" label="V1计划销售额IMK(RMB)">
+      <el-table-column width="220" align="right" prop="planRatio" label="V1计划场次(场)">
         <template v-slot:header>
-          <div>V1计划销售额IMK(RMB)<br><span class="subTitle">kA</span></div>
+          <div>
+            V1计划场次(场)
+            <br>
+            <span class="subTitle">KA+供应商+Region</span>
+          </div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planSalesAmount) }}
+            {{ FormatNum(scope.row.planRatio) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划合同费用(RMB)">
+      <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划合同费用(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
+          <div>
+            V1计划费用(RMB)
+            <br>
+            <span class="subTitle">KA+供应商+Region</span>
+          </div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planCost) }}
+            {{ FormatNum(scope.row.planRatio) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V2预估合同点数-默认(%)">
-        <template v-slot:header>
-          <div>V2预估合同点数-默认(%)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.forecastRatio) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="V2预估销售额IMK-默认(RMB)">
-        <template v-slot:header>
-          <div>V2预估销售额IMK-默认(RMB)<br><span class="subTitle">kA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.forecastSalesAmount) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V2预估合同费用-默认(RMB)">
-        <template v-slot:header>
-          <div>V2预估合同费用-默认(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.forecastCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="V2预估合同点数-调整后(%)">
-        <template v-slot:header>
-          <div>V2预估合同点数-调整后(%)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedRatio) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="260" align="right" prop="planCost" label="V2预估销售额IMK-调整后(RMB)">
-        <template v-slot:header>
-          <div>V2预估销售额IMK-调整后(RMB)<br><span class="subTitle">kA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedSalesAmount) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="V2预估合同费用-调整后(RMB)">
-        <template v-slot:header>
-          <div>V2预估合同费用-调整后(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column  width="220" align="right" prop="costBelongDept" label="费用归属部门">
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
-        <template v-slot:header>
-          <div>点数差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.ratioDifference) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
-        <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.costDifference) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-        <template slot-scope="{row}">
-          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-            <div slot="content" v-html="getTip(row)" />
-            <div class="statusWrap">
-              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-              <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-              <span class="judgmentText">{{ row.judgmentType }}</span>
-            </div>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
-      </el-table-column>
-      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
-      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
-      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+      <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="right" prop="costBelongDept" label="费用核销方式"></el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -197,9 +126,9 @@ import {
   downloadFile,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/contract'
+import API from '@/api/V1/contract'
 export default {
-  name: 'V2KARebate',
+  name: 'V1RoadShow',
   directives: { elDragDialog, permission },
 
   data() {
@@ -209,23 +138,24 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        contractItemCode: '',
         customerCode: '',
         month: '',
+        supplierCode: '',
+        regionCode: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
       monthList: [],
       customerArr: [],
       tableData: [],
-      ContractItemList: [],
+      RegionList: [],
       maxheight: getHeightHaveTab(),
     }
   },
   computed: {},
   watch: {
     'filterObj.channelCode'() {
-      this.filterObj.customerName = ''
+      this.filterObj.customerCode = ''
       this.getCustomerList()
     },
   },
@@ -237,6 +167,7 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
+    this.getBrandList()
     this.getContractItemList()
   },
   methods: {
@@ -252,7 +183,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPagekA({
+        API.getPageHIH({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
@@ -276,7 +207,7 @@ export default {
     getContractItemList() {
       selectAPI.getContractItemList().then((res) => {
         if (res.code === 1000) {
-          this.ContractItemList = res.data
+          this.ContractItemList=res.data
         }
       })
     },
@@ -301,8 +232,26 @@ export default {
           }
         })
     },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
+    },
+    getRegionList() {
+      selectAPI
+        .getRegionList({
+          distributorName: this.filterObj.distributorCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.RegionList = res.data
+          }
+        })
+    },
     //千分位分隔符+两位小数
-    formatNum(num) {
+    FormatNum(num) {
       const money = num * 1
       return money.toLocaleString('zh', {
         minimumFractionDigits: 2,
@@ -316,15 +265,15 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportKAApplyExcel({
+        API.exportHIH({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
+          regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })

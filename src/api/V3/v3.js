@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-30 08:52:13
- * @LastEditTime: 2021-12-03 21:11:13
+ * @LastEditTime: 2022-05-16 17:08:02
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -166,5 +166,9 @@ export default {
       data: formData,
       headers: { 'Content-Type': 'multipart/form-data' }
     })
-  }
+  },
+  //计算
+  calculation(params) {
+    return requestApi.request_get('/cityplan/investCpVThreeDetail/toCalculation', params)
+  },
 }

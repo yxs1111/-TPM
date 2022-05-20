@@ -49,9 +49,14 @@
           {{ row.name }}
         </template>
       </el-table-column>
-      <el-table-column  label="登录名" width="280" align="center">
+      <el-table-column  label="登录名" width="480" align="center">
         <template slot-scope="{row}">
           <span>{{ row.loginName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column  label="邮箱" width="480" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.email }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建人" align="center" width="180">

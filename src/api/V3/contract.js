@@ -1,7 +1,7 @@
 /*
  * @Description: V3合同
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-09 13:27:54
+ * @LastEditTime: 2022-05-11 15:33:46
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -42,4 +42,36 @@ export default {
   approve(params) {
     return requestApi.request_post(this.url+'/approve', params)
   },
+
+  // 审批-HIH/KA查询列表
+  getApprovePage(params) {
+    return requestApi.request_get(this.url+'/getApprovePage', params)
+  },
+  // 审批-HIH/KA 导出
+  exportApproveExcel(params) {
+    return request({
+      url: this.url+'/exportApproveExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  // 审批-HIH/KA 模板下载
+  downApproveExcelTemplate(params) {
+    return request({
+      url: this.url+'/downApproveExcelTemplate',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  // 导出校验数据
+  downCheckData(params){
+    return request({
+      url: this.url+'/downCheckData',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  }
 }

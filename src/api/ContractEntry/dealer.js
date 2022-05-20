@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-15 13:29:35
- * @LastEditTime: 2022-04-28 10:48:47
+ * @LastEditTime: 2022-05-20 10:02:30
  */
 /*
  * @Description: 客户合同录入
@@ -41,6 +41,23 @@ export default {
   export(params) {
     return request({
       url: this.url+'/exportDistributorContract',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //经销商列表 导出
+  exportDistributorContractInfo(params) {
+    return request({
+      url: this.url+'/exportDistributorContractInfo',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  exportDistributorContractDetail(params) {
+    return request({
+      url: this.url+'/exportDistributorContractDetail',
       method: 'get',
       params: params,
       responseType: 'blob'

@@ -62,7 +62,7 @@ div:focus {
 
 // main-container global css
 .app-container {
-  height: calc(100% - 80px);
+  // height: calc(100% - 80px);
   background-color: #fff;
   padding: 20px;
   border-radius: 16px;
@@ -483,7 +483,7 @@ div:focus {
 
   .el-dialog {
     // margin-top: 8vh !important;
-    top: 50%;
+    top: 50% !important;
     margin-top: 0px!important;
     transform: translateY(-50%);
   }
@@ -970,3 +970,9 @@ div:focus {
   fill: currentColor;
   overflow: hidden;
 }
+.closeIcon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+

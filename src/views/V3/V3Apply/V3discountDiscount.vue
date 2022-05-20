@@ -56,11 +56,12 @@
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
+      <el-button type="primary" class="TpmButtonBG" :class="currentIsCalculation?'':'noClick'" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="supplement">
         <svg-icon icon-class="nextSave" style="font-size: 20px;" />
         <span class="text">补录</span>
       </div>
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="submitApply">
+      <div class="TpmButtonBG" :class="btnStatus&&isCalculation === 1?'':'noClick'" @click="submitApply">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -108,11 +109,17 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
         {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
       </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="distNoticeCostBefore" label="经销商确认函费用-谈判前(RMB) ">
+        {{ FormateNum((row.distNoticeCostBefore*1).toFixed(2)) }}
+      </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
         {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
         {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="distNoticeCostAfter" label="经销商确认函费用-谈判后(RMB)">
+        {{ FormateNum((row.distNoticeCostAfter*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
         <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
@@ -235,11 +242,17 @@
           <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationCost" title="V3谈判前费用（RMB）">
             {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
           </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="distNoticeCostBefore" title="经销商确认函费用-谈判前(RMB) ">
+            {{ FormateNum((row.distNoticeCostBefore*1).toFixed(2)) }}
+          </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationPriceAve" title="V3谈判后均价（RMB/Tin）">
             {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationCost" title="V3谈判后费用（RMB）">
             {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="distNoticeCostAfter" title="经销商确认函费用-谈判后(RMB)">
+            {{ FormateNum((row.distNoticeCostAfter*1).toFixed(2)) }}
           </vxe-table-column>
           <vxe-table-column width="160" align="right" field="avePriceDifference" title="均价差值（%）">
             <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
@@ -436,6 +449,8 @@ export default {
       btnStatus: true,
       usernameLocal: '',
       maxheight: getHeightHaveTab(),
+      isCalculation:false,
+      currentIsCalculation:0, //当前是否属于计算节点
     }
   },
   computed: {},
@@ -473,6 +488,20 @@ export default {
     this.getAllMonth()
   },
   methods: {
+    //计算
+    Calculation() {
+      API.calculation({
+        yearAndMonth: this.localDate,
+        channelName: this.filterObj.channelName,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          this.$message.success(`计算成功`)
+        } else {
+           this.$message.info(`计算失败`)
+        }
+      })
+    },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
         this.monthList=res.data
@@ -1085,12 +1114,21 @@ export default {
       })
         .then((res) => {
           if (res.code === 1000) {
+            this.currentIsCalculation=0
             if (
               res.data.version === 'V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.submitBtn === 0
             ) {
               this.btnStatus = true
+              if(res.data.activityName=='V3谈判前调整'||res.data.activityName=='V3谈判后调整') {
+                this.currentIsCalculation=1
+                if(res.data.activityName=='V3谈判前调整') {
+                  this.isCalculation=this.tableData[0].isCalculationBefore==0?0:1
+                } else if(res.data.activityName=='V3谈判后调整') {
+                  this.isCalculation=this.tableData[0].isCalculationAfter==0?0:1
+                }
+              }
             } else {
               this.btnStatus = false
             }

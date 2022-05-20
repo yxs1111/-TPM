@@ -1,12 +1,4 @@
-<!--
- * @Description: 
- * @Date: 2021-11-16 14:01:16
-<<<<<<< HEAD
- * @LastEditTime: 2022-05-10 15:50:14
-=======
- * @LastEditTime: 2022-05-09 15:49:48
->>>>>>> dev
--->
+
 <template>
   <div class="MainContent">
     <div class="SelectBarWrap">
@@ -14,7 +6,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item in customerArr" :key="item.id" :label="item.customerName" :value="item.customerMdmCode" />
+            <el-option v-for="item in customerArr" :key="item.id" :label="item.label" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -56,9 +48,9 @@
       </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
     </div>
-    <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :span-method="objectSpanMethod" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
+    <el-table :data="tableData" :key="tableKey" :max-height="maxheight"  :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -206,8 +198,8 @@
         <div class="termInfo">
           <div class="selectCustomer">
             <span class="selectBar">客户合同</span>
-            <el-select v-model="addDialog.index" class="my-el-input" filterable @change="getDetail" clearable placeholder="请选择">
-              <el-option v-for="item,index in customerArr" :key="item.id" :label="item.customerName" :value="index" />
+            <el-select v-model="addDialog.index" class="my-el-selectCustomer" filterable @change="getDetail" clearable placeholder="请选择">
+              <el-option v-for="item,index in customerArr" :key="item.id" :label="item.label" :value="index" />
             </el-select>
           </div>
           <el-button type="primary" class="TpmButtonBG" @click="getDetail">查询</el-button>
@@ -394,8 +386,29 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      spanArr: [], //行合并
-      pickerOptions:pickerOptions
+      selectDate:'', 
+      pickerOptions: {
+        onPick: (obj) => {
+          this.selectDate=obj.minDate
+          //若存在最大值，将已选中的值置空（下次可选另一年（且保证同年））
+          if(obj.maxDate) {
+            this.selectDate=''
+          }
+        },
+        // 限制年月
+        disabledDate: (time) => {
+          const date=new Date(this.selectDate)
+          const year = date.getFullYear()
+          //未选择初始日期时，不做限制
+          if (this.selectDate=='') {
+            return false
+          }
+          return (
+            //日期限制（同一年）
+            time.getFullYear() == year ? false : true
+          )
+        },
+      },
     }
   },
   mounted() {
@@ -465,7 +478,6 @@ export default {
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
         this.tableData = [...list]
-        this.getSpanArr(this.tableData)
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
@@ -476,7 +488,12 @@ export default {
     getCustomerList() {
       API.getCustomerContract({}).then((res) => {
         if (res.code === 1000) {
-          this.customerArr = res.data
+          let list=res.data
+            list.forEach(item=>{
+              item.contractDate=item.contractBeginDate.replaceAll('-','/')+' - '+item.contractEndDate.replaceAll('-','/')
+              item.label=`${item.customerName}(${item.contractDate})`
+            })
+            this.customerArr = list
         }
       })
     },
@@ -545,17 +562,17 @@ export default {
         this.$message.info("请先选择数据")
         return
       }
-      let ccIdList=[]
+      let IdList=[]
       this.checkArr.forEach(item=>{
-        ccIdList.push(item.ccId)
-      })
+        IdList.push(item.id)
+      }) 
       this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       })
         .then(() => {
-          API.submit(ccIdList).then((res) => {
+          API.submit(IdList).then((res) => {
             if (res.code === 1000) {
               this.getTableData()
               this.$message.success('提交成功')
@@ -657,8 +674,8 @@ export default {
       this.tableKey++
     },
     //导出数据
-    exportData() {
-      API.export({
+    async exportData() {
+      await API.exportDistributorContractInfo({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -669,7 +686,20 @@ export default {
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议录入 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        this.$message.success('经销商分摊协议导出成功!')
+      })
+      await API.exportDistributorContractDetail({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        distributorMdmCode: this.filterObj.distributorMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '经销商分摊协议录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('经销商分摊协议明细导出成功!')
       })
     },
     //新增数据 --弹窗展示
@@ -821,39 +851,9 @@ export default {
       //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
       // )
     },
-    //合并行
-    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      // columnIndex === xx 找到第xx列，实现合并随机出现的行数
-      if (columnIndex === 0) {
-        const _row = this.spanArr[rowIndex]
-        const _col = _row > 0 ? 1 : 0
-        return {
-          rowspan: _row,
-          colspan: _col,
-        }
-      }
-    },
-    // 因为要合并的行数是不固定的，此函数是实现合并随意行数的功能
-    getSpanArr(data) {
-      this.spanArr = []
-      this.pos = 0
-      for (var i = 0; i < data.length; i++) {
-        if (i === 0) {
-          // 如果是第一条记录（即索引是0的时候），向数组中加入１
-          this.spanArr.push(1)
-          this.pos = 0
-        } else {
-          if (data[i].customerName === data[i - 1].customerName) {
-            // 如果id相等就累加，并且push 0
-            this.spanArr[this.pos] += 1
-            this.spanArr.push(0)
-          } else {
-            // 不相等push 1
-            this.spanArr.push(1)
-            this.pos = i
-          }
-        }
-      }
+    //处于草稿状态可提交
+    checkSelectable(row) {
+      return row.contractState === '0' || row.contractState === '2'
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -949,6 +949,7 @@ export default {
     width: 180px !important;
   }
 }
+
 .PopoverContent {
   .PopoverContentTop {
     display: flex;
@@ -1102,6 +1103,17 @@ export default {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 240px !important;
+  }
+}
+.my-el-dialog .dialogContent .selectCustomer .my-el-selectCustomer {
+  width: 300px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 300px !important;
+  }
+  .el-input--suffix {
+    width: 300px !important;
   }
 }
 </style>

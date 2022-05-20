@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 16:38:34
+ * @LastEditTime: 2022-05-13 16:37:22
 -->
 <template>
   <div class="MainContent">
@@ -38,7 +38,7 @@
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <!-- <el-table-column type="selection" align="center" /> -->
+      <el-table-column type="selection" align="center" />
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -184,7 +184,7 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      ccId:null
+      ccId: null,
     }
   },
   mounted() {
@@ -193,7 +193,7 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
-    // this.getTableData()
+    this.getTableData()
     this.getCustomerList()
   },
   directives: { elDragDialog, permission },
@@ -220,10 +220,6 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      if (this.filterObj.customerMdmCode=='') {
-        this.$message.info('请选择客户')
-        return
-      }
       API.getApproveList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -244,7 +240,7 @@ export default {
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
-        this.ccId=this.tableData[0].ccId
+        this.ccId = this.tableData[0].ccId
         this.tempObj.tempInfo = null
       })
     },
@@ -295,11 +291,10 @@ export default {
     handleFunction(flag) {
       let obj = {
         opinion: flag ? 'agree' : 'reject',
-        ccId: this.ccId,
         approveDetail: {},
       }
       //判断当前数据 所属角色审批
-      this.tableData.forEach((item) => {
+      this.checkArr.forEach((item) => {
         if (item.name.indexOf('Package Owner') != -1) {
           obj.approveDetail[item.distributorId] = item.poApprovalComments
         } else if (item.name.indexOf('Finance') != -1) {
@@ -310,11 +305,11 @@ export default {
       API.approveDistContract(obj).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
-          if(flag) {
-              this.$message.success('审批成功！')
-            } else {
-              this.$message.success('驳回成功！')
-            }
+          if (flag) {
+            this.$message.success('审批成功！')
+          } else {
+            this.$message.success('驳回成功！')
+          }
         }
       })
     },
@@ -436,7 +431,7 @@ export default {
 }
 .seeActivity {
   height: 32px;
-  background: #D7E8F2;
+  background: #d7e8f2;
   border-radius: 6px;
   font-size: 16px;
   color: #4192d3;

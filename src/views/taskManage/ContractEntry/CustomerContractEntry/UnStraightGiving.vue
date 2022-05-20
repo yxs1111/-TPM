@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-09 15:50:13
+ * @LastEditTime: 2022-05-18 10:02:05
 -->
 <template>
   <div class="MainContent">
@@ -91,7 +91,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额">
+      <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
@@ -192,7 +192,7 @@
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
-          <span class="termItem">目标销售额:{{FormateNum(termInfo.saleAmount)}}</span>
+          <span class="termItem">目标销售额(RMB):{{FormateNum(termInfo.saleAmount)}}</span>
           <span
             class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
           <span class="termItem">系统生效时间:{{termInfo.effectiveBeginDate}}-{{termInfo.effectiveEndDate}}</span>
@@ -256,9 +256,10 @@
             </el-table-column>
             <el-table-column prop="remark" align="center" label="描述">
               <template slot-scope="scope">
-                <div v-show="scope.row.isNewData">
+                <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
+                  <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(0,scope.$index)">
                 </div>
                 <div v-show="!scope.row.isNewData">
                   {{ scope.row.remark }}
@@ -266,13 +267,13 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="addNewRowWrap">
-            <div class="addNewRow" @click="addNewRowToVariable" v-if="isEditor">
+          <div class="addNewRowWrap" v-if="isEditor">
+            <div class="addNewRow" @click="addNewRowToVariable">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
           </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="240" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -328,9 +329,10 @@
             </el-table-column>
             <el-table-column prop="remark" align="center" label="描述">
               <template slot-scope="scope">
-                <div v-show="scope.row.isNewData">
+                <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
+                  <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(1,scope.$index)">
                 </div>
                 <div v-show="!scope.row.isNewData">
                   {{ scope.row.remark }}
@@ -338,8 +340,8 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="addNewRowWrap">
-            <div class="addNewRow" @click="addNewRowToFix" v-if="isEditor">
+          <div class="addNewRowWrap" v-if="isEditor">
+            <div class="addNewRow" @click="addNewRowToFix">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
@@ -365,7 +367,7 @@ import {
   contractItemFixList,
   downloadFile,
   getCurrentYearRange,
-  pickerOptions
+  pickerOptions,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -421,7 +423,29 @@ export default {
       },
       isEditor: 0,
       isShowPopover: false,
-      pickerOptions: pickerOptions,
+      selectDate:'', 
+      pickerOptions: {
+        onPick: (obj) => {
+          this.selectDate=obj.minDate
+          //若存在最大值，将已选中的值置空（下次可选另一年（且保证同年））
+          if(obj.maxDate) {
+            this.selectDate=''
+          }
+        },
+        // 限制年月
+        disabledDate: (time) => {
+          const date=new Date(this.selectDate)
+          const year = date.getFullYear()
+          //未选择初始日期时，不做限制
+          if (this.selectDate=='') {
+            return false
+          }
+          return (
+            //日期限制（同一年）
+            time.getFullYear() == year ? false : true
+          )
+        },
+      },
     }
   },
   mounted() {
@@ -716,8 +740,8 @@ export default {
       this.getTableData()
     },
     //导出数据
-    exportData() {
-      API.export({
+    async exportData() {
+     await API.exportCustomerContractInfo({
         customerType: 3,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
@@ -727,8 +751,21 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        downloadFile(res, '间供客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('客户合同录入导出成功!')
+      })
+      await API.exportCustomerContractDetail({
+        customerType: 3,
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '间供客户合同录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('客户合同录入明细导出成功!')
       })
     },
     //编辑行数据
@@ -1019,6 +1056,7 @@ export default {
     },
     //条款明细保存
     confirmTermsDetail() {
+      let isCheck = 1 //费比校验
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -1031,6 +1069,9 @@ export default {
       }
       this.termVariableData.forEach((item) => {
         if (item.isNewData) {
+          if (item.costRatio == '' || item.costRatio == 0) {
+            isCheck = 0
+          }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
             conditionsItem:
@@ -1045,6 +1086,9 @@ export default {
       })
       this.termFixData.forEach((item) => {
         if (item.isNewData) {
+          if (item.costRatio == '' || item.costRatio == 0) {
+            isCheck = 0
+          }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
             conditionsItem: this.contractItemFixList[item.contractItem].code,
@@ -1063,6 +1107,10 @@ export default {
       }
       if (this.TotalData.totalCost > this.termInfo.saleAmount) {
         this.$message.info('Total 含税费用应该小于目标销售额')
+        return
+      }
+      if (!isCheck) {
+        this.$message.info('费比不能为空,请填写费比')
         return
       }
       console.log(obj)
@@ -1125,6 +1173,15 @@ export default {
       this.$nextTick(function () {
         this.$refs.termFixTable.bodyWrapper.scrollTop = scrollHeight
       })
+    },
+    deleteTerm(flag, index) {
+      //variable 明细删除
+      if (flag == 0) {
+        this.termVariableData.splice(index, 1)
+      } else {
+        //fixed 明细删除
+        this.termFixData.splice(index, 1)
+      }
     },
     //费比更改
     changeCostRate(index, row) {
@@ -1397,6 +1454,15 @@ export default {
   }
   .el-input--suffix {
     width: 280px !important;
+  }
+}
+.TermDetail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .my-el-detail {
+    width: 400px !important;
+    margin: 0 auto;
   }
 }
 </style>

@@ -6,19 +6,19 @@
     <el-table v-show="svgType === 'instance'" ref="activityHistoryTable" :data="activityHistory.data" border fit stripe highlight-current-row>
       <el-table-column align="center" type="selection" width="55" />
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
-        {{ scopeProps.$index + 1 }}
+        {{ activityHistory.data.length-scopeProps.$index}}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="审核人" align="center">
+      <el-table-column v-slot="{row}" label="办理人" align="center">
         {{ row.assignee }}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="审核节点" align="center">
+      <el-table-column v-slot="{row}" label="办理节点" align="center">
         {{ row.activityName }}
       </el-table-column>
-      <el-table-column v-slot="{row}" label="审核时间" align="center">
+      <el-table-column v-slot="{row}" label="办理时间" align="center">
         <em class="el-icon-time" />
         <span>{{ parseJson(row.endTime, '{y}-{m}-{d} {h}:{i}') }}</span>
       </el-table-column>
-      <el-table-column v-slot="{row}" label="审核结果" align="center">
+      <el-table-column v-slot="{row}" label="办理结果" align="center">
         {{ row.result }}
       </el-table-column>
     </el-table>
