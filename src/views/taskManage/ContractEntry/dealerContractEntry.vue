@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-16 15:08:46
+ * @LastEditTime: 2022-05-20 13:26:51
 -->
 <template>
   <div class="MainContent">
@@ -678,8 +678,8 @@ export default {
       this.tableKey++
     },
     //导出数据
-    exportData() {
-      API.export({
+    async exportData() {
+      await API.exportDistributorContractInfo({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -690,7 +690,20 @@ export default {
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议录入 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        this.$message.success('经销商分摊协议导出成功!')
+      })
+      await API.exportDistributorContractDetail({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        distributorMdmCode: this.filterObj.distributorMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '经销商分摊协议录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('经销商分摊协议明细导出成功!')
       })
     },
     //新增数据 --弹窗展示

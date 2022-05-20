@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-05-18 10:07:42
+ * @LastEditTime: 2022-05-20 13:23:36
 -->
 <template>
   <div class="app-container">
@@ -45,7 +45,8 @@
       <el-table-column width="280" align="center" prop="startAndEndVTwo" label="V2" />
       <el-table-column width="280" align="center" prop="startAndEndVThree" label="V3" />
       <el-table-column width="150" align="center" prop="leWeek" label="Le销量Week" />
-      <el-table-column width="120" align="center" prop="leDate" label="实际销量日期" />
+      <el-table-column width="150" align="center" prop="leVtwoDate" label="V2Le销量日期" />
+      <el-table-column width="150" align="center" prop="leVthreeDate" label="V3实际销量日期" />
       <el-table-column width="150" align="center" prop="openingStatus" label="开启状态">
         <template slot-scope="scope">
           <div>
@@ -124,8 +125,17 @@
               <el-option v-for="item,index in ['W1','W2','W3','W4','W5']" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="实际销量日期" prop="leDate"  class="el_Dialog_dateRange el-form_le">
-            <el-date-picker v-model="ruleForm.leDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
+          <el-form-item label="V2Le销量日期" prop="leVtwoDate"  class="el_Dialog_dateRange el-form_le">
+            <el-date-picker v-model="ruleForm.leVtwoDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="V3实际销量日期" prop="leVthreeDate"  class="el_Dialog_dateRange el-form_levThree">
+            <el-date-picker v-model="ruleForm.leVthreeDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
+            </el-date-picker>
+          </el-form-item>
+          
+          <el-form-item label="V2Le销量日期" prop="leVtwoDate"  class="el_Dialog_dateRange" style="visibility: hidden;width:50%">
+            <el-date-picker v-model="ruleForm.leVtwoDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>
         </el-form>
@@ -197,7 +207,8 @@ export default {
         startAndEndVTwo: '',
         startAndEndVThree: '',
         leWeek: 'W3',
-        leDate: '',
+        leVthreeDate: '',
+        leVtwoDate: '',
       },
       rules: {
         activityMonth: [
@@ -242,7 +253,14 @@ export default {
             trigger: 'blur',
           },
         ],
-        leDate: [
+        leVtwoDate: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        leVthreeDate: [
           {
             required: true,
             message: 'This field is required',
@@ -341,7 +359,8 @@ export default {
         startAndEndVTwo: '',
         startAndEndVThree: '',
         leWeek: 'W3',
-        leDate: '',
+        leVthreeDate: '',
+        leVtwoDate: '',
       }
     },
     //提交form
@@ -366,7 +385,8 @@ export default {
                 this.ruleForm.startAndEndVThree
               ),
               leWeek:this.ruleForm.leWeek,
-              leDate:this.ruleForm.leDate,
+              leVtwoDate:this.ruleForm.leVtwoDate,
+              leVthreeDate:this.ruleForm.leVthreeDate,
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`${this.isEditor?'修改':'添加'}成功`)
@@ -432,7 +452,8 @@ export default {
         startAndEndVTwo: this.getFormatDateRange(obj.startAndEndVTwo),
         startAndEndVThree: this.getFormatDateRange(obj.startAndEndVThree),
         leWeek: obj.leWeek,
-        leDate: obj.leDate,
+        leVtwoDate: obj.leVtwoDate,
+        leVthreeDate: obj.leVthreeDate,
       }
     },
     //取消
@@ -644,5 +665,8 @@ export default {
 }
 .el-form_le .el-form-item__label {
   margin-left: -65px;
+}
+.el-form_levThree .el-form-item__label {
+  margin-left: -85px;
 }
 </style>
