@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-23 10:29:10
+ * @LastEditTime: 2022-05-23 11:06:27
 -->
 <template>
   <div class="MainContent">
@@ -38,6 +38,8 @@
             <el-option v-for="(item, index) in ContractItemList" :key="index" :label="item.contractItem" :value="item.contractItemCode" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -50,8 +52,8 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve">
-        <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
+      <div class="TpmButtonBG" @click="approve">
+        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
     </div>
@@ -569,7 +571,7 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      this.event=event
+      this.event = event
     },
     // 关闭导入
     closeImportDialog() {
@@ -609,9 +611,9 @@ export default {
     // 确认导入
     confirmImport() {
       API.importSave({
-        yearAndMonth:this.filterObj.month,
-        channelCode:this.filterObj.channelCode,
-        costItemCode:'KA rebate',
+        yearAndMonth: this.filterObj.month,
+        channelCode: this.filterObj.channelCode,
+        costItemCode: 'KA rebate',
         isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -653,7 +655,7 @@ export default {
           customerCode: this.filterObj.customerCode,
           contractItemCode: this.filterObj.contractItemCode,
           distributorCode: this.filterObj.distributorCode,
-          costItemCode:'KA rebate'
+          costItemCode: 'KA rebate',
         }).then((res) => {
           downloadFile(
             res,
@@ -679,7 +681,7 @@ export default {
               API.approve({
                 mainId: mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit:0,//申请0,审批1
+                isSubmit: 0, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')

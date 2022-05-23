@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-23 10:29:40
+ * @LastEditTime: 2022-05-23 11:05:39
 -->
 <template>
   <div class="MainContent">
@@ -38,6 +38,8 @@
             <el-option v-for="(item, index) in ContractItemList" :key="index" :label="item.contractItem" :value="item.contractItemCode" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -50,11 +52,11 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(1)">
-        <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
+      <div class="TpmButtonBG" @click="approve(1)">
+        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(0)">
+      <div class="TpmButtonBG" @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -387,7 +389,7 @@ export default {
       tableData: [],
       ContractItemList: [],
       maxheight: getHeightHaveTab(),
-      distributorArr:[],
+      distributorArr: [],
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
       mainId: '',
@@ -455,7 +457,7 @@ export default {
           contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
           distributorCode: this.filterObj.distributorCode,
-          costItemCode:'KA rebate'
+          costItemCode: 'KA rebate',
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -585,7 +587,7 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      this.event=event
+      this.event = event
     },
     // 关闭导入
     closeImportDialog() {
@@ -612,10 +614,10 @@ export default {
           } else {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
-            let isError=this.ImportData.findIndex(item=>{
-              item.judgmentType=='error'
+            let isError = this.ImportData.findIndex((item) => {
+              item.judgmentType == 'error'
             })
-            this.saveBtn = isError==-1?1:0
+            this.saveBtn = isError == -1 ? 1 : 0
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -625,9 +627,9 @@ export default {
     // 确认导入
     confirmImport() {
       API.importSave({
-        yearAndMonth:this.filterObj.month,
-        channelCode:this.filterObj.channelCode,
-        costItemCode:'KA rebate',
+        yearAndMonth: this.filterObj.month,
+        channelCode: this.filterObj.channelCode,
+        costItemCode: 'KA rebate',
         isSubmit: 1,
       }).then((res) => {
         if (res.code == 1000) {
@@ -652,7 +654,10 @@ export default {
           isSubmit: 1,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V3_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(
+            res,
+            'V3_HIH Rebate异常信息 -' + timestamp + '.xlsx'
+          ) // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -669,7 +674,7 @@ export default {
           customerCode: this.filterObj.customerCode,
           contractItemCode: this.filterObj.contractItemCode,
           distributorCode: this.filterObj.distributorCode,
-          costItemCode:'KA rebate'
+          costItemCode: 'KA rebate',
         }).then((res) => {
           this.downloadFile(
             res,
@@ -694,7 +699,7 @@ export default {
               API.approve({
                 mainId: mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit:1,//申请0,审批1
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -726,7 +731,7 @@ export default {
               API.approve({
                 mainId: mainId, // 主表id
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit:1,//申请0,审批1
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')
