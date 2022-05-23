@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-20 16:29:36
+ * @LastEditTime: 2022-05-23 10:49:22
 -->
 <template>
   <div class="MainContent">
@@ -38,9 +38,11 @@
             <el-option v-for="(item, index) in ContractItemList" :key="index" :label="item.contractItem" :value="item.contractItemCode" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
-          <img src="@/assets/images/export.png" alt="" />
+          <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
@@ -608,7 +610,7 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      
+      this.event=event
     },
     // 关闭导入
     closeImportDialog() {
@@ -638,7 +640,7 @@ export default {
             let isError=this.ImportData.findIndex(item=>{
               item.judgmentType=='error'
             })
-            this.isCheck = isError==-1?1:0
+            this.saveBtn = isError==-1?1:0
           }
         } else {
           this.$message.info(this.messageMap.importError)

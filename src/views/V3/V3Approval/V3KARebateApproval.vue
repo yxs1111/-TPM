@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 16:02:17
+ * @LastEditTime: 2022-05-23 10:29:40
 -->
 <template>
   <div class="MainContent">
@@ -585,7 +585,7 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      
+      this.event=event
     },
     // 关闭导入
     closeImportDialog() {
@@ -615,7 +615,7 @@ export default {
             let isError=this.ImportData.findIndex(item=>{
               item.judgmentType=='error'
             })
-            this.isCheck = isError==-1?1:0
+            this.saveBtn = isError==-1?1:0
           }
         } else {
           this.$message.info(this.messageMap.importError)

@@ -40,7 +40,8 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
-        <div class="OpertionBar">
+      </div>
+      <div class="OpertionBar">
           <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
           <div class="TpmButtonBG" @click="exportData">
             <img src="../../../assets/images/export.png" alt="">
@@ -48,8 +49,6 @@
             <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
           </div>
         </div>
-      </div>
-
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">

@@ -40,20 +40,14 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出</span>
-        </div>
-
       </div>
-      <!-- <div class="OpertionBar">
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-      </div> -->
+      </div>
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
