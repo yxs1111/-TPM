@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-20 13:26:51
+ * @LastEditTime: 2022-05-23 11:53:49
 -->
 <template>
   <div class="MainContent">
@@ -37,6 +37,8 @@
             <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportData">
           <img src="@/assets/images/export.png" alt="">

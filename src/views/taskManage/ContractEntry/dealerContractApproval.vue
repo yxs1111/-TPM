@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-13 16:37:22
+ * @LastEditTime: 2022-05-23 11:56:34
 -->
 <template>
   <div class="MainContent">
@@ -25,6 +25,8 @@
             end-placeholder="结束月份">
           </el-date-picker>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportData">
           <img src="@/assets/images/export.png" alt="">
@@ -39,6 +41,7 @@
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
+      
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
