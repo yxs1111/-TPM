@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-05-07 14:53:28
+ * @LastEditTime: 2022-05-23 09:13:08
 -->
 <template>
   <div class="dashboard-container">
@@ -242,7 +242,7 @@
               <el-timeline>
                 <el-timeline-item color="#4192d3" v-for="item,index in TodoList" :key="index">
                   <div class="TimeLineli">
-                    <div class="TimeLineTitleli">{{item.createTime?item.createTime.substring(0,10):""}}</div>
+                    <div class="TimeLineTitleli">{{item.yearAndMonth}}</div>
                     <div class="TimeLineTitleli">{{item.version}}</div>
                     <div class="TimeLineTitleli">{{item.activityName}}</div>
                     <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>
@@ -263,9 +263,9 @@
             </div>
             <div class="TimeLineBar">
               <el-timeline>
-                <el-timeline-item color="#4192d3" v-for="item,index in TodoList" :key="index">
+                <el-timeline-item color="#4192d3" v-for="item,index in completeData" :key="index">
                   <div class="TimeLineli">
-                    <div class="TimeLineTitleli">{{item.dueDate?item.dueDate.substring(0,10):""}}</div>
+                    <div class="TimeLineTitleli">{{item.yearAndMonth}}</div>
                     <div class="TimeLineTitleli">{{item.version}}</div>
                     <div class="TimeLineTitleli">{{item.name}}</div>
                     <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>

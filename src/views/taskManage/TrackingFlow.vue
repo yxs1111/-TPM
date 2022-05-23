@@ -1,4 +1,4 @@
-<!--
+<!--TodoList
  * @Description: 
  * @Date: 2021-11-16 14:01:16
  * @LastEditTime: 2022-04-11 10:20:41
@@ -13,7 +13,7 @@
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
         </div>
-         <div class="Selectli">
+        <div class="Selectli">
           <span class="SelectliTitle">Cost Type:</span>
           <el-select v-model="filterObj.CostType" clearable placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
@@ -49,7 +49,7 @@
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
       <el-table-column align="center" prop="minePackageName" label="Mine Package" width="250"> </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
-      <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态"> 
+      <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">
         {{row.processStatus===2?'已完成':'进行中'}}
       </el-table-column>
       <el-table-column width="280" align="center" prop="createBy" label="发起人"> </el-table-column>
@@ -58,11 +58,11 @@
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="280" align="center" prop="assignee" label="办理人"> 
+      <el-table-column v-slot={row} width="280" align="center" prop="assignee" label="办理人">
         <!-- {{setSplitAssignee(row.assignee)}} -->
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
-      <el-table-column width="150" align="center"  label="查看" fixed="right">
+      <el-table-column width="150" align="center" label="查看" fixed="right">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程
@@ -112,7 +112,7 @@ export default {
       CostTypeList: [],
       channelOptons: [],
       minePackageList: [],
-      processStatusList: ["进行中",'已完成'],
+      processStatusList: ['进行中', '已完成'],
       versionList: ['Final'],
       flowDiagram: {
         visible: false,
@@ -132,7 +132,7 @@ export default {
     FlowDiagram,
   },
   directives: { elDragDialog, permission },
-  watch:{
+  watch: {
     'filterObj.CostType'() {
       this.filterObj.MinePackageName = ''
       this.getMinePackageSelect()
@@ -144,10 +144,10 @@ export default {
       API.getInvestCpVList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        yearAndMonth:this.filterObj.yearAndMonth,
-        minePackageName:this.filterObj.MinePackageName,
-        channelCode:this.filterObj.channelCode,
-        processStatus:this.filterObj.processStatus,
+        yearAndMonth: this.filterObj.yearAndMonth,
+        minePackageName: this.filterObj.MinePackageName,
+        channelCode: this.filterObj.channelCode,
+        processStatus: this.filterObj.processStatus,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -177,14 +177,15 @@ export default {
       })
     },
     getMinePackageSelect() {
-      selectAPI.queryMinePackageSelect({
-        parentId: this.filterObj.CostType,
-      }).then((res) => {
-        if (res.code == 1000) {
-         
-          this.minePackageList = res.data
-        }
-      })
+      selectAPI
+        .queryMinePackageSelect({
+          parentId: this.filterObj.CostType,
+        })
+        .then((res) => {
+          if (res.code == 1000) {
+            this.minePackageList = res.data
+          }
+        })
     },
     search() {
       this.pageNum = 1
@@ -199,13 +200,16 @@ export default {
     // 导出数据
     exportExcel() {},
     setSplitAssignee(value) {
-      let list=value.split(',')
-      let formatString=''
-      for (let index = 0; index <list.length; index++) {
-        formatString+=`${list[index]}<br>`
-        
+      if (!value) {
+        return null
+      } else {
+        let list = value.split(',')
+        let formatString = ''
+        for (let index = 0; index < list.length; index++) {
+          formatString += `${list[index]}<br>`
+        }
+        return formatString
       }
-      return formatString
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
