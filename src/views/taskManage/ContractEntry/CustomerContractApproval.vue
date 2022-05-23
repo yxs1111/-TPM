@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-23 11:53:23
+ * @LastEditTime: 2022-05-23 13:50:04
 -->
 <template>
   <div class="MainContent">
@@ -885,6 +885,17 @@ export default {
     width: 280px !important;
   }
 }
+.my-el-select_dialog {
+  width: 120px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 120px;
+  }
+  .el-input--suffix {
+    width: 120px !important;
+  }
+}
 </style>
 <style lang="less">
 .contract_firstRow {
@@ -907,17 +918,7 @@ export default {
   color: #666;
 }
 
-.my-el-select_dialog {
-  width: 120px !important;
-  border-radius: 5px;
-  .el-input__inner {
-    height: 37px;
-    width: 120px;
-  }
-  .el-input--suffix {
-    width: 120px !important;
-  }
-}
+
 .MainContent .select_date {
   width: 240px !important;
   .el-date-editor.el-input,

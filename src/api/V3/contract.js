@@ -1,13 +1,14 @@
 /*
  * @Description: V3合同
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-11 15:33:46
+ * @LastEditTime: 2022-05-23 15:24:46
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
   url: '/cityplan/investCpContractVThreeDetail',
+  importUrl: '/cityplan/investCpContractVThreeDetailEb',
   // 申请-HIH/KA查询列表
   getApplyPage(params) {
     return requestApi.request_get(this.url+'/getApplyPage', params)
@@ -32,7 +33,7 @@ export default {
   },
   // 导入文件
   formatCheck(params) {
-    return requestApi.request_post(this.url+'/formatCheck', params)
+    return requestApi.request_post(this.importUrl+'/formatCheck', params)
   },
   // 保存
   importSave(params) {
