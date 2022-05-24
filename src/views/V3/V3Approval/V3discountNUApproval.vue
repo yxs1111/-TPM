@@ -436,6 +436,7 @@ export default {
         exportType: 'exportApproveTemplate',
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelCode,
+        yearAndMonth:this.localDate
       }).then((response) => {
         const fileName = `${this.localDate}_NU_${this.filterObj.channelCode}_V3审批.xlsx`
         //   res.data:请求到的二进制数据

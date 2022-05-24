@@ -536,6 +536,7 @@ export default {
         exportType: 'exportTemplate',
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelCode,
+        yearAndMonth:this.localDate
         // channelName: 'EC'
       }).then((response) => {
         const fileName = `${this.localDate}_NU_${this.filterObj.channelCode}_V3申请.xlsx`
