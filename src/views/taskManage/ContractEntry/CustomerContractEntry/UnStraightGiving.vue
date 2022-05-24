@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-23 11:52:58
+ * @LastEditTime: 2022-05-24 15:32:57
 -->
 <template>
   <div class="MainContent">
@@ -1059,6 +1059,7 @@ export default {
     //条款明细保存
     confirmTermsDetail() {
       let isCheck = 1 //费比校验
+      let Repeat=0 //contract Item  是否重复
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -1073,6 +1074,13 @@ export default {
         if (item.isNewData) {
           if (item.costRatio == '' || item.costRatio == 0) {
             isCheck = 0
+          }
+          //行（contract Item  条件类型 ）不能重复
+          let RepeatList= this.termVariableData.filter(vItem=>{
+           return vItem.contractItem==item.contractItem&&vItem.conditions==item.conditions
+          })
+          if(RepeatList.length>1) {
+            Repeat=1
           }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
@@ -1091,6 +1099,13 @@ export default {
           if (item.costRatio == '' || item.costRatio == 0) {
             isCheck = 0
           }
+          //行（contract Item  条件类型 ）不能重复
+          let RepeatList= this.termFixData.filter(vItem=>{
+           return vItem.contractItem==item.contractItem&&vItem.conditions==item.conditions
+          })
+          if(RepeatList.length>1) {
+            Repeat=1
+          }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
             conditionsItem: this.contractItemFixList[item.contractItem].code,
@@ -1102,7 +1117,6 @@ export default {
           obj.fixed.push(detailObj)
         }
       })
-
       if (this.TotalData.totalPoint > 100) {
         this.$message.info('Total 费比应该小于100%')
         return
@@ -1113,6 +1127,10 @@ export default {
       }
       if (!isCheck) {
         this.$message.info('费比不能为空,请填写费比')
+        return
+      }
+      if (Repeat) {
+        this.$message.info('contract Item加条件类型不能重复')
         return
       }
       console.log(obj)

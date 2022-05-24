@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-24 09:43:17
+ * @LastEditTime: 2022-05-24 11:23:17
 -->
 <!--
  * @Description: 
@@ -239,7 +239,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="系统判定内容">
+      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -463,8 +463,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="系统判定内容">
-            </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
             <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -586,7 +584,7 @@ export default {
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          this.isSubmit = this.tableData[0].isSubmit
+          // this.isSubmit = this.tableData[0].isSubmit
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })
@@ -601,7 +599,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.activityName.indexOf('V3')!=-1 &&
               res.data.assignee.indexOf(this.usernameLocal) != -1&&this.tableData[0].isSubmit
             ) {
               //本人可以提交
@@ -777,7 +775,7 @@ export default {
           isSubmit: 1,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(
+          downloadFile(
             res,
             'V3_HIH Rebate异常信息 -' + timestamp + '.xlsx'
           ) // 自定义Excel文件名
@@ -799,9 +797,9 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           costItemCode: 'HIH rebate',
         }).then((res) => {
-          this.downloadFile(
+          downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V3申请.xlsx`
+            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V3审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })

@@ -1,7 +1,7 @@
 /*
  * @Description: V3合同
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-23 15:24:46
+ * @LastEditTime: 2022-05-24 11:03:55
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -69,7 +69,7 @@ export default {
   // 导出校验数据
   downCheckData(params){
     return request({
-      url: this.url+'/downCheckData',
+      url: this.importUrl+'/downCheckData',
       method: 'get',
       params: params,
       responseType: 'blob'

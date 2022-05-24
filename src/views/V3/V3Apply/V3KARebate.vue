@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-23 17:14:27
+ * @LastEditTime: 2022-05-24 14:20:53
 -->
 <template>
   <div class="MainContent">
@@ -48,11 +48,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="approve">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
@@ -504,6 +504,9 @@ export default {
       ContractItemList: [],
       distributorArr: [],
       maxheight: getHeightHaveTab(),
+      isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSelf: 0, //是否是当前审批人
+      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -577,6 +580,7 @@ export default {
           this.pageSize = response.data.pageSize
           this.total = response.data.total
           this.isSubmit = this.tableData[0].isSubmit
+          this.isGainLe = this.tableData[0].isGainLe
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })
@@ -591,7 +595,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version="V3"  &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交

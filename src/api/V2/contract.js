@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-11 15:27:48
+ * @LastEditTime: 2022-05-24 10:40:56
  */
 /*
  * @Description: V1 合同
@@ -99,7 +99,7 @@ export default {
   // 导出校验数据
   downCheckData(params){
     return request({
-      url: this.url+'/downCheckData',
+      url: this.importUrl+'/downCheckData',
       method: 'get',
       params: params,
       responseType: 'blob'
