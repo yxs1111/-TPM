@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-23 17:21:28
+ * @LastEditTime: 2022-05-24 09:43:17
 -->
 <!--
  * @Description: 
@@ -53,15 +53,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(1)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(0)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -602,13 +602,13 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V3' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.assignee.indexOf(this.usernameLocal) != -1&&this.tableData[0].isSubmit
             ) {
               //本人可以提交
-              this.isSelf = true
+              this.isSubmit = false
             } else {
               //其他人禁用
-              this.isSelf = false
+               this.isSubmit = true
             }
           }
         })

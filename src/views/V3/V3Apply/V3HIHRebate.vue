@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-23 16:24:58
+ * @LastEditTime: 2022-05-24 09:28:06
 -->
 <template>
   <div class="MainContent">
@@ -48,11 +48,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG"  :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="approve">
+      <div class="TpmButtonBG"  :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
@@ -622,6 +622,7 @@ export default {
           this.pageSize = response.data.pageSize
           this.total = response.data.total
           this.isSubmit = this.tableData[0].isSubmit
+          this.isGainLe = this.tableData[0].isGainLe
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })
