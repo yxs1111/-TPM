@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-24 09:28:06
+ * @LastEditTime: 2022-05-24 09:48:44
 -->
 <template>
   <div class="MainContent">
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
       <div class="TpmButtonBG"  :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
@@ -55,6 +55,10 @@
       <div class="TpmButtonBG"  :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
+      </div>
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+          <span class="tipStar">*</span>
+          注意事项：若未获取到LE销量，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -549,6 +553,7 @@ export default {
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
+      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -637,7 +642,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.activityName.indexOf("V3") != -1 &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -905,4 +910,21 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+.tip {
+  color: #eb4f48;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #eb4f48;
+}
+</style>
