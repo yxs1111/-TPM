@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-24 11:23:17
+ * @LastEditTime: 2022-05-24 16:59:08
 -->
 <!--
  * @Description: 
@@ -789,7 +789,7 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportApproveExcel({
+        API.downApproveExcelTemplate({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,

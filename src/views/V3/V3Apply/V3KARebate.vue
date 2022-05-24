@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-24 14:20:53
+ * @LastEditTime: 2022-05-24 17:25:29
 -->
 <template>
   <div class="MainContent">
@@ -478,7 +478,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V3/contract'
 export default {
-  name: 'V1HIHRebate',
+  name: 'V3KARebate',
   directives: { elDragDialog, permission },
 
   data() {
@@ -717,6 +717,7 @@ export default {
     },
     // 校验数据
     checkImport() {
+      this.ImportData = []
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
@@ -732,9 +733,10 @@ export default {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              item.judgmentType == 'error'
+              return item.judgmentType == 'error'
             })
-            this.saveBtn = isError == -1 ? 1 : 0
+            console.log(isError);
+            this.saveBtn = isError == -1
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -782,7 +784,7 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportApplyExcel({
+        API.downApplyExcelTemplate({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,

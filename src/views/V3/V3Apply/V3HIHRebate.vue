@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-24 09:48:44
+ * @LastEditTime: 2022-05-24 17:30:12
 -->
 <template>
   <div class="MainContent">
@@ -779,8 +779,9 @@ export default {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              item.judgmentType == 'error'
+              return item.judgmentType == 'error'
             })
+            console.log(isError);
             this.saveBtn = isError == -1 ? 1 : 0
           }
         } else {
@@ -829,7 +830,7 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportApplyExcel({
+        API.downApplyExcelTemplate({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
