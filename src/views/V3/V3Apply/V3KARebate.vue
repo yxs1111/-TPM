@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-25 10:07:11
+ * @LastEditTime: 2022-05-25 17:16:04
 -->
 <template>
   <div class="MainContent">
@@ -417,9 +417,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="adjustedCost" label="V3实际合同费用-调整后(RMB)">
+            <el-table-column width="320" align="right" prop="adjustedCost" label="V3实际合同费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V3实际合同费用-调整后(RMB)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>V3实际合同费用-调整后(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -427,9 +427,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="costDeptName" label="费用归属部门">
+            <el-table-column width="320" align="right" prop="costDeptName" label="费用归属部门">
               <template v-slot:header>
-                <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -437,13 +437,23 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="ratioDifference" label="点数差值(%)">
+            <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
-                <div>点数差值(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>点数差值(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ formatNum(scope.row.ratioDifference) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="saleVolumeDifference" label="销售额差值（%）">
+              <template v-slot:header>
+                <div>销售额差值（%）<br><span class="subTitle">KA+经销商+region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.saleVolumeDifference) }}
                 </div>
               </template>
             </el-table-column>

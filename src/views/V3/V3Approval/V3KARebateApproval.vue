@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-25 10:07:24
+ * @LastEditTime: 2022-05-25 17:17:40
 -->
 <template>
   <div class="MainContent">
@@ -210,6 +210,16 @@
             {{ formatNum(scope.row.ratioDifference) }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column width="240" align="right" prop="saleVolumeDifference" label="销售额差值（%）">
+            <template v-slot:header>
+              <div>销售额差值（%）<br><span class="subTitle">KA+经销商+region</span></div>
+            </template>
+            <template slot-scope="scope">
+              <div>
+                {{ formatNum(scope.row.saleVolumeDifference) }}
+              </div>
+            </template>
       </el-table-column>
       <el-table-column width="240" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>

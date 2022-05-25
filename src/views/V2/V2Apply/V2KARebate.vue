@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-25 16:32:15
+ * @LastEditTime: 2022-05-25 17:07:04
 -->
 <template>
   <div class="MainContent">
@@ -60,9 +60,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planNewUserNum" label="V1计划销售额IMK(RMB)">
+      <el-table-column width="220" align="right" prop="planNewUserNum" label="V1计划销售额GSV(RMB)">
         <template v-slot:header>
-          <div>V1计划销售额IMK(RMB)<br><span class="subTitle">kA</span></div>
+          <div>V1计划销售额GSV(RMB)<br><span class="subTitle">kA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -90,9 +90,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="V2预估销售额IMK-默认(RMB)">
+      <el-table-column width="240" align="right" prop="planCost" label="V2预估销售额GSV-默认(RMB)">
         <template v-slot:header>
-          <div>V2预估销售额IMK-默认(RMB)<br><span class="subTitle">kA</span></div>
+          <div>V2预估销售额GSV-默认(RMB)<br><span class="subTitle">kA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -110,45 +110,15 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="V2预估合同点数-调整后(%)">
-        <template v-slot:header>
-          <div>V2预估合同点数-调整后(%)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedRatio) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="260" align="right" prop="planCost" label="V2预估销售额IMK-调整后(RMB)">
-        <template v-slot:header>
-          <div>V2预估销售额IMK-调整后(RMB)<br><span class="subTitle">kA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedSalesAmount) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="240" align="right" prop="planCost" label="V2预估合同费用-调整后(RMB)">
-        <template v-slot:header>
-          <div>V2预估合同费用-调整后(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedCost) }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column  width="220" align="right" prop="costDeptName" label="费用归属部门">
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
+      <el-table-column width="240" align="right" prop="saleVolumeDifference" label="销售额差值（%）">
         <template v-slot:header>
-          <div>点数差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
+          <div>销售额差值（%）<br><span class="subTitle">kA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.ratioDifference) }}
+            {{ formatNum(scope.row.saleVolumeDifference) }}
           </div>
         </template>
       </el-table-column>
