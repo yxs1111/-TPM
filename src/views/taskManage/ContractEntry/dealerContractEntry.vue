@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-23 11:53:49
+ * @LastEditTime: 2022-05-25 14:08:58
 -->
 <template>
   <div class="MainContent">
@@ -296,10 +296,10 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="contractState" align="center" label="合同状态">
+              <el-table-column prop="contractState" align="center" label="操作">
                 <template slot-scope="scope">
                   <div class="contractStatusWrap">
-                    {{ scope.row.contractStateName }}
+                    <img  src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteItem(scope.$index)">
                   </div>
                 </template>
               </el-table-column>
@@ -797,6 +797,10 @@ export default {
         index: '',
         customerMdmCode: '',
       }
+    },
+    //新增经销商 -- 删除
+    deleteItem(index) {
+      this.addDialogDealerList.splice(index,1)
     },
     //确认新增
     confirmAdd() {
