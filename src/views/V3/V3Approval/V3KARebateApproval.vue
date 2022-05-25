@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-25 17:17:40
+ * @LastEditTime: 2022-05-25 17:20:44
 -->
 <template>
   <div class="MainContent">
@@ -81,9 +81,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planSalesAmount" label="V1计划销售额IMK(RMB)">
+      <el-table-column width="220" align="right" prop="planSalesAmount" label="V1计划销售额GSV(RMB)">
         <template v-slot:header>
-          <div>V1计划销售额IMK(RMB)<br /><span class="subTitle">kA</span></div>
+          <div>V1计划销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -111,9 +111,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="forecastSalesAmount" label="V2预估销售额IMK(RMB)">
+      <el-table-column width="240" align="right" prop="forecastSalesAmount" label="V2预估销售额GSV(RMB)">
         <template v-slot:header>
-          <div>V2预估销售额IMK(RMB)<br /><span class="subTitle">kA</span></div>
+          <div>V2预估销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -141,9 +141,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额IMK-默认(RMB)">
+      <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额GSV-默认(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额IMK-默认(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+          <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -171,9 +171,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额IMK-调整后(RMB)">
+      <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额GSV-调整后(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额IMK-调整后(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+          <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -327,9 +327,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planSalesAmount" label="V1计划销售额IMK(RMB)">
+            <el-table-column width="220" align="right" prop="planSalesAmount" label="V1计划销售额GSV(RMB)">
               <template v-slot:header>
-                <div>V1计划销售额IMK(RMB)<br /><span class="subTitle">kA</span></div>
+                <div>V1计划销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -357,9 +357,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="forecastSalesAmount" label="V2预估销售额IMK(RMB)">
+            <el-table-column width="240" align="right" prop="forecastSalesAmount" label="V2预估销售额GSV(RMB)">
               <template v-slot:header>
-                <div>V2预估销售额IMK(RMB)<br /><span class="subTitle">kA</span></div>
+                <div>V2预估销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -387,9 +387,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额IMK-默认(RMB)">
+            <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额GSV-默认(RMB)">
               <template v-slot:header>
-                <div>V3实际销售额IMK-默认(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+                <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -417,9 +417,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额IMK-调整后(RMB)">
+            <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额GSV-调整后(RMB)">
               <template v-slot:header>
-                <div>V3实际销售额IMK-调整后(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+                <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商</span></div>
               </template>
               <template slot-scope="scope">
                 <div>

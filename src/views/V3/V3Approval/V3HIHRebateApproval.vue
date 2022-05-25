@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-25 17:12:27
+ * @LastEditTime: 2022-05-25 17:34:34
 -->
 <!--
  * @Description: 
@@ -136,9 +136,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="actualRatio" label="V3实际合同点数-默认(%)">
+      <el-table-column width="320" align="right" prop="actualRatio" label="V3实际合同点数-默认(%)">
         <template v-slot:header>
-          <div>V3实际合同点数-默认(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+          <div>V3实际合同点数-默认(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -148,7 +148,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额GSV-默认(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+          <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -156,9 +156,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="actualCost" label="V3实际合同费用-默认(RMB)">
+      <el-table-column width="320" align="right" prop="actualCost" label="V3实际合同费用-默认(RMB)">
         <template v-slot:header>
-          <div>V3实际合同费用-默认(RMB)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+          <div>V3实际合同费用-默认(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -166,9 +166,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="adjustedRatio" label="V3实际合同点数-调整后(%)">
+      <el-table-column width="320" align="right" prop="adjustedRatio" label="V3实际合同点数-调整后(%)">
         <template v-slot:header>
-          <div>V3实际合同点数-调整后(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+          <div>V3实际合同点数-调整后(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -178,7 +178,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额GSV-调整后(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+          <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -186,9 +186,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="adjustedCost" label="V3实际合同费用-调整后(RMB)">
+      <el-table-column width="320" align="right" prop="adjustedCost" label="V3实际合同费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V3实际合同费用-调整后(RMB)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+          <div>V3实际合同费用-调整后(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -196,9 +196,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="costDeptName" label="费用归属部门">
+      <el-table-column width="320" align="right" prop="costDeptName" label="费用归属部门">
         <template v-slot:header>
-          <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+          <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -206,9 +206,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="240" align="right" prop="ratioDifference" label="点数差值(%)">
+      <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
         <template v-slot:header>
-          <div>点数差值(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+          <div>点数差值(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -226,7 +226,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="right" prop="costDifference" label="费用差值(RMB)">
+      <el-table-column width="320" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
           <div>费用差值(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
@@ -383,9 +383,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="actualRatio" label="V3实际合同点数-默认(%)">
+            <el-table-column width="320" align="right" prop="actualRatio" label="V3实际合同点数-默认(%)">
               <template v-slot:header>
-                <div>V3实际合同点数-默认(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>V3实际合同点数-默认(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -395,7 +395,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额GSV-默认(RMB)">
               <template v-slot:header>
-                <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+                <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -403,9 +403,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="actualCost" label="V3实际合同费用-默认(RMB)">
+            <el-table-column width="320" align="right" prop="actualCost" label="V3实际合同费用-默认(RMB)">
               <template v-slot:header>
-                <div>V3实际合同费用-默认(RMB)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>V3实际合同费用-默认(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -413,9 +413,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="adjustedRatio" label="V3实际合同点数-调整后(%)">
+            <el-table-column width="320" align="right" prop="adjustedRatio" label="V3实际合同点数-调整后(%)">
               <template v-slot:header>
-                <div>V3实际合同点数-调整后(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>V3实际合同点数-调整后(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -425,7 +425,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额GSV-调整后(RMB)">
               <template v-slot:header>
-                <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商</span></div>
+                <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -433,9 +433,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="adjustedCost" label="V3实际合同费用-调整后(RMB)">
+            <el-table-column width="320" align="right" prop="adjustedCost" label="V3实际合同费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V3实际合同费用-调整后(RMB)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>V3实际合同费用-调整后(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -443,9 +443,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="costDeptName" label="费用归属部门">
+            <el-table-column width="320" align="right" prop="costDeptName" label="费用归属部门">
               <template v-slot:header>
-                <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -453,9 +453,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="ratioDifference" label="点数差值(%)">
+            <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
-                <div>点数差值(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>点数差值(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -463,9 +463,19 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="costDifference" label="费用差值(RMB)">
+            <el-table-column width="220" align="right" prop="saleVolumeDifference" label="销售额差值（%）">
               <template v-slot:header>
-                <div>费用差值(RMB)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
+                <div>销售额差值（%）<br><span class="subTitle">KA+经销商+region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.saleVolumeDifference) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="320" align="right" prop="costDifference" label="费用差值(RMB)">
+              <template v-slot:header>
+                <div>费用差值(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
