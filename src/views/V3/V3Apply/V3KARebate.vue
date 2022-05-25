@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-24 17:25:29
+ * @LastEditTime: 2022-05-25 10:07:11
 -->
 <template>
   <div class="MainContent">
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
@@ -55,6 +55,10 @@
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
+      </div>
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+          <span class="tipStar">*</span>
+          注意事项：若未获取到LE销量，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -230,7 +234,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="系统判定内容">
+      <el-table-column width="620" align="center" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -452,8 +456,6 @@
                   {{ formatNum(scope.row.costDifference) }}
                 </div>
               </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="系统判定内容">
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -773,7 +775,7 @@ export default {
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V3_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V3_KA Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -866,4 +868,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+.tip {
+  color: #eb4f48;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #eb4f48;
+}
 </style>

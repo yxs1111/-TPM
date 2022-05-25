@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-24 16:59:15
+ * @LastEditTime: 2022-05-25 10:07:24
 -->
 <template>
   <div class="MainContent">
@@ -48,15 +48,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(1)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" @click="approve(0)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -234,7 +234,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="系统判定内容">
+      <el-table-column width="620" align="right" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -457,7 +457,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="系统判定内容">
+            <el-table-column width="620" align="center" prop="judgmentContent" label="系统判定内容">
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -596,13 +596,13 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V3' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.assignee.indexOf(this.usernameLocal) != -1&&this.tableData[0].isSubmit
             ) {
               //本人可以提交
-              this.isSelf = true
+              this.isSubmit = false
             } else {
               //其他人禁用
-              this.isSelf = false
+              this.isSubmit = true
             }
           }
         })
@@ -771,9 +771,9 @@ export default {
           isSubmit: 1,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(
+          downloadFile(
             res,
-            'V3_HIH Rebate异常信息 -' + timestamp + '.xlsx'
+            'V3_KA Rebate异常信息 -' + timestamp + '.xlsx'
           ) // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
@@ -793,9 +793,9 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           costItemCode: 'KA rebate',
         }).then((res) => {
-          this.downloadFile(
+          downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V3申请.xlsx`
+            `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V3审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })

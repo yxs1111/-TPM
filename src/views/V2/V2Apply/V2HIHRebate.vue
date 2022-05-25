@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-23 10:48:53
+ * @LastEditTime: 2022-05-25 09:04:42
 -->
 <template>
   <div class="MainContent">
@@ -617,7 +617,7 @@ export default {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
             let isError=this.ImportData.findIndex(item=>{
-              item.judgmentType=='error'
+              return item.judgmentType=='error'
             })
             this.saveBtn = isError==-1?1:0
             console.log(this.saveBtn);
