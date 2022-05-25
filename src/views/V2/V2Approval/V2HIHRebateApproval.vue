@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-25 09:06:01
+ * @LastEditTime: 2022-05-25 16:35:44
 -->
 <template>
   <div class="MainContent">
@@ -154,7 +154,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门">
+      <el-table-column width="220" align="right" prop="costDeptName" label="费用归属部门">
       </el-table-column>
       <el-table-column width="220" align="right" prop="ratioDifference" label="点数差值(%)">
         <template v-slot:header>
@@ -351,7 +351,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="costBelongDept" label="费用归属部门">
+            <el-table-column width="240" align="right" prop="costDeptName" label="费用归属部门">
             </el-table-column>
             <el-table-column width="240" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
