@@ -578,6 +578,7 @@ export default {
           this.filterObj.brandName === '' ? null : this.filterObj.brandName,
         exportType: 'export',
         mainId: this.mainIdLocal,
+        yearAndMonth:this.localDate
       }
       API.exportV3NU(data)
         .then((res) => {

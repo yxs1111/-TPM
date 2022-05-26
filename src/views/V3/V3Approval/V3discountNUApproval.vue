@@ -613,6 +613,7 @@ export default {
           this.filterObj.brandName === '' ? null : this.filterObj.brandName,
         exportType: 'export',
         mainId: this.mainIdLocal,
+        yearAndMonth:this.localDate
       }
       API.exportV3NU(data).then((res) => {
         this.downloadFile(res, `${this.localDate}_NU_${this.filterObj.channelCode}_V3_查询.xlsx`) //自定义Excel文件名
