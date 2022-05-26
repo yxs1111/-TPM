@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-25 17:07:04
+ * @LastEditTime: 2022-05-26 13:05:15
 -->
 <template>
   <div class="MainContent">
@@ -111,26 +111,6 @@
         </template>
       </el-table-column>
       <el-table-column  width="220" align="right" prop="costDeptName" label="费用归属部门">
-      </el-table-column>
-      <el-table-column width="240" align="right" prop="saleVolumeDifference" label="销售额差值（%）">
-        <template v-slot:header>
-          <div>销售额差值（%）<br><span class="subTitle">kA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.saleVolumeDifference) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
-        <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.costDifference) }}
-          </div>
-        </template>
       </el-table-column>
       <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
