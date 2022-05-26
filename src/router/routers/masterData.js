@@ -456,6 +456,14 @@ export default function() {
           component: () => import('@/views/master/contractItem/contractItem.vue'),
           meta: { title: 'Contract Item', icon: 'apply' },
         },
+        // 匹配关系
+        {
+          path: '/MatchingRelation',
+          name: 'MatchingRelation',
+          code: 'mdm_product_information',
+          component: () => import('@/views/master/MatchingRelation.vue'),
+          meta: { title: '匹配关系', icon: 'apply' },
+        },
       ]
     }
   ]

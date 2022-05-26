@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-05-26 14:58:56
+ * @LastEditTime: 2022-05-26 16:41:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -650,13 +650,25 @@ export default {
     return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
   },
   MatchingRelationDownloadExcel(params) {
-    return requestApi.request_get('/mdm/mdOrganizationSupplier/downloadExcel', params)
+    return request({
+      url: '/mdm/mdOrganizationSupplier/downloadExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+    
   },
   MatchingRelationImportExcel(params) {
     return requestApi.request_post('/mdm/mdOrganizationSupplier/importExcel', params)
   },
   MatchingRelationExportExcel(params) {
-    return requestApi.request_get('/mdm/mdOrganizationSupplier/exportExcel', params)
+    return request({
+      url: '/mdm/mdOrganizationSupplier/exportExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+    
   },
   addMatchingRelation(params) {
     return requestApi.request_post('/mdm/mdOrganizationSupplier/insert', params)
