@@ -55,9 +55,10 @@
     <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
       style="width: 100%">
       <el-table-column type="selection" align="center" />
-      <el-table-column align="center" prop="zoneName" label="大区"> </el-table-column>
-      <el-table-column align="center" prop="regionName" label="区域"> </el-table-column>
-      <el-table-column align="center" prop="supplierName" label="供应商"> </el-table-column>
+      <el-table-column fixed="left" align="center" prop="minePackage" label="Mine Package"> </el-table-column>
+      <el-table-column fixed="left" align="center" prop="zoneName" label="大区"> </el-table-column>
+      <el-table-column fixed="left" align="center" prop="regionName" label="区域"> </el-table-column>
+      <el-table-column fixed="left" width="200" align="center" prop="supplierName" label="供应商"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
@@ -111,8 +112,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="状态">
-            <el-select v-model="ruleForm.state" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
+            <el-select v-model="ruleForm.state" clearable filterable placeholder="请选择">
+              <el-option v-for="(item,index) in ['无效','有效']" :key="item" :label="item" :value="index" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -167,7 +168,7 @@ import {
   getDefaultPermissions,
   parseTime,
   getTextMap,
-  getHeightSingle,
+  getHeightHaveTab,
   downloadFile,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
@@ -203,6 +204,7 @@ export default {
         supplierCode: '',
         supplierName: '',
         supplierIndex: '',
+        state:1
       },
       rules: {
         minePackage: [
@@ -245,7 +247,7 @@ export default {
       warningShow: false,
       errorVisible: false, //错误信息弹窗
       errorList: [], //错误信息数据
-      maxheight: getHeightSingle(),
+      maxheight: getHeightHaveTab(),
     }
   },
   directives: { elDragDialog, permission },
@@ -259,6 +261,8 @@ export default {
     this.getMinePackageList()
     this.getRegionList()
     this.getSupplierList()
+    this.getLargeAreaList()
+    this.getLargeAreaListdialog()
   },
   computed: {},
   watch: {
@@ -341,23 +345,44 @@ export default {
       })
     },
     getLargeAreaList(obj) {
-      console.log(obj)
-      API.getMatchingRelationZone({
-        parentCode: obj.parentCode ? obj.parentCode : '',
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.zoneList = res.data
-        }
-      })
+      if (obj) {
+        console.log(obj)
+        API.getMatchingRelationZone({
+          parentCode: obj.parentCode ? obj.parentCode : '',
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.zoneList = res.data
+          }
+        })
+      } else {
+        console.log(obj)
+        API.getMatchingRelationZone({
+          parentCode: '',
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.zoneList = res.data
+          }
+        })
+      }
     },
     getLargeAreaListdialog(obj) {
-      API.getMatchingRelationZone({
-        parentCode: obj.parentCode ? obj.parentCode : '',
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.zoneListDialog = res.data
-        }
-      })
+      if (obj) {
+        API.getMatchingRelationZone({
+          parentCode: obj.parentCode ? obj.parentCode : '',
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.zoneListDialog = res.data
+          }
+        })
+      } else {
+        API.getMatchingRelationZone({
+          parentCode: '',
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.zoneListDialog = res.data
+          }
+        })
+      }
     },
     add() {
       this.dialogVisible = true
@@ -403,6 +428,7 @@ export default {
               this.supplierList[this.ruleForm.supplierIndex].supplierBiCode,
             supplierName:
               this.supplierList[this.ruleForm.supplierIndex].supplierName,
+            state:this.ruleForm.state
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`添加成功`)
