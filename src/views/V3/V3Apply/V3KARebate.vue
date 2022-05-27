@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-27 08:53:43
+ * @LastEditTime: 2022-05-27 10:47:32
 -->
 <template>
   <div class="MainContent">
@@ -192,7 +192,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="320" align="right" prop="costDeptName" label="费用归属部门">
+      <el-table-column width="320" align="center" prop="costDeptName" label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
         </template>
@@ -202,6 +202,7 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="120" align="center" prop="payType" label="费用核销方式"></el-table-column>
       <el-table-column width="240" align="right" prop="ratioDifference" label="点数差值(%)">
         <template v-slot:header>
           <div>点数差值(%)<br /><span class="subTitle">KA+经销商+Contract item</span></div>
@@ -429,7 +430,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="320" align="right" prop="costDeptName" label="费用归属部门">
+            <el-table-column width="320" align="center" prop="costDeptName" label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
               </template>
@@ -439,6 +440,7 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column width="120" align="center" prop="payType" label="费用核销方式"></el-table-column>
             <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
                 <div>点数差值(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span></div>
