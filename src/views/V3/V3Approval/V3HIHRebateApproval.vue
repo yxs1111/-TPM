@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-27 10:47:20
+ * @LastEditTime: 2022-05-27 11:16:45
 -->
 <!--
  * @Description: 
@@ -608,7 +608,6 @@ export default {
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          // this.isSubmit = this.tableData[0].isSubmit
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })
