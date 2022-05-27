@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-25 17:03:38
+ * @LastEditTime: 2022-05-27 08:53:57
 -->
 <template>
   <div class="MainContent">
@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in ['EC','NKA','RKA']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -191,7 +191,7 @@
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.judgmentType=='pass'" src="@/assets/images/success.png" alt="">
               <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
               <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
               <span class="judgmentText">{{ row.judgmentType }}</span>
@@ -254,7 +254,7 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType=='pass'" src="@/assets/images/success.png" alt="">
                     <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
                     <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.judgmentType }}</span>
