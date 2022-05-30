@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-27 11:05:52
+ * @LastEditTime: 2022-05-30 08:41:11
 -->
 <template>
   <div class="MainContent">
@@ -58,7 +58,7 @@
       </div>
       <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
           <span class="tipStar">*</span>
-          注意事项：若未获取到LE销量，不能办理
+          注意事项：若未获取到实际销售额，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -214,7 +214,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.costDeptName) }}
+            {{ scope.row.costDeptName }}
           </div>
         </template>
       </el-table-column>
@@ -485,7 +485,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.costDeptName) }}
+                  {{ scope.row.costDeptName }}
                 </div>
               </template>
             </el-table-column>

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-05-27 11:16:45
+ * @LastEditTime: 2022-05-30 08:59:00
 -->
 <!--
  * @Description: 
@@ -203,7 +203,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.costDeptName) }}
+             {{ scope.row.costDeptName }}
           </div>
         </template>
       </el-table-column>
@@ -452,7 +452,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.costDeptName) }}
+                 {{ scope.row.costDeptName }}
                 </div>
               </template>
             </el-table-column>
