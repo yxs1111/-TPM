@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 16:05:35
+ * @LastEditTime: 2022-05-30 15:04:52
 -->
 <template>
   <div class="MainContent">
@@ -67,7 +67,9 @@
       <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="brandName" label="Contract Item" />
+      <el-table-column width="220" align="center" prop="brandName" label="供应商" />
+      <el-table-column width="220" align="center" prop="brandName" label="大区" />
+      <el-table-column width="220" align="center" prop="brandName" label="区域" />
       <el-table-column width="220" align="right" prop="planRatio" label="V1计划单价(RMB/人)">
         <template v-slot:header>
           <div>V1计划单价(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>

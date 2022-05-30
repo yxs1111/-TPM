@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-04-28 16:52:24
+ * @LastEditTime: 2022-05-30 14:47:17
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -85,5 +85,7 @@ export default {
   getContractItemList(params) {
     return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)
   },
-
+  getSupplierList(params) {
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
+  },
 }

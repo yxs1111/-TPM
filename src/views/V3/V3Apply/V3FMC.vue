@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-20 16:30:23
+ * @LastEditTime: 2022-05-30 15:07:18
 -->
 <template>
   <div class="MainContent">
@@ -168,7 +168,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="planRatio" label="V3实际人数-调整后(人)">
         <template v-slot:header>
-          <div>V3实际人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+          <div>V3实际人数-调整后(人)<br><span class="subTitle">从BI接入实际人数(需要汇总)</span></div>
         </template>
         <template slot-scope="scope">
           <div>

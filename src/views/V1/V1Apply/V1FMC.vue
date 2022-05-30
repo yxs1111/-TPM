@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 15:28:37
+ * @LastEditTime: 2022-05-30 14:54:48
 -->
 <template>
   <div class="MainContent">
@@ -28,8 +28,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.supplierIndex" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -147,6 +147,7 @@ export default {
       monthList: [],
       customerArr: [],
       tableData: [],
+      supplierList: [],
       RegionList: [],
       maxheight: getHeightHaveTab(),
     }
@@ -166,8 +167,6 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
-    this.getContractItemList()
   },
   methods: {
     // 获取表格数据
@@ -202,14 +201,6 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取ContractItem
-    getContractItemList() {
-      selectAPI.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.ContractItemList=res.data
-        }
-      })
-    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -231,13 +222,6 @@ export default {
           }
         })
     },
-    getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
-        if (res.code === 1000) {
-          this.BrandList = res.data
-        }
-      })
-    },
     getRegionList() {
       selectAPI
         .getRegionList({
@@ -248,6 +232,13 @@ export default {
             this.RegionList = res.data
           }
         })
+    },
+    getSupplierList() {
+      selectAPI.getSupplierList().then((res) => {
+        if (res.code === 1000) {
+          this.supplierList = res.data
+        }
+      })
     },
     //千分位分隔符+两位小数
     FormatNum(num) {

@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 17:02:03
+ * @LastEditTime: 2022-05-30 15:08:31
 -->
 <template>
   <div class="MainContent">
@@ -172,7 +172,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="planRatio" label="V3实际人数-调整后(人)">
         <template v-slot:header>
-          <div>V3实际人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+          <div>V3实际人数-调整后(人)<br><span class="subTitle">从BI接入实际人数(需要汇总)</span></div>
         </template>
         <template slot-scope="scope">
           <div>

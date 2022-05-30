@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 15:58:00
+ * @LastEditTime: 2022-05-30 15:01:20
 -->
 <template>
   <div class="MainContent">
@@ -67,7 +67,9 @@
       <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="brandName" label="Contract Item" />
+      <el-table-column width="220" align="center" prop="customerName" label="供应商" />
+      <el-table-column width="220" align="center" prop="brandName" label="大区" />
+      <el-table-column width="220" align="center" prop="brandName" label="区域" />
       <el-table-column width="220" align="right" prop="planRatio" label="V1计划单价(RMB/人)">
         <template v-slot:header>
           <div>V1计划单价(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
@@ -431,11 +433,10 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList:[],
-      ContractItemList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
-      isGainLe: 0, //是否已经从LE接过数据
+      isGainLe: 0, //是否已经从LE接过数据getAllMonth
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -464,7 +465,6 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getContractItemList()
   },
   methods: {
     // 获取表格数据
@@ -522,14 +522,6 @@ export default {
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
         this.monthList = res.data
-      })
-    },
-    // 获取ContractItem
-    getContractItemList() {
-      selectAPI.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.ContractItemList = res.data
-        }
       })
     },
     // 获取下拉框
@@ -642,7 +634,6 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
-            debugger
             this.ImportData = response.data
             let isError=this.ImportData.findIndex(item=>{
               item.judgmentType=='error'
