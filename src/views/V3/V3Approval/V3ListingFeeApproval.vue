@@ -1,7 +1,7 @@
 <!--
- * @Description: V2ListingFee
+ * @Description: V3ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 15:57:15
+ * @LastEditTime: 2022-05-30 16:20:26
 -->
 <template>
   <div class="MainContent">
@@ -28,8 +28,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
-          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
+          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -57,18 +57,18 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
+      <div class="TpmButtonBG" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
-        <span class="text">提交</span>
+        <span class="text">通过</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-        <span class="tipStar">*</span>
-        注意事项：若未获取到LE销量，不能办理
+      <div class="TpmButtonBG" @click="approve(0)">
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
+        <span class="text">驳回</span>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -103,11 +103,31 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="220" align="right" prop="planRatio" label="V3实际费用-默认(RMB)">
+        <template v-slot:header>
+          <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.planRatio) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="planRatio" label="V3实际费用-调整后(RMB)">
+        <template v-slot:header>
+          <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.planRatio) }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
       <el-table-column width="220" align="center" prop="costBelongDept" label="费用核销方式"></el-table-column>
       <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle">KA+Brand</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -223,32 +243,37 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column width="220" align="right" prop="planRatio" label="V3实际费用-默认(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.planRatio) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="planRatio" label="V3实际费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.planRatio) }}
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="costBelongDept" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle">KA+Brand</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ formatNum(scope.row.costDifference) }}
                 </div>
               </template>
-            </el-table-column>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -273,7 +298,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
 export default {
-  name: 'V2ListingFee',
+  name: 'V3FMCApproval',
   directives: { elDragDialog, permission },
 
   data() {
@@ -294,7 +319,6 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList: [],
-      skuOptions: [],
       ContractItemList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
@@ -415,11 +439,6 @@ export default {
             this.customerArr = res.data
           }
         })
-    },
-    getQuerySkuSelect() {
-      selectAPI.querySkuSelect().then((res) => {
-        this.skuOptions = res.data
-      })
     },
     getRegionList() {
       selectAPI

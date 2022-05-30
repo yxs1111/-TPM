@@ -1,7 +1,7 @@
 <!--
- * @Description: V2ListingFee
+ * @Description: V2ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 15:57:15
+ * @LastEditTime: 2022-05-30 16:04:27
 -->
 <template>
   <div class="MainContent">
@@ -28,8 +28,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
-          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
+          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -57,18 +57,18 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
+    <div class="TpmButtonBGWrap">
+      <div class="TpmButtonBG" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
+      <div class="TpmButtonBG" @click="approve(1)">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
-        <span class="text">提交</span>
+        <span class="text">通过</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-        <span class="tipStar">*</span>
-        注意事项：若未获取到LE销量，不能办理
+      <div class="TpmButtonBG" @click="approve(0)">
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
+        <span class="text">驳回</span>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -235,21 +235,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
-            </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
             <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -273,7 +258,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
 export default {
-  name: 'V2ListingFee',
+  name: 'V2FMCApproval',
   directives: { elDragDialog, permission },
 
   data() {
@@ -328,6 +313,7 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getContractItemList()
+    this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -347,7 +333,6 @@ export default {
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records
@@ -395,6 +380,11 @@ export default {
         }
       })
     },
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptions = res.data
+      })
+    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -415,11 +405,6 @@ export default {
             this.customerArr = res.data
           }
         })
-    },
-    getQuerySkuSelect() {
-      selectAPI.querySkuSelect().then((res) => {
-        this.skuOptions = res.data
-      })
     },
     getRegionList() {
       selectAPI
@@ -450,7 +435,6 @@ export default {
         API.exportHIHApplyExcel({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
@@ -546,7 +530,6 @@ export default {
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          contractItemCode: this.filterObj.contractItemCode,
           costItemCode: 'HIH rebate',
           isSubmit: 0,
         }).then((res) => {
@@ -569,7 +552,6 @@ export default {
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          contractItemCode: this.filterObj.contractItemCode,
           costItemCode: 'HIH rebate',
         }).then((res) => {
           downloadFile(
