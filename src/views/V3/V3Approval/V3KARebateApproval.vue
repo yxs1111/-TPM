@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 08:59:22
+ * @LastEditTime: 2022-05-30 11:30:57
 -->
 <template>
   <div class="MainContent">
@@ -263,7 +263,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <!-- <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -719,6 +719,26 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event = event
+      const formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.month)
+      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('isSubmit', 1)
+      formData.append('costItemCode', 'KA rebate')
+      API.fileImport(formData).then((response) => {
+        //清除input的value ,上传一样的
+        if (response.code == 1000) {
+          if (!Array.isArray(response.data)) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.ImportData = response.data
+            this.saveBtn = this.ImportData.length ? true : false
+            this.$message.success('导入成功！')
+          }
+        } else {
+          this.$message.info(this.messageMap.importError)
+        }
+      })
     },
     // 关闭导入
     closeImportDialog() {
@@ -730,47 +750,34 @@ export default {
       this.isCheck = false
     },
     // 校验数据
-    checkImport() {
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelCode', this.filterObj.channelCode)
-      formData.append('isSubmit', 1)
-      formData.append('costItemCode', 'KA rebate')
-      API.formatCheck(formData).then((response) => {
-        //清除input的value ,上传一样的
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
-            this.$message.info('导入数据为空，请检查模板')
-          } else {
-            this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data
-            let isError = this.ImportData.findIndex((item) => {
-              item.judgmentType == 'error'
-            })
-            this.saveBtn = isError == -1 ? 1 : 0
-          }
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
-      })
-    },
+    // checkImport() {
+    //   const formData = new FormData()
+    //   formData.append('yearAndMonth', this.filterObj.month)
+    //   formData.append('channelCode', this.filterObj.channelCode)
+    //   formData.append('isSubmit', 1)
+    //   formData.append('costItemCode', 'KA rebate')
+    //   API.formatCheck(formData).then((response) => {
+    //     //清除input的value ,上传一样的
+    //     if (response.code == 1000) {
+    //       if (!Array.isArray(response.data)) {
+    //         this.$message.info('导入数据为空，请检查模板')
+    //       } else {
+    //         this.$message.success(this.messageMap.importSuccess)
+    //         this.ImportData = response.data
+    //         let isError = this.ImportData.findIndex((item) => {
+    //           item.judgmentType == 'error'
+    //         })
+    //         this.saveBtn = isError == -1 ? 1 : 0
+    //       }
+    //     } else {
+    //       this.$message.info(this.messageMap.importError)
+    //     }
+    //   })
+    // },
     // 确认导入
     confirmImport() {
-      API.importSave({
-        yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
-        costItemCode: 'KA rebate',
-        isSubmit: 1,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 导出异常信息
     exportErrorList() {
