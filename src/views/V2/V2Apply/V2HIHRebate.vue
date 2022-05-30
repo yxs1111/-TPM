@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 09:01:42
+ * @LastEditTime: 2022-05-30 10:14:54
 -->
 <template>
   <div class="MainContent">
@@ -216,7 +216,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -608,7 +608,30 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event=event
-      
+      const formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.month)
+      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('isSubmit', 0)
+      formData.append('costItemCode', 'HIH rebate')
+      API.fileImport(formData).then((response) => {
+        //清除input的value ,上传一样的
+        this.event.srcElement.value = '' // 置空
+        if (response.code == 1000) {
+          if (!Array.isArray(response.data)) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.$message.success(this.messageMap.importSuccess)
+            this.ImportData = response.data
+            let isError = this.ImportData.findIndex((item) => {
+              return item.judgmentType == 'error'
+            })
+            this.isCheck = isError == -1 ? 1 : 0
+          }
+        } else {
+          this.$message.info(this.messageMap.importError)
+        }
+      })
     },
     // 关闭导入
     closeImportDialog() {
@@ -622,7 +645,6 @@ export default {
     // 校验数据
     checkImport() {
       const formData = new FormData()
-      formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
       formData.append('isSubmit', 0)
@@ -634,7 +656,7 @@ export default {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
-            this.$message.success(this.messageMap.importSuccess)
+            this.$message.success(this.messageMap.checkSuccess)
             this.ImportData = response.data
             let isError=this.ImportData.findIndex(item=>{
               return item.judgmentType=='error'

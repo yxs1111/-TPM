@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-24 10:40:56
+ * @LastEditTime: 2022-05-30 10:06:27
  */
 /*
  * @Description: V1 合同
@@ -83,6 +83,10 @@ export default {
       params: params,
       responseType: 'blob'
     })
+  },
+  // V2申请、审批导入 
+  fileImport(params) {
+    return requestApi.request_post(this.importUrl+'/fileImport', params)
   },
   // V2申请、审批导入 
   formatCheck(params) {

@@ -1,7 +1,7 @@
 /*
  * @Description: V3合同
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-24 11:03:55
+ * @LastEditTime: 2022-05-30 10:13:04
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -32,6 +32,10 @@ export default {
     })
   },
   // 导入文件
+  fileImport(params) {
+    return requestApi.request_post(this.importUrl+'/fileImport', params)
+  },
+  // 验证文件
   formatCheck(params) {
     return requestApi.request_post(this.importUrl+'/formatCheck', params)
   },
