@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 14:50:21
+ * @LastEditTime: 2022-05-30 15:24:27
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -65,6 +65,14 @@ export default function() {
               component: () => import('@/views/V1/V1Apply/V1KARebate.vue'),
               meta: { title: '折扣项-KA Rebate', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
             },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1FMC',
+              code: 'price_nka_v1_apply',
+              name: 'V1FMC',
+              component: () => import('@/views/V1/V1Apply/V1FMC.vue'),
+              meta: { title: '折扣项-FMC', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
+            },
           ]
         },
         {
@@ -114,6 +122,14 @@ export default function() {
               name: 'V1KARebateApprove',
               component: () => import('@/views/V1/V1Apply/V1KARebate.vue'),
               meta: { title: '折扣项-KA Rebate', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1FMCApproval',
+              code: 'price_nka_v1_approve',
+              name: 'V1FMCApprove',
+              component: () => import('@/views/V1/V1Approval/V1FMCApproval.vue'),
+              meta: { title: 'FMC', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
             },
           ]
         }
