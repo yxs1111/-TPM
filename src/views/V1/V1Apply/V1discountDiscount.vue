@@ -50,13 +50,9 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(0)">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(1)">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">爱亲/爱婴岛导入</span>
       </div>
       <el-button type="primary" class="TpmButtonBG" :class="submitBtn === 1?'noClick':''" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="btnStatus&&isCalculation === 1?'':'noClick'" @click="submitInfo">
@@ -304,7 +300,6 @@ export default {
       firstIsPass: false,
       isCalculation: false,
       maxheight: getHeightHaveTab(),
-      isAiQin:0, //是否是爱亲/爱婴岛 导入
     }
   },
   computed: {},
@@ -416,7 +411,6 @@ export default {
     saveImportInfo() {
       API.saveImportInfo({
         // mainId: this.mainIdLocal
-        saveFlag: this.isAiQin==0?1:2,
         channelName: this.filterObj.channelCode,
         yearAndMonth: this.localDate,
       }).then((res) => {
@@ -478,15 +472,10 @@ export default {
       })
     },
     // 导入数据
-    importData(flag) {
+    importData() {
       if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
-        if(flag) {
-          this.isAiQin=1
-        } else {
-          this.isAiQin=0
-        }
         this.importVisible = true
       }
     },
@@ -494,11 +483,7 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      if(this.isAiQin) {
-        formData.append('importType', 3)
-      }else {
-        formData.append('importType', 1)
-      }
+      formData.append('importType', 1)
       // formData.append('mainId', this.mainIdLocal)
       formData.append('channelName', this.filterObj.channelCode)
       formData.append('yearAndMonth', this.localDate)
@@ -553,11 +538,7 @@ export default {
     routineCheck(file) {
       var formData = new FormData()
       formData.append('file', file)
-      if(this.isAiQin) {
-        formData.append('importType', 3)
-      }else {
-        formData.append('importType', 1)
-      }
+      formData.append('importType', 1)
       formData.append('yearAndMonth', this.localDate)
       formData.append('channelName', this.filterObj.channelCode)
       API.routineCheck(formData)
@@ -604,7 +585,6 @@ export default {
     // 关闭导入
     closeImport() {
       this.importVisible = false
-      this.isAiQin=0
       this.event.srcElement.value = '' // 置空
       this.uploadFileName = ''
       this.uploadFile = ''
@@ -685,10 +665,9 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
-      
       API.downExcelTmpForV1({
         // mainId: this.mainIdLocal,
-        ImportType: this.isAiQin==0?1:3,
+        ImportType: 1,
         channelName: this.filterObj.channelCode,
         yearAndMonth: this.localDate,
       }).then((response) => {
