@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 11:24:55
+ * @LastEditTime: 2022-05-30 13:57:43
 -->
 <template>
   <div class="MainContent">
@@ -612,7 +612,7 @@ export default {
       formData.append('costItemCode', 'HIH rebate')
       API.fileImport(formData).then((response) => {
         //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
+        event.srcElement.value = '' // 置空
         if (response.code == 1000) {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
