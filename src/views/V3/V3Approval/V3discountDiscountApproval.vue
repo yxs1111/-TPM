@@ -102,11 +102,17 @@
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
         {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
       </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="distNoticeCostBefore" label="经销商确认函费用-谈判前(RMB) ">
+        {{ FormateNum((row.distNoticeCostBefore*1).toFixed(2)) }}
+      </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
         {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
         {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+      </el-table-column>
+      <el-table-column v-slot="{row}" width="220" align="right" prop="distNoticeCostAfter" label="经销商确认函费用-谈判后(RMB)">
+        {{ FormateNum((row.distNoticeCostAfter*1).toFixed(2)) }}
       </el-table-column>
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
         <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
@@ -225,11 +231,17 @@
           <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationCost" title="V3谈判前费用（RMB）">
             {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
           </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="distNoticeCostBefore" title="经销商确认函费用-谈判前(RMB) ">
+            {{ FormateNum((row.distNoticeCostBefore*1).toFixed(2)) }}
+          </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationPriceAve" title="V3谈判后均价（RMB/Tin）">
             {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationCost" title="V3谈判后费用（RMB）">
             {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+          </vxe-table-column>
+          <vxe-table-column v-slot="{row}" width="220" align="right" field="distNoticeCostAfter" title="经销商确认函费用-谈判后(RMB)">
+            {{ FormateNum((row.distNoticeCostAfter*1).toFixed(2)) }}
           </vxe-table-column>
           <vxe-table-column width="160" align="right" field="avePriceDifference" title="均价差值（%）">
             <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
