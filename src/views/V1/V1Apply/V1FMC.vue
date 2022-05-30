@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 14:54:48
+ * @LastEditTime: 2022-05-30 15:37:34
 -->
 <template>
   <div class="MainContent">
@@ -186,7 +186,6 @@ export default {
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 15:04:52
+ * @LastEditTime: 2022-05-30 15:37:15
 -->
 <template>
   <div class="MainContent">
@@ -486,7 +486,6 @@ export default {
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records
@@ -584,7 +583,6 @@ export default {
         API.exportHIHApplyExcel({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
@@ -681,7 +679,6 @@ export default {
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          contractItemCode: this.filterObj.contractItemCode,
           costItemCode: 'HIH rebate',
           isSubmit: 0,
         }).then((res) => {
@@ -701,7 +698,6 @@ export default {
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          contractItemCode: this.filterObj.contractItemCode,
           costItemCode:'HIH rebate',
         }).then((res) => {
           downloadFile(
