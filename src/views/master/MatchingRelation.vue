@@ -96,7 +96,7 @@
               <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
             </el-select>
           </el-form-item>
-          <el-form-item label="区域" prop="regionCode">
+          <el-form-item label="区域">
             <el-select v-model="ruleForm.regionCode" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in regionList" :key="index" :label="item.name" :value="item.code" />
             </el-select>

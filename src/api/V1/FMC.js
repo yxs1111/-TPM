@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-05-31 09:43:33
+ * @LastEditTime: 2022-05-31 14:54:55
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -13,13 +13,13 @@ export default {
     return requestApi.request_get(this.url+'/getSmartplanData', params)
   },
   //申请 分页查询
-  getFMCApplyPage(params) {
-    return requestApi.request_get('/cityplan/InvestFmcVOneApply/getPage', params)
+  getPage(params) {
+    return requestApi.request_get('/cityplan/investFmcVOne/getPage', params)
   },
   exportV1(params) {
     return request({
-      url: '/cityplan/InvestFmcVOneApply/exportV1',
-      method: 'get',
+      url: '/cityplan/investFmcVOne/exportV1',
+      method: 'post',
       params: params,
       responseType: 'blob'
     })

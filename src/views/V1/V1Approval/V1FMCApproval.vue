@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 审批 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 15:37:43
+ * @LastEditTime: 2022-05-31 15:37:39
 -->
 <template>
   <div class="MainContent">
@@ -28,8 +28,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.supplierName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.supplierName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -46,17 +46,17 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+      <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="120" align="center" prop="costType" label="费用类型" />
+      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
+      <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="供应商" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="区域" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="大区" />
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划单价(RMB/人)">
+      <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
+      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="220" align="center" prop="regionName" label="区域" />
+      <el-table-column width="220" align="center" prop="zoneName" label="大区" />
+      <el-table-column width="220" align="right" prop="v1PlanPrice" label="V1计划单价(RMB/人)">
         <template v-slot:header>
           <div>
             V1计划单价(RMB/人)
@@ -66,11 +66,11 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planRatio) }}
+            {{ FormatNum(scope.row.v1PlanPrice) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划人数(人)">
+      <el-table-column width="220" align="right" prop="v1PlanPeopleNum" label="V1计划人数(人)">
         <template v-slot:header>
           <div>
             V1计划人数(人)
@@ -80,11 +80,11 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planRatio) }}
+            {{ FormatNum(scope.row.v1PlanPeopleNum) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="right" prop="v1PlanPrice" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
@@ -94,12 +94,12 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planRatio) }}
+            {{ FormatNum(scope.row.v1PlanPrice) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门"></el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用核销方式"></el-table-column>
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -119,7 +119,7 @@ import {
   downloadFile,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V1/contract'
+import API from '@/api/V1/FMC'
 export default {
   name: 'V1FMCApproval',
   directives: { elDragDialog, permission },
@@ -133,7 +133,7 @@ export default {
         channelCode: '',
         customerCode: '',
         month: '',
-        supplierCode: '',
+        supplierName: '',
         regionCode: '',
       },
       permissions: getDefaultPermissions(),
@@ -176,12 +176,13 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -257,11 +258,12 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIH({
+        API.exportV1({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
         }).then((res) => {
           downloadFile(
             res,

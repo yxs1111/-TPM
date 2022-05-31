@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-31 09:12:57
+ * @LastEditTime: 2022-05-31 16:25:04
 -->
 <template>
   <div class="MainContent">
@@ -28,13 +28,13 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.supplierName" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
@@ -412,7 +412,7 @@ import {
   messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/contract'
+import API from '@/api/V2/FMC'
 export default {
   name: 'V2FMC',
   directives: { elDragDialog, permission },
@@ -424,8 +424,8 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        supplierCode: '',
-        regionCode: '',
+        supplierName: '',
+        regionName: '',
         customerCode: '',
         month: '',
       },
@@ -435,6 +435,7 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList:[],
+      supplierList:[],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
@@ -467,6 +468,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
+    this.getSupplierList()
   },
   methods: {
     // 获取表格数据
@@ -481,12 +483,14 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
@@ -557,6 +561,13 @@ export default {
           }
         })
     },
+    getSupplierList() {
+      selectAPI.getSupplierList().then((res) => {
+        if (res.code === 1000) {
+          this.supplierList = res.data
+        }
+      })
+    },
     //千分位分隔符+两位小数
     formatNum(num) {
       const money = num * 1
@@ -572,14 +583,16 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIHApplyExcel({
+        API.exportV2({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
