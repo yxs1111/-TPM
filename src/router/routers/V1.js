@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-30 15:24:27
+ * @LastEditTime: 2022-05-31 09:30:24
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -71,7 +71,7 @@ export default function() {
               code: 'price_nka_v1_apply',
               name: 'V1FMC',
               component: () => import('@/views/V1/V1Apply/V1FMC.vue'),
-              meta: { title: '折扣项-FMC', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
+              meta: { title: 'FMC', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
             },
           ]
         },

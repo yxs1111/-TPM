@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-30 15:28:12
+ * @LastEditTime: 2022-05-31 08:46:07
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -130,7 +130,7 @@ export default function() {
               path: '/costManagement/V2/V2Approval/V2FMCApproval',
               code: 'price_nka_v2_approve',
               name: 'V2FMCApproval',
-              component: () => import('@/views/V2/V2Apply/V2FMCApproval.vue'),
+              component: () => import('@/views/V2/V2Approval/V2FMCApproval.vue'),
               meta: { title: 'FMC', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
             },
           ]

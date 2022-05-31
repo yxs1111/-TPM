@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-07 14:38:59
+ * @LastEditTime: 2022-05-31 09:08:40
 -->
 <template>
   <div class="tabViewsWrap">
@@ -147,7 +147,15 @@ export default {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')
               }
-            }
+            },
+            {
+              name: 'FMC',
+              path: '/costManagement/V2/V2Apply/V2FMC',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
           ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))

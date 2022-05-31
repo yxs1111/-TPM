@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 17:13:35
+ * @LastEditTime: 2022-05-31 09:26:03
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -53,7 +53,7 @@ export default function() {
                   code: 'mdm_product_information',
                   name: 'UnStraightGiving',
                   component: () => import('@/views/taskManage/ContractEntry/CustomerContractEntry/UnStraightGiving.vue'),
-                  meta: { title: '非直供', icon: 'form' ,activeMenu: '/contractManagement/ContractEntry/CustomerContractEntry'},
+                  meta: { title: '间供', icon: 'form' ,activeMenu: '/contractManagement/ContractEntry/CustomerContractEntry'},
                 },
               ]
             },

@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 15:07:18
+ * @LastEditTime: 2022-05-31 09:19:08
 -->
 <template>
   <div class="MainContent">
@@ -38,6 +38,8 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -53,6 +55,10 @@
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
         <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
         <span class="text">提交</span>
+      </div>
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+          <span class="tipStar">*</span>
+          注意事项：未获取到实际人数，无法办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -156,7 +162,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V3实际单价-调整后(RMB/人)">
+      <el-table-column width="260" align="right" prop="planRatio" label="V3实际单价-调整后(RMB/人)">
         <template v-slot:header>
           <div>V3实际单价-调整后(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
@@ -166,7 +172,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V3实际人数-调整后(人)">
+      <el-table-column width="260" align="right" prop="planRatio" label="V3实际人数-调整后(人)">
         <template v-slot:header>
           <div>V3实际人数-调整后(人)<br><span class="subTitle">从BI接入实际人数(需要汇总)</span></div>
         </template>
@@ -176,7 +182,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V3实际费用-调整后(RMB)">
+      <el-table-column width="260" align="right" prop="planRatio" label="V3实际费用-调整后(RMB)">
         <template v-slot:header>
           <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-07 14:28:25
+ * @LastEditTime: 2022-05-31 08:54:06
 -->
 <template>
   <div class="tabViewsWrap">
@@ -133,6 +133,14 @@ export default {
             {
               name: '折扣项-KA Rebate',
               path: '/costManagement/V1/V1Apply/V1KARebate',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
+              name: 'FMC',
+              path: '/costManagement/V1/V1Apply/V1FMC',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')
