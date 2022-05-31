@@ -450,6 +450,7 @@ export default {
       maxheight: getHeightHaveTab(),
       isCalculation:false,
       currentIsCalculation:0, //当前是否属于计算节点
+      isBeforeOrAfter:0, //当前 谈判前or 谈判和
     }
   },
   computed: {},
@@ -600,7 +601,7 @@ export default {
             })
           })
       } else {
-        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+        this.$confirm(`此操作将进行${this.isBeforeOrAfter==0?'谈判前':'谈判后'}提交操作, 是否继续?`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
@@ -1123,8 +1124,10 @@ export default {
               if(res.data.activityName=='V3谈判前调整'||res.data.activityName=='V3谈判后调整') {
                 this.currentIsCalculation=1
                 if(res.data.activityName=='V3谈判前调整') {
+                  this.isBeforeOrAfter=0
                   this.isCalculation=this.tableData[0].isCalculationBefore==0?0:1
                 } else if(res.data.activityName=='V3谈判后调整') {
+                  this.isBeforeOrAfter=1
                   this.isCalculation=this.tableData[0].isCalculationAfter==0?0:1
                 }
               }

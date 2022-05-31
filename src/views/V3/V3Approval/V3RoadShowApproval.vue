@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 17:08:13
+ * @LastEditTime: 2022-05-31 11:18:53
 -->
 <template>
   <div class="MainContent">
@@ -38,6 +38,8 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -46,15 +48,15 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(1)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
         <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG"  @click="approve(0)">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'"  @click="approve(0)">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -745,25 +747,31 @@ export default {
         this.$message.info('数据不能为空')
       }
     },
-    approve() {
+    approve(value) {
       if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+        if (value) {
+          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
           })
             .then(() => {
-              const mainId = this.tableData[0].mainId
               API.approve({
                 mainId: mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit:0,//申请0,审批1
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
-                  this.$message.success('提交成功')
+                  this.$message({
+                    type: 'success',
+                    message: '审批成功!',
+                  })
                   this.getTableData()
+                } else {
+                  this.$message({
+                    type: 'info',
+                    message: '审批失败!',
+                  })
                 }
               })
             })
@@ -774,7 +782,31 @@ export default {
               })
             })
         } else {
-          this.$message.info('数据未校验，请先进行导入验证')
+          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(() => {
+              API.approve({
+                mainId: mainId, // 主表id
+                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                isSubmit: 1, //申请0,审批1
+              }).then((response) => {
+                if (response.code === 1000) {
+                  this.$message.success('驳回成功!')
+                  this.getTableData()
+                } else {
+                  this.$message.info('驳回失败!')
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         }
       } else {
         this.$message.warning('数据不能为空')
