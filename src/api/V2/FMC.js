@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-06-01 09:02:00
+ * @LastEditTime: 2022-06-01 16:47:29
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -11,10 +11,6 @@ export default {
   //申请 分页查询
   getPage(params) {
     return requestApi.request_get(this.url+'/getV2Page', params)
-  },
-  //导入
-  importV2(params) {
-    return requestApi.request_get(this.url+'/importV2', params)
   },
   //导出V2
   exportV2(params) {
@@ -27,7 +23,28 @@ export default {
   },
   //保存
   saveV2Data(params) {
-    return requestApi.request_get(this.url+'/saveV2Data', params)
+    return requestApi.request_put(this.url+'/saveV2Data', params)
+  },
+  //下载模板
+  downloadTemplate(params) {
+    return request({
+      url: this.url+'/downloadV2Template',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //导入
+  import(params) {
+    return requestApi.request_post(this.url+'/importV2', params)
+  },
+  //异常项校验
+  exceptionCheck(params) {
+    return requestApi.request_post(this.url+'/exceptionCheck', params)
+  },
+  //提交
+  approve(params) {
+    return requestApi.request_post(this.url+'/approve', params)
   },
   //获取审批
   getApproveList(params) {

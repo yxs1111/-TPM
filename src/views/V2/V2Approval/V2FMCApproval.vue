@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 13:48:18
+ * @LastEditTime: 2022-06-01 17:00:06
 -->
 <template>
   <div class="MainContent">
@@ -431,15 +431,33 @@ export default {
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
-      monthList: [],
+      monthList: [
+        {
+          id: 1,
+          createBy: 'admin',
+          createDate: '2022-03-04T09:23:41',
+          updateBy: null,
+          updateDate: null,
+          deleteFlag: 0,
+          activityMonth: '202202',
+          startAndEndVZero: '2022/01/30 - 2022/01/31',
+          startAndEndVOne: '2022/02/07 - 2022/02/18',
+          startAndEndVTwo: '2022/03/19 - 2022/03/31',
+          startAndEndVThree: '2022/04/07 - 2022/04/28',
+          openingStatus: 1,
+          state: 1,
+          remark: null,
+          leWeek: null,
+          leVthreeDate: null,
+          leVtwoDate: null,
+        },
+      ],
       customerArr: [],
       tableData: [],
       RegionList: [],
       supplierList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
-      isSelf: 0, //是否是当前审批人
-      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -466,7 +484,7 @@ export default {
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    this.getAllMonth()
+    // this.getAllMonth()
     this.getSupplierList()
   },
   methods: {
@@ -490,8 +508,6 @@ export default {
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = this.tableData[0].isGainLe
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -509,14 +525,14 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.activityName === 'Fin审批' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
-              //本人可以提交
-              this.isSelf = true
+              //本人可以提交、已经是提交（申请过）、节点
+              this.isSubmit = false
             } else {
               //其他人禁用
-              this.isSelf = false
+              this.isSubmit = true
             }
           }
         })
@@ -576,7 +592,7 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIHApplyExcel({
+        API.exportV2({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
@@ -607,10 +623,26 @@ export default {
     },
     // 导入
     parsingExcel(event) {
-      this.isCheck = false
+      this.event = event
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      this.event = event
+      let formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.month)
+      formData.append('channelCode', this.filterObj.channelCode)
+      API.import(formData).then((response) => {
+        //清除input的value ,上传一样的
+        event.srcElement.value = '' // 置空
+        if (response.code == 1000) {
+          if (!Array.isArray(response.data)) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.ImportData = response.data
+            this.saveBtn = this.ImportData.length ? true : false
+            this.$message.success('导入成功！')
+          }
+        }
+      })
     },
     // 关闭导入
     closeImportDialog() {
@@ -623,11 +655,8 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.importSave({
-        yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
-        costItemCode: 'HIH rebate',
-        isSubmit: 0,
+      API.saveV2Data({
+        mainId:this.mainId
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
@@ -686,9 +715,8 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                mainId: this.mainId, // 主表id
+                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -718,9 +746,8 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                mainId: this.mainId, // 主表id
+                approve: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')

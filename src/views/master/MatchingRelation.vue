@@ -270,6 +270,7 @@ export default {
       if (value == '') {
         this.filterObj.regionName = ''
         this.filterObj.zoneName = ''
+        this.getLargeAreaList()
       }
       this.zoneList = []
       this.filterObj.zoneName = ''
@@ -285,6 +286,7 @@ export default {
       if (value == '') {
         this.ruleForm.regionName = ''
         this.ruleForm.zoneName = ''
+        this.getLargeAreaListdialog()
       }
       this.zoneListDialog = []
       this.ruleForm.zoneName = ''
