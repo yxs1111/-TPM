@@ -460,7 +460,7 @@ export default function() {
         {
           path: '/MatchingRelation',
           name: 'MatchingRelation',
-          code: 'mdm_product_information',
+          code: 'MdOrganizationSupplier',
           component: () => import('@/views/master/MatchingRelation.vue'),
           meta: { title: '匹配关系', icon: 'apply' },
         },
