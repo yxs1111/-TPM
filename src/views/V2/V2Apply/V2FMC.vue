@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-31 16:25:04
+ * @LastEditTime: 2022-06-01 11:59:24
 -->
 <template>
   <div class="MainContent">
@@ -23,7 +23,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -53,161 +53,161 @@
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
-        <svg-icon icon-class="passApprove"  style="font-size: 24px;" />
+        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
       <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-          <span class="tipStar">*</span>
-          注意事项：未获取到MTD人数，无法办理
+        <span class="tipStar">*</span>
+        注意事项：未获取到MTD人数，无法办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="120" align="center" prop="costType" label="费用类型" />
+      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
+      <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="customerName" label="供应商" />
-      <el-table-column width="220" align="center" prop="brandName" label="大区" />
-      <el-table-column width="220" align="center" prop="brandName" label="区域" />
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划单价(RMB/人)">
+      <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
+      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="220" align="center" prop="zoneName" label="大区" />
+      <el-table-column width="220" align="center" prop="regionName" label="区域" />
+      <el-table-column width="220" align="right" prop="v1PlanPrice" label="V1计划单价(RMB/人)">
         <template v-slot:header>
           <div>V1计划单价(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v1PlanPrice) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划人数(人)">
+      <el-table-column width="220" align="right" prop="v1PlanPeopleNum" label="V1计划人数(人)">
         <template v-slot:header>
           <div>V1计划人数(人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v1PlanPeopleNum) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v1PlanCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V2预估单价-默认(RMB/人)">
+      <el-table-column width="220" align="right" prop="v2DefaultEstimatePrice" label="V2预估单价-默认(RMB/人)">
         <template v-slot:header>
           <div>V2预估单价-默认(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v2DefaultEstimatePrice) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V2预估人数-默认(人)">
+      <el-table-column width="220" align="right" prop="v2DefaultEstimatePeopleNum" label="V2预估人数-默认(人)">
         <template v-slot:header>
           <div>V2预估人数-默认(人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v2DefaultEstimatePeopleNum) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V2预估费用-默认(RMB)">
+      <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
         <template v-slot:header>
           <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v2DefaultEstimateCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V2预估单价-调整后(RMB/人)">
+      <el-table-column width="240" align="right" prop="v2AdjustEstimatePrice" label="V2预估单价-调整后(RMB/人)">
         <template v-slot:header>
           <div>V2预估单价-调整后(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v2AdjustEstimatePrice) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V2预估人数-调整后(人)">
+      <el-table-column width="220" align="right" prop="v2AdjustEstimatePeopleNum" label="V2预估人数-调整后(人)">
         <template v-slot:header>
           <div>V2预估人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v2AdjustEstimatePeopleNum) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V2预估费用-调整后(RMB)">
+      <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
           <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.v2AdjustEstimateCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用核销方式"></el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="单价差值(%)">
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
+      <el-table-column width="220" align="right" prop="priceDifference" label="单价差值(%)">
         <template v-slot:header>
           <div>单价差值(%)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.ratioDifference) }}
+            {{ formatNum(scope.row.priceDifference) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="人数差值(%)">
+      <el-table-column width="220" align="right" prop="peopleNumDifference" label="人数差值(%)">
         <template v-slot:header>
           <div>人数差值(%)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.ratioDifference) }}
+            {{ formatNum(scope.row.peopleNumDifference) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
+      <el-table-column width="220" align="right" prop="priceDifference" label="费用差值(RMB)">
         <template v-slot:header>
           <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.costDifference) }}
+            {{ formatNum(scope.row.priceDifference) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
+      <el-table-column width="180" align="center" prop="systemJudgment" label="系统判定">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-              <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-              <span class="judgmentText">{{ row.judgmentType }}</span>
+              <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
+              <span class="judgmentText">{{ row.systemJudgment }}</span>
             </div>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="220" align="center" prop="systemJudgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -431,11 +431,31 @@ export default {
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
-      monthList: [],
+      monthList: [
+        {
+          id: 1,
+          createBy: 'admin',
+          createDate: '2022-03-04T09:23:41',
+          updateBy: null,
+          updateDate: null,
+          deleteFlag: 0,
+          activityMonth: '202202',
+          startAndEndVZero: '2022/01/30 - 2022/01/31',
+          startAndEndVOne: '2022/02/07 - 2022/02/18',
+          startAndEndVTwo: '2022/03/19 - 2022/03/31',
+          startAndEndVThree: '2022/04/07 - 2022/04/28',
+          openingStatus: 1,
+          state: 1,
+          remark: null,
+          leWeek: null,
+          leVthreeDate: null,
+          leVtwoDate: null,
+        },
+      ],
       customerArr: [],
       tableData: [],
-      RegionList:[],
-      supplierList:[],
+      RegionList: [],
+      supplierList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
@@ -457,8 +477,7 @@ export default {
     }
   },
   computed: {},
-  watch: {
-  },
+  watch: {},
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -467,7 +486,7 @@ export default {
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    this.getAllMonth()
+    // this.getAllMonth()
     this.getSupplierList()
   },
   methods: {
@@ -486,7 +505,7 @@ export default {
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerCode: this.filterObj.customerCode,
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
@@ -551,15 +570,11 @@ export default {
         })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.RegionList = res.data
-          }
-        })
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     getSupplierList() {
       selectAPI.getSupplierList().then((res) => {
@@ -584,7 +599,7 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportV2({
-          customerCode: this.filterObj.customerCode,
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
@@ -619,8 +634,7 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      this.event=event
-      
+      this.event = event
     },
     // 关闭导入
     closeImportDialog() {
@@ -637,9 +651,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
-      formData.append('isSubmit', 0)
-      formData.append('costItemCode', 'HIH rebate')
-      API.formatCheck(formData).then((response) => {
+      API.importV2(formData).then((response) => {
         //清除input的value ,上传一样的
         this.event.srcElement.value = '' // 置空
         if (response.code == 1000) {
@@ -648,11 +660,11 @@ export default {
           } else {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
-            let isError=this.ImportData.findIndex(item=>{
-              item.judgmentType=='error'
+            let isError = this.ImportData.findIndex((item) => {
+              item.judgmentType == 'error'
             })
-            this.saveBtn = isError==-1?1:0
-            console.log(this.saveBtn);
+            this.saveBtn = isError == -1 ? 1 : 0
+            console.log(this.saveBtn)
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -661,11 +673,9 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.importSave({
-        yearAndMonth:this.filterObj.month,
-        channelCode:this.filterObj.channelCode,
-        costItemCode:'HIH rebate',
-        isSubmit: 0,
+      API.saveV2Data({
+        yearAndMonth: this.filterObj.month,
+        channelCode: this.filterObj.channelCode,
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
@@ -687,7 +697,10 @@ export default {
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.downloadFile(
+            res,
+            'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx'
+          ) // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -702,11 +715,10 @@ export default {
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          costItemCode:'HIH rebate',
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
@@ -728,7 +740,7 @@ export default {
               API.approve({
                 mainId: mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit:0,//申请0,审批1
+                isSubmit: 0, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')

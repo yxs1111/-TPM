@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-05-31 16:15:33
+ * @LastEditTime: 2022-06-01 09:02:00
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -10,7 +10,7 @@ export default {
   url: '/cityplan/investFmcVTwo',
   //申请 分页查询
   getPage(params) {
-    return requestApi.request_get(this.url+'/getPage', params)
+    return requestApi.request_get(this.url+'/getV2Page', params)
   },
   //导入
   importV2(params) {
