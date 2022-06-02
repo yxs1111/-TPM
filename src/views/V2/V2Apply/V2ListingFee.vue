@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-30 15:57:15
+ * @LastEditTime: 2022-06-02 14:54:49
 -->
 <template>
   <div class="MainContent">
@@ -40,8 +40,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+             <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName"  />
           </el-select>
         </div>
         <div class="Selectli">
@@ -128,7 +128,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="220" align="center" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -235,21 +235,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
-            </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
             <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -283,10 +268,13 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        supplierCode: '',
+        distributorCode: '',
         regionCode: '',
         customerCode: '',
+        customerMdmCode: '',
         month: '',
+        dim_product: '',
+        brandCode: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -294,8 +282,9 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList: [],
+      BrandList: [],
       skuOptions: [],
-      ContractItemList: [],
+      distributorArr: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
@@ -327,7 +316,8 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getContractItemList()
+    this.getBrandList()
+    this.getDistributorList()
   },
   methods: {
     // 获取表格数据
@@ -387,13 +377,17 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取ContractItem
-    getContractItemList() {
-      selectAPI.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.ContractItemList = res.data
-        }
-      })
+    // 经销商
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
     },
     // 获取下拉框
     getChannel() {
@@ -431,6 +425,13 @@ export default {
             this.RegionList = res.data
           }
         })
+    },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
+        if (res.code === 1000) {
+          this.BrandList = res.data
+        }
+      })
     },
     //千分位分隔符+两位小数
     formatNum(num) {
