@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-27 08:51:27
+ * @LastEditTime: 2022-06-02 08:36:19
 -->
 <template>
   <div class="MainContent">
@@ -127,7 +127,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
-      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>

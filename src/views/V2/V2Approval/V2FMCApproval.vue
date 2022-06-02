@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 17:00:06
+ * @LastEditTime: 2022-06-01 17:28:30
 -->
 <template>
   <div class="MainContent">
@@ -689,11 +689,9 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.downApplyExcelTemplate({
+        API.downloadTemplate({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          costItemCode: 'HIH rebate',
         }).then((res) => {
           downloadFile(
             res,
