@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-24 15:35:51
+ * @LastEditTime: 2022-06-02 09:23:44
 -->
 <template>
   <div class="MainContent">
@@ -33,20 +33,20 @@
         </div>
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow">新增一行</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow" v-permission="permissions['insert']">新增一行</el-button>
       <!-- <div class="TpmButtonBG" @click="save">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
       </div> -->
-      <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">提交</el-button>
       <!-- <div class="TpmButtonBG cancelButton" @click="cancelAddNewRow">
         <span class="text">取消</span>
       </div> -->
@@ -62,7 +62,7 @@
       <el-table-column fixed align="center" width="220" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
-            <div class="haveText_delete" @click="deleteRow(scope.row, scope.$index)">
+            <div class="haveText_delete" @click="deleteRow(scope.row, scope.$index)" v-permission="permissions['delete']">
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
@@ -70,7 +70,7 @@
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isEditor&&!scope.row.isNewData" @click="editorRow(scope.$index,scope.row)">
+            <div class="haveText_editor" v-permission="permissions['update']" v-show="!scope.row.isEditor&&!scope.row.isNewData" @click="editorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
@@ -448,6 +448,7 @@ export default {
           )
         },
       },
+      permissions: getDefaultPermissions(),
     }
   },
   mounted() {

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-23 11:56:34
+ * @LastEditTime: 2022-06-02 10:02:17
 -->
 <template>
   <div class="MainContent">
@@ -27,16 +27,16 @@
         </div>
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG" @click="submit">通过</el-button>
-      <el-button type="primary" class="TpmButtonBG" @click="reject">驳回</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">通过</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="reject" v-permission="permissions['rejected']">驳回</el-button>
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
@@ -54,7 +54,7 @@
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
+            <div class="haveText_editor" v-permission="permissions['update']" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
@@ -188,6 +188,7 @@ export default {
         tempInfo: null,
       },
       ccId: null,
+      permissions: getDefaultPermissions(),
     }
   },
   mounted() {

@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-31 09:26:03
+ * @LastEditTime: 2022-06-02 10:09:52
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -11,7 +11,7 @@ export default function() {
     {
       path:'/contractManagement',
       component: Layout,
-      code: 'price_nka_v0',
+      code: 'ContractManagement',
       name: 'costManagement',
       alwaysShow: true,
       meta: { title: '合同管理', icon: 'contractManagement' },
@@ -19,13 +19,14 @@ export default function() {
         {
           path: '/contractManagement/ContractEntry',
           name: 'customerContractEntry',
-          code: 'mdm_product_information',
+          code: 'customerContractEntry',
+          alwaysShow: true,
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '客户合同', icon: 'apply',activeMenu: '/contractManagement' },
           children: [
             {
               path: '/contractManagement/ContractEntry/CustomerContractEntry',
-              code: 'mdm_product_information',
+              code: 'customerContractApply',
               name: 'CustomerContractEntry',
               component: () => import('@/views/taskManage/ContractEntry/CustomerContractEntry.vue'),
               meta: { title: '录入', icon: 'apply',activeMenu: '/contractManagement/ContractEntry' },
@@ -34,7 +35,7 @@ export default function() {
                 {
                   hidden: true,
                   path: '/contractManagement/ContractEntry/CustomerContractEntry/StraightGiving',
-                  code: 'mdm_product_information',
+                  code: 'customerContractApply',
                   name: 'StraightGiving',
                   component: () => import('@/views/taskManage/ContractEntry/CustomerContractEntry/StraightGiving.vue'),
                   meta: { title: '直供', icon: 'form' ,activeMenu: '/contractManagement/ContractEntry/CustomerContractEntry'},
@@ -42,7 +43,7 @@ export default function() {
                 {
                   hidden: true,
                   path: '/contractManagement/ContractEntry/CustomerContractEntry/LikenessStraightGiving',
-                  code: 'mdm_product_information',
+                  code: 'customerContractApply',
                   name: 'LikenessStraightGiving',
                   component: () => import('@/views/taskManage/ContractEntry/CustomerContractEntry/LikenessStraightGiving.vue'),
                   meta: { title: '准直供', icon: 'form' ,activeMenu: '/contractManagement/ContractEntry/CustomerContractEntry'},
@@ -50,7 +51,7 @@ export default function() {
                 {
                   hidden: true,
                   path: '/contractManagement/ContractEntry/CustomerContractEntry/UnStraightGiving',
-                  code: 'mdm_product_information',
+                  code: 'customerContractApply',
                   name: 'UnStraightGiving',
                   component: () => import('@/views/taskManage/ContractEntry/CustomerContractEntry/UnStraightGiving.vue'),
                   meta: { title: '间供', icon: 'form' ,activeMenu: '/contractManagement/ContractEntry/CustomerContractEntry'},
@@ -59,7 +60,7 @@ export default function() {
             },
             {
               path: '/contractManagement/ContractEntry/CustomerContractApproval',
-              code: 'mdm_product_information',
+              code: 'customerContractEntryApproval',
               name: 'CustomerContractApproval',
               component: () => import('@/views/taskManage/ContractEntry/CustomerContractApproval.vue'),
               meta: { title: '审批', icon: 'approve',activeMenu: '/contractManagement/ContractEntry/CustomerContractApproval' },
@@ -69,13 +70,14 @@ export default function() {
         {
           path: '/contractManagement/dealer',
           name: 'dealerContract',
-          code: 'mdm_product_information',
+          code: 'dealerContract',
+          alwaysShow: true,
           component: () => import('@/views/master/modelIndex.vue'),
           meta: { title: '经销商分摊协议', icon: 'apply',activeMenu: '/contractManagement' },
           children: [
             {
               path: '/contractManagement/dealer/dealerContractEntry',
-              code: 'mdm_product_information',
+              code: 'dealerContractApply',
               name: 'dealerContractEntry',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry.vue'),
               meta: { title: '录入', icon: 'apply' },
@@ -83,14 +85,14 @@ export default function() {
             {
               hidden: true,
               path: '/contractManagement/dealer/dealerContractEntry/dealerTermDetail',
-              code: 'mdm_product_information',
+              code: 'dealerContractApply',
               name: 'dealerTermDetail',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail.vue'),
               meta: { title: '经销商分摊协议录入-条款明细', icon: 'form' ,activeMenu: '/contractManagement/dealer/dealerContractEntry'},
             },
             {
               path: '/contractManagement/dealer/dealerContractApproval',
-              code: 'mdm_product_information',
+              code: 'dealerContractApproval',
               name: 'dealerContractApproval',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval.vue'),
               meta: { title: '审批', icon: 'approve' },
@@ -98,7 +100,7 @@ export default function() {
             {
               hidden: true,
               path: '/contractManagement/dealer/dealerContractApproval/dealerTermView',
-              code: 'mdm_product_information',
+              code: 'dealerContractApproval',
               name: 'dealerTermView',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval/dealerTermView.vue'),
               meta: { title: '经销商分摊协议录入-条款明细', icon: 'form' ,activeMenu: '/contractManagement/dealer/dealerContractApproval'},

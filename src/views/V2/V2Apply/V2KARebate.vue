@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-02 08:36:19
+ * @LastEditTime: 2022-06-02 09:30:49
 -->
 <template>
   <div class="MainContent">
@@ -112,24 +112,6 @@
       </el-table-column>
       <el-table-column  width="220" align="right" prop="costDeptName" label="费用归属部门">
       </el-table-column>
-      <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-        <template slot-scope="{row}">
-          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-            <div slot="content" v-html="getTip(row)" />
-            <div class="statusWrap">
-              <img v-if="row.judgmentType=='pass'" src="@/assets/images/success.png" alt="">
-              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-              <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
-              <span class="judgmentText">{{ row.judgmentType }}</span>
-             </div>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
-      </el-table-column>
-      <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
-      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
-      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
