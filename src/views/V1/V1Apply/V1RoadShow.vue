@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 09:59:58
+ * @LastEditTime: 2022-06-06 09:12:27
 -->
 <template>
   <div class="MainContent">
@@ -53,8 +53,8 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap" style="align-items: center;" @click="getSmartPlan">
-      <div class="TpmButtonBG">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
+      <div class="TpmButtonBG" @click="getSmartPlan">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">获取smartplan数据</span>
       </div>
@@ -64,10 +64,10 @@
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="280" align="center" prop="supplierName" label="供应商" />
       <el-table-column width="220" align="center" prop="zoneName" label="大区" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="center" prop="activityType" label="活动类型" />
@@ -214,12 +214,25 @@ export default {
     },
     //获取SmartPlan
     getSmartPlan() {
-      API.getSmartplanData().then((res) => {
-        if (res.code === 1000) {
-          this.$message.success("成功获取SmartPlan数据")
-          this.getTableData()
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
         }
-      })
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.getSmartplanData({
+          yearAndMonth: this.filterObj.month,
+          channelCode: this.filterObj.channelCode,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('成功获取SmartPlan数据')
+            this.getTableData()
+          }
+        })
+      }
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
@@ -248,15 +261,11 @@ export default {
         })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.RegionList = res.data
-          }
-        })
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     getSupplierList() {
       selectAPI.getSupplierList().then((res) => {
@@ -283,11 +292,7 @@ export default {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          supplierCode: this.filterObj.supplierCode,
-          zoneCode: this.filterObj.zoneCode,
-          regionCode: this.filterObj.regionCode,
-          activityType: this.filterObj.activityType,
+          menu: "export" //导出常量 固定传这个
         }).then((res) => {
           downloadFile(
             res,

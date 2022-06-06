@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 13:17:12
+ * @LastEditTime: 2022-06-06 09:43:28
 -->
 <template>
   <div class="MainContent">
@@ -58,7 +58,7 @@
       </div>
       <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
         <span class="tipStar">*</span>
-        注意事项：若未获取到LE销量，不能办理
+        注意事项：若未获取到MTD场次日期，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -66,10 +66,10 @@
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="280" align="center" prop="supplierName" label="供应商" />
       <el-table-column width="220" align="center" prop="zoneName" label="大区" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="center" prop="activityType" label="活动类型" />
@@ -115,7 +115,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedPrice" label="V2预估单价-调整后(RMB/场)">
+      <el-table-column width="260" align="right" prop="adjustedPrice" label="V2预估单价-调整后(RMB/场)">
         <template v-slot:header>
           <div>V2预估单价-调整后(RMB/场)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
@@ -254,9 +254,9 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>
@@ -267,10 +267,10 @@
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-            <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+            <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
             <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-            <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+            <el-table-column width="280" align="center" prop="supplierName" label="供应商" />
             <el-table-column width="220" align="center" prop="zoneName" label="大区" />
             <el-table-column width="220" align="center" prop="regionName" label="区域" />
             <el-table-column width="220" align="center" prop="activityType" label="活动类型" />
@@ -522,7 +522,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version === 'RSV2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -589,7 +589,7 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.downExcelTemplate({
+        API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
@@ -717,7 +717,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_RoadShow_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.month}_RoadShow_${this.filterObj.channelCode}_V2申请模板.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })

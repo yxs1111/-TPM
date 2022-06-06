@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 13:27:33
+ * @LastEditTime: 2022-06-06 09:29:55
 -->
 <template>
   <div class="MainContent">
@@ -55,6 +55,10 @@
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
+      </div>
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+        <span class="tipStar">*</span>
+        注意事项：若未获取到实际场次，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">

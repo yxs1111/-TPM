@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-31 08:46:07
+ * @LastEditTime: 2022-06-06 09:22:53
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -75,6 +75,14 @@ export default function() {
               component: () => import('@/views/V2/V2Apply/V2FMC.vue'),
               meta: { title: 'FMC', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
             },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2RoadShow',
+              code: 'price_nka_v2_apply',
+              name: 'V2RoadShow',
+              component: () => import('@/views/V2/V2Apply/V2RoadShow.vue'),
+              meta: { title: 'V2RoadShow', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
+            },
           ]
         },
         {
@@ -132,6 +140,14 @@ export default function() {
               name: 'V2FMCApproval',
               component: () => import('@/views/V2/V2Approval/V2FMCApproval.vue'),
               meta: { title: 'FMC', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2RoadShowApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2RoadShowApproval',
+              component: () => import('@/views/V2/V2Approval/V2RoadShowApproval.vue'),
+              meta: { title: 'V2RoadShowApproval', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
             },
           ]
         },

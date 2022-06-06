@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-31 09:08:40
+ * @LastEditTime: 2022-06-06 09:25:56
 -->
 <template>
   <div class="tabViewsWrap">
@@ -151,6 +151,14 @@ export default {
             {
               name: 'FMC',
               path: '/costManagement/V2/V2Apply/V2FMC',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
+              name: 'Road Show',
+              path: '/costManagement/V2/V2Apply/V2RoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')

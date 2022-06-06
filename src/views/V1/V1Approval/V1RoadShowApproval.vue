@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 10:33:03
+ * @LastEditTime: 2022-06-06 09:18:55
 -->
 <template>
   <div class="MainContent">
@@ -58,10 +58,10 @@
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="280" align="center" prop="supplierName" label="供应商" />
       <el-table-column width="220" align="center" prop="zoneName" label="大区" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="center" prop="activityType" label="活动类型" />
@@ -109,6 +109,7 @@
       </el-table-column>
       <el-table-column width="220" align="center" prop="dept" label="费用归属部门"></el-table-column>
       <el-table-column width="220" align="center" prop="cancelCost" label="费用核销方式"></el-table-column>
+    </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
@@ -211,14 +212,6 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取ContractItem
-    getContractItemList() {
-      selectAPI.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.ContractItemList=res.data
-        }
-      })
-    },
     // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -275,15 +268,11 @@ export default {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          supplierCode: this.filterObj.supplierCode,
-          zoneCode: this.filterObj.zoneCode,
-          regionCode: this.filterObj.regionCode,
-          activityType: this.filterObj.activityType,
+          menu: "export" //导出常量 固定传这个
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_RoadShow_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_RoadShow_${this.filterObj.channelCode}_V1_审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
