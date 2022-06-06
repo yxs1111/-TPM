@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-20 14:50:01
+ * @LastEditTime: 2022-06-06 10:51:27
 -->
 <template>
   <div>
@@ -81,7 +81,23 @@ export default {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')
               }
-            }
+            },
+            {
+              name: 'FMC',
+              path: '/master/ruleCtrl/model/splitRulesFMC',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
+              name: 'Road Show',
+              path: '/master/ruleCtrl/model/splitRulesRoadShow',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
           ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
