@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 17:28:30
+ * @LastEditTime: 2022-06-06 21:41:45
 -->
 <template>
   <div class="MainContent">
@@ -23,7 +23,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -34,7 +34,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
@@ -207,7 +207,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="systemJudgmentContent" label="系统判定内容">
+      <el-table-column width="480" align="center" prop="systemJudgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -262,132 +262,144 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                    <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-            <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-            <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-            <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+            <el-table-column width="120" align="center" prop="costType" label="费用类型" />
+            <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
+            <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
             <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
-            <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-            <el-table-column width="220" align="center" prop="brandName" label="Contract Item" />
-            <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
+            <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
+            <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+            <el-table-column width="220" align="center" prop="zoneName" label="大区" />
+            <el-table-column width="220" align="center" prop="regionName" label="区域" />
+            <el-table-column width="220" align="right" prop="v1PlanPrice" label="V1计划单价(RMB/人)">
               <template v-slot:header>
-                <div>V1计划合同点数(%)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>V1计划单价(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.planRatio) }}
+                  {{ formatNum(scope.row.v1PlanPrice) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planNewUserNum" label="V1计划销售额IMK(RMB)">
+            <el-table-column width="220" align="right" prop="v1PlanPeopleNum" label="V1计划人数(人)">
               <template v-slot:header>
-                <div>V1计划销售额IMK(RMB)<br><span class="subTitle">kA</span></div>
+                <div>V1计划人数(人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.planSalesAmount) }}
+                  {{ formatNum(scope.row.v1PlanPeopleNum) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="V1计划合同费用(RMB)">
+            <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划合同费用(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.planCost) }}
+                  {{ formatNum(scope.row.v1PlanCost) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="V2预估合同点数-默认(%)">
+            <el-table-column width="220" align="right" prop="v2DefaultEstimatePrice" label="V2预估单价-默认(RMB/人)">
               <template v-slot:header>
-                <div>V2预估合同点数-默认(%)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>V2预估单价-默认(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.forecastRatio) }}
+                  {{ formatNum(scope.row.v2DefaultEstimatePrice) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="planCost" label="V2预估销售额IMK-默认(RMB)">
+            <el-table-column width="220" align="right" prop="v2DefaultEstimatePeopleNum" label="V2预估人数-默认(人)">
               <template v-slot:header>
-                <div>V2预估销售额IMK-默认(RMB)<br><span class="subTitle">kA</span></div>
+                <div>V2预估人数-默认(人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.forecastSalesAmount) }}
+                  {{ formatNum(scope.row.v2DefaultEstimatePeopleNum) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="V2预估合同费用-默认(RMB)">
+            <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估合同费用-默认(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.forecastCost) }}
+                  {{ formatNum(scope.row.v2DefaultEstimateCost) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="V2预估合同点数-调整后(%)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimatePrice" label="V2预估单价-调整后(RMB/人)">
               <template v-slot:header>
-                <div>V2预估合同点数-调整后(%)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>V2预估单价-调整后(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.adjustedRatio) }}
+                  {{ formatNum(scope.row.v2AdjustEstimatePrice) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="260" align="right" prop="planCost" label="V2预估销售额IMK-调整后(RMB)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimatePeopleNum" label="V2预估人数-调整后(人)">
               <template v-slot:header>
-                <div>V2预估销售额IMK-调整后(RMB)<br><span class="subTitle">kA</span></div>
+                <div>V2预估人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.adjustedSalesAmount) }}
+                  {{ formatNum(scope.row.v2AdjustEstimatePeopleNum) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="240" align="right" prop="planCost" label="V2预估合同费用-调整后(RMB)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V2预估合同费用-调整后(RMB)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.adjustedCost) }}
+                  {{ formatNum(scope.row.v2AdjustEstimateCost) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门">
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
+            <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
+            <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
+            <el-table-column width="220" align="right" prop="priceDifference" label="单价差值(%)">
               <template v-slot:header>
-                <div>点数差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>单价差值(%)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.ratioDifference) }}
+                  {{ formatNum(scope.row.priceDifference) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="费用差值(%)">
+            <el-table-column width="220" align="right" prop="peopleNumDifference" label="人数差值(%)">
               <template v-slot:header>
-                <div>费用差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
+                <div>人数差值(%)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.costDifference) }}
+                  {{ formatNum(scope.row.peopleNumDifference) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="priceDifference" label="费用差值(RMB)">
+              <template v-slot:header>
+                <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.priceDifference) }}
                 </div>
               </template>
             </el-table-column>
@@ -425,7 +437,7 @@ export default {
       filterObj: {
         channelCode: '',
         supplierName: '',
-        regionCode: '',
+        regionName: '',
         customerCode: '',
         month: '',
       },
@@ -485,6 +497,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     // this.getAllMonth()
+    this.getRegionList()
     this.getSupplierList()
   },
   methods: {
@@ -503,9 +516,11 @@ export default {
         API.getApproveList({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerCode: this.filterObj.customerCode,
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -593,9 +608,11 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportV2({
-          customerCode: this.filterObj.customerCode,
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((res) => {
           downloadFile(
             res,
@@ -630,6 +647,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('importType', 0)
       API.import(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
@@ -655,32 +673,13 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.saveV2Data({
-        mainId:this.mainId
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.downCheckData({
-          yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          costItemCode: 'HIH rebate',
-          isSubmit: 0,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
+        this.downloadTemplate()
       } else {
         this.$message.info('异常数据为空!')
       }
@@ -714,7 +713,7 @@ export default {
             .then(() => {
               API.approve({
                 mainId: this.mainId, // 主表id
-                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -745,7 +744,7 @@ export default {
             .then(() => {
               API.approve({
                 mainId: this.mainId, // 主表id
-                approve: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')
@@ -788,7 +787,7 @@ export default {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     getTip(row) {
-      return `<div class="Tip">${row.judgmentContent}</div>`
+      return `<div class="Tip">${row.systemJudgmentContent}</div>`
     },
   },
 }

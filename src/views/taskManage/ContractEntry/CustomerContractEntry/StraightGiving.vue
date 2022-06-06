@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-02 09:12:37
+ * @LastEditTime: 2022-06-06 16:38:50
 -->
 <template>
   <div class="MainContent">
@@ -201,7 +201,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="240" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="300" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -275,7 +275,7 @@
               <span class="addNewRowText">新增一行</span>
             </div>
           </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="250" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -918,7 +918,7 @@ export default {
         this.$message.info('该数据为新增数据,请选择其它数据')
       } else {
         //草稿、被拒绝可以编辑，其他仅查看
-        // this.$refs.termDialog.$el.firstChild.style.height = '90%'
+        this.$refs.termDialog.$el.firstChild.style.height = '100%'
         API.findOneSaveDetail({
           id: this.customerId,
           isMain: 1,
@@ -1453,6 +1453,16 @@ export default {
         }
       }
     }
+    .el-table td, .el-table th {
+    padding: 0 !important;
+    min-width: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    position: relative;
+    text-align: left;
+}
   }
 }
 .my-el-inputNumber {

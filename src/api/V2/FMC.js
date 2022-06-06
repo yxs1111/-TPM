@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-06-01 16:47:29
+ * @LastEditTime: 2022-06-06 13:35:15
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -40,7 +40,7 @@ export default {
   },
   //异常项校验
   exceptionCheck(params) {
-    return requestApi.request_post(this.url+'/exceptionCheck', params)
+    return requestApi.request_post(this.url+'/exceptionCheckV2', params)
   },
   //提交
   approve(params) {

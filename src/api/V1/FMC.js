@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-05-31 14:54:55
+ * @LastEditTime: 2022-06-06 09:55:53
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -19,7 +19,7 @@ export default {
   exportV1(params) {
     return request({
       url: '/cityplan/investFmcVOne/exportV1',
-      method: 'post',
+      method: 'get',
       params: params,
       responseType: 'blob'
     })

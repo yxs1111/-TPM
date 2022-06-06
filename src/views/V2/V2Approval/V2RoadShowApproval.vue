@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 13:34:23
+ * @LastEditTime: 2022-06-06 12:04:10
 -->
 <template>
   <div class="MainContent">
@@ -492,7 +492,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version === 'RSV2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {

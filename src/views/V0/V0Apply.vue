@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-18 17:26:36
+ * @LastEditTime: 2022-06-06 13:38:05
 -->
 <template>
   <div class="V0Content">
@@ -475,10 +475,14 @@ export default {
       this.getList()
     },
     getCPTData() {
-      if(this.filterObj.channelCode=='') {
-        this.$message.info('请先选择渠道')
-        return
+      if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
       }
+      if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+          return
+      } 
       this.getScenarioList()
       this.dialogVisible = true
       this.ruleForm.channelCode = this.filterObj.channelCode

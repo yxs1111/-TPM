@@ -432,6 +432,32 @@ export default function() {
                     activeMenu: '/ruleCtrl/testRules'
                   }
                 },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesFMC',
+                  code: 'mdm_Split_rules',
+                  name: 'splitRulesFMC',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesFMC.vue'),
+                  meta: {
+                    title: 'splitRulesFMC',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesRoadShow',
+                  code: 'mdm_Split_rules',
+                  name: 'splitRulesRoadShow',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesRoadShow.vue'),
+                  meta: {
+                    title: 'splitRulesRoadShow',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
               ]
             }
             // {

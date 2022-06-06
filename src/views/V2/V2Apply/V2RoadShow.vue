@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 09:43:28
+ * @LastEditTime: 2022-06-06 11:27:55
 -->
 <template>
   <div class="MainContent">
@@ -263,7 +263,7 @@
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
@@ -375,32 +375,6 @@
               </template>
             </el-table-column>
             <el-table-column width="220" align="right" prop="differenceCost" label="费用差值(RMB)">
-            </el-table-column>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="400" align="right" prop="judgmentContent" label="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.judgmentContent }}
-                </div>
-              </template>
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />

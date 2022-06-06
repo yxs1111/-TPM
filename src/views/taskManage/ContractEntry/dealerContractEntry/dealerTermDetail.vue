@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-19 10:15:26
+ * @LastEditTime: 2022-06-06 17:40:49
 -->
 <template>
   <div class="ContentDetail">
@@ -1170,11 +1170,12 @@ export default {
                 ...dealerItem,
               })
             }
-            if(dealerItem.taxPrice=='') {
+            if(dealerItem.taxPrice==='') {
               isTaxPriceEmpty=true
             }
           })
         }
+        console.log(isTaxPriceEmpty);
         //error 错误  经销商含税总金额若不等于客户含税金额 报error
         if (!item.isTotal && !item.isVariable) {
           let customerTaxPrice = item.customerInfo.taxPrice

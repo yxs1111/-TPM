@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-01 16:44:01
+ * @LastEditTime: 2022-06-06 19:30:07
 -->
 <template>
   <div class="MainContent">
@@ -207,7 +207,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="systemJudgmentContent" label="系统判定内容">
+      <el-table-column width="480" align="center" prop="systemJudgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -224,7 +224,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -262,9 +262,9 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.systemJudgment=='error'" src="@/assets/images/selectError.png" alt="">
+                    <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.systemJudgment }}</span>
                   </div>
                 </el-tooltip>
@@ -499,6 +499,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     // this.getAllMonth()
+    this.getRegionList()
     this.getSupplierList()
   },
   methods: {
@@ -650,6 +651,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('importType', 1)
       API.import(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
@@ -660,7 +662,7 @@ export default {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              item.systemJudgment == 'error'
+              return item.systemJudgment == 'Error'
             })
             this.isCheck = isError == -1 ? 1 : 0
           }
@@ -683,11 +685,7 @@ export default {
       API.exceptionCheck({
         channelCode: this.filterObj.channelCode,
         yearAndMonth: this.filterObj.month,
-        minePackage: 'FMC',
-        version: 'V2',
       }).then((response) => {
-        //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
         if (response.code == 1000) {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
@@ -695,7 +693,7 @@ export default {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              item.systemJudgment == 'error'
+              return item.systemJudgment == 'Error'
             })
             this.saveBtn = isError == -1 ? 1 : 0
             console.log(this.saveBtn)
@@ -709,7 +707,8 @@ export default {
     // 确认导入
     confirmImport() {
       API.saveV2Data({
-        mainId: this.mainId,
+        channelCode: this.filterObj.channelCode,
+        yearAndMonth: this.filterObj.month,
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
@@ -723,20 +722,7 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.downCheckData({
-          yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          costItemCode: 'HIH rebate',
-          isSubmit: 0,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          this.downloadFile(
-            res,
-            'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx'
-          ) // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
+        this.downloadTemplate()
       } else {
         this.$message.info('异常数据为空!')
       }
@@ -761,8 +747,8 @@ export default {
     },
     approve() {
       if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (1) {
+        const judgmentType = this.tableData[0].systemJudgment
+        if (judgmentType != null) {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -772,7 +758,7 @@ export default {
               const mainId = this.tableData[0].mainId
               API.approve({
                 mainId: mainId, // 主表id
-                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')
@@ -815,7 +801,7 @@ export default {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     getTip(row) {
-      return `<div class="Tip">${row.judgmentContent}</div>`
+      return `<div class="Tip">${row.systemJudgmentContent}</div>`
     },
   },
 }
