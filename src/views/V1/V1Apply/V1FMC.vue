@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 14:35:26
+ * @LastEditTime: 2022-06-07 09:33:26
 -->
 <template>
   <div class="MainContent">
@@ -188,7 +188,7 @@ export default {
       })()
     }
     this.getChannel()
-    // this.getAllMonth()
+    this.getAllMonth()
     this.getRegionList()
     this.getSupplierList()
   },

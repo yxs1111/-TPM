@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 21:41:45
+ * @LastEditTime: 2022-06-07 09:34:05
 -->
 <template>
   <div class="MainContent">
@@ -496,7 +496,7 @@ export default {
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    // this.getAllMonth()
+    this.getAllMonth()
     this.getRegionList()
     this.getSupplierList()
   },

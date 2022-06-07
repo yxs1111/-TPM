@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 20:02:44
+ * @LastEditTime: 2022-06-07 09:34:15
 -->
 <template>
   <div class="MainContent">
@@ -558,7 +558,7 @@ export default {
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
-    // this.getAllMonth()
+    this.getAllMonth()
     this.getRegionList()
     this.getSupplierList()
   },
