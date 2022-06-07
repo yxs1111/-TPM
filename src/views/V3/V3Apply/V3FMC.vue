@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-07 16:38:56
+ * @LastEditTime: 2022-06-07 20:06:06
 -->
 <template>
   <div class="MainContent">
@@ -782,7 +782,19 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        this.downloadTemplate()
+        API.exportV3Error({
+          customerSystemName: this.filterObj.customerCode,
+          channelCode: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
+        }).then((res) => {
+          downloadFile(
+            res,
+            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V3异常信息.xlsx`
+          ) //自定义Excel文件名
+          this.$message.success('导出成功!')
+        })
       } else {
         this.$message.info('异常数据为空!')
       }
