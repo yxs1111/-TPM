@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-07 13:13:06
+ * @LastEditTime: 2022-06-07 14:34:14
 -->
 <template>
   <div class="MainContent">
@@ -479,7 +479,7 @@ export default {
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = this.tableData[0].isGainLe
+          this.isGainLe = 1
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -669,7 +669,7 @@ export default {
           regionCode: this.filterObj.regionCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(
+          downloadFile(
             res,
             'V2_RoadShow异常信息 -' + timestamp + '.xlsx'
           ) // 自定义Excel文件名

@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-05-31 10:09:53
+ * @LastEditTime: 2022-06-07 14:31:28
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -18,7 +18,7 @@ export default {
     return request({
       url: this.url+'/downExcel',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },
@@ -27,7 +27,7 @@ export default {
     return request({
       url: this.url+'/downExcelTemplate',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },
@@ -44,7 +44,7 @@ export default {
     return request({
       url: this.ImportUrl+'/downExcel',
       method: 'post',
-      params: params,
+      data: params,
       responseType: 'blob'
     })
   },

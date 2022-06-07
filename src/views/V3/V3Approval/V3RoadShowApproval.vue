@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-07 13:14:26
+ * @LastEditTime: 2022-06-07 15:28:40
 -->
 <template>
   <div class="MainContent">
@@ -66,10 +66,10 @@
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="240" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="240" align="center" prop="supplierName" label="供应商" />
       <el-table-column width="220" align="center" prop="zoneName" label="大区" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="center" prop="activityType" label="活动类型" />
@@ -163,7 +163,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedPrice" label="V3实际单价-调整后(RMB/场)">
+      <el-table-column width="240" align="right" prop="adjustedPrice" label="V3实际单价-调整后(RMB/场)">
         <template v-slot:header>
           <div>V3实际单价-调整后(RMB/场)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
@@ -173,7 +173,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedVol" label="V3实际场次-调整后(场)">
+      <el-table-column width="240" align="right" prop="adjustedVol" label="V3实际场次-调整后(场)">
         <template v-slot:header>
           <div>V3实际场次-调整后(场)<br><span class="subTitle">从BI接入实际人数(需要汇总)</span></div>
         </template>
@@ -238,7 +238,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -599,7 +599,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version === 'RSV3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {
@@ -705,7 +705,7 @@ export default {
       this.uploadFile = event.target.files[0]
       let formData = new FormData()
       formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
+      formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -732,11 +732,8 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      this.importVisible = false
-      this.uploadFileName = ''
-      this.uploadFile = ''
-      this.ImportData = []
-      this.saveBtn = false
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 导出异常信息
     exportErrorList() {
@@ -788,7 +785,7 @@ export default {
             .then(() => {
               API.approve({
                 mainId: this.tableData[0].mainId,
-                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -819,7 +816,7 @@ export default {
             .then(() => {
               API.approve({
                 mainId: this.tableData[0].mainId,
-                approve: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')

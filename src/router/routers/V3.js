@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-07 13:44:59
+ * @LastEditTime: 2022-06-07 14:41:00
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -143,7 +143,7 @@ export default function() {
               path: '/costManagement/V3/V3Approval/V3RoadShowApproval',
               code: 'price_nka_v3_approve',
               name: 'V3RoadShowApproval',
-              component: () => import('@/views/V3/V3Approval/V3FMCApproval.vue'),
+              component: () => import('@/views/V3/V3Approval/V3RoadShowApproval.vue'),
               meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
             },
           ]

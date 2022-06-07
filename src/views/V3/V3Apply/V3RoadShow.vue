@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-07 13:14:18
+ * @LastEditTime: 2022-06-07 14:33:56
 -->
 <template>
   <div class="MainContent">
@@ -568,7 +568,7 @@ export default {
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = this.tableData[0].isGainLe
+          this.isGainLe = 1
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -586,7 +586,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version === 'RSV3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -766,7 +766,7 @@ export default {
           regionCode: this.filterObj.regionCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(res, 'V3_RoadShow异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V3_RoadShow异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
