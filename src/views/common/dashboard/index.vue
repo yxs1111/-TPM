@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-05-23 09:13:08
+ * @LastEditTime: 2022-06-07 10:20:24
 -->
 <template>
   <div class="dashboard-container">
@@ -204,6 +204,58 @@
                             <div class="delayPoint" v-if="item.version=='V3'&&item.workDateFlag!=='0'&&(item.version=='V3'&&item.processStatus==1)"></div>
                           </el-tooltip>
                           <div class="pointCircle" v-if="item.version!='V3'"></div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="NU" v-if="item.minePackageName=='Roadshow'">
+                      <div class="PointTitle">Road Show-{{item.channelCode}}</div>
+                      <div class="NuPoint">
+                        <div class="V1">
+                          <div class="passIcon" v-if="item.version=='RSV2'||item.version=='RSV3'||(item.version=='RSV1'&&item.processStatus==2)"></div>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='RSV1'&&item.workDateFlag==='0'&&(item.version=='RSV1'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="currentPoint" v-if="item.version=='RSV1'&&item.workDateFlag==='0'&&(item.version=='RSV1'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='RSV1'&&item.workDateFlag!=='0'&&(item.version=='RSV1'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="delayPoint" v-if="item.version=='RSV1'&&item.workDateFlag!=='0'&&(item.version=='RSV1'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <div class="pointCircle" v-if="item.version!='RSV1'&&item.version!='RSV2'&&item.version!='RSV3'"></div>
+                          <div class="line" v-if="item.version=='RSV2'||item.version=='RSV3'"></div>
+                          <div class="lineDark" v-if="(item.version!='RSV2'&&item.version!='RSV3')||item.version=='RSV1'"></div>
+                        </div>
+                        <div class="V2">
+                          <div class="passIcon" v-if="item.version=='RSV3'||(item.version=='RSV2'&&item.processStatus==2)"></div>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='RSV2'&&item.workDateFlag=='0'&&(item.version=='RSV2'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="currentPoint" v-if="item.version=='RSV2'&&item.workDateFlag=='0'&&(item.version=='RSV2'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='RSV2'&&item.workDateFlag!=='0'&&(item.version=='RSV2'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="delayPoint" v-if="item.version=='RSV2'&&item.workDateFlag!=='0'&&(item.version=='RSV2'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <div class="pointCircle" v-if="item.version!='RSV2'&&item.version!='RSV3'"></div>
+                          <div class="line" v-if="item.version=='RSV3'"></div>
+                          <div class="lineDark" v-if="(item.version=='RSV1')||item.version=='RSV2'"></div>
+                        </div>
+                        <div class="V3">
+                          <div class="passIcon" v-if="item.version=='RSV3'&&item.processStatus==2"></div>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='RSV3'&&item.workDateFlag=='0'&&(item.version=='RSV3'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="currentPoint" v-if="item.version=='RSV3'&&item.workDateFlag=='0'&&(item.version=='RSV3'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip"
+                            v-if="item.version=='RSV3'&&item.workDateFlag!=='0'&&(item.version=='RSV3'&&item.processStatus==1)">
+                            <div slot="content" v-html="getTip(item)"></div>
+                            <div class="delayPoint" v-if="item.version=='RSV3'&&item.workDateFlag!=='0'&&(item.version=='RSV3'&&item.processStatus==1)"></div>
+                          </el-tooltip>
+                          <div class="pointCircle" v-if="item.version!='RSV3'"></div>
                         </div>
                       </div>
 

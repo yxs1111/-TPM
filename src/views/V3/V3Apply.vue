@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-31 09:16:50
+ * @LastEditTime: 2022-06-07 13:32:48
 -->
 <template>
   <div class="tabViewsWrap">
@@ -136,24 +136,32 @@ export default {
               name: '折扣项-HIH Rebate',
               path: '/costManagement/V3/V3Apply/V3HIHRebate',
               img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
+                dark: require('@/assets/images/tab/tab_HIH.png'),
+                light: require('@/assets/images/tab/tab_HIH_l.png')
               }
             },
             {
               name: '折扣项-KA Rebate',
               path: '/costManagement/V3/V3Apply/V3KARebate',
               img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
+                dark: require('@/assets/images/tab/tab_KA.png'),
+                light: require('@/assets/images/tab/tab_KA_l.png')
               }
             },
             {
               name: 'FMC',
               path: '/costManagement/V3/V3Apply/V3FMC',
               img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
+                dark: require('@/assets/images/tab/tab_FMC.png'),
+                light: require('@/assets/images/tab/tab_FMC_l.png')
+              }
+            },
+            {
+              name: 'Road Show',
+              path: '/costManagement/V3/V3Apply/V3RoadShow',
+              img: {
+                dark: require('@/assets/images/tab/tab_RoadShow.png'),
+                light: require('@/assets/images/tab/tab_RoadShow_l.png')
               }
             },
           ]

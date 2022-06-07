@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 12:04:10
+ * @LastEditTime: 2022-06-07 13:14:07
 -->
 <template>
   <div class="MainContent">
@@ -35,7 +35,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
       </div>
@@ -66,10 +66,10 @@
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="260" align="center" prop="supplierName" label="供应商" />
       <el-table-column width="220" align="center" prop="zoneName" label="大区" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="center" prop="activityType" label="活动类型" />
@@ -115,7 +115,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedPrice" label="V2预估单价-调整后(RMB/场)">
+      <el-table-column width="240" align="right" prop="adjustedPrice" label="V2预估单价-调整后(RMB/场)">
         <template v-slot:header>
           <div>V2预估单价-调整后(RMB/场)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
@@ -151,7 +151,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.dept) }}
+            {{ scope.row.dept }}
           </div>
         </template>
       </el-table-column>
@@ -191,7 +191,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="400" align="right" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="880" align="center" prop="judgmentContent" label="系统判定内容">
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
@@ -254,16 +254,16 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
@@ -352,7 +352,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.dept) }}
+                  {{ scope.row.dept }}
                 </div>
               </template>
             </el-table-column>
@@ -451,6 +451,7 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getSupplierList()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -532,15 +533,11 @@ export default {
         })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.RegionList = res.data
-          }
-        })
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     getSupplierList() {
       selectAPI.getSupplierList().then((res) => {
@@ -602,7 +599,7 @@ export default {
       this.uploadFile = event.target.files[0]
       let formData = new FormData()
       formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
+      formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -629,11 +626,8 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      this.importVisible = false
-      this.uploadFileName = ''
-      this.uploadFile = ''
-      this.ImportData = []
-      this.saveBtn = false
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 导出异常信息
     exportErrorList() {
@@ -646,10 +640,7 @@ export default {
           regionCode: this.filterObj.regionCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(
-            res,
-            'V2_RoadShow异常信息 -' + timestamp + '.xlsx'
-          ) // 自定义Excel文件名
+          downloadFile(res, 'V2_RoadShow异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -687,8 +678,8 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: this.tableData[0].mainId, 
-                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                mainId: this.tableData[0].mainId,
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -707,7 +698,7 @@ export default {
             .catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消提交',
+                message: '已取消通过',
               })
             })
         } else {
@@ -718,7 +709,7 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: this.tableData[0].mainId, 
+                mainId: this.tableData[0].mainId,
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
@@ -732,7 +723,7 @@ export default {
             .catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消提交',
+                message: '已取消驳回',
               })
             })
         }

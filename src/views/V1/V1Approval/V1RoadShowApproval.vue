@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 09:18:55
+ * @LastEditTime: 2022-06-07 13:13:46
 -->
 <template>
   <div class="MainContent">
@@ -35,7 +35,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -175,6 +175,7 @@ export default {
     this.getAllMonth()
     this.getBrandList()
     this.getSupplierList()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -234,14 +235,11 @@ export default {
         })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.RegionList = res.data
-          }
-        })
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     getSupplierList() {
       selectAPI.getSupplierList().then((res) => {
@@ -268,7 +266,7 @@ export default {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          menu: "export" //导出常量 固定传这个
+          menu: 'export', //导出常量 固定传这个
         }).then((res) => {
           downloadFile(
             res,

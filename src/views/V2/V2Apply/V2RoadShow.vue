@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 11:27:55
+ * @LastEditTime: 2022-06-07 13:13:06
 -->
 <template>
   <div class="MainContent">
@@ -35,7 +35,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
       </div>
@@ -191,7 +191,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="400" align="right" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="880" align="right" prop="judgmentContent" label="系统判定内容">
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
@@ -453,6 +453,7 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getSupplierList()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -712,7 +713,7 @@ export default {
               const mainId = this.tableData[0].mainId
               API.approve({
                 mainId: mainId, // 主表id
-                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')
