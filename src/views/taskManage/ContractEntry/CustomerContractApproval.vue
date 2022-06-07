@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-02 10:02:37
+ * @LastEditTime: 2022-06-07 09:05:07
 -->
 <template>
   <div class="MainContent">
@@ -135,7 +135,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="240" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="250" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -170,7 +170,7 @@
             <el-table-column prop="remark" align="center" label="描述">
             </el-table-column>
           </el-table>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="250" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -541,7 +541,7 @@ export default {
     showTermsDetail(index) {
       this.customerId = this.tableData[index].ccId
       // 设置屏幕高度90%
-      // this.$refs.termDialog.$el.firstChild.style.height = '90%'
+      this.$refs.termDialog.$el.firstChild.style.height = '100%'
       //草稿、被拒绝可以编辑，其他仅查看
       API.findOneSaveDetail({
         id: this.customerId,
@@ -925,6 +925,32 @@ export default {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 240px !important;
+  }
+}
+.termTableWrap {
+  width: 100%;
+  border: 1px solid #e7e7e7;
+  .el-table {
+    td {
+      padding: 4px 0 !important;
+      min-width: 0;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: left;
+    }
+    th {
+      padding: 4px 0 !important;
+      min-width: 0;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: left;
+    }
   }
 }
 </style>

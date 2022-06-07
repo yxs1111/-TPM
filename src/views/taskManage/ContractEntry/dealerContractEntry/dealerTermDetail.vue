@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-06 17:40:49
+ * @LastEditTime: 2022-06-07 09:20:56
 -->
 <template>
   <div class="ContentDetail">
@@ -1154,6 +1154,7 @@ export default {
     //保存||提交
     submit(flag) {
       let isTaxPriceEmpty=false
+      let isPointCountEmpty=false
       let exceptionList = []
       let errorList = []
       //补录跳过验证--若之前经销商已经通过&&当前状态是草稿的 说明是补录
@@ -1170,16 +1171,22 @@ export default {
                 ...dealerItem,
               })
             }
-            if(dealerItem.taxPrice==='') {
-              isTaxPriceEmpty=true
+            if(dealerItem.pointCount==='') {
+              console.log("费比为空");
+              isPointCountEmpty=true
             }
           })
         }
-        console.log(isTaxPriceEmpty);
         //error 错误  经销商含税总金额若不等于客户含税金额 报error
         if (!item.isTotal && !item.isVariable) {
           let customerTaxPrice = item.customerInfo.taxPrice
           let dealerList = item.dealerList
+          dealerList.forEach(dealerItem=>{
+            if(dealerItem.taxPrice==='') {
+              console.log("含税金额为空");
+              isTaxPriceEmpty=true
+            }
+          })
           let dealerTaxPrice = dealerList.reduce((total, current) => {
             return total + Number(current.taxPrice)
           }, 0)
@@ -1192,8 +1199,12 @@ export default {
       })
       console.log(exceptionList)
       console.log(errorList)
+      if(isPointCountEmpty) {
+        this.$message.info('经销商费比不能为空,请进行填写')
+        return
+      }
       if(isTaxPriceEmpty) {
-        this.$message.info('经销商费比或经销商含税金额不能为空,请进行填写')
+        this.$message.info('经销商含税金额不能为空,请进行填写')
         return
       }
       //补录跳过校验
