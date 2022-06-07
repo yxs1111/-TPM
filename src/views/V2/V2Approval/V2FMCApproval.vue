@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-07 09:34:05
+ * @LastEditTime: 2022-06-07 16:38:46
 -->
 <template>
   <div class="MainContent">
@@ -209,7 +209,7 @@
       </el-table-column>
       <el-table-column width="480" align="center" prop="systemJudgmentContent" label="系统判定内容">
       </el-table-column>
-      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+      <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
     </el-table>
@@ -403,7 +403,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
+            <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
             <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
           </el-table>
