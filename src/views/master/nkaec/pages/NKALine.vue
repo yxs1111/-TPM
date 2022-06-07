@@ -24,6 +24,8 @@
           <span class="SelectliTitle">Measure:</span>
           <el-input v-model="filterObj.measure" clearable filterable placeholder="请输入" />
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
       </div>

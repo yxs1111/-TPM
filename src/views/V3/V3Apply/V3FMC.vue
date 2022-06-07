@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-07 09:34:15
+ * @LastEditTime: 2022-06-07 13:55:28
 -->
 <template>
   <div class="MainContent">
@@ -193,7 +193,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用核销方式"></el-table-column>
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
       <el-table-column width="220" align="right" prop="priceDifference" label="单价差值(%)">
         <template v-slot:header>
           <div>单价差值(%)<br><span class="subTitle">KA+供应商+Region</span></div>
@@ -432,7 +432,7 @@
               </template>
             </el-table-column>
             <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
-            <el-table-column width="220" align="center" prop="costBelongDept" label="费用核销方式"></el-table-column>
+            <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="priceDifference" label="单价差值(%)">
               <template v-slot:header>
                 <div>单价差值(%)<br><span class="subTitle">KA+供应商+Region</span></div>

@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-06 09:22:53
+ * @LastEditTime: 2022-06-07 13:45:18
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -81,7 +81,7 @@ export default function() {
               code: 'price_nka_v2_apply',
               name: 'V2RoadShow',
               component: () => import('@/views/V2/V2Apply/V2RoadShow.vue'),
-              meta: { title: 'V2RoadShow', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
+              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
             },
           ]
         },
@@ -147,7 +147,7 @@ export default function() {
               code: 'price_nka_v2_approve',
               name: 'V2RoadShowApproval',
               component: () => import('@/views/V2/V2Approval/V2RoadShowApproval.vue'),
-              meta: { title: 'V2RoadShowApproval', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
+              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
             },
           ]
         },

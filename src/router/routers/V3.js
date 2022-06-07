@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-07 11:09:58
+ * @LastEditTime: 2022-06-07 13:44:59
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -79,7 +79,7 @@ export default function() {
               code: 'price_nka_v3_apply',
               name: 'V3RoadShow',
               component: () => import('@/views/V3/V3Apply/V3RoadShow.vue'),
-              meta: { title: 'FMC', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
+              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
             },
           ]
         },
@@ -144,7 +144,7 @@ export default function() {
               code: 'price_nka_v3_approve',
               name: 'V3RoadShowApproval',
               component: () => import('@/views/V3/V3Approval/V3FMCApproval.vue'),
-              meta: { title: 'V3RoadShowApproval', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
+              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
             },
           ]
         },

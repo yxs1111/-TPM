@@ -36,10 +36,12 @@
           <el-date-picker v-model="filterObj.validDate" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
           </el-date-picker>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
-          <img src="../../../assets/images/export.png" alt="">
+          <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>

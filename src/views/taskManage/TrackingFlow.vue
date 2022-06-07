@@ -37,6 +37,8 @@
             <el-option v-for="item,index in processStatusList" :key="index" :label="item" :value="index+1" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
@@ -58,7 +60,7 @@
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="280" align="center" prop="assignee" label="办理人">
+      <el-table-column v-slot={row} width="300" align="center" prop="assignee" label="办理人">
         <!-- {{setSplitAssignee(row.assignee)}} -->
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>

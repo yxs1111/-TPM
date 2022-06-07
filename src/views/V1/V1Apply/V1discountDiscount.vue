@@ -692,7 +692,12 @@ export default {
         channelName: this.filterObj.channelCode,
         yearAndMonth: this.localDate,
       }).then((response) => {
-        const fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1申请.xlsx`
+        let fileName=''
+        if(this.isAiQin) {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_爱亲/爱婴岛V1申请.xlsx`
+        } else {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1申请.xlsx`
+        }
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
