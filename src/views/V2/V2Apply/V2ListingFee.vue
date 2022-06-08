@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 14:22:29
+ * @LastEditTime: 2022-06-08 18:58:01
 -->
 <template>
   <div class="MainContent">
@@ -41,7 +41,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-             <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName"  />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -50,6 +50,8 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -318,6 +320,8 @@ export default {
     this.getAllMonth()
     this.getBrandList()
     this.getDistributorList()
+    this.getRegionList()
+    this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -416,15 +420,23 @@ export default {
       })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
+      if (this.filterObj.distributorCode!='') {
+        selectAPI
+          .getRegionList({
+            distributorName: this.filterObj.distributorCode,
+          })
+          .then((res) => {
+            if (res.code === 1000) {
+              this.RegionList = res.data
+            }
+          })
+      } else {
+        selectAPI.getRegionList().then((res) => {
           if (res.code === 1000) {
             this.RegionList = res.data
           }
         })
+      }
     },
     getBrandList() {
       selectAPI.getBrand({}).then((res) => {

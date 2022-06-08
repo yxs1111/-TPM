@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-07 13:38:01
+ * @LastEditTime: 2022-06-08 18:49:57
 -->
 <template>
   <div class="tabViewsWrap">
@@ -170,6 +170,14 @@ export default {
                 light: require('@/assets/images/tab/tab_RoadShow_l.png')
               }
             },
+            {
+              name: 'Listing Fee',
+              path: '/costManagement/V1/V1Approval/V1ListingFeeApprove',
+              img: {
+                dark: require('@/assets/images/tab/tab_RoadShow.png'),
+                light: require('@/assets/images/tab/tab_RoadShow_l.png')
+              }
+            },
           ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
@@ -206,7 +214,7 @@ export default {
   .tabli {
     display: flex;
     align-items: center;
-    padding: 0 52px;
+    padding: 0 20px;
     height: 38px;
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;

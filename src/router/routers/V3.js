@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-07 14:41:00
+ * @LastEditTime: 2022-06-08 19:02:30
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -81,6 +81,14 @@ export default function() {
               component: () => import('@/views/V3/V3Apply/V3RoadShow.vue'),
               meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
             },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3ListingFee',
+              code: 'price_nka_v3_apply',
+              name: 'V3ListingFee',
+              component: () => import('@/views/V3/V3Apply/V3ListingFee.vue'),
+              meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
+            },
           ]
         },
         {
@@ -145,6 +153,14 @@ export default function() {
               name: 'V3RoadShowApproval',
               component: () => import('@/views/V3/V3Approval/V3RoadShowApproval.vue'),
               meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3ListingFeeApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3ListingFeeApproval',
+              component: () => import('@/views/V3/V3Approval/V3ListingFeeApproval.vue'),
+              meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
             },
           ]
         },

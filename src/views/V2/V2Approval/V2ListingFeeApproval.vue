@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 15:58:09
+ * @LastEditTime: 2022-06-08 18:58:25
 -->
 <template>
   <div class="MainContent">
@@ -50,6 +50,8 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -314,6 +316,7 @@ export default {
     this.getBrandList()
     this.getQuerySkuSelect()
     this.getDistributorList()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -399,15 +402,23 @@ export default {
         })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
+      if (this.filterObj.distributorCode!='') {
+        selectAPI
+          .getRegionList({
+            distributorName: this.filterObj.distributorCode,
+          })
+          .then((res) => {
+            if (res.code === 1000) {
+              this.RegionList = res.data
+            }
+          })
+      } else {
+        selectAPI.getRegionList().then((res) => {
           if (res.code === 1000) {
             this.RegionList = res.data
           }
         })
+      }
     },
     getBrandList() {
       selectAPI.getBrand({}).then((res) => {

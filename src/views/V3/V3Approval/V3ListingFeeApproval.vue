@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 15:59:07
+ * @LastEditTime: 2022-06-08 19:19:21
 -->
 <template>
   <div class="MainContent">
@@ -50,6 +50,8 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -350,7 +352,10 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getContractItemList()
+    this.getBrandList()
+    this.getDistributorList()
+    this.getRegionList()
+    this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -444,21 +449,34 @@ export default {
         })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
+      if (this.filterObj.distributorCode!='') {
+        selectAPI
+          .getRegionList({
+            distributorName: this.filterObj.distributorCode,
+          })
+          .then((res) => {
+            if (res.code === 1000) {
+              this.RegionList = res.data
+            }
+          })
+      } else {
+        selectAPI.getRegionList().then((res) => {
           if (res.code === 1000) {
             this.RegionList = res.data
           }
         })
+      }
     },
     getBrandList() {
       selectAPI.getBrand({}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
+      })
+    },
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptions = res.data
       })
     },
     //千分位分隔符+两位小数
