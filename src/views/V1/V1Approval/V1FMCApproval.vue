@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 审批 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 13:16:23
+ * @LastEditTime: 2022-06-08 15:05:10
 -->
 <template>
   <div class="MainContent">
@@ -17,27 +17,29 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.supplierName" />
+          <el-select v-model="filterObj.supplierName" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -131,16 +133,17 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
+        supplierName: '',
+        regionName: '',
         customerCode: '',
         month: '',
-        supplierName: '',
-        regionCode: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
       monthList: [],
       customerArr: [],
       tableData: [],
+      supplierList: [],
       RegionList: [],
       maxheight: getHeightHaveTab(),
     }
@@ -160,8 +163,9 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
+
     this.getRegionList()
+    this.getSupplierList()
   },
   methods: {
     // 获取表格数据
@@ -179,10 +183,11 @@ export default {
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerCode: this.filterObj.customerCode,
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -217,10 +222,10 @@ export default {
           }
         })
     },
-    getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
+    getSupplierList() {
+      selectAPI.getSupplierList().then((res) => {
         if (res.code === 1000) {
-          this.BrandList = res.data
+          this.supplierList = res.data
         }
       })
     },
@@ -247,11 +252,11 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportV1({
-          customerCode: this.filterObj.customerCode,
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((res) => {
           downloadFile(
             res,

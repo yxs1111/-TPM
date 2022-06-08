@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 10:59:46
+ * @LastEditTime: 2022-06-08 14:58:01
 -->
 <template>
   <div class="MainContent">
@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -34,7 +34,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
@@ -139,10 +139,10 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
+        supplierName: '',
+        regionName: '',
         customerCode: '',
         month: '',
-        supplierName: '',
-        regionCode: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -212,6 +212,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -299,7 +300,7 @@ export default {
         API.exportV1({
           customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          regionCode: this.filterObj.regionCode,
+          regionName: this.filterObj.regionName,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
         }).then((res) => {
