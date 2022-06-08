@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 15:41:28
+ * @LastEditTime: 2022-06-08 16:08:54
 -->
 <template>
   <div class="MainContent">
@@ -598,11 +598,15 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      const money = num * 1
-      return money.toLocaleString('zh', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      if(num==null) {
+        return null
+      } else {
+        const money = num * 1
+        return money.toLocaleString('zh', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      }
     },
     search() {
       this.pageNum = 1
