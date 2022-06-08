@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 16:12:20
+ * @LastEditTime: 2022-06-08 21:19:17
 -->
 <template>
   <div class="MainContent">
@@ -170,7 +170,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.priceDifference) }}
+            {{ formatNum(scope.row.priceDifference*100) }}
           </div>
         </template>
       </el-table-column>
@@ -180,7 +180,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.peopleNumDifference) }}
+            {{ formatNum(scope.row.peopleNumDifference*100) }}
           </div>
         </template>
       </el-table-column>
@@ -373,7 +373,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.priceDifference) }}
+                  {{ formatNum(scope.row.priceDifference*100) }}
                 </div>
               </template>
             </el-table-column>
@@ -383,7 +383,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.peopleNumDifference }}
+                  {{ formatNum(scope.row.peopleNumDifference*100) }}
                 </div>
               </template>
             </el-table-column>
