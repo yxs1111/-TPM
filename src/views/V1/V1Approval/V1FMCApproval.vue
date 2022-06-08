@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 审批 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-31 15:37:39
+ * @LastEditTime: 2022-06-08 11:00:06
 -->
 <template>
   <div class="MainContent">
@@ -161,7 +161,7 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getBrandList()
-    this.getContractItemList()
+    this.getRegionList()
   },
   methods: {
     // 获取表格数据
@@ -200,7 +200,7 @@ export default {
     getContractItemList() {
       selectAPI.getContractItemList().then((res) => {
         if (res.code === 1000) {
-          this.ContractItemList=res.data
+          this.ContractItemList = res.data
         }
       })
     },
@@ -233,15 +233,11 @@ export default {
       })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.RegionList = res.data
-          }
-        })
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     //千分位分隔符+两位小数
     FormatNum(num) {

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-07 20:03:36
+ * @LastEditTime: 2022-06-08 11:36:04
 -->
 <template>
   <div class="MainContent">
@@ -690,7 +690,7 @@ export default {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
-            this.$message.success(this.messageMap.importSuccess)
+            this.$message.success(this.messageMap.checkSuccess)
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
               return item.systemJudgment == 'Error'
@@ -699,7 +699,7 @@ export default {
             console.log(this.saveBtn)
           }
         } else {
-          this.$message.info(this.messageMap.importError)
+          this.$message.info(this.messageMap.checkError)
         }
         this.saveBtn=1
       })

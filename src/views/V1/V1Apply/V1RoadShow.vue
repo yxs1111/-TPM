@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-06 09:12:27
+ * @LastEditTime: 2022-06-08 10:57:41
 -->
 <template>
   <div class="MainContent">
@@ -179,6 +179,7 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
+    this.getRegionList()
     this.getSupplierList()
   },
   methods: {
