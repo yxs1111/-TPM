@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 11:35:48
+ * @LastEditTime: 2022-06-08 14:23:58
 -->
 <template>
   <div class="MainContent">
@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">

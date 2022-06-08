@@ -300,7 +300,7 @@ export default {
     },
     submitFormAdd(formName) {
       const params = {
-        minePackage: 'N',
+        minePackage: 'FMC',
         targetYearMonth: this.ruleFormAdd.newYear,
         newYearMonth: this.ruleFormAdd.targetYear,
       }
@@ -376,7 +376,7 @@ export default {
     exportExcelInfo() {
       API.excportRuleSave({
         channelCode: this.filterObj.channel,
-        minePackage: 'N',
+        minePackage: 'FMC',
         yearAndMonth: this.filterObj.date,
       }).then((response) => {
         const fileName = '检验数据Excel' + new Date().getTime() + '.xlsx'
@@ -569,7 +569,7 @@ export default {
       this.isChangeData = []
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: 'N',
+        minePackage: 'FMC',
         yearAndMonth: this.filterObj.date,
       })
         .then((response) => {
