@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 14:23:20
+ * @LastEditTime: 2022-06-08 15:41:28
 -->
 <template>
   <div class="MainContent">
@@ -88,7 +88,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.v1PlanPeopleNum) }}
+            {{ scope.row.v1PlanPeopleNum }}
           </div>
         </template>
       </el-table-column>
@@ -118,7 +118,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.v2DefaultEstimatePeopleNum) }}
+            {{ scope.row.v2DefaultEstimatePeopleNum }}
           </div>
         </template>
       </el-table-column>
@@ -148,7 +148,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.v2AdjustEstimatePeopleNum) }}
+            {{ scope.row.v2AdjustEstimatePeopleNum }}
           </div>
         </template>
       </el-table-column>
@@ -180,7 +180,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.peopleNumDifference) }}
+            {{ scope.row.peopleNumDifference }}
           </div>
         </template>
       </el-table-column>
@@ -297,7 +297,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.v1PlanPeopleNum) }}
+                  {{ scope.row.v1PlanPeopleNum }}
                 </div>
               </template>
             </el-table-column>
@@ -327,7 +327,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.v2DefaultEstimatePeopleNum) }}
+                  {{ scope.row.v2DefaultEstimatePeopleNum }}
                 </div>
               </template>
             </el-table-column>
@@ -357,7 +357,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.v2AdjustEstimatePeopleNum) }}
+                  {{ scope.row.v2AdjustEstimatePeopleNum }}
                 </div>
               </template>
             </el-table-column>
@@ -389,7 +389,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.peopleNumDifference) }}
+                  {{ scope.row.peopleNumDifference }}
                 </div>
               </template>
             </el-table-column>

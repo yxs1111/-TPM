@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 14:58:01
+ * @LastEditTime: 2022-06-08 15:39:07
 -->
 <template>
   <div class="MainContent">
@@ -88,11 +88,11 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.v1PlanPeopleNum) }}
+            {{scope.row.v1PlanPeopleNum }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="v1PlanPrice" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
@@ -102,7 +102,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.v1PlanPrice) }}
+            {{ FormatNum(scope.row.v1PlanCost) }}
           </div>
         </template>
       </el-table-column>
