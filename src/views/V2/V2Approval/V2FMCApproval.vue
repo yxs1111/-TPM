@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 15:40:48
+ * @LastEditTime: 2022-06-08 15:57:50
 -->
 <template>
   <div class="MainContent">
@@ -239,12 +239,6 @@
             <div v-if="uploadFileName!=''" class="fileName">
               <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
               <span>{{ uploadFileName }}</span>
-            </div>
-          </div>
-          <div class="seeData" style="width: auto;">
-            <div class="exportError" @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
-              <span>导出错误信息</span>
             </div>
           </div>
         </div>
