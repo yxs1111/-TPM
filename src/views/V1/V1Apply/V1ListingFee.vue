@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 14:53:46
+ * @LastEditTime: 2022-06-08 17:05:34
 -->
 <template>
   <div class="MainContent">
@@ -49,8 +49,8 @@
       <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="品牌" />
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="center" prop="brandName" label="品牌" />
+      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
@@ -60,12 +60,12 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planRatio) }}
+            {{ FormatNum(scope.row.planCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门"></el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用核销方式"></el-table-column>
+      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -99,8 +99,7 @@ export default {
         channelCode: '',
         customerCode: '',
         month: '',
-        supplierCode: '',
-        regionCode: '',
+        brandCode: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -146,7 +145,7 @@ export default {
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
+          brandCode: this.filterObj.brandCode,
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records
@@ -196,17 +195,6 @@ export default {
           this.BrandList = res.data
         }
       })
-    },
-    getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.RegionList = res.data
-          }
-        })
     },
     //千分位分隔符+两位小数
     FormatNum(num) {

@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-04-11 10:20:41
 -->
 <template>
-  <div class="MainContent" @keyup.enter="pageList">
+  <div class="MainContentNew">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
@@ -257,5 +257,11 @@ export default {
   .submit_icon {
     font-size: 20px;
   }
+}
+.MainContentNew {
+    /* height: 90%; */
+    background-color: #fff;
+    padding: 20px;
+    overflow-y: auto;
 }
 </style>
