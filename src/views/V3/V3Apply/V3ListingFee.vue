@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 19:06:51
+ * @LastEditTime: 2022-06-08 20:12:26
 -->
 <template>
   <div class="MainContent">
@@ -34,7 +34,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.dim_product" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
@@ -78,9 +78,9 @@
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="220" align="center" prop="brandName" label="品牌" />
-      <el-table-column width="220" align="center" prop="brandName" label="SKU" />
-      <el-table-column width="220" align="center" prop="brandName" label="经销商" />
-      <el-table-column width="220" align="center" prop="brandName" label="区域" />
+      <el-table-column width="220" align="center" prop="productName" label="SKU" />
+      <el-table-column width="220" align="center" prop="distributorName" label="经销商" />
+      <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
@@ -309,7 +309,7 @@ import {
   messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/contract'
+import API from '@/api/V2/ListingFee'
 export default {
   name: 'V3FMC',
   directives: { elDragDialog, permission },
@@ -326,7 +326,7 @@ export default {
         customerCode: '',
         customerMdmCode: '',
         month: '',
-        dim_product: '',
+        productCode: '',
         brandCode: '',
       },
       permissions: getDefaultPermissions(),
@@ -387,12 +387,15 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
+          customerCode: this.filterObj.customerCode,
+          brandCode: this.filterObj.brandCode,
+          productCode: this.filterObj.productCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records
@@ -511,15 +514,18 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIHApplyExcel({
-          customerCode: this.filterObj.customerCode,
+        API.exportPageExcel({
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
+          customerCode: this.filterObj.customerCode,
+          brandCode: this.filterObj.brandCode,
+          productCode: this.filterObj.productCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -547,25 +553,12 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       this.event = event
-    },
-    // 关闭导入
-    closeImportDialog() {
-      this.importVisible = false
-      this.uploadFileName = ''
-      this.uploadFile = ''
-      this.ImportData = []
-      this.saveBtn = false
-      this.isCheck = false
-    },
-    // 校验数据
-    checkImport() {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
       formData.append('isSubmit', 0)
-      formData.append('costItemCode', 'HIH rebate')
-      API.formatCheck(formData).then((response) => {
+      API.fileImport(formData).then((response) => {
         //清除input的value ,上传一样的
         this.event.srcElement.value = '' // 置空
         if (response.code == 1000) {
@@ -586,12 +579,44 @@ export default {
         }
       })
     },
+    // 关闭导入
+    closeImportDialog() {
+      this.importVisible = false
+      this.uploadFileName = ''
+      this.uploadFile = ''
+      this.ImportData = []
+      this.saveBtn = false
+      this.isCheck = false
+    },
+    // 校验数据
+    checkImport() {
+      API.formatCheck({
+        yearAndMonth:this.filterObj.month,
+        channelCode:this.filterObj.channelCode,
+        isSubmit:0
+      }).then((response) => {
+        if (response.code == 1000) {
+          if (!Array.isArray(response.data)) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.$message.success(this.messageMap.checkSuccess)
+            this.ImportData = response.data
+            let isError=this.ImportData.findIndex(item=>{
+              return item.judgmentType=='error'
+            })
+            this.saveBtn = isError==-1?1:0
+            console.log(this.saveBtn);
+          }
+        } else {
+          this.$message.info(this.messageMap.checkError)
+        }
+      })
+    },
     // 确认导入
     confirmImport() {
       API.importSave({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
-        costItemCode: 'HIH rebate',
         isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -606,16 +631,16 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.downCheckData({
+        API.exportCheckData({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          contractItemCode: this.filterObj.contractItemCode,
-          costItemCode: 'HIH rebate',
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(
+            res,
+            'V2_ListingFee异常信息 -' + timestamp + '.xlsx'
+          ) // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -626,16 +651,14 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.downApplyExcelTemplate({
+        API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          contractItemCode: this.filterObj.contractItemCode,
-          costItemCode: 'HIH rebate',
+          isSubmit: 0,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V2申请.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })

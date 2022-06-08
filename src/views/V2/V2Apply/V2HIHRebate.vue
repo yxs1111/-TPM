@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-02 08:35:38
+ * @LastEditTime: 2022-06-08 19:46:52
 -->
 <template>
   <div class="MainContent">
@@ -665,7 +665,7 @@ export default {
             console.log(this.saveBtn);
           }
         } else {
-          this.$message.info(this.messageMap.importError)
+          this.$message.info(this.messageMap.checkError)
         }
       })
     },

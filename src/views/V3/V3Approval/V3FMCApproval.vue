@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 16:12:52
+ * @LastEditTime: 2022-06-08 19:58:43
 -->
 <template>
   <div class="MainContent">
@@ -192,7 +192,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
       <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
       <el-table-column width="220" align="right" prop="priceDifference" label="单价差值(%)">
         <template v-slot:header>
@@ -425,7 +425,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+            <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="priceDifference" label="单价差值(%)">
               <template v-slot:header>

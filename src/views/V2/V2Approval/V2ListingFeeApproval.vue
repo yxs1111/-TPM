@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 18:58:25
+ * @LastEditTime: 2022-06-08 20:17:10
 -->
 <template>
   <div class="MainContent">
@@ -34,14 +34,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.dim_product" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-             <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName"  />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -82,32 +82,32 @@
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="220" align="center" prop="brandName" label="品牌" />
-      <el-table-column width="220" align="center" prop="brandName" label="SKU" />
-      <el-table-column width="220" align="center" prop="brandName" label="经销商" />
-      <el-table-column width="220" align="center" prop="brandName" label="区域" />
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="center" prop="productName" label="SKU" />
+      <el-table-column width="220" align="center" prop="distributorName" label="经销商" />
+      <el-table-column width="220" align="center" prop="regionName" label="区域" />
+      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.planCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V2预估费用-调整后(RMB)">
+      <el-table-column width="220" align="right" prop="forecastCost" label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
           <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planRatio) }}
+            {{ formatNum(scope.row.forecastCost) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用核销方式"></el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
+      <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
+      <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
           <div>费用差值(RMB)<br><span class="subTitle">KA+Brand</span></div>
         </template>
@@ -130,7 +130,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容">
       </el-table-column>
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -147,7 +147,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <!-- <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -179,16 +179,16 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
@@ -196,32 +196,32 @@
             <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="220" align="center" prop="brandName" label="品牌" />
-            <el-table-column width="220" align="center" prop="brandName" label="SKU" />
-            <el-table-column width="220" align="center" prop="brandName" label="经销商" />
-            <el-table-column width="220" align="center" prop="brandName" label="区域" />
-            <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
+            <el-table-column width="220" align="center" prop="productName" label="SKU" />
+            <el-table-column width="220" align="center" prop="distributorName" label="经销商" />
+            <el-table-column width="220" align="center" prop="regionName" label="区域" />
+            <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
               <template v-slot:header>
                 <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.planRatio) }}
+                  {{ formatNum(scope.row.planCost) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planRatio" label="V2预估费用-调整后(RMB)">
+            <el-table-column width="220" align="right" prop="forecastCost" label="V2预估费用-调整后(RMB)">
               <template v-slot:header>
                 <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+SKU+经销商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.planRatio) }}
+                  {{ formatNum(scope.row.forecastCost) }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
-            <el-table-column width="220" align="center" prop="costBelongDept" label="费用核销方式"></el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
+            <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
+            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
                 <div>费用差值(RMB)<br><span class="subTitle">KA+Brand</span></div>
               </template>
@@ -252,7 +252,7 @@ import {
   messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/contract'
+import API from '@/api/V2/ListingFee'
 export default {
   name: 'V2FMCApproval',
   directives: { elDragDialog, permission },
@@ -269,7 +269,7 @@ export default {
         customerCode: '',
         customerMdmCode: '',
         month: '',
-        dim_product: '',
+        productCode: '',
         brandCode: '',
       },
       permissions: getDefaultPermissions(),
@@ -331,11 +331,15 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          brandCode: this.filterObj.brandCode,
+          productCode: this.filterObj.productCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records
@@ -402,7 +406,7 @@ export default {
         })
     },
     getRegionList() {
-      if (this.filterObj.distributorCode!='') {
+      if (this.filterObj.distributorCode != '') {
         selectAPI
           .getRegionList({
             distributorName: this.filterObj.distributorCode,
@@ -454,14 +458,18 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIHApplyExcel({
-          customerCode: this.filterObj.customerCode,
+        API.exportPageExcel({
           channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          brandCode: this.filterObj.brandCode,
+          productCode: this.filterObj.productCode,
+          distributorCode: this.filterObj.distributorCode,
+          regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V2_审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -488,7 +496,26 @@ export default {
       this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      this.event = event
+      const formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.month)
+      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('isSubmit', 1)
+      API.fileImport(formData).then((response) => {
+        //清除input的value ,上传一样的
+        event.srcElement.value = '' // 置空
+        if (response.code == 1000) {
+          if (!Array.isArray(response.data)) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.ImportData = response.data
+            this.saveBtn = this.ImportData.length ? true : false
+            this.$message.success('导入成功！')
+          }
+        } else {
+          this.$message.info(this.messageMap.importError)
+        }
+      })
     },
     // 关闭导入
     closeImportDialog() {
@@ -530,35 +557,21 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.importSave({
-        yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
-        costItemCode: 'HIH rebate',
-        isSubmit: 0,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.downCheckData({
+        API.exportCheckData({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          costItemCode: 'HIH rebate',
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          this.downloadFile(
+          downloadFile(
             res,
-            'V2_HIH Rebate异常信息 -' + timestamp + '.xlsx'
+            'V2_ListingFee异常信息 -' + timestamp + '.xlsx'
           ) // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
@@ -570,15 +583,14 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.downApplyExcelTemplate({
+        API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          costItemCode: 'HIH rebate',
+          isSubmit: 0,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V2审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
@@ -596,8 +608,9 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: this.tableData[0].mainId, 
-                approve: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                mainId: this.tableData[0].mainId,
+                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -627,8 +640,9 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: this.tableData[0].mainId, 
-                approve: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                 mainId: this.tableData[0].mainId,
+                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                 isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')
