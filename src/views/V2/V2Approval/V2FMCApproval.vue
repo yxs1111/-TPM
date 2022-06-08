@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 21:19:17
+ * @LastEditTime: 2022-06-08 21:31:47
 -->
 <template>
   <div class="MainContent">
@@ -184,13 +184,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="priceDifference" label="费用差值(RMB)">
+      <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
           <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.priceDifference) }}
+            {{ formatNum(scope.row.costDifference) }}
           </div>
         </template>
       </el-table-column>
@@ -387,13 +387,13 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="priceDifference" label="费用差值(RMB)">
+            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
                 <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.priceDifference) }}
+                  {{ formatNum(scope.row.costDifference) }}
                 </div>
               </template>
             </el-table-column>
