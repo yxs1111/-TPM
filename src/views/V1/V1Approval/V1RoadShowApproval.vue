@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 14:54:10
+ * @LastEditTime: 2022-06-09 11:01:34
 -->
 <template>
   <div class="MainContent">
@@ -38,12 +38,12 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <!-- <div class="Selectli">
           <span class="SelectliTitle">活动类型:</span>
           <el-select v-model="filterObj.activityType" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in activityList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
-        </div>
+        </div> -->
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
