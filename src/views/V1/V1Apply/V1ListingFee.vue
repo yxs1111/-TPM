@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 17:05:34
+ * @LastEditTime: 2022-06-09 13:13:00
 -->
 <template>
   <div class="MainContent">
@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
           <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandCode" />
           </el-select>
         </div>
       </div>
@@ -85,7 +85,7 @@ import {
   downloadFile,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V1/contract'
+import API from '@/api/V1/ListingFee'
 export default {
   name: 'V1ListingFee',
   directives: { elDragDialog, permission },
@@ -140,7 +140,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode,
@@ -211,15 +211,15 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIH({
+        API.exportExcel({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          regionCode: this.filterObj.regionCode,
+          brandCode: this.filterObj.brandCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
