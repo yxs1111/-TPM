@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-09 09:08:21
+ * @LastEditTime: 2022-06-09 13:29:23
 -->
 <template>
   <div class="MainContent">
@@ -554,10 +554,9 @@ export default {
             debugger
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              item.judgmentType == 'error'
+              return item.judgmentType == 'error'
             })
             this.isCheck = isError == -1 ? 1 : 0
-            console.log(this.saveBtn)
           }
         } else {
           this.$message.info(this.messageMap.importError)

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-09 09:57:29
+ * @LastEditTime: 2022-06-09 13:27:16
 -->
 <template>
   <div class="MainContent">
@@ -147,7 +147,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
+            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -514,12 +514,11 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
-            debugger
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              item.judgmentType == 'error'
+              return item.judgmentType == 'error'
             })
-            this.saveBtn = isError == -1 ? 1 : 0
+            this.isCheck = isError == -1 ? 1 : 0
             console.log(this.saveBtn)
           }
         } else {
