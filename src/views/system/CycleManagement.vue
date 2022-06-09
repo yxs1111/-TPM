@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-05-20 13:23:36
+ * @LastEditTime: 2022-06-09 16:10:18
 -->
 <template>
   <div class="app-container">
@@ -47,6 +47,8 @@
       <el-table-column width="150" align="center" prop="leWeek" label="Le销量Week" />
       <el-table-column width="150" align="center" prop="leVtwoDate" label="V2Le销量日期" />
       <el-table-column width="150" align="center" prop="leVthreeDate" label="V3实际销量日期" />
+      <el-table-column width="150" align="center" prop="leVthreeDate" label="获取MTD人数日期" />
+      <el-table-column width="150" align="center" prop="leVthreeDate" label="获取MTD场次日期" />
       <el-table-column width="150" align="center" prop="openingStatus" label="开启状态">
         <template slot-scope="scope">
           <div>
@@ -130,6 +132,14 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="V3实际销量日期" prop="leVthreeDate"  class="el_Dialog_dateRange el-form_levThree">
+            <el-date-picker v-model="ruleForm.leVthreeDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="获取MTD人数日期" prop="leVthreeDate"  class="el_Dialog_dateRange el-form_levThree">
+            <el-date-picker v-model="ruleForm.leVthreeDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="获取MTD场次日期" prop="leVthreeDate"  class="el_Dialog_dateRange el-form_levThree">
             <el-date-picker v-model="ruleForm.leVthreeDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-09 09:36:17
+ * @LastEditTime: 2022-06-09 15:43:29
 -->
 <template>
   <div class="V0Content">
@@ -652,7 +652,6 @@ export default {
               url = API.getListingFee
               break
           }
-          console.log(url)
           url({
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,

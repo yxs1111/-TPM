@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-09 09:17:10
+ * @LastEditTime: 2022-06-09 16:29:10
 -->
 <template>
   <div class="MainContent">
@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -34,20 +34,20 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
       </div>
@@ -125,7 +125,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
       <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
       <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
@@ -199,9 +199,9 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>
@@ -259,7 +259,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+            <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
@@ -292,7 +292,7 @@ import {
   messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/ListingFee'
+import API from '@/api/V3/ListingFee'
 export default {
   name: 'V3FMCApproval',
   directives: { elDragDialog, permission },
@@ -309,7 +309,7 @@ export default {
         customerCode: '',
         customerMdmCode: '',
         month: '',
-        productCode: '',
+        productName: '',
         brandCode: '',
       },
       permissions: getDefaultPermissions(),
@@ -376,7 +376,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           brandCode: this.filterObj.brandCode,
-          productCode: this.filterObj.productCode,
+          productName: this.filterObj.productName,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
@@ -500,7 +500,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           brandCode: this.filterObj.brandCode,
-          productCode: this.filterObj.productCode,
+          productName: this.filterObj.productName,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
@@ -605,7 +605,7 @@ export default {
         API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          isSubmit: 0,
+          isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,

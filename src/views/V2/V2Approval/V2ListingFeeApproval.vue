@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 20:17:10
+ * @LastEditTime: 2022-06-09 15:59:30
 -->
 <template>
   <div class="MainContent">
@@ -34,20 +34,20 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
       </div>
@@ -105,7 +105,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
       <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
       <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
@@ -219,7 +219,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+            <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
@@ -269,7 +269,7 @@ export default {
         customerCode: '',
         customerMdmCode: '',
         month: '',
-        productCode: '',
+        productName: '',
         brandCode: '',
       },
       permissions: getDefaultPermissions(),
@@ -337,7 +337,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           brandCode: this.filterObj.brandCode,
-          productCode: this.filterObj.productCode,
+          productName: this.filterObj.productName,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
@@ -366,10 +366,10 @@ export default {
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
-              this.isSelf = true
+              this.isSubmit = false
             } else {
               //其他人禁用
-              this.isSelf = false
+              this.isSubmit = true
             }
           }
         })
@@ -462,7 +462,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           brandCode: this.filterObj.brandCode,
-          productCode: this.filterObj.productCode,
+          productName: this.filterObj.productName,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
@@ -526,58 +526,10 @@ export default {
       this.saveBtn = false
       this.isCheck = false
     },
-    // 校验数据
-    checkImport() {
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelCode', this.filterObj.channelCode)
-      formData.append('isSubmit', 0)
-      formData.append('costItemCode', 'HIH rebate')
-      API.formatCheck(formData).then((response) => {
-        //清除input的value ,上传一样的
-        this.event.srcElement.value = '' // 置空
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
-            this.$message.info('导入数据为空，请检查模板')
-          } else {
-            this.$message.success(this.messageMap.importSuccess)
-            debugger
-            this.ImportData = response.data
-            let isError = this.ImportData.findIndex((item) => {
-              item.judgmentType == 'error'
-            })
-            this.saveBtn = isError == -1 ? 1 : 0
-            console.log(this.saveBtn)
-          }
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
-      })
-    },
     // 确认导入
     confirmImport() {
       this.closeImportDialog()
       this.getTableData()
-    },
-    // 导出异常信息
-    exportErrorList() {
-      if (this.ImportData.length) {
-        API.exportCheckData({
-          yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          isSubmit: 0,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          downloadFile(
-            res,
-            'V2_ListingFee异常信息 -' + timestamp + '.xlsx'
-          ) // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
-      } else {
-        this.$message.info('异常数据为空!')
-      }
     },
     // 下载模板
     downloadTemplate() {
@@ -586,7 +538,7 @@ export default {
         API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          isSubmit: 0,
+          isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,

@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-09 13:29:23
+ * @LastEditTime: 2022-06-09 16:21:20
 -->
 <template>
   <div class="MainContent">
@@ -34,20 +34,20 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
       </div>
@@ -60,11 +60,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve()">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
@@ -121,7 +121,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
       <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
       <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
@@ -201,16 +201,16 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='success'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
@@ -261,7 +261,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+            <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
@@ -294,7 +294,7 @@ import {
   messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/ListingFee'
+import API from '@/api/V3/ListingFee'
 export default {
   name: 'V3FMC',
   directives: { elDragDialog, permission },
@@ -311,7 +311,7 @@ export default {
         customerCode: '',
         customerMdmCode: '',
         month: '',
-        productCode: '',
+        productName: '',
         brandCode: '',
       },
       permissions: getDefaultPermissions(),
@@ -326,7 +326,6 @@ export default {
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
-      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -378,14 +377,13 @@ export default {
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           brandCode: this.filterObj.brandCode,
-          productCode: this.filterObj.productCode,
+          productName: this.filterObj.productName,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = this.tableData[0].isGainLe
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -503,7 +501,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           brandCode: this.filterObj.brandCode,
-          productCode: this.filterObj.productCode,
+          productName: this.filterObj.productName,
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
@@ -551,10 +549,9 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
-            debugger
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              return item.judgmentType == 'error'
+              return item.judgmentType == 'Error'
             })
             this.isCheck = isError == -1 ? 1 : 0
           }
@@ -586,7 +583,7 @@ export default {
             this.$message.success(this.messageMap.checkSuccess)
             this.ImportData = response.data
             let isError = this.ImportData.findIndex((item) => {
-              return item.judgmentType == 'error'
+              return item.judgmentType == 'Error'
             })
             this.saveBtn = isError == -1 ? 1 : 0
             console.log(this.saveBtn)

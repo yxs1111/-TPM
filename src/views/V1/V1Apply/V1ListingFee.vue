@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-09 13:13:00
+ * @LastEditTime: 2022-06-09 14:22:12
 -->
 <template>
   <div class="MainContent">
@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">品牌:</span>
           <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandCode" />
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
       </div>
@@ -64,7 +64,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
       <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -107,6 +107,7 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList: [],
+      BrandList: [],
       maxheight: getHeightHaveTab(),
     }
   },
