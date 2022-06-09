@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-06 13:38:05
+ * @LastEditTime: 2022-06-09 09:36:17
 -->
 <template>
   <div class="V0Content">
@@ -136,7 +136,7 @@
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">
               <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in ['Price Promotion','New User','Contract']" :key="index" :label="item" :value="item" />
+                <el-option v-for="item,index in ['Price Promotion','New User','Contract','ListingFee']" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
@@ -145,7 +145,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="Version" prop="dimVersion">
-              <el-select v-model="ruleForm.dimVersion"  placeholder="请选择" class="my-el-select">
+              <el-select v-model="ruleForm.dimVersion" placeholder="请选择" class="my-el-select">
                 <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -358,7 +358,6 @@ export default {
     this.getAllMonth()
     // this.getList()
     this.getQuerySkuSelect()
-    
   },
   watch: {
     'filterObj.channelCode'() {
@@ -369,28 +368,27 @@ export default {
   methods: {
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
-        this.monthList=res.data
+        this.monthList = res.data
       })
     },
     getScenarioList() {
       API.getScenarioList({
         channelName: this.filterObj.channelCode,
       }).then((res) => {
-        this.yearAndMonthList=res.data
+        this.yearAndMonthList = res.data
       })
     },
     getList() {
-      if (this.filterObj.channelCode == ''|| this.filterObj.month == '') {
-        this.ContentData=[]
-        this.isNoData=true
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        this.ContentData = []
+        this.isNoData = true
         if (this.filterObj.month == '') {
           this.$message.info(messageObj.requireMonth)
           return
         }
         if (this.filterObj.channelCode == '') {
-           this.$message.info(messageObj.requireChannel)
-        } 
-        
+          this.$message.info(messageObj.requireChannel)
+        }
       } else {
         API.getList({
           yearAndMonth: this.filterObj.month,
@@ -476,13 +474,13 @@ export default {
     },
     getCPTData() {
       if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
+        this.$message.info(messageObj.requireMonth)
+        return
       }
       if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
-          return
-      } 
+        this.$message.info(messageObj.requireChannel)
+        return
+      }
       this.getScenarioList()
       this.dialogVisible = true
       this.ruleForm.channelCode = this.filterObj.channelCode
@@ -585,7 +583,10 @@ export default {
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
-          this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0_查询.xlsx`) //自定义Excel文件名
+          this.downloadFile(
+            res,
+            `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0_查询.xlsx`
+          ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -601,7 +602,10 @@ export default {
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((res) => {
-          this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0申请.xlsx`) //自定义Excel文件名
+          this.downloadFile(
+            res,
+            `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0申请.xlsx`
+          ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -631,12 +635,24 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var url =
-            this.ruleForm.Minepackage == 'Price Promotion'
-              ? API.getCPTData
-              : this.ruleForm.Minepackage == 'New User'
-              ? API.getNuData:API.getContractData
-               
+          let url
+          // var url =
+          //   this.ruleForm.Minepackage == 'Price Promotion'? API.getCPTData: this.ruleForm.Minepackage == 'New User'?API.getNuData: this.ruleForm.Minepackage == 'Contract'? API.getContractData:API.getListingFee
+          switch (this.ruleForm.Minepackage) {
+            case 'Price Promotion':
+              url = API.getCPTData
+              break
+            case 'New User':
+              url = API.getNuData
+              break
+            case 'Contract':
+              url = API.getContractData
+              break
+            case 'ListingFee':
+              url = API.getListingFee
+              break
+          }
+          console.log(url)
           url({
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,

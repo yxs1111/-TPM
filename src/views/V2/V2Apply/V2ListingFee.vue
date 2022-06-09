@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 19:47:43
+ * @LastEditTime: 2022-06-09 09:57:29
 -->
 <template>
   <div class="MainContent">
@@ -227,7 +227,7 @@
             </el-table-column>
             <el-table-column width="220" align="center" prop="costBelongDept" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="费用差值(RMB)">
+            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
                 <div>费用差值(RMB)<br><span class="subTitle">KA+Brand</span></div>
               </template>

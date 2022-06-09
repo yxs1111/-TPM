@@ -257,10 +257,10 @@ export default {
         this.maxheight = getHeightSingle()
       })()
     }
+    this.getSupplierList()
     this.getTableData()
     this.getMinePackageList()
     this.getRegionList()
-    this.getSupplierList()
     this.getLargeAreaList()
     this.getLargeAreaListdialog()
   },
@@ -303,20 +303,16 @@ export default {
     //获取表格数据
     getTableData() {
       this.tableData = []
+      let supplierCode= this.filterObj.supplierIndex !== ''? this.supplierList[this.filterObj.supplierIndex].supplierBiCode: ''
+      let supplierName= this.filterObj.supplierIndex !== ''? this.supplierList[this.filterObj.supplierIndex].supplierName: ''
       API.getMatchingRelationList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         minePackage: this.filterObj.minePackage,
         regionName: this.filterObj.regionName,
         zoneName: this.filterObj.zoneName,
-        supplierCode:
-          this.filterObj.supplierIndex != ''
-            ? this.supplierList[this.filterObj.supplierIndex].supplierBiCode
-            : '',
-        supplierName:
-          this.filterObj.supplierIndex != ''
-            ? this.supplierList[this.filterObj.supplierIndex].supplierName
-            : '',
+        supplierCode: supplierCode,
+        supplierName: supplierName,
         state: this.filterObj.state,
       }).then((response) => {
         this.tableData = response.data.records
