@@ -458,6 +458,19 @@ export default function() {
                     activeMenu: '/ruleCtrl/testRules'
                   }
                 },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesListingFee',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesListingFee',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
+                  meta: {
+                    title: 'splitRulesListingFee',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
               ]
             }
             // {

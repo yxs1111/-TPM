@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-06 10:51:27
+ * @LastEditTime: 2022-06-10 10:22:56
 -->
 <template>
   <div>
@@ -93,6 +93,14 @@ export default {
             {
               name: 'Road Show',
               path: '/master/ruleCtrl/model/splitRulesRoadShow',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
+              name: 'Listing Fee',
+              path: '/master/ruleCtrl/model/splitRulesListingFee',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png')
