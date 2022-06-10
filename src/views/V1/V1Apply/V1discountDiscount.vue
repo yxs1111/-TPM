@@ -40,25 +40,23 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcelInfo">
-          <img src="../../../assets/images/export.png" alt="">
-          <span class="text">导出</span>
-        </div>
-
       </div>
-      <!-- <div class="OpertionBar">
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo">
           <img src="../../../assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-      </div> -->
+      </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(0)">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(1)">
+        <img src="../../../assets/images/import.png" alt="">
+        <span class="text">爱亲/爱婴岛导入</span>
       </div>
       <el-button type="primary" class="TpmButtonBG" :class="submitBtn === 1?'noClick':''" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="btnStatus&&isCalculation === 1?'':'noClick'" @click="submitInfo">
@@ -306,6 +304,7 @@ export default {
       firstIsPass: false,
       isCalculation: false,
       maxheight: getHeightHaveTab(),
+      isAiQin:0, //是否是爱亲/爱婴岛 导入
     }
   },
   computed: {},
@@ -417,6 +416,7 @@ export default {
     saveImportInfo() {
       API.saveImportInfo({
         // mainId: this.mainIdLocal
+        saveFlag: this.isAiQin==0?1:2,
         channelName: this.filterObj.channelCode,
         yearAndMonth: this.localDate,
       }).then((res) => {
@@ -478,10 +478,15 @@ export default {
       })
     },
     // 导入数据
-    importData() {
+    importData(flag) {
       if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
+        if(flag) {
+          this.isAiQin=1
+        } else {
+          this.isAiQin=0
+        }
         this.importVisible = true
       }
     },
@@ -489,7 +494,11 @@ export default {
     confirmImport() {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
-      formData.append('importType', 1)
+      if(this.isAiQin) {
+        formData.append('importType', 3)
+      }else {
+        formData.append('importType', 1)
+      }
       // formData.append('mainId', this.mainIdLocal)
       formData.append('channelName', this.filterObj.channelCode)
       formData.append('yearAndMonth', this.localDate)
@@ -544,7 +553,11 @@ export default {
     routineCheck(file) {
       var formData = new FormData()
       formData.append('file', file)
-      formData.append('importType', 1)
+      if(this.isAiQin) {
+        formData.append('importType', 3)
+      }else {
+        formData.append('importType', 1)
+      }
       formData.append('yearAndMonth', this.localDate)
       formData.append('channelName', this.filterObj.channelCode)
       API.routineCheck(formData)
@@ -591,6 +604,7 @@ export default {
     // 关闭导入
     closeImport() {
       this.importVisible = false
+      this.isAiQin=0
       this.event.srcElement.value = '' // 置空
       this.uploadFileName = ''
       this.uploadFile = ''
@@ -671,13 +685,19 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
+      
       API.downExcelTmpForV1({
         // mainId: this.mainIdLocal,
-        ImportType: 1,
+        ImportType: this.isAiQin==0?1:3,
         channelName: this.filterObj.channelCode,
         yearAndMonth: this.localDate,
       }).then((response) => {
-        const fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1申请.xlsx`
+        let fileName=''
+        if(this.isAiQin) {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_爱亲/爱婴岛V1申请.xlsx`
+        } else {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1申请.xlsx`
+        }
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',

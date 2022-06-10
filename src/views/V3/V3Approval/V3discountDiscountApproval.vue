@@ -4,10 +4,10 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-            <span class="SelectliTitle">活动月:</span>
-            <el-select v-model="localDate" filterable clearable placeholder="请选择">
-              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
-            </el-select>
+          <span class="SelectliTitle">活动月:</span>
+          <el-select v-model="localDate" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
@@ -39,15 +39,14 @@
             <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
-        <div class="OpertionBar">
-          <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-          <div class="TpmButtonBG" @click="exportData">
-            <img src="../../../assets/images/export.png" alt="">
-            <span class="text">导出</span>
-          </div>
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
         </div>
       </div>
-
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
@@ -268,7 +267,7 @@ import {
   messageMap,
   FormateThousandNum,
   getHeightHaveTab,
-  messageObj
+  messageObj,
 } from '@/utils'
 import API from '@/api/V3/v3.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -359,7 +358,7 @@ export default {
   methods: {
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
-        this.monthList=res.data
+        this.monthList = res.data
       })
     },
     // 格式化--千位分隔符、两位小数
@@ -710,7 +709,10 @@ export default {
         mainId: this.mainIdLocal,
       }
       API.exportV3(data).then((res) => {
-        this.downloadFile(res, `${this.localDate}_Price_${this.filterObj.channelName}_V3_查询.xlsx`) //自定义Excel文件名
+        this.downloadFile(
+          res,
+          `${this.localDate}_Price_${this.filterObj.channelName}_V3_查询.xlsx`
+        ) //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
@@ -767,14 +769,14 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (!this.filterObj.channelName||!this.localDate) {
+      if (!this.filterObj.channelName || !this.localDate) {
         if (!this.localDate) {
           this.$message.info(messageObj.requireMonth)
           return
         }
         if (!this.filterObj.channelName) {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getPageV3({
           pageNum: this.pageNum, // 当前页

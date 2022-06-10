@@ -14,6 +14,8 @@
           <span class="SelectliTitle">年月:</span>
           <el-date-picker v-model="filterObj.date" clearable type="month" value-format="yyyyMM" format="yyyyMM" placeholder="选择月" />
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div v-permission="permissions['export']" class="TpmButtonBG" @click="exportExcelInfo">

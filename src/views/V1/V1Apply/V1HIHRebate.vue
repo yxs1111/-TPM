@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-04-29 16:20:28
+ * @LastEditTime: 2022-05-25 16:56:13
 -->
 <template>
   <div class="MainContent">
@@ -32,6 +32,8 @@
             <el-option v-for="(item, index) in ContractItemList" :key="index" :label="item.contractItem" :value="item.contractItemCode" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -62,8 +64,19 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot="{row}" width="120" align="right" prop="planSalesAmount" label="V1计划销售额IMK(RMB)">
-        {{ getPlanCost(row.planSalesAmount) }}
+      <el-table-column  width="240" align="right" prop="planSalesAmount" label="V1计划销售额GSV(RMB)">
+        <template v-slot:header>
+          <div>
+            V1计划销售额GSV(RMB)
+            <br>
+            <span class="subTitle">kA</span>
+          </div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ getPlanCost(scope.row.planSalesAmount) }}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column  width="220" align="right" prop="planCost" label="V1计划合同费用(RMB)">
         <template v-slot:header>

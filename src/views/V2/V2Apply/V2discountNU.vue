@@ -4,10 +4,10 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-            <span class="SelectliTitle">活动月:</span>
-            <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
-              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
-            </el-select>
+          <span class="SelectliTitle">活动月:</span>
+          <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+          </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
@@ -27,6 +27,8 @@
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -211,7 +213,7 @@ import {
   messageMap,
   FormateThousandNum,
   getHeightHaveTab,
-  messageObj
+  messageObj,
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -280,14 +282,17 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == ''||this.filterObj.yearAndMonth == '') {
+      if (
+        this.filterObj.channelCode == '' ||
+        this.filterObj.yearAndMonth == ''
+      ) {
         if (this.filterObj.yearAndMonth == '') {
           this.$message.info(messageObj.requireMonth)
           return
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getPageNU({
           pageNum: this.pageNum, // 当前页
@@ -348,7 +353,7 @@ export default {
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
-        this.monthList=res.data
+        this.monthList = res.data
       })
     },
     // 获取下拉框 渠道
@@ -490,7 +495,10 @@ export default {
           customerName: this.filterObj.customerCode,
           brandName: this.filterObj.brandCode,
         }).then((res) => {
-          this.downloadFile(res, `${this.filterObj.yearAndMonth}_NU_${this.filterObj.channelCode}_V2_查询.xlsx`) //自定义Excel文件名
+          this.downloadFile(
+            res,
+            `${this.filterObj.yearAndMonth}_NU_${this.filterObj.channelCode}_V2_查询.xlsx`
+          ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -507,7 +515,10 @@ export default {
           customerName: this.filterObj.customerCode,
           brandName: this.filterObj.brandCode,
         }).then((res) => {
-          this.downloadFile(res, `${this.filterObj.yearAndMonth}_NU_${this.filterObj.channelCode}_V2申请.xlsx`) //自定义Excel文件名
+          this.downloadFile(
+            res,
+            `${this.filterObj.yearAndMonth}_NU_${this.filterObj.channelCode}_V2申请.xlsx`
+          ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {

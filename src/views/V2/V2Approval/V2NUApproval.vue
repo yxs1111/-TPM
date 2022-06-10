@@ -27,15 +27,15 @@
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
-        <el-button type="primary" icon="el-icon-search" class="TpmButtonBG" @click="search">查询</el-button>
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
-      <!-- <div class="OpertionBar">
-
-      </div> -->
+     
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">

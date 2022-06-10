@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 14:49:09
+ * @LastEditTime: 2022-06-08 19:02:30
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -65,6 +65,30 @@ export default function() {
               component: () => import('@/views/V3/V3Apply/V3KARebate.vue'),
               meta: { title: '折扣项-KA Rebate', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
             },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3FMC',
+              code: 'price_nka_v3_apply',
+              name: 'V3FMC',
+              component: () => import('@/views/V3/V3Apply/V3FMC.vue'),
+              meta: { title: 'FMC', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3RoadShow',
+              code: 'price_nka_v3_apply',
+              name: 'V3RoadShow',
+              component: () => import('@/views/V3/V3Apply/V3RoadShow.vue'),
+              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3ListingFee',
+              code: 'price_nka_v3_apply',
+              name: 'V3ListingFee',
+              component: () => import('@/views/V3/V3Apply/V3ListingFee.vue'),
+              meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
+            },
           ]
         },
         {
@@ -113,6 +137,30 @@ export default function() {
               name: 'V3KARebateApproval',
               component: () => import('@/views/V3/V3Approval/V3KARebateApproval.vue'),
               meta: { title: '折扣项-KA Rebate', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3FMCApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3FMCApproval',
+              component: () => import('@/views/V3/V3Approval/V3FMCApproval.vue'),
+              meta: { title: 'FMC', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3RoadShowApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3RoadShowApproval',
+              component: () => import('@/views/V3/V3Approval/V3RoadShowApproval.vue'),
+              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3ListingFeeApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3ListingFeeApproval',
+              component: () => import('@/views/V3/V3Approval/V3ListingFeeApproval.vue'),
+              meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
             },
           ]
         },

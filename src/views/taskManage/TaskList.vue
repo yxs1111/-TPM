@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-03-16 09:20:56
+ * @LastEditTime: 2022-06-08 17:19:06
 -->
 <template>
-  <div class="MainContent" @keyup.enter="pageList">
+  <div class="MainContentNew">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
@@ -289,5 +289,10 @@ export default {
   .submit_icon {
     font-size: 26px;
   }
+}
+.MainContentNew {
+    background-color: #fff;
+    padding: 20px;
+    overflow-y: auto;
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-10 15:42:10
+ * @LastEditTime: 2022-06-10 16:44:01
 -->
 <template>
   <div class="tabViewsWrap">
@@ -28,13 +28,21 @@ export default {
     return {
       routerList: [
         {
-          name: '汇总',
+          name: '汇总 - 费用管理',
           path: '/taskManage/MyTodo/MyTodoAll',
           img: {
             dark: require('@/assets/images/tab/tab1.png'),
             light: require('@/assets/images/tab/tab1_l.png'),
           },
         },
+        // {
+        //   name: '折扣项',
+        //   path: '/taskManage/MyTodo/MyTodoDiscount',
+        //   img: {
+        //     dark: require('@/assets/images/tab/tab2.png'),
+        //     light: require('@/assets/images/tab/tab2_l.png'),
+        //   },
+        // },
         {
           name: '折扣项',
           path: '/taskManage/MyTodo/MyTodoDiscount',

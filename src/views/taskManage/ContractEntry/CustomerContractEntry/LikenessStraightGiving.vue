@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-18 10:01:14
+ * @LastEditTime: 2022-06-07 09:02:27
 -->
 <template>
   <div class="MainContent">
@@ -31,20 +31,22 @@
             <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow">新增一行</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow" v-permission="permissions['insert']">新增一行</el-button>
       <!-- <div class="TpmButtonBG" @click="save">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
       </div> -->
-      <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">提交</el-button>
       <!-- <div class="TpmButtonBG cancelButton" @click="cancelAddNewRow">
         <span class="text">取消</span>
       </div> -->
@@ -60,7 +62,7 @@
       <el-table-column fixed align="center" width="220" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
-            <div class="haveText_delete" @click="deleteRow(scope.row, scope.$index)">
+            <div class="haveText_delete" @click="deleteRow(scope.row, scope.$index)" v-permission="permissions['delete']">
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
@@ -68,7 +70,7 @@
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isEditor&&!scope.row.isNewData" @click="editorRow(scope.$index,scope.row)">
+            <div class="haveText_editor" v-permission="permissions['update']" v-show="!scope.row.isEditor&&!scope.row.isNewData" @click="editorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
@@ -199,7 +201,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="240" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termVariableData" ref="termVariableTable" max-height="250" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -273,7 +275,7 @@
               <span class="addNewRowText">新增一行</span>
             </div>
           </div>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="250" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -446,6 +448,7 @@ export default {
           )
         },
       },
+      permissions: getDefaultPermissions(),
     }
   },
   mounted() {
@@ -915,7 +918,7 @@ export default {
         this.$message.info('该数据为新增数据,请选择其它数据')
       } else {
         //草稿、被拒绝可以编辑，其他仅查看
-        // this.$refs.termDialog.$el.firstChild.style.height = '90%'
+        this.$refs.termDialog.$el.firstChild.style.height = '100%'
         API.findOneSaveDetail({
           id: this.customerId,
           isMain: 1,
@@ -1056,7 +1059,8 @@ export default {
     },
     //条款明细保存
     confirmTermsDetail() {
-      let isCheck=1 //费比校验
+      let isCheck = 1 //费比校验
+      let Repeat=0 //contract Item  是否重复
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -1069,8 +1073,15 @@ export default {
       }
       this.termVariableData.forEach((item) => {
         if (item.isNewData) {
-          if(item.costRatio==''||item.costRatio==0) {
-            isCheck=0
+          if (item.costRatio == '' || item.costRatio == 0) {
+            isCheck = 0
+          }
+          //行（contract Item  条件类型 ）不能重复
+          let RepeatList= this.termVariableData.filter(vItem=>{
+           return vItem.contractItem==item.contractItem&&vItem.conditions==item.conditions
+          })
+          if(RepeatList.length>1) {
+            Repeat=1
           }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
@@ -1086,8 +1097,15 @@ export default {
       })
       this.termFixData.forEach((item) => {
         if (item.isNewData) {
-          if(item.costRatio==''||item.costRatio==0) {
-            isCheck=0
+          if (item.costRatio == '' || item.costRatio == 0) {
+            isCheck = 0
+          }
+          //行（contract Item  条件类型 ）不能重复
+          let RepeatList= this.termFixData.filter(vItem=>{
+           return vItem.contractItem==item.contractItem&&vItem.conditions==item.conditions
+          })
+          if(RepeatList.length>1) {
+            Repeat=1
           }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
@@ -1100,7 +1118,6 @@ export default {
           obj.fixed.push(detailObj)
         }
       })
-
       if (this.TotalData.totalPoint > 100) {
         this.$message.info('Total 费比应该小于100%')
         return
@@ -1109,8 +1126,12 @@ export default {
         this.$message.info('Total 含税费用应该小于目标销售额')
         return
       }
-      if(!isCheck) {
+      if (!isCheck) {
         this.$message.info('费比不能为空,请填写费比')
+        return
+      }
+      if (Repeat) {
+        this.$message.info('contract Item加条件类型不能重复')
         return
       }
       console.log(obj)
@@ -1503,6 +1524,32 @@ export default {
   .el-date-editor.el-input,
   .el-date-editor.el-input__inner {
     width: 240px !important;
+  }
+}
+.termTableWrap {
+  width: 100%;
+  border: 1px solid #e7e7e7;
+  .el-table {
+    td {
+      padding: 4px 0 !important;
+      min-width: 0;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: left;
+    }
+    th {
+      padding: 4px 0 !important;
+      min-width: 0;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: left;
+    }
   }
 }
 </style>

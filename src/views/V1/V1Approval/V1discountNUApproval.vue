@@ -4,10 +4,10 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-            <span class="SelectliTitle">活动月:</span>
-            <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
-              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
-            </el-select>
+          <span class="SelectliTitle">活动月:</span>
+          <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+          </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
@@ -27,6 +27,9 @@
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandName" />
           </el-select>
         </div>
+
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -131,7 +134,7 @@ export default {
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
-        this.monthList=res.data
+        this.monthList = res.data
       })
     },
     // 客户
@@ -155,7 +158,7 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      if (this.filterObj.channelCode == ''||this.filterObj.month == '') {
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         this.tableData = []
         if (this.filterObj.month == '') {
           this.$message.info(messageObj.requireMonth)
@@ -163,7 +166,7 @@ export default {
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getPageNU({
           pageNum: this.pageNum, // 当前页
@@ -228,7 +231,10 @@ export default {
           brandCode: this.filterObj.brandCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
-          this.downloadFile(res, `${this.filterObj.month}_NU_${this.filterObj.channelCode}_V1_查询.xlsx`) //自定义Excel文件名
+          this.downloadFile(
+            res,
+            `${this.filterObj.month}_NU_${this.filterObj.channelCode}_V1_查询.xlsx`
+          ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {

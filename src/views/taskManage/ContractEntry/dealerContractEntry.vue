@@ -1,4 +1,8 @@
-
+<!--
+ * @Description: 
+ * @Date: 2021-11-16 14:01:16
+ * @LastEditTime: 2022-06-10 16:43:54
+-->
 <template>
   <div class="MainContent">
     <div class="SelectBarWrap">
@@ -33,20 +37,22 @@
             <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
+      </div>
+      <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="showAddDialog">新增</el-button>
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="showAddDialog" v-permission="permissions['insert']">新增</el-button>
       <!-- <div class="TpmButtonBG">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
       </div> -->
-      <el-button type="primary" class="TpmButtonBG" @click="submit">提交</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">提交</el-button>
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight"  :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
@@ -59,7 +65,7 @@
       <el-table-column fixed align="center" width="220" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
-            <div class="haveText_delete" @click="deleteRow(scope.row)">
+            <div class="haveText_delete" v-permission="permissions['delete']" @click="deleteRow(scope.row)">
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
@@ -67,7 +73,7 @@
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
             </div>
-            <div class="haveText_editor" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
+            <div class="haveText_editor" v-permission="permissions['update']" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
@@ -290,10 +296,10 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="contractState" align="center" label="合同状态">
+              <el-table-column prop="contractState" align="center" label="操作">
                 <template slot-scope="scope">
                   <div class="contractStatusWrap">
-                    {{ scope.row.contractStateName }}
+                    <img  src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteItem(scope.$index)">
                   </div>
                 </template>
               </el-table-column>
@@ -409,6 +415,7 @@ export default {
           )
         },
       },
+      permissions: getDefaultPermissions(),
     }
   },
   mounted() {
@@ -791,6 +798,10 @@ export default {
         index: '',
         customerMdmCode: '',
       }
+    },
+    //新增经销商 -- 删除
+    deleteItem(index) {
+      this.addDialogDealerList.splice(index,1)
     },
     //确认新增
     confirmAdd() {

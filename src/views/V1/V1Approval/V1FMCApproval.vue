@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 审批 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-05-19 15:28:37
+ * @LastEditTime: 2022-06-08 15:39:42
 -->
 <template>
   <div class="MainContent">
@@ -17,27 +17,29 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.supplierName" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -46,17 +48,17 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+      <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed />
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="120" align="center" prop="costType" label="费用类型" />
+      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
+      <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
       <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="供应商" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="区域" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="大区" />
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划单价(RMB/人)">
+      <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
+      <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+      <el-table-column width="220" align="center" prop="regionName" label="区域" />
+      <el-table-column width="220" align="center" prop="zoneName" label="大区" />
+      <el-table-column width="220" align="right" prop="v1PlanPrice" label="V1计划单价(RMB/人)">
         <template v-slot:header>
           <div>
             V1计划单价(RMB/人)
@@ -66,11 +68,11 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planRatio) }}
+            {{ FormatNum(scope.row.v1PlanPrice) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划人数(人)">
+      <el-table-column width="220" align="right" prop="v1PlanPeopleNum" label="V1计划人数(人)">
         <template v-slot:header>
           <div>
             V1计划人数(人)
@@ -80,11 +82,11 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planRatio) }}
+            {{ scope.row.v1PlanPeopleNum }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
@@ -94,12 +96,12 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planRatio) }}
+            {{ FormatNum(scope.row.v1PlanCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用归属部门"></el-table-column>
-      <el-table-column width="220" align="right" prop="costBelongDept" label="费用核销方式"></el-table-column>
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -119,7 +121,7 @@ import {
   downloadFile,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V1/contract'
+import API from '@/api/V1/FMC'
 export default {
   name: 'V1FMCApproval',
   directives: { elDragDialog, permission },
@@ -131,16 +133,17 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
+        supplierName: '',
+        regionName: '',
         customerCode: '',
         month: '',
-        supplierCode: '',
-        regionCode: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
       monthList: [],
       customerArr: [],
       tableData: [],
+      supplierList: [],
       RegionList: [],
       maxheight: getHeightHaveTab(),
     }
@@ -160,8 +163,9 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
-    this.getContractItemList()
+
+    this.getRegionList()
+    this.getSupplierList()
   },
   methods: {
     // 获取表格数据
@@ -176,13 +180,14 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPageHIH({
+        API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerCode: this.filterObj.customerCode,
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -194,14 +199,6 @@ export default {
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
         this.monthList = res.data
-      })
-    },
-    // 获取ContractItem
-    getContractItemList() {
-      selectAPI.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.ContractItemList=res.data
-        }
       })
     },
     // 获取下拉框
@@ -225,23 +222,19 @@ export default {
           }
         })
     },
-    getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
+    getSupplierList() {
+      selectAPI.getSupplierList().then((res) => {
         if (res.code === 1000) {
-          this.BrandList = res.data
+          this.supplierList = res.data
         }
       })
     },
     getRegionList() {
-      selectAPI
-        .getRegionList({
-          distributorName: this.filterObj.distributorCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.RegionList = res.data
-          }
-        })
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
     },
     //千分位分隔符+两位小数
     FormatNum(num) {
@@ -258,11 +251,12 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIH({
-          customerCode: this.filterObj.customerCode,
+        API.exportV1({
+          customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
-          regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
+          supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((res) => {
           downloadFile(
             res,

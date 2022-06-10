@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-05-06 15:34:11
+ * @LastEditTime: 2022-05-26 16:41:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -632,5 +632,48 @@ export default {
       params: params,
       responseType: 'blob'
     })
+  },
+  //匹配关系
+  getMatchingRelationList(params) {
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getPage', params)
+  },
+  getMatchingRelationMinePackage(params) {
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getMinePackage', params)
+  },
+  getMatchingRelationZone(params) {
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getZone', params)
+  },
+  getMatchingRelationRegion(params) {
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getRegion', params)
+  },
+  getMatchingRelationSupplier(params) {
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
+  },
+  MatchingRelationDownloadExcel(params) {
+    return request({
+      url: '/mdm/mdOrganizationSupplier/downloadExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+    
+  },
+  MatchingRelationImportExcel(params) {
+    return requestApi.request_post('/mdm/mdOrganizationSupplier/importExcel', params)
+  },
+  MatchingRelationExportExcel(params) {
+    return request({
+      url: '/mdm/mdOrganizationSupplier/exportExcel',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+    
+  },
+  addMatchingRelation(params) {
+    return requestApi.request_post('/mdm/mdOrganizationSupplier/insert', params)
+  },
+  deleteMatchingRelation(params) {
+    return requestApi.request_delete('/mdm/mdOrganizationSupplier/delete', params)
   },
 }

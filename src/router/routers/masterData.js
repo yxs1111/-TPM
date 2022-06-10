@@ -409,7 +409,7 @@ export default function() {
                 {
                   hidden: true,
                   path: '/master/ruleCtrl/model/splitRulesHIH',
-                  code: 'mdm_Split_rules',
+                  code: 'mdm_testing_regulations',
                   name: 'splitRulesHIH',
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesHIH.vue'),
@@ -422,12 +422,51 @@ export default function() {
                 {
                   hidden: true,
                   path: '/master/ruleCtrl/model/splitRulesKA',
-                  code: 'mdm_Split_rules',
+                  code: 'mdm_testing_regulations',
                   name: 'splitRulesKA',
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesKA.vue'),
                   meta: {
                     title: 'KA',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesFMC',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesFMC',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesFMC.vue'),
+                  meta: {
+                    title: 'splitRulesFMC',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesRoadShow',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesRoadShow',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesRoadShow.vue'),
+                  meta: {
+                    title: 'splitRulesRoadShow',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules'
+                  }
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesListingFee',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesListingFee',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
+                  meta: {
+                    title: 'splitRulesListingFee',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-10 13:22:02
+ * @LastEditTime: 2022-06-10 16:44:15
 -->
 <template>
   <div class="tabViewsWrap">
@@ -173,7 +173,7 @@ export default {
   .tabli {
     display: flex;
     align-items: center;
-    padding: 0 52px;
+    padding: 0 20px;
     height: 38px;
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;

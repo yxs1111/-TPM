@@ -39,12 +39,13 @@
             <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
+      </div>
+      <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="exportExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-        
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
