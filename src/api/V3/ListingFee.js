@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-06-09 15:32:06
+ * @LastEditTime: 2022-06-10 16:27:28
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -41,7 +41,12 @@ export default {
   },
   //异常信息导出
   exportCheckData(params) {
-    return requestApi.request_post(this.importUrl+'/exportCheckData', params)
+    return request({
+      url:this.importUrl+'/exportCheckData',
+      method:'post',
+      data:params,
+      responseType:'blob'
+    })
   },
   //保存
   importSave(params) {
