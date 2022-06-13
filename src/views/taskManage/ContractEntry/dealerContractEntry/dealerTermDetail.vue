@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-07 09:20:56
+ * @LastEditTime: 2022-06-13 11:24:04
 -->
 <template>
   <div class="ContentDetail">
@@ -762,7 +762,7 @@ export default {
             dealerList: [],
           }
           //取经销商对应的variable
-          // console.log(distributorList)
+          console.log(distributorList)
           distributorList.forEach((item) => {
             let distVariableObj = item.variable[index]
             //根据明细id来进行匹配
@@ -822,6 +822,7 @@ export default {
                     ? null
                     : Number(distVariableObj.payType), //支付方式
                 isEditor:
+                  distVariableObj.contractState == '1' ||
                   distVariableObj.contractState == '3' ||
                   distVariableObj.contractState == '4'
                     ? 0
