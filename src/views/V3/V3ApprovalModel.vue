@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-08 19:03:25
+ * @LastEditTime: 2022-06-14 16:05:06
 -->
 <template>
   <div class="tabViewsWrap">
@@ -168,8 +168,8 @@ export default {
               name: 'Listing Fee',
               path: '/costManagement/V3/V3Approval/V3ListingFeeApproval',
               img: {
-                dark: require('@/assets/images/tab/tab_RoadShow.png'),
-                light: require('@/assets/images/tab/tab_RoadShow_l.png')
+                dark: require('@/assets/images/tab/tab_ListingFee.png'),
+                light: require('@/assets/images/tab/tab_ListingFee_l.png')
               }
             },
           ]

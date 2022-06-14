@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-07 09:05:07
+ * @LastEditTime: 2022-06-14 13:18:59
 -->
 <template>
   <div class="MainContent">
@@ -75,8 +75,8 @@
       </el-table-column>
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
-          <div v-if="scope.row.contractBeginDate">
-            {{ scope.row.contractBeginDate?scope.row.contractBeginDate.replaceAll('-','/'):'' + ' - ' + scope.row.contractBeginDate?scope.row.contractEndDate.replaceAll('-','/'):'' }}
+          <div>
+            {{ scope.row.contractBeginDate?scope.row.contractBeginDate.replaceAll('-','/'):'' }} - {{scope.row.contractEndDate?scope.row.contractEndDate.replaceAll('-','/'):''}}
           </div>
         </template>
       </el-table-column>

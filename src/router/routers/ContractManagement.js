@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-02 10:09:52
+ * @LastEditTime: 2022-06-14 15:32:28
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -30,7 +30,7 @@ export default function() {
               name: 'CustomerContractEntry',
               component: () => import('@/views/taskManage/ContractEntry/CustomerContractEntry.vue'),
               meta: { title: '录入', icon: 'apply',activeMenu: '/contractManagement/ContractEntry' },
-              redirect: '/contractManagement/ContractEntry/CustomerContractEntry/StraightGiving',
+              redirect: '/contractManagement/ContractEntry/CustomerContractEntry/UnStraightGiving',
               children: [
                 {
                   hidden: true,

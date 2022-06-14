@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-14 11:22:18
+ * @LastEditTime: 2022-06-14 14:15:23
 -->
 <template>
   <div class="ContentDetail">
@@ -1299,13 +1299,14 @@ export default {
       return FormateThousandNum(num)
     },
     //弹窗表格样式
-    tableRowClassName({ row, rowIndex }) {
+    tableRowClassName({ row, rowIndex ,columnIndex}) {
       if (row.name.indexOf('Total') === 0) {
         return 'contract_firstRow'
       }
       if (row.name.indexOf('total') != -1) {
         return 'first-row'
       }
+      
     },
     // 列样式
     columnStyle({ row, column, rowIndex, columnIndex }) {
@@ -1314,6 +1315,12 @@ export default {
       }
       if (row.name.indexOf('total') !== -1) {
         return 'background-color: #E3F3FF !important;color: #666!important;'
+      }
+      // if(rowIndex==0&&columnIndex>5) {
+      //    return 'background-color: #87CEFA !important;text-align: center;color: #fff;font-family: Source Han Sans CN;font-size: 16px;'
+      // }
+      if((columnIndex-6)%10==0) {
+        return 'color: #87CEFA!important;'
       }
     },
     HeadTable({ row, column, rowIndex, columnIndex }) {

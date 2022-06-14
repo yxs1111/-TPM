@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-05-13 10:37:14
+ * @LastEditTime: 2022-06-14 15:31:29
 -->
 <template>
   <div class="tabViewsWrap">
@@ -37,11 +37,11 @@ export default {
       // ],
       routerList: [
         {
-          name: '直供',
-          path: '/contractManagement/ContractEntry/CustomerContractEntry/StraightGiving',
+          name: '间供',
+          path: '/contractManagement/ContractEntry/CustomerContractEntry/UnStraightGiving',
           img: {
-            dark: require('@/assets/images/tab/StraightGiving.png'),
-            light: require('@/assets/images/tab/StraightGiving_l.png'),
+            dark: require('@/assets/images/tab/UnStraightGiving.png'),
+            light: require('@/assets/images/tab/UnStraightGiving_l.png'),
           },
         },
         {
@@ -53,11 +53,11 @@ export default {
           },
         },
         {
-          name: '间供',
-          path: '/contractManagement/ContractEntry/CustomerContractEntry/UnStraightGiving',
+          name: '直供',
+          path: '/contractManagement/ContractEntry/CustomerContractEntry/StraightGiving',
           img: {
-            dark: require('@/assets/images/tab/UnStraightGiving.png'),
-            light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+            dark: require('@/assets/images/tab/StraightGiving.png'),
+            light: require('@/assets/images/tab/StraightGiving_l.png'),
           },
         },
       ],

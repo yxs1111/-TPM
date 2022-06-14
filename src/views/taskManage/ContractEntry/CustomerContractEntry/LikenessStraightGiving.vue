@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-14 09:15:17
+ * @LastEditTime: 2022-06-14 15:59:57
 -->
 <template>
   <div class="MainContent">
@@ -40,13 +40,17 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="addNewRow" v-permission="permissions['insert']">新增一行</el-button>
       <!-- <div class="TpmButtonBG" @click="save">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">保存</span>
       </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">提交</el-button>
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+          <span class="tipStar">*</span>
+          注意事项：如果合同期间存在跨年情况，请分两份录入
+      </div>
       <!-- <div class="TpmButtonBG cancelButton" @click="cancelAddNewRow">
         <span class="text">取消</span>
       </div> -->
@@ -179,9 +183,9 @@
       </el-table-column>
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见" />
       <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见"></el-table-column>
-      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
+      <el-table-column prop="createBy" align="center" width="240" label="创建人"></el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
-      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
+      <el-table-column prop="updateBy" align="center" width="240" label="修改人"></el-table-column>
       <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -1486,6 +1490,25 @@ export default {
     width: 400px !important;
     margin: 0 auto;
   }
+}
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+.tip {
+  color: #4192d3;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #4192d3;
 }
 </style>
 <style lang="less">
