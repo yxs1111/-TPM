@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-09 15:59:37
+ * @LastEditTime: 2022-06-14 11:50:32
 -->
 <template>
   <div class="MainContent">
@@ -508,7 +508,18 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data
+            let importList=response.data
+            importList.forEach(item=>{
+              if (item.judgmentType=="Error") {
+                item.sort=1
+              } else if(item.judgmentType="Exception") {
+                item.sort=2
+              } else {
+                item.sort=3
+              }
+            })
+            importList.sort((item,nextItem)=>item.sort-nextItem.sort)
+            this.ImportData = importList
             let isError = this.ImportData.findIndex((item) => {
               return item.judgmentType == 'Error'
             })
@@ -540,11 +551,22 @@ export default {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
-            this.$message.success(this.messageMap.checkSuccess)
-            this.ImportData = response.data
-            let isError=this.ImportData.findIndex(item=>{
+            this.$message.success(this.messageMap.checkSuccess)    
+            let checkList=response.data
+            checkList.forEach(item=>{
+              if (item.judgmentType=="Error") {
+                item.sort=1
+              } else if(item.judgmentType="Exception") {
+                item.sort=2
+              } else {
+                item.sort=3
+              }
+            })
+            let isError=checkList.findIndex(item=>{
               return item.judgmentType=='Error'
             })
+            checkList.sort((item,nextItem)=>item.sort-nextItem.sort)
+            this.ImportData = checkList
             this.saveBtn = isError==-1?1:0
             console.log(this.saveBtn);
           }

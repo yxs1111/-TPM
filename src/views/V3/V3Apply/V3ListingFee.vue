@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-10 15:36:39
+ * @LastEditTime: 2022-06-14 11:58:44
 -->
 <template>
   <div class="MainContent">
@@ -549,7 +549,18 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data
+            let importList=response.data
+            importList.forEach(item=>{
+              if (item.judgmentType=="Error") {
+                item.sort=1
+              } else if(item.judgmentType="Exception") {
+                item.sort=2
+              } else {
+                item.sort=3
+              }
+            })
+            importList.sort((item,nextItem)=>item.sort-nextItem.sort)
+            this.ImportData = importList
             let isError = this.ImportData.findIndex((item) => {
               return item.judgmentType == 'Error'
             })
@@ -581,7 +592,18 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.checkSuccess)
-            this.ImportData = response.data
+            let checkList=response.data
+            checkList.forEach(item=>{
+              if (item.judgmentType=="Error") {
+                item.sort=1
+              } else if(item.judgmentType="Exception") {
+                item.sort=2
+              } else {
+                item.sort=3
+              }
+            })
+            checkList.sort((item,nextItem)=>item.sort-nextItem.sort)
+            this.ImportData = checkList
             let isError = this.ImportData.findIndex((item) => {
               return item.judgmentType == 'Error'
             })

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-05-12 16:23:14
+ * @LastEditTime: 2022-06-14 09:01:09
 -->
 <template>
   <div class="ContentDetail">
@@ -13,7 +13,7 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="760" fixed="left">
+      <el-table-column align="center" width="860" fixed="left">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
@@ -21,7 +21,7 @@
           </div>
         </template>
         <template>
-          <el-table-column width="760">
+          <el-table-column width="860">
             <template v-slot:header>
             </template>
             <template>
@@ -45,7 +45,7 @@
               <el-table-column v-slot={row} prop="taxPrice" align="center" width="150" label="含税金额（￥）">
                 {{FormateNum(row.customerInfo.taxPrice)}}
               </el-table-column>
-              <el-table-column v-slot={row} prop="detail" align="center" width="100" label="描述">
+              <el-table-column v-slot={row} prop="detail" align="center" width="200" label="描述">
                 {{row.customerInfo.detail}}
               </el-table-column>
             </template>

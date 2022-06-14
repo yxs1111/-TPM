@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-07 08:58:33
+ * @LastEditTime: 2022-06-14 09:15:07
 -->
 <template>
   <div class="MainContent">
@@ -239,9 +239,10 @@
             </el-table-column>
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
-                <div v-show="scope.row.isNewData">
+                <div v-show="scope.row.isNewData" style="display: flex;align-items: center;">
                   <el-input v-model="scope.row.costRatio" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
                   </el-input>
+                  <span>%</span>
                 </div>
                 <div v-show="!scope.row.isNewData">
                   {{ FormateNum(scope.row.costRatio) }}%
@@ -1557,7 +1558,7 @@ export default {
       text-overflow: ellipsis;
       vertical-align: middle;
       position: relative;
-      text-align: left;
+      text-align: center;
     }
     th {
       padding: 4px 0 !important;
@@ -1567,7 +1568,7 @@ export default {
       text-overflow: ellipsis;
       vertical-align: middle;
       position: relative;
-      text-align: left;
+      text-align: center;
     }
   }
 }

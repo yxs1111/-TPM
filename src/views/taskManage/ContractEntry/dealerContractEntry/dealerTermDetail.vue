@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-13 11:24:04
+ * @LastEditTime: 2022-06-14 11:22:18
 -->
 <template>
   <div class="ContentDetail">
@@ -21,7 +21,7 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="760" fixed="left">
+      <el-table-column align="center" width="860" fixed="left">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
@@ -29,7 +29,7 @@
           </div>
         </template>
         <template>
-          <el-table-column width="760">
+          <el-table-column width="860">
             <template v-slot:header>
             </template>
             <template>
@@ -53,7 +53,7 @@
               <el-table-column v-slot={row} prop="taxPrice" align="center" width="150" label="含税金额（￥）">
                 {{FormateNum(row.customerInfo.taxPrice)}}
               </el-table-column>
-              <el-table-column v-slot={row} prop="detail" align="center" width="100" label="描述">
+              <el-table-column v-slot={row} prop="detail" align="center" width="200" label="描述">
                 {{row.customerInfo.detail}}
               </el-table-column>
             </template>
@@ -81,7 +81,7 @@
                   <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable&&!scope.row.isTotal">
                     <el-input v-model="scope.row.dealerList[dealerIndex].pointCount" clearable class="my-el-inputNumber" placeholder="请输入"
                       @blur="changePointCount(scope.row,scope.$index,dealerIndex)">
-                    </el-input>
+                    </el-input>%
                   </div>
                   <div v-else>{{FormateNum(scope.row.dealerList[dealerIndex].pointCount)}}%</div>
                 </template>
@@ -118,11 +118,11 @@
             <template>
               <el-table-column prop="frieslandPointCount" align="center" width="150" label="费比（%）">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal">
+                  <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable">
                       <el-input v-model="scope.row.dealerList[dealerIndex].frieslandPointCount" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeFrieslandPointCount(scope.row,scope.$index,dealerIndex)">
-                      </el-input>
+                      </el-input>%
                     </div>
                     <div v-else>
                       {{FormateNum(scope.row.dealerList[dealerIndex].frieslandPointCount)}}%
@@ -132,7 +132,7 @@
               </el-table-column>
               <el-table-column prop="frieslandTaxPrice" align="center" width="150" label="含税金额（￥）">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal">
+                  <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
                       <el-input v-model="scope.row.dealerList[dealerIndex].frieslandTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeFrieslandTaxPrice(scope.row,scope.$index,dealerIndex)">
@@ -153,11 +153,11 @@
             <template>
               <el-table-column prop="dealerPointCount" align="center" width="150" label="费比（%）">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal">
+                  <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable">
                       <el-input v-model="scope.row.dealerList[dealerIndex].dealerPointCount" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeDealerPointCount(scope.row,scope.$index,dealerIndex)">
-                      </el-input>
+                      </el-input>%
                     </div>
                     <div v-else>
                       {{FormateNum(scope.row.dealerList[dealerIndex].dealerPointCount)}}%
@@ -167,7 +167,7 @@
               </el-table-column>
               <el-table-column prop="dealerTaxPrice" align="center" width="150" label="含税金额（￥）">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal">
+                  <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
                       <el-input v-model="scope.row.dealerList[dealerIndex].dealerTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeDealerTaxPrice(scope.row,scope.$index,dealerIndex)">
@@ -226,11 +226,6 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
-    <!-- <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div> -->
   </div>
 </template>
 
@@ -257,327 +252,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       maxheight: contractView(),
-      AllTableData: [
-        {
-          name: 'Total',
-          isVariable: 1, //total 、Fix 区分
-          isTotal: 1, //是否是汇总行
-          customerInfo: {
-            customerName: '高鑫零售', //客户名称
-            targetSale: 10000, //客户目标销售额
-            contractItem: '',
-            conditionType: '',
-            pointCount: 3,
-            taxPrice: 21,
-            detail: '',
-            isVariable: 1, //total 、Fix 区分
-          },
-          dealerList: [
-            {
-              dealerName: '成都华隆',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 10,
-              taxPrice: 1000,
-              detail: '',
-              frieslandPointCount: '', //菲仕兰承担费比
-              frieslandTaxPrice: '', //菲仕兰承担--含税金额
-              dealerPointCount: '', //经销商承担费比
-              dealerTaxPrice: '', //经销商承担--含税金额
-              customerTaxPoint: '', //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              dealerName: '成都华隆2',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 10,
-              taxPrice: 1000,
-              detail: '',
-              frieslandPointCount: '', //菲仕兰承担费比
-              frieslandTaxPrice: '', //菲仕兰承担--含税金额
-              dealerPointCount: '', //经销商承担费比
-              dealerTaxPrice: '', //经销商承担--含税金额
-              customerTaxPoint: '', //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-          ],
-        },
-        {
-          name: 'Variable',
-          isTotal: 0,
-          isVariable: 1, //total 、Fix 区分
-          customerInfo: {
-            customerName: '高鑫零售', //客户名称
-            targetSale: 10000, //客户目标销售额
-            contractItem: 'contractItem',
-            conditionType: 'conditionType',
-            pointCount: 3,
-            taxPrice: 21,
-            detail: 'detail',
-            isVariable: 1, //total 、Fix 区分
-          },
-          dealerList: [
-            {
-              dealerName: '成都华隆',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 300,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              dealerName: '成都华隆2',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 1,
-              taxPrice: 100,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-          ],
-        },
-        {
-          name: 'Variable',
-          isTotal: 0,
-          isVariable: 1, //total 、Fix 区分
-          customerInfo: {
-            customerName: '高鑫零售', //客户名称
-            targetSale: 10000, //客户目标销售额
-            contractItem: 'contractItem',
-            conditionType: 'conditionType',
-            pointCount: 3,
-            taxPrice: 21,
-            detail: 'detail',
-            isVariable: 1, //total 、Fix 区分
-          },
-          dealerList: [
-            {
-              dealerName: '成都华隆',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 300,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              dealerName: '成都华隆2',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 2,
-              taxPrice: 200,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-          ],
-        },
-        {
-          name: 'Variable total',
-          isTotal: 1,
-          customerInfo: {
-            customerName: '', //客户名称
-            targetSale: 10000, //客户目标销售额
-            contractItem: '',
-            conditionType: '',
-            pointCount: 3,
-            taxPrice: 21,
-            detail: '',
-            isVariable: 1, //total 、Fix 区分
-          },
-          dealerList: [
-            {
-              dealerName: '成都华隆',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 21,
-              detail: '',
-              frieslandPointCount: '', //菲仕兰承担费比
-              frieslandTaxPrice: '', //菲仕兰承担--含税金额
-              dealerPointCount: '', //经销商承担费比
-              dealerTaxPrice: '', //经销商承担--含税金额
-              customerTaxPoint: '', //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-            {
-              dealerName: '成都华隆2',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 21,
-              detail: '',
-              frieslandPointCount: '', //菲仕兰承担费比
-              frieslandTaxPrice: '', //菲仕兰承担--含税金额
-              dealerPointCount: '', //经销商承担费比
-              dealerTaxPrice: '', //经销商承担--含税金额
-              customerTaxPoint: '', //客户扣款税点
-              isVariable: 1, //total 、Fix 区分
-            },
-          ],
-        },
-        {
-          name: 'Fixed',
-          isTotal: 0,
-          isVariable: 0, //total 、Fix 区分
-          customerInfo: {
-            customerName: '高鑫零售', //客户名称
-            targetSale: 10000, //客户目标销售额
-            contractItem: 'contractItem',
-            conditionType: 'conditionType',
-            pointCount: 3,
-            taxPrice: 21,
-            detail: 'detail',
-          },
-          dealerList: [
-            {
-              dealerName: '成都华隆',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 1,
-              taxPrice: 100,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-            },
-            {
-              dealerName: '成都华隆2',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 300,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-            },
-          ],
-        },
-        {
-          name: 'Fixed',
-          isTotal: 0,
-          isVariable: 0, //total 、Fix 区分
-          customerInfo: {
-            customerName: '高鑫零售', //客户名称
-            targetSale: 10000, //客户目标销售额
-            contractItem: 'contractItem',
-            conditionType: 'conditionType',
-            pointCount: 3,
-            taxPrice: 21,
-            detail: 'detail',
-          },
-          dealerList: [
-            {
-              dealerName: '成都华隆',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 300,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-            },
-            {
-              dealerName: '成都华隆2',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 1,
-              taxPrice: 100,
-              detail: 'detail',
-              frieslandPointCount: 0, //菲仕兰承担费比
-              frieslandTaxPrice: 0, //菲仕兰承担--含税金额
-              dealerPointCount: 0, //经销商承担费比
-              dealerTaxPrice: 0, //经销商承担--含税金额
-              customerTaxPoint: 13, //客户扣款税点
-            },
-          ],
-        },
-        {
-          name: 'Fixed total',
-          isTotal: 1,
-          isVariable: 0, //total 、Fix 区分
-          customerInfo: {
-            customerName: '', //客户名称
-            targetSale: 10000, //客户目标销售额
-            contractItem: '',
-            conditionType: '',
-            pointCount: 3,
-            taxPrice: 21,
-            detail: '',
-          },
-          dealerList: [
-            {
-              dealerName: '成都华隆',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 21,
-              detail: '',
-              frieslandPointCount: '', //菲仕兰承担费比
-              frieslandTaxPrice: '', //菲仕兰承担--含税金额
-              dealerPointCount: '', //经销商承担费比
-              dealerTaxPrice: '', //经销商承担--含税金额
-              customerTaxPoint: '', //客户扣款税点
-            },
-            {
-              dealerName: '成都华隆2',
-              targetSale: 10000,
-              contractItem: '',
-              conditionType: '',
-              pointCount: 3,
-              taxPrice: 21,
-              detail: '',
-              frieslandPointCount: '', //菲仕兰承担费比
-              frieslandTaxPrice: '', //菲仕兰承担--含税金额
-              dealerPointCount: '', //经销商承担费比
-              dealerTaxPrice: '', //经销商承担--含税金额
-              customerTaxPoint: '', //客户扣款税点
-            },
-          ],
-        },
-      ],
+      AllTableData: [],
       TaxDeductionsPoint: ['6', '13'],
       payTypeList: ['PO', '红票', '票扣'],
       ccId: null,
@@ -1005,6 +680,7 @@ export default {
             item.customerInfo.taxPrice
           )
         })
+        console.log(VariableTableData);
         //计算Fixed 汇总行数据--客户维度
         FixedTableData.forEach((item) => {
           FixedTotalTableData[0].customerInfo.pointCount += Number(
@@ -1363,7 +1039,7 @@ export default {
         taxPrice
       this.changeFrieslandTaxPrice(Obj, index, dealerIndex)
       // this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice=0
-      this.setVariableTotal()
+      // this.setVariableTotal()
     },
     //设置Variable、Fixed   Total
     setVariableTotal() {
@@ -1373,6 +1049,10 @@ export default {
       this.AllTableData[0].dealerList.forEach((item) => {
         item.taxPrice = 0
         item.pointCount = 0
+        item.frieslandPointCount = 0
+        item.frieslandTaxPrice = 0
+        item.dealerPointCount = 0
+        item.dealerTaxPrice = 0
       })
       //对行进行遍历
       for (let index = 0; index < this.AllTableData.length; index++) {
@@ -1387,16 +1067,20 @@ export default {
             dealerIndex < dealerList.length;
             dealerIndex++
           ) {
-            const { pointCount, taxPrice, dealerName } = dealerList[dealerIndex]
+            const { pointCount, taxPrice, dealerName,frieslandPointCount,frieslandTaxPrice,dealerTaxPrice,dealerPointCount } = dealerList[dealerIndex]
             if (!AllVariableDealer[dealerName]) {
               AllVariableDealer[dealerName] = [
-                { pointCount, taxPrice, dealerIndex },
+                { pointCount, taxPrice, dealerIndex,frieslandPointCount,frieslandTaxPrice,dealerTaxPrice,dealerPointCount },
               ]
             } else {
               AllVariableDealer[dealerName].push({
                 pointCount,
                 taxPrice,
                 dealerIndex,
+                frieslandPointCount,
+                frieslandTaxPrice,
+                dealerTaxPrice,
+                dealerPointCount
               })
             }
           }
@@ -1413,16 +1097,20 @@ export default {
             dealerIndex < dealerList.length;
             dealerIndex++
           ) {
-            const { pointCount, taxPrice, dealerName } = dealerList[dealerIndex]
+            const { pointCount, taxPrice, dealerName,frieslandPointCount,frieslandTaxPrice,dealerTaxPrice,dealerPointCount} = dealerList[dealerIndex]
             if (!AllFixedDealer[dealerName]) {
               AllFixedDealer[dealerName] = [
-                { pointCount, taxPrice, dealerIndex },
+                { pointCount, taxPrice, dealerIndex ,frieslandPointCount,frieslandTaxPrice,dealerTaxPrice,dealerPointCount},
               ]
             } else {
               AllFixedDealer[dealerName].push({
                 pointCount,
                 taxPrice,
                 dealerIndex,
+                frieslandPointCount,
+                frieslandTaxPrice,
+                dealerTaxPrice,
+                dealerPointCount
               })
             }
           }
@@ -1436,17 +1124,28 @@ export default {
       let FixedIndex = this.AllTableData.findIndex(
         (item) => item.name == 'Fixed total'
       )
+      console.log(AllVariableDealer);
+      console.log(AllFixedDealer);
       //遍历variable 经销商
+      // debugger
       for (const key in AllVariableDealer) {
         if (Object.hasOwnProperty.call(AllVariableDealer, key)) {
           const dealerList = AllVariableDealer[key]
           let variableTotalPointCount = 0
           let variableTotalTaxPrice = 0
+          let variableTotalFrieslandTaxPrice = 0 //菲仕兰承担含税金额
+          let variableTotalFrieslandPointCount = 0 //菲仕兰承担费比
+          let variableTotalDealerTaxPrice = 0 //经销商承担含税金额
+          let variableTotalDealerPointCount = 0 //经销商承担费比
           let index = 0
           //记录每个经销商的合 并取得经销商的索引
           dealerList.forEach((dealerItem) => {
             variableTotalPointCount += Number(dealerItem.pointCount)
             variableTotalTaxPrice += Number(dealerItem.taxPrice)
+            variableTotalFrieslandTaxPrice+=Number(dealerItem.frieslandTaxPrice)
+            variableTotalFrieslandPointCount+=Number(dealerItem.frieslandPointCount)
+            variableTotalDealerTaxPrice+=Number(dealerItem.dealerTaxPrice)
+            variableTotalDealerPointCount+=Number(dealerItem.dealerPointCount)
             index = dealerItem.dealerIndex
           })
           //将当前的经销商的和赋值给当前经销商的VariableTotal
@@ -1454,11 +1153,27 @@ export default {
             variableTotalPointCount
           this.AllTableData[VariableIndex].dealerList[index].taxPrice =
             variableTotalTaxPrice
+          this.AllTableData[VariableIndex].dealerList[index].frieslandTaxPrice =
+            variableTotalFrieslandTaxPrice
+          this.AllTableData[VariableIndex].dealerList[index].frieslandPointCount =
+            variableTotalFrieslandPointCount
+          this.AllTableData[VariableIndex].dealerList[index].dealerTaxPrice =
+            variableTotalDealerTaxPrice
+          this.AllTableData[VariableIndex].dealerList[index].dealerPointCount =
+            variableTotalDealerPointCount
           //汇总variable Total行--》Total
           this.AllTableData[0].dealerList[index].taxPrice +=
             variableTotalTaxPrice
           this.AllTableData[0].dealerList[index].pointCount +=
             variableTotalPointCount
+          this.AllTableData[0].dealerList[index].frieslandTaxPrice +=
+            variableTotalFrieslandTaxPrice
+          this.AllTableData[0].dealerList[index].frieslandPointCount +=
+            variableTotalFrieslandPointCount
+          this.AllTableData[0].dealerList[index].dealerTaxPrice +=
+            variableTotalDealerTaxPrice
+          this.AllTableData[0].dealerList[index].dealerPointCount +=
+            variableTotalDealerPointCount
         }
       }
       //遍历Fixed 经销商
@@ -1467,11 +1182,19 @@ export default {
           const dealerList = AllFixedDealer[key]
           let FixedTotalPointCount = 0
           let FixedTotalTaxPrice = 0
+          let FixedTotalFrieslandTaxPrice = 0 //菲仕兰承担含税金额
+          let FixedTotalFrieslandPointCount = 0 //菲仕兰承担费比
+          let FixedTotalDealerTaxPrice = 0 //经销商承担含税金额
+          let FixedTotalDealerPointCount = 0 //经销商承担费比
           let index = 0
           //记录每个经销商的合 并取得经销商的索引
           dealerList.forEach((dealerItem) => {
             FixedTotalPointCount += Number(dealerItem.pointCount)
             FixedTotalTaxPrice += Number(dealerItem.taxPrice)
+            FixedTotalFrieslandTaxPrice += Number(dealerItem.frieslandTaxPrice)
+            FixedTotalFrieslandPointCount += Number(dealerItem.frieslandPointCount)
+            FixedTotalDealerTaxPrice += Number(dealerItem.dealerTaxPrice)
+            FixedTotalDealerPointCount += Number(dealerItem.dealerPointCount)
             index = dealerItem.dealerIndex
           })
           //将当前的经销商的和赋值给当前经销商的VariableTotal
@@ -1479,11 +1202,24 @@ export default {
             FixedTotalPointCount
           this.AllTableData[FixedIndex].dealerList[index].taxPrice =
             FixedTotalTaxPrice
-
+          this.AllTableData[FixedIndex].dealerList[index].frieslandTaxPrice =
+            FixedTotalFrieslandTaxPrice
+          this.AllTableData[FixedIndex].dealerList[index].frieslandPointCount =
+            FixedTotalFrieslandPointCount
+          this.AllTableData[FixedIndex].dealerList[index].dealerTaxPrice =
+            FixedTotalDealerTaxPrice
+          this.AllTableData[FixedIndex].dealerList[index].dealerPointCount =
+            FixedTotalDealerPointCount
           //汇总variable Total行--》Total
           this.AllTableData[0].dealerList[index].taxPrice += FixedTotalTaxPrice
           this.AllTableData[0].dealerList[index].pointCount +=
             FixedTotalPointCount
+          this.AllTableData[0].dealerList[index].frieslandTaxPrice += FixedTotalFrieslandTaxPrice
+          this.AllTableData[0].dealerList[index].frieslandPointCount +=
+            FixedTotalFrieslandPointCount
+          this.AllTableData[0].dealerList[index].dealerTaxPrice += FixedTotalDealerTaxPrice
+          this.AllTableData[0].dealerList[index].dealerPointCount +=
+            FixedTotalDealerPointCount
         }
       }
     },
@@ -1496,9 +1232,10 @@ export default {
       if (0 <= frieslandPointCount && frieslandPointCount <= pointCount) {
         this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =
           pointCount - frieslandPointCount
-        this.changeDealerPointCount(Obj, index, dealerIndex)
         this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice =
           (frieslandPointCount * targetSale) / 100
+        this.changeDealerPointCount(Obj, index, dealerIndex)
+        
       } else {
         this.$message.info(
           `第${index}行 ${this.AllTableData[index].name} ${this.AllTableData[index].dealerList[dealerIndex].dealerName}  菲仕兰承担费比+经销商承担费比应该等于客户费比`
@@ -1506,6 +1243,7 @@ export default {
         this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
           pointCount
         this.changeDealerPointCount(Obj, index, dealerIndex)
+        
         // this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = 0
         // this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = 0
       }
@@ -1519,6 +1257,8 @@ export default {
       this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice =
         Number(taxPrice) - Number(frieslandTaxPrice)
       this.changeDealerTaxPrice(Obj, index, dealerIndex)
+      this.setVariableTotal()
+     
     },
     //更改经销商承担费比--》经销商承担含税金额
     changeDealerPointCount(Obj, index, dealerIndex) {
@@ -1528,6 +1268,7 @@ export default {
         (dealerPointCount * targetSale) / 100
       this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
         Number(pointCount) - Number(dealerPointCount)
+      this.setVariableTotal()
     },
     //更改经销商含税金额--》经销商承担承担费比
     changeDealerTaxPrice(Obj, index, dealerIndex) {
