@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-02 10:02:17
+ * @LastEditTime: 2022-06-14 16:54:22
 -->
 <template>
   <div class="MainContent">
@@ -79,7 +79,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="distributorName" align="center" width="220" label="经销商名称">
+      <el-table-column prop="distributorName" align="center" width="280" label="经销商名称">
         <template slot-scope="scope">
           <div>
             {{scope.row.distributorName}}

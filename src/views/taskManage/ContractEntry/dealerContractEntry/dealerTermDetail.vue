@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-14 14:15:23
+ * @LastEditTime: 2022-06-14 16:47:01
 -->
 <template>
   <div class="ContentDetail">
@@ -208,7 +208,7 @@
               </el-table-column>
               <el-table-column v-slot={row} prop="customerTaxPoint" align="center" width="120" label="支付方式">
                 <!-- {{row.dealerList[dealerIndex].customerTaxPoint}} -->
-                <div v-if="!row.isTotal">
+                <div v-if="!row.isTotal&&row.dealerList[dealerIndex].customerTaxPoint!==''">
                   <div v-if="row.dealerList[dealerIndex].isEditor">
                     <el-select v-model="row.dealerList[dealerIndex].payType" class="my-el-select_dialog" filterable clearable placeholder="请选择">
                       <el-option v-for="(item, index) in CustomerDeductionsAndPayType[row.dealerList[dealerIndex].customerTaxPoint].payTypeList" :key="index" :label="item.label"
@@ -806,7 +806,7 @@ export default {
       if (num != -1) {
         return num
       } else {
-        return 0
+        return ''
       }
     },
     //根据1/2/3 查名字

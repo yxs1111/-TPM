@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-14 09:01:09
+ * @LastEditTime: 2022-06-14 17:01:44
 -->
 <template>
   <div class="ContentDetail">
@@ -146,7 +146,7 @@
                 </template>
               </el-table-column>
               <el-table-column v-slot={row} prop="customerTaxPoint" align="center" width="120" label="支付方式">
-                <div v-if="!row.isTotal">
+                <div v-if="!row.isTotal&&row.dealerList[dealerIndex].customerTaxPoint!==''">
                   {{getPaymentMethodText(row.dealerList[dealerIndex].customerTaxPoint,row.dealerList[dealerIndex].payType)}}
                 </div>
               </el-table-column>
@@ -692,7 +692,7 @@ export default {
       if (num != -1) {
         return num
       } else {
-        return 0
+        return ''
       }
     },
     //根据1/2/3 查名字

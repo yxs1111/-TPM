@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-02 09:53:58
+ * @LastEditTime: 2022-06-14 16:53:32
 -->
 <template>
   <div class="MainContent">
@@ -98,7 +98,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="distributorName" align="center" width="220" label="经销商名称">
+      <el-table-column prop="distributorName" align="center" width="280" label="经销商名称">
         <template slot-scope="scope">
           <div>
             {{scope.row.distributorName}}
@@ -188,9 +188,9 @@
       </el-table-column>
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见" />
       <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见"></el-table-column>
-      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
+      <el-table-column prop="createBy" align="center" width="240" label="创建人"></el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
-      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
+      <el-table-column prop="updateBy" align="center" width="240" label="修改人"></el-table-column>
       <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
     </el-table>
     <!-- 分页 -->

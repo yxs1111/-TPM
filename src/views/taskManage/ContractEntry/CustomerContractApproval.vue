@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-14 13:18:59
+ * @LastEditTime: 2022-06-14 16:44:53
 -->
 <template>
   <div class="MainContent">
@@ -939,7 +939,7 @@ export default {
       text-overflow: ellipsis;
       vertical-align: middle;
       position: relative;
-      text-align: left;
+      text-align: center;
     }
     th {
       padding: 4px 0 !important;
@@ -949,7 +949,7 @@ export default {
       text-overflow: ellipsis;
       vertical-align: middle;
       position: relative;
-      text-align: left;
+      text-align: center;
     }
   }
 }
