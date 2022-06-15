@@ -253,7 +253,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div>
                   <!-- {{ termInfo.saleNumber*(scope.row.costRatio/100) }} -->
@@ -325,7 +325,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
                   <el-input v-model="scope.row.taxCost" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCost(scope.$index,scope.row)">

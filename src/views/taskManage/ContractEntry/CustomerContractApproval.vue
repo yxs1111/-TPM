@@ -160,7 +160,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div>
                   {{FormateNum(scope.row.taxCost)}}
@@ -196,7 +196,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div>{{ FormateNum(scope.row.taxCost) }}</div>
               </template>

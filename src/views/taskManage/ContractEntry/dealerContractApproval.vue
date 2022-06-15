@@ -86,7 +86,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(¥)">
+      <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.distributorSaleAmount)}}

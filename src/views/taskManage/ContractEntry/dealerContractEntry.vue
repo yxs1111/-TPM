@@ -91,7 +91,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额(¥)">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount)}}
@@ -105,7 +105,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(¥)">
+      <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(RMB)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
@@ -215,7 +215,7 @@
             <el-table :data="addDialogCustomer" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="customerName" align="center" width="320" label="客户名称">
               </el-table-column>
-              <el-table-column prop="saleAmount" align="center" width="280" label="客户目标销售额(¥)">
+              <el-table-column prop="saleAmount" align="center" width="280" label="客户目标销售额(RMB)">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.saleAmount)}}
@@ -261,7 +261,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="targetSale" align="center" width="280" label="协议目标销售额(¥)">
+              <el-table-column prop="targetSale" align="center" width="280" label="协议目标销售额(RMB)">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
                     <el-input v-model="scope.row.targetSale" clearable class="my-el-input" placeholder="请输入">

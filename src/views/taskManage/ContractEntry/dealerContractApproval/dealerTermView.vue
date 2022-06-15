@@ -17,7 +17,7 @@
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
-            <span class="topTarget"> 目标销售额(含税,¥): {{FormateNum(AllTableData[0].customerInfo.targetSale)}} </span>
+            <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].customerInfo.targetSale)}} </span>
           </div>
         </template>
         <template>
@@ -42,7 +42,7 @@
               <el-table-column v-slot={row} prop="pointCount" align="center" width="100" label="费比（%）">
                 {{FormateNum(row.customerInfo.pointCount)}}%
               </el-table-column>
-              <el-table-column v-slot={row} prop="taxPrice" align="center" width="150" label="含税金额（￥）">
+              <el-table-column v-slot={row} prop="taxPrice" align="center" width="150" label="含税金额（RMB）">
                 {{FormateNum(row.customerInfo.taxPrice)}}
               </el-table-column>
               <el-table-column v-slot={row} prop="detail" align="center" width="200" label="描述">
@@ -57,7 +57,7 @@
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}</span>
-            <span class="topTarget"> 目标销售额(含税,¥): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
+            <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
           </div>
         </template>
         <template>
@@ -73,7 +73,7 @@
                   {{FormateNum(scope.row.dealerList[dealerIndex].pointCount)}}%
                 </template>
               </el-table-column>
-              <el-table-column prop="taxPrice" align="center" width="150" label="含税金额（￥）">
+              <el-table-column prop="taxPrice" align="center" width="150" label="含税金额（RMB）">
                 <template slot-scope="scope">
 
                   {{FormateNum(scope.row.dealerList[dealerIndex].taxPrice)}}
@@ -104,7 +104,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="frieslandTaxPrice" align="center" width="150" label="含税金额（￥）">
+              <el-table-column prop="frieslandTaxPrice" align="center" width="150" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal">
                     {{FormateNum(scope.row.dealerList[dealerIndex].frieslandTaxPrice)}}
@@ -125,7 +125,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="dealerTaxPrice" align="center" width="150" label="含税金额（￥）">
+              <el-table-column prop="dealerTaxPrice" align="center" width="150" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal">
                     {{FormateNum(scope.row.dealerList[dealerIndex].dealerTaxPrice)}}
