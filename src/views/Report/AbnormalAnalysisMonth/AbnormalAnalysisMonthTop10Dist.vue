@@ -504,7 +504,7 @@ export default {
       try {
         FileSaver.saveAs(
           new Blob([s2ab(wbout)], { type: 'application/octet-stream' }),
-          '异常分析报告-bychannel.xlsx'
+          '异常分析报告-Top10Dist.xlsx'
         )
       } catch (e) {
         if (typeof console !== 'undefined') console.log(e, wbout)
@@ -611,6 +611,11 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
+  height: calc(100% - 80px);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  overflow: hidden;
   .checkBoxWrap {
     display: flex;
     align-items: center;
