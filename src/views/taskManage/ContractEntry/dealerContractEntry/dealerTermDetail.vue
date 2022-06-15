@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-14 16:47:01
+ * @LastEditTime: 2022-06-15 15:19:19
 -->
 <template>
   <div class="ContentDetail">
@@ -130,7 +130,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="frieslandTaxPrice" align="center" width="150" label="含税金额（RMB）">
+              <el-table-column prop="frieslandTaxPrice" align="center" width="160" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
@@ -165,7 +165,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="dealerTaxPrice" align="center" width="150" label="含税金额（RMB）">
+              <el-table-column prop="dealerTaxPrice" align="center" width="160" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
@@ -305,7 +305,7 @@ export default {
         let distributorList = res.data.distributorContract
         //经销商添加对应数量的variable /fixed
         distributorList.forEach((item) => {
-          if (item.fixed.length == 0) {
+          if (item.fixed.length == 0&&item.variable.length == 0) {
             item.isEmpty = 1
             for (let index = 0; index < customerVariableList.length; index++) {
               let obj = {
@@ -382,6 +382,7 @@ export default {
         let VariableTableData = []
         let FixedTotalTableData = []
         let FixedTableData = []
+        console.log(distributorList);
         //添加variable-->获得表格variable部分数据（维度：行，行中数据保留客户和经销商）
         for (let index = 0; index < customerVariableList.length; index++) {
           const customerVariableObj = customerVariableList[index]
@@ -546,6 +547,7 @@ export default {
           }
           VariableTableData.push(variableObj)
         }
+        console.log(VariableTotalTableData);
         //添加 fixed -->获得表格中fix 部分数据
         for (let index = 0; index < customerFixList.length; index++) {
           const customerFixObj = customerFixList[index]
@@ -692,11 +694,11 @@ export default {
         })
         //variable + fix 汇总行
         AllTotalTableData[0].customerInfo.pointCount =
-          VariableTotalTableData[0].customerInfo.pointCount +
-          FixedTotalTableData[0].customerInfo.pointCount
+         VariableTotalTableData.length?VariableTotalTableData[0].customerInfo.pointCount:0 +
+         FixedTotalTableData.length? FixedTotalTableData[0].customerInfo.pointCount:0
         AllTotalTableData[0].customerInfo.taxPrice =
-          VariableTotalTableData[0].customerInfo.taxPrice +
-          FixedTotalTableData[0].customerInfo.taxPrice
+         VariableTotalTableData.length?VariableTotalTableData[0].customerInfo.taxPrice:0 +
+         FixedTotalTableData.length?FixedTotalTableData[0].customerInfo.taxPrice:0
         this.AllTableData = [
           ...AllTotalTableData,
           ...VariableTableData,
@@ -1124,8 +1126,8 @@ export default {
       let FixedIndex = this.AllTableData.findIndex(
         (item) => item.name == 'Fixed total'
       )
-      console.log(AllVariableDealer);
-      console.log(AllFixedDealer);
+      // console.log(AllVariableDealer);
+      // console.log(AllFixedDealer);
       //遍历variable 经销商
       // debugger
       for (const key in AllVariableDealer) {

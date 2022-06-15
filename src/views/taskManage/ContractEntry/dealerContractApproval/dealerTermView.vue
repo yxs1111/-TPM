@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-14 17:01:44
+ * @LastEditTime: 2022-06-15 15:21:10
 -->
 <template>
   <div class="ContentDetail">
@@ -104,7 +104,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="frieslandTaxPrice" align="center" width="150" label="含税金额（RMB）">
+              <el-table-column prop="frieslandTaxPrice" align="center" width="160" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal">
                     {{FormateNum(scope.row.dealerList[dealerIndex].frieslandTaxPrice)}}
@@ -125,7 +125,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="dealerTaxPrice" align="center" width="150" label="含税金额（RMB）">
+              <el-table-column prop="dealerTaxPrice" align="center" width="160" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal">
                     {{FormateNum(scope.row.dealerList[dealerIndex].dealerTaxPrice)}}
@@ -578,11 +578,11 @@ export default {
         })
         //variable + fix 汇总行
         AllTotalTableData[0].customerInfo.pointCount =
-          VariableTotalTableData[0].customerInfo.pointCount +
-          FixedTotalTableData[0].customerInfo.pointCount
+         VariableTotalTableData.length?VariableTotalTableData[0].customerInfo.pointCount:0 +
+         FixedTotalTableData.length? FixedTotalTableData[0].customerInfo.pointCount:0
         AllTotalTableData[0].customerInfo.taxPrice =
-          VariableTotalTableData[0].customerInfo.taxPrice +
-          FixedTotalTableData[0].customerInfo.taxPrice
+         VariableTotalTableData.length?VariableTotalTableData[0].customerInfo.taxPrice:0 +
+         FixedTotalTableData.length?FixedTotalTableData[0].customerInfo.taxPrice:0
         this.AllTableData = [
           ...AllTotalTableData,
           ...VariableTableData,
