@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-15 10:51:54
+ * @LastEditTime: 2022-06-15 13:28:40
 -->
 <template>
   <div class="MainContent">
@@ -47,7 +47,7 @@
         <span class="text">保存</span>
       </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">提交</el-button>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+      <div class="tip">
           <span class="tipStar">*</span>
           注意事项：如果合同期间存在跨年情况，请分两份录入
       </div>
@@ -559,7 +559,6 @@ export default {
               item.isVariableOrFix = 2
             }
           })
-          console.log(list)
           list.forEach((item) => {
             if (item.isVariableOrFix === 0) {
               this.contractItemVariableList.push({
@@ -776,14 +775,20 @@ export default {
       })
     },
     //编辑行数据
-    editorRow(index, { isNewData }) {
-      if (
+    editorRow(index, { isNewData,systemDate }) {
+      //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不受状态影响
+      let isDeleteFlag= this.compareDate(systemDate[0])
+      if(!isDeleteFlag) {
+        if (
+        this.tableData[index].contractState == '1' ||
         this.tableData[index].contractState == '3' ||
         this.tableData[index].contractState == '4'
       ) {
-        this.$message.info('合同状态已经通过，不能进行编辑操作')
+        this.$message.info('合同已经提交，不能进行编辑操作')
         return
       }
+      }
+      
       if (this.tempObj.tempInfo && !isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
@@ -811,12 +816,23 @@ export default {
         this.tableData[index] = this.tempObj.tempInfo
       }
     },
+    compareDate(date) {
+      let currentDate=new Date();
+      let month=currentDate.getMonth()<10?"0"+(currentDate.getMonth()+1):(currentDate.getMonth()+1)
+      let year=currentDate.getFullYear()
+      let currentMonth=year+month
+      return Number(currentMonth)<Number(date)
+    },
     //删除该行数据
     deleteRow(row, index) {
-      if(row.contractState== '3'||row.contractState== '4') {
-        this.$message.info('合同状态已经通过，不能进行删除操作')
-        return
-      }
+      //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不受状态影响
+      let isDeleteFlag= this.compareDate(row.systemDate[0])
+      if (!isDeleteFlag) {
+        if(row.contractState== '1'||row.contractState== '3'||row.contractState== '4') {
+          this.$message.info('合同已经提交，不能进行编辑操作')
+          return
+        }
+      } 
       //删除新增的
       if (row.isNewData) {
         this.$confirm('确定要删除新增的数据吗？此操作不可逆', '提示', {

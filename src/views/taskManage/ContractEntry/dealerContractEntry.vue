@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-15 11:04:50
+ * @LastEditTime: 2022-06-15 13:35:10
 -->
 <template>
   <div class="MainContent">
@@ -516,9 +516,13 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState == '1'||row.contractState == '3' || row.contractState == '4') {
-        this.$message.info('该经销商已经提交，不能进行编辑')
-        return
+      //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不收状态影响
+      let isDeleteFlag= this.compareDate(row.systemDate[0])
+      if (!isDeleteFlag) {
+        if (row.contractState == '1'||row.contractState == '3' || row.contractState == '4') {
+          this.$message.info('该经销商已经提交，不能进行编辑操作')
+          return
+        }
       }
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
@@ -535,11 +539,22 @@ export default {
       this.tableData[index].isEditor = 0
       this.tableData[index] = this.tempObj.tempInfo
     },
+    compareDate(date) {
+      let currentDate=new Date();
+      let month=currentDate.getMonth()<10?"0"+(currentDate.getMonth()+1):(currentDate.getMonth()+1)
+      let year=currentDate.getFullYear()
+      let currentMonth=year+month
+      return Number(currentMonth)<Number(date)
+    },
     //删除该行数据
     deleteRow(row) {
-      if(row.contractState== '3'||row.contractState== '4') {
-        this.$message.info('经销商状态已经通过，不能进行删除操作')
-        return
+      //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不收状态影响
+      let isDeleteFlag= this.compareDate(row.systemDate[0])
+      if (!isDeleteFlag) {
+        if(row.contractState == '1'||row.contractState== '3'||row.contractState== '4') {
+          this.$message.info('经销商状态已经通过，不能进行删除操作')
+          return
+        }
       }
       //删除数据库中的数据
       this.$confirm('确定要删除数据吗?', '提示', {
