@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-15 10:26:47
+ * @LastEditTime: 2022-06-15 11:04:50
 -->
 <template>
   <div class="MainContent">
@@ -91,7 +91,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额(RMB)">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="180" label="客户目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount)}}
@@ -516,8 +516,8 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState == '3' || row.contractState == '4') {
-        this.$message.info('该经销商已经通过，不能进行编辑')
+      if (row.contractState == '1'||row.contractState == '3' || row.contractState == '4') {
+        this.$message.info('该经销商已经提交，不能进行编辑')
         return
       }
       if (this.tempObj.tempInfo) {
@@ -537,6 +537,10 @@ export default {
     },
     //删除该行数据
     deleteRow(row) {
+      if(row.contractState== '3'||row.contractState== '4') {
+        this.$message.info('经销商状态已经通过，不能进行删除操作')
+        return
+      }
       //删除数据库中的数据
       this.$confirm('确定要删除数据吗?', '提示', {
         confirmButtonText: '确定',

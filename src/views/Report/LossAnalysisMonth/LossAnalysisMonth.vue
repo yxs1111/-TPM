@@ -855,6 +855,13 @@ export default {
 
 <style lang="scss" scoped>
 .app-container {
+  height: calc(100% - 80px);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  // margin-bottom: 100px;
+  // overflow-y: auto;
   .checkBoxWrap {
     display: flex;
     align-items: center;

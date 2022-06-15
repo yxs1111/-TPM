@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-15 10:03:06
+ * @LastEditTime: 2022-06-15 10:55:48
 -->
 <template>
   <div class="MainContent">
@@ -813,6 +813,10 @@ export default {
     },
     //删除该行数据
     deleteRow(row, index) {
+      if(row.contractState== '3'||row.contractState== '4') {
+        this.$message.info('合同状态已经通过，不能进行删除操作')
+        return
+      }
       //删除新增的
       if (row.isNewData) {
         this.$confirm('确定要删除新增的数据吗？此操作不可逆', '提示', {
