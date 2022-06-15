@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-15 15:19:19
+ * @LastEditTime: 2022-06-15 16:07:30
 -->
 <template>
   <div class="ContentDetail">
@@ -938,10 +938,7 @@ export default {
                     fcTaxCost: distItem.frieslandTaxPrice,
                     distributorCostRatio: distItem.dealerPointCount,
                     distributorTaxCost: distItem.dealerTaxPrice,
-                    deductionTaxRate:
-                      this.CustomerDeductionsAndPayType[
-                        distItem.customerTaxPoint
-                      ].CustomerDeduction,
+                    deductionTaxRate:distItem.customerTaxPoint!=""?this.CustomerDeductionsAndPayType[distItem.customerTaxPoint].CustomerDeduction:'',
                     payType: distItem.payType,
                   })
                 } else {
@@ -956,9 +953,9 @@ export default {
                     distributorCostRatio: distItem.dealerPointCount,
                     distributorTaxCost: distItem.dealerTaxPrice,
                     deductionTaxRate:
-                      this.CustomerDeductionsAndPayType[
+                     distItem.customerTaxPoint!=""? this.CustomerDeductionsAndPayType[
                         distItem.customerTaxPoint
-                      ].CustomerDeduction,
+                      ].CustomerDeduction:'',
                     payType: distItem.payType,
                   })
                 }
@@ -978,8 +975,8 @@ export default {
                   distributorCostRatio: distItem.dealerPointCount,
                   distributorTaxCost: distItem.dealerTaxPrice,
                   deductionTaxRate:
-                    this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
-                      .CustomerDeduction,
+                   distItem.customerTaxPoint!=""? this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
+                      .CustomerDeduction:'',
                   payType: distItem.payType,
                 })
               } else {
@@ -994,8 +991,8 @@ export default {
                   distributorCostRatio: distItem.dealerPointCount,
                   distributorTaxCost: distItem.dealerTaxPrice,
                   deductionTaxRate:
-                    this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
-                      .CustomerDeduction,
+                   distItem.customerTaxPoint!=""? this.CustomerDeductionsAndPayType[distItem.customerTaxPoint]
+                      .CustomerDeduction:'',
                   payType: distItem.payType,
                 })
               }
