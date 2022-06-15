@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-14 15:59:57
+ * @LastEditTime: 2022-06-15 10:03:06
 -->
 <template>
   <div class="MainContent">
@@ -143,11 +143,10 @@
               <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
-                    <span>合同终止</span>
+                    <span>调整系统生效时间</span>
                   </div>
                   <div class="PopoverContentOption">
                     <div class="PopoverContentOptionItem">
-                      <span class="PopoverContentOptionItemText">更改时间</span>
                       <el-date-picker v-model="scope.row.expireDate" value-format="yyyyMM" format="yyyyMM" type="month" placeholder="选择日期">
                       </el-date-picker>
                     </div>

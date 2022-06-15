@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-14 15:54:11
+ * @LastEditTime: 2022-06-15 10:02:25
 -->
 <template>
   <div class="MainContent">
@@ -109,7 +109,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractDate" align="center" width="280" label="合同期间(不允许跨年)">
+      <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-date-picker v-model="scope.row.contractDate" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
@@ -143,11 +143,10 @@
               <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
-                    <span>合同终止</span>
+                    <span>调整系统生效时间</span>
                   </div>
                   <div class="PopoverContentOption">
                     <div class="PopoverContentOptionItem">
-                      <span class="PopoverContentOptionItemText">更改时间</span>
                       <el-date-picker v-model="scope.row.expireDate" value-format="yyyyMM" format="yyyyMM" type="month" placeholder="选择日期">
                       </el-date-picker>
                     </div>
