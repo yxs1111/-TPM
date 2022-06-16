@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 21:20:47
+ * @LastEditTime: 2022-06-16 16:38:09
 -->
 <template>
   <div class="MainContent">
@@ -596,7 +596,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version === 'FMC-V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交、已经是提交（申请过）、节点

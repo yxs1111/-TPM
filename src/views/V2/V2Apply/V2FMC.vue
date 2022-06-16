@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-08 21:31:42
+ * @LastEditTime: 2022-06-16 16:24:00
 -->
 <template>
   <div class="MainContent">
@@ -544,7 +544,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.activityName.indexOf('V2') != -1 &&
+              res.data.version=='FMC-V2'  &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
