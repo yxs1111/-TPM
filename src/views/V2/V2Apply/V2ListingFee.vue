@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-14 11:50:32
+ * @LastEditTime: 2022-06-16 08:50:34
 -->
 <template>
   <div class="MainContent">
@@ -512,7 +512,7 @@ export default {
             importList.forEach(item=>{
               if (item.judgmentType=="Error") {
                 item.sort=1
-              } else if(item.judgmentType="Exception") {
+              } else if(item.judgmentType=="Exception") {
                 item.sort=2
               } else {
                 item.sort=3
@@ -556,7 +556,7 @@ export default {
             checkList.forEach(item=>{
               if (item.judgmentType=="Error") {
                 item.sort=1
-              } else if(item.judgmentType="Exception") {
+              } else if(item.judgmentType=="Exception") {
                 item.sort=2
               } else {
                 item.sort=3

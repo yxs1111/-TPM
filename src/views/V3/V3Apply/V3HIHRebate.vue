@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-15 08:44:39
+ * @LastEditTime: 2022-06-16 08:52:50
 -->
 <template>
   <div class="MainContent">
@@ -792,7 +792,7 @@ export default {
             importList.forEach(item=>{
               if (item.judgmentType=="error") {
                 item.sort=1
-              } else if(item.judgmentType="exception") {
+              } else if(item.judgmentType=="exception") {
                 item.sort=2
               } else {
                 item.sort=3
@@ -837,7 +837,7 @@ export default {
             checkList.forEach(item=>{
               if (item.judgmentType=="error") {
                 item.sort=1
-              } else if(item.judgmentType="exception") {
+              } else if(item.judgmentType=="exception") {
                 item.sort=2
               } else {
                 item.sort=3
