@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-14 16:44:53
+ * @LastEditTime: 2022-06-16 11:46:26
 -->
 <template>
   <div class="MainContent">
@@ -356,28 +356,29 @@ export default {
           let list = res.data
           //区分variable 和 fixed
           list.forEach((item) => {
-            item.name = item.contractItem
-            item.code = item.contractItemCode
-            item.conditionType = item.conditionType
-            if (item.conditionType.indexOf(',') != -1) {
-              item.conditionalIsTwo = 2
-            } else {
-              item.conditionalIsTwo = 1
-            }
-            if (item.variablePoint.indexOf('variable') != -1) {
-              item.isVariableOrFix = 0
-            }
-            if (item.variablePoint.indexOf('fix') != -1) {
-              item.isVariableOrFix = 1
-            }
-            if (
-              item.variablePoint.indexOf('fix') != -1 &&
-              item.variablePoint.indexOf('variable') != -1
-            ) {
-              item.isVariableOrFix = 2
+            if (item.conditionType && item.variablePoint) {
+              item.name = item.contractItem
+              item.code = item.contractItemCode
+              item.conditionType = item.conditionType
+              if (item.conditionType.indexOf(',') != -1) {
+                item.conditionalIsTwo = 2
+              } else {
+                item.conditionalIsTwo = 1
+              }
+              if (item.variablePoint.indexOf('variable') != -1) {
+                item.isVariableOrFix = 0
+              }
+              if (item.variablePoint.indexOf('fix') != -1) {
+                item.isVariableOrFix = 1
+              }
+              if (
+                item.variablePoint.indexOf('fix') != -1 &&
+                item.variablePoint.indexOf('variable') != -1
+              ) {
+                item.isVariableOrFix = 2
+              }
             }
           })
-          console.log(list)
           list.forEach((item) => {
             if (item.isVariableOrFix === 0) {
               this.contractItemVariableList.push({

@@ -125,7 +125,7 @@
           <div v-else>{{ row.judgmentType }}</div>
         </template>
       </el-table-column>
-      <el-table-column width="400" align="center" prop="judgmentContent" label="审批判定内容" />
+      <el-table-column width="800" align="center" prop="judgmentContent" label="审批判定内容" />
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />

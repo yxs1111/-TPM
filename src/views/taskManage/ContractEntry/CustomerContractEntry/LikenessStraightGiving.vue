@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-15 13:30:44
+ * @LastEditTime: 2022-06-16 11:44:49
 -->
 <template>
   <div class="MainContent">
@@ -48,8 +48,8 @@
       </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">提交</el-button>
       <div class="tip">
-          <span class="tipStar">*</span>
-          注意事项：如果合同期间存在跨年情况，请分两份录入
+        <span class="tipStar">*</span>
+        注意事项：如果合同期间存在跨年情况，请分两份录入
       </div>
       <!-- <div class="TpmButtonBG cancelButton" @click="cancelAddNewRow">
         <span class="text">取消</span>
@@ -274,7 +274,7 @@
             </el-table-column>
           </el-table>
           <div class="addNewRowWrap" v-if="isEditor">
-            <div class="addNewRow" @click="addNewRowToVariable" >
+            <div class="addNewRow" @click="addNewRowToVariable">
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
@@ -373,7 +373,7 @@ import {
   contractItemFixList,
   downloadFile,
   getCurrentYearRange,
-  pickerOptions
+  pickerOptions,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -429,21 +429,21 @@ export default {
       },
       isEditor: 0,
       isShowPopover: false,
-      selectDate:'', 
+      selectDate: '',
       pickerOptions: {
         onPick: (obj) => {
-          this.selectDate=obj.minDate
+          this.selectDate = obj.minDate
           //若存在最大值，将已选中的值置空（下次可选另一年（且保证同年））
-          if(obj.maxDate) {
-            this.selectDate=''
+          if (obj.maxDate) {
+            this.selectDate = ''
           }
         },
         // 限制年月
         disabledDate: (time) => {
-          const date=new Date(this.selectDate)
+          const date = new Date(this.selectDate)
           const year = date.getFullYear()
           //未选择初始日期时，不做限制
-          if (this.selectDate=='') {
+          if (this.selectDate == '') {
             return false
           }
           return (
@@ -538,25 +538,27 @@ export default {
           let list = res.data
           //区分variable 和 fixed
           list.forEach((item) => {
-            item.name = item.contractItem
-            item.code = item.contractItemCode
-            item.conditionType = item.conditionType
-            if (item.conditionType.indexOf(',') != -1) {
-              item.conditionalIsTwo = 2
-            } else {
-              item.conditionalIsTwo = 1
-            }
-            if (item.variablePoint.indexOf('variable') != -1) {
-              item.isVariableOrFix = 0
-            }
-            if (item.variablePoint.indexOf('fix') != -1) {
-              item.isVariableOrFix = 1
-            }
-            if (
-              item.variablePoint.indexOf('fix') != -1 &&
-              item.variablePoint.indexOf('variable') != -1
-            ) {
-              item.isVariableOrFix = 2
+            if (item.conditionType && item.variablePoint) {
+              item.name = item.contractItem
+              item.code = item.contractItemCode
+              item.conditionType = item.conditionType
+              if (item.conditionType.indexOf(',') != -1) {
+                item.conditionalIsTwo = 2
+              } else {
+                item.conditionalIsTwo = 1
+              }
+              if (item.variablePoint.indexOf('variable') != -1) {
+                item.isVariableOrFix = 0
+              }
+              if (item.variablePoint.indexOf('fix') != -1) {
+                item.isVariableOrFix = 1
+              }
+              if (
+                item.variablePoint.indexOf('fix') != -1 &&
+                item.variablePoint.indexOf('variable') != -1
+              ) {
+                item.isVariableOrFix = 2
+              }
             }
           })
           list.forEach((item) => {
@@ -747,7 +749,7 @@ export default {
     },
     //导出数据
     async exportData() {
-     await API.exportCustomerContractInfo({
+      await API.exportCustomerContractInfo({
         customerType: 2,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
@@ -775,18 +777,18 @@ export default {
       })
     },
     //编辑行数据
-    editorRow(index, { isNewData,systemDate }) {
+    editorRow(index, { isNewData, systemDate }) {
       //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不受状态影响
-      let isDeleteFlag= this.compareDate(systemDate[0])
-      if(!isDeleteFlag) {
+      let isDeleteFlag = this.compareDate(systemDate[0])
+      if (!isDeleteFlag) {
         if (
-        this.tableData[index].contractState == '1' ||
-        this.tableData[index].contractState == '3' ||
-        this.tableData[index].contractState == '4'
-      ) {
-        this.$message.info('合同已经提交，不能进行编辑操作')
-        return
-      }
+          this.tableData[index].contractState == '1' ||
+          this.tableData[index].contractState == '3' ||
+          this.tableData[index].contractState == '4'
+        ) {
+          this.$message.info('合同已经提交，不能进行编辑操作')
+          return
+        }
       }
       if (this.tempObj.tempInfo && !isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
@@ -816,22 +818,29 @@ export default {
       }
     },
     compareDate(date) {
-      let currentDate=new Date();
-      let month=currentDate.getMonth()<10?"0"+(currentDate.getMonth()+1):(currentDate.getMonth()+1)
-      let year=currentDate.getFullYear()
-      let currentMonth=year+month
-      return Number(currentMonth)<Number(date)
+      let currentDate = new Date()
+      let month =
+        currentDate.getMonth() < 10
+          ? '0' + (currentDate.getMonth() + 1)
+          : currentDate.getMonth() + 1
+      let year = currentDate.getFullYear()
+      let currentMonth = year + month
+      return Number(currentMonth) < Number(date)
     },
     //删除该行数据
     deleteRow(row, index) {
       //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不收状态影响
-      let isDeleteFlag= this.compareDate(row.systemDate[0])
+      let isDeleteFlag = this.compareDate(row.systemDate[0])
       if (!isDeleteFlag) {
-        if(row.contractState== '1'||row.contractState== '3'||row.contractState== '4') {
+        if (
+          row.contractState == '1' ||
+          row.contractState == '3' ||
+          row.contractState == '4'
+        ) {
           this.$message.info('合同已经提交，不能进行编辑操作')
           return
         }
-      } 
+      }
       //删除新增的
       if (row.isNewData) {
         this.$confirm('确定要删除新增的数据吗？此操作不可逆', '提示', {
@@ -1083,7 +1092,7 @@ export default {
     //条款明细保存
     confirmTermsDetail() {
       let isCheck = 1 //费比校验
-      let Repeat=0 //contract Item  是否重复
+      let Repeat = 0 //contract Item  是否重复
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -1100,11 +1109,14 @@ export default {
             isCheck = 0
           }
           //行（contract Item  条件类型 ）不能重复
-          let RepeatList= this.termVariableData.filter(vItem=>{
-           return vItem.contractItem==item.contractItem&&vItem.conditions==item.conditions
+          let RepeatList = this.termVariableData.filter((vItem) => {
+            return (
+              vItem.contractItem == item.contractItem &&
+              vItem.conditions == item.conditions
+            )
           })
-          if(RepeatList.length>1) {
-            Repeat=1
+          if (RepeatList.length > 1) {
+            Repeat = 1
           }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
@@ -1124,11 +1136,14 @@ export default {
             isCheck = 0
           }
           //行（contract Item  条件类型 ）不能重复
-          let RepeatList= this.termFixData.filter(vItem=>{
-           return vItem.contractItem==item.contractItem&&vItem.conditions==item.conditions
+          let RepeatList = this.termFixData.filter((vItem) => {
+            return (
+              vItem.contractItem == item.contractItem &&
+              vItem.conditions == item.conditions
+            )
           })
-          if(RepeatList.length>1) {
-            Repeat=1
+          if (RepeatList.length > 1) {
+            Repeat = 1
           }
           let detailObj = {
             type: item.type, //明细类型 variable和fixed
@@ -1218,13 +1233,13 @@ export default {
         this.$refs.termFixTable.bodyWrapper.scrollTop = scrollHeight
       })
     },
-    deleteTerm(flag,index) {
+    deleteTerm(flag, index) {
       //variable 明细删除
-      if(flag==0) {
-        this.termVariableData.splice(index,1)
+      if (flag == 0) {
+        this.termVariableData.splice(index, 1)
       } else {
         //fixed 明细删除
-        this.termFixData.splice(index,1)
+        this.termFixData.splice(index, 1)
       }
     },
     //费比更改

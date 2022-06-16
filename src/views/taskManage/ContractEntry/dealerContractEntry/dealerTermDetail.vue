@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-15 16:07:30
+ * @LastEditTime: 2022-06-16 11:46:13
 -->
 <template>
   <div class="ContentDetail">
@@ -721,25 +721,27 @@ export default {
           let list = res.data
           //区分variable 和 fixed
           list.forEach((item) => {
-            item.name = item.contractItem
-            item.code = item.contractItemCode
-            item.conditionType = item.conditionType
-            if (item.conditionType.indexOf(',') != -1) {
-              item.conditionalIsTwo = 2
-            } else {
-              item.conditionalIsTwo = 1
-            }
-            if (item.variablePoint.indexOf('variable') != -1) {
-              item.isVariableOrFix = 0
-            }
-            if (item.variablePoint.indexOf('fix') != -1) {
-              item.isVariableOrFix = 1
-            }
-            if (
-              item.variablePoint.indexOf('fix') != -1 &&
-              item.variablePoint.indexOf('variable') != -1
-            ) {
-              item.isVariableOrFix = 2
+            if (item.conditionType && item.variablePoint) {
+              item.name = item.contractItem
+              item.code = item.contractItemCode
+              item.conditionType = item.conditionType
+              if (item.conditionType.indexOf(',') != -1) {
+                item.conditionalIsTwo = 2
+              } else {
+                item.conditionalIsTwo = 1
+              }
+              if (item.variablePoint.indexOf('variable') != -1) {
+                item.isVariableOrFix = 0
+              }
+              if (item.variablePoint.indexOf('fix') != -1) {
+                item.isVariableOrFix = 1
+              }
+              if (
+                item.variablePoint.indexOf('fix') != -1 &&
+                item.variablePoint.indexOf('variable') != -1
+              ) {
+                item.isVariableOrFix = 2
+              }
             }
           })
           list.forEach((item) => {
@@ -778,7 +780,6 @@ export default {
               })
             }
           })
-          this.getTermInfo()
         }
       })
     },
