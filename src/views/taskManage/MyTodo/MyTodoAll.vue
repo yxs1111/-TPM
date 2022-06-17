@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-08 15:13:11
+ * @LastEditTime: 2022-06-17 12:02:04
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -28,7 +28,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber"  />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
       </div>
@@ -56,12 +56,13 @@
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
       <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
       <el-table-column width="240" v-slot={row} align="center" prop="versionName" label="版本名称">
-        {{versionNameList[row.version]}}
+        <!-- {{versionNameList[row.version]}} -->
+        {{getVersion(row.version)}}
       </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="300" prop="assignee" label="办理人"> 
+      <el-table-column v-slot={row} align="center" width="300" prop="assignee" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
@@ -98,7 +99,13 @@
 
 <script>
 import API from '@/api/taskManage/taskManage.js'
-import { getDefaultPermissions, getTextMap, parseTime,getHeightHaveTab ,setSplitAssignee} from '@/utils'
+import {
+  getDefaultPermissions,
+  getTextMap,
+  parseTime,
+  getHeightHaveTab,
+  setSplitAssignee,
+} from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
@@ -136,7 +143,43 @@ export default {
         V3: 'V3 - Actual 实际入账',
         NUV2: 'NUV2 - Accrual 预提调整',
         NUV3: 'NUV3 - Actual 实际入账',
+        FMCV2: 'FMCV2 - Accrual 预提调整',
+        FMCV3: 'FMCV3 - Actual 实际入账',
       },
+      versionList: [
+        {
+          version: 'V0',
+          name: 'V0 - Pre city plan 预拆分',
+        },
+        {
+          version: 'V1',
+          name: 'V1 - City plan 详细拆分',
+        },
+        {
+          version: 'V2',
+          name: 'V2 - Accrual 预提调整',
+        },
+        {
+          version: 'V3',
+          name: 'V3 - Actual 实际入账',
+        },
+        {
+          version: 'NUV2',
+          name: 'V2 - Accrual 预提调整',
+        },
+        {
+          version: 'NUV3',
+          name: 'V3 - Actual 实际入账',
+        },
+        {
+          version: 'FMC-V2',
+          name: 'V2 - Accrual 预提调整',
+        },
+        {
+          version: 'FMC-V3',
+          name: 'V3 - Actual 实际入账',
+        },
+      ],
       maxheight: getHeightHaveTab(),
     }
   },
@@ -155,6 +198,17 @@ export default {
   },
   directives: { elDragDialog, permission },
   methods: {
+    //获取菜单明
+    getVersion(version) {
+      if(version) {
+       let index= this.versionList.findIndex(item=>item.version==version)
+       if (index!=-1) {
+        return this.versionList[index].name
+       }else {
+        return null
+       }
+      }
+    },
     //获取表格数据
     getTableData() {
       API.getList({
@@ -164,13 +218,12 @@ export default {
         version: this.filterObj.version,
         channelCode: this.filterObj.channelCode,
         minePackageCode: this.filterObj.MinePackage,
+      }).then((response) => {
+        this.tableData = response.data.records
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
       })
-        .then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
     },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
@@ -181,7 +234,7 @@ export default {
     },
     getMinePackage() {
       selectAPI.queryMinePackageSelect().then((res) => {
-        this.MinePackageList=res.data
+        this.MinePackageList = res.data
       })
     },
     search() {
@@ -195,16 +248,28 @@ export default {
       if (version == 'V0') {
         console.log(version, name)
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V0/V0Apply',
+            params: { channelCode },
+          })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V0/V0Approval',
+            params: { channelCode },
+          })
         }
       }
       if (version == 'V1') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Apply', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V1/V1Apply',
+            params: { channelCode },
+          })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Approval', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V1/V1Approval',
+            params: { channelCode },
+          })
         }
       }
       if (version == 'NUV1') {
@@ -218,9 +283,28 @@ export default {
       }
       if (version == 'V2') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Apply', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V2/V2Apply',
+            params: { channelCode },
+          })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Approval', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V2/V2Approval',
+            params: { channelCode },
+          })
+        }
+      }
+      if (version == 'FMC-V2') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({
+            path: '/costManagement/V2/V2Apply',
+            params: { channelCode },
+          })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({
+            path: '/costManagement/V2/V2Approval',
+            params: { channelCode },
+          })
         }
       }
       if (version == 'NUV2') {
@@ -239,9 +323,28 @@ export default {
       }
       if (version == 'V3') {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V3/V3Apply',
+            params: { channelCode },
+          })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Approval', params: { channelCode } })
+          this.$router.push({
+            path: '/costManagement/V3/V3Approval',
+            params: { channelCode },
+          })
+        }
+      }
+      if (version == 'FMC-V3') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({
+            path: '/costManagement/V3/V3Apply',
+            params: { channelCode },
+          })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({
+            path: '/costManagement/V3/V3Approval',
+            params: { channelCode },
+          })
         }
       }
       if (version == 'NUV3') {
@@ -306,9 +409,7 @@ export default {
       this.flowDiagram.visible = true
     },
     // 导出数据
-    exportExcel() {
-      
-    },
+    exportExcel() {},
     setSplitAssignee(value) {
       return setSplitAssignee(value)
     },
