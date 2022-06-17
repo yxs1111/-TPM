@@ -30,13 +30,13 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column  align="center" prop="zoneCode" label="大区编码"> </el-table-column>
+      <el-table-column  align="center" prop="zoneAbridge" label="大区编码"> </el-table-column>
       <el-table-column  align="center" prop="zone" label="大区"> </el-table-column>
-      <el-table-column  align="center" prop="regionCode" label="区域编码"> </el-table-column>
+      <el-table-column  align="center" prop="regionAbridge" label="区域编码"> </el-table-column>
       <el-table-column  align="center" prop="region" label="区域"> </el-table-column>
-      <el-table-column  align="center" prop="cityGroupCode" label="城市群编码"> </el-table-column>
+      <el-table-column  align="center" prop="cityGroupAbridge" label="城市群编码"> </el-table-column>
       <el-table-column  align="center" prop="cityGroup" label="城市群"> </el-table-column>
-      <el-table-column align="center" prop="code" label="城市编码" > </el-table-column>
+      <el-table-column align="center" prop="nameAbridge" label="城市编码" > </el-table-column>
       <el-table-column align="center" prop="name" label="城市" > </el-table-column>
       <el-table-column align="center" prop="remark" label="备注" > </el-table-column>
     </el-table>
