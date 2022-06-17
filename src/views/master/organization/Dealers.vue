@@ -67,6 +67,7 @@ import {
   downloadFile
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'Dealers',
 
@@ -78,7 +79,7 @@ export default {
       filterObj: {
         distributorCode: '',
         Distributor: '',
-        regionCode: 1,
+        regionCode: '',
         state: 1,
       },
       permissions: getDefaultPermissions(),
