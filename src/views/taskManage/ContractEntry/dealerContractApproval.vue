@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-14 16:54:22
+ * @LastEditTime: 2022-06-20 10:09:40
 -->
 <template>
   <div class="MainContent">
@@ -24,6 +24,12 @@
           <el-date-picker v-model="filterObj.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
             end-placeholder="结束月份">
           </el-date-picker>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同状态:</span>
+          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
+          </el-select>
         </div>
       </div>
       <div class="OpertionBar">
@@ -106,6 +112,8 @@
             {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column prop="collection" align="center" width="220" label="是否补录">
       </el-table-column>
       <el-table-column v-slot={row} width="120" align="center" label="合同条款">
         <div class="seeActivity" @click="showTermDetailDialog(row)">

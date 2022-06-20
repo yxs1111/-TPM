@@ -503,6 +503,13 @@ export default function() {
           component: () => import('@/views/master/MatchingRelation.vue'),
           meta: { title: '匹配关系', icon: 'apply' },
         },
+        {
+          path: '/pdMatchingRelationship',
+          name: 'MatchingRelation',
+          code: 'MdOrganizationSupplier',
+          component: () => import('@/views/master/pdMatchingRelationship.vue'),
+          meta: { title: 'Package&部门匹配关系', icon: 'apply' },
+        },
       ]
     }
   ]

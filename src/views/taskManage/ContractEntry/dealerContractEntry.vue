@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-15 13:35:10
+ * @LastEditTime: 2022-06-20 10:09:28
 -->
 <template>
   <div class="MainContent">
@@ -139,6 +139,8 @@
             {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column prop="collection" align="center" width="220" label="是否补录">
       </el-table-column>
       <el-table-column prop="contractStatus" align="center" width="160" label="合同状态">
         <template slot-scope="scope">

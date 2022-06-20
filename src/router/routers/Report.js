@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-04-07 14:19:28
+ * @LastEditTime: 2022-06-20 16:43:27
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -90,6 +90,13 @@ export default function() {
           name: 'POSDifferenceAnalysis',
           component: () => import('@/views/Report/POSDifferenceAnalysis/POSDifferenceAnalysis.vue'),
           meta: { title: '月结POS差异分析报表', icon: 'approve' }
+        },
+        {
+          path: '/AccrualReport',
+          code: 'resource-report-confirm',
+          name: 'AccrualReport',
+          component: () => import('@/views/Report/AccrualReport.vue'),
+          meta: { title: 'Accrual报表', icon: 'approve' }
         },
         //OverviewKA OverviewDist
         // {
