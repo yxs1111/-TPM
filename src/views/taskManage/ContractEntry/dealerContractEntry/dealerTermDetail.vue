@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-21 14:28:59
+ * @LastEditTime: 2022-06-21 14:39:29
 -->
 <template>
   <div class="ContentDetail">
@@ -50,7 +50,7 @@
               <el-table-column v-slot={row} prop="pointCount" align="center" width="100" label="费比（%）">
                 {{FormateNum(row.customerInfo.pointCount)}}%
               </el-table-column>
-              <el-table-column v-slot={row} prop="taxPrice" align="center" width="150" label="含税金额（RMB）">
+              <el-table-column v-slot={row} prop="taxPrice" align="center" width="180" label="含税金额（RMB）">
                 {{FormateNum(row.customerInfo.taxPrice)}}
               </el-table-column>
               <el-table-column v-slot={row} prop="detail" align="center" width="200" label="描述">
@@ -86,7 +86,7 @@
                   <div v-else>{{FormateNum(scope.row.dealerList[dealerIndex].pointCount)}}%</div>
                 </template>
               </el-table-column>
-              <el-table-column prop="taxPrice" align="center" width="150" label="含税金额（RMB）">
+              <el-table-column prop="taxPrice" align="center" width="180" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isTotal&&!scope.row.isVariable">
                     <el-input v-model="scope.row.dealerList[dealerIndex].taxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
@@ -554,6 +554,7 @@ export default {
         }
         console.log(VariableTotalTableData)
         console.log(AllTotalTableData)
+        console.log(customerFixList)
         //添加 fixed -->获得表格中fix 部分数据
         for (let index = 0; index < customerFixList.length; index++) {
           const customerFixObj = customerFixList[index]
@@ -599,11 +600,11 @@ export default {
             customerInfo: {
               conditionType: '',
               contractItem: '',
-              customerName: customerFixList.customerName, //客户名称,,
+              customerName: customerFixObj.customerName, //客户名称,,
               detail: '',
               isVariable: 1,
               pointCount: 0,
-              targetSale: customerFixList.saleAmount, //客户目标销售额,,
+              targetSale: customerFixObj.saleAmount, //客户目标销售额,,
               taxPrice: 0,
             },
             dealerList: [],

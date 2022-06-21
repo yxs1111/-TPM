@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-21 14:31:42
+ * @LastEditTime: 2022-06-21 14:38:53
 -->
 <template>
   <div class="ContentDetail">
@@ -493,11 +493,11 @@ export default {
             customerInfo: {
               conditionType: '',
               contractItem: '',
-              customerName: customerFixList.customerName, //客户名称,,
+              customerName: customerFixObj.customerName, //客户名称,,
               detail: '',
               isVariable: 1,
               pointCount: 0,
-              targetSale: customerFixList.saleAmount, //客户目标销售额,,
+              targetSale: customerFixObj.saleAmount, //客户目标销售额,,
               taxPrice: 0,
             },
             dealerList: [],
