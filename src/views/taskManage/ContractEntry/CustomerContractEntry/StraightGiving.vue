@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-21 15:40:53
+ * @LastEditTime: 2022-06-21 15:47:16
 -->
 <template>
   <div class="MainContent">
@@ -1183,6 +1183,7 @@ export default {
             //获取total +variable total
             variableListOrigin.forEach((item) => {
               let obj = {
+                id: item.id,
                 type: item.type,
                 contractItem: this.getContractItemByCode(
                   0,
@@ -1207,6 +1208,7 @@ export default {
             //获取total +fixed total
             fixedListOrigin.forEach((item) => {
               let obj = {
+                id: item.id,
                 type: item.type,
                 contractItem: this.getContractItemByCode(
                   1,
