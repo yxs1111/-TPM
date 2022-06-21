@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-14 16:04:52
+ * @LastEditTime: 2022-06-21 10:05:39
 -->
 <template>
   <div class="tabViewsWrap">
@@ -19,7 +19,7 @@
         <img v-if="index == currentIndex" :src="item.img.dark" alt="">
         {{ item.name }}</router-link>
     </div>
-    <div>
+    <div style="height: calc(100vh - 0px);">
       <router-view />
     </div>
   </div>

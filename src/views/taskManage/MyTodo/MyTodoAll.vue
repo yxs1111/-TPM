@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-17 12:02:04
+ * @LastEditTime: 2022-06-21 09:23:57
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -242,165 +242,34 @@ export default {
       this.getTableData()
     },
     operateProcess(version, name, channelCode) {
-      // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})
-      // sessionStorage.setItem('currentIndex',2)
-      // return
-      if (version == 'V0') {
-        console.log(version, name)
+      if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V0/V0Apply',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V0/V0Approval',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
         }
       }
-      if (version == 'V1') {
+      if (version.indexOf('V1')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V1/V1Apply',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V1/V1Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V1/V1Approval',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V1/V1Approval', params: { channelCode } })
         }
       }
-      if (version == 'NUV1') {
+      if (version.indexOf('V2')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V1/V1Apply/V1discountNU',
-            params: { channelCode },
-          })
-          sessionStorage.setItem('currentIndex', 2)
-        }
-      }
-      if (version == 'V2') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Apply',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V2/V2Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Approval',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V2/V2Approval', params: { channelCode } })
         }
       }
-      if (version == 'FMC-V2') {
+      if (version.indexOf('V3')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Apply',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Approval',
-            params: { channelCode },
-          })
+          this.$router.push({ path: '/costManagement/V3/V3Approval', params: { channelCode } })
         }
       }
-      if (version == 'NUV2') {
-        sessionStorage.setItem('currentIndex', 2)
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Apply/V2discountNU',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Approval/V2NUApproval',
-            params: { channelCode },
-          })
-        }
-      }
-      if (version == 'V3') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Apply',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Approval',
-            params: { channelCode },
-          })
-        }
-      }
-      if (version == 'FMC-V3') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Apply',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Approval',
-            params: { channelCode },
-          })
-        }
-      }
-      if (version == 'NUV3') {
-        sessionStorage.setItem('currentIndex', 2)
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Apply/V3discountNU',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Approval/V3discountNUApproval',
-            params: { channelCode },
-          })
-        }
-      }
-      if (version == 'RSV1') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V1/V1Apply/V1RoadShow',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V1/V1Approval/V1RoadShowApproval',
-            params: { channelCode },
-          })
-        }
-      }
-      if (version == 'RSV2') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Apply/V2RoadShow',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V2/V2Approval/V2RoadShowApproval',
-            params: { channelCode },
-          })
-        }
-      }
-      if (version == 'RSV3') {
-        if (name.indexOf('调整') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Apply/V3RoadShow',
-            params: { channelCode },
-          })
-        } else if (name.indexOf('审批') != -1) {
-          this.$router.push({
-            path: '/costManagement/V3/V3Approval/V3RoadShowApproval',
-            params: { channelCode },
-          })
-        }
-      }
-      //this.$router.push({ path: '/process', query: currentRow })
     },
     //查看流程
     openFlowDiagram(row) {
