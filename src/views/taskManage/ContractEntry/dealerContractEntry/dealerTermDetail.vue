@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-21 14:39:29
+ * @LastEditTime: 2022-06-21 16:52:27
 -->
 <template>
   <div class="ContentDetail">
@@ -889,6 +889,8 @@ export default {
         let isPointCountEmpty = false
         let exceptionList = []
         let errorList = []
+        let pointCountEmpty = []  //经销商费比为空 
+        let taxPriceEmpty = []  //经销商费比为空 
         //补录跳过验证--若之前经销商已经通过&&当前状态是草稿的 说明是补录
         this.AllTableData.forEach((item, index) => {
           //对 Variable 异常处理 各经销商费比大于客户费比
@@ -903,9 +905,15 @@ export default {
                   ...dealerItem,
                 })
               }
-              if (dealerItem.pointCount === '') {
+              // debugger
+              if (dealerItem.pointCount === ''||dealerItem.pointCount === null) {
                 console.log('费比为空')
                 isPointCountEmpty = true
+                pointCountEmpty.push({
+                  rowIndex: index,
+                  dealerIndex,
+                  ...dealerItem,
+                })
               }
             })
           }
@@ -913,10 +921,15 @@ export default {
           if (!item.isTotal && !item.isVariable) {
             let customerTaxPrice = item.customerInfo.taxPrice
             let dealerList = item.dealerList
-            dealerList.forEach((dealerItem) => {
-              if (dealerItem.taxPrice === '') {
+            dealerList.forEach((dealerItem,dealerIndex) => {
+              if (dealerItem.taxPrice === ''||dealerItem.taxPrice === null) {
                 console.log('含税金额为空')
                 isTaxPriceEmpty = true
+                taxPriceEmpty.push({
+                  rowIndex: index,
+                  dealerIndex,
+                  ...dealerItem,
+                })
               }
             })
             let dealerTaxPrice = dealerList.reduce((total, current) => {
@@ -931,14 +944,39 @@ export default {
         })
         console.log(exceptionList)
         console.log(errorList)
+        console.log(pointCountEmpty)
         if (isPointCountEmpty) {
-          this.$message.info('经销商费比不能为空,请进行填写')
+          pointCountEmpty.forEach((item) => {
+              setTimeout(() => {
+                this.$notify.warning({
+                  title: '警告',
+                  message: `第${item.rowIndex + 1}行${
+                    this.AllTableData[item.rowIndex].customerInfo.contractItem
+                  } ${item.dealerName } 费比不能为空,请进行填写`,
+                  duration: 0,
+                })
+              }, 50)
+            })
+          // this.$message.info('经销商费比不能为空,请进行填写')
           return
         }
         if (isTaxPriceEmpty) {
-          this.$message.info('经销商含税金额不能为空,请进行填写')
+          taxPriceEmpty.forEach((item) => {
+              setTimeout(() => {
+                this.$notify.warning({
+                  title: '警告',
+                  message: `第${item.rowIndex + 1}行${
+                    this.AllTableData[item.rowIndex].customerInfo.contractItem
+                  } ${item.dealerName } 含税金额不能为空,请进行填写`,
+                  duration: 0,
+                })
+              }, 50)
+            })
+          // this.$message.info('经销商含税金额不能为空,请进行填写')
           return
         }
+        console.log(pointCountEmpty);
+        console.log(taxPriceEmpty);
         //补录跳过校验
         if (!this.isMakeUp) {
           if (errorList.length) {
