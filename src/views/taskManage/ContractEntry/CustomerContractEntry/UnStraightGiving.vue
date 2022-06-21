@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-17 11:52:53
+ * @LastEditTime: 2022-06-21 15:40:24
 -->
 <template>
   <div class="MainContent">
@@ -1346,6 +1346,7 @@ export default {
             Repeat = 1
           }
           let detailObj = {
+            id:item.id,
             type: item.type, //明细类型 variable和fixed
             conditionsItem:
               this.contractItemVariableList[item.contractItem].code,
@@ -1373,6 +1374,7 @@ export default {
             Repeat = 1
           }
           let detailObj = {
+            id:item.id,
             type: item.type, //明细类型 variable和fixed
             conditionsItem: this.contractItemFixList[item.contractItem].code,
             conditions: item.conditions, //条件类型condition和unconditional
