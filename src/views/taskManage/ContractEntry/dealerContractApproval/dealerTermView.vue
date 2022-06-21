@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-16 11:46:05
+ * @LastEditTime: 2022-06-21 14:31:42
 -->
 <template>
   <div class="ContentDetail">
@@ -216,6 +216,11 @@ export default {
         let customerContract = res.data.customerContract
         //copy  属性--》单个的客户variable
         customerVariableList.forEach((item) => {
+          item.customerName = customerContract.customerName
+          item.customerMdmCode = customerContract.customerMdmCode
+          item.saleAmount = customerContract.saleAmount
+        })
+        customerFixList.forEach((item) => {
           item.customerName = customerContract.customerName
           item.customerMdmCode = customerContract.customerMdmCode
           item.saleAmount = customerContract.saleAmount
@@ -481,6 +486,22 @@ export default {
             },
             dealerList: [],
           }
+          let variableAndFixObj = {
+            name: 'Total',
+            isTotal: 1,
+            isVariable: 1,
+            customerInfo: {
+              conditionType: '',
+              contractItem: '',
+              customerName: customerFixList.customerName, //客户名称,,
+              detail: '',
+              isVariable: 1,
+              pointCount: 0,
+              targetSale: customerFixList.saleAmount, //客户目标销售额,,
+              taxPrice: 0,
+            },
+            dealerList: [],
+          }
           //取经销商对应的variable
           distributorList.forEach((item) => {
             let distFixObj = item.fixed[index]
@@ -551,7 +572,26 @@ export default {
               customerTaxPoint: '',
               payType: '',
             })
+            variableAndFixObj.dealerList.push({
+              dealerName: distFixObj.dealerName,
+              targetSale: distFixObj.targetSale,
+              contractItem: '',
+              conditionType: '',
+              pointCount: 0,
+              taxPrice: 0,
+              detail: '',
+              frieslandPointCount: '',
+              frieslandTaxPrice: '',
+              dealerPointCount: '',
+              dealerTaxPrice: '',
+              customerTaxPoint: '',
+              payType: '',
+            })
           })
+          //variable+fix Total
+          if (AllTotalTableData.length === 0) {
+            AllTotalTableData.push(variableAndFixObj)
+          }
           //初始化variable 汇总行--添加经销商
           if (FixedTotalTableData.length === 0) {
             FixedTotalTableData.push(FixedTotalObj)

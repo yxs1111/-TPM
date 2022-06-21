@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-17 14:16:05
+ * @LastEditTime: 2022-06-21 14:28:59
 -->
 <template>
   <div class="ContentDetail">
@@ -294,6 +294,11 @@ export default {
           item.customerMdmCode = customerContract.customerMdmCode
           item.saleAmount = customerContract.saleAmount
         })
+        customerFixList.forEach((item) => {
+          item.customerName = customerContract.customerName
+          item.customerMdmCode = customerContract.customerMdmCode
+          item.saleAmount = customerContract.saleAmount
+        })
         //排序 匹配variable 行
         customerVariableList.sort((item, nItem) => {
           return item.id - nItem.id
@@ -548,6 +553,7 @@ export default {
           VariableTableData.push(variableObj)
         }
         console.log(VariableTotalTableData)
+        console.log(AllTotalTableData)
         //添加 fixed -->获得表格中fix 部分数据
         for (let index = 0; index < customerFixList.length; index++) {
           const customerFixObj = customerFixList[index]
@@ -582,6 +588,22 @@ export default {
               isVariable: 1,
               pointCount: 0,
               targetSale: 0,
+              taxPrice: 0,
+            },
+            dealerList: [],
+          }
+          let variableAndFixObj = {
+            name: 'Total',
+            isTotal: 1,
+            isVariable: 1,
+            customerInfo: {
+              conditionType: '',
+              contractItem: '',
+              customerName: customerFixList.customerName, //客户名称,,
+              detail: '',
+              isVariable: 1,
+              pointCount: 0,
+              targetSale: customerFixList.saleAmount, //客户目标销售额,,
               taxPrice: 0,
             },
             dealerList: [],
@@ -666,7 +688,26 @@ export default {
               customerTaxPoint: '',
               payType: '',
             })
+            variableAndFixObj.dealerList.push({
+              dealerName: distFixObj.dealerName,
+              targetSale: distFixObj.targetSale,
+              contractItem: '',
+              conditionType: '',
+              pointCount: 0,
+              taxPrice: 0,
+              detail: '',
+              frieslandPointCount: '',
+              frieslandTaxPrice: '',
+              dealerPointCount: '',
+              dealerTaxPrice: '',
+              customerTaxPoint: '',
+              payType: '',
+            })
           })
+          //variable+fix Total
+          if (AllTotalTableData.length === 0) {
+            AllTotalTableData.push(variableAndFixObj)
+          }
           //初始化variable 汇总行--添加经销商
           if (FixedTotalTableData.length === 0) {
             FixedTotalTableData.push(FixedTotalObj)
@@ -692,6 +733,7 @@ export default {
             item.customerInfo.taxPrice
           )
         })
+        console.log(AllTotalTableData)
         //variable + fix 汇总行
         AllTotalTableData[0].customerInfo.pointCount =
           VariableTotalTableData.length
