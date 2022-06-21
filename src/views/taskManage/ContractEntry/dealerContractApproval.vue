@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-21 08:50:20
+ * @LastEditTime: 2022-06-21 14:02:46
 -->
 <template>
   <div class="MainContent">
@@ -113,7 +113,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="collection" align="center" width="220" label="是否补录">
+      <el-table-column v-slot="{row}" prop="isSupplement" align="center" width="100" label="是否补录">
+        {{row.isSupplement?'是':'否'}}
       </el-table-column>
       <el-table-column v-slot={row} width="120" align="center" label="合同条款">
         <div class="seeActivity" @click="showTermDetailDialog(row)">

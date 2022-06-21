@@ -608,7 +608,7 @@ export function contractView() {
  * @returns el-table max-height
  */
 export function getContractEntry() {
-  return window.innerHeight - 450
+  return window.innerHeight - 400
 }
 /**
  *

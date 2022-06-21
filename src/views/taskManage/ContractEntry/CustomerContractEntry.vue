@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-20 15:37:22
+ * @LastEditTime: 2022-06-21 13:40:24
 -->
 <template>
   <div class="tabViewsWrap">
@@ -13,7 +13,7 @@
         <div class="tabTitle"> {{ item.name }}</div>
       </router-link>
     </div>
-    <div style="margin-top: -5px;">
+    <div style="margin-top: -5px;height: calc(100vh - 0px);">
       <router-view />
     </div>
   </div>
