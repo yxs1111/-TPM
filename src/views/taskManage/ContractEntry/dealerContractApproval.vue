@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-20 10:09:40
+ * @LastEditTime: 2022-06-21 08:50:20
 -->
 <template>
   <div class="MainContent">
@@ -202,7 +202,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getContractEntry()
+        this.maxheight = window.innerHeight - 420
       })()
     }
     this.getTableData()
