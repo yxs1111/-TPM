@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-21 14:38:53
+ * @LastEditTime: 2022-06-22 15:10:06
 -->
 <template>
   <div class="ContentDetail">
@@ -13,7 +13,7 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="860" fixed="left">
+      <el-table-column align="center" width="890" fixed="left">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
@@ -21,7 +21,7 @@
           </div>
         </template>
         <template>
-          <el-table-column width="860">
+          <el-table-column width="890">
             <template v-slot:header>
             </template>
             <template>
