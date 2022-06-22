@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-21 15:46:17
+ * @LastEditTime: 2022-06-22 14:30:52
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in customerArr" :key="index" :label="item.customer_cs_name" :value="item.customer_mdm_code" />
+            <el-option v-for="item,index in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -89,11 +89,23 @@
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.customerMdmCode" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in customerArr" :key="index" :label="item.customer_cs_name" :value="item.customer_mdm_code" />
+              <el-option v-for="item,index in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
             </el-select>
           </div>
           <div v-show="!scope.row.isEditor">
             {{ scope.row.customerName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="regionCode" fixed align="center" width="220" label="大区">
+        <template slot-scope="scope">
+          <div v-show="scope.row.isEditor">
+            <el-select v-model="scope.row.regionCode" class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.code" />
+            </el-select>
+          </div>
+          <div v-show="!scope.row.isEditor">
+            {{ scope.row.regionName }}
           </div>
         </template>
       </el-table-column>
@@ -417,7 +429,7 @@
               <i class="el-icon-plus"></i>
               <span class="addNewRowText">新增一行</span>
             </div>
-          </div>    
+          </div>
           <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="240" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
@@ -604,6 +616,7 @@ export default {
       checkArr: [], //选中的数据
       tableData: [],
       customerArr: [],
+      largeAreaList: [],
       contractList: contractList,
       contractItemVariableList: contractItemVariableList,
       contractItemFixList: contractItemFixList,
@@ -672,6 +685,7 @@ export default {
     this.getTableData()
     this.getCustomerList()
     this.getContractItemList()
+    this.getLargeAreaList()
   },
   computed: {},
   watch: {
@@ -713,6 +727,8 @@ export default {
         list.forEach((item) => {
           item.isEditor = 0
           item.isNewData = 0
+          // item.regionCode = ''
+          // item.regionName = ''
           // item.earlyExpireDate =item.earlyExpireDate!=''
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
@@ -808,6 +824,17 @@ export default {
         }
       })
     },
+    getLargeAreaList() {
+      selectAPI
+        .getLargeAreaList({
+          parentCode: '',
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.largeAreaList = res.data
+          }
+        })
+    },
     //新增一行数据
     addNewRow() {
       this.tableData.unshift({
@@ -824,6 +851,8 @@ export default {
         contractStatus: 0,
         systemStatus: '',
         remark: '',
+        regionCode: '',
+        regionName: '',
         packageOwner: '',
         finance: '',
         createBy: '',
@@ -859,6 +888,7 @@ export default {
           contractEndDate: '', //合同区间-结束
           effectiveBeginDate: '', //系统生效-开始时间
           effectiveEndDate: '', //系统生效-结束时间
+          regionCode: '', //regionCode
           remark: '', //备注
         }
         obj.customerMdmCode = item.customerMdmCode
@@ -867,6 +897,7 @@ export default {
         obj.contractEndDate = item.contractDate[1]
         obj.effectiveBeginDate = item.systemDate[0]
         obj.effectiveEndDate = item.systemDate[1]
+        obj.regionCode = item.regionCode
         obj.remark = item.remark
         list.push(obj)
       })
@@ -877,8 +908,29 @@ export default {
       })
     },
     saveSingle(row) {
+      let isRequireRegion =
+        this.customerArr.findIndex(
+          (item) =>
+            item.channelCode == 'RKA' &&
+            item.customerMdmCode == row.customerMdmCode
+        ) != -1
+          ? true
+          : false
+      console.log(isRequireRegion)
+      if (isRequireRegion) {
+        if (row.regionCode == '') {
+          this.$message.warning('请填写大区')
+          return
+        }
+      } else {
+        if (row.regionCode != '') {
+          this.$message.warning('该客户大区应为空')
+          return
+        }
+      }
       let obj = {
         customerMdmCode: '', //客户编号
+        regionCode: '', //客户编号
         saleAmount: '', //目标销售额
         contractBeginDate: '', //合同区间-开始
         contractEndDate: '', //合同区间-结束
@@ -887,6 +939,7 @@ export default {
         remark: '', //备注
       }
       obj.customerMdmCode = row.customerMdmCode
+      obj.regionCode = row.regionCode
       obj.saleAmount = row.saleAmount
       obj.contractBeginDate = row.contractDate[0]
       obj.contractEndDate = row.contractDate[1]
@@ -1105,10 +1158,32 @@ export default {
           //新增数据保存
           this.saveSingle(row)
         } else if (row.isEditor) {
+          let isRequireRegion =
+            this.customerArr.findIndex(
+              (item) =>
+                item.channelCode == 'RKA' &&
+                item.customerMdmCode == row.customerMdmCode
+            ) != -1
+              ? true
+              : false
+          console.log(isRequireRegion)
+          //客户属于RKA ，大区必填项
+          if (isRequireRegion) {
+            if (row.regionCode == ''||row.regionCode == null) {
+              this.$message.warning('请填写大区')
+              return
+            }
+          } else {
+            if (row.regionCode != '') {
+              this.$message.warning('该客户大区应为空')
+              return
+            }
+          }
           //修改操作
           API.updateCustomerContract({
             id: row.id,
             customerMdmCode: row.customerMdmCode,
+            regionCode: row.regionCode,
             saleAmount: row.saleAmount,
             contractBeginDate: row.contractDate[0],
             contractEndDate: row.contractDate[1],
@@ -1152,15 +1227,15 @@ export default {
       //判断当前月份是否处于系统生效开始时间，若不处于可以修改，不受状态影响
       let isEditorFlag = this.compareDate(this.tableData[index].systemDate[0])
       let isEditor
-      if(!isEditorFlag) {
+      if (!isEditorFlag) {
         isEditor =
-        this.tableData[index].contractState == '1' ||
-        this.tableData[index].contractState == '3' ||
-        this.tableData[index].contractState == '4'
-          ? 0
-          : 1
+          this.tableData[index].contractState == '1' ||
+          this.tableData[index].contractState == '3' ||
+          this.tableData[index].contractState == '4'
+            ? 0
+            : 1
       } else {
-        isEditor=1
+        isEditor = 1
       }
       this.isEditor = isEditor
       if (this.tableData[index].isNewData) {
@@ -1348,7 +1423,7 @@ export default {
             Repeat = 1
           }
           let detailObj = {
-            id:item.id,
+            id: item.id,
             type: item.type, //明细类型 variable和fixed
             conditionsItem:
               this.contractItemVariableList[item.contractItem].code,
@@ -1376,7 +1451,7 @@ export default {
             Repeat = 1
           }
           let detailObj = {
-            id:item.id,
+            id: item.id,
             type: item.type, //明细类型 variable和fixed
             conditionsItem: this.contractItemFixList[item.contractItem].code,
             conditions: item.conditions, //条件类型condition和unconditional
