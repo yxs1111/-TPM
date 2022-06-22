@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-22 11:47:58
+ * @LastEditTime: 2022-06-22 15:46:43
 -->
 <template>
   <div class="MainContent">
@@ -856,7 +856,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_RoadShow_${this.filterObj.channelCode}_V2申请模板.xlsx`
+            `${this.filterObj.month}_RoadShow_${this.filterObj.channelCode}_V2申请.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
