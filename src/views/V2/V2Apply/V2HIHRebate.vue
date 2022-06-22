@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-21 13:15:07
+ * @LastEditTime: 2022-06-22 11:22:06
 -->
 <template>
   <div class="MainContent">
@@ -56,14 +56,86 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
-      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
-      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" />
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
+        <template v-slot:header>
+          <div>CPID<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.cpId }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" >
+        <template v-slot:header>
+          <div>活动月<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.yearAndMonth }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" >
+        <template v-slot:header>
+          <div>费用类型<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costTypeName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" >
+        <template v-slot:header>
+          <div>Mine Package<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.minePackageName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" >
+        <template v-slot:header>
+          <div>费用科目<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costItemName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道" >
+        <template v-slot:header>
+          <div>渠道<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.channelCode }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" >
+        <template v-slot:header>
+          <div>客户系统名称<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.customerName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" >
+        <template v-slot:header>
+          <div>Contract Item<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.contractItemName }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
         <template v-slot:header>
           <div>V1计划合同点数(%)<br><span class="subTitle">kA+Contract Item</span></div>
@@ -155,6 +227,14 @@
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门">
+        <template v-slot:header>
+          <div>费用归属部门<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costDeptName }}
+          </div>
+        </template>
       </el-table-column>
       <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
         <template v-slot:header>
@@ -187,6 +267,9 @@
         </template>
       </el-table-column>
       <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
+        <template v-slot:header>
+          <div>系统判定<br><span class="subTitle">-</span></div>
+        </template>
         <template slot-scope="{row}">
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
@@ -199,11 +282,46 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="420" align="center" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容">
+        <template v-slot:header>
+            <div>系统判定内容<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+            <div>
+              {{ scope.row.judgmentContent }}
+            </div>
+        </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
-      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
-      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+      <el-table-column width="120" align="center" prop="remark" label="申请人备注" >
+        <template v-slot:header>
+            <div>申请人备注<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+            <div>
+              {{ scope.row.remark }}
+            </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" >
+        <template v-slot:header>
+            <div>Package Owner审批意见<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+            <div>
+              {{ scope.row.poApprovalComments }}
+            </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" >
+        <template v-slot:header>
+            <div>Finance审批意见<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+            <div>
+              {{ scope.row.finApprovalComments }}
+            </div>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
