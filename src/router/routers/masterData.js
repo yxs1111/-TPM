@@ -501,11 +501,11 @@ export default function() {
           name: 'MatchingRelation',
           code: 'MdOrganizationSupplier',
           component: () => import('@/views/master/MatchingRelation.vue'),
-          meta: { title: '匹配关系', icon: 'apply' },
+          meta: { title: '大区（+区域）&供应商匹配关系', icon: 'apply' },
         },
         {
           path: '/pdMatchingRelationship',
-          name: 'MatchingRelation',
+          name: 'pdMatchingRelationship',
           code: 'MdOrganizationSupplier',
           component: () => import('@/views/master/pdMatchingRelationship.vue'),
           meta: { title: 'Package&部门匹配关系', icon: 'apply' },

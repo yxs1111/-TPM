@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-21 08:48:22
+ * @LastEditTime: 2022-06-23 18:19:16
 -->
 <template>
   <div class="MainContent">
@@ -28,7 +28,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">合同状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
+            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
           </el-select>
         </div>
       </div>
@@ -75,7 +75,7 @@
       <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.customerContractSaleAmount ? scope.row.customerContractSaleAmount : 0)}}
+            {{FormateNum(scope.row.saleAmount ? scope.row.saleAmount : 0)}}
           </div>
         </template>
       </el-table-column>
@@ -359,7 +359,7 @@ export default {
       checkArr: [], //选中的数据
       tableData: [],
       customerArr: [],
-      contractList: contractList,
+      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
       contractItemVariableList: contractItemVariableList,
       contractItemFixList: contractItemFixList,
       isAddCount: 0,
@@ -391,6 +391,8 @@ export default {
         tempInfo: null,
       },
       permissions: getDefaultPermissions(),
+      mainIdList:[],
+      usernameLocal:'',
     }
   },
   mounted() {
@@ -399,6 +401,7 @@ export default {
         this.maxheight = window.innerHeight - 400
       })()
     }
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getTableData()
     this.getCustomerList()
     this.getContractItemList()
@@ -428,7 +431,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      API.getApproveList({
+      API.getApprovePageCustomer({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -436,21 +439,46 @@ export default {
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
-        minePackageCode: 'CUSTOMER-CONTRACT',
+        contractState: this.filterObj.state,
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
           item.isEditor = 0
           item.packageOwner = ''
+          item.isCanSubmit = 0
+          item.name=''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+          this.mainIdList.push(item.mainId)
         })
+        
         this.tableData = [...list]
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
         this.tempObj.tempInfo = null
+        this.infoByMainId()
       })
+    },
+    infoByMainId() {
+      selectAPI
+        .contractInfoByMainId(
+          this.mainIdList,
+        )
+        .then((res) => {
+          let activityList=res.data
+          if (res.code === 1000) {
+            this.tableData.forEach(item=>{
+              activityList.forEach(mItem=>{
+                if(mItem.id==item.mainId) {
+                  item.name=mItem.activityName
+                  let isFlag=mItem.assignee.indexOf(this.usernameLocal) != -1?1:0
+                  item.isCanSubmit=isFlag
+                } 
+              })
+            })
+          }
+        })
     },
     // 客户
     getCustomerList() {
@@ -593,12 +621,13 @@ export default {
       }
     },
     exportData() {
-      API.exportApprove({
+      API.exportApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
-        minePackageCode: 'CUSTOMER-CONTRACT',
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '客户合同审批 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -653,7 +682,7 @@ export default {
     },
     //条款明细--弹窗展示
     showTermsDetail(index) {
-      this.customerId = this.tableData[index].ccId
+      this.customerId = this.tableData[index].id
       // 设置屏幕高度90%
       // this.$refs.termDialog.$el.firstChild.style.height = '100%'
       //草稿、被拒绝可以编辑，其他仅查看
@@ -789,8 +818,7 @@ export default {
     },
     //处于草稿状态可提交
     checkSelectable(row) {
-      // return row.contractState === '0'
-      return 1
+      return row.contractState === '1'&&row.isCanSubmit === 1
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

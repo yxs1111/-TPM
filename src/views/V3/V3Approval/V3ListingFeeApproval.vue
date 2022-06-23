@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-22 12:01:32
+ * @LastEditTime: 2022-06-23 17:20:24
 -->
 <template>
   <div class="MainContent">
@@ -662,7 +662,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V3_审批.xlsx`
+            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })

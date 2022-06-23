@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-21 14:02:46
+ * @LastEditTime: 2022-06-23 18:19:32
 -->
 <template>
   <div class="MainContent">
@@ -28,7 +28,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">合同状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index" />
+            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
           </el-select>
         </div>
       </div>
@@ -46,7 +46,7 @@
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
@@ -95,7 +95,7 @@
       <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.distributorSaleAmount)}}
+            {{FormateNum(scope.row.saleAmount)}}
           </div>
         </template>
       </el-table-column>
@@ -184,11 +184,12 @@ export default {
         effectiveBeginDate: '',
         effectiveEndDate: '',
         customerMdmCode: '',
+        state: '',
       },
       maxheight: getContractEntry(),
       tableData: [],
       customerArr: [],
-      contractList: contractList,
+      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
       checkArr: [], //选中的数据
       tableKey: 0,
       //取消编辑 --》数据重置（不保存）
@@ -198,6 +199,8 @@ export default {
       },
       ccId: null,
       permissions: getDefaultPermissions(),
+      mainIdList:[],
+      usernameLocal: "",
     }
   },
   mounted() {
@@ -206,6 +209,7 @@ export default {
         this.maxheight = window.innerHeight - 420
       })()
     }
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getTableData()
     this.getCustomerList()
   },
@@ -233,7 +237,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      API.getApproveList({
+      API.getApprovePageDealer({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -241,13 +245,16 @@ export default {
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
-        minePackageCode: 'DISTRIBUTOR-CONTRACT',
+        contractState: this.filterObj.state,
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
           item.isEditor = 0
+          item.isCanSubmit = 0
+          item.name=''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+          this.mainIdList.push(item.mainId)
         })
         this.tableData = [...list]
         this.pageNum = response.data.pageNum
@@ -255,7 +262,28 @@ export default {
         this.total = response.data.total
         this.ccId = this.tableData[0].ccId
         this.tempObj.tempInfo = null
+        this.infoByMainId()
       })
+    },
+    infoByMainId() {
+      selectAPI
+        .contractInfoByMainId(
+          this.mainIdList,
+        )
+        .then((res) => {
+          let activityList=res.data
+          if (res.code === 1000) {
+            this.tableData.forEach(item=>{
+              activityList.forEach(mItem=>{
+                if(mItem.id==item.mainId) {
+                  item.name=mItem.activityName
+                  let isFlag=mItem.assignee.indexOf(this.usernameLocal) != -1?1:0
+                  item.isCanSubmit=isFlag
+                } 
+              })
+            })
+          }
+        })
     },
     // 客户
     getCustomerList() {
@@ -372,12 +400,13 @@ export default {
     },
     //导出数据
     exportData() {
-      API.exportApprove({
+      API.exportApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
-        minePackageCode: 'DISTRIBUTOR-CONTRACT',
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议审批 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -393,6 +422,9 @@ export default {
           ccId,
         },
       })
+    },
+    checkSelectable(row) {
+      return row.contractState === '1'&&row.isCanSubmit === 1
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

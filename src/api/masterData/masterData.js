@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-05-26 16:41:27
+ * @LastEditTime: 2022-06-23 14:01:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -668,7 +668,6 @@ export default {
       params: params,
       responseType: 'blob'
     })
-    
   },
   addMatchingRelation(params) {
     return requestApi.request_post('/mdm/mdOrganizationSupplier/insert', params)
@@ -676,4 +675,35 @@ export default {
   deleteMatchingRelation(params) {
     return requestApi.request_delete('/mdm/mdOrganizationSupplier/delete', params)
   },
+  //package & 部门匹配关系
+  getPagePdMatchingRelationship(params) {
+    return requestApi.request_get('/mdm/mdDeptPackageMatching/getPage', params)
+  },
+  //新增 package & 部门匹配关系
+  addPdMatchingRelationship(params) {
+    return requestApi.request_post('/mdm/mdDeptPackageMatching/addData', params)
+  },
+  updatePdMatchingRelationship(params) {
+    return requestApi.request_put('/mdm/mdDeptPackageMatching/updateData', params)
+  },
+  exportPdMatchingRelationship(params) {
+    return request({
+      url: '/mdm/mdDeptPackageMatching/exportData',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  deletePdMatchingRelationship(params) {
+    return requestApi.request_post('/mdm/mdDeptPackageMatching/deleteByIds', params)
+  },
+  //新增时 获取相同的costType
+  getExistingData(params) {
+    return requestApi.request_get('/mdm/mdDeptPackageMatching/getExistingData', params)
+  },
+  //新增时 获取部门id
+  getDepartmentId(params) {
+    return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentId', params)
+  },
+  
 }
