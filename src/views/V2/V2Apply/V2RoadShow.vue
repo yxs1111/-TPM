@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-22 15:46:43
+ * @LastEditTime: 2022-06-23 16:31:55
 -->
 <template>
   <div class="MainContent">
@@ -661,7 +661,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'RSV2' &&
+              res.data.version === 'V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
