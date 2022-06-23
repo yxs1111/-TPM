@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-15 13:29:35
- * @LastEditTime: 2022-05-20 10:02:30
+ * @LastEditTime: 2022-06-23 10:24:00
  */
 /*
  * @Description: 客户合同录入
@@ -28,6 +28,10 @@ export default {
   //编辑合同
   update(params) {
     return requestApi.request_post(this.url+'/update', params)
+  },
+  //复制合同
+  addCopy(params) {
+    return requestApi.request_post(this.url+'/addCopy', params)
   },
   /**
    * 合同终止

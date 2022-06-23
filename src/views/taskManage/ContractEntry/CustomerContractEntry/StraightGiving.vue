@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-22 14:46:15
+ * @LastEditTime: 2022-06-23 13:37:21
 -->
 <template>
   <div class="MainContent">
@@ -63,12 +63,16 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column fixed align="center" width="220" label="操作">
+      <el-table-column fixed align="center" width="280" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
             <div class="haveText_delete" @click="deleteRow(scope.row, scope.$index)" v-permission="permissions['delete']">
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
+            </div>
+            <div class="haveText_editor"  @click="copyRow(scope.row, scope.$index)">
+              <svg-icon icon-class="copy" class="svgIcon" />
+              <span>复制</span>
             </div>
             <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
               <svg-icon icon-class="save-light" class="svgIcon" />
@@ -1155,8 +1159,13 @@ export default {
         this.$message.info('超出最大数值')
       } else {
         if (row.isNewData) {
-          //新增数据保存
-          this.saveSingle(row)
+          if(row.isNewData===1) {
+            //新增数据保存
+            this.saveSingle(row)
+          }else if(row.isNewData===2) {
+            this.saveCopy(row)
+          }
+          
         } else if (row.isEditor) {
           let isRequireRegion =
             this.customerArr.findIndex(
@@ -1169,7 +1178,7 @@ export default {
           console.log(isRequireRegion)
           //客户属于RKA ，大区必填项
           if (isRequireRegion) {
-            if (row.regionCode == ''||row.regionCode == null) {
+            if (row.regionCode == '' || row.regionCode == null) {
               this.$message.warning('请填写大区')
               return
             }
@@ -1202,6 +1211,61 @@ export default {
           })
         }
       }
+    },
+    //复制
+    copyRow(row, index) {
+      console.log(row);
+      this.tableData.unshift({
+        id:row.id,
+        customerName: row.customerName,
+        customerMdmCode: row.customerMdmCode,
+        saleAmount: row.saleAmount,
+        Tax: row.Tax,
+        contractDate: [row.contractBeginDate,row.contractEndDate],
+        contractBeginDate: row.contractBeginDate,
+        contractEndDate: row.contractEndDate,
+        systemDate: row.systemDate,
+        effectiveBeginDate: row.effectiveBeginDate,
+        effectiveEndDate: row.effectiveEndDate,
+        contractStatus: 0,
+        systemStatus: row.systemStatus,
+        remark: row.remark,
+        regionCode: row.regionCode,
+        regionName: row.regionName,
+        poApprovalComments:row.poApprovalComments,
+        finApprovalComments: row.finApprovalComments,
+        createBy: row.createBy,
+        createDate: row.createDate,
+        updateBy: row.updateBy,
+        updateDate: row.updateDate,
+        isEditor: 1, //是否 处于编辑状态
+        isNewData: 2, //是否 是新增的数据 0否，1新增，2 copy
+        isTimeout: '',
+        contractTimeoutStatus: '',
+        contractTimeoutTime: '',
+      })
+    },
+    saveCopy(row) {
+      API.copyCustomerContract([{
+        id: row.id,
+        customerMdmCode: row.customerMdmCode,
+        regionCode: row.regionCode,
+        saleAmount: row.saleAmount,
+        contractBeginDate: row.contractDate[0],
+        contractEndDate: row.contractDate[1],
+        effectiveBeginDate: row.systemDate[0],
+        effectiveEndDate: row.systemDate[1],
+        remark: row.remark,
+      }]).then((res) => {
+        if (res.code === 1000) {
+          this.getTableData()
+          if (res.data) {
+            this.$message.success('复制成功')
+          } else {
+            this.$message.info(`${res.message}`)
+          }
+        }
+      })
     },
     //定时任务确定--终止合同
     popoverSubmit(index, row) {

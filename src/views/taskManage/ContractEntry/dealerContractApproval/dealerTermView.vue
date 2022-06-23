@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-22 15:10:06
+ * @LastEditTime: 2022-06-23 11:04:48
 -->
 <template>
   <div class="ContentDetail">
@@ -140,7 +140,7 @@
             <template>
               <el-table-column prop="customerTaxPoint" align="center" width="150" label="客户扣缴税点">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal">
+                  <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].customerTaxPoint!=''">
                     {{CustomerDeductionsAndPayType[scope.row.dealerList[dealerIndex].customerTaxPoint].CustomerDeduction}}%
                   </div>
                 </template>
@@ -705,6 +705,7 @@ export default {
             }
           })
         }
+        this.getTermInfo()
       })
     },
     //通过code 来查ContractItem

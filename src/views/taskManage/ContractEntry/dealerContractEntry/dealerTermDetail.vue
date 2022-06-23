@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-22 15:09:10
+ * @LastEditTime: 2022-06-23 13:33:45
 -->
 <template>
   <div class="ContentDetail">
@@ -101,7 +101,7 @@
               <el-table-column prop="detail" align="center" width="180" label="描述">
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].isEditor">
-                    <el-input v-model="scope.row.dealerList[dealerIndex].detail" clearable class="my-el-detail" placeholder="请输入">
+                    <el-input v-model="scope.row.dealerList[dealerIndex].detail"   type="textarea" autosize clearable class="my-el-detail my-textArea" placeholder="请输入">
                     </el-input>
                   </div>
                   <div v-else>
@@ -190,7 +190,7 @@
             <template>
               <el-table-column prop="customerTaxPoint" align="center" width="150" label="客户扣缴税点">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal">
+                  <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].customerTaxPoint!=''">
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor">
                       <el-select v-model="scope.row.dealerList[dealerIndex].customerTaxPoint" @change="changeCustomerTaxPoint(scope.row,dealerIndex)" class="my-el-select_dialog"
                         filterable clearable placeholder="请选择">
@@ -443,7 +443,6 @@ export default {
             dealerList: [],
           }
           //取经销商对应的variable
-          console.log(distributorList)
           distributorList.forEach((item) => {
             let distVariableObj = item.variable[index]
             //根据明细id来进行匹配
@@ -1545,5 +1544,11 @@ export default {
   .el-input--suffix {
     width: 80px !important;
   }
+}
+.my-textArea {
+  textarea {
+    resize: none !important;
+  }
+  
 }
 </style>
