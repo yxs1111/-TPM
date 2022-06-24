@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-24 10:01:14
+ * @LastEditTime: 2022-06-24 14:02:38
 -->
 <template>
   <div class="tabViewsWrap">
@@ -176,8 +176,8 @@ export default {
               name: '补录',
               path: '/costManagement/V3/V3Apply/V3Collection',
               img: {
-                dark: require('@/assets/images/tab/tab_ListingFee.png'),
-                light: require('@/assets/images/tab/tab_ListingFee_l.png')
+                dark: require('@/assets/images/tab/tab_collection.png'),
+                light: require('@/assets/images/tab/tab_collection_l.png')
               }
             },
           ]

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-24 09:45:43
+ * @LastEditTime: 2022-06-24 14:49:11
 -->
 <template>
   <div class="MainContent">
@@ -42,19 +42,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve()">
-        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
-        <span class="text">提交</span>
-      </div>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-        <span class="tipStar">*</span>
-        注意事项：若未获取到MTD场次日期，不能办理
-      </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" />
@@ -234,7 +226,6 @@ export default {
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
-      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -289,7 +280,6 @@ export default {
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = 1
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -541,40 +531,6 @@ export default {
         })
       } else {
         this.$message.info('数据不能为空')
-      }
-    },
-    approve() {
-      if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              const mainId = this.tableData[0].mainId
-              API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('提交成功')
-                  this.getTableData()
-                }
-              })
-            })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
-              })
-            })
-        } else {
-          this.$message.info('数据未校验，请先进行导入验证')
-        }
-      } else {
-        this.$message.warning('数据不能为空')
       }
     },
     // 每页显示页面数变更
