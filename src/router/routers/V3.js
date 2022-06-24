@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-08 19:02:30
+ * @LastEditTime: 2022-06-24 10:00:44
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -89,6 +89,14 @@ export default function() {
               component: () => import('@/views/V3/V3Apply/V3ListingFee.vue'),
               meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
             },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3Collection',
+              code: 'price_nka_v3_apply',
+              name: 'V3Collection',
+              component: () => import('@/views/V3/V3Apply/V3Collection.vue'),
+              meta: { title: '补录', icon: 'form' ,activeMenu: '/costManagement/V3/V3Apply'},
+            },
           ]
         },
         {
@@ -161,6 +169,14 @@ export default function() {
               name: 'V3ListingFeeApproval',
               component: () => import('@/views/V3/V3Approval/V3ListingFeeApproval.vue'),
               meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3CollectionApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3CollectionApproval',
+              component: () => import('@/views/V3/V3Approval/V3CollectionApproval.vue'),
+              meta: { title: '补录', icon: 'form' ,activeMenu: '/costManagement/V3/V3Approval'},
             },
           ]
         },

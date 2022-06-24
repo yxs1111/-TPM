@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-23 16:31:55
+ * @LastEditTime: 2022-06-24 13:10:15
 -->
 <template>
   <div class="MainContent">
@@ -268,7 +268,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.dept) }}
+            {{ scope.row.dept }}
           </div>
         </template>
       </el-table-column>
