@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-21 13:14:16
+ * @LastEditTime: 2022-06-24 08:44:19
 -->
 <template>
   <div class="MainContent">
@@ -321,7 +321,7 @@
       <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
         <template v-slot:header>
           <div>
-            点数差值(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span>
+            点数差值(%)<br /><span class="subTitle">KA+Contract item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -332,7 +332,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="saleVolumeDifference" label="销售额差值（%）">
         <template v-slot:header>
-          <div>销售额差值（%）<br><span class="subTitle">KA+经销商+region</span></div>
+          <div>销售额差值（%）<br><span class="subTitle">KA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -343,7 +343,7 @@
       <el-table-column width="320" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
           <div>
-            费用差值(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span>
+            费用差值(RMB)<br /><span class="subTitle">KA+Contract item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -630,7 +630,7 @@
             <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
                 <div>
-                  点数差值(%)<br /><span class="subTitle">KA+经销商+region+Contract item</span>
+                  点数差值(%)<br /><span class="subTitle">KA+Contract item</span>
                 </div>
               </template>
               <template slot-scope="scope">
@@ -641,7 +641,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="saleVolumeDifference" label="销售额差值（%）">
               <template v-slot:header>
-                <div>销售额差值（%）<br><span class="subTitle">KA+经销商+region</span></div>
+                <div>销售额差值（%）<br><span class="subTitle">KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -652,7 +652,7 @@
             <el-table-column width="320" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
                 <div>
-                  费用差值(RMB)<br /><span class="subTitle">KA+经销商+region+Contract item</span>
+                  费用差值(RMB)<br /><span class="subTitle">KA+Contract item</span>
                 </div>
               </template>
               <template slot-scope="scope">
