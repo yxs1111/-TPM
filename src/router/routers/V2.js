@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-24 09:34:44
+ * @LastEditTime: 2022-06-24 13:34:27
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -172,14 +172,6 @@ export default function() {
               name: 'V2ListingFeeApproval',
               component: () => import('@/views/V2/V2Approval/V2ListingFeeApproval.vue'),
               meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
-            },
-            {
-              hidden: true,
-              path: '/costManagement/V2/V2Approval/V2CollectionApproval',
-              code: 'price_nka_v2_approve',
-              name: 'V2CollectionApproval',
-              component: () => import('@/views/V2/V2Approval/V2CollectionApproval.vue'),
-              meta: { title: '补录', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
             },
           ]
         },

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-24 09:35:28
+ * @LastEditTime: 2022-06-24 13:33:26
 -->
 <template>
   <div class="tabViewsWrap">
@@ -167,14 +167,6 @@ export default {
             {
               name: 'Listing Fee',
               path: '/costManagement/V2/V2Approval/V2ListingFeeApproval',
-              img: {
-                dark: require('@/assets/images/tab/tab_ListingFee.png'),
-                light: require('@/assets/images/tab/tab_ListingFee_l.png')
-              }
-            },
-            {
-              name: '补录',
-              path: '/costManagement/V2/V2Approval/V2CollectionApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png')
