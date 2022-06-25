@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-25 15:29:31
+ * @LastEditTime: 2022-06-25 17:42:21
 -->
 <template>
   <div class="MainContent">
@@ -201,7 +201,7 @@ import {
   messageMap,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/Collection'
+import API from '@/api/V3/Collection'
 export default {
   name: 'V3Collection',
   directives: { elDragDialog, permission },
@@ -271,6 +271,7 @@ export default {
           channelName: this.filterObj.channelCode,
           minePackage: this.filterObj.minePackage,
           costAccount: this.filterObj.costAccount,
+          version:'V3'
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -288,7 +289,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version === 'V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -379,10 +380,11 @@ export default {
           minePackage: this.filterObj.minePackage,
           costAccount: this.filterObj.costAccount,
           channelName: this.filterObj.channelCode,
+          version:'V3'
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_补录_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_补录_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -476,7 +478,7 @@ export default {
           regionCode: this.filterObj.regionCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_RoadShow异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V3_RoadShow异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -488,10 +490,11 @@ export default {
       // 导出数据筛选
       API.downloadTemplate({
         yearAndMonth: this.filterObj.month,
+        version:'V3'
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_补录_${this.filterObj.channelCode}_V2申请.xlsx`
+          `${this.filterObj.month}_补录_${this.filterObj.channelCode}_V3申请.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

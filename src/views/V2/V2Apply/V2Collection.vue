@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-25 13:33:54
+ * @LastEditTime: 2022-06-25 15:38:59
 -->
 <template>
   <div class="MainContent">
@@ -271,6 +271,7 @@ export default {
           channelName: this.filterObj.channelCode,
           minePackage: this.filterObj.minePackage,
           costAccount: this.filterObj.costAccount,
+          version:'V2'
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -379,6 +380,7 @@ export default {
           minePackage: this.filterObj.minePackage,
           costAccount: this.filterObj.costAccount,
           channelName: this.filterObj.channelCode,
+          version:'V2'
         }).then((res) => {
           downloadFile(
             res,
@@ -488,6 +490,7 @@ export default {
       // 导出数据筛选
       API.downloadTemplate({
         yearAndMonth: this.filterObj.month,
+        version:'V2'
       }).then((res) => {
         downloadFile(
           res,
