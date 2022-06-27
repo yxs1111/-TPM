@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-06-24 13:08:07
+ * @LastEditTime: 2022-06-27 20:13:04
 -->
 <template>
   <div class="dashboard-container">
@@ -37,8 +37,8 @@
             <!-- 流程 -->
             <div class="monthBar" v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex">
               <div class="monthBg">
-                <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div>
-                <div class="monthName">({{MonthItem.month}})</div>
+                <!-- <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> -->
+                <div class="monthName">{{MonthItem.month}}</div>
                
               </div>
               <div class="monthPoint">

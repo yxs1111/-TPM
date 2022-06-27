@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 19:32:47
+ * @LastEditTime: 2022-06-27 20:25:27
 -->
 <template>
   <div class="MainContent">
@@ -112,7 +112,7 @@
       <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(RMB)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.saleAmount" type="number" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -272,7 +272,7 @@
               <el-table-column prop="targetSale" align="center" width="280" label="协议目标销售额(RMB)">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
-                    <el-input v-model="scope.row.targetSale" clearable class="my-el-input" placeholder="请输入">
+                    <el-input v-model="scope.row.targetSale" type="number" clearable class="my-el-input" placeholder="请输入">
                     </el-input>
                   </div>
                   <div v-else>

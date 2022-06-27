@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-27 18:17:47
+ * @LastEditTime: 2022-06-27 20:29:49
 -->
 <template>
   <div class="ContentDetail">
@@ -79,7 +79,7 @@
               <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
                 <template slot-scope="scope">
                   <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable&&!scope.row.isTotal">
-                    <el-input v-model="scope.row.dealerList[dealerIndex].pointCount" clearable class="my-el-inputNumber" placeholder="请输入"
+                    <el-input type="number" v-model="scope.row.dealerList[dealerIndex].pointCount" clearable class="my-el-inputNumber" placeholder="请输入"
                       @blur="changePointCount(scope.row,scope.$index,dealerIndex)">
                     </el-input>%
                   </div>
@@ -89,7 +89,7 @@
               <el-table-column prop="taxPrice" align="center" width="180" label="含税金额（RMB）">
                 <template slot-scope="scope">
                   <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isTotal&&!scope.row.isVariable">
-                    <el-input v-model="scope.row.dealerList[dealerIndex].taxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
+                    <el-input type="number" v-model="scope.row.dealerList[dealerIndex].taxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
                       @blur="changeTaxPrice(scope.row,scope.$index,dealerIndex)">
                     </el-input>
                   </div>
@@ -101,7 +101,7 @@
               <el-table-column prop="detail" align="center" width="180" label="描述">
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].isEditor">
-                    <el-input v-model="scope.row.dealerList[dealerIndex].detail"   type="textarea" autosize clearable class="my-el-detail my-textArea" placeholder="请输入">
+                    <el-input  v-model="scope.row.dealerList[dealerIndex].detail"   type="textarea" autosize clearable class="my-el-detail my-textArea" placeholder="请输入">
                     </el-input>
                   </div>
                   <div v-else>
@@ -120,7 +120,7 @@
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable">
-                      <el-input v-model="scope.row.dealerList[dealerIndex].frieslandPointCount" clearable class="my-el-inputNumber" placeholder="请输入"
+                      <el-input type="number" v-model="scope.row.dealerList[dealerIndex].frieslandPointCount" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeFrieslandPointCount(scope.row,scope.$index,dealerIndex)">
                       </el-input>%
                     </div>
@@ -134,7 +134,7 @@
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
-                      <el-input v-model="scope.row.dealerList[dealerIndex].frieslandTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
+                      <el-input type="number" v-model="scope.row.dealerList[dealerIndex].frieslandTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeFrieslandTaxPrice(scope.row,scope.$index,dealerIndex)">
                       </el-input>
                     </div>
@@ -155,7 +155,7 @@
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable">
-                      <el-input v-model="scope.row.dealerList[dealerIndex].dealerPointCount" clearable class="my-el-inputNumber" placeholder="请输入"
+                      <el-input type="number" v-model="scope.row.dealerList[dealerIndex].dealerPointCount" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeDealerPointCount(scope.row,scope.$index,dealerIndex)">
                       </el-input>%
                     </div>
@@ -169,7 +169,7 @@
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&!scope.row.isVariable">
-                      <el-input v-model="scope.row.dealerList[dealerIndex].dealerTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
+                      <el-input type="number" v-model="scope.row.dealerList[dealerIndex].dealerTaxPrice" clearable class="my-el-inputNumber" placeholder="请输入"
                         @blur="changeDealerTaxPrice(scope.row,scope.$index,dealerIndex)">
                       </el-input>
                     </div>
@@ -925,7 +925,7 @@ export default {
                 })
               }
               if(dealerItem.frieslandPointCount) {
-                if(dealerItem.customerTaxPoint==='') {
+                if(dealerItem.customerTaxPoint===''||dealerItem.payType=='') {
                   console.log("客户扣款税点为空");
                   payTypeRequire.push({
                     rowIndex: index,
@@ -951,7 +951,7 @@ export default {
                 })
               }
               if(dealerItem.frieslandPointCount) {
-                if(dealerItem.customerTaxPoint==='') {
+                if(dealerItem.customerTaxPoint===''||dealerItem.payType=='') {
                   console.log("客户扣款税点为空");
                   payTypeRequire.push({
                     rowIndex: index,
@@ -1166,6 +1166,7 @@ export default {
     },
     cancelSubmit() {
       this.$router.go(-1)
+      sessionStorage.removeItem('isEditor')
     },
     //更改费比 --》 含税金额
     changePointCount(Obj, index, dealerIndex) {

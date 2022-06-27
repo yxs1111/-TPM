@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 19:32:43
+ * @LastEditTime: 2022-06-27 20:16:40
 -->
 <template>
   <div class="MainContent">
@@ -116,7 +116,7 @@
       <el-table-column prop="saleAmount" align="center" width="220" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.saleAmount" type="number" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -188,7 +188,7 @@
       <el-table-column align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.remark" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.remark"  clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -259,7 +259,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" style="display: flex;align-items: center;">
-                  <el-input v-model="scope.row.costRatio" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
+                  <el-input v-model="scope.row.costRatio" type="number" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
                   </el-input>
                   <span>%</span>
                 </div>
@@ -329,7 +329,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" style="display: flex;align-items: center;">
-                  <el-input v-model="scope.row.costRatio" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
+                  <el-input v-model="scope.row.costRatio" type="number" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
                   </el-input>
                   <span>%</span>
                 </div>
@@ -398,7 +398,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" style="display: flex;align-items: center;">
-                  <el-input v-model="scope.row.costRatio" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
+                  <el-input v-model="scope.row.costRatio" type="number" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCostRate(scope.$index,scope.row)">
                   </el-input>
                   <span>%</span>
                 </div>
@@ -482,7 +482,7 @@
             <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
-                  <el-input v-model="scope.row.taxCost" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCost(scope.$index,scope.row)">
+                  <el-input v-model="scope.row.taxCost" type="number" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCost(scope.$index,scope.row)">
                   </el-input>
                 </div>
                 <div v-show="!scope.row.isNewData">{{ FormateNum(scope.row.taxCost) }}</div>
@@ -548,7 +548,7 @@
             <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData">
-                  <el-input v-model="scope.row.taxCost" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCost(scope.$index,scope.row)">
+                  <el-input v-model="scope.row.taxCost" type="number" clearable class="my-el-inputNumber" placeholder="请输入" @blur="changeCost(scope.$index,scope.row)">
                   </el-input>
                 </div>
                 <div v-show="!scope.row.isNewData">{{ FormateNum(scope.row.taxCost) }}</div>
