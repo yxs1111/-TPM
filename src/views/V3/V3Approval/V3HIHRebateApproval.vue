@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-06-27 16:55:04
+ * @LastEditTime: 2022-06-27 17:40:13
 -->
 <!--
  * @Description: 
@@ -363,13 +363,13 @@
             </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="remark" label="申请人备注" >
+      <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" >
         <template v-slot:header>
             <div>申请人备注<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
             <div>
-              {{ scope.row.remark }}
+              {{ scope.row.applyRemarks }}
             </div>
         </template>
       </el-table-column>
@@ -618,7 +618,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="120" align="center" prop="remark" label="申请人备注" />
+            <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
             <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
           </el-table>
