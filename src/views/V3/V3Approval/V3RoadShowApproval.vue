@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-23 16:34:23
+ * @LastEditTime: 2022-06-27 08:50:11
 -->
 <template>
   <div class="MainContent">
@@ -803,11 +803,15 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      const money = num * 1
-      return money.toLocaleString('zh', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      if(num===null) {
+        return ''
+      } else {
+        const money = num * 1
+        return money.toLocaleString('zh', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      }
     },
     search() {
       this.pageNum = 1
