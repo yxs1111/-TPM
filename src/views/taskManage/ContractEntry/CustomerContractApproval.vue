@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 09:25:34
+ * @LastEditTime: 2022-06-27 10:56:39
 -->
 <template>
   <div class="MainContent">
@@ -71,6 +71,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="220" label="客户名称">
+      </el-table-column>
+      <el-table-column prop="regionName" fixed align="center" width="140" label="大区">
       </el-table-column>
       <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额(RMB)">
         <template slot-scope="scope">
@@ -643,11 +645,11 @@ export default {
     //编辑行数据
     editorRow(index, row) {
       if (row.contractState == '3' || row.contractState == '4') {
-        this.$message.info('该经销商已经通过，不能进行编辑')
+        this.$message.info('该合同不能进行编辑操作')
         return
       }
       if (!row.isCanSubmit) {
-        this.$message.info('该经销商已经通过，不能进行编辑')
+        this.$message.info('该合同不能进行编辑操作')
         return
       }
       if (this.tempObj.tempInfo) {
