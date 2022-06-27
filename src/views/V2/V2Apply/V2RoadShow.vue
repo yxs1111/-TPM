@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:13:22
+ * @LastEditTime: 2022-06-27 17:24:42
 -->
 <template>
   <div class="MainContent">
@@ -438,8 +438,12 @@
             <el-table-column width="220" align="center" prop="zoneName" label="大区" />
             <el-table-column width="220" align="center" prop="regionName" label="区域" />
             <el-table-column width="220" align="center" prop="activityType" label="活动类型" />
-            <el-table-column width="220" align="center" prop="planPrice" label="V1计划单价(RMB/场)" />
-            <el-table-column width="220" align="center" prop="planVol" label="V1计划场次(场)" />
+            <el-table-column v-slot={row} width="220" align="center" prop="planPrice" label="V1计划单价(RMB/场)" >
+              {{ formatNum(row.planPrice) }}
+            </el-table-column>
+            <el-table-column  v-slot={row} width="220" align="center" prop="planVol" label="V1计划场次(场)" >
+              {{ formatNum(row.planVol) }}
+            </el-table-column>
             <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
               <template v-slot:header>
                 <div>V1计划费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
