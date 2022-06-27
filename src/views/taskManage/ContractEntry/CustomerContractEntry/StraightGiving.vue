@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 16:14:13
+ * @LastEditTime: 2022-06-27 18:16:06
 -->
 <template>
   <div class="MainContent">
@@ -687,7 +687,7 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
-    this.getTableData()
+    // this.getTableData()
     this.getCustomerList()
     this.getContractItemList()
     this.getLargeAreaList()

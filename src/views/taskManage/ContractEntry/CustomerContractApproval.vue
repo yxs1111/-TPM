@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 10:56:39
+ * @LastEditTime: 2022-06-27 18:16:50
 -->
 <template>
   <div class="MainContent">
@@ -406,7 +406,7 @@ export default {
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
-    this.getTableData()
+    // this.getTableData()
     this.getCustomerList()
     this.getContractItemList()
   },

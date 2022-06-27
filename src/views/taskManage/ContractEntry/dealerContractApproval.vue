@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 09:45:04
+ * @LastEditTime: 2022-06-27 18:17:01
 -->
 <template>
   <div class="MainContent">
@@ -212,7 +212,7 @@ export default {
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
-    this.getTableData()
+    // this.getTableData()
     this.getCustomerList()
   },
   directives: { elDragDialog, permission },

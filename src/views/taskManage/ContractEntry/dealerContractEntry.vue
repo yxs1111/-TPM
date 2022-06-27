@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 16:25:32
+ * @LastEditTime: 2022-06-27 18:17:04
 -->
 <template>
   <div class="MainContent">
@@ -432,7 +432,7 @@ export default {
         this.maxheight = window.innerHeight - 420
       })()
     }
-    this.getTableData()
+    // this.getTableData()
     this.getCustomerList()
     this.getDistributorList()
   },

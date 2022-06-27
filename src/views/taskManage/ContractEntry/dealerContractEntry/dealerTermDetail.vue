@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-27 12:05:16
+ * @LastEditTime: 2022-06-27 18:17:47
 -->
 <template>
   <div class="ContentDetail">
@@ -274,7 +274,7 @@ export default {
     } else {
       this.ccId = sessionStorage.getItem('ccId')
     }
-    if(sessionStorage.getItem("isEditor")!='') {
+    if(sessionStorage.getItem("isEditor")) {
       let editorIndex=Number(sessionStorage.getItem("EditorIndex"))
       let editorStrList=sessionStorage.getItem("isEditor").split('-')
       if(editorIndex==Number(editorStrList[1])) {
@@ -899,6 +899,7 @@ export default {
         let errorList = []
         let pointCountEmpty = []  //经销商费比为空 
         let taxPriceEmpty = []  //经销商费比为空 
+        let payTypeRequire=[]
         //补录跳过验证--若之前经销商已经通过&&当前状态是草稿的 说明是补录
         this.AllTableData.forEach((item, index) => {
           //对 Variable 异常处理 各经销商费比大于客户费比
@@ -923,6 +924,16 @@ export default {
                   ...dealerItem,
                 })
               }
+              if(dealerItem.frieslandPointCount) {
+                if(dealerItem.customerTaxPoint==='') {
+                  console.log("客户扣款税点为空");
+                  payTypeRequire.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
+              }
             })
           }
           //error 错误  经销商含税总金额若不等于客户含税金额 报error
@@ -938,6 +949,16 @@ export default {
                   dealerIndex,
                   ...dealerItem,
                 })
+              }
+              if(dealerItem.frieslandPointCount) {
+                if(dealerItem.customerTaxPoint==='') {
+                  console.log("客户扣款税点为空");
+                  payTypeRequire.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
               }
             })
             let dealerTaxPrice = dealerList.reduce((total, current) => {
@@ -976,6 +997,21 @@ export default {
                   message: `第${item.rowIndex + 1}行${
                     this.AllTableData[item.rowIndex].customerInfo.contractItem
                   } ${item.dealerName } 含税金额不能为空,请进行填写`,
+                  duration: 0,
+                })
+              }, 50)
+            })
+          // this.$message.info('经销商含税金额不能为空,请进行填写')
+          return
+        }
+        if(payTypeRequire.length) {
+          payTypeRequire.forEach((item) => {
+              setTimeout(() => {
+                this.$notify.warning({
+                  title: '警告',
+                  message: `第${item.rowIndex + 1}行${
+                    this.AllTableData[item.rowIndex].customerInfo.contractItem
+                  } ${item.dealerName } 菲仕兰承担费比不为零时，扣款税点和支付方式不能为空`,
                   duration: 0,
                 })
               }, 50)
