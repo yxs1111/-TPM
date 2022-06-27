@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 18:16:06
+ * @LastEditTime: 2022-06-27 19:55:24
 -->
 <template>
   <div class="MainContent">
@@ -1563,6 +1563,7 @@ export default {
       this.TotalData.totalCost = 0
       this.customerId = 0
       this.isTermsDetailVisible = false
+      this.isEditor=0 //编辑弹窗
     },
     //新增条款--variable
     addNewRowToVariable() {

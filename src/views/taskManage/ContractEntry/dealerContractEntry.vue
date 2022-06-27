@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 18:17:04
+ * @LastEditTime: 2022-06-27 19:32:47
 -->
 <template>
   <div class="MainContent">
@@ -957,7 +957,7 @@ export default {
           targetSaleLimit + this.addDialog.nowTargetSale !=
           this.addDialogCustomer[0].saleAmount
         ) {
-          this.$message.info(`经销商目标销售额之和应等于客户目标销售额之和`)
+          this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
           return
         } else {
           API.add(list).then((res) => {
