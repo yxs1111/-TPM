@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 审批 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:00:44
+ * @LastEditTime: 2022-06-27 17:12:31
 -->
 <template>
   <div class="MainContent">
@@ -347,7 +347,7 @@ export default {
     },
     //千分位分隔符+两位小数
     FormatNum(num) {
-      FormateThousandNum(num)
+       return FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1

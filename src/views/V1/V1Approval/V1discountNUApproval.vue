@@ -216,7 +216,7 @@ export default {
         .catch()
     },
     getPlanCost(num) {
-      FormateThousandNum(num)
+       return FormateThousandNum(num)
     },
     search() {
       this.getTableData()

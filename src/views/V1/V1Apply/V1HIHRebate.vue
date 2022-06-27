@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 16:57:40
+ * @LastEditTime: 2022-06-27 17:11:53
 -->
 <template>
   <div class="MainContent">
@@ -312,7 +312,7 @@ export default {
     
     //千分位分隔符+两位小数
     getPlanCost(num) {
-      FormateThousandNum(num)
+       return FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1

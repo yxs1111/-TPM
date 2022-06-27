@@ -550,7 +550,7 @@ export const dynamicColumnCost = [
 ]
 
 export function FormateThousandNum(num) {
-  if(num===null) {
+  if(num===null||num==="null") {
     return ''
   } else {
     const money = num * 1

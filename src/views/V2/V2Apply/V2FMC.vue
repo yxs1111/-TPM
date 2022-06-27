@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 16:36:47
+ * @LastEditTime: 2022-06-27 17:10:27
 -->
 <template>
   <div class="MainContent">
@@ -745,7 +745,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1

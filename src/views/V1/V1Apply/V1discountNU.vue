@@ -220,7 +220,7 @@ export default {
     },
     //千分位分隔符+两位小数
     getPlanCost(num) {
-      FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1
