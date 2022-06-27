@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-24 16:26:39
+ * @LastEditTime: 2022-06-27 09:25:34
 -->
 <template>
   <div class="MainContent">
@@ -605,9 +605,9 @@ export default {
         //判断当前数据 所属角色审批
         this.checkArr.forEach((item) => {
           if (item.name.indexOf('Package Owner') != -1) {
-            obj.approveDetail[item.businessKey] = item.poApprovalComments
+            obj.approveDetail[item.mainId] = item.poApprovalComments
           } else if (item.name.indexOf('Finance') != -1) {
-            obj.approveDetail[item.businessKey] = item.finApprovalComments
+            obj.approveDetail[item.mainId] = item.finApprovalComments
           }
         })
         API.approveCustomerContract(obj).then((res) => {
@@ -643,6 +643,10 @@ export default {
     //编辑行数据
     editorRow(index, row) {
       if (row.contractState == '3' || row.contractState == '4') {
+        this.$message.info('该经销商已经通过，不能进行编辑')
+        return
+      }
+      if (!row.isCanSubmit) {
         this.$message.info('该经销商已经通过，不能进行编辑')
         return
       }

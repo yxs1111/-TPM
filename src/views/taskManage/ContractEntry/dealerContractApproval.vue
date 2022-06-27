@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-24 16:27:31
+ * @LastEditTime: 2022-06-27 09:45:04
 -->
 <template>
   <div class="MainContent">
@@ -339,9 +339,9 @@ export default {
       //判断当前数据 所属角色审批
       this.checkArr.forEach((item) => {
         if (item.name.indexOf('Package Owner') != -1) {
-          obj.approveDetail[item.distributorId] = item.poApprovalComments
+          obj.approveDetail[item.id] = item.poApprovalComments
         } else if (item.name.indexOf('Finance') != -1) {
-          obj.approveDetail[item.distributorId] = item.finApprovalComments
+          obj.approveDetail[item.id] = item.finApprovalComments
         }
       })
       console.log(obj)

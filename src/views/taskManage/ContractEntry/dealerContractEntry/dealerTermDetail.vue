@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-23 13:33:45
+ * @LastEditTime: 2022-06-27 10:14:51
 -->
 <template>
   <div class="ContentDetail">
@@ -190,7 +190,7 @@
             <template>
               <el-table-column prop="customerTaxPoint" align="center" width="150" label="客户扣缴税点">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].customerTaxPoint!=''">
+                  <div v-if="!scope.row.isTotal">
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor">
                       <el-select v-model="scope.row.dealerList[dealerIndex].customerTaxPoint" @change="changeCustomerTaxPoint(scope.row,dealerIndex)" class="my-el-select_dialog"
                         filterable clearable placeholder="请选择">
@@ -377,7 +377,7 @@ export default {
         })
         // 是否有可编辑的，若没有则只显示关闭按钮
         let isOtherEditor = distributorList.findIndex((item) => {
-          return item.contractState == '0'
+          return item.contractState == '0'||item.contractState == '2'
         })
         //没有通过则是正常，若有之前通过的经销商则为补录
         this.isMakeUp = index == -1 ? 0 : 1
@@ -1030,7 +1030,7 @@ export default {
                     distributorCostRatio: distItem.dealerPointCount,
                     distributorTaxCost: distItem.dealerTaxPrice,
                     deductionTaxRate:
-                      distItem.customerTaxPoint != ''
+                      distItem.customerTaxPoint !== ''
                         ? this.CustomerDeductionsAndPayType[
                             distItem.customerTaxPoint
                           ].CustomerDeduction
@@ -1049,7 +1049,7 @@ export default {
                     distributorCostRatio: distItem.dealerPointCount,
                     distributorTaxCost: distItem.dealerTaxPrice,
                     deductionTaxRate:
-                      distItem.customerTaxPoint != ''
+                      distItem.customerTaxPoint !== ''
                         ? this.CustomerDeductionsAndPayType[
                             distItem.customerTaxPoint
                           ].CustomerDeduction
@@ -1073,7 +1073,7 @@ export default {
                   distributorCostRatio: distItem.dealerPointCount,
                   distributorTaxCost: distItem.dealerTaxPrice,
                   deductionTaxRate:
-                    distItem.customerTaxPoint != ''
+                    distItem.customerTaxPoint !== ''
                       ? this.CustomerDeductionsAndPayType[
                           distItem.customerTaxPoint
                         ].CustomerDeduction
@@ -1092,7 +1092,7 @@ export default {
                   distributorCostRatio: distItem.dealerPointCount,
                   distributorTaxCost: distItem.dealerTaxPrice,
                   deductionTaxRate:
-                    distItem.customerTaxPoint != ''
+                    distItem.customerTaxPoint !== ''
                       ? this.CustomerDeductionsAndPayType[
                           distItem.customerTaxPoint
                         ].CustomerDeduction

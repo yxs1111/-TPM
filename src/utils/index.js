@@ -697,7 +697,7 @@ export function setSplitAssignee(value) {
   }
   return formatString
 }
-export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止']
+export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止','过期']
 export let contractItemVariableList = [
   {
     name: '月度返利',

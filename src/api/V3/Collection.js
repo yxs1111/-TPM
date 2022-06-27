@@ -1,24 +1,25 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-06-25 17:39:53
+ * @LastEditTime: 2022-06-25 19:27:30
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
   url: '/cityplan/investSrVThree',
+  V2Url: '/cityplan/investSrVTwo',
   //分页查询
   getPage(params) {
-    return requestApi.request_get(this.url+'/getPage', params)
+    return requestApi.request_get(this.V2Url+'/getPage', params)
   },
   delete(params) {
-    return requestApi.request_post(this.url+'/deleteByIds  ', params)
+    return requestApi.request_post(this.V2Url+'/deleteByIds  ', params)
   },
   //导出
   downExcel(params) {
     return request({
-      url: this.url+'/exportSrVTwo',
+      url: this.V2Url+'/exportSrVTwo',
       method: 'get',
       params: params,
       responseType: 'blob'
@@ -27,7 +28,7 @@ export default {
   //下载模板
   downloadTemplate(params) {
     return request({
-      url: this.url+'/downloadTemplate',
+      url: this.V2Url+'/downloadTemplate',
       method: 'get',
       params: params,
       responseType: 'blob'

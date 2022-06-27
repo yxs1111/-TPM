@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-23 11:04:48
+ * @LastEditTime: 2022-06-27 10:11:23
 -->
 <template>
   <div class="ContentDetail">
@@ -140,7 +140,7 @@
             <template>
               <el-table-column prop="customerTaxPoint" align="center" width="150" label="客户扣缴税点">
                 <template slot-scope="scope">
-                  <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].customerTaxPoint!=''">
+                  <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].customerTaxPoint!==''">
                     {{CustomerDeductionsAndPayType[scope.row.dealerList[dealerIndex].customerTaxPoint].CustomerDeduction}}%
                   </div>
                 </template>
@@ -228,7 +228,7 @@ export default {
         let distributorList = res.data.distributorContract
         //经销商添加对应数量的variable /fixed
         distributorList.forEach((item) => {
-          if (item.fixed.length == 0) {
+          if (item.fixed.length == 0 && item.variable.length == 0) {
             item.isEmpty = 1
             for (let index = 0; index < customerVariableList.length; index++) {
               let obj = {
@@ -295,6 +295,7 @@ export default {
         let VariableTableData = []
         let FixedTotalTableData = []
         let FixedTableData = []
+        console.log(distributorList);
         //添加variable-->获得表格variable部分数据（维度：行，行中数据保留客户和经销商）
         for (let index = 0; index < customerVariableList.length; index++) {
           const customerVariableObj = customerVariableList[index]

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-23 13:38:33
+ * @LastEditTime: 2022-06-27 10:47:58
 -->
 <template>
   <div class="MainContent">
@@ -92,7 +92,7 @@
       <el-table-column prop="customerMdmCode" fixed align="center" width="220" label="客户名称">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.customerMdmCode" class="my-el-input" filterable clearable placeholder="请选择">
+            <el-select v-model="scope.row.customerMdmCode" class="my-el-input" @change="changeCustomer(scope.row)" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
             </el-select>
           </div>
@@ -104,7 +104,7 @@
       <el-table-column prop="regionCode" fixed align="center" width="220" label="大区">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.regionCode" class="my-el-input" filterable clearable placeholder="请选择">
+            <el-select v-model="scope.row.regionCode" :disabled="scope.row.isRequireRegion==1?false:true" class="my-el-input" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.code" />
             </el-select>
           </div>
@@ -1046,16 +1046,17 @@ export default {
       //判断当前月份是否处于系统生效开始时间，若处于则不可以删除,若不处于系统生效开始时间随便删，不受状态影响
       let isDeleteFlag = this.compareDate(systemDate[0])
       if (!isDeleteFlag) {
+        //已进入汇算（大于等于当前月）
         if (
           this.tableData[index].contractState == '1' ||
           this.tableData[index].contractState == '3' ||
-          this.tableData[index].contractState == '4'
+          this.tableData[index].contractState == '4' ||
+          this.tableData[index].contractState == '5'
         ) {
-          this.$message.info('合同已经提交，不能进行编辑操作')
+          this.$message.info('该合同不能进行编辑操作')
           return
         }
       }
-
       if (this.tempObj.tempInfo && !isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
@@ -1101,9 +1102,10 @@ export default {
         if (
           row.contractState == '1' ||
           row.contractState == '3' ||
-          row.contractState == '4'
+          row.contractState == '4' ||
+          row.contractState == '5'
         ) {
-          this.$message.info('合同已经提交，不能进行编辑操作')
+          this.$message.info('该合同不能进行编辑操作')
           return
         }
       }
@@ -1212,9 +1214,26 @@ export default {
         }
       }
     },
+    //判断当前选中的客户类型--》大区是否可选择
+    changeCustomer(row) {
+      let isRequireRegion = this.customerArr.findIndex((item) =>
+                item.channelCode == 'RKA' &&
+                item.customerMdmCode == row.customerMdmCode
+            ) != -1
+              ? true
+              : false
+      row.isRequireRegion=isRequireRegion
+      console.log(isRequireRegion);
+    },
     //复制
     copyRow(row, index) {
       console.log(row);
+      let isRequireRegion = this.customerArr.findIndex((item) =>
+                item.channelCode == 'RKA' &&
+                item.customerMdmCode == row.customerMdmCode
+            ) != -1
+              ? true
+              : false
       this.tableData.unshift({
         id:row.id,
         customerName: row.customerName,
@@ -1243,6 +1262,7 @@ export default {
         isTimeout: '',
         contractTimeoutStatus: '',
         contractTimeoutTime: '',
+        isRequireRegion: isRequireRegion,
       })
       this.isAddCount++
     },
@@ -1296,7 +1316,8 @@ export default {
         isEditor =
           this.tableData[index].contractState == '1' ||
           this.tableData[index].contractState == '3' ||
-          this.tableData[index].contractState == '4'
+          this.tableData[index].contractState == '4' ||
+          this.tableData[index].contractState == '5'
             ? 0
             : 1
       } else {
