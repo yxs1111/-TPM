@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-23 10:24:56
+ * @LastEditTime: 2022-06-27 11:47:41
 -->
 <template>
   <div class="MainContent">
@@ -176,10 +176,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="120" align="center" label="合同条款">
-        <div class="seeActivity" @click="showTermDetailDialog(row)">
+      <el-table-column  width="120" align="center" label="合同条款">
+        <template v-slot="scope">
+          <div class="seeActivity" @click="showTermDetailDialog(scope.row,scope.$index)">
           条款明细
-        </div>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column prop="remark" align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
@@ -535,6 +537,7 @@ export default {
           row.contractState == '4'
         ) {
           this.$message.info('该经销商已经提交，不能进行编辑操作')
+          sessionStorage.setItem("isEditor",`0-${index}`)
           return
         }
       }
@@ -547,11 +550,13 @@ export default {
       this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 1
       this.$forceUpdate()
+      sessionStorage.setItem("isEditor",`1-${index}`)
     },
     CancelEditorRow(index) {
       // this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 0
       this.tableData[index] = this.tempObj.tempInfo
+      sessionStorage.setItem("isEditor",`0-${index}`)
     },
     compareDate(date) {
       let currentDate = new Date()
@@ -977,7 +982,7 @@ export default {
       }
     },
     //打开条款明细弹窗
-    showTermDetailDialog({ ccId }) {
+    showTermDetailDialog({ ccId },index) {
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
         name: 'dealerTermDetail',
@@ -985,6 +990,7 @@ export default {
           ccId,
         },
       })
+      sessionStorage.setItem("EditorIndex",index)
       // this.$router.push(
       //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
       // )

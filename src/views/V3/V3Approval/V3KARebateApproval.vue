@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-24 08:53:45
+ * @LastEditTime: 2022-06-27 13:38:51
 -->
 <template>
   <div class="MainContent">
@@ -340,9 +340,9 @@
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.judgmentType=='pass'" src="@/assets/images/success.png" alt="">
-              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-              <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
               <span class="judgmentText">{{ row.judgmentType }}</span>
             </div>
           </el-tooltip>
@@ -432,9 +432,9 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='error'" src="@/assets/images/selectError.png" alt="">
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
                     <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>

@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-25 17:42:21
+ * @LastEditTime: 2022-06-27 11:05:29
 -->
 <template>
   <div class="MainContent">
@@ -16,14 +16,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.minePackage" placeholder="请选择" class="my-el-select">
+          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">费用科目:</span>
           <el-select v-model="filterObj.costAccount" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -222,7 +222,7 @@ export default {
       monthList: [],
       MinePackageList: [],
       tableData: [],
-      RegionList: [],
+      CostItemList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
@@ -255,6 +255,7 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getMinePackage()
+    this.getCostItemList()
   },
   methods: {
     // 获取表格数据
@@ -323,10 +324,10 @@ export default {
           this.MinePackageList = res.data
         })
     },
-    getRegionList() {
-      selectAPI.getRegionList().then((res) => {
+    getCostItemList() {
+      API.getCostItemList().then((res) => {
         if (res.code === 1000) {
-          this.RegionList = res.data
+          this.CostItemList = res.data
         }
       })
     },

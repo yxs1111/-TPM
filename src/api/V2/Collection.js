@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-06-25 13:30:38
+ * @LastEditTime: 2022-06-27 11:01:42
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -11,6 +11,10 @@ export default {
   //分页查询
   getPage(params) {
     return requestApi.request_get(this.url+'/getPage', params)
+  },
+  //费用科目下拉
+  getCostItemList(params) {
+    return requestApi.request_get('/cityplan/investSrVThree/getCostItemList', params)
   },
   delete(params) {
     return requestApi.request_post(this.url+'/deleteByIds  ', params)

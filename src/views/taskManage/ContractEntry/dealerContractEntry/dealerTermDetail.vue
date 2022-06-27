@@ -1,16 +1,16 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-27 10:14:51
+ * @LastEditTime: 2022-06-27 12:05:16
 -->
 <template>
   <div class="ContentDetail">
     <div class="TpmButtonBGWrap">
-      <div v-if="isOtherEditor" class="TpmButtonBG" @click="staging">
+      <div v-if="isOtherEditor&&isEditor" class="TpmButtonBG" @click="staging">
         <svg-icon icon-class="save" style="font-size: 24px;" />
         <span class="text">暂存</span>
       </div>
-      <div v-if="isOtherEditor" class="TpmButtonBG" @click="submit(0)">
+      <div v-if="isOtherEditor&&isEditor" class="TpmButtonBG" @click="submit(0)">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
@@ -197,7 +197,7 @@
                         <el-option v-for="(item, index) in CustomerDeductionsAndPayType" :key="index" :label="item.CustomerDeduction+'%'" :value="index" />
                       </el-select>
                     </div>
-                    <div v-else>
+                    <div v-if="!scope.row.dealerList[dealerIndex].isEditor&&scope.row.dealerList[dealerIndex].customerTaxPoint!==''">
                       {{CustomerDeductionsAndPayType[scope.row.dealerList[dealerIndex].customerTaxPoint].CustomerDeduction}}%
                       <!-- {{TaxDeductionsPoint[Number(scope.row.dealerList[dealerIndex].customerTaxPoint)]}} -->
                     </div>
@@ -263,6 +263,7 @@ export default {
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       isMakeUp: 0, //是否补录
       isOtherEditor: 0, //是否有可编辑
+      isEditor:0,
     }
   },
 
@@ -272,6 +273,14 @@ export default {
       sessionStorage.setItem('ccId', this.$route.query.ccId)
     } else {
       this.ccId = sessionStorage.getItem('ccId')
+    }
+    if(sessionStorage.getItem("isEditor")!='') {
+      let editorIndex=Number(sessionStorage.getItem("EditorIndex"))
+      let editorStrList=sessionStorage.getItem("isEditor").split('-')
+      if(editorIndex==Number(editorStrList[1])) {
+        this.isEditor=Number(editorStrList[0])
+      }
+      // this.isEditor=Number(sessionStorage.getItem("isEditor"))
     }
     this.getContractItemList()
   },
@@ -471,12 +480,12 @@ export default {
                       variableItem.payType == ''
                         ? null
                         : Number(variableItem.payType), //支付方式
-                    isEditor:
-                      variableItem.contractState == '1' ||
-                      variableItem.contractState == '3' ||
-                      variableItem.contractState == '4'
-                        ? 0
-                        : 1,
+                    isEditor:this.isEditor
+                      // (variableItem.contractState == '1' ||
+                      // variableItem.contractState == '3' ||
+                      // variableItem.contractState == '4')&&!this.isEditor
+                      //   ? 0
+                      //   : 1,
                   })
                 }
               })
@@ -501,12 +510,12 @@ export default {
                   distVariableObj.payType == ''
                     ? null
                     : Number(distVariableObj.payType), //支付方式
-                isEditor:
-                  distVariableObj.contractState == '1' ||
-                  distVariableObj.contractState == '3' ||
-                  distVariableObj.contractState == '4'
-                    ? 0
-                    : 1,
+                isEditor:this.isEditor
+                  // (distVariableObj.contractState == '1' ||
+                  // distVariableObj.contractState == '3' ||
+                  // distVariableObj.contractState == '4')&&!this.isEditor
+                  //   ? 0
+                  //   : 1,
               })
             }
             //设置 variable 汇总行
@@ -637,12 +646,12 @@ export default {
                       fixedItem.payType == ''
                         ? null
                         : Number(fixedItem.payType), //支付方式
-                    isEditor:
-                      fixedItem.contractState == '1' ||
-                      fixedItem.contractState == '3' ||
-                      fixedItem.contractState == '4'
-                        ? 0
-                        : 1,
+                    isEditor: this.isEditor
+                      // (fixedItem.contractState == '1' ||
+                      // fixedItem.contractState == '3' ||
+                      // fixedItem.contractState == '4')&&!this.isEditor
+                      //   ? 0
+                      //   : 1,
                   })
                 }
               })
@@ -665,12 +674,12 @@ export default {
                 ), //客户扣款税点
                 payType:
                   distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
-                isEditor:
-                  distFixObj.contractState == '1' ||
-                  distFixObj.contractState == '3' ||
-                  distFixObj.contractState == '4'
-                    ? 0
-                    : 1,
+                isEditor: this.isEditor
+                  // (distFixObj.contractState == '1' ||
+                  // distFixObj.contractState == '3' ||
+                  // distFixObj.contractState == '4')&&!this.isEditor
+                  //   ? 0
+                  //   : 1,
               })
             }
             FixedTotalObj.dealerList.push({
