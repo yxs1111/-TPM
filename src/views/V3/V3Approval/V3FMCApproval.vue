@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 21:10:02
+ * @LastEditTime: 2022-06-27 21:34:32
 -->
 <template>
   <div class="MainContent">
@@ -308,7 +308,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formateHundredNumber(scope.row.priceDifference*100) }}
+            {{ formateHundredNumber(scope.row.priceDifference) }}
           </div>
         </template>
       </el-table-column>
@@ -318,7 +318,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formateHundredNumber(scope.row.peopleNumDifference*100) }}
+            {{ formateHundredNumber(scope.row.peopleNumDifference) }}
           </div>
         </template>
       </el-table-column>
@@ -579,7 +579,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formateHundredNumber(scope.row.priceDifference*100) }}
+                  {{ formateHundredNumber(scope.row.priceDifference) }}
                 </div>
               </template>
             </el-table-column>
@@ -589,7 +589,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formateHundredNumber(scope.row.peopleNumDifference*100) }}
+                  {{ formateHundredNumber(scope.row.peopleNumDifference) }}
                 </div>
               </template>
             </el-table-column>

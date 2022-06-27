@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 21:19:49
+ * @LastEditTime: 2022-06-27 21:41:32
 -->
 <template>
   <div class="MainContent">
@@ -256,7 +256,7 @@
           <div class="space">
           </div>
           <div class="TableWrap_dealer">
-            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="500" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+            <el-table :data="addDialogDealerList" ref="dealerTable" :max-height="maxheightTerm" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
@@ -431,6 +431,7 @@ export default {
     window.onresize = () => {
       return (() => {
         this.maxheight = window.innerHeight - 420
+        this.maxheightTerm = window.innerHeight - 320
       })()
     }
     // this.getTableData()
@@ -833,7 +834,7 @@ export default {
     //新增数据 --弹窗展示
     showAddDialog() {
       this.isAddDialogVisible = true
-      this.$refs.termDialog.$el.firstChild.style.height = '95%'
+      this.$refs.termDialog.$el.firstChild.style.minHeight = '500px'
     },
     //新增经销商 -- 获取客户数据
     getDetail() {
