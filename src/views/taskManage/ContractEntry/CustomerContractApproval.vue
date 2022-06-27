@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 18:16:50
+ * @LastEditTime: 2022-06-27 22:27:24
 -->
 <template>
   <div class="MainContent">
@@ -250,7 +250,7 @@
             <el-table-column prop="remark" align="center" label="描述">
             </el-table-column>
           </el-table>  
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="250" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -692,7 +692,7 @@ export default {
     showTermsDetail(index) {
       this.customerId = this.tableData[index].id
       // 设置屏幕高度90%
-      // this.$refs.termDialog.$el.firstChild.style.height = '100%'
+      this.$refs.termDialog.$el.firstChild.style.height = '98%'
       //草稿、被拒绝可以编辑，其他仅查看
       API.findOneSaveDetail({
         id: this.customerId,
@@ -1051,7 +1051,7 @@ export default {
 <style lang="less">
 .termDialog {
   .el-dialog {
-    margin-top: 5vh !important;
+    margin-top: 1vh !important;
     top: 50%;
     transform: translateY(-50%);
     .el-dialog__body {
