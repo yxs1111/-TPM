@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-22 12:05:48
+ * @LastEditTime: 2022-06-27 16:37:54
 -->
 <template>
   <div class="MainContent">
@@ -209,6 +209,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
+  FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
@@ -317,11 +318,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      const money = num * 1
-      return money.toLocaleString('zh', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1

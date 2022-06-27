@@ -75,37 +75,37 @@
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划销量（CTN）">
-        {{ FormateNum((row.planSales*1).toFixed(2)) }}
+        {{ FormateNum(row.planSales) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planPriceAve" label="V1计划均价（RMB/Tin）">
-        {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
+        {{ FormateNum(row.planPriceAve) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
-        {{ FormateNum((row.planCost*1).toFixed(2)) }}
+        {{ FormateNum(row.planCost) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测销量（CTN）">
-        {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+        {{ FormateNum(row.forecastSales) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedPriceAve" label="V2调整后均价（RMB/Tin）">
-        {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
+        {{ FormateNum(row.adjustedPriceAve) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
-        {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+        {{ FormateNum(row.adjustedCost) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
-        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        {{ FormateNum(row.actualSales) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationPriceAve" label="V3谈判前均价（RMB/Tin）">
-        {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
+        {{ FormateNum(row.beforeNegotiationPriceAve) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
-        {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+        {{ FormateNum(row.beforeNegotiationCost) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationPriceAve" label="V3谈判后均价（RMB/Tin）">
-        {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
+        {{ FormateNum(row.afterNegotiationPriceAve) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="afterNegotiationCost" label="V3谈判后费用（RMB）">
-        {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+        {{ FormateNum(row.afterNegotiationCost) }}
       </el-table-column>
       <el-table-column width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
         <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>
@@ -114,7 +114,7 @@
         <template slot-scope="scope">{{ (scope.row.salesDifference*1).toFixed(2) }}</template>
       </el-table-column>
       <el-table-column v-slot="{row}" width="120" align="right" prop="costDifference" label="费用差值">
-        {{ FormateNum((row.costDifference*1).toFixed(2)) }}
+        {{ FormateNum(row.costDifference) }}
       </el-table-column>
       <el-table-column width="160" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
@@ -198,37 +198,37 @@
           <vxe-table-column width="320" align="center" field="distributorName" title="经销商" />
           <vxe-table-column width="220" align="center" field="regionName" title="区域" />
           <vxe-table-column v-slot="{row}" width="220" align="right" field="planSales" title="V1计划销量（CTN）">
-            {{ FormateNum((row.planSales*1).toFixed(2)) }}
+            {{ FormateNum(row.planSales) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="planPriceAve" title="V1计划均价（RMB/Tin）">
-            {{ FormateNum((row.planPriceAve*1).toFixed(2)) }}
+            {{ FormateNum(row.planPriceAve) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="planCost" title="V1计划费用（RMB）">
-            {{ FormateNum((row.planCost*1).toFixed(2)) }}
+            {{ FormateNum(row.planCost) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="forecastSales" title="V2预测销量（CTN）">
-            {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+            {{ FormateNum(row.forecastSales) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="adjustedPriceAve" title="V2调整后均价（RMB/Tin）">
-            {{ FormateNum((row.adjustedPriceAve*1).toFixed(2)) }}
+            {{ FormateNum(row.adjustedPriceAve) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="adjustedCost" title="V2调整后费用（RMB）">
-            {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+            {{ FormateNum(row.adjustedCost) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="actualSales" title="V3实际销量（CTN）">
-            {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+            {{ FormateNum(row.actualSales) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationPriceAve" title="V3谈判前均价（RMB/Tin）">
-            {{ FormateNum((row.beforeNegotiationPriceAve*1).toFixed(2)) }}
+            {{ FormateNum(row.beforeNegotiationPriceAve) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationCost" title="V3谈判前费用（RMB）">
-            {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+            {{ FormateNum(row.beforeNegotiationCost) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationPriceAve" title="V3谈判后均价（RMB/Tin）">
-            {{ FormateNum((row.afterNegotiationPriceAve*1).toFixed(2)) }}
+            {{ FormateNum(row.afterNegotiationPriceAve) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="afterNegotiationCost" title="V3谈判后费用（RMB）">
-            {{ FormateNum((row.afterNegotiationCost*1).toFixed(2)) }}
+            {{ FormateNum(row.afterNegotiationCost) }}
           </vxe-table-column>
           <vxe-table-column width="160" align="right" field="avePriceDifference" title="均价差值（%）">
             <template slot-scope="scope">{{ (scope.row.avePriceDifference*1).toFixed(2) }}</template>

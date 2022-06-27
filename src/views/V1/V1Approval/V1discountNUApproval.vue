@@ -70,6 +70,7 @@ import {
   getTextMap,
   getHeightHaveTab,
   messageObj,
+  FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/v1.js'
@@ -215,9 +216,7 @@ export default {
         .catch()
     },
     getPlanCost(num) {
-      const money = Number(num.toFixed(2))
-      // let money=num.toLocaleString() //百分数
-      return money.toLocaleString() // 二位小数
+      FormateThousandNum(num)
     },
     search() {
       this.getTableData()

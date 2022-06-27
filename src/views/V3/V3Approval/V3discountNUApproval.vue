@@ -63,31 +63,31 @@
       <el-table-column width="320" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="220" align="center" prop="regionName" label="区域" />
       <el-table-column v-slot="{row}" width="220" align="right" prop="planSales" label="V1计划总销量（CTN）">
-        {{ FormateNum((row.planSales*1).toFixed(2)) }}
+        {{ FormateNum(row.planSales) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planNewUserNum" label="目标新客数量">
-        {{ FormateNum((row.planNewUserNum*1).toFixed(2)) }}
+        {{ FormateNum(row.planNewUserNum) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="planCost" label="V1计划费用（RMB）">
-        {{ FormateNum((row.planCost*1).toFixed(2)) }}
+        {{ FormateNum(row.planCost) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="forecastSales" label="V2预测总销量(CTN)">
-        {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+        {{ FormateNum(row.forecastSales) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedNewUserNum" label="目标新客数量">
-        {{ FormateNum((row.adjustedNewUserNum*1).toFixed(2)) }}
+        {{ FormateNum(row.adjustedNewUserNum) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedCost" label="V2调整后费用（RMB）">
-        {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+        {{ FormateNum(row.adjustedCost) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualSales" label="V3实际销量（CTN）">
-        {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+        {{ FormateNum(row.actualSales) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="actualNewUserNum" label="实际新客数量">
-        {{ FormateNum((row.actualNewUserNum*1).toFixed(2)) }}
+        {{ FormateNum(row.actualNewUserNum) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="beforeNegotiationCost" label="V3谈判前费用（RMB）">
-        {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+        {{ FormateNum(row.beforeNegotiationCost) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="160" align="right" prop="avePriceDifference" label="均价差值（%）">
         {{ (row.avePriceDifference*1).toFixed(2) }}
@@ -96,7 +96,7 @@
         {{ (row.salesDifference*1).toFixed(2) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="150" align="right" prop="costDifference" label="费用差值(RMB)">
-        {{ FormateNum((row.costDifference*1).toFixed(2)) }}
+        {{ FormateNum(row.costDifference) }}
       </el-table-column>
       <el-table-column width="160" align="center" prop="judgmentType" label="系统判定">
         <template slot-scope="{row}">
@@ -181,31 +181,31 @@
           <vxe-table-column width="320" align="center" field="distributorName" title="经销商" />
           <vxe-table-column width="220" align="center" field="regionName" title="区域" />
           <vxe-table-column v-slot="{row}" width="220" align="right" field="planSales" title="V1计划总销量（CTN）">
-            {{ FormateNum((row.planSales*1).toFixed(2)) }}
+            {{ FormateNum(row.planSales) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="planNewUserNum" title="目标新客数量">
-            {{ FormateNum((row.planNewUserNum*1).toFixed(2)) }}
+            {{ FormateNum(row.planNewUserNum) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="planCost" title="V1计划费用（RMB）">
-            {{ FormateNum((row.planCost*1).toFixed(2)) }}
+            {{ FormateNum(row.planCost) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="forecastSales" title="V2预测总销量(CTN)">
-            {{ FormateNum((row.forecastSales*1).toFixed(2)) }}
+            {{ FormateNum(row.forecastSales) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="adjustedNewUserNum" title="目标新客数量">
-            {{ FormateNum((row.adjustedNewUserNum*1).toFixed(2)) }}
+            {{ FormateNum(row.adjustedNewUserNum) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="adjustedCost" title="V2调整后费用（RMB）">
-            {{ FormateNum((row.adjustedCost*1).toFixed(2)) }}
+            {{ FormateNum(row.adjustedCost) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="actualSales" title="V3实际销量（CTN）">
-            {{ FormateNum((row.actualSales*1).toFixed(2)) }}
+            {{ FormateNum(row.actualSales) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="actualNewUserNum" title="实际新客数量">
-            {{ FormateNum((row.actualNewUserNum*1).toFixed(2)) }}
+            {{ FormateNum(row.actualNewUserNum) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="220" align="right" field="beforeNegotiationCost" title="V3谈判前费用（RMB）">
-            {{ FormateNum((row.beforeNegotiationCost*1).toFixed(2)) }}
+            {{ FormateNum(row.beforeNegotiationCost) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="160" align="right" field="avePriceDifference" title="均价差值（%）">
             {{ (row.avePriceDifference*1).toFixed(2) }}
@@ -214,7 +214,7 @@
             {{ (row.salesDifference*1).toFixed(2) }}
           </vxe-table-column>
           <vxe-table-column v-slot="{row}" width="150" align="right" field="costDifference" title="费用差值(RMB)">
-            {{ FormateNum((row.costDifference*1).toFixed(2)) }}
+            {{ FormateNum(row.costDifference) }}
           </vxe-table-column>
           <vxe-table-column width="120" align="center" field="judgmentType" title="系统判定" />
           <vxe-table-column width="280" align="center" field="judgmentContent" title="系统判定内容" />

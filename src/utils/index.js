@@ -550,12 +550,15 @@ export const dynamicColumnCost = [
 ]
 
 export function FormateThousandNum(num) {
-  //千分位分隔符+两位小数
-  const money = num * 1
-  return money.toLocaleString('zh', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  })
+  if(num===null) {
+    return ''
+  } else {
+    const money = num * 1
+    return money.toLocaleString('zh', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  }
 }
 
 export const exportDefault = 'export default '

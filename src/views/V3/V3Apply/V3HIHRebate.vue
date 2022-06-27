@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 13:36:45
+ * @LastEditTime: 2022-06-27 16:49:29
 -->
 <template>
   <div class="MainContent">
@@ -680,6 +680,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
+  FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V3/contract'
@@ -860,11 +861,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      const money = num * 1
-      return money.toLocaleString('zh', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1

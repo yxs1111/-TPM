@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 10:42:12
+ * @LastEditTime: 2022-06-27 16:10:54
 -->
 <template>
   <div class="MainContent">
@@ -653,6 +653,7 @@ export default {
         tempInfo: null,
       },
       isEditor: 0,
+      editorIndex: 0,
       isShowPopover: false,
       selectDate: '',
       pickerOptions: {
@@ -1043,19 +1044,11 @@ export default {
     },
     //编辑行数据
     editorRow(index, { isNewData, systemDate }) {
-      //判断当前月份是否处于系统生效开始时间，若处于则不可以删除,若不处于系统生效开始时间随便删，不受状态影响
-      let isDeleteFlag = this.compareDate(systemDate[0])
-      if (!isDeleteFlag) {
-        //已进入汇算（大于等于当前月）
-        if (
-          this.tableData[index].contractState == '1' ||
-          this.tableData[index].contractState == '3' ||
-          this.tableData[index].contractState == '4' ||
-          this.tableData[index].contractState == '5'
-        ) {
-          this.$message.info('该合同不能进行编辑操作')
-          return
-        }
+      //编辑状态：草稿、被拒绝
+      if(this.tableData[index].contractState !== '0'&&this.tableData[index].contractState !== '2') {
+        this.isEditor=0
+        this.$message.info('该合同不能进行编辑操作')
+        return 
       }
       if (this.tempObj.tempInfo && !isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
@@ -1073,6 +1066,8 @@ export default {
         }
       })
       this.tableData[index].isEditor = 1
+      this.isEditor=1 //可以编辑弹窗
+      this.editorIndex=index
       this.$forceUpdate()
     },
     CancelEditorRow(index) {
@@ -1098,16 +1093,10 @@ export default {
     deleteRow(row, index) {
       //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不受状态影响
       let isDeleteFlag = this.compareDate(row.systemDate[0])
-      if (!isDeleteFlag) {
-        if (
-          row.contractState == '1' ||
-          row.contractState == '3' ||
-          row.contractState == '4' ||
-          row.contractState == '5'
-        ) {
-          this.$message.info('该合同不能进行编辑操作')
-          return
-        }
+      //允许删除：草稿、被拒绝、通过（未汇算）
+      if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
+        this.$message.info('该合同不能进行删除操作')
+        return
       }
       //删除新增的
       if (row.isNewData) {
@@ -1309,21 +1298,6 @@ export default {
     //条款明细--弹窗展示
     showTermsDetail(index) {
       this.customerId = this.tableData[index].id
-      //判断当前月份是否处于系统生效开始时间，若不处于可以修改，不受状态影响
-      let isEditorFlag = this.compareDate(this.tableData[index].systemDate[0])
-      let isEditor
-      if (!isEditorFlag) {
-        isEditor =
-          this.tableData[index].contractState == '1' ||
-          this.tableData[index].contractState == '3' ||
-          this.tableData[index].contractState == '4' ||
-          this.tableData[index].contractState == '5'
-            ? 0
-            : 1
-      } else {
-        isEditor = 1
-      }
-      this.isEditor = isEditor
       if (this.tableData[index].isNewData) {
         this.$message.info('该数据为新增数据,请选择其它数据')
       } else {
@@ -1342,6 +1316,7 @@ export default {
             let variableListOrigin = this.termInfo.variable
             let variableList = []
             //获取total +variable total
+            let isEditor=this.isEditor&&index==this.editorIndex
             variableListOrigin.forEach((item) => {
               let obj = {
                 id: item.id,

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 08:49:20
+ * @LastEditTime: 2022-06-27 16:38:31
 -->
 <template>
   <div class="MainContent">
@@ -559,6 +559,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
+  FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/RoadShow'
@@ -715,15 +716,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      if(num===null) {
-        return ''
-      } else {
-        const money = num * 1
-        return money.toLocaleString('zh', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-      }
+      FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1

@@ -92,10 +92,10 @@
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
       <el-table-column v-slot="{row}" width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）">
-        {{ FormateNum((row.systemRecommendedVol*1).toFixed(2)) }}
+        {{ FormateNum(row.systemRecommendedVol) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）">
-        {{ FormateNum((row.adjustedVol*1).toFixed(2)) }}
+        {{ FormateNum(row.adjustedVol) }}
       </el-table-column>
       <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
       <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>

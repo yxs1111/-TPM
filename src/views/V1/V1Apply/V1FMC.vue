@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-21 16:23:15
+ * @LastEditTime: 2022-06-27 16:57:08
 -->
 <template>
   <div class="MainContent">
@@ -233,6 +233,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
+  FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/FMC'
@@ -392,11 +393,7 @@ export default {
     },
     //千分位分隔符+两位小数
     FormatNum(num) {
-      const money = num * 1
-      return money.toLocaleString('zh', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1

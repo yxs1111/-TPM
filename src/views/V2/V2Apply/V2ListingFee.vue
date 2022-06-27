@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-22 12:01:59
+ * @LastEditTime: 2022-06-27 16:38:10
 -->
 <template>
   <div class="MainContent">
@@ -407,6 +407,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
+  FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/ListingFee'
@@ -599,11 +600,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      const money = num * 1
-      return money.toLocaleString('zh', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })
+      FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1
