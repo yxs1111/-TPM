@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:13:29
+ * @LastEditTime: 2022-06-27 21:07:56
 -->
 <template>
   <div class="MainContent">
@@ -278,7 +278,8 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.priceDifference*100) }}
+            {{formateHundredNumber(scope.row.priceDifference)}}
+            <!-- {{ formatNum(scope.row.priceDifference*100) }} -->
           </div>
         </template>
       </el-table-column>
@@ -288,7 +289,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.peopleNumDifference*100) }}
+            {{ formateHundredNumber(scope.row.peopleNumDifference) }}
           </div>
         </template>
       </el-table-column>
@@ -519,7 +520,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.priceDifference*100) }}
+                  {{ formateHundredNumber(scope.row.priceDifference) }}
                 </div>
               </template>
             </el-table-column>
@@ -529,7 +530,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.peopleNumDifference*100) }}
+                  {{ formateHundredNumber(scope.row.peopleNumDifference) }}
                 </div>
               </template>
             </el-table-column>
@@ -736,6 +737,17 @@ export default {
     //千分位分隔符+两位小数
     formatNum(num) {
        return FormateThousandNum(num)
+    },
+    formateHundredNumber(num) {
+      if(num===null||num==="null") {
+        return ''
+      } else {
+        const money = num * 100
+        return money.toLocaleString('zh', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      }
     },
     search() {
       this.pageNum = 1

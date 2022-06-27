@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:14:25
+ * @LastEditTime: 2022-06-27 20:56:47
 -->
 <template>
   <div class="MainContent">
@@ -457,7 +457,7 @@
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="240" align="center" prop="minePackageName" label="Mine Package" />

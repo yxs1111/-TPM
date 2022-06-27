@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 20:25:27
+ * @LastEditTime: 2022-06-27 21:19:49
 -->
 <template>
   <div class="MainContent">
@@ -207,7 +207,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 新增 -->
-    <el-dialog width="95%" v-elDragDialog class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
+    <el-dialog width="95%" ref="termDialog" class="termDialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
       <div class="dialogContent">
         <div class="termInfo">
           <div class="selectCustomer">
@@ -256,7 +256,7 @@
           <div class="space">
           </div>
           <div class="TableWrap_dealer">
-            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="500" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
@@ -364,6 +364,7 @@ export default {
         state: '',
       },
       maxheight: getContractEntry(),
+      maxheightTerm:'',
       tableData: [],
       editMaxTargetSale: 0, //修改可填最大值
       editIsCollection: 0, //编辑--判断是否补录 --是否跳过验证
@@ -832,6 +833,7 @@ export default {
     //新增数据 --弹窗展示
     showAddDialog() {
       this.isAddDialogVisible = true
+      this.$refs.termDialog.$el.firstChild.style.height = '95%'
     },
     //新增经销商 -- 获取客户数据
     getDetail() {
@@ -1218,6 +1220,98 @@ export default {
 }
 </style>
 <style lang="less">
+.termDialog {
+  .el-dialog {
+    margin-top: 5vh !important;
+    top: 50%;
+    transform: translateY(-50%);
+    .el-dialog__body {
+      padding: 20px 20px !important;
+    }
+  }
+  .el-dialog__header {
+    height: 50px;
+    padding: 0 0 0 20px;
+    background-color: #4192d3;
+  }
+  .el-dialog__title {
+    font-size: 16px;
+    font-family: Source Han Sans CN Light;
+    font-weight: bold;
+    color: #fff;
+    line-height: 50px;
+  }
+  .el-dialog__headerbtn {
+    top: 16px;
+    .el-dialog__close {
+      color: #fff;
+    }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    .el-button--default {
+      width: 122px;
+      height: 37px;
+      background: #ffffff;
+      border: 1px solid #4192d3;
+      border-radius: 5px;
+      color: #4192d3;
+    }
+    .el-button--primary {
+      width: 120px;
+      height: 37px;
+      background: #4192d3;
+      border-radius: 5px;
+      border: 1px solid #4192d3;
+      background-color: #4192d3;
+    }
+    .el-button + .el-button {
+      margin-left: 15px;
+    }
+  }
+  .el-downloadFileBar {
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .el-button--primary {
+      width: 122px;
+      height: 41px;
+      line-height: 41px;
+      border-radius: 8px;
+      margin-bottom: 0;
+      padding: 0;
+    }
+    .el-button--primary.is-plain:active {
+      background: #fff;
+      border-color: #4192d3;
+      color: #4192d3;
+    }
+    .el-button--primary.is-plain {
+      width: 122px;
+      background: #fff;
+      border-color: #4192d3;
+      color: #4192d3;
+    }
+  }
+  .tableWrap {
+    width: 100%;
+    max-height: 400px;
+    margin-top: 20px;
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #333333;
+  }
+}
+.termDialog .el-dialog__body {
+  padding: 10px 20px;
+}
 .contract_firstRow {
   background-color: #4192d3 !important;
   color: #fff;

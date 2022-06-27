@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:39:03
+ * @LastEditTime: 2022-06-27 21:18:28
 -->
 <template>
   <div class="MainContent">
@@ -375,6 +375,7 @@
                     <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
                     <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
                     <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
+                    <span class="judgmentText">{{ row.judgmentType }}</span>
                   </div>
                 </el-tooltip>
               </template>
