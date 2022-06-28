@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 22:29:10
+ * @LastEditTime: 2022-06-28 14:39:49
 -->
 <template>
   <div class="MainContent">
@@ -186,8 +186,8 @@
       <el-table-column prop="remark" align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.remark" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="scope.row.remark"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
+            </el-input> 
           </div>
           <div v-show="!scope.row.isEditor">
             {{scope.row.remark}}

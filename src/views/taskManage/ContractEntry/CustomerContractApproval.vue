@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-28 11:55:52
+ * @LastEditTime: 2022-06-28 14:41:17
 -->
 <template>
   <div class="MainContent">
@@ -109,7 +109,7 @@
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
           <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
-            <el-input v-model="scope.row.poApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.poApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-else>
@@ -120,7 +120,7 @@
       <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见">
         <template slot-scope="scope">
           <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
-            <el-input v-model="scope.row.finApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.finApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-else>

@@ -976,7 +976,14 @@ div:focus {
   height: 22px;
   cursor: pointer;
 }
+//input  输入框 type Number 样式修改--删除上调减少
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
+}
+//备注、描述填写
+.my-textArea {
+  textarea {
+    resize: none !important;
+  }
 }
