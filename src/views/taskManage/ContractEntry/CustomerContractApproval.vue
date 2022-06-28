@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-27 22:27:24
+ * @LastEditTime: 2022-06-28 11:55:52
 -->
 <template>
   <div class="MainContent">
@@ -644,11 +644,7 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState == '3' || row.contractState == '4') {
-        this.$message.info('该合同不能进行编辑操作')
-        return
-      }
-      if (!row.isCanSubmit) {
+      if (row.contractState != '1'||!row.isCanSubmit) {
         this.$message.info('该合同不能进行编辑操作')
         return
       }

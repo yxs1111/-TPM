@@ -440,7 +440,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesFMC.vue'),
                   meta: {
-                    title: 'splitRulesFMC',
+                    title: 'FMC',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
@@ -453,7 +453,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesRoadShow.vue'),
                   meta: {
-                    title: 'splitRulesRoadShow',
+                    title: 'RoadShow',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
@@ -466,7 +466,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
                   meta: {
-                    title: 'splitRulesListingFee',
+                    title: 'ListingFee',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
