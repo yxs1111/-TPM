@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-06-27 17:40:13
+ * @LastEditTime: 2022-06-29 08:29:43
 -->
 <!--
  * @Description: 
@@ -447,7 +447,6 @@
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
             <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
