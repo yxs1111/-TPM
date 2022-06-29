@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-28 14:34:42
+ * @LastEditTime: 2022-06-29 13:45:16
 -->
 <template>
   <div class="MainContent">
@@ -717,6 +717,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
+      this.isEditor=0 //编辑弹窗
       API.getPage({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -1071,6 +1072,7 @@ export default {
       this.$forceUpdate()
     },
     CancelEditorRow(index) {
+      this.isEditor=0 //编辑弹窗
       // this.tableData.forEach((item) => (item.isEditor = 0))
       if (this.tableData[index].isNewData) {
         //新增的不能取消编辑，只有删除
@@ -1563,7 +1565,7 @@ export default {
       this.TotalData.totalCost = 0
       this.customerId = 0
       this.isTermsDetailVisible = false
-      this.isEditor=0 //编辑弹窗
+      // this.isEditor=0 //编辑弹窗
     },
     //新增条款--variable
     addNewRowToVariable() {
