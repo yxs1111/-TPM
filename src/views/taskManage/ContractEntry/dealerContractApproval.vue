@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-28 14:35:49
+ * @LastEditTime: 2022-06-29 15:46:34
 -->
 <template>
   <div class="MainContent">
@@ -70,6 +70,8 @@
             </div>
           </div>
         </template>
+      </el-table-column>
+      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="180" label="客户名称">
         <template slot-scope="scope">

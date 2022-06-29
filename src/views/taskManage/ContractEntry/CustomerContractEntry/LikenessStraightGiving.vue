@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-29 13:46:25
+ * @LastEditTime: 2022-06-29 15:45:18
 -->
 <template>
   <div class="MainContent">
@@ -89,6 +89,8 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      </el-table-column>
       <el-table-column prop="customerMdmCode" fixed align="center" width="220" label="客户名称">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
@@ -101,7 +103,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="regionCode" fixed align="center" width="220" label="大区">
+      <el-table-column prop="regionCode"  align="center" width="220" label="大区">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.regionCode" :disabled="scope.row.isRequireRegion==1?false:true" class="my-el-input" filterable clearable placeholder="请选择">
