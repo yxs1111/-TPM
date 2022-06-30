@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-30 14:59:42
+ * @LastEditTime: 2022-06-30 17:26:21
 -->
 <template>
   <div class="MainContent">
@@ -125,7 +125,7 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
               range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @blur="changeContractDate(scope.row)">
             </el-date-picker>
           </div>
@@ -491,6 +491,11 @@ export default {
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
+          if(item.contractState==='2') {
+            item.isRefused=1
+          } else {
+            item.isRefused=0
+          }
           item.isEditor = 0
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
