@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-30 09:00:08
+ * @LastEditTime: 2022-06-30 16:58:18
 -->
 <template>
   <div class="MainContent">
@@ -94,7 +94,7 @@
       <el-table-column prop="customerMdmCode" fixed align="center" width="220" label="客户名称">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.customerMdmCode" class="my-el-input" @change="changeCustomer(scope.row)" filterable clearable placeholder="请选择">
+            <el-select v-model="scope.row.customerMdmCode" :disabled="scope.row.isRefused==1?true:false" class="my-el-input" @change="changeCustomer(scope.row)" filterable clearable placeholder="请选择">
               <el-option v-for="item,index in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
             </el-select>
           </div>
@@ -130,7 +130,7 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
               range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
@@ -735,6 +735,11 @@ export default {
         list.forEach((item) => {
           item.isEditor = 0
           item.isNewData = 0
+          if(item.contractState==='2') {
+            item.isRefused=1
+          } else {
+            item.isRefused=0
+          }
           // item.regionCode = ''
           // item.regionName = ''
           // item.earlyExpireDate =item.earlyExpireDate!=''
