@@ -1,7 +1,7 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-06-29 09:39:38
+ * @LastEditTime: 2022-06-30 10:11:49
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -33,6 +33,15 @@ export default {
   downloadTemplate(params) {
     return request({
       url: this.V2Url+'/downloadTemplate',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //导出错误
+  exportErrorMessage(params) {
+    return request({
+      url: this.V2Url+'/exportErrorMessage',
       method: 'get',
       params: params,
       responseType: 'blob'

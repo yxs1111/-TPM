@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-30 09:10:30
+ * @LastEditTime: 2022-06-30 10:11:57
 -->
 <template>
   <div class="MainContent">
@@ -468,7 +468,7 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.downloadTemplate({
+        API.exportErrorMessage({
           yearAndMonth: this.filterObj.month,
           version: 'V3',
         }).then((res) => {
