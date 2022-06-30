@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-29 15:46:12
+ * @LastEditTime: 2022-06-30 14:59:42
 -->
 <template>
   <div class="MainContent">
@@ -870,7 +870,7 @@ export default {
             this.addDialog.nowTargetSale += item.saleAmount
           })
           let flag = distList.findIndex((item) => {
-            return item.contractState == '3' || item.contractState == '4'
+            return item.contractState == '3' 
           })
           //是否补录，补录状态判断
           this.addDialog.isCollection = flag === -1 ? 0 : 1

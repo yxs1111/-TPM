@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-06-29 15:15:47
+ * @LastEditTime: 2022-06-30 14:53:18
 -->
 <template>
   <div class="dashboard-container">
@@ -260,7 +260,7 @@
                       </div>
 
                     </div>
-                    <div class="NU" v-if="item.minePackageName=='Listing审批流程'">
+                    <div class="NU" v-if="item.minePackageName=='Listing fee'">
                       <div class="PointTitle">Listing-{{item.channelCode}}</div>
                       <div class="NuPoint">
                         <div class="V1">
