@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-30 10:11:57
+ * @LastEditTime: 2022-06-30 13:26:05
 -->
 <template>
   <div class="MainContent">
@@ -420,7 +420,7 @@ export default {
           } else {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
-            this.saveBtn = response.data[0].judgmentType !== 'Error'
+            this.saveBtn = response.data[0].systemJudgment !== 'Error'
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -435,21 +435,6 @@ export default {
       this.ImportData = []
       this.saveBtn = false
       this.isCheck = false
-    },
-    // 校验数据
-    checkImport() {
-      API.exceptionCheck({
-        yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
-      }).then((response) => {
-        if (response.code == 1000) {
-          this.$message.success(this.messageMap.checkSuccess)
-          this.ImportData = response.data
-          this.saveBtn = response.data[0].judgmentType !== 'Error'
-        } else {
-          this.$message.info(this.messageMap.checkError)
-        }
-      })
     },
     // 确认导入
     confirmImport() {
