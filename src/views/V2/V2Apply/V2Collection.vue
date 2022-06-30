@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:12:47
+ * @LastEditTime: 2022-06-30 09:06:26
 -->
 <template>
   <div class="MainContent">
@@ -156,7 +156,7 @@
             </el-table-column>
             <el-table-column width="180" align="center" prop="costAccount" label="费用科目">
             </el-table-column>
-            <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+            <el-table-column width="120" align="center" prop="channelName" label="渠道">
             </el-table-column>
             <el-table-column width="220" align="center" prop="customerName" label="客户">
             </el-table-column>
@@ -469,17 +469,7 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.downExcelError({
-          yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          supplierCode: this.filterObj.supplierCode,
-          regionCode: this.filterObj.regionCode,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_RoadShow异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
+        this.downloadTemplate()
       } else {
         this.$message.info('异常数据为空!')
       }

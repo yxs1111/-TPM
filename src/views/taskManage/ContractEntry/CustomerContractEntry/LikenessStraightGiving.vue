@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-29 15:45:18
+ * @LastEditTime: 2022-06-30 09:00:38
 -->
 <template>
   <div class="MainContent">
@@ -931,7 +931,7 @@ export default {
           return
         }
       } else {
-        if (row.regionCode != '') {
+        if (row.regionCode) {
           this.$message.warning('该客户大区应为空')
           return
         }
@@ -1178,7 +1178,7 @@ export default {
               return
             }
           } else {
-            if (row.regionCode != '') {
+            if (row.regionCode) {
               this.$message.warning('该客户大区应为空')
               return
             }
