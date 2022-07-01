@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-30 16:56:01
+ * @LastEditTime: 2022-07-01 10:58:54
 -->
 <template>
   <div class="MainContent">
@@ -1052,18 +1052,18 @@ export default {
       })
     },
     //编辑行数据
-    editorRow(index, { isNewData, systemDate }) {
+    editorRow(index, row) {
       //编辑状态：草稿、被拒绝
       if(this.tableData[index].contractState !== '0'&&this.tableData[index].contractState !== '2') {
         this.isEditor=0
         this.$message.info('该合同不能进行编辑操作')
         return 
       }
-      if (this.tempObj.tempInfo && !isNewData) {
+      if (this.tempObj.tempInfo && !row.isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
       //不存新增的数据，新增没有取消编辑
-      if (!isNewData) {
+      if (!row.isNewData) {
         //存编辑之前的数据
         this.tempObj.rowIndex = index
         this.tempObj.tempInfo = { ...this.tableData[index] }
@@ -1074,6 +1074,7 @@ export default {
           item.isEditor = 0
         }
       })
+      this.changeCustomer(row)
       this.tableData[index].isEditor = 1
       this.isEditor=1 //可以编辑弹窗
       this.editorIndex=index
