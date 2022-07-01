@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-06-30 14:53:18
+ * @LastEditTime: 2022-07-01 17:06:51
 -->
 <template>
   <div class="dashboard-container">
@@ -156,7 +156,7 @@
                       </div>
 
                     </div>
-                    <div class="NU" v-if="item.minePackageName=='合同流程-hih rebate'">
+                    <div class="NU" v-if="item.minePackageName=='HIH rebate'">
                       <div class="PointTitle">HIH Rebate-{{item.channelCode}}</div>
                       <div class="NuPoint">
                         <div class="V1">
@@ -208,7 +208,7 @@
                       </div>
 
                     </div>
-                    <div class="NU" v-if="item.minePackageName=='合同流程-ka rebate'">
+                    <div class="NU" v-if="item.minePackageName=='KA rebate'">
                       <div class="PointTitle">KA Rebate-{{item.channelCode}}</div>
                       <div class="NuPoint">
                         <div class="V1">
