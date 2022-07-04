@@ -45,7 +45,7 @@
     </div>
     <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
       style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       <el-table-column fixed align="center" label="操作">
         <template slot-scope="{ row }">
           <div class="table_operation">
@@ -378,6 +378,10 @@ export default {
       }
     },
     editor(obj) {
+      if(!obj.state) {
+        this.$message.info("该数据已无效,不能编辑")
+        return
+      }
       this.isEditor = true
       this.dialogVisible = true
       this.ruleForm = {
@@ -473,6 +477,9 @@ export default {
         downloadFile(res, 'Package&部门匹配关系 -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
+    },
+    checkSelectable(row) {
+      return row.state === 1
     },
     handleSelectionChange(val) {
       this.checkArr = val
