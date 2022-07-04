@@ -112,7 +112,7 @@
           </el-form-item>
           <el-form-item label="Department">
             <el-select v-model="ruleForm.departmentName" @change="getDepartmentId" multiple class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="item,index in departmentList" :key="index" :label="item" :value="item" />
+              <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName" :value="item.departmentName" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -221,14 +221,20 @@ export default {
   },
   watch: {
     'ruleForm.costTypeIndex'() {
-      this.ruleForm.costType=this.costTypeList[this.ruleForm.costTypeIndex].costType
-      this.ruleForm.costTypeNumber=this.costTypeList[this.ruleForm.costTypeIndex].costTypeNumber
-      this.ruleForm.minePackage = ''
-      this.getMinePackageListDialog()
+      if(this.ruleForm.costTypeIndex!=='') {
+        this.ruleForm.costType=this.costTypeList[this.ruleForm.costTypeIndex].costType
+        this.ruleForm.costTypeNumber=this.costTypeList[this.ruleForm.costTypeIndex].costTypeNumber
+        this.ruleForm.minePackage = ''
+        this.getMinePackageListDialog()
+      }
+      
     },
     'ruleForm.minePackageIndex'() {
-      this.ruleForm.minePackage=this.minePackageList[this.ruleForm.minePackageIndex].costType
-      this.ruleForm.minePackageCode=this.minePackageList[this.ruleForm.minePackageIndex].costTypeNumber
+      if (this.ruleForm.minePackageIndex!=='') {
+        this.ruleForm.minePackage=this.minePackageList[this.ruleForm.minePackageIndex].costType
+        this.ruleForm.minePackageCode=this.minePackageList[this.ruleForm.minePackageIndex].costTypeNumber
+      }
+      
     },
   },
   computed: {},
@@ -326,15 +332,18 @@ export default {
       })
     },
     getDepartmentId() {
-      API.getDepartmentId({
-        departmentName: this.ruleForm.departmentName.join(','),
-      }).then((res) => {
-        if (res.code == 1000) {
-          if(res.data) {
-            this.ruleForm.departmentId=res.data
-          }
+      let departmentId='';
+      this.ruleForm.departmentName.forEach(item=>{
+        let index=this.departmentList.findIndex(department=>department.departmentName==item)
+        if(index!=-1) {
+          departmentId+=this.departmentList[index].departmentId+','
         }
       })
+      if(departmentId) {
+        this.ruleForm.departmentId=departmentId.slice(0,-1)
+      } else {
+        this.ruleForm.departmentId=''
+      }
     },
     add() {
       this.dialogVisible = true
@@ -359,6 +368,7 @@ export default {
         costTypeIndex: '',
         costType: '',
         costTypeNumber: '',
+        minePackageIndex: '',
         minePackage: '',
         minePackageCode: '',
         channelCode: '',
@@ -371,17 +381,24 @@ export default {
       this.isEditor = true
       this.dialogVisible = true
       this.ruleForm = {
-        costTypeIndex: '',
-        costType: '',
-        costTypeNumber: '',
-        minePackage: '',
-        minePackageCode: '',
-        channelCode: '',
-        zoneName: '',
-        departmentId: '',
-        departmentName: [],
+        costTypeIndex: this.getCostTypeIndex(obj.costType),
+        costType: obj.costType,
+        costTypeNumber: obj.costTypeNumber,
+        minePackage: obj.minePackage,
+        minePackageIndex: this.getMinePackageIndex(obj.minePackageCode),
+        minePackageCode: obj.minePackageCode,
+        channelCode: obj.channelName,
+        zoneName: obj.zoneName,
+        departmentId: obj.departmentId,
+        departmentName: obj.departmentName.split(','),
       }
       this.editorId = obj.id
+    },
+    getCostTypeIndex(costType) {
+      return this.costTypeList.findIndex(item=>item.costType==costType)
+    },
+    getMinePackageIndex(minePackageCode) {
+      return this.minePackageList.findIndex(item=>item.costTypeNumber==minePackageCode)
     },
     //提交form
     submitForm(formName) {
@@ -396,7 +413,7 @@ export default {
             channelName: this.ruleForm.channelCode,
             zoneName: this.ruleForm.zoneName,
             departmentId: this.ruleForm.departmentId,
-            departmentName: this.ruleForm.departmentName,
+            departmentName: this.ruleForm.departmentName.join(","),
           }).then((response) => {
             if (response.code === 1000) {
               this.$message.success(`${this.isEditor ? '修改' : '添加'}成功`)
