@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:15:28
+ * @LastEditTime: 2022-07-05 10:06:39
 -->
 <template>
   <div class="MainContent">
@@ -857,7 +857,7 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
+          if (!Array.isArray(response.data)||response.data.length===0) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.ImportData = response.data
