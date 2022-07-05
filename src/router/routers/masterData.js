@@ -491,7 +491,7 @@ export default function() {
         {
           path: '/contractItem',
           name: 'contractItem',
-          code: 'mdm_product_information',
+          code: 'ContractItem',
           component: () => import('@/views/master/contractItem/contractItem.vue'),
           meta: { title: 'Contract Item', icon: 'apply' },
         },
@@ -499,14 +499,14 @@ export default function() {
         {
           path: '/MatchingRelation',
           name: 'MatchingRelation',
-          code: 'MdOrganizationSupplier',
+          code: 'MatchingRelation',
           component: () => import('@/views/master/MatchingRelation.vue'),
           meta: { title: '大区（+区域）&供应商匹配关系', icon: 'apply' },
         },
         {
           path: '/pdMatchingRelationship',
           name: 'pdMatchingRelationship',
-          code: 'MdOrganizationSupplier',
+          code: 'pdMatchingRelationship',
           component: () => import('@/views/master/pdMatchingRelationship.vue'),
           meta: { title: 'Package&部门匹配关系', icon: 'apply' },
         },
