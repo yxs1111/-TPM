@@ -117,6 +117,8 @@ export default {
               Object.assign(record, { idea: variable.value })
             } else if (variable.name === 'approver') {
               Object.assign(record, { approver: variable.value })
+            } else if (variable.name === 'approvalUser') {
+              Object.assign(record, { assignee: variable.value })
             }
           })
         }
