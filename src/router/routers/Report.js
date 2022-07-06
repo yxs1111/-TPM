@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-06-20 16:43:27
+ * @LastEditTime: 2022-07-06 10:08:14
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -93,7 +93,7 @@ export default function() {
         },
         {
           path: '/AccrualReport',
-          code: 'resource-report-confirm',
+          code: 'resource-report-accrual',
           name: 'AccrualReport',
           component: () => import('@/views/Report/AccrualReport.vue'),
           meta: { title: 'Accrual报表', icon: 'approve' }

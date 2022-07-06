@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-04-29 10:39:18
+ * @LastEditTime: 2022-07-06 10:00:27
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -58,6 +58,19 @@ export default {
   //查询当前节点
   getTaskNode(params) {
     return requestApi.request_get(this.url + '/investCpV/getTaskNode', params)
+  },
+  //Accrual 报表
+  getAccrualReport(params) {
+    return requestApi.request_get(this.url + '/investReportAccrual/getPage', params)
+  },
+  //Accrual 报表--导出
+  exportAccrualReport(params) {
+    return request({
+      url: this.url + '/investReportAccrual/exportList',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
 }
 

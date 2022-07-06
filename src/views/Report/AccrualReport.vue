@@ -5,11 +5,11 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyy-MM" format="yyyy-MM">
           </el-date-picker>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData">
+        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData"  v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
@@ -25,20 +25,20 @@
         </template>
       </el-table-column>
       <el-table-column width="450" align="center" prop="cpId" label="CPID" />
-      <el-table-column width="180" align="center" prop="cpId" label="Legal Entity" />
-      <el-table-column width="180" align="center" prop="cpId" label="Expense Type" />
-      <el-table-column width="180" align="center" prop="cpId" label="Month(YYYY-MM)" />
-      <el-table-column width="180" align="center" prop="cpId" label="GL Account" />
-      <el-table-column width="180" align="center" prop="cpId" label="WBS" />
-      <el-table-column width="180" align="center" prop="cpId" label="Cost Center" />
-      <el-table-column width="180" align="center" prop="cpId" label="Profit Center" />
-      <el-table-column width="180" align="center" prop="cpId" label="IO" />
-      <el-table-column width="180" align="center" prop="cpId" label="Item Description" />
-      <el-table-column width="260" align="center" prop="cpId" label="Amount in CNY (exc. VAT)" />
-      <el-table-column width="180" align="center" prop="cpId" label="Vendor Name" />
-      <el-table-column width="280" align="center" prop="cpId" label="Event Start Date (mm/dd/yyyy)" />
-      <el-table-column width="220" align="center" prop="cpId" label="Purchase Order Number" />
-      <el-table-column width="320" align="center" prop="cpId" label="Expected Reversal Date (mm/dd/yyyy)" />
+      <el-table-column width="180" align="center" prop="legalEntity" label="Legal Entity" />
+      <el-table-column width="180" align="center" prop="expenseType" label="Expense Type" />
+      <el-table-column width="180" align="center" prop="month" label="Month(YYYY-MM)" />
+      <el-table-column width="180" align="center" prop="glAccount" label="GL Account" />
+      <el-table-column width="180" align="center" prop="wbsCode" label="WBS" />
+      <el-table-column width="180" align="center" prop="costCenter" label="Cost Center" />
+      <el-table-column width="180" align="center" prop="profitCenter" label="Profit Center" />
+      <el-table-column width="180" align="center" prop="ioCode" label="IO" />
+      <el-table-column width="180" align="center" prop="itemDescription" label="Item Description" />
+      <el-table-column width="260" align="center" prop="amountInCny" label="Amount in CNY (exc. VAT)" />
+      <el-table-column width="180" align="center" prop="vendorName" label="Vendor Name" />
+      <el-table-column width="280" align="center" prop="eventStartDate" label="Event Start Date (mm/dd/yyyy)" />
+      <el-table-column width="220" align="center" prop="purchaseOrderNumber" label="Purchase Order Number" />
+      <el-table-column width="320" align="center" prop="expectedReversalDate" label="Expected Reversal Date (mm/dd/yyyy)" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -98,10 +98,10 @@ export default {
         this.$message.info('请选择年月')
         this.tableData = []
       } else {
-        API.getSubstituteConfirmReport({
+        API.getAccrualReport({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          yearAndMonth: this.filterObj.yearAndMonth,
+          month: this.filterObj.yearAndMonth,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -116,8 +116,8 @@ export default {
     },
     //下载报表
     exportData() {
-      API.exportSubstituteConfirmReport({
-        yearAndMonth: this.filterObj.yearAndMonth,
+      API.exportAccrualReport({
+        month: this.filterObj.yearAndMonth,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         this.downloadFile(res, 'Accrual报表-' + timestamp + '.xlsx') //自定义Excel文件名
