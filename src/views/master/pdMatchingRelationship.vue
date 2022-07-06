@@ -87,13 +87,13 @@
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="el-form-row">
           <el-form-item label="Cost Type" prop="costType">
-            <el-select v-model="ruleForm.costTypeIndex" class="my-el-input" clearable filterable placeholder="请选择">
+            <el-select v-model="ruleForm.costTypeIndex" class="my-el-input" @change="changeCostTypeIndex" clearable filterable placeholder="请选择">
               <el-option v-for="item,index in costTypeList" :key="index" :label="item.costType" :value="index" />
             </el-select>
           </el-form-item>
           <el-form-item label="Mine Package" prop="minePackage">
             <el-select v-model="ruleForm.minePackageIndex" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="index" />
+              <el-option v-for="item,index in minePackageListDialog" :key="index" :label="item.costType" :value="index" />
             </el-select>
           </el-form-item>
           <el-form-item label="渠道">
@@ -157,6 +157,7 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       minePackageList: [],
+      minePackageListDialog: [],
       costTypeList: [],
       channelOptions: [],
       largeAreaList: [],
@@ -220,25 +221,33 @@ export default {
     this.getCostTypeList()
   },
   watch: {
-    'ruleForm.costTypeIndex'() {
-      if(this.ruleForm.costTypeIndex!=='') {
-        this.ruleForm.costType=this.costTypeList[this.ruleForm.costTypeIndex].costType
-        this.ruleForm.costTypeNumber=this.costTypeList[this.ruleForm.costTypeIndex].costTypeNumber
-        this.ruleForm.minePackage = ''
-        this.getMinePackageListDialog()
-      }
+    // 'ruleForm.costTypeIndex'() {
+    //   if(this.ruleForm.costTypeIndex!=='') {
+    //     this.ruleForm.costType=this.costTypeList[this.ruleForm.costTypeIndex].costType
+    //     this.ruleForm.costTypeNumber=this.costTypeList[this.ruleForm.costTypeIndex].costTypeNumber
+    //     // this.ruleForm.minePackageIndex = ''
+    //     this.getMinePackageListDialog()
+    //   }
       
-    },
+    // },
     'ruleForm.minePackageIndex'() {
-      if (this.ruleForm.minePackageIndex!=='') {
-        this.ruleForm.minePackage=this.minePackageList[this.ruleForm.minePackageIndex].costType
-        this.ruleForm.minePackageCode=this.minePackageList[this.ruleForm.minePackageIndex].costTypeNumber
+      if (this.ruleForm.minePackageIndex!==''&&this.minePackageListDialog.length) {
+        this.ruleForm.minePackage=this.minePackageListDialog[this.ruleForm.minePackageIndex].costType
+        this.ruleForm.minePackageCode=this.minePackageListDialog[this.ruleForm.minePackageIndex].costTypeNumber
       }
       
     },
   },
   computed: {},
   methods: {
+    changeCostTypeIndex() {
+      if(this.ruleForm.costTypeIndex!=='') {
+        this.ruleForm.costType=this.costTypeList[this.ruleForm.costTypeIndex].costType
+        this.ruleForm.costTypeNumber=this.costTypeList[this.ruleForm.costTypeIndex].costTypeNumber
+        // this.ruleForm.minePackageIndex = ''
+        this.getMinePackageListDialog()
+      }
+    },
     //获取表格数据
     getTableData() {
       this.tableData = []
@@ -249,6 +258,7 @@ export default {
         minePackage: this.filterObj.minePackage,
         channelName: this.filterObj.channelCode,
         departmentName: this.filterObj.department,
+        state: this.filterObj.state,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -267,12 +277,12 @@ export default {
         }
       })
     },
-    getMinePackageListDialog() {
-      selectAPI.queryMinePackageSelect({
+    async getMinePackageListDialog() {
+      await selectAPI.queryMinePackageSelect({
         parentId: this.ruleForm.costTypeNumber,
       }).then((res) => {
         if (res.code === 1000) {
-          this.minePackageList = res.data
+          this.minePackageListDialog = res.data
         }
       })
     },
@@ -376,8 +386,9 @@ export default {
         departmentId: '',
         departmentName: [],
       }
+      this.minePackageListDialog=[]
     },
-    editor(obj) {
+    async editor(obj) {
       if(!obj.state) {
         this.$message.info("该数据已无效,不能编辑")
         return
@@ -389,20 +400,22 @@ export default {
         costType: obj.costType,
         costTypeNumber: obj.costTypeNumber,
         minePackage: obj.minePackage,
-        minePackageIndex: this.getMinePackageIndex(obj.minePackageCode),
+        minePackageIndex: '',
         minePackageCode: obj.minePackageCode,
         channelCode: obj.channelName,
         zoneName: obj.zoneName,
         departmentId: obj.departmentId,
         departmentName: obj.departmentName.split(','),
       }
+      await this.getMinePackageListDialog()
+      this.ruleForm.minePackageIndex=this.getMinePackageIndex(obj.minePackageCode)
       this.editorId = obj.id
     },
     getCostTypeIndex(costType) {
       return this.costTypeList.findIndex(item=>item.costType==costType)
     },
     getMinePackageIndex(minePackageCode) {
-      return this.minePackageList.findIndex(item=>item.costTypeNumber==minePackageCode)
+      return this.minePackageListDialog.findIndex(item=>item.costTypeNumber==minePackageCode)
     },
     //提交form
     submitForm(formName) {
