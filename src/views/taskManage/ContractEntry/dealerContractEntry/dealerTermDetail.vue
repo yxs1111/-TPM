@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-06-27 20:29:49
+ * @LastEditTime: 2022-07-07 14:58:13
 -->
 <template>
   <div class="ContentDetail">
@@ -21,7 +21,7 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="890" fixed="left">
+      <el-table-column align="center" width="910" fixed="left">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
@@ -29,7 +29,7 @@
           </div>
         </template>
         <template>
-          <el-table-column width="890">
+          <el-table-column width="910">
             <template v-slot:header>
             </template>
             <template>
@@ -55,6 +55,14 @@
               </el-table-column>
               <el-table-column v-slot={row} prop="detail" align="center" width="200" label="描述">
                 {{row.customerInfo.detail}}
+              </el-table-column>
+              <el-table-column width="20">
+                <template v-slot:header></template>
+                <template>
+                  <div>
+
+                  </div>
+                </template>
               </el-table-column>
             </template>
           </el-table-column>
@@ -101,7 +109,7 @@
               <el-table-column prop="detail" align="center" width="180" label="描述">
                 <template slot-scope="scope">
                   <div v-if="!scope.row.isTotal&&scope.row.dealerList[dealerIndex].isEditor">
-                    <el-input  v-model="scope.row.dealerList[dealerIndex].detail"   type="textarea" autosize clearable class="my-el-detail my-textArea" placeholder="请输入">
+                    <el-input v-model="scope.row.dealerList[dealerIndex].detail" type="textarea" autosize clearable class="my-el-detail my-textArea" placeholder="请输入">
                     </el-input>
                   </div>
                   <div v-else>
@@ -223,6 +231,14 @@
               </el-table-column>
             </template>
           </el-table-column>
+          <el-table-column width="20">
+            <template v-slot:header></template>
+            <template>
+              <div>
+
+              </div>
+            </template>
+          </el-table-column>
         </template>
       </el-table-column>
     </el-table>
@@ -263,7 +279,7 @@ export default {
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       isMakeUp: 0, //是否补录
       isOtherEditor: 0, //是否有可编辑
-      isEditor:0,
+      isEditor: 0,
     }
   },
 
@@ -274,11 +290,11 @@ export default {
     } else {
       this.ccId = sessionStorage.getItem('ccId')
     }
-    if(sessionStorage.getItem("isEditor")) {
-      let editorIndex=Number(sessionStorage.getItem("EditorIndex"))
-      let editorStrList=sessionStorage.getItem("isEditor").split('-')
-      if(editorIndex==Number(editorStrList[1])) {
-        this.isEditor=Number(editorStrList[0])
+    if (sessionStorage.getItem('isEditor')) {
+      let editorIndex = Number(sessionStorage.getItem('EditorIndex'))
+      let editorStrList = sessionStorage.getItem('isEditor').split('-')
+      if (editorIndex == Number(editorStrList[1])) {
+        this.isEditor = Number(editorStrList[0])
       }
       // this.isEditor=Number(sessionStorage.getItem("isEditor"))
     }
@@ -386,7 +402,7 @@ export default {
         })
         // 是否有可编辑的，若没有则只显示关闭按钮
         let isOtherEditor = distributorList.findIndex((item) => {
-          return item.contractState == '0'||item.contractState == '2'
+          return item.contractState == '0' || item.contractState == '2'
         })
         //没有通过则是正常，若有之前通过的经销商则为补录
         this.isMakeUp = index == -1 ? 0 : 1
@@ -480,12 +496,12 @@ export default {
                       variableItem.payType == ''
                         ? null
                         : Number(variableItem.payType), //支付方式
-                    isEditor:this.isEditor
-                      // (variableItem.contractState == '1' ||
-                      // variableItem.contractState == '3' ||
-                      // variableItem.contractState == '4')&&!this.isEditor
-                      //   ? 0
-                      //   : 1,
+                    isEditor: this.isEditor,
+                    // (variableItem.contractState == '1' ||
+                    // variableItem.contractState == '3' ||
+                    // variableItem.contractState == '4')&&!this.isEditor
+                    //   ? 0
+                    //   : 1,
                   })
                 }
               })
@@ -510,12 +526,12 @@ export default {
                   distVariableObj.payType == ''
                     ? null
                     : Number(distVariableObj.payType), //支付方式
-                isEditor:this.isEditor
-                  // (distVariableObj.contractState == '1' ||
-                  // distVariableObj.contractState == '3' ||
-                  // distVariableObj.contractState == '4')&&!this.isEditor
-                  //   ? 0
-                  //   : 1,
+                isEditor: this.isEditor,
+                // (distVariableObj.contractState == '1' ||
+                // distVariableObj.contractState == '3' ||
+                // distVariableObj.contractState == '4')&&!this.isEditor
+                //   ? 0
+                //   : 1,
               })
             }
             //设置 variable 汇总行
@@ -646,12 +662,12 @@ export default {
                       fixedItem.payType == ''
                         ? null
                         : Number(fixedItem.payType), //支付方式
-                    isEditor: this.isEditor
-                      // (fixedItem.contractState == '1' ||
-                      // fixedItem.contractState == '3' ||
-                      // fixedItem.contractState == '4')&&!this.isEditor
-                      //   ? 0
-                      //   : 1,
+                    isEditor: this.isEditor,
+                    // (fixedItem.contractState == '1' ||
+                    // fixedItem.contractState == '3' ||
+                    // fixedItem.contractState == '4')&&!this.isEditor
+                    //   ? 0
+                    //   : 1,
                   })
                 }
               })
@@ -674,12 +690,12 @@ export default {
                 ), //客户扣款税点
                 payType:
                   distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
-                isEditor: this.isEditor
-                  // (distFixObj.contractState == '1' ||
-                  // distFixObj.contractState == '3' ||
-                  // distFixObj.contractState == '4')&&!this.isEditor
-                  //   ? 0
-                  //   : 1,
+                isEditor: this.isEditor,
+                // (distFixObj.contractState == '1' ||
+                // distFixObj.contractState == '3' ||
+                // distFixObj.contractState == '4')&&!this.isEditor
+                //   ? 0
+                //   : 1,
               })
             }
             FixedTotalObj.dealerList.push({
@@ -897,9 +913,9 @@ export default {
         let isPointCountEmpty = false
         let exceptionList = []
         let errorList = []
-        let pointCountEmpty = []  //经销商费比为空 
-        let taxPriceEmpty = []  //经销商费比为空 
-        let payTypeRequire=[]
+        let pointCountEmpty = [] //经销商费比为空
+        let taxPriceEmpty = [] //经销商费比为空
+        let payTypeRequire = []
         //补录跳过验证--若之前经销商已经通过&&当前状态是草稿的 说明是补录
         this.AllTableData.forEach((item, index) => {
           //对 Variable 异常处理 各经销商费比大于客户费比
@@ -915,7 +931,10 @@ export default {
                 })
               }
               // debugger
-              if (dealerItem.pointCount === ''||dealerItem.pointCount === null) {
+              if (
+                dealerItem.pointCount === '' ||
+                dealerItem.pointCount === null
+              ) {
                 console.log('费比为空')
                 isPointCountEmpty = true
                 pointCountEmpty.push({
@@ -924,9 +943,12 @@ export default {
                   ...dealerItem,
                 })
               }
-              if(dealerItem.frieslandPointCount) {
-                if(dealerItem.customerTaxPoint===''||dealerItem.payType=='') {
-                  console.log("客户扣款税点为空");
+              if (dealerItem.frieslandPointCount) {
+                if (
+                  dealerItem.customerTaxPoint === '' ||
+                  dealerItem.payType == ''
+                ) {
+                  console.log('客户扣款税点为空')
                   payTypeRequire.push({
                     rowIndex: index,
                     dealerIndex,
@@ -940,8 +962,8 @@ export default {
           if (!item.isTotal && !item.isVariable) {
             let customerTaxPrice = item.customerInfo.taxPrice
             let dealerList = item.dealerList
-            dealerList.forEach((dealerItem,dealerIndex) => {
-              if (dealerItem.taxPrice === ''||dealerItem.taxPrice === null) {
+            dealerList.forEach((dealerItem, dealerIndex) => {
+              if (dealerItem.taxPrice === '' || dealerItem.taxPrice === null) {
                 console.log('含税金额为空')
                 isTaxPriceEmpty = true
                 taxPriceEmpty.push({
@@ -950,9 +972,12 @@ export default {
                   ...dealerItem,
                 })
               }
-              if(dealerItem.frieslandPointCount) {
-                if(dealerItem.customerTaxPoint===''||dealerItem.payType=='') {
-                  console.log("客户扣款税点为空");
+              if (dealerItem.frieslandPointCount) {
+                if (
+                  dealerItem.customerTaxPoint === '' ||
+                  dealerItem.payType == ''
+                ) {
+                  console.log('客户扣款税点为空')
                   payTypeRequire.push({
                     rowIndex: index,
                     dealerIndex,
@@ -976,51 +1001,53 @@ export default {
         console.log(pointCountEmpty)
         if (isPointCountEmpty) {
           pointCountEmpty.forEach((item) => {
-              setTimeout(() => {
-                this.$notify.warning({
-                  title: '警告',
-                  message: `第${item.rowIndex + 1}行${
-                    this.AllTableData[item.rowIndex].customerInfo.contractItem
-                  } ${item.dealerName } 费比不能为空,请进行填写`,
-                  duration: 0,
-                })
-              }, 50)
-            })
+            setTimeout(() => {
+              this.$notify.warning({
+                title: '警告',
+                message: `第${item.rowIndex + 1}行${
+                  this.AllTableData[item.rowIndex].customerInfo.contractItem
+                } ${item.dealerName} 费比不能为空,请进行填写`,
+                duration: 0,
+              })
+            }, 50)
+          })
           // this.$message.info('经销商费比不能为空,请进行填写')
           return
         }
         if (isTaxPriceEmpty) {
           taxPriceEmpty.forEach((item) => {
-              setTimeout(() => {
-                this.$notify.warning({
-                  title: '警告',
-                  message: `第${item.rowIndex + 1}行${
-                    this.AllTableData[item.rowIndex].customerInfo.contractItem
-                  } ${item.dealerName } 含税金额不能为空,请进行填写`,
-                  duration: 0,
-                })
-              }, 50)
-            })
+            setTimeout(() => {
+              this.$notify.warning({
+                title: '警告',
+                message: `第${item.rowIndex + 1}行${
+                  this.AllTableData[item.rowIndex].customerInfo.contractItem
+                } ${item.dealerName} 含税金额不能为空,请进行填写`,
+                duration: 0,
+              })
+            }, 50)
+          })
           // this.$message.info('经销商含税金额不能为空,请进行填写')
           return
         }
-        if(payTypeRequire.length) {
+        if (payTypeRequire.length) {
           payTypeRequire.forEach((item) => {
-              setTimeout(() => {
-                this.$notify.warning({
-                  title: '警告',
-                  message: `第${item.rowIndex + 1}行${
-                    this.AllTableData[item.rowIndex].customerInfo.contractItem
-                  } ${item.dealerName } 菲仕兰承担费比不为零时，扣款税点和支付方式不能为空`,
-                  duration: 0,
-                })
-              }, 50)
-            })
+            setTimeout(() => {
+              this.$notify.warning({
+                title: '警告',
+                message: `第${item.rowIndex + 1}行${
+                  this.AllTableData[item.rowIndex].customerInfo.contractItem
+                } ${
+                  item.dealerName
+                } 菲仕兰承担费比不为零时，扣款税点和支付方式不能为空`,
+                duration: 0,
+              })
+            }, 50)
+          })
           // this.$message.info('经销商含税金额不能为空,请进行填写')
           return
         }
-        console.log(pointCountEmpty);
-        console.log(taxPriceEmpty);
+        console.log(pointCountEmpty)
+        console.log(taxPriceEmpty)
         //补录跳过校验
         if (!this.isMakeUp) {
           if (errorList.length) {
@@ -1149,7 +1176,7 @@ export default {
           })
         }
       })
-      console.log(Obj)  
+      console.log(Obj)
       API.saveContractDetail(Obj).then((res) => {
         if (res.code === 1000) {
           if (flag) {
@@ -1503,10 +1530,16 @@ export default {
       if (row.name.indexOf('total') !== -1) {
         return 'background-color: #E3F3FF !important;color: #666!important;'
       }
+      if (columnIndex==6) {
+        return 'background-color: #4192d3 !important;'
+      }
+      if((columnIndex - 7) % 11 == 10) {
+        return 'background-color: #E3F3FF !important;'
+      }
       // if(rowIndex==0&&columnIndex>5) {
       //    return 'background-color: #87CEFA !important;text-align: center;color: #fff;font-family: Source Han Sans CN;font-size: 16px;'
       // }
-      if ((columnIndex - 6) % 10 == 0) {
+      if ((columnIndex - 7) % 11 == 0) {
         return 'color: #87CEFA!important;'
       }
     },
@@ -1595,6 +1628,10 @@ export default {
   textarea {
     resize: none !important;
   }
-  
+}
+.dividingLine {
+  width: 100%;
+  height: 100%;
+  background-color: #4192d3;
 }
 </style>
