@@ -244,7 +244,7 @@ export default {
       if(this.ruleForm.costTypeIndex!=='') {
         this.ruleForm.costType=this.costTypeList[this.ruleForm.costTypeIndex].costType
         this.ruleForm.costTypeNumber=this.costTypeList[this.ruleForm.costTypeIndex].costTypeNumber
-        // this.ruleForm.minePackageIndex = ''
+        this.ruleForm.minePackageIndex = ''
         this.getMinePackageListDialog()
       }
     },
