@@ -556,6 +556,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
+          downTempFlag:3
         }).then((res) => {
           this.downloadFile(res, `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2审批.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
