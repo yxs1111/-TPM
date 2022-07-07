@@ -792,11 +792,15 @@ export default {
         this.$refs.FileSalesTree.setCheckedNodes([...fsDatalist])
         let NoeKeyList=[]
         kaDataList.forEach(item=>{
+          if(item.kaDataTerCode==null) {
+            item.NodeKey= 'KA-' +item.kaDataSecCode
+            NoeKeyList.push(item.NodeKey)
+          }else {
+            item.NodeKey= 'KA-' +item.kaDataSecCode+'-'+item.kaDataTerCode
+            NoeKeyList.push(item.NodeKey)
+          }
           //NodeKey:"KA-LKA-1003"
-          item.NodeKey= 'KA-' +item.kaDataSecCode+'-'+item.kaDataTerCode
-          NoeKeyList.push(item.NodeKey)
         })
-        
         console.log(NoeKeyList);
         this.$refs.KATree.setCheckedKeys([...NoeKeyList])
         // this.$refs.KATree.setCheckedKeys([...kaDataList])
