@@ -890,7 +890,7 @@ export default {
             for (let j = 0; j < list[i].children.length; j++) {
               list[i].children[j]['label'] = list[i].children[j].name
               list[i].children[j]['dataTerId'] = list[i].children[j].id
-              list[i].children[j]['dataTerCode'] = list[i].children[j].code
+              list[i].children[j]['dataTerCode'] = list[i].children[j].nameAbridge
               list[i].children[j]['dataSecId'] = list[i].id
               list[i].children[j]['dataSecCode'] = list[i].name
               list[i].children[j]['dataFirCode'] = 'FieldSales'

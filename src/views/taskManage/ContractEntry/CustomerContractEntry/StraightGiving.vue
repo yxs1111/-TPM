@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-01 11:01:24
+ * @LastEditTime: 2022-07-07 13:37:55
 -->
 <template>
   <div class="MainContent">
@@ -107,7 +107,7 @@
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.regionCode" :disabled="scope.row.isRequireRegion==1?false:true" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.code" />
+              <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.nameAbridge" />
             </el-select>
           </div>
           <div v-show="!scope.row.isEditor">
