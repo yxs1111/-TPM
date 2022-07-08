@@ -4,8 +4,10 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">Cost Type</span>
-          <el-input v-model="filterObj.costType" clearable placeholder="请输入" />
+          <span class="SelectliTitle">Cost Type:</span>
+          <el-select v-model="filterObj.costType" clearable placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in costTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package</span>
@@ -221,6 +223,10 @@ export default {
     this.getCostTypeList()
   },
   watch: {
+    'filterObj.costType'() {
+      this.filterObj.minePackage = ''
+      this.getMinePackageList()
+    },
     // 'ruleForm.costTypeIndex'() {
     //   if(this.ruleForm.costTypeIndex!=='') {
     //     this.ruleForm.costType=this.costTypeList[this.ruleForm.costTypeIndex].costType

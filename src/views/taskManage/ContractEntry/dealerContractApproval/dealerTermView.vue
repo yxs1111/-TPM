@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-07 15:01:16
+ * @LastEditTime: 2022-07-08 10:34:35
 -->
 <template>
   <div class="ContentDetail">
@@ -1115,7 +1115,7 @@ export default {
       if((columnIndex - 7) % 11 == 10) {
         return 'background-color: #E3F3FF !important;'
       }
-      if ((columnIndex - 6) % 11 == 0) {
+      if ((columnIndex - 7) % 11 == 0) {
         return 'color: #87CEFA!important;'
       }
     },
