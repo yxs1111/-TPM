@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-07 14:58:13
+ * @LastEditTime: 2022-07-08 11:11:53
 -->
 <template>
   <div class="ContentDetail">
@@ -21,7 +21,7 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="910" fixed="left">
+      <el-table-column align="center" width="890" fixed="left">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
@@ -29,7 +29,7 @@
           </div>
         </template>
         <template>
-          <el-table-column width="910">
+          <el-table-column width="890">
             <template v-slot:header>
             </template>
             <template>
@@ -56,14 +56,6 @@
               <el-table-column v-slot={row} prop="detail" align="center" width="200" label="描述">
                 {{row.customerInfo.detail}}
               </el-table-column>
-              <el-table-column width="20">
-                <template v-slot:header></template>
-                <template>
-                  <div>
-
-                  </div>
-                </template>
-              </el-table-column>
             </template>
           </el-table-column>
         </template>
@@ -77,6 +69,13 @@
           </div>
         </template>
         <template>
+          <el-table-column width="5">
+            <template v-slot:header></template>
+            <template>
+              <div>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column>
             <template v-slot:header>
             </template>
@@ -229,14 +228,6 @@
 
                 </div>
               </el-table-column>
-            </template>
-          </el-table-column>
-          <el-table-column width="20">
-            <template v-slot:header></template>
-            <template>
-              <div>
-
-              </div>
             </template>
           </el-table-column>
         </template>
@@ -1527,20 +1518,11 @@ export default {
       if (row.name.indexOf('Total') !== -1) {
         return 'background-color: #4192d3 !important;color: #fff!important;'
       }
-      if (row.name.indexOf('total') !== -1) {
-        return 'background-color: #E3F3FF !important;color: #666!important;'
+      if (row.name.indexOf('total') !== -1&&(columnIndex - 6) % 11 != 0) {
+        return 'background-color: #E3F3FF;color: #666!important;'
       }
-      if (columnIndex==6) {
+      if ((columnIndex - 6) % 11 == 0) {
         return 'background-color: #4192d3 !important;'
-      }
-      if((columnIndex - 7) % 11 == 10) {
-        return 'background-color: #E3F3FF !important;'
-      }
-      // if(rowIndex==0&&columnIndex>5) {
-      //    return 'background-color: #87CEFA !important;text-align: center;color: #fff;font-family: Source Han Sans CN;font-size: 16px;'
-      // }
-      if ((columnIndex - 7) % 11 == 0) {
-        return 'color: #87CEFA!important;'
       }
     },
     HeadTable({ row, column, rowIndex, columnIndex }) {
