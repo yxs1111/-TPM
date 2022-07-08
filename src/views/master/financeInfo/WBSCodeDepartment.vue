@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-06-07 14:12:20
+ * @LastEditTime: 2022-06-20 11:37:43
 -->
 <template>
   <div class="app-container">
@@ -50,8 +50,6 @@
       </el-table-column>
       <el-table-column fixed width="140" align="center" prop="deptID" label="Department ID"> </el-table-column>
       <el-table-column fixed width="280" align="center" prop="deptName" label="Department"> </el-table-column>
-      <el-table-column fixed width="280" align="center" prop="minePackage" label="Mine Package"> </el-table-column>
-      <el-table-column fixed width="280" align="center" prop="costType" label="费用类型"> </el-table-column>
       <el-table-column width="150" align="center" prop="createBy" label="创建人" />
       <el-table-column width="180" align="center" prop="createDate" label="创建时间">
         <template slot-scope="{row}">
@@ -98,21 +96,6 @@
             <el-input v-model="ruleForm.deptName" class="my-el-input" placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="Cost Type">
-            <el-select v-model="ruleForm.costType" placeholder="请选择" class="my-el-select">
-              <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Mine Package">
-            <el-select v-model="ruleForm.minePackage" multiple class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costType" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="ruleForm.state" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
-            </el-select>
-          </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -155,9 +138,6 @@ export default {
       ruleForm: {
         deptID: '',
         deptName: '',
-        costType: '',
-        minePackage: [],
-        state: 1,
       },
       rules: {
         deptID: [
@@ -168,13 +148,6 @@ export default {
           },
         ],
         deptName: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        minePackage: [
           {
             required: true,
             message: 'This field is required',
@@ -203,10 +176,6 @@ export default {
   },
   computed: {},
   watch: {
-    'ruleForm.costType'() {
-      // this.ruleForm.minePackage = []
-      this.getMinePackage()
-    },
   },
   methods: {
     //获取表格数据
@@ -256,9 +225,6 @@ export default {
       this.ruleForm = {
         deptID: '',
         deptName: '',
-        costType: '',
-        minePackage: [],
-        state: 1,
       }
       this.dialogVisible = true
     },
@@ -289,9 +255,6 @@ export default {
       this.ruleForm = {
         deptID: '',
         deptName: '',
-        costType: '',
-        minePackage: [],
-        state: 1,
       }
     },
     editor(obj) {
@@ -300,12 +263,7 @@ export default {
       this.ruleForm = {
         deptID: obj.deptID,
         deptName: obj.deptName,
-        minePackage:obj.minePackage.split(','),
-        costType:obj.costType,
-        state: Number(obj.state),
       }
-      console.log(this.ruleForm);
-      console.log(obj.minePackage.split(','));
       this.editorId = obj.id
     },
     //提交form
@@ -317,9 +275,6 @@ export default {
               id: this.editorId,
               deptID: this.ruleForm.deptID,
               deptName: this.ruleForm.deptName,
-              costType: this.ruleForm.costType,
-              minePackage: this.ruleForm.minePackage.join(','),
-
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`修改成功`)
@@ -332,8 +287,6 @@ export default {
               id: this.editorId,
               deptID: this.ruleForm.deptID,
               deptName: this.ruleForm.deptName,
-              costType: this.ruleForm.costType,
-              minePackage: this.ruleForm.minePackage.join(','),
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`添加成功`)

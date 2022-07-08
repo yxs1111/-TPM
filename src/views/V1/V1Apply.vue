@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-10 16:44:15
+ * @LastEditTime: 2022-07-08 17:31:27
 -->
 <template>
   <div class="tabViewsWrap">
@@ -22,7 +22,7 @@
         {{ item.name }}
       </router-link>
     </div>
-    <div>
+    <div style="height: calc(100vh - 0px);">
       <router-view />
     </div>
   </div>
@@ -120,25 +120,49 @@ export default {
             }
           ]
         }
-        // this.routerList = [
-        //     ...this.routerList,
-        //     {
-        //       name: '折扣项-HIH Rebate',
-        //       path: '/costManagement/V1/V1Apply/V1HIHRebate',
-        //       img: {
-        //         dark: require('@/assets/images/tab/tab2.png'),
-        //         light: require('@/assets/images/tab/tab2_l.png')
-        //       }
-        //     },
-        //     {
-        //       name: '折扣项-KA Rebate',
-        //       path: '/costManagement/V1/V1Apply/V1KARebate',
-        //       img: {
-        //         dark: require('@/assets/images/tab/tab3.png'),
-        //         light: require('@/assets/images/tab/tab3_l.png')
-        //       }
-        //     }
-        //   ]
+        this.routerList = [
+            ...this.routerList,
+            {
+              name: '折扣项-HIH Rebate',
+              path: '/costManagement/V1/V1Apply/V1HIHRebate',
+              img: {
+                dark: require('@/assets/images/tab/tab_HIH.png'),
+                light: require('@/assets/images/tab/tab_HIH_l.png')
+              }
+            },
+            {
+              name: '折扣项-KA Rebate',
+              path: '/costManagement/V1/V1Apply/V1KARebate',
+              img: {
+                dark: require('@/assets/images/tab/tab_KA.png'),
+                light: require('@/assets/images/tab/tab_KA_l.png')
+              }
+            },
+            {
+              name: 'FMC',
+              path: '/costManagement/V1/V1Apply/V1FMC',
+              img: {
+                dark: require('@/assets/images/tab/tab_FMC.png'),
+                light: require('@/assets/images/tab/tab_FMC_l.png')
+              }
+            },
+            {
+              name: 'Road Show',
+              path: '/costManagement/V1/V1Apply/V1RoadShow',
+              img: {
+                dark: require('@/assets/images/tab/tab_RoadShow.png'),
+                light: require('@/assets/images/tab/tab_RoadShow_l.png')
+              }
+            },
+            {
+              name: 'Listing Fee',
+              path: '/costManagement/V1/V1Apply/V1ListingFee',
+              img: {
+                dark: require('@/assets/images/tab/tab_ListingFee.png'),
+                light: require('@/assets/images/tab/tab_ListingFee_l.png')
+              }
+            },
+          ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
         } else {

@@ -485,11 +485,12 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
       formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('importFlag', 1)
       API.importExcel(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
+          if (!Array.isArray(response.data)||response.data.length===0) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.ImportData = response.data
@@ -556,6 +557,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
+          downTempFlag:3
         }).then((res) => {
           this.downloadFile(res, `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2审批.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)

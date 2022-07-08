@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-05-30 14:47:17
+ * @LastEditTime: 2022-06-23 17:14:51
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -54,6 +54,10 @@ export default {
   infoByMainId(params) {
     return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
   },
+  //客户合同审批  通过与驳回按钮状态
+  contractInfoByMainId(params) {
+    return requestApi.request_post('/cityplan/investCpV/getMultInfoByMainId', params)
+  },
   timeout(params) {
     return requestApi.request_put('/job/job/pause', params)
   },
@@ -87,5 +91,9 @@ export default {
   },
   getSupplierList(params) {
     return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
+  },
+  //部门下拉
+  getDepartmentList(params) {
+    return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentList', params)
   },
 }

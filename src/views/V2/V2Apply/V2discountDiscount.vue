@@ -49,9 +49,13 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData(0)">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
+      </div>
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData(1)">
+        <img src="@/assets/images/import.png" alt="">
+        <span class="text">爱亲/爱婴岛导入</span>
       </div>
       <el-button type="primary" class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe&&isCalculation === 1?'':'noClick'" @click="approve">
@@ -304,7 +308,8 @@ export default {
       usernameLocal: '',
       messageMap: messageMap(),
       maxheight: getHeightHaveTab(),
-      isCalculation:false
+      isCalculation:false,
+      isAiQin:0,
     }
   },
   computed: {},
@@ -475,11 +480,16 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
-    importData() {
+    importData(flag) {
       this.saveBtn = false
       if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
+        if(flag) {
+          this.isAiQin=1
+        } else {
+          this.isAiQin=0
+        }
         this.importVisible = true
       }
     },
@@ -495,6 +505,11 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       const formData = new FormData()
+      if(this.isAiQin) {
+        formData.append('importFlag', 2)
+      }else {
+        formData.append('importFlag', 1)
+      }
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
       formData.append('channelCode', this.filterObj.channelCode)
@@ -502,7 +517,7 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
+          if (!Array.isArray(response.data)||response.data.length===0) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
@@ -527,7 +542,8 @@ export default {
     checkImport() {
       API.exceptionCheckTwo({
         yearAndMonth:this.filterObj.yearAndMonth,
-        channelCode:this.filterObj.channelCode
+        channelCode:this.filterObj.channelCode,
+        importFlag:this.isAiQin?2:1
       }).then((response) => {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
@@ -542,6 +558,7 @@ export default {
     confirmImport() {
       API.exceptionSave({
         mainId: this.tableData[0].mainId,
+        importFlag:this.isAiQin?2:1
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
@@ -562,6 +579,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
+          importFlag:this.isAiQin?2:1
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -604,6 +622,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
+          downTempFlag:this.isAiQin?2:1
         }).then((res) => {
           this.downloadFile(
             res,

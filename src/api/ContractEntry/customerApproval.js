@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-04-27 16:49:00
+ * @LastEditTime: 2022-06-23 18:19:00
  */
 /*
  * @Description: 客户合同录入
@@ -18,6 +18,12 @@ export default {
   getApproveList(params) {
     return requestApi.request_get(this.url+'/pageApproveTaskList', params)
   },
+  getApprovePageCustomer(params) {
+    return requestApi.request_get(this.url+'/getApprovePage', params)
+  },
+  getApprovePageDealer(params) {
+    return requestApi.request_get(this.distUrl+'/getApprovePage', params)
+  },
   saveApproveComments(params) {
     return requestApi.request_post(this.url+'/saveApproveComments', params)
   },
@@ -32,6 +38,15 @@ export default {
   exportApprove(params) {
     return request({
       url: this.url+'/exportApproveTask',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //客户合同审批--导出
+  exportApprovePage(params) {
+    return request({
+      url: this.url+'/exportApprovePage',
       method: 'get',
       params: params,
       responseType: 'blob'

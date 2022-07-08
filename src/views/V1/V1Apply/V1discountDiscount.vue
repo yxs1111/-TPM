@@ -92,10 +92,10 @@
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
       <el-table-column v-slot="{row}" width="220" align="right" prop="systemRecommendedVol" label="系统拆分销量（CTN）">
-        {{ FormateNum((row.systemRecommendedVol*1).toFixed(2)) }}
+        {{ FormateNum(row.systemRecommendedVol) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="220" align="right" prop="adjustedVol" label="调整后销量（CTN）">
-        {{ FormateNum((row.adjustedVol*1).toFixed(2)) }}
+        {{ FormateNum(row.adjustedVol) }}
       </el-table-column>
       <el-table-column width="220" align="right" prop="volDifference" label="销量差值（%）" />
       <!-- <template slot-scope="scope">{{ scope.row.volDifference + '%' }}</template>
@@ -125,7 +125,7 @@
           <div v-else>{{ row.judgmentType }}</div>
         </template>
       </el-table-column>
-      <el-table-column width="400" align="center" prop="judgmentContent" label="审批判定内容" />
+      <el-table-column width="800" align="center" prop="judgmentContent" label="审批判定内容" />
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />

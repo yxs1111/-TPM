@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-05-07 14:52:29
+ * @LastEditTime: 2022-06-16 17:06:10
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -192,6 +192,7 @@ export default {
       return setSplitAssignee(value)
     },
     operateProcess(version, name, channelCode) {
+      debugger
       // this.$router.push({path:'/V3/V3Apply/V3discountNU',query:{channelCode:'EC'}})
       // sessionStorage.setItem('currentIndex',2)
       // return
@@ -226,6 +227,13 @@ export default {
           this.$router.push({ path: '/costManagement/V2/V2Approval', params: { channelCode } })
         }
       }
+      if (version == 'FMC-V2') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({ path: '/costManagement/V2/V2Apply', params: { channelCode } })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({ path: '/costManagement/V2/V2Approval', params: { channelCode } })
+        }
+      }
       if (version == 'NUV2') {
         sessionStorage.setItem('currentIndex', 2)
         if (name.indexOf('调整') != -1) {
@@ -241,6 +249,13 @@ export default {
         }
       }
       if (version == 'V3') {
+        if (name.indexOf('调整') != -1) {
+          this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
+        } else if (name.indexOf('审批') != -1) {
+          this.$router.push({ path: '/costManagement/V3/V3Approval', params: { channelCode } })
+        }
+      }
+      if (version == 'FMC-V3') {
         if (name.indexOf('调整') != -1) {
           this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {

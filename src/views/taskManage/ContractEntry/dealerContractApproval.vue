@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-02 10:02:17
+ * @LastEditTime: 2022-06-29 15:46:34
 -->
 <template>
   <div class="MainContent">
@@ -25,6 +25,12 @@
             end-placeholder="结束月份">
           </el-date-picker>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同状态:</span>
+          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
+          </el-select>
+        </div>
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
@@ -40,7 +46,7 @@
     </div>
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
@@ -65,6 +71,8 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="180" label="客户名称">
         <template slot-scope="scope">
           <div>
@@ -79,17 +87,17 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="distributorName" align="center" width="220" label="经销商名称">
+      <el-table-column prop="distributorName" align="center" width="280" label="经销商名称">
         <template slot-scope="scope">
           <div>
             {{scope.row.distributorName}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(¥)">
+      <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.distributorSaleAmount)}}
+            {{FormateNum(scope.row.saleAmount)}}
           </div>
         </template>
       </el-table-column>
@@ -107,6 +115,11 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="contractStateName" width="160" label="合同状态">
+      </el-table-column>
+      <el-table-column v-slot="{row}" prop="isSupplement" align="center" width="100" label="是否补录">
+        {{row.isSupplement?'是':'否'}}
+      </el-table-column>
       <el-table-column v-slot={row} width="120" align="center" label="合同条款">
         <div class="seeActivity" @click="showTermDetailDialog(row)">
           条款明细
@@ -117,7 +130,7 @@
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
           <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
-            <el-input v-model="scope.row.poApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.poApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-else>
@@ -128,7 +141,7 @@
       <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
         <template slot-scope="scope">
           <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
-            <el-input v-model="scope.row.finApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.finApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-else>
@@ -175,11 +188,12 @@ export default {
         effectiveBeginDate: '',
         effectiveEndDate: '',
         customerMdmCode: '',
+        state: '',
       },
       maxheight: getContractEntry(),
       tableData: [],
       customerArr: [],
-      contractList: contractList,
+      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
       checkArr: [], //选中的数据
       tableKey: 0,
       //取消编辑 --》数据重置（不保存）
@@ -189,15 +203,18 @@ export default {
       },
       ccId: null,
       permissions: getDefaultPermissions(),
+      mainIdList:[],
+      usernameLocal: "",
     }
   },
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getContractEntry()
+        this.maxheight = window.innerHeight - 420
       })()
     }
-    this.getTableData()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
+    // this.getTableData()
     this.getCustomerList()
   },
   directives: { elDragDialog, permission },
@@ -224,7 +241,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      API.getApproveList({
+      API.getApprovePageDealer({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -232,13 +249,16 @@ export default {
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
-        minePackageCode: 'DISTRIBUTOR-CONTRACT',
+        contractState: this.filterObj.state,
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
           item.isEditor = 0
+          item.isCanSubmit = 0
+          item.name=''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+          this.mainIdList.push(item.mainId)
         })
         this.tableData = [...list]
         this.pageNum = response.data.pageNum
@@ -246,7 +266,28 @@ export default {
         this.total = response.data.total
         this.ccId = this.tableData[0].ccId
         this.tempObj.tempInfo = null
+        this.infoByMainId()
       })
+    },
+    infoByMainId() {
+      selectAPI
+        .contractInfoByMainId(
+          this.mainIdList,
+        )
+        .then((res) => {
+          let activityList=res.data
+          if (res.code === 1000) {
+            this.tableData.forEach(item=>{
+              activityList.forEach(mItem=>{
+                if(mItem.id==item.mainId) {
+                  item.name=mItem.activityName
+                  let isFlag=mItem.assignee.indexOf(this.usernameLocal) != -1?1:0
+                  item.isCanSubmit=isFlag
+                } 
+              })
+            })
+          }
+        })
     },
     // 客户
     getCustomerList() {
@@ -300,9 +341,9 @@ export default {
       //判断当前数据 所属角色审批
       this.checkArr.forEach((item) => {
         if (item.name.indexOf('Package Owner') != -1) {
-          obj.approveDetail[item.distributorId] = item.poApprovalComments
+          obj.approveDetail[item.id] = item.poApprovalComments
         } else if (item.name.indexOf('Finance') != -1) {
-          obj.approveDetail[item.distributorId] = item.finApprovalComments
+          obj.approveDetail[item.id] = item.finApprovalComments
         }
       })
       console.log(obj)
@@ -319,8 +360,8 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState == '3' || row.contractState == '4') {
-        this.$message.info('该经销商已经通过，不能进行编辑')
+      if (row.contractState !== '1' || !row.isCanSubmit) {
+        this.$message.info('该经销商不能进行编辑')
         return
       }
       if (this.tempObj.tempInfo) {
@@ -363,12 +404,13 @@ export default {
     },
     //导出数据
     exportData() {
-      API.exportApprove({
+      API.exportApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
-        minePackageCode: 'DISTRIBUTOR-CONTRACT',
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议审批 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -384,6 +426,9 @@ export default {
           ccId,
         },
       })
+    },
+    checkSelectable(row) {
+      return row.contractState === '1'&&row.isCanSubmit === 1
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-08 18:52:15
+ * @LastEditTime: 2022-06-24 13:34:27
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -90,6 +90,14 @@ export default function() {
               name: 'V2ListingFee',
               component: () => import('@/views/V2/V2Apply/V2ListingFee.vue'),
               meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Collection',
+              code: 'price_nka_v2_apply',
+              name: 'V2Collection',
+              component: () => import('@/views/V2/V2Apply/V2Collection.vue'),
+              meta: { title: '补录', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
             },
           ]
         },

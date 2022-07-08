@@ -18,7 +18,8 @@
           <img src="../../../assets/images/clickIndex.png" alt="" class="clickIndex">
           <span class="IndexText">首页</span>
         </div>
-        <img src="../../../assets/images/toggle.png" alt="" class="toggleIcon" @click.stop="toggleSideBar">
+        <img src="../../../assets/images/toggle.png"  v-show="sidebar.opened" alt="" class="toggleIcon" @click.stop="toggleSideBar">
+        <img src="../../../assets/images/toggle.png"  v-show="!sidebar.opened" alt="" class="toggleIcon_Hidden" @click.stop="toggleSideBar">
       </div>
     </template>
 
@@ -135,6 +136,13 @@ export default {
     height: 18px;
     cursor: pointer;
     margin-left: 17px;
+  }
+  .toggleIcon_Hidden {
+    width: 16px;
+    height: 18px;
+    cursor: pointer;
+    margin-left: 21px;
+    transform: rotate(180deg);
   }
   .dashBoard {
     display: flex;

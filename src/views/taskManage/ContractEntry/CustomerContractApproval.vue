@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-07 09:05:07
+ * @LastEditTime: 2022-07-08 14:28:08
 -->
 <template>
   <div class="MainContent">
@@ -24,6 +24,12 @@
           <el-date-picker v-model="filterObj.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
             end-placeholder="结束月份">
           </el-date-picker>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同状态:</span>
+          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
+          </el-select>
         </div>
       </div>
       <div class="OpertionBar">
@@ -64,19 +70,23 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="220" label="客户名称">
+      </el-table-column>
+      <el-table-column prop="regionName"  align="center" width="140" label="大区">
       </el-table-column>
       <el-table-column prop="customerContractSaleAmount" align="center" width="220" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.customerContractSaleAmount ? scope.row.customerContractSaleAmount : 0)}}
+            {{FormateNum(scope.row.saleAmount ? scope.row.saleAmount : 0)}}
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
-          <div v-if="scope.row.contractBeginDate">
-            {{ scope.row.contractBeginDate?scope.row.contractBeginDate.replaceAll('-','/'):'' + ' - ' + scope.row.contractBeginDate?scope.row.contractEndDate.replaceAll('-','/'):'' }}
+          <div>
+            {{ scope.row.contractBeginDate?scope.row.contractBeginDate.replaceAll('-','/'):'' }} - {{scope.row.contractEndDate?scope.row.contractEndDate.replaceAll('-','/'):''}}
           </div>
         </template>
       </el-table-column>
@@ -86,6 +96,8 @@
             {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column align="center" prop="contractStateName" width="160" label="合同状态">
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
@@ -99,7 +111,7 @@
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
           <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
-            <el-input v-model="scope.row.poApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.poApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-else>
@@ -110,7 +122,7 @@
       <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见">
         <template slot-scope="scope">
           <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
-            <el-input v-model="scope.row.finApprovalComments" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.finApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-else>
@@ -125,7 +137,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 条款明细 -->
-    <el-dialog width="90%"  ref="termDialog" v-elDragDialog class="my-el-dialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
+    <el-dialog width="90%"  ref="termDialog"  class="termDialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
@@ -135,7 +147,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termVariableData" ref="termVariableTable" max-height="250" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termTotalData"  max-height="250" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -160,7 +172,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div>
                   {{FormateNum(scope.row.taxCost)}}
@@ -170,7 +182,77 @@
             <el-table-column prop="remark" align="center" label="描述">
             </el-table-column>
           </el-table>
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="250" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termVariableData" :show-header="false" ref="termVariableTable" max-height="250" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+            <el-table-column align="center" width="140" fixed>
+              <template v-slot:header> </template>
+              <template slot-scope="{ row }">
+                <div>
+                  {{ row.type }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="contractItem" align="center" label="contract item" width="160">
+              <template slot-scope="scope">
+                <div v-if="!scope.row.isTotal">
+                  {{ contractItemVariableList[scope.row.contractItem].name }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="conditions" width="160" label="条件类型">
+            </el-table-column>
+            <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.costRatio }}%
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
+              <template slot-scope="scope">
+                <div>
+                  {{FormateNum(scope.row.taxCost)}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="remark" align="center" label="描述">
+            </el-table-column>
+          </el-table>
+          <el-table :data="termVariableTotalData" :show-header="false"  style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+            <el-table-column align="center" width="140" fixed>
+              <template v-slot:header> </template>
+              <template slot-scope="{ row }">
+                <div>
+                  {{ row.type }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="contractItem" align="center" label="contract item" width="160">
+              <template slot-scope="scope">
+                <div v-if="!scope.row.isTotal">
+                  {{ contractItemVariableList[scope.row.contractItem].name }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="conditions" width="160" label="条件类型">
+            </el-table-column>
+            <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.costRatio }}%
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
+              <template slot-scope="scope">
+                <div>
+                  {{FormateNum(scope.row.taxCost)}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="remark" align="center" label="描述">
+            </el-table-column>
+          </el-table>  
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -196,7 +278,41 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="含税费用(¥)" width="150">
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
+              <template slot-scope="scope">
+                <div>{{ FormateNum(scope.row.taxCost) }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="remark" align="center" label="描述">
+            </el-table-column>
+          </el-table>
+          <el-table :data="termFixTotalData"  :show-header="false" max-height="250" style="width: 100%" :header-cell-style="HeadTable"
+            :row-class-name="tableRowClassNameDialog">
+            <el-table-column align="center" width="140" fixed>
+              <template v-slot:header> </template>
+              <template slot-scope="{ row }">
+                <div>
+                  {{ row.type }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="contractItem" align="center" label="contract item" width="160">
+              <template slot-scope="scope">
+                <div v-if="!scope.row.isTotal">
+                  {{contractItemFixList[scope.row.contractItem].name}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="conditions" align="center" width="160" label="条件类型">
+            </el-table-column>
+            <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
+              <template slot-scope="scope">
+                <div>
+                  {{scope.row.costRatio}}%
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="含税费用(RMB)" width="150">
               <template slot-scope="scope">
                 <div>{{ FormateNum(scope.row.taxCost) }}</div>
               </template>
@@ -221,8 +337,6 @@ import {
   getContractEntry,
   FormateThousandNum,
   contractList,
-  contractItemVariableList,
-  contractItemFixList,
   downloadFile,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -250,13 +364,16 @@ export default {
       tableData: [],
       customerArr: [],
       contractList: contractList,
-      contractItemVariableList: contractItemVariableList,
-      contractItemFixList: contractItemFixList,
+      contractItemVariableList: [],
+      contractItemFixList: [],
       isAddCount: 0,
       tableKey: 0,
       customerId: 0,
       isTermsDetailVisible: false, //条款明细弹窗
       termInfo: {}, //条款明细信息
+      termTotalData: [],
+      termVariableTotalData: [],
+      termFixTotalData: [],
       termVariableData: [],
       termFixData: [],
       //VariableData+FixData
@@ -278,15 +395,18 @@ export default {
         tempInfo: null,
       },
       permissions: getDefaultPermissions(),
+      mainIdList:[],
+      usernameLocal:'',
     }
   },
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getContractEntry()
+        this.maxheight = window.innerHeight - 400
       })()
     }
-    this.getTableData()
+    this.usernameLocal = localStorage.getItem('usernameLocal')
+    // this.getTableData()
     this.getCustomerList()
     this.getContractItemList()
   },
@@ -315,7 +435,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      API.getApproveList({
+      API.getApprovePageCustomer({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -323,21 +443,46 @@ export default {
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
-        minePackageCode: 'CUSTOMER-CONTRACT',
+        contractState: this.filterObj.state,
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
           item.isEditor = 0
           item.packageOwner = ''
+          item.isCanSubmit = 0
+          item.name=''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+          this.mainIdList.push(item.mainId)
         })
+        
         this.tableData = [...list]
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
         this.tempObj.tempInfo = null
+        this.infoByMainId()
       })
+    },
+    infoByMainId() {
+      selectAPI
+        .contractInfoByMainId(
+          this.mainIdList,
+        )
+        .then((res) => {
+          let activityList=res.data
+          if (res.code === 1000) {
+            this.tableData.forEach(item=>{
+              activityList.forEach(mItem=>{
+                if(mItem.id==item.mainId) {
+                  item.name=mItem.activityName
+                  let isFlag=mItem.assignee.indexOf(this.usernameLocal) != -1?1:0
+                  item.isCanSubmit=isFlag
+                } 
+              })
+            })
+          }
+        })
     },
     // 客户
     getCustomerList() {
@@ -356,28 +501,29 @@ export default {
           let list = res.data
           //区分variable 和 fixed
           list.forEach((item) => {
-            item.name = item.contractItem
-            item.code = item.contractItemCode
-            item.conditionType = item.conditionType
-            if (item.conditionType.indexOf(',') != -1) {
-              item.conditionalIsTwo = 2
-            } else {
-              item.conditionalIsTwo = 1
-            }
-            if (item.variablePoint.indexOf('variable') != -1) {
-              item.isVariableOrFix = 0
-            }
-            if (item.variablePoint.indexOf('fix') != -1) {
-              item.isVariableOrFix = 1
-            }
-            if (
-              item.variablePoint.indexOf('fix') != -1 &&
-              item.variablePoint.indexOf('variable') != -1
-            ) {
-              item.isVariableOrFix = 2
+            if (item.conditionType && item.variablePoint) {
+              item.name = item.contractItem
+              item.code = item.contractItemCode
+              item.conditionType = item.conditionType
+              if (item.conditionType.indexOf(',') != -1) {
+                item.conditionalIsTwo = 2
+              } else {
+                item.conditionalIsTwo = 1
+              }
+              if (item.variablePoint.indexOf('variable') != -1) {
+                item.isVariableOrFix = 0
+              }
+              if (item.variablePoint.indexOf('fix') != -1) {
+                item.isVariableOrFix = 1
+              }
+              if (
+                item.variablePoint.indexOf('fix') != -1 &&
+                item.variablePoint.indexOf('variable') != -1
+              ) {
+                item.isVariableOrFix = 2
+              }
             }
           })
-          console.log(list)
           list.forEach((item) => {
             if (item.isVariableOrFix === 0) {
               this.contractItemVariableList.push({
@@ -461,9 +607,9 @@ export default {
         //判断当前数据 所属角色审批
         this.checkArr.forEach((item) => {
           if (item.name.indexOf('Package Owner') != -1) {
-            obj.approveDetail[item.businessKey] = item.poApprovalComments
+            obj.approveDetail[item.mainId] = item.poApprovalComments
           } else if (item.name.indexOf('Finance') != -1) {
-            obj.approveDetail[item.businessKey] = item.finApprovalComments
+            obj.approveDetail[item.mainId] = item.finApprovalComments
           }
         })
         API.approveCustomerContract(obj).then((res) => {
@@ -479,12 +625,13 @@ export default {
       }
     },
     exportData() {
-      API.exportApprove({
+      API.exportApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
-        minePackageCode: 'CUSTOMER-CONTRACT',
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '客户合同审批 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -497,8 +644,8 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState == '3' || row.contractState == '4') {
-        this.$message.info('该经销商已经通过，不能进行编辑')
+      if (row.contractState != '1'||!row.isCanSubmit) {
+        this.$message.info('该合同不能进行编辑操作')
         return
       }
       if (this.tempObj.tempInfo) {
@@ -539,9 +686,9 @@ export default {
     },
     //条款明细--弹窗展示
     showTermsDetail(index) {
-      this.customerId = this.tableData[index].ccId
+      this.customerId = this.tableData[index].id
       // 设置屏幕高度90%
-      this.$refs.termDialog.$el.firstChild.style.height = '100%'
+      this.$refs.termDialog.$el.firstChild.style.height = '98%'
       //草稿、被拒绝可以编辑，其他仅查看
       API.findOneSaveDetail({
         id: this.customerId,
@@ -597,7 +744,7 @@ export default {
             this.FixTotalData.totalPoint += item.costRatio
           })
           //variable  -- 设置Total
-          this.termVariableData.unshift({
+          this.termTotalData.push({
             type: 'Total',
             contractItem: '',
             conditionType: '',
@@ -610,7 +757,7 @@ export default {
           //variable  -- 设置variable
           this.termVariableData = [...this.termVariableData, ...variableList]
           //variable  -- 设置variable total
-          this.termVariableData.push({
+          this.termVariableTotalData.push({
             type: 'Variable total',
             contractItem: '',
             conditionType: '',
@@ -623,7 +770,7 @@ export default {
           //Fixed  -- Fixed
           this.termFixData = [...this.termFixData, ...fixList]
           //Fixed  -- Fixed total
-          this.termFixData.push({
+          this.termFixTotalData.push({
             type: 'Fixed total',
             contractItem: '',
             conditionType: '',
@@ -675,8 +822,7 @@ export default {
     },
     //处于草稿状态可提交
     checkSelectable(row) {
-      // return row.contractState === '0'
-      return 1
+      return row.contractState === '1'&&row.isCanSubmit === 1
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -899,6 +1045,98 @@ export default {
 }
 </style>
 <style lang="less">
+.termDialog {
+  .el-dialog {
+    margin-top: 1vh !important;
+    top: 50%;
+    transform: translateY(-50%);
+    .el-dialog__body {
+      padding: 20px 20px !important;
+    }
+  }
+  .el-dialog__header {
+    height: 50px;
+    padding: 0 0 0 20px;
+    background-color: #4192d3;
+  }
+  .el-dialog__title {
+    font-size: 16px;
+    font-family: Source Han Sans CN Light;
+    font-weight: bold;
+    color: #fff;
+    line-height: 50px;
+  }
+  .el-dialog__headerbtn {
+    top: 16px;
+    .el-dialog__close {
+      color: #fff;
+    }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    .el-button--default {
+      width: 122px;
+      height: 37px;
+      background: #ffffff;
+      border: 1px solid #4192d3;
+      border-radius: 5px;
+      color: #4192d3;
+    }
+    .el-button--primary {
+      width: 120px;
+      height: 37px;
+      background: #4192d3;
+      border-radius: 5px;
+      border: 1px solid #4192d3;
+      background-color: #4192d3;
+    }
+    .el-button + .el-button {
+      margin-left: 15px;
+    }
+  }
+  .el-downloadFileBar {
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .el-button--primary {
+      width: 122px;
+      height: 41px;
+      line-height: 41px;
+      border-radius: 8px;
+      margin-bottom: 0;
+      padding: 0;
+    }
+    .el-button--primary.is-plain:active {
+      background: #fff;
+      border-color: #4192d3;
+      color: #4192d3;
+    }
+    .el-button--primary.is-plain {
+      width: 122px;
+      background: #fff;
+      border-color: #4192d3;
+      color: #4192d3;
+    }
+  }
+  .tableWrap {
+    width: 100%;
+    max-height: 400px;
+    margin-top: 20px;
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #333333;
+  }
+}
+.termDialog .el-dialog__body {
+  padding: 10px 20px;
+}
 .contract_firstRow {
   background-color: #4192d3 !important;
   color: #fff;
@@ -939,7 +1177,7 @@ export default {
       text-overflow: ellipsis;
       vertical-align: middle;
       position: relative;
-      text-align: left;
+      text-align: center;
     }
     th {
       padding: 4px 0 !important;
@@ -949,7 +1187,7 @@ export default {
       text-overflow: ellipsis;
       vertical-align: middle;
       position: relative;
-      text-align: left;
+      text-align: center;
     }
   }
 }

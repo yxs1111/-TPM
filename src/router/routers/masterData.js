@@ -440,7 +440,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesFMC.vue'),
                   meta: {
-                    title: 'splitRulesFMC',
+                    title: 'FMC',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
@@ -453,7 +453,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesRoadShow.vue'),
                   meta: {
-                    title: 'splitRulesRoadShow',
+                    title: 'RoadShow',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
@@ -466,7 +466,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
                   meta: {
-                    title: 'splitRulesListingFee',
+                    title: 'ListingFee',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
@@ -488,13 +488,28 @@ export default function() {
           ]
         },
         // 产品信息
-        // {
-        //   path: '/contractItem',
-        //   name: 'contractItem',
-        //   code: 'mdm_product_information',
-        //   component: () => import('@/views/master/contractItem/contractItem.vue'),
-        //   meta: { title: 'Contract Item', icon: 'apply' },
-        // },
+        {
+          path: '/contractItem',
+          name: 'contractItem',
+          code: 'ContractItem',
+          component: () => import('@/views/master/contractItem/contractItem.vue'),
+          meta: { title: 'Contract Item', icon: 'apply' },
+        },
+        // 匹配关系
+        {
+          path: '/MatchingRelation',
+          name: 'MatchingRelation',
+          code: 'MatchingRelation',
+          component: () => import('@/views/master/MatchingRelation.vue'),
+          meta: { title: '大区（+区域）&供应商匹配关系', icon: 'apply' },
+        },
+        {
+          path: '/pdMatchingRelationship',
+          name: 'pdMatchingRelationship',
+          code: 'pdMatchingRelationship',
+          component: () => import('@/views/master/pdMatchingRelationship.vue'),
+          meta: { title: 'Package&部门匹配关系', icon: 'apply' },
+        },
       ]
     }
   ]

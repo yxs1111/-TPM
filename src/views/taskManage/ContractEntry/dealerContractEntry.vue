@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-10 16:43:54
+ * @LastEditTime: 2022-07-08 17:27:34
 -->
 <template>
   <div class="MainContent">
@@ -54,7 +54,7 @@
       </div> -->
       <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">提交</el-button>
     </div>
-    <el-table :data="tableData" :key="tableKey" :max-height="maxheight"  :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
+    <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" :selectable="checkSelectable" />
       <el-table-column fixed align="center" width="80" label="序号">
@@ -62,12 +62,16 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column fixed align="center" width="220" label="操作">
+      <el-table-column fixed align="center" width="280" label="操作">
         <template slot-scope="scope">
           <div class="table_operation">
             <div class="haveText_delete" v-permission="permissions['delete']" @click="deleteRow(scope.row)">
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
+            </div>
+            <div class="haveText_editor" @click="copyRow(scope.row, scope.$index)">
+              <svg-icon icon-class="copy" class="svgIcon" />
+              <span>复制</span>
             </div>
             <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
               <svg-icon icon-class="save-light" class="svgIcon" />
@@ -84,6 +88,8 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="160" label="客户名称">
         <template slot-scope="scope">
           <div>
@@ -91,24 +97,24 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额(¥)">
+      <el-table-column prop="customerContractSaleAmount" align="center" width="180" label="客户目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
             {{FormateNum(scope.row.customerContractSaleAmount)}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="distributorName" align="center" width="220" label="经销商名称">
+      <el-table-column prop="distributorName" align="center" width="280" label="经销商名称">
         <template slot-scope="scope">
           <div>
             {{scope.row.distributorName}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(¥)">
+      <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(RMB)">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.saleAmount" clearable class="my-el-input" placeholder="请输入">
+            <el-input v-model="scope.row.saleAmount" type="number" clearable class="my-el-input" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -119,8 +125,8 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
-              start-placeholder="开始日期" end-placeholder="结束日期">
+            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @blur="changeContractDate(scope.row)">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -131,7 +137,7 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+            <el-date-picker v-model="scope.row.systemDate" :picker-options="pickerOptionsSystemDate(scope.row)" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
               end-placeholder="结束月份">
             </el-date-picker>
           </div>
@@ -139,6 +145,9 @@
             {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column v-slot="{row}" prop="isSupplement" align="center" width="100" label="是否补录">
+        {{row.isSupplement?'是':'否'}}
       </el-table-column>
       <el-table-column prop="contractStatus" align="center" width="160" label="合同状态">
         <template slot-scope="scope">
@@ -150,11 +159,10 @@
               <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
-                    <span>合同终止</span>
+                    <span>调整系统生效时间</span>
                   </div>
                   <div class="PopoverContentOption">
                     <div class="PopoverContentOptionItem">
-                      <span class="PopoverContentOptionItemText">更改时间</span>
                       <el-date-picker v-model="scope.row.expireDate" value-format="yyyyMM" format="yyyyMM" type="month" placeholder="选择日期">
                       </el-date-picker>
                     </div>
@@ -170,16 +178,18 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="120" align="center" label="合同条款">
-        <div class="seeActivity" @click="showTermDetailDialog(row)">
+      <el-table-column  width="120" align="center" label="合同条款">
+        <template v-slot="scope">
+          <div class="seeActivity" @click="showTermDetailDialog(scope.row,scope.$index)">
           条款明细
-        </div>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column prop="remark" align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.remark" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
+            <el-input v-model="scope.row.remark"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
+            </el-input> 
           </div>
           <div v-show="!scope.row.isEditor">
             {{scope.row.remark}}
@@ -188,9 +198,9 @@
       </el-table-column>
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见" />
       <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见"></el-table-column>
-      <el-table-column prop="createBy" align="center" width="220" label="创建人"></el-table-column>
+      <el-table-column prop="createBy" align="center" width="240" label="创建人"></el-table-column>
       <el-table-column prop="createDate" align="center" width="220" label="创建时间"></el-table-column>
-      <el-table-column prop="updateBy" align="center" width="220" label="修改人"></el-table-column>
+      <el-table-column prop="updateBy" align="center" width="240" label="修改人"></el-table-column>
       <el-table-column prop="updateDate" align="center" width="220" label="修改时间"></el-table-column>
     </el-table>
     <!-- 分页 -->
@@ -199,7 +209,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 新增 -->
-    <el-dialog width="95%" v-elDragDialog class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
+    <el-dialog width="95%" ref="termDialog" class="my-el-dialog"  title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
       <div class="dialogContent">
         <div class="termInfo">
           <div class="selectCustomer">
@@ -215,7 +225,7 @@
             <el-table :data="addDialogCustomer" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="customerName" align="center" width="320" label="客户名称">
               </el-table-column>
-              <el-table-column prop="saleAmount" align="center" width="280" label="客户目标销售额(¥)">
+              <el-table-column prop="saleAmount" align="center" width="280" label="客户目标销售额(RMB)">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.saleAmount)}}
@@ -248,7 +258,7 @@
           <div class="space">
           </div>
           <div class="TableWrap_dealer">
-            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="220" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+            <el-table :data="addDialogDealerList" ref="dealerTable"  max-height="400" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
@@ -261,10 +271,10 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="targetSale" align="center" width="280" label="协议目标销售额(¥)">
+              <el-table-column prop="targetSale" align="center" width="280" label="协议目标销售额(RMB)">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
-                    <el-input v-model="scope.row.targetSale" clearable class="my-el-input" placeholder="请输入">
+                    <el-input v-model="scope.row.targetSale" type="number" clearable class="my-el-input" placeholder="请输入">
                     </el-input>
                   </div>
                   <div v-else>
@@ -275,8 +285,8 @@
               <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
-                    <el-date-picker v-model="scope.row.contractDate" type="daterange" class="select_date" :picker-options="pickerOptions" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
-                      start-placeholder="开始日期" end-placeholder="结束日期">
+                    <el-date-picker v-model="scope.row.contractDate" type="daterange" class="select_date" :picker-options="pickerOptions" value-format="yyyy-MM-dd"
+                      format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                   </div>
                   <div v-else>
@@ -299,7 +309,7 @@
               <el-table-column prop="contractState" align="center" label="操作">
                 <template slot-scope="scope">
                   <div class="contractStatusWrap">
-                    <img  src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteItem(scope.$index)">
+                    <img src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteItem(scope.$index)">
                   </div>
                 </template>
               </el-table-column>
@@ -331,7 +341,8 @@ import {
   contractList,
   FormateThousandNum,
   downloadFile,
-  pickerOptions
+  pickerOptions,
+  pickerOptionsSystemDate
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -356,6 +367,7 @@ export default {
         state: '',
       },
       maxheight: getContractEntry(),
+      maxheightTerm:'',
       tableData: [],
       editMaxTargetSale: 0, //修改可填最大值
       editIsCollection: 0, //编辑--判断是否补录 --是否跳过验证
@@ -375,38 +387,28 @@ export default {
         isCollection: '', //是否补录
       },
       addDialogCustomer: [],
-      addDialogDealerList: [
-        // {
-        //   distributorName: '上海映华食品有限公司',
-        //   targetSale: 100,
-        //   contractDate: ['20220110', '20220521'],
-        //   systemDate: ['202201', '202212'],
-        //   contractStatus: 0,
-        //   systemStatus: 0,
-        //   isEditor: 1, //是否补录
-        // },
-      ],
+      addDialogDealerList: [],
       isAddDialogVisible: false,
       //取消编辑 --》数据重置（不保存）
       tempObj: {
         rowIndex: 0,
         tempInfo: null,
       },
-      selectDate:'', 
+      selectDate: '',
       pickerOptions: {
         onPick: (obj) => {
-          this.selectDate=obj.minDate
+          this.selectDate = obj.minDate
           //若存在最大值，将已选中的值置空（下次可选另一年（且保证同年））
-          if(obj.maxDate) {
-            this.selectDate=''
+          if (obj.maxDate) {
+            this.selectDate = ''
           }
         },
         // 限制年月
         disabledDate: (time) => {
-          const date=new Date(this.selectDate)
+          const date = new Date(this.selectDate)
           const year = date.getFullYear()
           //未选择初始日期时，不做限制
-          if (this.selectDate=='') {
+          if (this.selectDate == '') {
             return false
           }
           return (
@@ -421,10 +423,11 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getContractEntry()
+        this.maxheight = window.innerHeight - 420
+        // this.maxheightTerm = window.innerHeight - 320
       })()
     }
-    this.getTableData()
+    // this.getTableData()
     this.getCustomerList()
     this.getDistributorList()
   },
@@ -479,6 +482,11 @@ export default {
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
+          if(item.contractState==='2') {
+            item.isRefused=1
+          } else {
+            item.isRefused=0
+          }
           item.isEditor = 0
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
@@ -495,12 +503,15 @@ export default {
     getCustomerList() {
       API.getCustomerContract({}).then((res) => {
         if (res.code === 1000) {
-          let list=res.data
-            list.forEach(item=>{
-              item.contractDate=item.contractBeginDate.replaceAll('-','/')+' - '+item.contractEndDate.replaceAll('-','/')
-              item.label=`${item.customerName}(${item.contractDate})`
-            })
-            this.customerArr = list
+          let list = res.data
+          list.forEach((item) => {
+            item.contractDate =
+              item.contractBeginDate.replaceAll('-', '/') +
+              ' - ' +
+              item.contractEndDate.replaceAll('-', '/')
+            item.label = `${item.customerName}(${item.contractDate})`
+          })
+          this.customerArr = list
         }
       })
     },
@@ -517,8 +528,16 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState == '3' || row.contractState == '4') {
-        this.$message.info('该经销商已经通过，不能进行编辑')
+      //编辑状态：草稿、被拒绝
+      if(row.contractState !== '0'&&row.contractState !== '2') {
+        if(row.contractState==1) {
+          this.$message.info('审批中的合同不允许编辑')
+        } else if(row.contractState==3) {
+          this.$message.info('该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间')
+        } else if(row.contractState==4||row.contractState==5) {
+          this.$message.info('该合同不允许编辑')
+        }
+        sessionStorage.setItem("isEditor",`0-${index}`)
         return
       }
       if (this.tempObj.tempInfo) {
@@ -530,14 +549,37 @@ export default {
       this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 1
       this.$forceUpdate()
+      sessionStorage.setItem("isEditor",`1-${index}`)
     },
     CancelEditorRow(index) {
       // this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 0
       this.tableData[index] = this.tempObj.tempInfo
+      sessionStorage.setItem("isEditor",`0-${index}`)
+    },
+    compareDate(date) {
+      let currentDate = new Date()
+      let month =
+        currentDate.getMonth() < 10
+          ? '0' + (currentDate.getMonth() + 1)
+          : currentDate.getMonth() + 1
+      let year = currentDate.getFullYear()
+      let currentMonth = year + month
+      return Number(currentMonth) < Number(date)
     },
     //删除该行数据
     deleteRow(row) {
+      //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不收状态影响
+      let isDeleteFlag = this.compareDate(row.systemDate[0])
+      //允许删除：草稿、被拒绝、通过（未汇算） 不允许删除：待审批、通过（已汇算）、终止、过期
+      if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
+        if(row.contractState === '1') {
+          this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
+        } else if(row.contractState == '3'&&!isDeleteFlag||row.contractState === '4'||row.contractState === '5') {
+          this.$message.info('该合同不允许删除')
+        }
+        return
+      }
       //删除数据库中的数据
       this.$confirm('确定要删除数据吗?', '提示', {
         confirmButtonText: '确定',
@@ -565,14 +607,14 @@ export default {
     },
     //经销商提交
     submit() {
-      if(this.checkArr.length==0) {
-        this.$message.info("请先选择数据")
+      if (this.checkArr.length == 0) {
+        this.$message.info('请先选择数据')
         return
       }
-      let IdList=[]
-      this.checkArr.forEach(item=>{
+      let IdList = []
+      this.checkArr.forEach((item) => {
         IdList.push(item.id)
-      }) 
+      })
       this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -635,28 +677,116 @@ export default {
         }
       })
     },
-    //编辑一行 API
-    updateRowFunction(row) {
-      API.update({
+    copyRow(row, index) {
+      this.tableData.unshift({
         id: row.id,
+        createBy: row.createBy,
+        createDate: row.createDate,
+        updateBy: row.updateBy,
+        updateDate: row.updateDate,
+        deleteFlag: row.deleteFlag,
         ccId: row.ccId,
         distributorMdmCode: row.distributorMdmCode,
+        distributorName: row.distributorName,
         saleAmount: row.saleAmount,
-        contractBeginDate: row.contractDate[0],
-        contractEndDate: row.contractDate[1],
-        effectiveBeginDate: row.systemDate[0],
-        effectiveEndDate: row.systemDate[1],
+        contractBeginDate: row.contractBeginDate,
+        contractEndDate: row.contractEndDate,
+        effectiveBeginDate: row.effectiveBeginDate,
+        effectiveEndDate: row.effectiveEndDate,
+        contractState: row.contractState,
         remark: row.remark,
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.getTableData()
-          if (res.data) {
-            this.$message.success('修改成功')
-          } else {
-            this.$message.info(`${res.message}`)
-          }
-        }
+        poApprovalComments: row.poApprovalComments,
+        finApprovalComments: row.finApprovalComments,
+        isSupplement: row.isSupplement,
+        earlyExpireDate: row.earlyExpireDate,
+        entryDate: row.entryDate,
+        customerName: row.customerName,
+        customerContractSaleAmount: row.customerContractSaleAmount,
+        contractStateName: row.contractStateName,
+        variable: row.variable,
+        fixed: row.fixed,
+        customerMdmCode: row.customerMdmCode,
+        isEditor: 2,
+        expireDate: row.expireDate,
+        contractDate: row.contractDate,
+        systemDate: row.systemDate,
       })
+    },
+    //更改合同日期--匹配对应的客户合同
+    changeContractDate(row) {
+      if (row.isEditor == 2) {
+        let index = this.customerArr.findIndex(
+          (item) =>
+            item.customerName == row.customerName &&
+            item.contractBeginDate == row.contractDate[0] &&
+            item.contractEndDate == row.contractDate[1]
+        )
+        if (index == -1) {
+          this.$message.warning('请选择正确的合同日期')
+        } else {
+          row.ccId = this.customerArr[index].id
+          API.findOne({
+            id: row.ccId,
+            isCustomerContract: 1, //是否查询客户合同（1是0否）
+            isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
+            isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
+          }).then((res) => {
+            if (res.code === 1000) {
+              row.customerContractSaleAmount =
+                res.data.customerContract.saleAmount
+              row.saleAmount = res.data.customerContract.saleAmount
+            }
+          })
+        }
+      }
+    },
+    //编辑一行 API
+    updateRowFunction(row) {
+      if (row.isEditor == 2) {
+        API.addCopy([
+          {
+            id: row.id,
+            ccId: row.ccId,
+            distributorMdmCode: row.distributorMdmCode,
+            saleAmount: row.saleAmount,
+            contractBeginDate: row.contractDate[0],
+            contractEndDate: row.contractDate[1],
+            effectiveBeginDate: row.systemDate[0],
+            effectiveEndDate: row.systemDate[1],
+            remark: row.remark,
+          },
+        ]).then((res) => {
+          if (res.code === 1000) {
+            this.getTableData()
+            if (res.data) {
+              this.$message.success('复制成功')
+            } else {
+              this.$message.info(`${res.message}`)
+            }
+          }
+        })
+      } else {
+        API.update({
+          id: row.id,
+          ccId: row.ccId,
+          distributorMdmCode: row.distributorMdmCode,
+          saleAmount: row.saleAmount,
+          contractBeginDate: row.contractDate[0],
+          contractEndDate: row.contractDate[1],
+          effectiveBeginDate: row.systemDate[0],
+          effectiveEndDate: row.systemDate[1],
+          remark: row.remark,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.getTableData()
+            if (res.data) {
+              this.$message.success('修改成功')
+            } else {
+              this.$message.info(`${res.message}`)
+            }
+          }
+        })
+      }
     },
     search() {
       this.pageNum = 1
@@ -712,6 +842,7 @@ export default {
     //新增数据 --弹窗展示
     showAddDialog() {
       this.isAddDialogVisible = true
+      this.$refs.termDialog.$el.firstChild.style.height = '90%'
     },
     //新增经销商 -- 获取客户数据
     getDetail() {
@@ -745,7 +876,7 @@ export default {
             this.addDialog.nowTargetSale += item.saleAmount
           })
           let flag = distList.findIndex((item) => {
-            return item.contractState == '3' || item.contractState == '4'
+            return item.contractState == '3' 
           })
           //是否补录，补录状态判断
           this.addDialog.isCollection = flag === -1 ? 0 : 1
@@ -801,7 +932,7 @@ export default {
     },
     //新增经销商 -- 删除
     deleteItem(index) {
-      this.addDialogDealerList.splice(index,1)
+      this.addDialogDealerList.splice(index, 1)
     },
     //确认新增
     confirmAdd() {
@@ -837,7 +968,7 @@ export default {
           targetSaleLimit + this.addDialog.nowTargetSale !=
           this.addDialogCustomer[0].saleAmount
         ) {
-          this.$message.info(`经销商目标销售额之和应等于客户目标销售额之和`)
+          this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
           return
         } else {
           API.add(list).then((res) => {
@@ -850,7 +981,7 @@ export default {
       }
     },
     //打开条款明细弹窗
-    showTermDetailDialog({ ccId }) {
+    showTermDetailDialog({ ccId },index) {
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
         name: 'dealerTermDetail',
@@ -858,6 +989,7 @@ export default {
           ccId,
         },
       })
+      sessionStorage.setItem("EditorIndex",index)
       // this.$router.push(
       //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
       // )
@@ -903,6 +1035,9 @@ export default {
         return 'first-row'
       }
     },
+    pickerOptionsSystemDate(row) {
+      return pickerOptionsSystemDate(row)
+    }
   },
 }
 </script>
@@ -916,7 +1051,7 @@ export default {
 }
 .seeActivity {
   height: 32px;
-  background: #D7E8F2;
+  background: #d7e8f2;
   border-radius: 6px;
   font-size: 16px;
   color: #4192d3;
@@ -1097,6 +1232,7 @@ export default {
 }
 </style>
 <style lang="less">
+
 .contract_firstRow {
   background-color: #4192d3 !important;
   color: #fff;

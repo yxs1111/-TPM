@@ -42,7 +42,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column fixed="left" label="权限名称" align="center" width="250">
+      <el-table-column fixed="left" label="权限名称" align="center" width="320">
         <template slot-scope="{row}">
           {{ row.name }}
         </template>
@@ -156,9 +156,9 @@
 </script>
 <style lang="scss">
 .permissionInput {
-  width: 250px !important;
+  width: 380px !important;
   .el-input--suffix {
-    width: 250px !important;
+    width: 380px !important;
   }
 }
 </style>

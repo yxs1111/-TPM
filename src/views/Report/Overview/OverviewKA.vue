@@ -36,7 +36,7 @@
       <el-table-column width="150" align="center" prop="regionName" label="Contract item" />
       <el-table-column width="150" align="center" prop="cityName" label="条件类型" />
       <el-table-column width="150" align="center" prop="channelName" label="费比（%）" />
-      <el-table-column width="150" align="center" prop="customerGroupName" label="含税金额（￥）" />
+      <el-table-column width="150" align="center" prop="customerGroupName" label="含税金额（RMB）" />
       <el-table-column width="280" align="center" prop="customerName" label="描述" />
     </el-table>
     <!-- 分页 -->
