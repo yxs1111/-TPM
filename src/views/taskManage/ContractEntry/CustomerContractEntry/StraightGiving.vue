@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-08 13:47:12
+ * @LastEditTime: 2022-07-08 15:21:52
 -->
 <template>
   <div class="MainContent">
@@ -142,7 +142,7 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" :picker-options="pickerOptionsSystemDate(scope.row)" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
               end-placeholder="结束月份">
             </el-date-picker>
           </div>
@@ -592,11 +592,10 @@ import {
   getContractEntry,
   FormateThousandNum,
   contractList,
-  contractItemVariableList,
-  contractItemFixList,
   downloadFile,
   getCurrentYearRange,
   pickerOptions,
+  pickerOptionsSystemDate
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -624,8 +623,8 @@ export default {
       customerArr: [],
       largeAreaList: [],
       contractList: contractList,
-      contractItemVariableList: contractItemVariableList,
-      contractItemFixList: contractItemFixList,
+      contractItemVariableList: [],
+      contractItemFixList: [],
       isAddCount: 0,
       tableKey: 0,
       customerId: 0,
@@ -1053,9 +1052,15 @@ export default {
     //编辑行数据
     editorRow(index, row) {
       //编辑状态：草稿、被拒绝
-      if(this.tableData[index].contractState !== '0'&&this.tableData[index].contractState !== '2') {
+      if(row.contractState !== '0'&&row.contractState !== '2') {
         this.isEditor=0
-        this.$message.info('该合同不能进行编辑操作')
+        if(row.contractState==1) {
+          this.$message.info('审批中的合同不允许编辑')
+        } else if(row.contractState==3) {
+          this.$message.info('该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间')
+        } else if(row.contractState==4||row.contractState==5) {
+          this.$message.info('该合同不允许编辑')
+        }
         return 
       }
       if (this.tempObj.tempInfo && !row.isNewData) {
@@ -1105,7 +1110,11 @@ export default {
       let isDeleteFlag = this.compareDate(row.systemDate[0])
       //允许删除：草稿、被拒绝、通过（未汇算）
       if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
-        this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
+        if(row.contractState === '1') {
+          this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
+        } else if(row.contractState == '3'&&!isDeleteFlag||row.contractState === '4'||row.contractState === '5') {
+          this.$message.info('该合同不允许删除')
+        }
         return
       }
       //删除新增的
@@ -1719,6 +1728,9 @@ export default {
     FormateNum(num) {
       return FormateThousandNum(num)
     },
+    pickerOptionsSystemDate(row) {
+      return pickerOptionsSystemDate(row)
+    }
   },
 }
 </script>

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-29 15:45:31
+ * @LastEditTime: 2022-07-08 14:28:08
 -->
 <template>
   <div class="MainContent">
@@ -337,8 +337,6 @@ import {
   getContractEntry,
   FormateThousandNum,
   contractList,
-  contractItemVariableList,
-  contractItemFixList,
   downloadFile,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -365,9 +363,9 @@ export default {
       checkArr: [], //选中的数据
       tableData: [],
       customerArr: [],
-      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
-      contractItemVariableList: contractItemVariableList,
-      contractItemFixList: contractItemFixList,
+      contractList: contractList,
+      contractItemVariableList: [],
+      contractItemFixList: [],
       isAddCount: 0,
       tableKey: 0,
       customerId: 0,

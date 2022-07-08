@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-30 17:26:21
+ * @LastEditTime: 2022-07-08 15:19:10
 -->
 <template>
   <div class="MainContent">
@@ -137,7 +137,7 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
+            <el-date-picker v-model="scope.row.systemDate" :picker-options="pickerOptionsSystemDate(scope.row)" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
               end-placeholder="结束月份">
             </el-date-picker>
           </div>
@@ -342,6 +342,7 @@ import {
   FormateThousandNum,
   downloadFile,
   pickerOptions,
+  pickerOptionsSystemDate
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -386,17 +387,7 @@ export default {
         isCollection: '', //是否补录
       },
       addDialogCustomer: [],
-      addDialogDealerList: [
-        // {
-        //   distributorName: '上海映华食品有限公司',
-        //   targetSale: 100,
-        //   contractDate: ['20220110', '20220521'],
-        //   systemDate: ['202201', '202212'],
-        //   contractStatus: 0,
-        //   systemStatus: 0,
-        //   isEditor: 1, //是否补录
-        // },
-      ],
+      addDialogDealerList: [],
       isAddDialogVisible: false,
       //取消编辑 --》数据重置（不保存）
       tempObj: {
@@ -539,7 +530,13 @@ export default {
     editorRow(index, row) {
       //编辑状态：草稿、被拒绝
       if(row.contractState !== '0'&&row.contractState !== '2') {
-        this.$message.info('该经销商不能进行编辑操作')
+        if(row.contractState==1) {
+          this.$message.info('审批中的合同不允许编辑')
+        } else if(row.contractState==3) {
+          this.$message.info('该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间')
+        } else if(row.contractState==4||row.contractState==5) {
+          this.$message.info('该合同不允许编辑')
+        }
         sessionStorage.setItem("isEditor",`0-${index}`)
         return
       }
@@ -576,7 +573,11 @@ export default {
       let isDeleteFlag = this.compareDate(row.systemDate[0])
       //允许删除：草稿、被拒绝、通过（未汇算） 不允许删除：待审批、通过（已汇算）、终止、过期
       if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
-        this.$message.info('该经销商不能进行删除操作')
+        if(row.contractState === '1') {
+          this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
+        } else if(row.contractState == '3'&&!isDeleteFlag||row.contractState === '4'||row.contractState === '5') {
+          this.$message.info('该合同不允许删除')
+        }
         return
       }
       //删除数据库中的数据
@@ -1034,6 +1035,9 @@ export default {
         return 'first-row'
       }
     },
+    pickerOptionsSystemDate(row) {
+      return pickerOptionsSystemDate(row)
+    }
   },
 }
 </script>
