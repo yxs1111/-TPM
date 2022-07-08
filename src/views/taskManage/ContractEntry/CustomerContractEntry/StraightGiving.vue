@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-07 13:37:55
+ * @LastEditTime: 2022-07-08 13:47:12
 -->
 <template>
   <div class="MainContent">
@@ -1105,7 +1105,7 @@ export default {
       let isDeleteFlag = this.compareDate(row.systemDate[0])
       //允许删除：草稿、被拒绝、通过（未汇算）
       if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
-        this.$message.info('该合同不能进行删除操作')
+        this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
         return
       }
       //删除新增的
