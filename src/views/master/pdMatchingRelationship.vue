@@ -98,7 +98,7 @@
               <el-option v-for="item,index in minePackageListDialog" :key="index" :label="item.costType" :value="index" />
             </el-select>
           </el-form-item>
-          <el-form-item label="渠道">
+          <el-form-item label="渠道" prop="channelCode">
             <el-select v-model="ruleForm.channelCode" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
             </el-select>
@@ -192,6 +192,13 @@ export default {
           },
         ],
         departmentId: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        channelCode: [
           {
             required: true,
             message: 'This field is required',
