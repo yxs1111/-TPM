@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-11 08:56:51
+ * @LastEditTime: 2022-07-11 17:43:53
 -->
 <template>
   <div class="MainContent">
@@ -1298,6 +1298,13 @@ export default {
     },
     //定时任务确定--终止合同
     popoverSubmit(index, row) {
+      let newStr=row.expireDate.substring(0,4)+'-'+row.expireDate.substring(4)
+      let expireDate=new Date(newStr)
+      let contractDate=new Date(row.contractDate[1].substring(0,4)+'-'+row.contractDate[1].substring(5,7))
+      if(expireDate.getTime()<contractDate.getTime()) {
+        this.$message.info("系统生效时间结束时间不能早于合同期间结束时间")
+        return
+      }
       API.termination({
         id: row.id,
         date: row.expireDate,
