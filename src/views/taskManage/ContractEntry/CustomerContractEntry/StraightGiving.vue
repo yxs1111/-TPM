@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-08 15:21:52
+ * @LastEditTime: 2022-07-11 08:56:51
 -->
 <template>
   <div class="MainContent">
@@ -1303,7 +1303,7 @@ export default {
         date: row.expireDate,
       }).then((res) => {
         if (res.code === 1000) {
-          this.$message.success('终止成功')
+          this.$message.success('调整成功')
           this.popoverCancel(row.id)
           this.getTableData()
         }
