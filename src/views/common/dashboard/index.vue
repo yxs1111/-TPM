@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-07-08 17:26:18
+ * @LastEditTime: 2022-07-12 16:24:24
 -->
 <template>
   <div class="dashboard-container">
@@ -506,6 +506,7 @@ import auth from '@/utils/auth'
 import TaskAPI from '@/api/taskManage/taskManage.js'
 import API from '@/api/index/index.js'
 import completeAPI from '@/api/taskManage/taskManage.js'
+import { logger } from 'runjs/lib/common'
 export default {
   name: 'Dashboard',
   created() {},
@@ -560,6 +561,11 @@ export default {
       this.currentIndex = index
     },
     getTip(value) {
+      let assigneeList=value.assignee.split(",")
+      let assigneeStr=''
+      assigneeList.forEach(item=>{
+                  assigneeStr+= `<span>${item}</span></br>`
+                })
       return `<div class="Tip">
                 <span class="TipTitle">节点名称: </span>
                 <span>${value.activityName}</span>
@@ -570,7 +576,7 @@ export default {
               </div>
               <div class="Tip">
                 <span class="TipTitle">办理人: </span>
-                <span>${value.assignee}</span>
+                <span>${assigneeStr}</span>
               </div>
               <div class="Tip">
                 <span class="TipTitle">办理状态: </span>
@@ -1355,7 +1361,7 @@ export default {
   font-weight: 400;
   margin: 3px 0;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 }
 .TipTitle {
   width: 70px;
