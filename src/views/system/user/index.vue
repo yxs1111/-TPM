@@ -22,22 +22,22 @@
           :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd" :default-time="['00:00:00','23:59:59']" @change="search" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="TpmButtonBG"  @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </el-form-item>
       <el-form-item>
         <el-button @click="reset" class="TpmButtonBG">重置</el-button>
       </el-form-item>
     </el-form>
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG"  icon="el-icon-delete" @click="showDeleteDialog">删除</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="showDeleteDialog">删除</el-button>
       <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="newRowData">新增</el-button>
-      <el-button :disabled="editDisabled" class="TpmButtonBG"  type="primary" icon="el-icon-edit" @click="editUserRole">
+      <el-button :disabled="editDisabled" class="TpmButtonBG" type="primary" icon="el-icon-edit" @click="editUserRole">
         角色
       </el-button>
     </div>
     <!--查询结果-->
-    <el-table ref="userInfoTable"  :data="userPageProps.records"  border  :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :max-height="maxheight" highlight-current-row
-      @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
+    <el-table ref="userInfoTable" :data="userPageProps.records" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" :max-height="maxheight"
+      highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
       <el-table-column align="center" fixed="left" type="selection" width="55" />
       <el-table-column align="center" fixed="left" label="序号" width="55">
         <template slot-scope="scope">
@@ -49,12 +49,12 @@
           {{ row.name }}
         </template>
       </el-table-column>
-      <el-table-column  label="登录名" width="480" align="center">
+      <el-table-column label="登录名" width="480" align="center">
         <template slot-scope="{row}">
           <span>{{ row.loginName }}</span>
         </template>
       </el-table-column>
-      <el-table-column  label="邮箱" width="480" align="center">
+      <el-table-column label="邮箱" width="480" align="center">
         <template slot-scope="{row}">
           <span>{{ row.email }}</span>
         </template>
@@ -64,12 +64,12 @@
           {{ row.createBy }}
         </template>
       </el-table-column>
-      <el-table-column  width="180" align="center" prop="created_date" label="创建时间">
+      <el-table-column width="180" align="center" prop="created_date" label="创建时间">
         <template slot-scope="{row}">
           <span>{{ parseJson(row.createDate, '{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="150"  prop="expireAt" label="过期状态">
+      <el-table-column align="center" width="150" prop="expireAt" label="过期状态">
         <template slot-scope="{row}">
           <el-popover placement="top-start" title="过期时间" width="150" trigger="hover">
             <em class="el-icon-time" />
@@ -106,9 +106,9 @@
     <!--分页-->
     <div class="TpmPaginationWrap">
       <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="userPageProps.total" :page-size="userPageProps.pageSize"
-      :current-page="userPageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        :current-page="userPageProps.pageNum" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    
+
     <!--信息框-->
     <el-dialog v-el-drag-dialog :title="textMap[userInfoDialog.state]" :visible.sync="userInfoDialog.visible" @dragDialog="handleDrag">
       <el-form ref="userDataForm" :rules="rules" :model="userInfoDialog.data" label-position="left" label-width="90px" style="width: 600px; margin-left:50px;">
@@ -117,7 +117,8 @@
           <el-input v-else v-model="userInfoDialog.data.name" class="my_elInput" maxlength="50" :clearable="true" placeholder="用户名" show-word-limit />
         </el-form-item>
         <el-form-item label="登录名" prop="loginName">
-          <el-input v-if="userInfoDialog.state === 'create'" class="my_elInput" v-model="userInfoDialog.data.loginName" maxlength="50" :clearable="true" placeholder="登录名" show-word-limit />
+          <el-input v-if="userInfoDialog.state === 'create'" class="my_elInput" v-model="userInfoDialog.data.loginName" maxlength="50" :clearable="true" placeholder="登录名"
+            show-word-limit />
           <span v-else>{{ userInfoDialog.data.loginName }}</span>
         </el-form-item>
         <el-form-item label="电话号码" prop="phone">
@@ -163,7 +164,7 @@
         <el-button v-if="userInfoDialog.state==='info'" type="primary" @click="changeToEdit">
           编辑
         </el-button>
-        <el-button v-else type="primary"  @click="saveOrUpdate">
+        <el-button v-else type="primary" @click="saveOrUpdate">
           保存并关闭
         </el-button>
       </div>
@@ -197,18 +198,25 @@
     <el-dialog width="75%" v-el-drag-dialog class="my-el-dialog roleDailog" title="数据权限绑定" :visible="roleVisible" @close="closeRoleDialog">
       <div class="roleBindWrap">
         <div class="roleTree">
-          <!-- <el-tree  :data="RoleTreeData_Mine" ref="RoleTree_Mine" :filter-node-method="RoleTreeFilterMethod"
-            :show-checkbox="true" node-key="mid" highlight-current :props="treeProps_Mine">
-          </el-tree> -->
-          <el-tree  :data="RoleTreeData_Mine" class="roleTreeLi" ref="MinePackageTree" accordion :filter-node-method="RoleTreeFilterMethod"
-            :show-checkbox="true" node-key="mid" highlight-current :props="Role_KA">
-          </el-tree> 
-          <el-tree  :data="RoleTreeData_FieldSales" class="roleTreeLi" ref="FileSalesTree" accordion :filter-node-method="RoleTreeFilterMethod"
-            :show-checkbox="true" node-key="NodeKey" highlight-current :props="Role_KA">
-          </el-tree> 
-          <el-tree  :data="RoleTreeData_KA"  class="roleTreeLi" ref="KATree" accordion :filter-node-method="RoleTreeFilterMethod"
-            :show-checkbox="true" node-key="NodeKey" highlight-current :props="Role_KA">
-          </el-tree> 
+          <div class="roleTreeLi">
+            <el-input placeholder="输入关键字进行过滤" v-model="filterTextMinePackage"></el-input>
+            <el-tree :data="RoleTreeData_Mine" ref="MinePackageTree" accordion :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="mid" highlight-current
+              :props="Role_KA">
+            </el-tree>
+          </div>
+          <div class="roleTreeLi">
+            <el-input placeholder="输入关键字进行过滤" v-model="filterTextFs"></el-input>
+            <el-tree :data="RoleTreeData_FieldSales" ref="FileSalesTree" accordion :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true"
+              node-key="NodeKey" highlight-current :props="Role_KA">
+            </el-tree>
+          </div>
+          <div class="roleTreeLi">
+            <el-input placeholder="输入关键字进行过滤" v-model="filterTextKA"></el-input>
+            <el-tree :data="RoleTreeData_KA" ref="KATree" accordion :filter-node-method="RoleTreeFilterMethod" :show-checkbox="true" node-key="NodeKey"
+              highlight-current :props="Role_KA">
+            </el-tree>
+          </div>
+
         </div>
       </div>
       <span slot="footer" class="dialog-footer">

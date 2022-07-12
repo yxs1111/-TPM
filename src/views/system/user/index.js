@@ -275,7 +275,9 @@ export default {
       joinOrgDialog: {
         visible: false
       },
-      filterText: '',
+      filterTextFs: '',
+      filterTextMinePackage: '',
+      filterTextKA: '',
       allOrg: [],
       defaultProps: {
         children: 'children',
@@ -332,7 +334,16 @@ export default {
   watch: {
     multipleSelection(val) {
       this.editDisabled = !(val && val.length === 1)
-    }
+    },
+    filterTextFs(val) {
+      this.$refs.FileSalesTree.filter(val);
+    },
+    filterTextMinePackage(val) {
+      this.$refs.MinePackageTree.filter(val);
+    },
+    filterTextKA(val) {
+      this.$refs.KATree.filter(val);
+    },
   },
   methods: {
     // 查询方法
@@ -775,6 +786,9 @@ export default {
       this.RoleTreeData_KA = []
       this.RoleTreeData_Mine = []
       this.RoleTreeData_FieldSales = []
+      this.filterTextFs=''
+      this.filterTextMinePackage=''
+      this.filterTextKA=''
     },
     //获取默认权限
     async getDefaultRolePermissions(userName) {
