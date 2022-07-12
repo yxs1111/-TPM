@@ -506,7 +506,6 @@ import auth from '@/utils/auth'
 import TaskAPI from '@/api/taskManage/taskManage.js'
 import API from '@/api/index/index.js'
 import completeAPI from '@/api/taskManage/taskManage.js'
-import { logger } from 'runjs/lib/common'
 export default {
   name: 'Dashboard',
   created() {},
