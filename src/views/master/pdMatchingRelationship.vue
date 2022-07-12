@@ -99,12 +99,12 @@
             </el-select>
           </el-form-item>
           <el-form-item label="渠道" prop="channelCode">
-            <el-select v-model="ruleForm.channelCode" class="my-el-input" clearable filterable placeholder="请选择">
+            <el-select v-model="ruleForm.channelCode" @change="channelCodeDialog" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
             </el-select>
           </el-form-item>
-          <el-form-item label="大区" :required="ruleForm.channelCode==='RKA'?true:false">
-            <el-select v-model="ruleForm.zoneName" class="my-el-input" @change="getDepartment" clearable filterable placeholder="请选择">
+          <el-form-item label="大区" :required="ruleForm.channelCode==='RKA'?true:false"  prop="zoneName">
+            <el-select v-model="ruleForm.zoneName" class="my-el-input" :disabled="ruleForm.channelCode!=='RKA'?true:false" @change="getDepartment" clearable filterable placeholder="请选择">
                <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.name" />
             </el-select>
           </el-form-item>
@@ -201,6 +201,12 @@ export default {
         channelCode: [
           {
             required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        zoneName: [
+          {
             message: 'This field is required',
             trigger: 'blur',
           },
@@ -430,8 +436,16 @@ export default {
     getMinePackageIndex(minePackageCode) {
       return this.minePackageListDialog.findIndex(item=>item.costTypeNumber==minePackageCode)
     },
+    channelCodeDialog() {
+      this.ruleForm.zoneName=''
+    },
     //提交form
     submitForm(formName) {
+      if(this.ruleForm.channelCode=="RKA") {
+        this.rules.zoneName.required=true
+      } else {
+        this.rules.zoneName.required=false
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let url = this.isEditor ? API.updatePdMatchingRelationship : API.addPdMatchingRelationship
