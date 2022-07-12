@@ -343,6 +343,8 @@ export default {
       })
     },
     getDepartment() {
+      this.ruleForm.departmentId=''
+      this.ruleForm.departmentName=''
       API.getExistingData({
         costType: this.ruleForm.costType,
         minePackage: this.ruleForm.minePackage,
@@ -438,6 +440,7 @@ export default {
     },
     channelCodeDialog() {
       this.ruleForm.zoneName=''
+      this.getDepartment()
     },
     //提交form
     submitForm(formName) {
