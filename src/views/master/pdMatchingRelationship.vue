@@ -103,7 +103,7 @@
               <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
             </el-select>
           </el-form-item>
-          <el-form-item label="大区">
+          <el-form-item label="大区" :required="ruleForm.channelCode==='RKA'?true:false">
             <el-select v-model="ruleForm.zoneName" class="my-el-input" @change="getDepartment" clearable filterable placeholder="请选择">
                <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.name" />
             </el-select>
