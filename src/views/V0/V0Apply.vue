@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-11 14:01:50
+ * @LastEditTime: 2022-07-13 14:13:57
 -->
 <template>
   <div class="V0Content">
@@ -136,7 +136,7 @@
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">
               <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in ['Price Promotion','New User','Contract','ListingFee']" :key="index" :label="item" :value="item" />
+                <el-option v-for="item,index in ['Price Promotion','New User','KA Contract','ListingFee']" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
