@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-13 14:41:37
+ * @LastEditTime: 2022-07-13 15:43:23
 -->
 <template>
   <div class="MainContent">
@@ -509,7 +509,11 @@ export default {
               item.contractBeginDate.replaceAll('-', '/') +
               ' - ' +
               item.contractEndDate.replaceAll('-', '/')
-            item.label = `${item.customerName}(${item.contractDate})`
+            if(item.channelCode=='RKA'&&item.regionName) {
+              item.label = `${item.customerName}-${item.regionName}(${item.contractDate})`
+            } else {
+              item.label = `${item.customerName}(${item.contractDate})`
+            }
           })
           this.customerArr = list
         }
