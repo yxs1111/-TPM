@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-11 08:56:37
+ * @LastEditTime: 2022-07-13 14:16:08
 -->
 <template>
   <div class="MainContent">
@@ -278,14 +278,14 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column prop="remark" align="left" label="描述">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
                   <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(0,scope.$index)">
                 </div>
-                <div v-show="!scope.row.isNewData">
+                <div v-show="!scope.row.isNewData" class="detailText">
                   {{ scope.row.remark }}
                 </div>
               </template>
@@ -348,14 +348,14 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column prop="remark" align="left" label="描述">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
                   <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(0,scope.$index)">
                 </div>
-                <div v-show="!scope.row.isNewData">
+                <div v-show="!scope.row.isNewData" class="detailText">
                   {{ scope.row.remark }}
                 </div>
               </template>
@@ -417,14 +417,14 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column prop="remark" align="left" label="描述">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
                   <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(0,scope.$index)">
                 </div>
-                <div v-show="!scope.row.isNewData">
+                <div v-show="!scope.row.isNewData" class="detailText">
                   {{ scope.row.remark }}
                 </div>
               </template>
@@ -490,14 +490,14 @@
                 <div v-show="!scope.row.isNewData">{{ FormateNum(scope.row.taxCost) }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column prop="remark" align="left" label="描述">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
                   <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(1,scope.$index)">
                 </div>
-                <div v-show="!scope.row.isNewData">
+                <div v-show="!scope.row.isNewData" class="detailText">
                   {{ scope.row.remark }}
                 </div>
               </template>
@@ -556,14 +556,14 @@
                 <div v-show="!scope.row.isNewData">{{ FormateNum(scope.row.taxCost) }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column prop="remark" align="left" label="描述">
               <template slot-scope="scope">
                 <div v-show="scope.row.isNewData" class="TermDetail">
                   <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                   </el-input>
                   <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(1,scope.$index)">
                 </div>
-                <div v-show="!scope.row.isNewData">
+                <div v-show="!scope.row.isNewData" class="detailText">
                   {{ scope.row.remark }}
                 </div>
               </template>
@@ -1737,6 +1737,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.detailText {
+  text-align: left;
+}
 .seeActivity {
   height: 32px;
   background: #d7e8f2;
