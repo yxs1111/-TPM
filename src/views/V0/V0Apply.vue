@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-13 08:37:47
+ * @LastEditTime: 2022-07-13 15:47:32
 -->
 <template>
   <div class="V0Content">
@@ -645,7 +645,7 @@ export default {
             case 'New User':
               url = API.getNuData
               break
-            case 'Contract':
+            case 'KA Contract':
               url = API.getContractData
               break
             case 'ListingFee':
