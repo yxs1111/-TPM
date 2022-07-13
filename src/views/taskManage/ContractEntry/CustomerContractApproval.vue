@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-08 14:28:08
+ * @LastEditTime: 2022-07-13 10:04:31
 -->
 <template>
   <div class="MainContent">
@@ -147,7 +147,7 @@
           <span class="termItem">合同状态:{{contractList[termInfo.contractState]}}</span>
         </div>
         <div class="termTableWrap">
-          <el-table :data="termTotalData"  max-height="250" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+          <el-table :data="termTotalData"  max-height="350" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
               <template slot-scope="{ row }">
@@ -214,7 +214,10 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column v-slot={row} prop="remark" align="left" label="描述">
+              <div class="detailText">
+                {{row.remark}}
+              </div>
             </el-table-column>
           </el-table>
           <el-table :data="termVariableTotalData" :show-header="false"  style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
@@ -249,10 +252,10 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column prop="remark" align="left" label="描述">
             </el-table-column>
           </el-table>  
-          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="200" style="width: 100%" :header-cell-style="HeadTable"
+          <el-table :data="termFixData" ref="termFixTable" :show-header="false" max-height="350" style="width: 100%" :header-cell-style="HeadTable"
             :row-class-name="tableRowClassNameDialog">
             <el-table-column align="center" width="140" fixed>
               <template v-slot:header> </template>
@@ -283,7 +286,10 @@
                 <div>{{ FormateNum(scope.row.taxCost) }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column v-slot={row} prop="remark" align="left" label="描述">
+              <div class="detailText">
+                {{row.remark}}
+              </div>
             </el-table-column>
           </el-table>
           <el-table :data="termFixTotalData"  :show-header="false" max-height="250" style="width: 100%" :header-cell-style="HeadTable"
@@ -308,7 +314,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div>
-                  {{scope.row.costRatio}}%
+                  {{FormateNum(scope.row.costRatio)}}%
                 </div>
               </template>
             </el-table-column>
@@ -317,7 +323,10 @@
                 <div>{{ FormateNum(scope.row.taxCost) }}</div>
               </template>
             </el-table-column>
-            <el-table-column prop="remark" align="center" label="描述">
+            <el-table-column v-slot={row} prop="remark" align="left" label="描述">
+              <div class="detailText">
+                {{row.remark}}
+              </div>
             </el-table-column>
           </el-table>
         </div>
@@ -809,6 +818,9 @@ export default {
     },
     //条款明细关闭
     closeTermsDetail() {
+      this.termTotalData = []
+      this.termVariableTotalData = []
+      this.termFixTotalData = []
       this.termVariableData = []
       this.termFixData = []
       this.FixTotalData.totalPoint = 0
@@ -866,6 +878,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.detailText {
+  text-align: left;
+}
 .seeActivity {
   height: 32px;
   background: #D7E8F2;
