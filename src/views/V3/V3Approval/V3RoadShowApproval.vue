@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-05 10:06:39
+ * @LastEditTime: 2022-07-13 17:06:25
 -->
 <template>
   <div class="MainContent">
@@ -358,7 +358,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="880" align="center" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="880" align="left" prop="judgmentContent" label="系统判定内容">
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">-</span></div>
         </template>
@@ -627,7 +627,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="judgmentContent" label="系统判定内容">
+            <el-table-column width="220" align="left" prop="judgmentContent" label="系统判定内容">
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
