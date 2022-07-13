@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-13 14:17:42
+ * @LastEditTime: 2022-07-13 14:46:23
 -->
 <template>
   <div class="MainContent">
@@ -125,8 +125,8 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
-              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @blur="changeContractDate(scope.row)">
+            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange"
+              value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @blur="changeContractDate(scope.row)">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -137,8 +137,8 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" :picker-options="pickerOptionsSystemDate(scope.row)" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
-              end-placeholder="结束月份">
+            <el-date-picker v-model="scope.row.systemDate" :picker-options="pickerOptionsSystemDate(scope.row)" type="monthrange" value-format="yyyyMM" format="yyyyMM"
+              range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -178,18 +178,18 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column  width="120" align="center" label="合同条款">
+      <el-table-column width="120" align="center" label="合同条款">
         <template v-slot="scope">
           <div class="seeActivity" @click="showTermDetailDialog(scope.row,scope.$index)">
-          条款明细
+            条款明细
           </div>
         </template>
       </el-table-column>
       <el-table-column prop="remark" align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.remark"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
-            </el-input> 
+            <el-input v-model="scope.row.remark" type="textarea" autosize clearable class="my-el-input my-textArea" placeholder="请输入">
+            </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
             {{scope.row.remark}}
@@ -209,7 +209,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 新增 -->
-    <el-dialog width="95%" ref="termDialog" class="my-el-dialog"  title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
+    <el-dialog width="95%" ref="termDialog" class="my-el-dialog" title="新增" :visible="isAddDialogVisible" @close="closeAddDialog">
       <div class="dialogContent">
         <div class="termInfo">
           <div class="selectCustomer">
@@ -258,7 +258,7 @@
           <div class="space">
           </div>
           <div class="TableWrap_dealer">
-            <el-table :data="addDialogDealerList" ref="dealerTable"  max-height="400" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+            <el-table :data="addDialogDealerList" ref="dealerTable" max-height="400" style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
               <el-table-column prop="distributorName" align="center" width="320" label="经销商名称">
                 <template slot-scope="scope">
                   <div v-if="scope.row.isEditor">
@@ -342,7 +342,7 @@ import {
   FormateThousandNum,
   downloadFile,
   pickerOptions,
-  pickerOptionsSystemDate
+  pickerOptionsSystemDate,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -367,7 +367,7 @@ export default {
         state: '',
       },
       maxheight: getContractEntry(),
-      maxheightTerm:'',
+      maxheightTerm: '',
       tableData: [],
       editMaxTargetSale: 0, //修改可填最大值
       editIsCollection: 0, //编辑--判断是否补录 --是否跳过验证
@@ -482,10 +482,10 @@ export default {
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
-          if(item.contractState==='2') {
-            item.isRefused=1
+          if (item.contractState === '2') {
+            item.isRefused = 1
           } else {
-            item.isRefused=0
+            item.isRefused = 0
           }
           item.isEditor = 0
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
@@ -529,15 +529,17 @@ export default {
     //编辑行数据
     editorRow(index, row) {
       //编辑状态：草稿、被拒绝
-      if(row.contractState !== '0'&&row.contractState !== '2') {
-        if(row.contractState==1) {
+      if (row.contractState !== '0' && row.contractState !== '2') {
+        if (row.contractState == 1) {
           this.$message.info('审批中的合同不允许编辑')
-        } else if(row.contractState==3) {
-          this.$message.info('该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间')
-        } else if(row.contractState==4||row.contractState==5) {
+        } else if (row.contractState == 3) {
+          this.$message.info(
+            '该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间'
+          )
+        } else if (row.contractState == 4 || row.contractState == 5) {
           this.$message.info('该合同不允许编辑')
         }
-        sessionStorage.setItem("isEditor",`0-${index}`)
+        sessionStorage.setItem('isEditor', `0-${index}`)
         return
       }
       if (this.tempObj.tempInfo) {
@@ -549,13 +551,13 @@ export default {
       this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 1
       this.$forceUpdate()
-      sessionStorage.setItem("isEditor",`1-${index}`)
+      sessionStorage.setItem('isEditor', `1-${index}`)
     },
     CancelEditorRow(index) {
       // this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 0
       this.tableData[index] = this.tempObj.tempInfo
-      sessionStorage.setItem("isEditor",`0-${index}`)
+      sessionStorage.setItem('isEditor', `0-${index}`)
     },
     compareDate(date) {
       let currentDate = new Date()
@@ -569,41 +571,67 @@ export default {
     },
     //删除该行数据
     deleteRow(row) {
-      //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不收状态影响
-      let isDeleteFlag = this.compareDate(row.systemDate[0])
-      //允许删除：草稿、被拒绝、通过（未汇算） 不允许删除：待审批、通过（已汇算）、终止、过期
-      if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
-        if(row.contractState === '1') {
-          this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
-        } else if(row.contractState == '3'&&!isDeleteFlag||row.contractState === '4'||row.contractState === '5') {
-          this.$message.info('该合同不允许删除')
+      if (row.isEditor == 2) {
+        this.$confirm('确定要删除复制的数据吗？此操作不可逆', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            this.tableData.splice(0, 1)
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
+      } else {
+        //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不收状态影响
+        let isDeleteFlag = this.compareDate(row.systemDate[0])
+        //允许删除：草稿、被拒绝、通过（未汇算） 不允许删除：待审批、通过（已汇算）、终止、过期
+        if (
+          row.contractState === '1' ||
+          (row.contractState == '3' && !isDeleteFlag) ||
+          row.contractState === '4' ||
+          row.contractState === '5'
+        ) {
+          if (row.contractState === '1') {
+            this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
+          } else if (
+            (row.contractState == '3' && !isDeleteFlag) ||
+            row.contractState === '4' ||
+            row.contractState === '5'
+          ) {
+            this.$message.info('该合同不允许删除')
+          }
+          return
         }
-        return
-      }
-      //删除数据库中的数据
-      this.$confirm('确定要删除数据吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          API.delete([row.id]).then((res) => {
-            if (res.code === 1000) {
-              this.getTableData()
-              if (res.data) {
-                this.$message.success('删除成功')
-              } else {
-                this.$message.info(`${res.message}`)
+        //删除数据库中的数据
+        this.$confirm('确定要删除数据吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.delete([row.id]).then((res) => {
+              if (res.code === 1000) {
+                this.getTableData()
+                if (res.data) {
+                  this.$message.success('删除成功')
+                } else {
+                  this.$message.info(`${res.message}`)
+                }
               }
-            }
+            })
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消',
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
           })
-        })
+      }
     },
     //经销商提交
     submit() {
@@ -876,7 +904,7 @@ export default {
             this.addDialog.nowTargetSale += item.saleAmount
           })
           let flag = distList.findIndex((item) => {
-            return item.contractState == '3' 
+            return item.contractState == '3'
           })
           //是否补录，补录状态判断
           this.addDialog.isCollection = flag === -1 ? 0 : 1
@@ -981,7 +1009,7 @@ export default {
       }
     },
     //打开条款明细弹窗
-    showTermDetailDialog({ ccId },index) {
+    showTermDetailDialog({ ccId }, index) {
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
         name: 'dealerTermDetail',
@@ -989,7 +1017,7 @@ export default {
           ccId,
         },
       })
-      sessionStorage.setItem("EditorIndex",index)
+      sessionStorage.setItem('EditorIndex', index)
       // this.$router.push(
       //   '/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail',
       // )
@@ -1037,7 +1065,7 @@ export default {
     },
     pickerOptionsSystemDate(row) {
       return pickerOptionsSystemDate(row)
-    }
+    },
   },
 }
 </script>
@@ -1232,7 +1260,6 @@ export default {
 }
 </style>
 <style lang="less">
-
 .contract_firstRow {
   background-color: #4192d3 !important;
   color: #fff;
