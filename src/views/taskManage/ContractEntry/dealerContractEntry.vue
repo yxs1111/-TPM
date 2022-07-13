@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-11 17:44:08
+ * @LastEditTime: 2022-07-13 13:53:49
 -->
 <template>
   <div class="MainContent">
@@ -693,7 +693,7 @@ export default {
         contractEndDate: row.contractEndDate,
         effectiveBeginDate: row.effectiveBeginDate,
         effectiveEndDate: row.effectiveEndDate,
-        contractState: row.contractState,
+        contractState: 0,
         remark: row.remark,
         poApprovalComments: row.poApprovalComments,
         finApprovalComments: row.finApprovalComments,
@@ -702,7 +702,7 @@ export default {
         entryDate: row.entryDate,
         customerName: row.customerName,
         customerContractSaleAmount: row.customerContractSaleAmount,
-        contractStateName: row.contractStateName,
+        contractStateName: '草稿',
         variable: row.variable,
         fixed: row.fixed,
         customerMdmCode: row.customerMdmCode,
