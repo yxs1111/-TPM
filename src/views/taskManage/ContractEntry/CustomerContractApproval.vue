@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-13 10:04:31
+ * @LastEditTime: 2022-07-13 10:23:24
 -->
 <template>
   <div class="MainContent">
@@ -168,7 +168,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costRatio }}%
+                  {{ FormateNum(scope.row.costRatio) }}%
                 </div>
               </template>
             </el-table-column>
@@ -203,7 +203,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costRatio }}%
+                  {{ FormateNum(scope.row.costRatio) }}%
                 </div>
               </template>
             </el-table-column>
@@ -241,7 +241,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costRatio }}%
+                  {{ FormateNum(scope.row.costRatio) }}%
                 </div>
               </template>
             </el-table-column>
@@ -277,7 +277,7 @@
             <el-table-column prop="costRatio" align="center" label="费比(%)" width="150">
               <template slot-scope="scope">
                 <div>
-                  {{scope.row.costRatio}}%
+                  {{FormateNum(scope.row.costRatio)}}%
                 </div>
               </template>
             </el-table-column>
