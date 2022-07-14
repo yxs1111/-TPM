@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-13 10:23:24
+ * @LastEditTime: 2022-07-14 16:48:12
 -->
 <template>
   <div class="MainContent">
@@ -28,7 +28,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">合同状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
+            <el-option v-for="item,index in ['待审批', '被拒绝', '通过', '终止', '过期']" :key="index" :label="item" :value="index+1" />
           </el-select>
         </div>
       </div>
