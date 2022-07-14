@@ -804,8 +804,14 @@ export default {
         this.$refs.MinePackageTree.setCheckedNodes([...ciDataList])
         let fsNodeKeyList=[]
         fsDatalist.forEach(item=>{
+          if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId!=null) {
+            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId+'-'+item.fsDataFouId)
+          } else if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId==null) {
+            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId)
+          } else if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId==null&&item.fsDataFouId==null) {
+            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId)
+          }
           //NodeKey:"FieldSales-zone-4539"
-          fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId+'-'+item.fsDataFouId)
         })
         console.log(fsNodeKeyList);
         this.$refs.FileSalesTree.setCheckedKeys([...fsNodeKeyList])
