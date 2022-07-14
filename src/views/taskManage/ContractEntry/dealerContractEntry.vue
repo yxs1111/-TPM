@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-13 15:43:23
+ * @LastEditTime: 2022-07-14 14:32:56
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item in customerArr" :key="item.id" :label="item.label" :value="item.customerMdmCode" />
+            <el-option v-for="(item, index) in customerAllArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -372,6 +372,7 @@ export default {
       editMaxTargetSale: 0, //修改可填最大值
       editIsCollection: 0, //编辑--判断是否补录 --是否跳过验证
       customerArr: [],
+      customerAllArr: [],
       distributorArr: [],
       distributorArrDialog: [],
       contractList: contractList,
@@ -429,6 +430,7 @@ export default {
     }
     // this.getTableData()
     this.getCustomerList()
+    this.getCustomerListAll()
     this.getDistributorList()
   },
   directives: { elDragDialog, permission },
@@ -527,6 +529,16 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.distributorArr = res.data
+          }
+        })
+    },
+    getCustomerListAll() {
+      selectAPI
+        .queryCustomerList({
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerAllArr = res.data
           }
         })
     },
