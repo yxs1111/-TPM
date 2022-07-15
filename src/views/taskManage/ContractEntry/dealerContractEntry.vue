@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-15 09:37:24
+ * @LastEditTime: 2022-07-14 14:32:56
 -->
 <template>
   <div class="MainContent">
@@ -783,7 +783,6 @@ export default {
           })
         }
       }
-      this.resetSystemDate(row)
     },
     //编辑一行 API
     updateRowFunction(row) {
@@ -1094,10 +1093,6 @@ export default {
     },
     pickerOptionsSystemDate(row) {
       return pickerOptionsSystemDate(row)
-    },
-    //更改合同期间--重设系统生效时间
-    resetSystemDate(row) {
-      row.systemDate=[]
     },
   },
 }
