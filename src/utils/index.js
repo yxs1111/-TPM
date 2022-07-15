@@ -743,12 +743,12 @@ export function pickerOptionsSystemDate(row) {
   return {
     // 限制年月
     disabledDate: (time) => {
-      const date = new Date(row.contractDate[0])
-      const year = date.getFullYear()
       //未选择初始日期时，不做限制
-      if (row.contractDate[0] == '') {
+      if (!row.contractDate) {
         return false
       }
+      const date = new Date(row.contractDate[0])
+      const year = date.getFullYear()
       return (
         //日期限制（同一年）
         (time.getFullYear() == year||time.getFullYear() == year+1) ? false : true
