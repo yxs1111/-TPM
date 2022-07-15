@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-13 09:56:58
+ * @LastEditTime: 2022-07-15 09:35:09
 -->
 <template>
   <div class="MainContent">
@@ -130,7 +130,7 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+            <el-date-picker v-model="scope.row.contractDate" @blur="resetSystemDate(scope.row)" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
               range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
@@ -1737,7 +1737,11 @@ export default {
     },
     pickerOptionsSystemDate(row) {
       return pickerOptionsSystemDate(row)
-    }
+    },
+    //更改合同期间--重设系统生效时间
+    resetSystemDate(row) {
+      row.systemDate=[]
+    },
   },
 }
 </script>
