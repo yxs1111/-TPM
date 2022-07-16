@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-10 16:44:01
+ * @LastEditTime: 2022-07-16 15:20:01
 -->
 <template>
   <div class="tabViewsWrap">
@@ -43,22 +43,22 @@ export default {
         //     light: require('@/assets/images/tab/tab2_l.png'),
         //   },
         // },
-        {
-          name: '折扣项',
-          path: '/taskManage/MyTodo/MyTodoDiscount',
-          img: {
-            dark: require('@/assets/images/tab/tab2.png'),
-            light: require('@/assets/images/tab/tab2_l.png'),
-          },
-        },
         // {
-        //   name: 'Contract',
-        //   path: '/taskManage/MyTodo/ContractTodo',
+        //   name: '折扣项',
+        //   path: '/taskManage/MyTodo/MyTodoDiscount',
         //   img: {
-        //     dark: require('@/assets/images/tab/tab3.png'),
-        //     light: require('@/assets/images/tab/tab3_l.png'),
+        //     dark: require('@/assets/images/tab/tab2.png'),
+        //     light: require('@/assets/images/tab/tab2_l.png'),
         //   },
         // },
+        {
+          name: '合同管理',
+          path: '/taskManage/MyTodo/ContractTodo',
+          img: {
+            dark: require('@/assets/images/tab/tab3.png'),
+            light: require('@/assets/images/tab/tab3_l.png'),
+          },
+        },
       ],
       currentIndex: 0,
     }
