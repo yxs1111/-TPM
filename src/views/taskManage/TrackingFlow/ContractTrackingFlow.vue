@@ -1,10 +1,10 @@
-<!--
- * @Description: 合同待办
+<!--TodoList
+ * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-16 14:43:07
+ * @LastEditTime: 2022-04-11 10:20:41
 -->
 <template>
-  <div class="MainContent" @keyup.enter="pageList">
+  <div class="MainContentNew">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
@@ -17,7 +17,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in customerArr" :key="item.customerMdmCode" :label="item.customerCsName" :value="item.customerMdmCode" />
+            <el-option v-for="(item) in customerArr" :key="item.customerCode" :label="item.customerCsName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -26,40 +26,44 @@
             <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
           </el-select>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">流程状态:</span>
+          <el-select v-model="filterObj.processStatus" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in processStatusList" :key="index" :label="item" :value="index+1" />
+          </el-select>
+        </div>
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" type="selection" />
-      <el-table-column align="center" label="序号" width="55">
+    <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" label="序号" width="80">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="待办项"  width="100"> </el-table-column>
-      <el-table-column align="center" prop="customerName" label="客户名称"  width="120"> </el-table-column>
-      <el-table-column align="center" prop="distributorName" label="经销商名称"  width="250"> </el-table-column>
-      <el-table-column align="center" width="180" prop="name" label="当前节点"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人">
+      <el-table-column align="center" prop="item" label="待办项"  width="150"> </el-table-column>
+      <el-table-column align="center" prop="customerName" label="客户名称"  width="150"> </el-table-column>
+      <el-table-column align="center" prop="distributorName" label="经销商名称"  width="280"> </el-table-column>
+      <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">
+        {{row.processStatus===2?'已完成':'进行中'}}
+      </el-table-column>
+      <el-table-column v-slot={row} width="300" align="center" prop="originator" label="发起人"> 
+        <span v-html="setSplitAssignee(row.originator)"></span>
+      </el-table-column>
+      <el-table-column align="center" prop="originatorDate" label="发起时间" width="250">
+        <template slot-scope="scope">
+          {{ scope.row.originatorDate===null ? '': scope.row.originatorDate.replace('T', ' ') }}
+        </template>
+      </el-table-column>
+      <el-table-column v-slot={row} width="300" align="center" prop="assignee" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
-      <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
-        {{row.createTime?row.createTime.substring(0,10):""}}
-      </el-table-column>
-      <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
+      <el-table-column width="150" align="center" label="查看" fixed="right">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
-        <template slot-scope="{row}">
-          <div class="operation" @click="operateProcess(row.minePackageCode,row.name)">
-            <svg-icon icon-class="submit_l" class="submit_icon" />
-            办理
           </div>
         </template>
       </el-table-column>
@@ -78,14 +82,7 @@
 
 <script>
 import API from '@/api/taskManage/taskManage.js'
-import {
-  getDefaultPermissions,
-  getTextMap,
-  parseTime,
-  getHeightHaveTab,
-  setSplitAssignee,
-  downloadFile
-} from '@/utils'
+import { getDefaultPermissions, getTextMap, parseTime } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
@@ -93,6 +90,7 @@ import FlowDiagram from '@/components/FlowDiagram'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
+  name: 'ContractTrackingFlow',
   data() {
     return {
       total: 0,
@@ -106,54 +104,51 @@ export default {
       },
       permissions: getDefaultPermissions(),
       tableData: [],
-      customerArr: [],
-      MinePackageList: [
-      ],
       distributorArr: [],
+      customerArr: [],
+      processStatusList: ['进行中', '已完成'],
+      versionList: ['Final'],
       flowDiagram: {
         visible: false,
         activate: false,
         businessId: null,
         processId: null,
       },
-      maxheight: getHeightHaveTab(),
     }
   },
+  mounted() {
+    this.getTableData()
+    this.getDistributorList()
+    this.getCustomerList()
+  },
+  components: {
+    FlowDiagram,
+  },
+  directives: { elDragDialog, permission },
   watch: {
     'filterObj.customerMdmCode'() {
       this.filterObj.distributorMdmCode = ''
       this.getDistributorList()
     },
   },
-  mounted() {
-    window.onresize = () => {
-      return (() => {
-        this.maxheight = getHeightHaveTab()
-      })()
-    }
-    this.getTableData()
-    this.getCustomerList()
-    this.getDistributorList()
-  },
-  components: {
-    FlowDiagram,
-  },
-  directives: { elDragDialog, permission },
   methods: {
     //获取表格数据
     getTableData() {
-      API.getContractListTodo({
+      API.getContractTrackingFlow({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         item: this.filterObj.item,
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
-      }).then((response) => {
-        this.tableData = response.data.records
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
+        processStatus: this.filterObj.processStatus,
       })
+        .then((response) => {
+          this.tableData = response.data.records
+          this.pageNum = response.data.current
+          this.pageSize = response.data.size
+          this.total = response.data.total
+        })
+        .catch((error) => {})
     },
     // 获取下拉框 渠道
     getDistributorList() {
@@ -168,50 +163,46 @@ export default {
         })
     },
     getCustomerList() {
-      selectAPI.queryCustomerList().then((res) => {
+      selectAPI.queryCustomerList({}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
       })
     },
+    getMinePackageSelect() {
+      selectAPI
+        .queryMinePackageSelect({
+          parentId: this.filterObj.CostType,
+        })
+        .then((res) => {
+          if (res.code == 1000) {
+            this.minePackageList = res.data
+          }
+        })
+    },
     search() {
       this.pageNum = 1
       this.getTableData()
     },
-    setSplitAssignee(value) {
-      return setSplitAssignee(value)
-    },
-    operateProcess(version, name) {
-      if(version=='DISTRIBUTOR-CONTRACT') {
-        if(name.indexOf('审批') != -1) {
-          this.$router.push('/contractManagement/dealer/dealerContractApproval')
-        } else {
-          this.$router.push('/contractManagement/dealer/dealerContractEntry')
-        }
-      } else if(version=='CUSTOMER-CONTRACT') {
-        if(name.indexOf('审批') != -1) {
-          this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
-        } else {
-          this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
-        }
-      }
-    },
     //查看流程
     openFlowDiagram(row) {
-      this.flowDiagram.businessId = row.businessKey
-      this.flowDiagram.processId = row.procInstId
+      this.flowDiagram.businessId = row.id
+      this.flowDiagram.processId = row.processId
       this.flowDiagram.visible = true
     },
     // 导出数据
-    exportExcel() {
-      API.contractExport({
-        customerMdmCode: this.filterObj.customerMdmCode,
-        minePackageCode: this.filterObj.minePackageCode,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, 'Contract 待办 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
+    exportExcel() {},
+    setSplitAssignee(value) {
+      if (!value) {
+        return null
+      } else {
+        let list = value.split(',')
+        let formatString = ''
+        for (let index = 0; index < list.length; index++) {
+          formatString += `${list[index]}<br>`
+        }
+        return formatString
+      }
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -253,10 +244,15 @@ export default {
   align-items: center;
   justify-content: center;
   color: #4192d3;
-  font-size: 16px;
   cursor: pointer;
   .submit_icon {
-    font-size: 26px;
+    font-size: 20px;
   }
+}
+.MainContentNew {
+  /* height: 90%; */
+  background-color: #fff;
+  padding: 20px;
+  overflow-y: auto;
 }
 </style>

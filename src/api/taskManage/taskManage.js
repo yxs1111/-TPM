@@ -1,7 +1,7 @@
 /*
  * @Description: 我的待办
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-04-28 11:20:21
+ * @LastEditTime: 2022-07-16 14:23:29
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -24,6 +24,10 @@ export default {
   getContractList(params) {
     return requestApi.request_get('/cityplan/customerContract/pageTaskList', params)
   },
+  //我的待办--合同管理
+  getContractListTodo(params) {
+    return requestApi.request_get('/cityplan/myHandle/getTaskPageContract', params)
+  },
   //合同待办导出
   contractExport(params) {
     return request({
@@ -32,6 +36,10 @@ export default {
       params: params,
       responseType: 'blob'
     })
+  },
+  //合同流程跟踪--合同管理
+  getContractTrackingFlow(params) {
+    return requestApi.request_get('/cityplan/processTracking/getPage', params)
   },
 }
 

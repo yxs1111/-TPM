@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 15:49:58
+ * @LastEditTime: 2022-07-16 14:39:28
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -24,6 +24,25 @@ export default function() {
           name: 'TrackingFlow',
           component: () => import('@/views/taskManage/TrackingFlow.vue'),
           meta: { title: '流程跟踪', icon: 'approve' },
+          redirect: '/taskManage/TrackingFlow/TrackingFlowAll',
+          children:[
+            {
+              hidden: true,
+              path: '/taskManage/TrackingFlow/TrackingFlowAll',
+              code: 'resource-task_lcgz',
+              name: 'TrackingFlowAll',
+              component: () => import('@/views/taskManage/TrackingFlow/TrackingFlowAll.vue'),
+              meta: { title: '汇总', icon: 'form' ,activeMenu: '/taskManage/TrackingFlow'},
+            },
+            {
+              hidden: true,
+              path: '/taskManage/TrackingFlow/ContractTrackingFlow',
+              code: 'resource-task_lcgz',
+              name: 'ContractTrackingFlow',
+              component: () => import('@/views/taskManage/TrackingFlow/ContractTrackingFlow.vue'),
+              meta: { title: '合同管理', icon: 'form' ,activeMenu: '/taskManage/TrackingFlow'},
+            },
+          ],
         },
         {
           path: '/taskManage/MyTodo',
@@ -55,7 +74,7 @@ export default function() {
               code: 'resource-task_wddb',
               name: 'Contract',
               component: () => import('@/views/taskManage/MyTodo/ContractTodo.vue'),
-              meta: { title: '折扣项', icon: 'form' ,activeMenu: '/taskManage/MyTodo'},
+              meta: { title: '合同管理', icon: 'form' ,activeMenu: '/taskManage/MyTodo'},
             },
           ]
         },
