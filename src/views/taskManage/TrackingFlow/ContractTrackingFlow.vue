@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column align="center" prop="item" label="待办项" width="150"> </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称"  width="150"> </el-table-column>
-      <el-table-column align="center" prop="distributorName" label="经销商名称"  width="280"> </el-table-column>
+      <el-table-column align="center" prop="distributorName" label="经销商名称"  width="220"> </el-table-column>
       <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">
         {{row.processStatus===2?'已完成':'进行中'}}
       </el-table-column>
@@ -57,7 +57,7 @@
           {{ scope.row.originatorDate===null ? '': scope.row.originatorDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="300" align="center" prop="assignee" label="办理人">
+      <el-table-column v-slot={row}  align="center" prop="assignee" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
       <el-table-column width="150" align="center" label="查看" fixed="right">
