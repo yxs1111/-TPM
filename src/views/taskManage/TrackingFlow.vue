@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-16 13:58:01
+ * @LastEditTime: 2022-07-18 10:04:20
 -->
 <template>
   <div class="tabViewsWrap">
@@ -28,7 +28,7 @@ export default {
     return {
       routerList: [
         {
-          name: '汇总',
+          name: '汇总-费用管理',
           path: '/taskManage/TrackingFlow/TrackingFlowAll',
           img: {
             dark: require('@/assets/images/tab/tab1.png'),

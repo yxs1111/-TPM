@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-06-23 17:14:51
+ * @LastEditTime: 2022-07-18 10:23:36
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -95,5 +95,8 @@ export default {
   //部门下拉
   getDepartmentList(params) {
     return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentList', params)
+  },//费用科目下拉
+  getCostItemList(params) {
+    return requestApi.request_get('/cityplan/investSrVThree/getCostItemList', params)
   },
 }

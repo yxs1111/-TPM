@@ -38,12 +38,12 @@
       </div>
     </div>
     <el-table :data="tableData" max-height="600" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" label="序号" width="80">
+      <el-table-column align="center" label="序号" width="100">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="待办项"  width="150"> </el-table-column>
+      <el-table-column align="center" prop="item" label="待办项" width="150"> </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称"  width="150"> </el-table-column>
       <el-table-column align="center" prop="distributorName" label="经销商名称"  width="280"> </el-table-column>
       <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">

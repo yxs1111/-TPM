@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-21 09:23:57
+ * @LastEditTime: 2022-07-18 10:20:01
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -32,13 +32,6 @@
           </el-select>
         </div>
       </div>
-      <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <div class="TpmButtonBG" @click="exportExcel">
-          <img src="@/assets/images/export.png" alt="">
-          <span class="text">导出</span>
-        </div>
-      </div>
     </div>
     <!-- <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG">
@@ -47,8 +40,7 @@
       </div>
     </div> -->
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" type="selection" />
-      <el-table-column align="center" label="序号" width="55">
+      <el-table-column align="center" label="序号" width="100">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
@@ -60,7 +52,9 @@
         {{getVersion(row.version)}}
       </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costTypeName" label="cost Type"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costItemName" label="cost Item"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
       <el-table-column v-slot={row} align="center" width="300" prop="assignee" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
@@ -277,8 +271,6 @@ export default {
       this.flowDiagram.processId = row.processId
       this.flowDiagram.visible = true
     },
-    // 导出数据
-    exportExcel() {},
     setSplitAssignee(value) {
       return setSplitAssignee(value)
     },
