@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 17:00:08
+ * @LastEditTime: 2022-07-18 17:21:11
 -->
 <template>
   <div class="MainContent">
@@ -71,7 +71,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractCode" fixed align="center" width="320" label="合同ID">
+      <el-table-column prop="contractCode" fixed align="center" width="320" label="经销商分摊协议ID">
       </el-table-column>
       <el-table-column prop="customerChannelCode" fixed align="center" width="120" label="渠道">
       </el-table-column>
