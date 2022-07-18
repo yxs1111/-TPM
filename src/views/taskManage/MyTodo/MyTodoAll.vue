@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 11:12:37
+ * @LastEditTime: 2022-07-18 11:29:38
 -->
 <template>
   <div class="MainContent">
@@ -26,19 +26,19 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Cost item:</span>
+          <span class="SelectliTitle">Cost Item:</span>
           <el-select v-model="filterObj.costItem" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">渠道</span>
+          <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">版本号</span>
+          <span class="SelectliTitle">版本号:</span>
           <el-select v-model="filterObj.version" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ['V0','V1','V2','V3']" :key="index" :label="item" :value="item" />
           </el-select>
@@ -55,9 +55,9 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
-      <el-table-column align="center" width="240" prop="costTypeName" label="cost Type"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costTypeName" label="Cost Type"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
-      <el-table-column align="center" width="240" prop="costItemName" label="cost Item"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costItemName" label="Cost Item"> </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>

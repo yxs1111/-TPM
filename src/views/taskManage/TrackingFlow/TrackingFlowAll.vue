@@ -20,13 +20,13 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Mine package:</span>
+          <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.MinePackageName" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Cost item:</span>
+          <span class="SelectliTitle">Cost Item:</span>
           <el-select v-model="filterObj.costItem" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
           </el-select>
