@@ -117,7 +117,7 @@ export default {
     }
   },
   mounted() {
-    this.getTableData()
+    // this.getTableData()
     this.getDistributorList()
     this.getCustomerList()
   },
@@ -134,6 +134,11 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
+      this.tableData=[]
+      if(!this.filterObj.item) {
+        this.$message.info("待办项不能为空")
+        return
+      }
       API.getContractTrackingFlow({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数

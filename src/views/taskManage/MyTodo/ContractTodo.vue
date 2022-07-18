@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 10:17:10
+ * @LastEditTime: 2022-07-18 16:20:16
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -45,7 +45,7 @@
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
-        {{row.createTime?row.createTime.substring(0,10):""}}
+        {{row.createTime?row.createTime.substring(0,19).replaceAll("T",' '):""}}
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
         <template slot-scope="{row}">
@@ -130,7 +130,7 @@ export default {
         this.maxheight = getHeightHaveTab()
       })()
     }
-    this.getTableData()
+    // this.getTableData()
     this.getCustomerList()
     this.getDistributorList()
   },
@@ -141,6 +141,11 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
+      this.tableData=[]
+      if(!this.filterObj.item) {
+        this.$message.info("待办项不能为空")
+        return
+      }
       API.getContractListTodo({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数

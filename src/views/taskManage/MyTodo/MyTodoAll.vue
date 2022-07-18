@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 11:29:38
+ * @LastEditTime: 2022-07-18 16:17:22
 -->
 <template>
   <div class="MainContent">
@@ -65,7 +65,7 @@
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
-        {{row.createTime?row.createTime.substring(0,10):""}}
+        {{row.createTime?row.createTime.substring(0,19).replaceAll("T",' '):""}}
       </el-table-column>
       <!-- <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column> -->
       <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
