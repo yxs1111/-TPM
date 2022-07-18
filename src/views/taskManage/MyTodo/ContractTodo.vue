@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 16:24:33
+ * @LastEditTime: 2022-07-18 17:07:08
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -130,7 +130,7 @@ export default {
         this.maxheight = getHeightHaveTab()
       })()
     }
-    // this.getTableData()
+    this.getTableData()
     this.getCustomerList()
     this.getDistributorList()
   },
@@ -142,10 +142,6 @@ export default {
     //获取表格数据
     getTableData() {
       this.tableData=[]
-      if(!this.filterObj.item) {
-        this.$message.info("待办项不能为空")
-        return
-      }
       API.getContractListTodo({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
