@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-29 15:46:34
+ * @LastEditTime: 2022-07-18 16:10:26
 -->
 <template>
   <div class="MainContent">
@@ -71,7 +71,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      <el-table-column prop="contractCode" fixed align="center" width="320" label="合同ID">
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="180" label="客户名称">
         <template slot-scope="scope">
@@ -404,7 +404,7 @@ export default {
     },
     //导出数据
     exportData() {
-      API.exportApprovePage({
+      API.exportDistApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
