@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-14 14:32:56
+ * @LastEditTime: 2022-07-18 16:50:51
 -->
 <template>
   <div class="MainContent">
@@ -88,7 +88,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      <el-table-column prop="contractCode" fixed align="center" width="320" label="合同ID">
+      </el-table-column>
+      <el-table-column prop="customerChannelCode" fixed align="center" width="120" label="渠道">
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="160" label="客户名称">
         <template slot-scope="scope">
@@ -96,6 +98,8 @@
             {{scope.row.customerName}}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column prop="customerRegionName" fixed align="center" width="120" label="大区">
       </el-table-column>
       <el-table-column prop="customerContractSaleAmount" align="center" width="180" label="客户目标销售额(RMB)">
         <template slot-scope="scope">

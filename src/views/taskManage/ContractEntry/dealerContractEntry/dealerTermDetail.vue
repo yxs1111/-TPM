@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-14 13:58:19
+ * @LastEditTime: 2022-07-18 16:57:37
 -->
 <template>
   <div class="ContentDetail">
@@ -25,6 +25,7 @@
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
+            <span class="topInfo" v-if="customerContract.channelCode==='RKA'"> 大区: {{customerContract.regionName}}</span>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].customerInfo.targetSale)}} </span>
           </div>
         </template>
@@ -271,6 +272,7 @@ export default {
       isMakeUp: 0, //是否补录
       isOtherEditor: 0, //是否有可编辑
       isEditor: 0,
+      customerContract:'',//客户合同
     }
   },
 
@@ -304,6 +306,7 @@ export default {
         let { variable: customerVariableList, fixed: customerFixList } =
           res.data.customerContract
         let customerContract = res.data.customerContract
+        this.customerContract = res.data.customerContract
         //copy  属性--》单个的客户variable
         customerVariableList.forEach((item) => {
           item.customerName = customerContract.customerName
