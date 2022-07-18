@@ -150,7 +150,7 @@ export default {
   directives: { elDragDialog, permission },
   watch: {
     'filterObj.CostTypeIndex'(value) {
-      if(value!='') {
+      if(value!=='') {
         this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
         this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
       } else {

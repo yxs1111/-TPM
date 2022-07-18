@@ -1,22 +1,34 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 10:20:01
+ * @LastEditTime: 2022-07-18 11:12:37
 -->
 <template>
-  <div class="MainContent" @keyup.enter="pageList">
+  <div class="MainContent">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar">
-        <div class="Selectli" @keyup.enter="search">
+        <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
           <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
           </el-date-picker>
         </div>
-        <div class="Selectli" @keyup.enter="search">
-          <span class="SelectliTitle">版本名称:</span>
-          <el-select v-model="filterObj.version" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in versionNameList" :key="index" :label="item" :value="index" />
+        <div class="Selectli">
+          <span class="SelectliTitle">Cost Type:</span>
+          <el-select v-model="filterObj.CostTypeIndex" clearable placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="index" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Mine Package:</span>
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Cost item:</span>
+          <el-select v-model="filterObj.costItem" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -26,19 +38,16 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          <span class="SelectliTitle">版本号</span>
+          <el-select v-model="filterObj.version" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['V0','V1','V2','V3']" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
       </div>
-    </div>
-    <!-- <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG">
-        <svg-icon icon-class="task" />
-        <span class="text">任务转办</span>
+      <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
       </div>
-    </div> -->
+    </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" label="序号" width="100">
         <template slot-scope="scope">
@@ -46,15 +55,11 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
-      <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
-      <el-table-column width="240" v-slot={row} align="center" prop="versionName" label="版本名称">
-        <!-- {{versionNameList[row.version]}} -->
-        {{getVersion(row.version)}}
-      </el-table-column>
-      <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="240" prop="costTypeName" label="cost Type"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="240" prop="costItemName" label="cost Item"> </el-table-column>
+      <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
       <el-table-column v-slot={row} align="center" width="300" prop="assignee" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
@@ -107,6 +112,7 @@ import FlowDiagram from '@/components/FlowDiagram'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
+  name:'MyTodoAll',
   data() {
     return {
       total: 0,
@@ -114,6 +120,10 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
+        CostTypeIndex: '',
+        CostType: '',
+        CostTypeName: '',
+        costItem:'',
         version: '',
         channelCode: '',
         state: '',
@@ -122,6 +132,8 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       ChannelList: [],
+      CostTypeList: [],
+      CostItemList: [],
       MinePackageList: [],
       versionList: ['Final'],
       flowDiagram: {
@@ -185,12 +197,26 @@ export default {
     }
     this.getTableData()
     this.getChannelList()
+    this.getCostTypeList()
+    this.getCostItemList()
     this.getMinePackage()
   },
   components: {
     FlowDiagram,
   },
   directives: { elDragDialog, permission },
+  watch: {
+    'filterObj.CostTypeIndex'(value) {
+      if(value!=='') {
+        this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+        this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+      } else {
+        this.filterObj.CostTypeName = ''
+      }
+      this.filterObj.MinePackage = ''
+      this.getMinePackage()
+    },
+  },
   methods: {
     //获取菜单明
     getVersion(version) {
@@ -209,6 +235,8 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
+        costTypeName: this.filterObj.CostTypeName,
+        costItemName: this.filterObj.costItem,
         version: this.filterObj.version,
         channelCode: this.filterObj.channelCode,
         minePackageCode: this.filterObj.MinePackage,
@@ -219,6 +247,25 @@ export default {
         this.total = response.data.total
       })
     },
+    // 获取下拉框
+    getCostItemList() {
+      selectAPI.getCostItemList().then((res) => {
+        if (res.code === 1000) {
+          this.CostItemList = res.data
+        }
+      })
+    },
+    getCostTypeList() {
+      selectAPI
+        .getCostTypeList({
+          costLevel: 1,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.CostTypeList = res.data
+          }
+        })
+    },
     getChannelList() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code == 1000) {
@@ -227,7 +274,9 @@ export default {
       })
     },
     getMinePackage() {
-      selectAPI.queryMinePackageSelect().then((res) => {
+      selectAPI.queryMinePackageSelect({
+        parentId: this.filterObj.CostType,
+      }).then((res) => {
         this.MinePackageList = res.data
       })
     },
