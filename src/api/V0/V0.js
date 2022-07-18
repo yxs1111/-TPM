@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-06-09 09:20:39
+ * @LastEditTime: 2022-07-18 11:48:16
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -14,6 +14,9 @@ export default {
   //获取V0数据
   getList(params) {
     return requestApi.request_post(this.url+'/getList', params)
+  },
+  getPage(params) {
+    return requestApi.request_get('/cityplan/investCpPriceVZeroDetail/getPage', params)
   },
   //获取V0 审批数据
   getApproveList(params) {

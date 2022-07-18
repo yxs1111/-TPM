@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-05-07 14:50:41
+ * @LastEditTime: 2022-07-18 13:39:33
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -24,6 +24,13 @@ export default function() {
           component: () => import('@/views/V0/V0Apply.vue'),
           meta: { title: '申请', icon: 'apply' },
         },
+        // {
+        //   path: '/costManagement/V0/V0ApplyList',
+        //   code: 'price_nka_v0_apply',
+        //   name: 'V0ApplyList',
+        //   component: () => import('@/views/V0/V0ApplyList.vue'),
+        //   meta: { title: '申请', icon: 'apply' },
+        // },
         {
           path: '/costManagement/V0/V0Approval',
           code: 'price_nka_v0_approve',
