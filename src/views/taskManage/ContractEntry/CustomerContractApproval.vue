@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-19 10:34:07
+ * @LastEditTime: 2022-07-19 14:22:38
 -->
 <template>
   <div class="MainContent">
@@ -636,8 +636,32 @@ export default {
         })
       }
     },
-    exportData() {
-      API.exportApprovePage({
+    async exportData() {
+      await API.exportApproveCustomerContractDetail({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '.客户合同明细-by KA-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+      await API.exportApproveCustomerContractInfo({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '客户合同明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+      await API.exportApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
