@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-19 10:14:10
+ * @LastEditTime: 2022-07-19 15:16:37
 -->
 <template>
   <div class="V0ApplyList">
@@ -32,21 +32,17 @@
         </div>
       </div>
       <div class="OpertionBar">
-        <!-- <el-button type="primary" @click="getCPTData" v-permission="permissions['getCPT']">获取CPT数据</el-button> -->
-        <div class="TpmButtonBG" @click="getCPTData" v-permission="permissions['getCPT']">
-          <img src="@/assets/images/huoqu.png" alt="" />
-          <span class="text">获取CPT数据</span>
-        </div>
-        <!-- 提交 有数据  正常 暗 -->
-        <!-- 没有提交 有数据  正常点击 -->
-        <!-- 没有提交 无数据  正常 暗 -->
-        <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
+        <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
           <img src="@/assets/images/import.png" alt="" />
           <span class="text">导入</span>
         </div>
-        <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve">
-          <svg-icon icon-class="passLocal" style="font-size: 22px;" />
-          <span class="text">提交</span>
+        <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
+          <svg-icon icon-class="passApprove" style="font-size: 24px;" />
+          <span class="text">通过</span>
+        </div>
+        <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
+          <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
+          <span class="text">驳回</span>
         </div>
       </div>
     </div>
@@ -143,43 +139,12 @@
       <el-pagination :current-page="pageNum" :page-sizes="[100, 50, 100, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
-      <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
-          <el-form-item label="Mine package">
-            <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-              <el-option v-for="item,index in ['Price Promotion','New User','KA Contract','ListingFee']" :key="index" :label="item" :value="item" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Scenario" prop="dimScenario">
-            <el-select v-model="ruleForm.dimScenario" placeholder="请选择" class="my-el-select">
-              <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Version" prop="dimVersion">
-            <el-select v-model="ruleForm.dimVersion" placeholder="请选择" class="my-el-select">
-              <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="渠道" prop="channelCode">
-            <el-select v-model="ruleForm.channelCode" disabled placeholder="请选择" class="my-el-select">
-              <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
-            </el-select>
-          </el-form-item>
-        </el-form>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
-      </span>
-    </el-dialog>
     <!-- 导入 -->
     <el-dialog width="66%" class="my-el-dialog " title="导入" :visible="importVisible" @close="closeImportDialog">
       <div class="importDialog">
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -343,45 +308,7 @@ export default {
       },
       monthList: [],
       skuOptons: [],
-      ContentData: [],
       tableData: [],
-      ruleForm: {
-        yearAndMonth: '',
-        channelCode: '',
-        dimScenario: '',
-        dimVersion: '',
-        Minepackage: '',
-      },
-      rules: {
-        channelCode: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        dimScenario: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        dimVersion: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-        Minepackage: [
-          {
-            required: true,
-            message: 'This field is required',
-            trigger: 'blur',
-          },
-        ],
-      },
       dialogVisible: false,
       //导入
       importVisible: false, //导入弹窗
@@ -407,17 +334,13 @@ export default {
         '2021 8+4',
       ],
       VersionList: VersionList(),
-      ChannelList: [],
-      backgroundList: [
-        'background:#EFFCF9',
-        'background:#FEF5F6',
-        'background:#F0F6FC',
-      ], //价格档位背景色
+      ChannelList: [], //价格档位背景色
       isNoData: true,
       usernameLocal: '',
       mainId: '',
       messageMap: messageMap(),
       maxheight: getHeightSingle(),
+      isSubmitStatus: 1,
     }
   },
   directives: { elDragDialog, permission },
@@ -433,23 +356,12 @@ export default {
     // this.getList()
     this.getQuerySkuSelect()
   },
-  watch: {
-    'filterObj.channelCode'() {
-      this.ruleForm.channelCode = this.filterObj.channelCode
-    },
-  },
+  watch: {},
   computed: {},
   methods: {
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
         this.monthList = res.data
-      })
-    },
-    getScenarioList() {
-      API.getScenarioList({
-        channelName: this.filterObj.channelCode,
-      }).then((res) => {
-        this.yearAndMonthList = res.data
       })
     },
     getList() {
@@ -464,7 +376,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        V0New.getPage({
+        V0New.getApproveList({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
@@ -474,7 +386,7 @@ export default {
           if (response.code === 1000) {
             this.tableData = response.data.records
             this.pageNum = response.data.pageNum
-            this.isSubmit=this.tableData[0].isSubmit
+            this.isSubmitStatus = this.tableData[0].isSubmit
             this.pageSize = response.data.pageSize
             this.total = response.data.total
             this.mainId = this.tableData[0].mainId
@@ -505,13 +417,13 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'V0' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.isSubmitStatus
             ) {
-              //本人可以提交
-              this.isSelf = true
+              this.isSubmit = false
             } else {
               //其他人禁用
-              this.isSelf = false
+              this.isSubmit = true
             }
           }
         })
@@ -520,27 +432,8 @@ export default {
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
-    //档位列
-    columnList(list) {
-      let columnList = list[0].customGearList
-      return columnList
-    },
     search() {
       this.getList()
-    },
-    getCPTData() {
-      if (this.filterObj.month == '') {
-        this.$message.info(messageObj.requireMonth)
-        return
-      }
-      if (this.filterObj.channelCode == '') {
-        this.$message.info(messageObj.requireChannel)
-        return
-      }
-      this.getScenarioList()
-      this.dialogVisible = true
-      this.ruleForm.channelCode = this.filterObj.channelCode
-      this.ruleForm.dimVersion = ''
     },
     //导入数据弹窗显示
     importData() {
@@ -577,28 +470,10 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          this.$message.success(this.messageMap.importSuccess)
           this.ImportData = response.data
-          this.isCheck =
-            response.data[0].judgmentType === 'Error' ? false : true
+          this.saveBtn = this.ImportData.length ? true : false
         } else {
           this.$message.info(this.messageMap.importError)
-        }
-      })
-    },
-    //校验数据
-    checkImport() {
-      V0New.exceptionCheck({
-        yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
-      }).then((response) => {
-        if (response.code == 1000) {
-          this.$message.success(this.messageMap.checkSuccess)
-          this.ImportData = response.data
-          this.saveBtn =
-            response.data[0].judgmentType === 'Error' ? false : true
-        } else {
-          this.$message.info(this.messageMap.checkError)
         }
       })
     },
@@ -662,7 +537,7 @@ export default {
         }).then((res) => {
           this.downloadFile(
             res,
-            `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0申请.xlsx`
+            `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
@@ -689,82 +564,32 @@ export default {
         document.body.removeChild(elink)
       }
     },
-    //确认获取CPT 数据
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          let url
-          // var url =
-          //   this.ruleForm.Minepackage == 'Price Promotion'? API.getCPTData: this.ruleForm.Minepackage == 'New User'?API.getNuData: this.ruleForm.Minepackage == 'Contract'? API.getContractData:API.getListingFee
-          switch (this.ruleForm.Minepackage) {
-            case 'Price Promotion':
-              url = V0New.getCPTData
-              break
-            case 'New User':
-              url = API.getNuData
-              break
-            case 'KA Contract':
-              url = API.getContractData
-              break
-            case 'ListingFee':
-              url = API.getListingFee
-              break
-          }
-          console.log(url)
-          url({
-            yearAndMonth: this.filterObj.month,
-            channelCode: this.ruleForm.channelCode,
-            dimScenario: this.ruleForm.dimScenario,
-            dimVersion: this.ruleForm.dimVersion,
-          }).then((response) => {
-            if (response.code == 1000) {
-              this.$message.success('成功获取数据!')
-              this.getList()
-              this.resetForm(formName)
-            }
-          })
-        } else {
-          this.$message.warning('提交失败,请填写必填项')
-          return false
-        }
-      })
-    },
-    //取消
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-      this.closeDialog()
-    },
-    // 弹窗关闭
-    closeDialog() {
-      this.dialogVisible = false
-      this.isEditor = false
-      this.editorId = ''
-      this.ruleForm = {
-        yearAndMonth: '',
-        channelCode: '',
-        dimScenario: '',
-        dimVersion: '',
-        Minepackage: '',
-      }
-    },
     //V0 提交审批
-    approve() {
+    approve(value) {
       if (this.tableData.length) {
-        let judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+        let mainId = this.mainId
+        if (value) {
+          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
           })
             .then(() => {
-              V0New.approve({
-                mainId: this.mainId, //主表id
+              API.approve({
+                mainId, //主表id
                 opinion: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
                 if (response.code === 1000) {
-                  this.$message.success('提交成功')
+                  this.$message({
+                    type: 'success',
+                    message: '审批成功!',
+                  })
                   this.getList()
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '审批失败!',
+                  })
                 }
               })
             })
@@ -775,7 +600,30 @@ export default {
               })
             })
         } else {
-          this.$message.info('数据未校验，请先进行导入验证')
+          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(() => {
+              API.approve({
+                mainId, //主表id
+                opinion: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
+              }).then((response) => {
+                if (response.code === 1000) {
+                  this.$message.success('驳回成功!')
+                  this.getList()
+                } else {
+                  this.$message.error('驳回失败!')
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         }
       } else {
         this.$message.warning('数据不能为空')
