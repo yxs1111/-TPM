@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-07-12 16:21:31
+ * @LastEditTime: 2022-07-19 08:57:39
 -->
 <template>
   <div class="dashboard-container">
@@ -156,8 +156,8 @@
                       </div>
 
                     </div>
-                    <div class="NU" v-if="item.minePackageName=='HIH rebate'">
-                      <div class="PointTitle">HIH Rebate-{{item.channelCode}}</div>
+                    <div class="NU" v-if="item.minePackageName=='HIH Contract'">
+                      <div class="PointTitle">HIH Contract-{{item.channelCode}}</div>
                       <div class="NuPoint">
                         <div class="V1">
                           <div class="passIcon" v-if="item.version=='V2'||item.version=='V3'||(item.version=='V1'&&item.processStatus==2)"></div>
@@ -208,8 +208,8 @@
                       </div>
 
                     </div>
-                    <div class="NU" v-if="item.minePackageName=='KA rebate'">
-                      <div class="PointTitle">KA Rebate-{{item.channelCode}}</div>
+                    <div class="NU" v-if="item.minePackageName=='KA Contract'">
+                      <div class="PointTitle">KA Contract-{{item.channelCode}}</div>
                       <div class="NuPoint">
                         <div class="V1">
                           <div class="passIcon" v-if="item.version=='V2'||item.version=='V3'||(item.version=='V1'&&item.processStatus==2)"></div>
