@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 17:01:13
+ * @LastEditTime: 2022-07-19 10:34:07
 -->
 <template>
   <div class="MainContent">
@@ -446,6 +446,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
+      this.mainIdList=[]
       API.getApprovePageCustomer({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
