@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 09:38:39
+ * @LastEditTime: 2022-07-20 11:49:30
 -->
 <template>
   <div class="MainContent">
@@ -705,9 +705,9 @@ export default {
     saveRow(row) {
       let obj = {}
       if (row.name.indexOf('Package Owner') != -1) {
-        obj[row.businessKey] = row.poApprovalComments
+        obj[row.mainId] = row.poApprovalComments
       } else if (row.name.indexOf('Finance') != -1) {
-        obj[row.businessKey] = row.finApprovalComments
+        obj[row.mainId] = row.finApprovalComments
       }
       API.saveApproveComments(obj).then((res) => {
         if (res.code === 1000) {
