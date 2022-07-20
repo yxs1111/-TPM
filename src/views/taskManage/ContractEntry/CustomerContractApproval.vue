@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 11:43:00
+ * @LastEditTime: 2022-07-20 16:41:16
 -->
 <template>
   <div class="MainContent">
@@ -98,7 +98,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="contractStateName" width="160" label="合同状态">
+      <el-table-column v-slot={row} align="center" prop="contractStateName" width="240" label="合同状态">
+        {{row.contractStateName=='待审批'&&row.activityName&&row.activityName.indexOf('审批')!=-1?row.contractStateName+'-'+row.activityName:row.contractStateName}}
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
