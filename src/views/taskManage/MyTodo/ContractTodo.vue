@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 09:39:33
+ * @LastEditTime: 2022-07-20 09:49:01
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -37,7 +37,7 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="待办项"  width="150"> </el-table-column>
+      <el-table-column align="center" prop="item" label="待办项"  min-width="150"> </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称"  width="120"> </el-table-column>
       <el-table-column align="center" prop="distributorName" label="经销商名称"> </el-table-column>
       <el-table-column align="center" width="180" prop="name" label="当前节点"> </el-table-column>
