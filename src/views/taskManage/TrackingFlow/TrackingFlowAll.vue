@@ -15,14 +15,20 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Cost Type:</span>
-          <el-select v-model="filterObj.CostType" clearable placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          <el-select v-model="filterObj.CostTypeIndex" clearable placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="index" />
           </el-select>
         </div>
-        <div class="Selectli" @keyup.enter="search">
-          <span class="SelectliTitle">Mine package:</span>
+        <div class="Selectli">
+          <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.MinePackageName" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Cost Item:</span>
+          <el-select v-model="filterObj.costItem" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -49,7 +55,9 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
-      <el-table-column align="center" prop="minePackageName" label="Mine Package" width="250"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costTypeName" label="Cost Type"> </el-table-column>
+      <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costItemName" label="Cost Item"> </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">
         {{row.processStatus===2?'已完成':'进行中'}}
@@ -94,6 +102,7 @@ import FlowDiagram from '@/components/FlowDiagram'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
+  name:"TrackingFlowAll",
   data() {
     return {
       total: 0,
@@ -101,7 +110,10 @@ export default {
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
+        CostTypeIndex: '',
         CostType: '',
+        CostTypeName: '',
+        costItem:'',
         MinePackageName: '',
         channelCode: '',
         processStatus: '',
@@ -114,6 +126,7 @@ export default {
       CostTypeList: [],
       channelOptons: [],
       minePackageList: [],
+      CostItemList: [],
       processStatusList: ['进行中', '已完成'],
       versionList: ['Final'],
       flowDiagram: {
@@ -128,6 +141,7 @@ export default {
     this.getTableData()
     this.getQueryChannelSelect()
     this.getCostTypeList()
+    this.getCostItemList()
     this.getMinePackageSelect()
   },
   components: {
@@ -135,7 +149,13 @@ export default {
   },
   directives: { elDragDialog, permission },
   watch: {
-    'filterObj.CostType'() {
+    'filterObj.CostTypeIndex'(value) {
+      if(value!=='') {
+        this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+        this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+      } else {
+        this.filterObj.CostTypeName = ''
+      }
       this.filterObj.MinePackageName = ''
       this.getMinePackageSelect()
     },
@@ -150,6 +170,8 @@ export default {
         minePackageName: this.filterObj.MinePackageName,
         channelCode: this.filterObj.channelCode,
         processStatus: this.filterObj.processStatus,
+        costTypeName: this.filterObj.CostTypeName,
+        costItemName: this.filterObj.costItem,
       })
         .then((response) => {
           this.tableData = response.data.records
@@ -158,6 +180,14 @@ export default {
           this.total = response.data.total
         })
         .catch((error) => {})
+    },
+    // 获取下拉框
+    getCostItemList() {
+      selectAPI.getCostItemList().then((res) => {
+        if (res.code === 1000) {
+          this.CostItemList = res.data
+        }
+      })
     },
     getCostTypeList() {
       selectAPI

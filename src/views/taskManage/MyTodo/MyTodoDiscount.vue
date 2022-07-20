@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-16 17:06:10
+ * @LastEditTime: 2022-07-14 10:20:57
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -59,7 +59,9 @@
         {{versionNameList[row.version]}}
       </el-table-column>
       <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costType" label="costTypeName"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
+      <el-table-column align="center" width="240" prop="costItem" label="costItemName"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
       <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人"> 
          <span v-html="setSplitAssignee(row.assignee)"></span>

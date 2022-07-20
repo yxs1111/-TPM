@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-16 14:43:07
+ * @LastEditTime: 2022-07-20 09:39:33
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -32,21 +32,20 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" type="selection" />
-      <el-table-column align="center" label="序号" width="55">
+      <el-table-column align="center" label="序号" width="100">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="待办项"  width="100"> </el-table-column>
+      <el-table-column align="center" prop="item" label="待办项"  width="150"> </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称"  width="120"> </el-table-column>
-      <el-table-column align="center" prop="distributorName" label="经销商名称"  width="250"> </el-table-column>
+      <el-table-column align="center" prop="distributorName" label="经销商名称"> </el-table-column>
       <el-table-column align="center" width="180" prop="name" label="当前节点"> </el-table-column>
       <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
-        {{row.createTime?row.createTime.substring(0,10):""}}
+        {{row.createTime?row.createTime.substring(0,19).replaceAll("T",' '):""}}
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
         <template slot-scope="{row}">
@@ -142,6 +141,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
+      this.tableData=[]
       API.getContractListTodo({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数

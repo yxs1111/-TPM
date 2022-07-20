@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-06-23 18:19:00
+ * @LastEditTime: 2022-07-19 14:08:37
  */
 /*
  * @Description: 客户合同录入
@@ -47,6 +47,51 @@ export default {
   exportApprovePage(params) {
     return request({
       url: this.url+'/exportApprovePage',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //客户合同审批--导出客户详细信息
+  exportApproveCustomerContractDetail(params) {
+    return request({
+      url: this.url+'/exportApproveCustomerContractDetail',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //客户合同审批--导出客户条款明细信息
+  exportApproveCustomerContractInfo(params) {
+    return request({
+      url: this.url+'/exportApproveCustomerContractInfo',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //经销商合同审批--导出
+  exportDistApprovePage(params) {
+    return request({
+      url: this.distUrl+'/exportApprovePage',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //经销商合同导出-按照客户合同区分Sheet
+  exportApproveDistributorContractDetail(params) {
+    return request({
+      url: this.distUrl+'/exportApproveDistributorContractDetail',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //经销商合同导出-列表显示合同明细
+  exportApproveDistributorContractInfo(params) {
+    return request({
+      url: this.distUrl+'/exportApproveDistributorContractInfo',
       method: 'get',
       params: params,
       responseType: 'blob'

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-13 14:15:42
+ * @LastEditTime: 2022-07-20 09:37:58
 -->
 <template>
   <div class="MainContent">
@@ -89,7 +89,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID"></el-table-column>
+      <el-table-column prop="channelCode" fixed align="center" width="120" label="渠道">
       </el-table-column>
       <el-table-column prop="customerMdmCode" fixed align="center" width="220" label="客户名称">
         <template slot-scope="scope">
@@ -215,6 +216,7 @@
       <div class="dialogContent">
         <div class="termInfo">
           <span class="termItem">客户名称:{{termInfo.customerName}}</span>
+          <span class="termItem" v-if="termInfo.channelCode==='RKA'">大区:{{termInfo.regionName}}</span>
           <span class="termItem">目标销售额(RMB):{{FormateNum(termInfo.saleAmount)}}</span>
           <span
             class="termItem">合同期间:{{termInfo.contractBeginDate?termInfo.contractBeginDate.replaceAll('-','/'):''}}-{{termInfo.contractEndDate?termInfo.contractEndDate.replaceAll('-','/'):''}}</span>
@@ -1298,6 +1300,13 @@ export default {
     },
     //定时任务确定--终止合同
     popoverSubmit(index, row) {
+      let newStr=row.expireDate.substring(0,4)+'-'+row.expireDate.substring(4)
+      let expireDate=new Date(newStr)
+      let contractDate=new Date(row.contractDate[1].substring(0,4)+'-'+row.contractDate[1].substring(5,7))
+      if(expireDate.getTime()<contractDate.getTime()) {
+        this.$message.info("系统生效时间结束时间不能早于合同期间结束时间")
+        return
+      }
       API.termination({
         id: row.id,
         date: row.expireDate,

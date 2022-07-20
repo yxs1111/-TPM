@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-14 09:03:00
+ * @LastEditTime: 2022-07-20 09:38:54
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item in customerArr" :key="item.id" :label="item.label" :value="item.customerMdmCode" />
+            <el-option v-for="(item, index) in customerAllArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -88,7 +88,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="contractCode" fixed align="center" width="220" label="合同ID">
+      <el-table-column prop="contractCode" fixed align="center" width="320" label="经销商分摊协议ID">
+      </el-table-column>
+      <el-table-column prop="customerChannelCode" fixed align="center" width="120" label="渠道">
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="160" label="客户名称">
         <template slot-scope="scope">
@@ -96,6 +98,8 @@
             {{scope.row.customerName}}
           </div>
         </template>
+      </el-table-column>
+      <el-table-column prop="customerRegionName" fixed align="center" width="120" label="大区">
       </el-table-column>
       <el-table-column prop="customerContractSaleAmount" align="center" width="180" label="客户目标销售额(RMB)">
         <template slot-scope="scope">
@@ -372,6 +376,7 @@ export default {
       editMaxTargetSale: 0, //修改可填最大值
       editIsCollection: 0, //编辑--判断是否补录 --是否跳过验证
       customerArr: [],
+      customerAllArr: [],
       distributorArr: [],
       distributorArrDialog: [],
       contractList: contractList,
@@ -429,6 +434,7 @@ export default {
     }
     // this.getTableData()
     this.getCustomerList()
+    this.getCustomerListAll()
     this.getDistributorList()
   },
   directives: { elDragDialog, permission },
@@ -527,6 +533,16 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.distributorArr = res.data
+          }
+        })
+    },
+    getCustomerListAll() {
+      selectAPI
+        .queryCustomerList({
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerAllArr = res.data
           }
         })
     },
@@ -826,6 +842,18 @@ export default {
     },
     //定时任务确定--终止合同
     popoverSubmit(index, row) {
+      let newStr =
+        row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
+      let expireDate = new Date(newStr)
+      let contractDate = new Date(
+        row.contractDate[1].substring(0, 4) +
+          '-' +
+          row.contractDate[1].substring(5, 7)
+      )
+      if (expireDate.getTime() < contractDate.getTime()) {
+        this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
+        return
+      }
       API.termination({
         id: row.id,
         date: row.expireDate,

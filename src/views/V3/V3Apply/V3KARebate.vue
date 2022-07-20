@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-05 10:05:25
+ * @LastEditTime: 2022-07-13 17:05:24
 -->
 <template>
   <div class="MainContent">
@@ -348,7 +348,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="620" align="center" prop="judgmentContent" label="系统判定内容">
+      <el-table-column width="620" align="left" prop="judgmentContent" label="系统判定内容">
           <template v-slot:header>
             <div>系统判定内容<br><span class="subTitle">-</span></div>
           </template>

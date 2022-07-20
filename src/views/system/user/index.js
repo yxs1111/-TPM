@@ -275,7 +275,9 @@ export default {
       joinOrgDialog: {
         visible: false
       },
-      filterText: '',
+      filterTextFs: '',
+      filterTextMinePackage: '',
+      filterTextKA: '',
       allOrg: [],
       defaultProps: {
         children: 'children',
@@ -332,7 +334,16 @@ export default {
   watch: {
     multipleSelection(val) {
       this.editDisabled = !(val && val.length === 1)
-    }
+    },
+    filterTextFs(val) {
+      this.$refs.FileSalesTree.filter(val);
+    },
+    filterTextMinePackage(val) {
+      this.$refs.MinePackageTree.filter(val);
+    },
+    filterTextKA(val) {
+      this.$refs.KATree.filter(val);
+    },
   },
   methods: {
     // 查询方法
@@ -744,10 +755,13 @@ export default {
       FileSalesList.forEach(item => {
         obj.fsDatalist.push({
           fsDataFirCode: item.dataFirCode,
+          fsDataFirId: item.dataFirId,
           fsDataSecId: item.dataSecId,
           fsDataSecCode: item.dataSecCode,
           fsDataTerId: item.dataTerId,
-          fsDataTerCode: item.dataTerCode
+          fsDataTerCode: item.dataTerCode,
+          fsDataFouId: item.dataFouId,
+          fsDataFouCode: item.dataFouCode,
         })
       })
       KAlist.forEach(item => {
@@ -772,6 +786,9 @@ export default {
       this.RoleTreeData_KA = []
       this.RoleTreeData_Mine = []
       this.RoleTreeData_FieldSales = []
+      this.filterTextFs=''
+      this.filterTextMinePackage=''
+      this.filterTextKA=''
     },
     //获取默认权限
     async getDefaultRolePermissions(userName) {
@@ -785,11 +802,19 @@ export default {
           item.mid= item.ciDataSecCode + '-' + item.ciDataTerCode
         })
         this.$refs.MinePackageTree.setCheckedNodes([...ciDataList])
+        let fsNodeKeyList=[]
         fsDatalist.forEach(item=>{
+          if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId!=null) {
+            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId+'-'+item.fsDataFouId)
+          } else if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId==null) {
+            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId)
+          } else if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId==null&&item.fsDataFouId==null) {
+            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId)
+          }
           //NodeKey:"FieldSales-zone-4539"
-          item.NodeKey= 'FieldSales-' +item.fsDataSecCode+'-'+item.fsDataTerCode
         })
-        this.$refs.FileSalesTree.setCheckedNodes([...fsDatalist])
+        console.log(fsNodeKeyList);
+        this.$refs.FileSalesTree.setCheckedKeys([...fsNodeKeyList])
         let NoeKeyList=[]
         kaDataList.forEach(item=>{
           if(item.kaDataTerCode==null) {
@@ -884,32 +909,69 @@ export default {
     async getFieldSales() {
      await roleApi.getFieldSales().then(res => {
         let list = res.data.children
+        //一级 大区
         for (let i = 0; i < list.length; i++) {
           list[i]['label'] = list[i].name
-          list[i]['dataFirCode'] = 'FieldSales'
-          list[i]['dataSecCode'] = list[i].name
-          list[i]['dataSecId'] = list[i].id
+          list[i]['dataFirCode'] = list[i].nameAbridge
+          list[i]['dataFirId'] = list[i].id
+          list[i]['NodeKey'] = list[i]['dataFirId']
           if (list[i].children) {
-            
-            for (let j = 0; j < list[i].children.length; j++) {
-              list[i].children[j]['label'] = list[i].children[j].name
-              list[i].children[j]['dataTerId'] = list[i].children[j].id
-              list[i].children[j]['dataTerCode'] = list[i].children[j].nameAbridge
-              list[i].children[j]['dataSecId'] = list[i].id
-              list[i].children[j]['dataSecCode'] = list[i].name
-              list[i].children[j]['dataFirCode'] = 'FieldSales'
-              list[i].children[j]['NodeKey'] =
-                'FieldSales-' +
-                list[i].children[j]['dataSecCode'] +
-                '-' +
-                list[i].children[j]['dataTerCode']
+            //二级 区域
+            for (let s = 0; s < list[i].children.length; s++) {
+              list[i].children[s]['label'] = list[i].children[s].name
+              list[i].children[s]['dataFirCode'] = list[i].nameAbridge
+              list[i].children[s]['dataFirId'] = list[i].id
+              list[i].children[s]['dataSecCode'] = list[i].children[s].nameAbridge
+              list[i].children[s]['dataSecId'] = list[i].children[s].id
+              list[i].children[s]['NodeKey'] = list[i]['dataFirId']+'-'+list[i].children[s]['dataSecId']
+              if(list[i].children[s].children) {
+                //三级城市
+                for (let t = 0; t < list[i].children[s].children.length; t++) {
+                  list[i].children[s].children[t]['label'] = list[i].children[s].children[t].name
+                  list[i].children[s].children[t]['dataFirCode'] = list[i].nameAbridge
+                  list[i].children[s].children[t]['dataFirId'] = list[i].id
+                  list[i].children[s].children[t]['dataSecCode'] = list[i].children[s].nameAbridge
+                  list[i].children[s].children[t]['dataSecId'] = list[i].children[s].id
+                  list[i].children[s].children[t]['dataTerCode'] = list[i].children[s].children[t].nameAbridge
+                  list[i].children[s].children[t]['dataTerId'] = list[i].children[s].children[t].id
+                  list[i].children[s].children[t]['NodeKey'] = list[i]['dataFirId']+'-'+list[i].children[s]['dataSecId']+'-'+list[i].children[s].children[t]['dataTerId']
+                  //四级城市群
+                  if(list[i].children[s].children[t].children) {
+                    for (let f = 0; f < list[i].children[s].children[t].children.length; f++) {
+                      list[i].children[s].children[t].children[f]['label'] = list[i].children[s].children[t].children[f].name
+                      list[i].children[s].children[t].children[f]['dataFirCode'] = list[i].nameAbridge
+                      list[i].children[s].children[t].children[f]['dataFirId'] = list[i].id
+                      list[i].children[s].children[t].children[f]['dataSecCode'] = list[i].children[s].nameAbridge
+                      list[i].children[s].children[t].children[f]['dataSecId'] = list[i].children[s].id
+                      list[i].children[s].children[t].children[f]['dataTerCode'] = list[i].children[s].children[t].nameAbridge
+                      list[i].children[s].children[t].children[f]['dataTerId'] = list[i].children[s].children[t].id
+                      list[i].children[s].children[t].children[f]['dataFouCode'] = list[i].children[s].children[t].children[f].nameAbridge
+                      list[i].children[s].children[t].children[f]['dataFouId'] = list[i].children[s].children[t].children[f].id
+                      list[i].children[s].children[t].children[f]['NodeKey'] = list[i]['dataFirId']+'-'+list[i].children[s]['dataSecId']+'-'+list[i].children[s].children[t]['dataTerId']+'-'+list[i].children[s].children[t].children[f]['dataFouId']
+                    }
+                  }
+                }
+              }
             }
+            // for (let j = 0; j < list[i].children.length; j++) {
+            //   list[i].children[j]['label'] = list[i].children[j].name
+            //   list[i].children[j]['dataTerId'] = list[i].children[j].id
+            //   list[i].children[j]['dataTerCode'] = list[i].children[j].nameAbridge
+            //   list[i].children[j]['dataSecId'] = list[i].id
+            //   list[i].children[j]['dataSecCode'] = list[i].name
+            //   list[i].children[j]['dataFirCode'] = 'FieldSales'
+            //   list[i].children[j]['NodeKey'] =
+            //     'FieldSales-' +
+            //     list[i].children[j]['dataSecCode'] +
+            //     '-' +
+            //     list[i].children[j]['dataTerCode']
+            // }
           } else {
             list[i]['children'] = []
           }
         }
         var obj = {
-          label: 'Field sales',
+          label: 'Zone',
           children: [...list]
         }
         this.RoleTreeData_FieldSales.push(obj)

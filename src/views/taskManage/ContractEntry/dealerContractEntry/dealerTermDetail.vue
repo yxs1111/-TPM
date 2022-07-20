@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-08 17:28:19
+ * @LastEditTime: 2022-07-20 09:38:33
 -->
 <template>
   <div class="ContentDetail">
@@ -25,6 +25,7 @@
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
+            <span class="topInfo" v-if="customerContract.channelCode==='RKA'"> 大区: {{customerContract.regionName}}</span>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].customerInfo.targetSale)}} </span>
           </div>
         </template>
@@ -271,6 +272,7 @@ export default {
       isMakeUp: 0, //是否补录
       isOtherEditor: 0, //是否有可编辑
       isEditor: 0,
+      customerContract:'',//客户合同
     }
   },
 
@@ -304,6 +306,7 @@ export default {
         let { variable: customerVariableList, fixed: customerFixList } =
           res.data.customerContract
         let customerContract = res.data.customerContract
+        this.customerContract = res.data.customerContract
         //copy  属性--》单个的客户variable
         customerVariableList.forEach((item) => {
           item.customerName = customerContract.customerName
@@ -1436,12 +1439,11 @@ export default {
       // debugger
       let { frieslandPointCount, targetSale, pointCount } =
         Obj.dealerList[dealerIndex]
-      frieslandPointCount = Number(frieslandPointCount)
       if (0 <= frieslandPointCount && frieslandPointCount <= pointCount) {
-        this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =
-          pointCount - frieslandPointCount
+        this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =Number(Number(pointCount)-Number(frieslandPointCount)).toFixed(2) 
+          // Number(pointCount).toFixed(2) - Number(frieslandPointCount).toFixed(2) 
         this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice =
-          (frieslandPointCount * targetSale) / 100
+          (Number(frieslandPointCount) * targetSale) / 100
         this.changeDealerPointCount(Obj, index, dealerIndex)
       } else {
         this.$message.info(
@@ -1472,8 +1474,8 @@ export default {
         Obj.dealerList[dealerIndex]
       this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice =
         (dealerPointCount * targetSale) / 100
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =
-        Number(pointCount) - Number(dealerPointCount)
+      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount =Number(Number(pointCount) - Number(dealerPointCount)).toFixed(2)
+        // Number(pointCount) - Number(dealerPointCount)
       this.setVariableTotal()
     },
     //更改经销商含税金额--》经销商承担承担费比

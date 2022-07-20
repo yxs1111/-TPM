@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-05 10:03:23
+ * @LastEditTime: 2022-07-13 17:04:27
 -->
 <template>
   <div class="MainContent">
@@ -319,7 +319,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="800" align="center" prop="systemJudgmentContent" label="系统判定内容">
+      <el-table-column width="800" align="left" prop="systemJudgmentContent" label="系统判定内容">
         <template v-slot:header>
             <div>系统判定内容<br><span class="subTitle">-</span></div>
         </template>
