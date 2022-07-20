@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-10 16:42:53
+ * @LastEditTime: 2022-07-19 18:13:10
 -->
 <template>
   <div>
@@ -64,25 +64,49 @@ export default {
             { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
           ]
         }
-        // this.routerList = [
-        //     ...this.routerList,
-        //     {
-        //       name: 'HIH Rebate',
-        //       path: '/master/ruleCtrl/model/splitRulesHIH',
-        //       img: {
-        //         dark: require('@/assets/images/tab/tab2.png'),
-        //         light: require('@/assets/images/tab/tab2_l.png')
-        //       }
-        //     },
-        //     {
-        //       name: 'KA Rebate',
-        //       path: '/master/ruleCtrl/model/splitRulesKA',
-        //       img: {
-        //         dark: require('@/assets/images/tab/tab3.png'),
-        //         light: require('@/assets/images/tab/tab3_l.png')
-        //       }
-        //     }
-        //   ]
+        this.routerList = [
+            ...this.routerList,
+            {
+              name: 'HIH Rebate',
+              path: '/master/ruleCtrl/model/splitRulesHIH',
+              img: {
+                dark: require('@/assets/images/tab/tab2.png'),
+                light: require('@/assets/images/tab/tab2_l.png')
+              }
+            },
+            {
+              name: 'KA Rebate',
+              path: '/master/ruleCtrl/model/splitRulesKA',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
+              name: 'FMC',
+              path: '/master/ruleCtrl/model/splitRulesFMC',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
+              name: 'Road Show',
+              path: '/master/ruleCtrl/model/splitRulesRoadShow',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
+              name: 'Listing Fee',
+              path: '/master/ruleCtrl/model/splitRulesListingFee',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+          ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
         } else {
