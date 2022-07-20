@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-18 16:57:37
+ * @LastEditTime: 2022-07-20 11:55:02
 -->
 <template>
   <div class="ContentDetail">
@@ -937,7 +937,7 @@ export default {
                   ...dealerItem,
                 })
               }
-              if (dealerItem.frieslandPointCount) {
+              if (Number(dealerItem.frieslandPointCount)!=0) {
                 if (
                   dealerItem.customerTaxPoint === '' ||
                   dealerItem.payType == ''
@@ -966,7 +966,7 @@ export default {
                   ...dealerItem,
                 })
               }
-              if (dealerItem.frieslandPointCount) {
+              if (Number(dealerItem.frieslandPointCount)!=0) {
                 if (
                   dealerItem.customerTaxPoint === '' ||
                   dealerItem.payType == ''
