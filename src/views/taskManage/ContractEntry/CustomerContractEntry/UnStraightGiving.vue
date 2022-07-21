@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 16:30:25
+ * @LastEditTime: 2022-07-20 20:38:39
 -->
 <template>
   <div class="MainContent">
@@ -70,7 +70,7 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor"  @click="copyRow(scope.row, scope.$index)">
+            <div class="haveText_editor" v-permission="permissions['update']"  @click="copyRow(scope.row, scope.$index)">
               <svg-icon icon-class="copy" class="svgIcon" />
               <span>复制</span>
             </div>
