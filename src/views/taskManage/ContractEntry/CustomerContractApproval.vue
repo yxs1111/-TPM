@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 16:41:16
+ * @LastEditTime: 2022-07-21 11:30:31
 -->
 <template>
   <div class="MainContent">
@@ -474,7 +474,9 @@ export default {
         this.pageSize = response.data.pageSize
         this.total = response.data.total
         this.tempObj.tempInfo = null
-        this.infoByMainId()
+        if(list.length) {
+          this.infoByMainId()
+        }
       })
     },
     infoByMainId() {

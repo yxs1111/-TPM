@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 16:49:04
+ * @LastEditTime: 2022-07-21 11:30:56
 -->
 <template>
   <div class="MainContent">
@@ -272,7 +272,9 @@ export default {
         this.total = response.data.total
         this.ccId = this.tableData[0].ccId
         this.tempObj.tempInfo = null
-        this.infoByMainId()
+        if(list.length) {
+          this.infoByMainId()
+        }
       })
     },
     infoByMainId() {
