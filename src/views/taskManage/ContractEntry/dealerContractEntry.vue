@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-21 10:58:17
+ * @LastEditTime: 2022-07-21 11:01:32
 -->
 <template>
   <div class="MainContent">
@@ -850,7 +850,7 @@ export default {
           '-' +
           row.contractDate[1].substring(5, 7)
       )
-      if (expireDate.getTime() < contractDate.getTime()) {
+      if((expireDate.getTime()<contractDate.getTime())&&row.contractStateName=='通过') {
         this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
         return
       } else if(row.contractStateName=='过期'||row.contractStateName=='终止') {
