@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 20:39:03
+ * @LastEditTime: 2022-07-21 10:58:17
 -->
 <template>
   <div class="MainContent">
@@ -852,6 +852,9 @@ export default {
       )
       if (expireDate.getTime() < contractDate.getTime()) {
         this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
+        return
+      } else if(row.contractStateName=='过期'||row.contractStateName=='终止') {
+        this.$message.info("只有状态为“通过”的经销商分摊协议，允许调整生效时间，其他都不允许，请知悉，谢谢！")
         return
       }
       API.termination({

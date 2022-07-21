@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 20:38:48
+ * @LastEditTime: 2022-07-21 10:57:33
 -->
 <template>
   <div class="MainContent">
@@ -1305,6 +1305,9 @@ export default {
       let contractDate=new Date(row.contractDate[1].substring(0,4)+'-'+row.contractDate[1].substring(5,7))
       if(expireDate.getTime()<contractDate.getTime()) {
         this.$message.info("系统生效时间结束时间不能早于合同期间结束时间")
+        return
+      } else if(row.contractStateName=='过期'||row.contractStateName=='终止') {
+        this.$message.info("只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！")
         return
       }
       API.termination({
