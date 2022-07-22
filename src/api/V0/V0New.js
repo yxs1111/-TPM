@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-07-18 15:38:58
+ * @LastEditTime: 2022-07-20 13:36:14
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -52,7 +52,7 @@ export default {
   },
   //v0校验
   exceptionCheck(params) {
-    return requestApi.request_post(this.ImportUrl+'/exceptionCheck', params)
+    return requestApi.request_post(this.url+'/exceptionCheck', params)
   },
   //v0数据异常项保存
   exceptionSave(params) {

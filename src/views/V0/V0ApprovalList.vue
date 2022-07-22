@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-19 15:16:37
+ * @LastEditTime: 2022-07-20 15:54:46
 -->
 <template>
   <div class="V0ApplyList">
@@ -185,11 +185,6 @@
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" label="序号" width="80">
-              <template slot-scope="scope">
-                {{ scope.$index+1 }}
-              </template>
-            </el-table-column>
             <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
             <el-table-column align="center" width="120" prop="costTypeName" label="费用类型"></el-table-column>
             <el-table-column align="center" width="160" prop="minePackageName" label="Mine Package"></el-table-column>
@@ -376,7 +371,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        V0New.getApproveList({
+        V0New.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
@@ -479,17 +474,8 @@ export default {
     },
     //确认导入文件
     confirmImport() {
-      V0New.exceptionSave({
-        mainId: this.mainId,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.closeImportDialog()
-          this.getList()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      this.closeImportDialog()
+      this.getList()
     },
     //导出异常信息
     exportErrorList() {

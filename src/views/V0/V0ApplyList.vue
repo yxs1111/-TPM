@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-19 10:14:10
+ * @LastEditTime: 2022-07-20 15:51:59
 -->
 <template>
   <div class="V0ApplyList">
@@ -182,6 +182,7 @@
             <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
+          <el-button  type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
         <div class="fileInfo">
           <div class="fileInfo">
@@ -220,11 +221,6 @@
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" label="序号" width="80">
-              <template slot-scope="scope">
-                {{ scope.$index+1 }}
-              </template>
-            </el-table-column>
             <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
             <el-table-column align="center" width="120" prop="costTypeName" label="费用类型"></el-table-column>
             <el-table-column align="center" width="160" prop="minePackageName" label="Mine Package"></el-table-column>
