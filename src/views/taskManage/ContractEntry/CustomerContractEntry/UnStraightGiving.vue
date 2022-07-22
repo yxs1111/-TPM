@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-21 10:51:49
+ * @LastEditTime: 2022-07-22 09:15:47
 -->
 <template>
   <div class="MainContent">
@@ -70,7 +70,7 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor" v-permission="permissions['update']"  @click="copyRow(scope.row, scope.$index)">
+            <div class="haveText_editor" v-permission="permissions['update']" @click="copyRow(scope.row, scope.$index)">
               <svg-icon icon-class="copy" class="svgIcon" />
               <span>复制</span>
             </div>
@@ -95,7 +95,8 @@
       <el-table-column prop="customerMdmCode" fixed align="center" width="220" label="客户名称">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.customerMdmCode" :disabled="scope.row.isRefused==1?true:false" class="my-el-input" @change="changeCustomer(scope.row)" filterable clearable placeholder="请选择">
+            <el-select v-model="scope.row.customerMdmCode" :disabled="scope.row.isRefused==1?true:false" class="my-el-input" @change="changeCustomer(scope.row)" filterable
+              clearable placeholder="请选择">
               <el-option v-for="item,index in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
             </el-select>
           </div>
@@ -104,7 +105,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="regionCode"  align="center" width="220" label="大区">
+      <el-table-column prop="regionCode" align="center" width="220" label="大区">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.regionCode" :disabled="scope.row.isRequireRegion==1?false:true" class="my-el-input" filterable clearable placeholder="请选择">
@@ -131,8 +132,8 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
-              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange"
+              value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -143,8 +144,8 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" :picker-options="pickerOptionsSystemDate(scope.row)" range-separator="至" start-placeholder="开始月份"
-              end-placeholder="结束月份">
+            <el-date-picker v-model="scope.row.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" :picker-options="pickerOptionsSystemDate(scope.row)"
+              range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -191,7 +192,7 @@
       <el-table-column align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.remark"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
+            <el-input v-model="scope.row.remark" type="textarea" autosize clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -597,7 +598,7 @@ import {
   downloadFile,
   getCurrentYearRange,
   pickerOptions,
-  pickerOptionsSystemDate
+  pickerOptionsSystemDate,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -720,7 +721,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.isEditor=0 //编辑弹窗
+      this.isEditor = 0 //编辑弹窗
       API.getPage({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -737,10 +738,10 @@ export default {
           item.isEditor = 0
           item.isNewData = 0
           //被拒绝状态，不允许编辑客户名称、合同期间
-          if(item.contractState==='2') {
-            item.isRefused=1
+          if (item.contractState === '2') {
+            item.isRefused = 1
           } else {
-            item.isRefused=0
+            item.isRefused = 0
           }
           // item.regionCode = ''
           // item.regionName = ''
@@ -1055,16 +1056,18 @@ export default {
     //编辑行数据
     editorRow(index, row) {
       //编辑状态：草稿、被拒绝
-      if(row.contractState !== '0'&&row.contractState !== '2') {
-        this.isEditor=0
-        if(row.contractState==1) {
+      if (row.contractState !== '0' && row.contractState !== '2') {
+        this.isEditor = 0
+        if (row.contractState == 1) {
           this.$message.info('审批中的合同不允许编辑')
-        } else if(row.contractState==3) {
-          this.$message.info('该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间')
-        } else if(row.contractState==4||row.contractState==5) {
+        } else if (row.contractState == 3) {
+          this.$message.info(
+            '该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间'
+          )
+        } else if (row.contractState == 4 || row.contractState == 5) {
           this.$message.info('该合同不允许编辑')
         }
-        return 
+        return
       }
       if (this.tempObj.tempInfo && !row.isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
@@ -1083,12 +1086,12 @@ export default {
       })
       this.changeCustomer(row)
       this.tableData[index].isEditor = 1
-      this.isEditor=1 //可以编辑弹窗
-      this.editorIndex=index
+      this.isEditor = 1 //可以编辑弹窗
+      this.editorIndex = index
       this.$forceUpdate()
     },
     CancelEditorRow(index) {
-      this.isEditor=0 //编辑弹窗
+      this.isEditor = 0 //编辑弹窗
       // this.tableData.forEach((item) => (item.isEditor = 0))
       if (this.tableData[index].isNewData) {
         //新增的不能取消编辑，只有删除
@@ -1112,10 +1115,19 @@ export default {
       //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不受状态影响
       let isDeleteFlag = this.compareDate(row.systemDate[0])
       //允许删除：草稿、被拒绝、通过（未汇算）
-      if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
-        if(row.contractState === '1') {
+      if (
+        row.contractState === '1' ||
+        (row.contractState == '3' && !isDeleteFlag) ||
+        row.contractState === '4' ||
+        row.contractState === '5'
+      ) {
+        if (row.contractState === '1') {
           this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
-        } else if(row.contractState == '3'&&!isDeleteFlag||row.contractState === '4'||row.contractState === '5') {
+        } else if (
+          (row.contractState == '3' && !isDeleteFlag) ||
+          row.contractState === '4' ||
+          row.contractState === '5'
+        ) {
           this.$message.info('该合同不允许删除')
         }
         return
@@ -1172,13 +1184,12 @@ export default {
         this.$message.info('超出最大数值')
       } else {
         if (row.isNewData) {
-          if(row.isNewData===1) {
+          if (row.isNewData === 1) {
             //新增数据保存
             this.saveSingle(row)
-          }else if(row.isNewData===2) {
+          } else if (row.isNewData === 2) {
             this.saveCopy(row)
           }
-          
         } else if (row.isEditor) {
           let isRequireRegion =
             this.customerArr.findIndex(
@@ -1195,7 +1206,7 @@ export default {
               this.$message.warning('请填写大区')
               return
             }
-          } else {  
+          } else {
             if (row.regionCode) {
               this.$message.warning('该客户大区应为空')
               return
@@ -1227,31 +1238,35 @@ export default {
     },
     //判断当前选中的客户类型--》大区是否可选择
     changeCustomer(row) {
-      let isRequireRegion = this.customerArr.findIndex((item) =>
-                item.channelCode == 'RKA' &&
-                item.customerMdmCode == row.customerMdmCode
-            ) != -1
-              ? true
-              : false
-      row.isRequireRegion=isRequireRegion
-      console.log(isRequireRegion);
+      let isRequireRegion =
+        this.customerArr.findIndex(
+          (item) =>
+            item.channelCode == 'RKA' &&
+            item.customerMdmCode == row.customerMdmCode
+        ) != -1
+          ? true
+          : false
+      row.isRequireRegion = isRequireRegion
+      console.log(isRequireRegion)
     },
     //复制
     copyRow(row, index) {
-      console.log(row);
-      let isRequireRegion = this.customerArr.findIndex((item) =>
-                item.channelCode == 'RKA' &&
-                item.customerMdmCode == row.customerMdmCode
-            ) != -1
-              ? true
-              : false
+      console.log(row)
+      let isRequireRegion =
+        this.customerArr.findIndex(
+          (item) =>
+            item.channelCode == 'RKA' &&
+            item.customerMdmCode == row.customerMdmCode
+        ) != -1
+          ? true
+          : false
       this.tableData.unshift({
-        id:row.id,
+        id: row.id,
         customerName: row.customerName,
         customerMdmCode: row.customerMdmCode,
         saleAmount: row.saleAmount,
         Tax: row.Tax,
-        contractDate: [row.contractBeginDate,row.contractEndDate],
+        contractDate: [row.contractBeginDate, row.contractEndDate],
         contractBeginDate: row.contractBeginDate,
         contractEndDate: row.contractEndDate,
         systemDate: row.systemDate,
@@ -1262,7 +1277,7 @@ export default {
         remark: row.remark,
         regionCode: row.regionCode,
         regionName: row.regionName,
-        poApprovalComments:row.poApprovalComments,
+        poApprovalComments: row.poApprovalComments,
         finApprovalComments: row.finApprovalComments,
         createBy: row.createBy,
         createDate: row.createDate,
@@ -1278,17 +1293,19 @@ export default {
       this.isAddCount++
     },
     saveCopy(row) {
-      API.copyCustomerContract([{
-        id: row.id,
-        customerMdmCode: row.customerMdmCode,
-        regionCode: row.regionCode,
-        saleAmount: row.saleAmount,
-        contractBeginDate: row.contractDate[0],
-        contractEndDate: row.contractDate[1],
-        effectiveBeginDate: row.systemDate[0],
-        effectiveEndDate: row.systemDate[1],
-        remark: row.remark,
-      }]).then((res) => {
+      API.copyCustomerContract([
+        {
+          id: row.id,
+          customerMdmCode: row.customerMdmCode,
+          regionCode: row.regionCode,
+          saleAmount: row.saleAmount,
+          contractBeginDate: row.contractDate[0],
+          contractEndDate: row.contractDate[1],
+          effectiveBeginDate: row.systemDate[0],
+          effectiveEndDate: row.systemDate[1],
+          remark: row.remark,
+        },
+      ]).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
           if (res.data) {
@@ -1301,14 +1318,27 @@ export default {
     },
     //定时任务确定--终止合同
     popoverSubmit(index, row) {
-      let newStr=row.expireDate.substring(0,4)+'-'+row.expireDate.substring(4)
-      let expireDate=new Date(newStr)
-      let contractDate=new Date(row.contractDate[1].substring(0,4)+'-'+row.contractDate[1].substring(5,7))
-      if((expireDate.getTime()<contractDate.getTime())&&row.contractStateName=='通过') {
-        this.$message.info("系统生效时间结束时间不能早于合同期间结束时间")
+      let newStr =
+        row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
+      let expireDate = new Date(newStr)
+      let contractDate = new Date(
+        row.contractDate[1].substring(0, 4) +
+          '-' +
+          row.contractDate[1].substring(5, 7)
+      )
+      if (
+        expireDate.getTime() < contractDate.getTime() &&
+        row.contractStateName == '通过'
+      ) {
+        this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
         return
-      } else if(row.contractStateName=='过期'||row.contractStateName=='终止') {
-        this.$message.info("只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！")
+      } else if (
+        row.contractStateName == '过期' ||
+        row.contractStateName == '终止'
+      ) {
+        this.$message.info(
+          '只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！'
+        )
         return
       }
       API.termination({
@@ -1331,122 +1361,121 @@ export default {
     showTermsDetail(index) {
       this.customerId = this.tableData[index].id
       if (this.tableData[index].isNewData) {
-        this.$message.info('该数据为新增数据,请选择其它数据')
+        this.$message.info('请先进行保存,再进行操作')
       } else {
         //草稿、被拒绝可以编辑，其他仅查看
-        this.$refs.termDialog.$el.firstChild.style.height = '98%'
-        API.findOneSaveDetail({
-          id: this.customerId,
-          isMain: 1,
-          isDetail: 1,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.termVariableData = []
-            this.termFixData = []
-            let data = res.data
-            this.termInfo = { ...data }
-            let variableListOrigin = this.termInfo.variable
-            let variableList = []
-            //获取total +variable total
-            let isEditor=this.isEditor&&index==this.editorIndex
-            variableListOrigin.forEach((item) => {
-              let obj = {
-                id: item.id,
-                type: item.type,
-                contractItem: this.getContractItemByCode(
-                  0,
-                  item.conditionsItem
-                ),
-                conditionType: item.conditions,
-                conditions: item.conditions,
-                costRatio: item.costRatio,
-                taxCost: item.taxCost,
-                remark: item.remark,
-                isNewData: isEditor, //是否未新添数据
-                isTotal: 0, //是否total 行
-              }
-              variableList.push(obj)
-              this.TotalData.totalCost += item.taxCost
-              this.TotalData.totalPoint += item.costRatio
-              this.VariableTotalData.totalCost += item.taxCost
-              this.VariableTotalData.totalPoint += item.costRatio
+        if (this.tableData[index].isEditor) {
+          this.$confirm('是否需要保存?', '提示', {
+            confirmButtonText: '需要',
+            cancelButtonText: '不需要',
+            type: 'warning',
+          })
+            .then(() => {})
+            .catch(() => {
+              this.$refs.termDialog.$el.firstChild.style.height = '98%'
+              this.getContractTermData(index)
             })
-            let fixedListOrigin = this.termInfo.fixed
-            let fixList = []
-            //获取total +fixed total
-            fixedListOrigin.forEach((item) => {
-              let obj = {
-                id: item.id,
-                type: item.type,
-                contractItem: this.getContractItemByCode(
-                  1,
-                  item.conditionsItem
-                ),
-                conditionType: item.conditions,
-                conditions: item.conditions,
-                costRatio: item.costRatio,
-                taxCost: item.taxCost,
-                remark: item.remark,
-                isNewData: isEditor, //是否未新添数据
-                isTotal: 0, //是否total 行
-              }
-              fixList.push(obj)
-              this.TotalData.totalCost += item.taxCost
-              this.TotalData.totalPoint += item.costRatio
-              this.FixTotalData.totalCost += item.taxCost
-              this.FixTotalData.totalPoint += item.costRatio
-            })
-            //variable  -- 设置Total
-            // this.termVariableData.unshift({
-            //   type: 'Total',
-            //   contractItem: '',
-            //   conditionType: '',
-            //   costRatio: this.TotalData.totalPoint,
-            //   taxCost: this.TotalData.totalCost,
-            //   remark: '',
-            //   isNewData: 0, //是否未新添数据
-            //   isTotal: 1, //是否total 行
-            // })
-            this.termTotalData.push({
-              type: 'Total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.TotalData.totalPoint,
-              taxCost: this.TotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1, //是否total 行
-            })
-            //variable  -- 设置variable
-            this.termVariableData = [...this.termVariableData, ...variableList]
-            //variable  -- 设置variable total
-            this.termVariableTotalData.push({
-              type: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.VariableTotalData.totalPoint,
-              taxCost: this.VariableTotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1,
-            })
-            //Fixed  -- Fixed
-            this.termFixData = [...this.termFixData, ...fixList]
-            //Fixed  -- Fixed total
-            this.termFixTotalData.push({
-              type: 'Fixed total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.FixTotalData.totalPoint,
-              taxCost: this.FixTotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1,
-            })
-            this.isTermsDetailVisible = true
-          }
-        })
+        } else {
+          this.getContractTermData(index)
+        }
       }
+    },
+    //获取客户合同明细数据
+    getContractTermData(index) {
+      API.findOneSaveDetail({
+        id: this.customerId,
+        isMain: 1,
+        isDetail: 1,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.termVariableData = []
+          this.termFixData = []
+          let data = res.data
+          this.termInfo = { ...data }
+          let variableListOrigin = this.termInfo.variable
+          let variableList = []
+          //获取total +variable total
+          let isEditor = this.isEditor && index == this.editorIndex
+          variableListOrigin.forEach((item) => {
+            let obj = {
+              id: item.id,
+              type: item.type,
+              contractItem: this.getContractItemByCode(0, item.conditionsItem),
+              conditionType: item.conditions,
+              conditions: item.conditions,
+              costRatio: item.costRatio,
+              taxCost: item.taxCost,
+              remark: item.remark,
+              isNewData: isEditor, //是否未新添数据
+              isTotal: 0, //是否total 行
+            }
+            variableList.push(obj)
+            this.TotalData.totalCost += item.taxCost
+            this.TotalData.totalPoint += item.costRatio
+            this.VariableTotalData.totalCost += item.taxCost
+            this.VariableTotalData.totalPoint += item.costRatio
+          })
+          let fixedListOrigin = this.termInfo.fixed
+          let fixList = []
+          //获取total +fixed total
+          fixedListOrigin.forEach((item) => {
+            let obj = {
+              id: item.id,
+              type: item.type,
+              contractItem: this.getContractItemByCode(1, item.conditionsItem),
+              conditionType: item.conditions,
+              conditions: item.conditions,
+              costRatio: item.costRatio,
+              taxCost: item.taxCost,
+              remark: item.remark,
+              isNewData: isEditor, //是否未新添数据
+              isTotal: 0, //是否total 行
+            }
+            fixList.push(obj)
+            this.TotalData.totalCost += item.taxCost
+            this.TotalData.totalPoint += item.costRatio
+            this.FixTotalData.totalCost += item.taxCost
+            this.FixTotalData.totalPoint += item.costRatio
+          })
+          this.termTotalData.push({
+            type: 'Total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.TotalData.totalPoint,
+            taxCost: this.TotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1, //是否total 行
+          })
+          //variable  -- 设置variable
+          this.termVariableData = [...this.termVariableData, ...variableList]
+          //variable  -- 设置variable total
+          this.termVariableTotalData.push({
+            type: 'Variable total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.VariableTotalData.totalPoint,
+            taxCost: this.VariableTotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1,
+          })
+          //Fixed  -- Fixed
+          this.termFixData = [...this.termFixData, ...fixList]
+          //Fixed  -- Fixed total
+          this.termFixTotalData.push({
+            type: 'Fixed total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.FixTotalData.totalPoint,
+            taxCost: this.FixTotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1,
+          })
+          this.isTermsDetailVisible = true
+        }
+      })
     },
     //更改ContractItem --》改变条件类型
     changeContractItem(flag, row, value) {
@@ -1743,7 +1772,7 @@ export default {
     },
     pickerOptionsSystemDate(row) {
       return pickerOptionsSystemDate(row)
-    }
+    },
   },
 }
 </script>

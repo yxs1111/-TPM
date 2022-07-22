@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-21 11:01:32
+ * @LastEditTime: 2022-07-22 09:23:34
 -->
 <template>
   <div class="MainContent">
@@ -117,11 +117,11 @@
       </el-table-column>
       <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(RMB)">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
+          <!-- <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" type="number" clearable class="my-el-input" placeholder="请输入">
             </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
+          </div> -->
+          <div>
             {{FormateNum(scope.row.saleAmount)}}
           </div>
         </template>
@@ -515,7 +515,7 @@ export default {
               item.contractBeginDate.replaceAll('-', '/') +
               ' - ' +
               item.contractEndDate.replaceAll('-', '/')
-            if(item.channelCode=='RKA'&&item.regionName) {
+            if (item.channelCode == 'RKA' && item.regionName) {
               item.label = `${item.customerName}-${item.regionName}(${item.contractDate})`
             } else {
               item.label = `${item.customerName}(${item.contractDate})`
@@ -537,14 +537,11 @@ export default {
         })
     },
     getCustomerListAll() {
-      selectAPI
-        .queryCustomerList({
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.customerAllArr = res.data
-          }
-        })
+      selectAPI.queryCustomerList({}).then((res) => {
+        if (res.code === 1000) {
+          this.customerAllArr = res.data
+        }
+      })
     },
     //编辑行数据
     editorRow(index, row) {
@@ -850,11 +847,19 @@ export default {
           '-' +
           row.contractDate[1].substring(5, 7)
       )
-      if((expireDate.getTime()<contractDate.getTime())&&row.contractStateName=='通过') {
+      if (
+        expireDate.getTime() < contractDate.getTime() &&
+        row.contractStateName == '通过'
+      ) {
         this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
         return
-      } else if(row.contractStateName=='过期'||row.contractStateName=='终止') {
-        this.$message.info("只有状态为“通过”的经销商分摊协议，允许调整生效时间，其他都不允许，请知悉，谢谢！")
+      } else if (
+        row.contractStateName == '过期' ||
+        row.contractStateName == '终止'
+      ) {
+        this.$message.info(
+          '只有状态为“通过”的经销商分摊协议，允许调整生效时间，其他都不允许，请知悉，谢谢！'
+        )
         return
       }
       API.termination({
