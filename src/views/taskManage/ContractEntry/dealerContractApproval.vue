@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-21 11:30:56
+ * @LastEditTime: 2022-07-22 09:56:57
 -->
 <template>
   <div class="MainContent">
@@ -11,6 +11,12 @@
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
             <el-option v-for="value,key in customerArr" :key="key" :label="value" :value="key" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商名称:</span>
+          <el-select v-model="filterObj.distributorMdmCode" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -193,11 +199,13 @@ export default {
         effectiveBeginDate: '',
         effectiveEndDate: '',
         customerMdmCode: '',
+        distributorMdmCode: '',
         state: '',
       },
       maxheight: getContractEntry(),
       tableData: [],
       customerArr: [],
+      distributorArr: [],
       contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
       checkArr: [], //选中的数据
       tableKey: 0,
@@ -221,6 +229,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getTableData()
     this.getCustomerList()
+    this.getDistributorList()
   },
   directives: { elDragDialog, permission },
   watch: {
@@ -242,6 +251,10 @@ export default {
         this.filterObj.effectiveEndDate = ''
       }
     },
+    'filterObj.customerMdmCode'(value) {
+      this.filterObj.distributorMdmCode = ''
+      this.getDistributorList()
+    },
   },
   methods: {
     //获取表格数据
@@ -255,6 +268,7 @@ export default {
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
+        distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,
       }).then((response) => {
         let list = response.data.records
@@ -306,6 +320,17 @@ export default {
           this.customerArr = res.data
         }
       })
+    },
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
     },
     //经销商审批通过
     submit() {

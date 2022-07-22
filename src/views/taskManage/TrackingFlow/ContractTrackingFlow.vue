@@ -15,6 +15,10 @@
           </el-select>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">合同ID:</span>
+          <el-input v-model="filterObj.contractCode" clearable placeholder="请输入" />
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item) in customerArr" :key="item.customerCode" :label="item.customerCsName" :value="item.customerMdmCode" />
@@ -43,7 +47,8 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="合同类型" width="150"> </el-table-column>
+      <el-table-column align="center" prop="item" label="合同类型" width="150" > </el-table-column>
+      <el-table-column align="center" prop="contractCode" label="合同ID" width="250" > </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称"  width="150"> </el-table-column>
       <el-table-column align="center" prop="distributorName" label="经销商名称"  width="220"> </el-table-column>
       <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">
@@ -97,6 +102,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        contractCode: '',
         item: '',
         customerMdmCode: '',
         distributorMdmCode: '',
@@ -142,6 +148,7 @@ export default {
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         processStatus: this.filterObj.processStatus,
+        contractCode: this.filterObj.contractCode,
       })
         .then((response) => {
           this.tableData = response.data.records

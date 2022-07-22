@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-21 11:04:50
+ * @LastEditTime: 2022-07-22 09:49:02
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -13,6 +13,10 @@
           <el-select v-model="filterObj.item" clearable placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in ['客户合同','经销商分摊协议']" :key="index" :label="item" :value="item" />
           </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同ID:</span>
+          <el-input v-model="filterObj.contractCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
@@ -32,14 +36,15 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" label="序号" width="100">
+      <el-table-column align="center" label="序号" width="100" >
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="合同类型"  width="150"> </el-table-column>
+      <el-table-column align="center" prop="item" label="合同类型"  width="150" > </el-table-column>
+      <el-table-column align="center" prop="contractCode" label="合同ID" width="250" > </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称"  width="120"> </el-table-column>
-      <el-table-column align="center" prop="distributorName" label="经销商名称"> </el-table-column>
+      <el-table-column align="center" prop="distributorName" label="经销商名称" min-width="220"> </el-table-column>
       <el-table-column align="center" width="180" prop="name" label="当前节点"> </el-table-column>
       <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
@@ -98,6 +103,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        contractCode: '',
         item: '',
         customerMdmCode: '',
         distributorMdmCode: '',
@@ -145,6 +151,7 @@ export default {
       API.getContractListTodo({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        contractCode: this.filterObj.contractCode,
         item: this.filterObj.item,
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
