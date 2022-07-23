@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-22 09:23:34
+ * @LastEditTime: 2022-07-23 08:42:26
 -->
 <template>
   <div class="MainContent">
@@ -692,7 +692,10 @@ export default {
         //除去该经销商 其他经销商的目标销售额之和
         let otherDist = 0
         distList.forEach((item) => {
-          if (item.id != row.id) {
+          if (item.id != row.id 
+              && item.contractState != "3"
+              && item.contractState != "4"
+              && item.contractState != "5") {
             otherDist += item.saleAmount
           }
         })
@@ -941,7 +944,12 @@ export default {
           //查该现阶段客户下所有经销商的和，新增经销商之和应等于客户目标销售额
           this.addDialog.nowTargetSale = 0
           distList.forEach((item) => {
-            this.addDialog.nowTargetSale += item.saleAmount
+            if(item.contractState != "3"
+                  && item.contractState != "4"
+                  && item.contractState != "5"){
+                this.addDialog.nowTargetSale += item.saleAmount
+            }
+            
           })
           let flag = distList.findIndex((item) => {
             return item.contractState == '3'
