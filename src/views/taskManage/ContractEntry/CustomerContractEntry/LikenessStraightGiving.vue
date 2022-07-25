@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-22 09:20:43
+ * @LastEditTime: 2022-07-25 20:59:55
 -->
 <template>
   <div class="MainContent">
@@ -1334,10 +1334,11 @@ export default {
       } else {
         //草稿、被拒绝可以编辑，其他仅查看
         if (this.tableData[index].isEditor) {
-          this.$confirm('是否需要保存?', '提示', {
-            confirmButtonText: '需要',
-            cancelButtonText: '不需要',
+          this.$confirm('点击"是"以返回保存<br/> 点击"否"以进入"条款明细"编辑页面', '是否有修改基础信息', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
             type: 'warning',
+            dangerouslyUseHTMLString: true
           })
             .then(() => {})
             .catch(() => {
