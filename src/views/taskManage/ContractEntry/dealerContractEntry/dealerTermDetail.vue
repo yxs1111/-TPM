@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-25 16:01:28
+ * @LastEditTime: 2022-07-25 19:22:31
 -->
 <template>
   <div class="ContentDetail">
@@ -490,7 +490,7 @@ export default {
                       variableItem.payType == ''
                         ? null
                         : Number(variableItem.payType), //支付方式
-                    isEditor: this.isEditor,
+                    isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
                     contractStateName: item.contractStateName,
                     // (variableItem.contractState == '1' ||
                     // variableItem.contractState == '3' ||
@@ -521,7 +521,7 @@ export default {
                   distVariableObj.payType == ''
                     ? null
                     : Number(distVariableObj.payType), //支付方式
-                isEditor: this.isEditor,
+                isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
                 contractStateName: item.contractStateName,
                 // (distVariableObj.contractState == '1' ||
                 // distVariableObj.contractState == '3' ||
@@ -660,7 +660,7 @@ export default {
                       fixedItem.payType == ''
                         ? null
                         : Number(fixedItem.payType), //支付方式
-                    isEditor: this.isEditor,
+                    isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
                     contractStateName: item.contractStateName,
                     // (fixedItem.contractState == '1' ||
                     // fixedItem.contractState == '3' ||
@@ -689,7 +689,7 @@ export default {
                 ), //客户扣款税点
                 payType:
                   distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
-                isEditor: this.isEditor,
+                isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
                 contractStateName: item.contractStateName,
                 // (distFixObj.contractState == '1' ||
                 // distFixObj.contractState == '3' ||
