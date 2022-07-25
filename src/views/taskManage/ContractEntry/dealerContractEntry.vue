@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-23 08:42:26
+ * @LastEditTime: 2022-07-25 18:02:54
 -->
 <template>
   <div class="MainContent">
@@ -1041,7 +1041,7 @@ export default {
         })
       } else {
         if (
-          targetSaleLimit + this.addDialog.nowTargetSale !=
+          (Number(targetSaleLimit) + Number(this.addDialog.nowTargetSale)).toFixed(2) !=
           this.addDialogCustomer[0].saleAmount
         ) {
           this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
