@@ -1050,6 +1050,7 @@ export default {
           API.add(list).then((res) => {
             if (res.code === 1000) {
               this.isAddDialogVisible = false
+              this.$message.success("新增成功")
               this.getTableData()
             }
           })
