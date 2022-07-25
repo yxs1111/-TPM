@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-20 11:55:02
+ * @LastEditTime: 2022-07-25 16:01:28
 -->
 <template>
   <div class="ContentDetail">
@@ -65,7 +65,7 @@
       <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
           <div class="topInfoWrap">
-            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}</span>
+            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
           </div>
         </template>
@@ -491,6 +491,7 @@ export default {
                         ? null
                         : Number(variableItem.payType), //支付方式
                     isEditor: this.isEditor,
+                    contractStateName: item.contractStateName,
                     // (variableItem.contractState == '1' ||
                     // variableItem.contractState == '3' ||
                     // variableItem.contractState == '4')&&!this.isEditor
@@ -521,6 +522,7 @@ export default {
                     ? null
                     : Number(distVariableObj.payType), //支付方式
                 isEditor: this.isEditor,
+                contractStateName: item.contractStateName,
                 // (distVariableObj.contractState == '1' ||
                 // distVariableObj.contractState == '3' ||
                 // distVariableObj.contractState == '4')&&!this.isEditor
@@ -543,6 +545,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distVariableObj.dealerName,
@@ -558,6 +561,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total
@@ -657,6 +661,7 @@ export default {
                         ? null
                         : Number(fixedItem.payType), //支付方式
                     isEditor: this.isEditor,
+                    contractStateName: item.contractStateName,
                     // (fixedItem.contractState == '1' ||
                     // fixedItem.contractState == '3' ||
                     // fixedItem.contractState == '4')&&!this.isEditor
@@ -685,6 +690,7 @@ export default {
                 payType:
                   distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
                 isEditor: this.isEditor,
+                contractStateName: item.contractStateName,
                 // (distFixObj.contractState == '1' ||
                 // distFixObj.contractState == '3' ||
                 // distFixObj.contractState == '4')&&!this.isEditor
@@ -706,6 +712,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distFixObj.dealerName,
@@ -721,6 +728,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total
@@ -1001,7 +1009,7 @@ export default {
                 message: `第${item.rowIndex + 1}行${
                   this.AllTableData[item.rowIndex].customerInfo.contractItem
                 } ${item.dealerName} 费比不能为空,请进行填写`,
-                duration: 0,
+                duration: 5000,
               })
             }, 50)
           })
@@ -1016,7 +1024,7 @@ export default {
                 message: `第${item.rowIndex + 1}行${
                   this.AllTableData[item.rowIndex].customerInfo.contractItem
                 } ${item.dealerName} 含税金额不能为空,请进行填写`,
-                duration: 0,
+                duration: 5000,
               })
             }, 50)
           })
@@ -1033,7 +1041,7 @@ export default {
                 } ${
                   item.dealerName
                 } 菲仕兰承担费比不为零时，扣款税点和支付方式不能为空`,
-                duration: 0,
+                duration: 5000,
               })
             }, 50)
           })
@@ -1052,7 +1060,7 @@ export default {
                   message: `第${item.rowIndex + 1}行${
                     this.AllTableData[item.rowIndex].customerInfo.contractItem
                   }  经销商含税金额total 不等于客户含税金额`,
-                  duration: 0,
+                  duration: 5000,
                 })
               }, 50)
             })
