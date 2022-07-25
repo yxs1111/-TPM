@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-25 19:22:31
+ * @LastEditTime: 2022-07-25 20:37:42
 -->
 <template>
   <div class="ContentDetail">
@@ -521,7 +521,7 @@ export default {
                   distVariableObj.payType == ''
                     ? null
                     : Number(distVariableObj.payType), //支付方式
-                isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
+                isEditor: (distVariableObj.contractState == '0'||distVariableObj.contractState == '2')&&this.isEditor?1:0,
                 contractStateName: item.contractStateName,
                 // (distVariableObj.contractState == '1' ||
                 // distVariableObj.contractState == '3' ||
@@ -660,7 +660,7 @@ export default {
                       fixedItem.payType == ''
                         ? null
                         : Number(fixedItem.payType), //支付方式
-                    isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
+                    isEditor: (fixedItem.contractState == '0'||fixedItem.contractState == '2')&&this.isEditor?1:0,
                     contractStateName: item.contractStateName,
                     // (fixedItem.contractState == '1' ||
                     // fixedItem.contractState == '3' ||
@@ -689,7 +689,7 @@ export default {
                 ), //客户扣款税点
                 payType:
                   distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
-                isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
+                isEditor: (distFixObj.contractState == '0'||distFixObj.contractState == '2')&&this.isEditor?1:0,
                 contractStateName: item.contractStateName,
                 // (distFixObj.contractState == '1' ||
                 // distFixObj.contractState == '3' ||
