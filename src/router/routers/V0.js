@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-07-20 14:10:22
+ * @LastEditTime: 2022-07-26 08:51:11
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -24,13 +24,13 @@ export default function() {
           component: () => import('@/views/V0/V0Apply.vue'),
           meta: { title: '申请', icon: 'apply' },
         },
-        {
-          path: '/costManagement/V0/V0ApplyList',
-          code: 'price_nka_v0_apply',
-          name: 'V0ApplyList',
-          component: () => import('@/views/V0/V0ApplyList.vue'),
-          meta: { title: '申请new', icon: 'apply' },
-        },
+        // {
+        //   path: '/costManagement/V0/V0ApplyList',
+        //   code: 'price_nka_v0_apply',
+        //   name: 'V0ApplyList',
+        //   component: () => import('@/views/V0/V0ApplyList.vue'),
+        //   meta: { title: '申请new', icon: 'apply' },
+        // },
         {
           path: '/costManagement/V0/V0Approval',
           code: 'price_nka_v0_approve',
@@ -38,13 +38,13 @@ export default function() {
           component: () => import('@/views/V0/V0Approval.vue'),
           meta: { title: '审批', icon: 'approve' },
         },
-        {
-          path: '/costManagement/V0/V0ApprovalList',
-          code: 'price_nka_v0_approve',
-          name: 'V0ApprovalList',
-          component: () => import('@/views/V0/V0ApprovalList.vue'),
-          meta: { title: '审批new', icon: 'approve' },
-        },
+        // {
+        //   path: '/costManagement/V0/V0ApprovalList',
+        //   code: 'price_nka_v0_approve',
+        //   name: 'V0ApprovalList',
+        //   component: () => import('@/views/V0/V0ApprovalList.vue'),
+        //   meta: { title: '审批new', icon: 'approve' },
+        // },
       ]
     },
   ]
