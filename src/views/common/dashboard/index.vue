@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-07-20 09:37:30
+ * @LastEditTime: 2022-07-26 08:42:56
 -->
 <template>
   <div class="dashboard-container">
@@ -980,7 +980,7 @@ export default {
               // background-color: pink;
             }
             .PointTitle {
-              width: 145px;
+              width: 160px;
               font-size: 16px;
               font-family: Source Han Sans CN;
               font-weight: 500;

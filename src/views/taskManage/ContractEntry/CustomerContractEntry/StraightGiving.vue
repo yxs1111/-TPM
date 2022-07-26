@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-20 09:38:04
+ * @LastEditTime: 2022-07-26 08:44:15
 -->
 <template>
   <div class="MainContent">
@@ -70,7 +70,7 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor"  @click="copyRow(scope.row, scope.$index)">
+            <div class="haveText_editor" v-permission="permissions['update']"  @click="copyRow(scope.row, scope.$index)">
               <svg-icon icon-class="copy" class="svgIcon" />
               <span>复制</span>
             </div>
@@ -1303,8 +1303,11 @@ export default {
       let newStr=row.expireDate.substring(0,4)+'-'+row.expireDate.substring(4)
       let expireDate=new Date(newStr)
       let contractDate=new Date(row.contractDate[1].substring(0,4)+'-'+row.contractDate[1].substring(5,7))
-      if(expireDate.getTime()<contractDate.getTime()) {
+      if((expireDate.getTime()<contractDate.getTime())&&row.contractStateName=='通过') {
         this.$message.info("系统生效时间结束时间不能早于合同期间结束时间")
+        return
+      } else if(row.contractStateName=='过期'||row.contractStateName=='终止') {
+        this.$message.info("只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！")
         return
       }
       API.termination({
@@ -1327,122 +1330,122 @@ export default {
     showTermsDetail(index) {
       this.customerId = this.tableData[index].id
       if (this.tableData[index].isNewData) {
-        this.$message.info('该数据为新增数据,请选择其它数据')
+        this.$message.info('请先进行保存,再进行操作')
       } else {
         //草稿、被拒绝可以编辑，其他仅查看
-        this.$refs.termDialog.$el.firstChild.style.height = '98%'
-        API.findOneSaveDetail({
-          id: this.customerId,
-          isMain: 1,
-          isDetail: 1,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.termVariableData = []
-            this.termFixData = []
-            let data = res.data
-            this.termInfo = { ...data }
-            let variableListOrigin = this.termInfo.variable
-            let variableList = []
-            //获取total +variable total
-            let isEditor=this.isEditor&&index==this.editorIndex
-            variableListOrigin.forEach((item) => {
-              let obj = {
-                id: item.id,
-                type: item.type,
-                contractItem: this.getContractItemByCode(
-                  0,
-                  item.conditionsItem
-                ),
-                conditionType: item.conditions,
-                conditions: item.conditions,
-                costRatio: item.costRatio,
-                taxCost: item.taxCost,
-                remark: item.remark,
-                isNewData: isEditor, //是否未新添数据
-                isTotal: 0, //是否total 行
-              }
-              variableList.push(obj)
-              this.TotalData.totalCost += item.taxCost
-              this.TotalData.totalPoint += item.costRatio
-              this.VariableTotalData.totalCost += item.taxCost
-              this.VariableTotalData.totalPoint += item.costRatio
+        if (this.tableData[index].isEditor) {
+          this.$confirm('点击"是"以返回保存<br/> 点击"否"以进入"条款明细"编辑页面', '是否有修改基础信息', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning',
+            dangerouslyUseHTMLString: true
+          })
+            .then(() => {})
+            .catch(() => {
+              this.$refs.termDialog.$el.firstChild.style.height = '98%'
+              this.getContractTermData(index)
             })
-            let fixedListOrigin = this.termInfo.fixed
-            let fixList = []
-            //获取total +fixed total
-            fixedListOrigin.forEach((item) => {
-              let obj = {
-                id: item.id,
-                type: item.type,
-                contractItem: this.getContractItemByCode(
-                  1,
-                  item.conditionsItem
-                ),
-                conditionType: item.conditions,
-                conditions: item.conditions,
-                costRatio: item.costRatio,
-                taxCost: item.taxCost,
-                remark: item.remark,
-                isNewData: isEditor, //是否未新添数据
-                isTotal: 0, //是否total 行
-              }
-              fixList.push(obj)
-              this.TotalData.totalCost += item.taxCost
-              this.TotalData.totalPoint += item.costRatio
-              this.FixTotalData.totalCost += item.taxCost
-              this.FixTotalData.totalPoint += item.costRatio
-            })
-            //variable  -- 设置Total
-            // this.termVariableData.unshift({
-            //   type: 'Total',
-            //   contractItem: '',
-            //   conditionType: '',
-            //   costRatio: this.TotalData.totalPoint,
-            //   taxCost: this.TotalData.totalCost,
-            //   remark: '',
-            //   isNewData: 0, //是否未新添数据
-            //   isTotal: 1, //是否total 行
-            // })
-            this.termTotalData.push({
-              type: 'Total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.TotalData.totalPoint,
-              taxCost: this.TotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1, //是否total 行
-            })
-            //variable  -- 设置variable
-            this.termVariableData = [...this.termVariableData, ...variableList]
-            //variable  -- 设置variable total
-            this.termVariableTotalData.push({
-              type: 'Variable total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.VariableTotalData.totalPoint,
-              taxCost: this.VariableTotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1,
-            })
-            //Fixed  -- Fixed
-            this.termFixData = [...this.termFixData, ...fixList]
-            //Fixed  -- Fixed total
-            this.termFixTotalData.push({
-              type: 'Fixed total',
-              contractItem: '',
-              conditionType: '',
-              costRatio: this.FixTotalData.totalPoint,
-              taxCost: this.FixTotalData.totalCost,
-              remark: '',
-              isNewData: 0, //是否未新添数据
-              isTotal: 1,
-            })
-            this.isTermsDetailVisible = true
-          }
-        })
+        } else {
+          this.getContractTermData(index)
+        }
       }
+    },
+    //获取客户合同明细数据
+    getContractTermData(index) {
+      API.findOneSaveDetail({
+        id: this.customerId,
+        isMain: 1,
+        isDetail: 1,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.termVariableData = []
+          this.termFixData = []
+          let data = res.data
+          this.termInfo = { ...data }
+          let variableListOrigin = this.termInfo.variable
+          let variableList = []
+          //获取total +variable total
+          let isEditor = this.isEditor && index == this.editorIndex
+          variableListOrigin.forEach((item) => {
+            let obj = {
+              id: item.id,
+              type: item.type,
+              contractItem: this.getContractItemByCode(0, item.conditionsItem),
+              conditionType: item.conditions,
+              conditions: item.conditions,
+              costRatio: item.costRatio,
+              taxCost: item.taxCost,
+              remark: item.remark,
+              isNewData: isEditor, //是否未新添数据
+              isTotal: 0, //是否total 行
+            }
+            variableList.push(obj)
+            this.TotalData.totalCost += item.taxCost
+            this.TotalData.totalPoint += item.costRatio
+            this.VariableTotalData.totalCost += item.taxCost
+            this.VariableTotalData.totalPoint += item.costRatio
+          })
+          let fixedListOrigin = this.termInfo.fixed
+          let fixList = []
+          //获取total +fixed total
+          fixedListOrigin.forEach((item) => {
+            let obj = {
+              id: item.id,
+              type: item.type,
+              contractItem: this.getContractItemByCode(1, item.conditionsItem),
+              conditionType: item.conditions,
+              conditions: item.conditions,
+              costRatio: item.costRatio,
+              taxCost: item.taxCost,
+              remark: item.remark,
+              isNewData: isEditor, //是否未新添数据
+              isTotal: 0, //是否total 行
+            }
+            fixList.push(obj)
+            this.TotalData.totalCost += item.taxCost
+            this.TotalData.totalPoint += item.costRatio
+            this.FixTotalData.totalCost += item.taxCost
+            this.FixTotalData.totalPoint += item.costRatio
+          })
+          this.termTotalData.push({
+            type: 'Total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.TotalData.totalPoint,
+            taxCost: this.TotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1, //是否total 行
+          })
+          //variable  -- 设置variable
+          this.termVariableData = [...this.termVariableData, ...variableList]
+          //variable  -- 设置variable total
+          this.termVariableTotalData.push({
+            type: 'Variable total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.VariableTotalData.totalPoint,
+            taxCost: this.VariableTotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1,
+          })
+          //Fixed  -- Fixed
+          this.termFixData = [...this.termFixData, ...fixList]
+          //Fixed  -- Fixed total
+          this.termFixTotalData.push({
+            type: 'Fixed total',
+            contractItem: '',
+            conditionType: '',
+            costRatio: this.FixTotalData.totalPoint,
+            taxCost: this.FixTotalData.totalCost,
+            remark: '',
+            isNewData: 0, //是否未新添数据
+            isTotal: 1,
+          })
+          this.isTermsDetailVisible = true
+        }
+      })
     },
     //更改ContractItem --》改变条件类型
     changeContractItem(flag, row, value) {

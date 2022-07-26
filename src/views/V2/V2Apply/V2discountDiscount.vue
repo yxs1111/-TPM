@@ -53,10 +53,10 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <!-- <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData(1)">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData(1)">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">爱亲/爱婴岛导入</span>
-      </div> -->
+      </div>
       <el-button type="primary" class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe&&isCalculation === 1?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
