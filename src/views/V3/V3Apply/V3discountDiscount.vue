@@ -639,7 +639,7 @@ export default {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
         isMakeUp: false,
-        importType:1
+        importType: this.isAiQin?2:1,
       })
         .then((res) => {
           if (res.code === 1000) {
@@ -659,7 +659,7 @@ export default {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
         isMakeUp: true,
-        importType:2
+        importType:1
       })
         .then((res) => {
           if (res.code === 1000) {
@@ -955,7 +955,7 @@ export default {
         yearAndMonth: this.localDate,
         // channelName: 'NKA',
         mainId: this.mainIdLocal,
-        importType:1
+        importType: this.isAiQin?2:1,
       }).then((response) => {
         const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请.xlsx`
         //   res.data:请求到的二进制数据
@@ -980,7 +980,7 @@ export default {
         // channelName: this.filterObj.channelName,
         channelName: this.filterObj.channelName,
         mainId: this.mainIdLocal,
-        importType:2
+        importType:1
       }).then((response) => {
         const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请_补录.xlsx`
         //   res.data:请求到的二进制数据
