@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-27 11:53:59
+ * @LastEditTime: 2022-07-27 17:00:01
 -->
 <template>
   <div class="MainContent">
@@ -773,16 +773,18 @@ export default {
     changeSystemTime(row) {
       if (row.isEditor == 2) {
         let {
-          contractBeginDate,
-          contractEndDate,
+          contractDate,
           systemDate
         } = row
+        let contractBeginDate=contractDate[0]
+        let contractEndDate=contractDate[1]
         let effectiveBeginDate=systemDate[0]
         let effectiveEndDate=systemDate[1]
         //在合同区间里的经销商
         let index= this.customerArr.findIndex((item) => {
           return (
             item.customerName == row.customerName &&
+            item.regionCode == row.customerRegionCode &&
             this.betweenDate(
               item.contractBeginDate,
               item.contractEndDate,
@@ -828,16 +830,16 @@ export default {
           this.$message.warning('此协议匹配不到客户合同，请先录入客户合同')
         } else {
           row.ccId = this.customerArr[index].id
-          API.findOne({
-            id: row.ccId,
-            isCustomerContract: 1, //是否查询客户合同（1是0否）
-            isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
-            isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
-          }).then((res) => {
-            if (res.code === 1000) {
+          // API.findOne({
+          //   id: row.ccId,
+          //   isCustomerContract: 1, //是否查询客户合同（1是0否）
+          //   isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
+          //   isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
+          // }).then((res) => {
+          //   if (res.code === 1000) {
               
-            }
-          })
+          //   }
+          // })
         }
       }
     },
@@ -846,6 +848,7 @@ export default {
      * 日期区间比较，是否在区间里
      */
     betweenDate(start, end, compare) {
+      console.log(start,end,compare);
       let beginDate = new Date(start).getTime()
       let endDate = new Date(end).getTime()
       let compareDate = new Date(compare).getTime()
