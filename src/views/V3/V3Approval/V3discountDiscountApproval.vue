@@ -490,6 +490,7 @@ export default {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
         isMakeUp: false,
+        importType:1
       })
         .then((res) => {
           if (res.code === 1000) {
@@ -549,6 +550,7 @@ export default {
     exceptionCheck() {
       var formData = new FormData()
       formData.append('mainId', this.mainIdLocal)
+      formData.append('importType',1)
       API.exceptionCheck(formData)
         .then((res) => {
           if (res.code === 1000) {
@@ -584,6 +586,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('mainId', this.mainIdLocal)
       formData.append('isApprove', true)
+      formData.append('importType',1)
       // 添加mainId
       API.importV3(formData)
         .then((response) => {
@@ -631,6 +634,7 @@ export default {
       formData.append('mainId', this.mainIdLocal)
       formData.append('isMakeUp', false)
       formData.append('isApprove', true)
+      formData.append('importType',1)
       API.formatCheck(formData)
         .then((response) => {
           if (response.code === 1000) {
@@ -695,6 +699,7 @@ export default {
           this.filterObj.regionName === '' ? null : this.filterObj.regionName,
         exportType: 'export',
         mainId: this.mainIdLocal,
+        importType:1
       }
       API.exportV3(data).then((res) => {
         this.downloadFile(
