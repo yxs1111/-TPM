@@ -12,7 +12,7 @@ const model = {
       key: '',
       category: '',
       current: 0,
-      size: 10,
+      size: 100,
       total: null
     },
     tableData: []
