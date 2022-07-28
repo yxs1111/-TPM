@@ -449,7 +449,7 @@ export default {
       uploadFile: '',
       localDate: '',
       saveDialog: false,
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       maxheight: getHeightHaveTab(),
       isCalculation:false,
@@ -957,7 +957,12 @@ export default {
         mainId: this.mainIdLocal,
         importType: this.isAiQin?2:1,
       }).then((response) => {
-        const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请.xlsx`
+        let fileName=''
+        if(this.isAiQin) {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelName}_爱亲/爱婴岛V3申请.xlsx`
+        } else {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请.xlsx`
+        }
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',

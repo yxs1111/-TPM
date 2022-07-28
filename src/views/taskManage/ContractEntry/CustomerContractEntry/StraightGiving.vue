@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-25 20:59:44
+ * @LastEditTime: 2022-07-28 08:43:38
 -->
 <template>
   <div class="MainContent">
@@ -963,6 +963,7 @@ export default {
       API.addCustomerContract([obj]).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
+          this.$message.success("新增成功")
         }
       })
     },
