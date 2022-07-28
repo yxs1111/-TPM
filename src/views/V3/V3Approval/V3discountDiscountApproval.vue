@@ -511,6 +511,7 @@ export default {
         exportType: 'exportApproveTemplate',
         mainId: this.mainIdLocal,
         channelName: this.filterObj.channelName,
+        importType:1
         // channelName: 'NKA'
       }).then((response) => {
         const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3审批.xlsx`
