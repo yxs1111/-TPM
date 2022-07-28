@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:12:08
+ * @LastEditTime: 2022-07-28 13:44:16
 -->
 <template>
   <div class="MainContent">
@@ -46,17 +46,15 @@
         </div> -->
       </div>
       <div class="OpertionBar">
+        <div class="TpmButtonBG" @click="getSmartPlan">
+          <img src="@/assets/images/huoqu.png" alt="">
+          <span class="text">获取Smart Plan数据</span>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-      </div>
-    </div>
-    <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" @click="getSmartPlan">
-        <img src="@/assets/images/import.png" alt="">
-        <span class="text">获取smartplan数据</span>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">

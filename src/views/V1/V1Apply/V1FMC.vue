@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-27 14:44:14
+ * @LastEditTime: 2022-07-28 13:44:13
 -->
 <template>
   <div class="MainContent">
@@ -41,8 +41,8 @@
       </div>
       <div class="OpertionBar">
         <div class="TpmButtonBG" @click="getSmartPlan">
-          <img src="@/assets/images/import.png" alt="">
-          <span class="text">获取smartplan数据</span>
+          <img src="@/assets/images/huoqu.png" alt="">
+          <span class="text">获取Smart Plan数据</span>
         </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
@@ -51,12 +51,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" @click="getSmartPlan">
-        <img src="@/assets/images/import.png" alt="">
-        <span class="text">获取smartplan数据</span>
-      </div>
-    </div> -->
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed >
         <template v-slot:header>
