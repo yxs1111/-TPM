@@ -8,11 +8,11 @@
       <el-table-column v-slot="scopeProps" align="center" label="序号" width="95">
         {{ activityHistory.data.length-scopeProps.$index}}
       </el-table-column>
+      <el-table-column v-slot="{row}" label="办理节点" align="left">
+        {{ row.activityName }}
+      </el-table-column>
       <el-table-column v-slot="{row}" label="办理人" align="center">
         {{ row.assignee }}
-      </el-table-column>
-      <el-table-column v-slot="{row}" label="办理节点" align="center">
-        {{ row.activityName }}
       </el-table-column>
       <el-table-column v-slot="{row}" label="办理时间" align="center">
         <em class="el-icon-time" />

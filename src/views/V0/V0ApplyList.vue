@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-20 15:51:59
+ * @LastEditTime: 2022-07-29 14:16:56
 -->
 <template>
   <div class="V0ApplyList">
@@ -55,6 +55,8 @@
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
+      </el-table-column>
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
       </el-table-column>
       <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月" fixed></el-table-column>
       <el-table-column align="center" width="180" prop="costTypeName" label="费用类型"></el-table-column>
@@ -133,7 +135,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="800" prop="judgmentContent" label="系统判定内容"></el-table-column>
+      <el-table-column align="center" width="850" prop="judgmentContent" label="系统判定内容"></el-table-column>
       <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
       <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
       <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
@@ -220,7 +222,9 @@
                 <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+            <el-table-column width="400" align="center" prop="judgmentContent" fixed label="验证信息" />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
+            </el-table-column>
             <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
             <el-table-column align="center" width="120" prop="costTypeName" label="费用类型"></el-table-column>
             <el-table-column align="center" width="160" prop="minePackageName" label="Mine Package"></el-table-column>
@@ -464,7 +468,7 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
-          // dimProduct: this.filterObj.SKU,
+          dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((response) => {
           if (response.code === 1000) {

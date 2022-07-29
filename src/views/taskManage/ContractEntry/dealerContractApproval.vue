@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-22 09:56:57
+ * @LastEditTime: 2022-07-28 09:27:21
 -->
 <template>
   <div class="MainContent">
@@ -10,7 +10,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="value,key in customerArr" :key="key" :label="value" :value="key" />
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -313,9 +313,7 @@ export default {
     },
     // 客户
     getCustomerList() {
-      API.getDistributorApproveConsumer({
-        minePackageCode: 'DISTRIBUTOR-CONTRACT',
-      }).then((res) => {
+      selectAPI.queryCustomerList({}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }

@@ -44,8 +44,8 @@
       <el-table-column width="280" align="center" prop="startAndEndVOne" label="V1" />
       <el-table-column width="280" align="center" prop="startAndEndVTwo" label="V2" />
       <el-table-column width="280" align="center" prop="startAndEndVThree" label="V3" />
-      <el-table-column width="150" align="center" prop="leWeek" label="Le销量Week" />
-      <el-table-column width="150" align="center" prop="leVtwoDate" label="V2Le销量日期" />
+      <el-table-column width="150" align="center" prop="leWeek" label="LE销量Week" />
+      <el-table-column width="150" align="center" prop="leVtwoDate" label="V2LE销量日期" />
       <el-table-column width="150" align="center" prop="leVthreeDate" label="V3实际销量日期" />
       <!-- <el-table-column width="180" align="center" prop="fmcV2MtdNumberDate" label="获取MTD人数日期" />
       <el-table-column width="180" align="center" prop="rsV2MtdVolDate" label="获取MTD场次日期" /> -->
@@ -122,12 +122,12 @@
               start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="Le销量Week" prop="leWeek"  class="el_Dialog_dateRange el-form_le">
+          <el-form-item label="LE销量Week" prop="leWeek"  class="el_Dialog_dateRange el-form_le">
             <el-select v-model="ruleForm.leWeek" clearable filterable class="my-el-dateRange" placeholder="请选择">
               <el-option v-for="item,index in ['W1','W2','W3','W4','W5']" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="V2Le销量日期" prop="leVtwoDate"  class="el_Dialog_dateRange el-form_le">
+          <el-form-item label="V2LE销量日期" prop="leVtwoDate"  class="el_Dialog_dateRange el-form_le">
             <el-date-picker v-model="ruleForm.leVtwoDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>
@@ -144,7 +144,7 @@
             </el-date-picker>
           </el-form-item> -->
           
-          <el-form-item label="V2Le销量日期" prop="leVtwoDate"  class="el_Dialog_dateRange" style="visibility: hidden;width:50%">
+          <el-form-item label="V2LE销量日期" prop="leVtwoDate"  class="el_Dialog_dateRange" style="visibility: hidden;width:50%">
             <el-date-picker v-model="ruleForm.leVtwoDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>

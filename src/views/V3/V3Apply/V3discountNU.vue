@@ -255,7 +255,7 @@ export default {
       excepImg: require('@/assets/images/warning.png'),
       passImg: require('@/assets/images/success.png'),
       BrandList: [],
-      btnStatus: true,
+      btnStatus: false,
       total: 0,
       pageSize: 100,
       pageNum: 1,

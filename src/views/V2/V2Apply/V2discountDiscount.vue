@@ -63,8 +63,8 @@
         <span class="text">提交</span>
       </div>
       <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-          <span class="tipStar">*</span>
-          注意事项：若未获取到LE销量，不能办理
+        <span class="tipStar">*</span>
+        注意事项：若未获取到LE销量，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -308,8 +308,8 @@ export default {
       usernameLocal: '',
       messageMap: messageMap(),
       maxheight: getHeightHaveTab(),
-      isCalculation:false,
-      isAiQin:0,
+      isCalculation: false,
+      isAiQin: 0,
     }
   },
   computed: {},
@@ -485,10 +485,10 @@ export default {
       if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
-        if(flag) {
-          this.isAiQin=1
+        if (flag) {
+          this.isAiQin = 1
         } else {
-          this.isAiQin=0
+          this.isAiQin = 0
         }
         this.importVisible = true
       }
@@ -505,9 +505,9 @@ export default {
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       const formData = new FormData()
-      if(this.isAiQin) {
+      if (this.isAiQin) {
         formData.append('importFlag', 2)
-      }else {
+      } else {
         formData.append('importFlag', 1)
       }
       formData.append('file', this.uploadFile)
@@ -517,7 +517,7 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          if (!Array.isArray(response.data)||response.data.length===0) {
+          if (!Array.isArray(response.data) || response.data.length === 0) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
@@ -541,9 +541,9 @@ export default {
     // 校验数据
     checkImport() {
       API.exceptionCheckTwo({
-        yearAndMonth:this.filterObj.yearAndMonth,
-        channelCode:this.filterObj.channelCode,
-        importFlag:this.isAiQin?2:1
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelCode: this.filterObj.channelCode,
+        importFlag: this.isAiQin ? 2 : 1,
       }).then((response) => {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
@@ -558,7 +558,7 @@ export default {
     confirmImport() {
       API.exceptionSave({
         mainId: this.tableData[0].mainId,
-        importFlag:this.isAiQin?2:1
+        importFlag: this.isAiQin ? 2 : 1,
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
@@ -579,7 +579,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
-          importFlag:this.isAiQin?2:1
+          importFlag: this.isAiQin ? 2 : 1,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -622,12 +622,15 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
-          downTempFlag:this.isAiQin?2:1
+          downTempFlag: this.isAiQin ? 2 : 1,
         }).then((res) => {
-          this.downloadFile(
-            res,
-            `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2申请.xlsx`
-          ) //自定义Excel文件名
+          let fileName = ''
+          if (this.isAiQin) {
+            fileName = `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_爱亲/爱婴岛V2申请.xlsx`
+          } else {
+            fileName = `${this.filterObj.yearAndMonth}_Price_${this.filterObj.channelCode}_V2申请.xlsx`
+          }
+          this.downloadFile(res, fileName) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -698,7 +701,7 @@ export default {
           this.getTableData()
           this.$message.success(`计算成功`)
         } else {
-           this.$message.info(`计算失败`)
+          this.$message.info(`计算失败`)
         }
       })
     },

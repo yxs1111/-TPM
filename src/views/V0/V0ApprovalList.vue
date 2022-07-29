@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-20 15:54:46
+ * @LastEditTime: 2022-07-29 14:19:53
 -->
 <template>
   <div class="V0ApplyList">
@@ -51,6 +51,8 @@
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
+      </el-table-column>
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
       </el-table-column>
       <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月" fixed></el-table-column>
       <el-table-column align="center" width="180" prop="costTypeName" label="费用类型"></el-table-column>
@@ -184,7 +186,9 @@
                 <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" fixed />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
+            </el-table-column>
             <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
             <el-table-column align="center" width="120" prop="costTypeName" label="费用类型"></el-table-column>
             <el-table-column align="center" width="160" prop="minePackageName" label="Mine Package"></el-table-column>
@@ -375,7 +379,7 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
-          // dimProduct: this.filterObj.SKU,
+          dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
         }).then((response) => {
           if (response.code === 1000) {
@@ -561,7 +565,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              V0New.approve({
                 mainId, //主表id
                 opinion: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
@@ -592,7 +596,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              V0New.approve({
                 mainId, //主表id
                 opinion: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
