@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-20 15:54:46
+ * @LastEditTime: 2022-07-29 13:40:48
 -->
 <template>
   <div class="V0ApplyList">
@@ -561,7 +561,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              V0New.approve({
                 mainId, //主表id
                 opinion: 'agree', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
@@ -592,7 +592,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              V0New.approve({
                 mainId, //主表id
                 opinion: 'reject', //审批标识(agree：审批通过，reject：审批驳回)
               }).then((response) => {
