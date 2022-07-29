@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-07-22 09:29:52
+ * @LastEditTime: 2022-07-29 13:49:55
 -->
 <template>
   <div class="dashboard-container">
@@ -828,11 +828,13 @@ export default {
         let allName=''
         list.forEach(item=>{
           let index = item.indexOf('@')
-          allName+='<br>'+item.slice(0, index)
+          if(index!=-1) {
+            allName+='<br>'+item.slice(0, index)
+          }else {
+            allName+='<br>'+item.slice(0)
+          }
         })
         return allName.slice(4)
-        // let index = assigneeStr.indexOf('@')
-        // return assigneeStr.slice(0, index)
       }
     },
   },
