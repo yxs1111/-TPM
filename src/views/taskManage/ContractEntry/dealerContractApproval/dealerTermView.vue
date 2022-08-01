@@ -1,11 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
-<<<<<<< HEAD
- * @LastEditTime: 2022-08-01 14:06:04
-=======
  * @LastEditTime: 2022-08-01 13:45:21
->>>>>>> 6ef66e3 (经销商审批条款明细dcId)
 -->
 <template>
   <div class="ContentDetail">
