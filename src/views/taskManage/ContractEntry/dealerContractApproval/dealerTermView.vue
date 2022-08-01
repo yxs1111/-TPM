@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-08-01 13:42:35
+ * @LastEditTime: 2022-08-01 13:45:21
 -->
 <template>
   <div class="ContentDetail">
@@ -837,6 +837,7 @@ export default {
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -848,6 +849,7 @@ export default {
               AllVariableDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
@@ -884,6 +886,7 @@ export default {
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -895,6 +898,7 @@ export default {
               AllFixedDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
