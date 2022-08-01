@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-08-01 13:53:18
+ * @LastEditTime: 2022-08-01 13:58:49
 -->
 <template>
   <div class="V0ApplyList">
@@ -216,10 +216,12 @@
             }" :row-class-name="tableRowClassName" stripe>
             <el-table-column fixed align="center" label="是否通过" width="100">
               <template slot-scope="scope">
-                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
-                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
-                <span class="judgmentText">{{ scope.row.judgmentType }}</span>
+                <div class="statusWrap">
+                  <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
+                  <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
+                  <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+                  <span class="judgmentText">{{ scope.row.judgmentType }}</span>
+                </div>
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" fixed label="验证信息" />
