@@ -1,7 +1,11 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-20 09:38:27
+<<<<<<< HEAD
+ * @LastEditTime: 2022-08-01 14:06:04
+=======
+ * @LastEditTime: 2022-08-01 13:45:21
+>>>>>>> 6ef66e3 (经销商审批条款明细dcId)
 -->
 <template>
   <div class="ContentDetail">
@@ -825,17 +829,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllVariableDealer[dealerName]) {
-              AllVariableDealer[dealerName] = [
+            if (!AllVariableDealer[dcId]) {
+              AllVariableDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -844,9 +850,10 @@ export default {
                 },
               ]
             } else {
-              AllVariableDealer[dealerName].push({
+              AllVariableDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
@@ -871,17 +878,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllFixedDealer[dealerName]) {
-              AllFixedDealer[dealerName] = [
+            if (!AllFixedDealer[dcId]) {
+              AllFixedDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -890,9 +899,10 @@ export default {
                 },
               ]
             } else {
-              AllFixedDealer[dealerName].push({
+              AllFixedDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
