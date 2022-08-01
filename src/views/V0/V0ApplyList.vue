@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-29 14:16:56
+ * @LastEditTime: 2022-08-01 13:53:18
 -->
 <template>
   <div class="V0ApplyList">
@@ -184,7 +184,6 @@
             <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
-          <el-button  type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
         <div class="fileInfo">
           <div class="fileInfo">
@@ -220,6 +219,7 @@
                 <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
                 <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
                 <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+                <span class="judgmentText">{{ scope.row.judgmentType }}</span>
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" fixed label="验证信息" />

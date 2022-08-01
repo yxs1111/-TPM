@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-29 14:19:53
+ * @LastEditTime: 2022-08-01 13:53:31
 -->
 <template>
   <div class="V0ApplyList">
@@ -184,6 +184,7 @@
                 <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
                 <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
                 <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+                <span class="judgmentText">{{ scope.row.judgmentType }}</span>
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" fixed />
