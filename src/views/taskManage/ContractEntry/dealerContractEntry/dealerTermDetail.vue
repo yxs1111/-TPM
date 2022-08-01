@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-26 08:44:47
+ * @LastEditTime: 2022-08-01 14:04:49
 -->
 <template>
   <div class="ContentDetail">
@@ -1248,17 +1248,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllVariableDealer[dealerName]) {
-              AllVariableDealer[dealerName] = [
+            if (!AllVariableDealer[dcId]) {
+              AllVariableDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -1267,9 +1269,10 @@ export default {
                 },
               ]
             } else {
-              AllVariableDealer[dealerName].push({
+              AllVariableDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
@@ -1294,17 +1297,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllFixedDealer[dealerName]) {
-              AllFixedDealer[dealerName] = [
+            if (!AllFixedDealer[dcId]) {
+              AllFixedDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -1313,9 +1318,10 @@ export default {
                 },
               ]
             } else {
-              AllFixedDealer[dealerName].push({
+              AllFixedDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
