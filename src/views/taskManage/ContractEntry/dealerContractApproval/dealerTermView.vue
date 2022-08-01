@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-18 16:59:14
+ * @LastEditTime: 2022-08-01 13:42:35
 -->
 <template>
   <div class="ContentDetail">
@@ -825,14 +825,15 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllVariableDealer[dealerName]) {
-              AllVariableDealer[dealerName] = [
+            if (!AllVariableDealer[dcId]) {
+              AllVariableDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
@@ -844,7 +845,7 @@ export default {
                 },
               ]
             } else {
-              AllVariableDealer[dealerName].push({
+              AllVariableDealer[dcId].push({
                 pointCount,
                 taxPrice,
                 dealerIndex,
@@ -871,14 +872,15 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllFixedDealer[dealerName]) {
-              AllFixedDealer[dealerName] = [
+            if (!AllFixedDealer[dcId]) {
+              AllFixedDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
@@ -890,7 +892,7 @@ export default {
                 },
               ]
             } else {
-              AllFixedDealer[dealerName].push({
+              AllFixedDealer[dcId].push({
                 pointCount,
                 taxPrice,
                 dealerIndex,
