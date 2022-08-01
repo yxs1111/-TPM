@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-08-01 13:31:29
+ * @LastEditTime: 2022-08-01 15:05:33
 -->
 <template>
   <div class="ContentDetail">
@@ -762,18 +762,22 @@ export default {
         })
         console.log(AllTotalTableData)
         //variable + fix 汇总行
-        AllTotalTableData[0].customerInfo.pointCount =
-          VariableTotalTableData.length
-            ? VariableTotalTableData[0].customerInfo.pointCount
-            : 0 + FixedTotalTableData.length
-            ? FixedTotalTableData[0].customerInfo.pointCount
-            : 0
-        AllTotalTableData[0].customerInfo.taxPrice =
-          VariableTotalTableData.length
-            ? VariableTotalTableData[0].customerInfo.taxPrice
-            : 0 + FixedTotalTableData.length
-            ? FixedTotalTableData[0].customerInfo.taxPrice
-            : 0
+        if(VariableTotalTableData.length||FixedTotalTableData.length) {
+          if(VariableTotalTableData.length) { 
+            AllTotalTableData[0].customerInfo.pointCount+=VariableTotalTableData[0].customerInfo.pointCount
+            AllTotalTableData[0].customerInfo.taxPrice+=VariableTotalTableData[0].customerInfo.taxPrice
+          } else {
+            AllTotalTableData[0].customerInfo.pointCount+=0
+            AllTotalTableData[0].customerInfo.taxPrice+=0
+          }
+          if(FixedTotalTableData.length) {
+            AllTotalTableData[0].customerInfo.pointCount+=FixedTotalTableData[0].customerInfo.pointCount
+            AllTotalTableData[0].customerInfo.taxPrice+=FixedTotalTableData[0].customerInfo.taxPrice
+          } else {
+            AllTotalTableData[0].customerInfo.pointCount+=0
+            AllTotalTableData[0].customerInfo.taxPrice+=0
+          }
+        }
         this.AllTableData = [
           ...AllTotalTableData,
           ...VariableTableData,
