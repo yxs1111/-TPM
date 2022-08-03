@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-28 08:43:07
+ * @LastEditTime: 2022-08-03 10:24:26
 -->
 <template>
   <div class="MainContent">
@@ -1318,7 +1318,7 @@ export default {
       })
     },
     //定时任务确定--终止合同
-    popoverSubmit(index, row) {
+    async popoverSubmit(index, row) {
       let newStr =
         row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
       let expireDate = new Date(newStr)
@@ -1342,16 +1342,91 @@ export default {
         )
         return
       }
-      API.termination({
+      let distributorContract=[]
+      let isCheck=0
+      await API.findOne({
         id: row.id,
-        date: row.expireDate,
+        isCustomerContract: 1, //是否查询客户合同（1是0否）
+        isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
+        isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
       }).then((res) => {
-        if (res.code === 1000) {
-          this.$message.success('调整成功')
-          this.popoverCancel(row.id)
-          this.getTableData()
-        }
+        distributorContract=res.data.distributorContract
+        console.log(distributorContract);
+        if(distributorContract.findIndex(item=>item.contractStateName=='待审批')!=-1) {
+          this.$message.info(
+          '该客户合同下存在待审批状态的经销商分摊协议不允许修改系统生效时间结束时间'
+          )
+          return
+        }  
+        
       })
+      //往后调
+      if(Number(row.expireDate)>Number(row.systemDate[1])) {
+        this.$message.info(
+        '此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！'
+        )
+      }else {
+        isCheck=1
+        //系统生效时间前调
+        distributorContract.forEach((item,index)=>{
+          //若“调整后的客户合同系统生效时间结束时间”早于“经销商分摊协议系统生效时间开始时间”
+          if(Number(row.expireDate)<Number(item.effectiveBeginDate)) {
+            item.checkInfo=`${index+1} 若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`
+            console.log(`若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`);
+          } 
+          //若“调整后的客户合同系统生效时间结束时间”处于“经销商分摊协议系统生效时间”之内，且晚于“经销商分摊协议合同期间结束时间”
+          if(Number(item.effectiveBeginDate)<=Number(row.expireDate)&&Number(row.expireDate)<=Number(item.effectiveEndDate)&&this.dateCompare(row.expireDate,item.contractEndDate)){
+            item.checkInfo=`${index+1} 此操作会使得${item.distributorName}经销商分摊协议（${item.contractCode}）系统生效时间结束时间随之变动，调整为“${row.expireDate}”`
+          }
+          //若“调整后的客户合同系统生效时间结束时间”晚于“经销商分摊协议系统生效时间结束时间”，
+          if(Number(row.expireDate)>Number(item.effectiveEndDate)) {
+            item.checkInfo=`${index+1} 此修改只修改客户合同，${item.distributorName}分摊协议（${item.contractCode}）的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢`
+            console.log(`此修改只修改客户合同，${item.distributorName}分摊协议（${item.contractCode}）的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢`)
+          }
+        })
+      }
+      if(isCheck) {
+        let str=''
+        distributorContract.forEach(item=>{
+          str+=item.checkInfo+'<br/>'
+        })
+        this.$confirm(str, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true
+        }).then(() => {
+          API.termination({
+          id: row.id,
+          date: row.expireDate,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('调整成功')
+            this.popoverCancel(row.id)
+            this.getTableData()
+          }
+        })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          });          
+        });
+      } else {
+        API.termination({
+          id: row.id,
+          date: row.expireDate,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('调整成功')
+            this.popoverCancel(row.id)
+            this.getTableData()
+          }
+        })
+      }
+    },
+    dateCompare(expireDate,contractEndDate) {
+      return new Date((expireDate).slice(0, 4),Number((expireDate).slice(4)),0).getTime()>new Date(contractEndDate).getTime()
     },
     //定时任务取消
     popoverCancel(id) {
