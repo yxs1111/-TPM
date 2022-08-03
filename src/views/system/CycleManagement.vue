@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-08-03 14:47:57
+ * @LastEditTime: 2022-08-03 14:50:23
 -->
 <template>
   <div class="app-container">
@@ -47,8 +47,8 @@
       <el-table-column width="150" align="center" prop="leWeek" label="LE销量Week" />
       <el-table-column width="150" align="center" prop="leVtwoDate" label="V2LE销量日期" />
       <el-table-column width="150" align="center" prop="leVthreeDate" label="V3实际销量日期" />
-      <!-- <el-table-column width="180" align="center" prop="fmcV2MtdNumberDate" label="获取MTD人数日期" />
-      <el-table-column width="180" align="center" prop="rsV2MtdVolDate" label="获取MTD场次日期" /> -->
+      <el-table-column width="180" align="center" prop="fmcV2MtdNumberDate" label="获取MTD人数日期" />
+      <el-table-column width="180" align="center" prop="rsV2MtdVolDate" label="获取MTD场次日期" />
       <el-table-column width="150" align="center" prop="openingStatus" label="开启状态">
         <template slot-scope="scope">
           <div>
