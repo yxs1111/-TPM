@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-27 17:00:01
+ * @LastEditTime: 2022-08-03 11:34:24
 -->
 <template>
   <div class="MainContent">
@@ -458,11 +458,8 @@ export default {
       }
     },
     'filterObj.customerMdmCode'(value) {
-      if (value == '') {
-        this.filterObj.distributorMdmCode = ''
-      } else {
-        this.getDistributorList()
-      }
+      this.filterObj.distributorMdmCode = ''
+      this.getDistributorList()
     },
     'addDialog.id'(value) {
       if (value == '') {
