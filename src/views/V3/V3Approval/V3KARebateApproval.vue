@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-13 17:06:00
+ * @LastEditTime: 2022-08-05 17:19:57
 -->
 <template>
   <div class="MainContent">
@@ -284,7 +284,7 @@
       </el-table-column>
       <el-table-column width="240" align="center" prop="costDeptName" label="费用归属部门">
         <template v-slot:header>
-          <div>费用归属部门(%)<br /><span class="subTitle">kA+经销商+Contract item</span></div>
+          <div>费用归属部门<br /><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -573,7 +573,7 @@
             </el-table-column>
             <el-table-column width="240" align="center" prop="costDeptName" label="费用归属部门">
               <template v-slot:header>
-                <div>费用归属部门(%)<br /><span class="subTitle">kA+经销商+Contract item</span></div>
+                <div>费用归属部门<br /><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>

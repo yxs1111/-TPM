@@ -99,7 +99,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="渠道" prop="channelCode">
-            <el-select v-model="ruleForm.channelCode" @change="channelCodeDialog" class="my-el-input" clearable filterable placeholder="请选择">
+            <el-select v-model="ruleForm.channelCode" @change="channelCodeDialog(ruleForm.channelCode)" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
             </el-select>
           </el-form-item>
@@ -438,9 +438,14 @@ export default {
     getMinePackageIndex(minePackageCode) {
       return this.minePackageListDialog.findIndex(item=>item.costTypeNumber==minePackageCode)
     },
-    channelCodeDialog() {
-      this.ruleForm.zoneName=''
-      this.getDepartment()
+    channelCodeDialog(channelCode) {
+      if(channelCode=='RKA') {
+
+      } else {
+        this.ruleForm.zoneName=''
+        this.getDepartment()
+      }
+      
     },
     //提交form
     submitForm(formName) {
