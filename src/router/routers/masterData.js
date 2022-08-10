@@ -495,6 +495,14 @@ export default function() {
           component: () => import('@/views/master/contractItem/contractItem.vue'),
           meta: { title: 'Contract Item', icon: 'apply' },
         },
+        // displayItem
+        {
+          path: '/displayItem',
+          name: 'displayItem',
+          code: 'ContractItem',
+          component: () => import('@/views/master/displayItem.vue'),
+          meta: { title: 'Display Item', icon: 'apply' },
+        },
         // 匹配关系
         {
           path: '/MatchingRelation',

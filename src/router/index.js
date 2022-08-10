@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-10-14 13:22:15
- * @LastEditTime: 2022-05-07 15:16:18
+ * @LastEditTime: 2022-08-10 14:14:14
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -58,7 +58,7 @@ export const constantRoutes = [
   // ...V3(),
   // ...Report(),
   // ...taskManage(),
-  // ...masterData(),
+  ...masterData(),
   // ...system(),
   // ...activiti(),
   
@@ -73,7 +73,7 @@ export const asyncRoutes = [
   ...ContractManagement(),
   ...Report(),
   ...taskManage(),
-  ...masterData(),
+  // ...masterData(),
   ...system(),
   ...activiti(),
   // ...meta,

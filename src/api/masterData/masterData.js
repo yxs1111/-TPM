@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-06-23 14:01:42
+ * @LastEditTime: 2022-08-10 16:49:44
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -705,5 +705,23 @@ export default {
   getDepartmentId(params) {
     return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentId', params)
   },
-  
+  //Display Item 
+  getDisplayItem(params) {
+    return requestApi.request_get("/mdm/mdDisplayItem/getDisplayItemPage",params)
+  },
+  addDisplayItem(params) {
+    return requestApi.request_post("/mdm/mdDisplayItem/saveData",params)
+  },
+  updateDisplayItem(params) {
+    return requestApi.request_post("/mdm/mdDisplayItem/updateData",params)
+  },
+  deleteDisplayItem(params) {
+    return requestApi.request_post("/mdm/mdDisplayItem/deleteByIds",params)
+  },
+  getCostItemList(params) {
+    return requestApi.request_get("/mdm/mdDisplayItem/getCostItemList",params)
+  },
+  exportDisplayItem(params) {
+    return requestApi.request_get("/mdm/mdDisplayItem/exportData",params)
+  },
 }
