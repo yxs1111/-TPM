@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-06-09 16:50:12
+ * @LastEditTime: 2022-08-10 10:13:21
 -->
 <template>
   <div class="app-container">
@@ -395,6 +395,10 @@ export default {
     confirmAdd(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if(!this.compareDate(this.ruleForm.startAndEndVTwo[1],this.ruleForm.startAndEndVThree[0])) {
+            this.$message.info("V3的开始时间，不应早于V2的结束时间")
+            return
+          }
           if (this.isConfirm) {
             let url=this.isEditor?API.updateCycleConfig:API.confirmCycleConfig
             url({
@@ -463,6 +467,11 @@ export default {
           return false
         }
       })
+    },
+    compareDate(start,end) {
+      let startDate=new Date(start)
+      let endDate=new Date(end)
+      return startDate.getTime()<endDate.getTime()
     },
     getFormatDateRange(dateStr) {
       if(dateStr) {

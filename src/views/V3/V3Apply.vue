@@ -157,7 +157,7 @@ export default {
               }
             },
             {
-              name: 'Road Show',
+              name: 'Roadshow',
               path: '/costManagement/V3/V3Apply/V3RoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab_RoadShow.png'),

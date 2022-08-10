@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-07-29 13:49:55
+ * @LastEditTime: 2022-08-10 09:21:17
 -->
 <template>
   <div class="dashboard-container">
@@ -313,7 +313,7 @@
 
                     </div>
                     <div class="NU" v-if="item.minePackageName=='Roadshow'">
-                      <div class="PointTitle">Road Show-{{item.channelCode}}</div>
+                      <div class="PointTitle">Roadshow-{{item.channelCode}}</div>
                       <div class="NuPoint">
                         <div class="V1">
                           <div class="passIcon" v-if="item.version=='V2'||item.version=='V3'||(item.version=='V1'&&item.processStatus==2)"></div>

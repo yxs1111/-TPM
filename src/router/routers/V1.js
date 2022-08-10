@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-08 18:49:52
+ * @LastEditTime: 2022-08-10 09:30:43
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -79,7 +79,7 @@ export default function() {
               code: 'price_nka_v1_apply',
               name: 'V1RoadShow',
               component: () => import('@/views/V1/V1Apply/V1RoadShow.vue'),
-              meta: { title: 'Road Show', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
+              meta: { title: 'Roadshow', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
             },
             {
               hidden: true,
@@ -87,7 +87,7 @@ export default function() {
               code: 'price_nka_v1_apply',
               name: 'V1ListingFee',
               component: () => import('@/views/V1/V1Apply/V1ListingFee.vue'),
-              meta: { title: 'ListingFee', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
+              meta: { title: 'Listing Fee', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
             },
           ]
         },
@@ -153,7 +153,7 @@ export default function() {
               code: 'price_nka_v1_approve',
               name: 'V1RoadShowApproval',
               component: () => import('@/views/V1/V1Approval/V1RoadShowApproval.vue'),
-              meta: { title: 'Road Show', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
+              meta: { title: 'Roadshow', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
             },
             {
               hidden: true,
@@ -161,7 +161,7 @@ export default function() {
               code: 'price_nka_v1_approve',
               name: 'V1ListingFeeApprove',
               component: () => import('@/views/V1/V1Apply/V1ListingFee.vue'),
-              meta: { title: 'ListingFee', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
+              meta: { title: 'Listing Fee', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
             },
           ]
         }

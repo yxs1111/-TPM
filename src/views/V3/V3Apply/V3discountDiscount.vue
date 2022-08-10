@@ -51,14 +51,18 @@
         </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(0)">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(1)">
-        <img src="@/assets/images/import.png" alt="">
-        <span class="text">爱亲/爱婴岛导入</span>
-      </div>
+      <el-tooltip class="item" effect="dark" :content="isBeforeOrAfter?'谈判后':'谈判前'" placement="bottom">
+        <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(0)">
+          <img src="../../../assets/images/import.png" alt="">
+          <span class="text">导入</span>
+        </div>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" :content="isBeforeOrAfter?'谈判后':'谈判前'" placement="bottom">
+        <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(1)">
+          <img src="@/assets/images/import.png" alt="">
+          <span class="text">爱亲/爱婴岛导入</span>
+        </div>
+      </el-tooltip>
       <el-button type="primary" class="TpmButtonBG" :class="currentIsCalculation?'':'noClick'" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="supplement">
         <svg-icon icon-class="nextSave" style="font-size: 20px;" />

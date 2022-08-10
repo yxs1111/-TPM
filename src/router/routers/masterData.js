@@ -466,7 +466,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
                   meta: {
-                    title: 'ListingFee',
+                    title: 'Listing Fee',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
