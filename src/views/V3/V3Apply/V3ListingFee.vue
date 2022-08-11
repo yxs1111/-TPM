@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFee
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-13 17:05:32
+ * @LastEditTime: 2022-08-11 09:39:03
 -->
 <template>
   <div class="MainContent">
@@ -537,6 +537,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
+          isSubmit:0
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
@@ -657,6 +658,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
+          isSubmit:0
         }).then((res) => {
           downloadFile(
             res,

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-05 17:19:57
+ * @LastEditTime: 2022-08-11 09:39:31
 -->
 <template>
   <div class="MainContent">
@@ -731,6 +731,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           distributorCode: this.filterObj.distributorCode,
           costItemCode: 'KA rebate',
+          isSubmit:1
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -826,6 +827,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           yearAndMonth: this.filterObj.month,
           costItemCode: 'KA rebate',
+          isSubmit:1
         }).then((res) => {
           downloadFile(
             res,
@@ -952,6 +954,7 @@ export default {
           contractItemCode: this.filterObj.contractItemCode,
           distributorCode: this.filterObj.distributorCode,
           costItemCode: 'KA rebate',
+          isSubmit:1
         }).then((res) => {
           downloadFile(
             res,
