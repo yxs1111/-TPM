@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-11 09:39:41
+ * @LastEditTime: 2022-08-15 09:57:58
 -->
 <template>
   <div class="MainContent">
@@ -526,6 +526,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
+        this.isSubmit=1
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
