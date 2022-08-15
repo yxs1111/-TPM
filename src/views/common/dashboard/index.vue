@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-08-10 09:21:17
+ * @LastEditTime: 2022-08-15 09:38:06
 -->
 <template>
   <div class="dashboard-container">
@@ -793,9 +793,9 @@ export default {
     goAssignee(version, name, channelCode) {
       if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApplyList', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApprovalList', params: { channelCode } })
         }
       }
       if (version.indexOf('V1')!=-1) {

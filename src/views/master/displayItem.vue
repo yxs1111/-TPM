@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-08-10 16:49:52
+ * @LastEditTime: 2022-08-11 11:31:45
 -->
 <template>
   <div class="app-container">
@@ -66,7 +66,7 @@
         </template>
       </el-table-column>
       <el-table-column width="180" align="center" prop="minePackage" label="Mine Package"> </el-table-column>
-      <el-table-column width="180" align="center" prop="id" label="ID"> </el-table-column>
+      <el-table-column width="180" align="center" prop="itemId" label="ID"> </el-table-column>
       <el-table-column v-slot={row} width="260" align="center" prop="item" label="Item">
         <el-input v-if="row.isEditor" v-model="row.item" class="my-el-input" clearable placeholder="请输入" />
         <span v-if="!row.isEditor">{{row.item}}</span>
