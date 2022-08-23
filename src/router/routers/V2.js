@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-06-24 13:34:27
+ * @LastEditTime: 2022-08-10 09:30:56
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -81,7 +81,7 @@ export default function() {
               code: 'price_nka_v2_apply',
               name: 'V2RoadShow',
               component: () => import('@/views/V2/V2Apply/V2RoadShow.vue'),
-              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
+              meta: { title: 'Roadshow', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
             },
             {
               hidden: true,
@@ -89,7 +89,7 @@ export default function() {
               code: 'price_nka_v2_apply',
               name: 'V2ListingFee',
               component: () => import('@/views/V2/V2Apply/V2ListingFee.vue'),
-              meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
+              meta: { title: 'Listing Fee', icon: 'form' ,activeMenu: '/costManagement/V2/V2Apply'},
             },
             {
               hidden: true,
@@ -163,7 +163,7 @@ export default function() {
               code: 'price_nka_v2_approve',
               name: 'V2RoadShowApproval',
               component: () => import('@/views/V2/V2Approval/V2RoadShowApproval.vue'),
-              meta: { title: 'Road Show', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
+              meta: { title: 'Roadshow', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
             },
             {
               hidden: true,
@@ -171,7 +171,7 @@ export default function() {
               code: 'price_nka_v2_approve',
               name: 'V2ListingFeeApproval',
               component: () => import('@/views/V2/V2Approval/V2ListingFeeApproval.vue'),
-              meta: { title: 'ListingFee', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
+              meta: { title: 'Listing Fee', icon: 'form' ,activeMenu: '/costManagement/V2/V2Approval'},
             },
           ]
         },

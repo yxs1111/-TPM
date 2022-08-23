@@ -157,7 +157,7 @@ export default {
               }
             },
             {
-              name: 'Road Show',
+              name: 'Roadshow',
               path: '/costManagement/V2/V2Approval/V2RoadShowApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_RoadShow.png'),

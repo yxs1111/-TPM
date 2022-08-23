@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-19 10:34:07
+ * @LastEditTime: 2022-07-21 11:30:31
 -->
 <template>
   <div class="MainContent">
@@ -98,7 +98,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="contractStateName" width="160" label="合同状态">
+      <el-table-column v-slot={row} align="center" prop="contractStateName" width="240" label="合同状态">
+        {{row.contractStateName=='待审批'&&row.activityName&&row.activityName.indexOf('审批')!=-1?row.contractStateName+'-'+row.activityName:row.contractStateName}}
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
@@ -473,7 +474,9 @@ export default {
         this.pageSize = response.data.pageSize
         this.total = response.data.total
         this.tempObj.tempInfo = null
-        this.infoByMainId()
+        if(list.length) {
+          this.infoByMainId()
+        }
       })
     },
     infoByMainId() {
@@ -636,8 +639,32 @@ export default {
         })
       }
     },
-    exportData() {
-      API.exportApprovePage({
+    async exportData() {
+      await API.exportApproveCustomerContractDetail({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '.客户合同明细-by KA-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+      await API.exportApproveCustomerContractInfo({
+        contractBeginDate: this.filterObj.contractBeginDate,
+        contractEndDate: this.filterObj.contractEndDate,
+        effectiveBeginDate: this.filterObj.effectiveBeginDate,
+        effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerMdmCode: this.filterObj.customerMdmCode,
+        contractState: this.filterObj.state,
+      }).then((res) => {
+        let timestamp = Date.parse(new Date())
+        downloadFile(res, '客户合同明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('导出成功!')
+      })
+      await API.exportApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -681,9 +708,9 @@ export default {
     saveRow(row) {
       let obj = {}
       if (row.name.indexOf('Package Owner') != -1) {
-        obj[row.businessKey] = row.poApprovalComments
+        obj[row.mainId] = row.poApprovalComments
       } else if (row.name.indexOf('Finance') != -1) {
-        obj[row.businessKey] = row.finApprovalComments
+        obj[row.mainId] = row.finApprovalComments
       }
       API.saveApproveComments(obj).then((res) => {
         if (res.code === 1000) {

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-13 17:04:50
+ * @LastEditTime: 2022-08-05 13:51:19
 -->
 <template>
   <div class="MainContent">
@@ -720,7 +720,7 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.downExcelTemplate({
+        API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-14 10:20:57
+ * @LastEditTime: 2022-08-15 09:38:36
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -201,9 +201,9 @@ export default {
       if (version == 'V0') {
         console.log(version, name)
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApplyList', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApprovalList', params: { channelCode } })
         }
       }
       if (version == 'V1') {

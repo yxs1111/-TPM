@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-18 16:57:37
+ * @LastEditTime: 2022-08-01 15:05:33
 -->
 <template>
   <div class="ContentDetail">
@@ -65,7 +65,7 @@
       <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
           <div class="topInfoWrap">
-            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}</span>
+            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
           </div>
         </template>
@@ -490,7 +490,8 @@ export default {
                       variableItem.payType == ''
                         ? null
                         : Number(variableItem.payType), //支付方式
-                    isEditor: this.isEditor,
+                    isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
+                    contractStateName: item.contractStateName,
                     // (variableItem.contractState == '1' ||
                     // variableItem.contractState == '3' ||
                     // variableItem.contractState == '4')&&!this.isEditor
@@ -520,7 +521,8 @@ export default {
                   distVariableObj.payType == ''
                     ? null
                     : Number(distVariableObj.payType), //支付方式
-                isEditor: this.isEditor,
+                isEditor: (distVariableObj.contractState == '0'||distVariableObj.contractState == '2')&&this.isEditor?1:0,
+                contractStateName: item.contractStateName,
                 // (distVariableObj.contractState == '1' ||
                 // distVariableObj.contractState == '3' ||
                 // distVariableObj.contractState == '4')&&!this.isEditor
@@ -543,6 +545,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distVariableObj.dealerName,
@@ -558,6 +561,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total
@@ -656,7 +660,8 @@ export default {
                       fixedItem.payType == ''
                         ? null
                         : Number(fixedItem.payType), //支付方式
-                    isEditor: this.isEditor,
+                    isEditor: (fixedItem.contractState == '0'||fixedItem.contractState == '2')&&this.isEditor?1:0,
+                    contractStateName: item.contractStateName,
                     // (fixedItem.contractState == '1' ||
                     // fixedItem.contractState == '3' ||
                     // fixedItem.contractState == '4')&&!this.isEditor
@@ -684,7 +689,8 @@ export default {
                 ), //客户扣款税点
                 payType:
                   distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
-                isEditor: this.isEditor,
+                isEditor: (distFixObj.contractState == '0'||distFixObj.contractState == '2')&&this.isEditor?1:0,
+                contractStateName: item.contractStateName,
                 // (distFixObj.contractState == '1' ||
                 // distFixObj.contractState == '3' ||
                 // distFixObj.contractState == '4')&&!this.isEditor
@@ -706,6 +712,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distFixObj.dealerName,
@@ -721,6 +728,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total
@@ -754,18 +762,22 @@ export default {
         })
         console.log(AllTotalTableData)
         //variable + fix 汇总行
-        AllTotalTableData[0].customerInfo.pointCount =
-          VariableTotalTableData.length
-            ? VariableTotalTableData[0].customerInfo.pointCount
-            : 0 + FixedTotalTableData.length
-            ? FixedTotalTableData[0].customerInfo.pointCount
-            : 0
-        AllTotalTableData[0].customerInfo.taxPrice =
-          VariableTotalTableData.length
-            ? VariableTotalTableData[0].customerInfo.taxPrice
-            : 0 + FixedTotalTableData.length
-            ? FixedTotalTableData[0].customerInfo.taxPrice
-            : 0
+        if(VariableTotalTableData.length||FixedTotalTableData.length) {
+          if(VariableTotalTableData.length) { 
+            AllTotalTableData[0].customerInfo.pointCount+=VariableTotalTableData[0].customerInfo.pointCount
+            AllTotalTableData[0].customerInfo.taxPrice+=VariableTotalTableData[0].customerInfo.taxPrice
+          } else {
+            AllTotalTableData[0].customerInfo.pointCount+=0
+            AllTotalTableData[0].customerInfo.taxPrice+=0
+          }
+          if(FixedTotalTableData.length) {
+            AllTotalTableData[0].customerInfo.pointCount+=FixedTotalTableData[0].customerInfo.pointCount
+            AllTotalTableData[0].customerInfo.taxPrice+=FixedTotalTableData[0].customerInfo.taxPrice
+          } else {
+            AllTotalTableData[0].customerInfo.pointCount+=0
+            AllTotalTableData[0].customerInfo.taxPrice+=0
+          }
+        }
         this.AllTableData = [
           ...AllTotalTableData,
           ...VariableTableData,
@@ -937,7 +949,7 @@ export default {
                   ...dealerItem,
                 })
               }
-              if (dealerItem.frieslandPointCount) {
+              if (Number(dealerItem.frieslandPointCount)!=0) {
                 if (
                   dealerItem.customerTaxPoint === '' ||
                   dealerItem.payType == ''
@@ -966,7 +978,7 @@ export default {
                   ...dealerItem,
                 })
               }
-              if (dealerItem.frieslandPointCount) {
+              if (Number(dealerItem.frieslandPointCount)!=0) {
                 if (
                   dealerItem.customerTaxPoint === '' ||
                   dealerItem.payType == ''
@@ -1001,7 +1013,7 @@ export default {
                 message: `第${item.rowIndex + 1}行${
                   this.AllTableData[item.rowIndex].customerInfo.contractItem
                 } ${item.dealerName} 费比不能为空,请进行填写`,
-                duration: 0,
+                duration: 5000,
               })
             }, 50)
           })
@@ -1016,7 +1028,7 @@ export default {
                 message: `第${item.rowIndex + 1}行${
                   this.AllTableData[item.rowIndex].customerInfo.contractItem
                 } ${item.dealerName} 含税金额不能为空,请进行填写`,
-                duration: 0,
+                duration: 5000,
               })
             }, 50)
           })
@@ -1033,7 +1045,7 @@ export default {
                 } ${
                   item.dealerName
                 } 菲仕兰承担费比不为零时，扣款税点和支付方式不能为空`,
-                duration: 0,
+                duration: 5000,
               })
             }, 50)
           })
@@ -1052,7 +1064,7 @@ export default {
                   message: `第${item.rowIndex + 1}行${
                     this.AllTableData[item.rowIndex].customerInfo.contractItem
                   }  经销商含税金额total 不等于客户含税金额`,
-                  duration: 0,
+                  duration: 5000,
                 })
               }, 50)
             })
@@ -1240,17 +1252,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllVariableDealer[dealerName]) {
-              AllVariableDealer[dealerName] = [
+            if (!AllVariableDealer[dcId]) {
+              AllVariableDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -1259,9 +1273,10 @@ export default {
                 },
               ]
             } else {
-              AllVariableDealer[dealerName].push({
+              AllVariableDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
@@ -1286,17 +1301,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllFixedDealer[dealerName]) {
-              AllFixedDealer[dealerName] = [
+            if (!AllFixedDealer[dcId]) {
+              AllFixedDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -1305,9 +1322,10 @@ export default {
                 },
               ]
             } else {
-              AllFixedDealer[dealerName].push({
+              AllFixedDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,

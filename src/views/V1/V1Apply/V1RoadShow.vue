@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:12:08
+ * @LastEditTime: 2022-07-28 14:31:18
 -->
 <template>
   <div class="MainContent">
@@ -46,6 +46,10 @@
         </div> -->
       </div>
       <div class="OpertionBar">
+        <div class="TpmButtonBG" @click="getSmartPlan">
+          <img src="@/assets/images/huoqu.png" alt="">
+          <span class="text">获取Smart Plan数据</span>
+        </div>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -53,14 +57,8 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" @click="getSmartPlan">
-        <img src="@/assets/images/import.png" alt="">
-        <span class="text">获取smartplan数据</span>
-      </div>
-    </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
         </template>
@@ -70,7 +68,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" >
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
         <template v-slot:header>
           <div>活动月<br><span class="subTitle">-</span></div>
         </template>
@@ -80,7 +78,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" >
+      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型">
         <template v-slot:header>
           <div>费用类型<br><span class="subTitle">-</span></div>
         </template>
@@ -90,7 +88,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" >
+      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package">
         <template v-slot:header>
           <div>Mine Package<br><span class="subTitle">-</span></div>
         </template>
@@ -100,7 +98,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" >
+      <el-table-column width="180" align="center" prop="costItemName" label="费用科目">
         <template v-slot:header>
           <div>费用科目<br><span class="subTitle">-</span></div>
         </template>
@@ -110,7 +108,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道" >
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
@@ -120,7 +118,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" >
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称">
         <template v-slot:header>
           <div>客户系统名称<br><span class="subTitle">-</span></div>
         </template>
@@ -130,7 +128,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="supplierName" label="供应商" >
+      <el-table-column width="280" align="center" prop="supplierName" label="供应商">
         <template v-slot:header>
           <div>供应商<br><span class="subTitle">-</span></div>
         </template>
@@ -140,7 +138,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="zoneName" label="大区" >
+      <el-table-column width="220" align="center" prop="zoneName" label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle">-</span></div>
         </template>
@@ -150,7 +148,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="regionName" label="区域" >
+      <el-table-column width="220" align="center" prop="regionName" label="区域">
         <template v-slot:header>
           <div>区域<br><span class="subTitle">-</span></div>
         </template>
@@ -160,7 +158,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="activityType" label="活动类型" >
+      <el-table-column width="220" align="center" prop="activityType" label="活动类型">
         <template v-slot:header>
           <div>活动类型<br><span class="subTitle">-</span></div>
         </template>
@@ -249,7 +247,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
-  FormateThousandNum
+  FormateThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/RoadShow'
@@ -342,15 +340,28 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getSmartplanData({
-          yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.$message.success('成功获取SmartPlan数据')
-            this.getTableData()
-          }
+        this.$confirm('是否获取SmartPlan数据?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         })
+          .then(() => {
+            API.getSmartplanData({
+              yearAndMonth: this.filterObj.month,
+              channelCode: this.filterObj.channelCode,
+            }).then((res) => {
+              if (res.code === 1000) {
+                this.$message.success('成功获取SmartPlan数据')
+                this.getTableData()
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
       }
     },
     getAllMonth() {
@@ -395,7 +406,7 @@ export default {
     },
     //千分位分隔符+两位小数
     FormatNum(num) {
-       return FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1
@@ -407,7 +418,7 @@ export default {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          menu: "export" //导出常量 固定传这个
+          menu: 'export', //导出常量 固定传这个
         }).then((res) => {
           downloadFile(
             res,

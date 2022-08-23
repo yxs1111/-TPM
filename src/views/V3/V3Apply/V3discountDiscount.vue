@@ -51,10 +51,18 @@
         </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
-        <img src="../../../assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
+      <el-tooltip class="item" effect="dark" :content="isBeforeOrAfter?'谈判后':'谈判前'" placement="bottom">
+        <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(0)">
+          <img src="../../../assets/images/import.png" alt="">
+          <span class="text">导入</span>
+        </div>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" :content="isBeforeOrAfter?'谈判后':'谈判前'" placement="bottom">
+        <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(1)">
+          <img src="@/assets/images/import.png" alt="">
+          <span class="text">爱亲/爱婴岛导入</span>
+        </div>
+      </el-tooltip>
       <el-button type="primary" class="TpmButtonBG" :class="currentIsCalculation?'':'noClick'" @click="Calculation">计算</el-button>
       <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="supplement">
         <svg-icon icon-class="nextSave" style="font-size: 20px;" />
@@ -445,12 +453,13 @@ export default {
       uploadFile: '',
       localDate: '',
       saveDialog: false,
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       maxheight: getHeightHaveTab(),
       isCalculation:false,
       currentIsCalculation:0, //当前是否属于计算节点
       isBeforeOrAfter:0, //当前 谈判前or 谈判和
+      isAiQin:0,//是否爱亲爱婴岛导入
     }
   },
   computed: {},
@@ -634,6 +643,7 @@ export default {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
         isMakeUp: false,
+        importType: this.isAiQin?2:1,
       })
         .then((res) => {
           if (res.code === 1000) {
@@ -653,6 +663,7 @@ export default {
       API.saveImportInfo({
         mainId: this.mainIdLocal,
         isMakeUp: true,
+        importType:1
       })
         .then((res) => {
           if (res.code === 1000) {
@@ -668,11 +679,16 @@ export default {
         .catch()
     },
     // 导入数据
-    importData() {
+    importData(flag) {
       this.saveDialog = false
       if (this.filterObj.channelName === '') {
         this.$message.info('请先选择渠道！')
       } else {
+        if(flag) {
+          this.isAiQin=1
+        } else {
+          this.isAiQin=0
+        }
         this.importVisible = true
       }
       this.firstIsPass = false
@@ -686,6 +702,11 @@ export default {
     exceptionCheck() {
       var formData = new FormData()
       formData.append('mainId', this.mainIdLocal)
+      if(this.isAiQin) {
+        formData.append('importType', 2)
+      }else {
+        formData.append('importType', 1)
+      }
       API.exceptionCheck(formData)
         .then((res) => {
           if (res.code === 1000) {
@@ -722,6 +743,11 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('mainId', this.mainIdLocal)
       formData.append('isApprove', false)
+      if(this.isAiQin) {
+        formData.append('importType', 2)
+      }else {
+        formData.append('importType', 1)
+      }
       // 添加mainId
       API.importV3(formData)
         .then((response) => {
@@ -790,6 +816,11 @@ export default {
       var formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('mainId', this.mainIdLocal)
+      if(this.isAiQin) {
+        formData.append('importType', 2)
+      }else {
+        formData.append('importType', 1)
+      }
       // 添加mainId
       API.importV3MakeUp(formData)
         .then((response) => {
@@ -841,6 +872,11 @@ export default {
       formData.append('mainId', this.mainIdLocal)
       formData.append('isMakeUp', isMakeUp)
       formData.append('isApprove', false)
+      if(this.isAiQin) {
+        formData.append('importType', 2)
+      }else {
+        formData.append('importType', 1)
+      }
       API.formatCheck(formData)
         .then((response) => {
           if (response.code === 1000) {
@@ -923,8 +959,14 @@ export default {
         yearAndMonth: this.localDate,
         // channelName: 'NKA',
         mainId: this.mainIdLocal,
+        importType: this.isAiQin?2:1,
       }).then((response) => {
-        const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请.xlsx`
+        let fileName=''
+        if(this.isAiQin) {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelName}_爱亲/爱婴岛V3申请.xlsx`
+        } else {
+          fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请.xlsx`
+        }
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
@@ -947,6 +989,7 @@ export default {
         // channelName: this.filterObj.channelName,
         channelName: this.filterObj.channelName,
         mainId: this.mainIdLocal,
+        importType:1
       }).then((response) => {
         const fileName = `${this.localDate}_Price_${this.filterObj.channelName}_V3申请_补录.xlsx`
         //   res.data:请求到的二进制数据
@@ -969,6 +1012,7 @@ export default {
         yearAndMonth: this.localDate,
         exportType: 'exportExceptionTemplate',
         mainId: this.mainIdLocal,
+        importType: this.isAiQin?2:1,
         channelName:
           this.filterObj.channelName === '' ? null : this.filterObj.channelName,
       }).then((response) => {
@@ -1025,6 +1069,7 @@ export default {
           this.filterObj.regionName === '' ? null : this.filterObj.regionName,
         exportType: 'export',
         mainId: this.mainIdLocal,
+        importType: 1,
       }
       API.exportV3(data).then((res) => {
         // if (res.code) {

@@ -36,6 +36,7 @@
       <el-table-column align="center" prop="minePackage" label="MinePackage"> </el-table-column>
       <el-table-column align="center" prop="costItemTypeNumber" label="费用科目编码"> </el-table-column>
       <el-table-column align="center" prop="costItem" label="费用科目"> </el-table-column>
+      <el-table-column align="center" prop="glAccount" label="GL Account"> </el-table-column>
 
     </el-table>
     <!-- 分页 -->

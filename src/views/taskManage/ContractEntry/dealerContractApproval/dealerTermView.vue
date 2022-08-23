@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-07-18 16:59:14
+ * @LastEditTime: 2022-08-01 15:02:29
 -->
 <template>
   <div class="ContentDetail">
@@ -628,12 +628,22 @@ export default {
           )
         })
         //variable + fix 汇总行
-        AllTotalTableData[0].customerInfo.pointCount =
-         VariableTotalTableData.length?VariableTotalTableData[0].customerInfo.pointCount:0 +
-         FixedTotalTableData.length? FixedTotalTableData[0].customerInfo.pointCount:0
-        AllTotalTableData[0].customerInfo.taxPrice =
-         VariableTotalTableData.length?VariableTotalTableData[0].customerInfo.taxPrice:0 +
-         FixedTotalTableData.length?FixedTotalTableData[0].customerInfo.taxPrice:0
+        if(VariableTotalTableData.length||FixedTotalTableData.length) {
+          if(VariableTotalTableData.length) { 
+            AllTotalTableData[0].customerInfo.pointCount+=VariableTotalTableData[0].customerInfo.pointCount
+            AllTotalTableData[0].customerInfo.taxPrice+=VariableTotalTableData[0].customerInfo.taxPrice
+          } else {
+            AllTotalTableData[0].customerInfo.pointCount+=0
+            AllTotalTableData[0].customerInfo.taxPrice+=0
+          }
+          if(FixedTotalTableData.length) {
+            AllTotalTableData[0].customerInfo.pointCount+=FixedTotalTableData[0].customerInfo.pointCount
+            AllTotalTableData[0].customerInfo.taxPrice+=FixedTotalTableData[0].customerInfo.taxPrice
+          } else {
+            AllTotalTableData[0].customerInfo.pointCount+=0
+            AllTotalTableData[0].customerInfo.taxPrice+=0
+          }
+        }
         this.AllTableData = [
           ...AllTotalTableData,
           ...VariableTableData,
@@ -825,17 +835,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllVariableDealer[dealerName]) {
-              AllVariableDealer[dealerName] = [
+            if (!AllVariableDealer[dcId]) {
+              AllVariableDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -844,9 +856,10 @@ export default {
                 },
               ]
             } else {
-              AllVariableDealer[dealerName].push({
+              AllVariableDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,
@@ -871,17 +884,19 @@ export default {
             const {
               pointCount,
               taxPrice,
+              dcId,
               dealerName,
               frieslandPointCount,
               frieslandTaxPrice,
               dealerTaxPrice,
               dealerPointCount,
             } = dealerList[dealerIndex]
-            if (!AllFixedDealer[dealerName]) {
-              AllFixedDealer[dealerName] = [
+            if (!AllFixedDealer[dcId]) {
+              AllFixedDealer[dcId] = [
                 {
                   pointCount,
                   taxPrice,
+                  dcId,
                   dealerIndex,
                   frieslandPointCount,
                   frieslandTaxPrice,
@@ -890,9 +905,10 @@ export default {
                 },
               ]
             } else {
-              AllFixedDealer[dealerName].push({
+              AllFixedDealer[dcId].push({
                 pointCount,
                 taxPrice,
+                dcId,
                 dealerIndex,
                 frieslandPointCount,
                 frieslandTaxPrice,

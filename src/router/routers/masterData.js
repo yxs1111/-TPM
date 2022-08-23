@@ -466,7 +466,7 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
                   meta: {
-                    title: 'ListingFee',
+                    title: 'Listing Fee',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules'
                   }
@@ -494,6 +494,14 @@ export default function() {
           code: 'ContractItem',
           component: () => import('@/views/master/contractItem/contractItem.vue'),
           meta: { title: 'Contract Item', icon: 'apply' },
+        },
+        // displayItem
+        {
+          path: '/displayItem',
+          name: 'displayItem',
+          code: 'ContractItem',
+          component: () => import('@/views/master/displayItem.vue'),
+          meta: { title: 'Display Item', icon: 'apply' },
         },
         // 匹配关系
         {

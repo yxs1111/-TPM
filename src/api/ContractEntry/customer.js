@@ -1,7 +1,7 @@
 /*
  * @Description: 客户合同录入
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-06-22 16:10:50
+ * @LastEditTime: 2022-08-02 11:21:46
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -77,6 +77,10 @@ export default {
    */
   termination(params) {
     return requestApi.request_post(this.url+'/termination', params)
+  },
+  //信息查询
+  findOne(params) {
+    return requestApi.request_post('/cityplan/distributorContract/findOne', params)
   },
   getContractItemList(params) {
     return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)

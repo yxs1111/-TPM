@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-13 17:05:19
+ * @LastEditTime: 2022-08-11 09:38:39
 -->
 <template>
   <div class="MainContent">
@@ -780,6 +780,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           distributorCode: this.filterObj.distributorCode,
           costItemCode: 'HIH rebate',
+          isSubmit:0
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -876,6 +877,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           yearAndMonth: this.filterObj.month,
           costItemCode: 'HIH rebate',
+          isSubmit:0
         }).then((res) => {
           downloadFile(
             res,
@@ -1037,6 +1039,7 @@ export default {
           contractItemCode: this.filterObj.contractItemCode,
           distributorCode: this.filterObj.distributorCode,
           costItemCode: 'HIH rebate',
+          isSubmit:0
         }).then((res) => {
           downloadFile(
             res,

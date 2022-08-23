@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 17:20:55
+ * @LastEditTime: 2022-08-03 11:34:24
 -->
 <template>
   <div class="MainContent">
@@ -69,7 +69,7 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor" @click="copyRow(scope.row, scope.$index)">
+            <div class="haveText_editor" v-permission="permissions['update']" @click="copyRow(scope.row, scope.$index)">
               <svg-icon icon-class="copy" class="svgIcon" />
               <span>复制</span>
             </div>
@@ -117,11 +117,11 @@
       </el-table-column>
       <el-table-column prop="saleAmount" align="center" width="220" label="协议目标销售额(RMB)">
         <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
+          <!-- <div v-show="scope.row.isEditor">
             <el-input v-model="scope.row.saleAmount" type="number" clearable class="my-el-input" placeholder="请输入">
             </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
+          </div> -->
+          <div>
             {{FormateNum(scope.row.saleAmount)}}
           </div>
         </template>
@@ -142,7 +142,7 @@
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-date-picker v-model="scope.row.systemDate" :picker-options="pickerOptionsSystemDate(scope.row)" type="monthrange" value-format="yyyyMM" format="yyyyMM"
-              range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
+              range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" @blur="changeSystemTime(scope.row)">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -458,11 +458,8 @@ export default {
       }
     },
     'filterObj.customerMdmCode'(value) {
-      if (value == '') {
-        this.filterObj.distributorMdmCode = ''
-      } else {
-        this.getDistributorList()
-      }
+      this.filterObj.distributorMdmCode = ''
+      this.getDistributorList()
     },
     'addDialog.id'(value) {
       if (value == '') {
@@ -515,7 +512,7 @@ export default {
               item.contractBeginDate.replaceAll('-', '/') +
               ' - ' +
               item.contractEndDate.replaceAll('-', '/')
-            if(item.channelCode=='RKA'&&item.regionName) {
+            if (item.channelCode == 'RKA' && item.regionName) {
               item.label = `${item.customerName}-${item.regionName}(${item.contractDate})`
             } else {
               item.label = `${item.customerName}(${item.contractDate})`
@@ -537,14 +534,11 @@ export default {
         })
     },
     getCustomerListAll() {
-      selectAPI
-        .queryCustomerList({
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.customerAllArr = res.data
-          }
-        })
+      selectAPI.queryCustomerList({}).then((res) => {
+        if (res.code === 1000) {
+          this.customerAllArr = res.data
+        }
+      })
     },
     //编辑行数据
     editorRow(index, row) {
@@ -695,7 +689,12 @@ export default {
         //除去该经销商 其他经销商的目标销售额之和
         let otherDist = 0
         distList.forEach((item) => {
-          if (item.id != row.id) {
+          if (
+            item.id != row.id &&
+            item.contractState != '3' &&
+            item.contractState != '4' &&
+            item.contractState != '5'
+          ) {
             otherDist += item.saleAmount
           }
         })
@@ -730,6 +729,7 @@ export default {
         id: row.id,
         createBy: row.createBy,
         createDate: row.createDate,
+        customerChannelCode: row.customerChannelCode,
         updateBy: row.updateBy,
         updateDate: row.updateDate,
         deleteFlag: row.deleteFlag,
@@ -749,6 +749,8 @@ export default {
         earlyExpireDate: row.earlyExpireDate,
         entryDate: row.entryDate,
         customerName: row.customerName,
+        customerRegionCode: row.customerRegionCode,
+        customerRegionName: row.customerRegionName,
         customerContractSaleAmount: row.customerContractSaleAmount,
         contractStateName: '草稿',
         variable: row.variable,
@@ -762,31 +764,92 @@ export default {
     },
     //更改合同日期--匹配对应的客户合同
     changeContractDate(row) {
+      
+    },
+    //更改系统生效时间
+    changeSystemTime(row) {
       if (row.isEditor == 2) {
-        let index = this.customerArr.findIndex(
-          (item) =>
+        let {
+          contractDate,
+          systemDate
+        } = row
+        let contractBeginDate=contractDate[0]
+        let contractEndDate=contractDate[1]
+        let effectiveBeginDate=systemDate[0]
+        let effectiveEndDate=systemDate[1]
+        //在合同区间里的经销商
+        let index= this.customerArr.findIndex((item) => {
+          return (
             item.customerName == row.customerName &&
-            item.contractBeginDate == row.contractDate[0] &&
-            item.contractEndDate == row.contractDate[1]
-        )
+            item.regionCode == row.customerRegionCode &&
+            this.betweenDate(
+              item.contractBeginDate,
+              item.contractEndDate,
+              contractBeginDate
+            ) &&
+            this.betweenDate(
+              item.contractBeginDate,
+              item.contractEndDate,
+              contractEndDate
+            ) &&
+            this.betweenDate(
+              item.effectiveBeginDate.slice(0, 4) +
+                '-' +
+                item.effectiveBeginDate.slice(4) +
+                '-01',
+              item.effectiveEndDate.slice(0, 4) +
+                '-' +
+                item.effectiveEndDate.slice(4) +
+                '-01',
+              effectiveBeginDate.slice(0, 4) +
+                '-' +
+                effectiveBeginDate.slice(4) +
+                '-01',
+            ) &&
+            this.betweenDate(
+              item.effectiveBeginDate.slice(0, 4) +
+                '-' +
+                item.effectiveBeginDate.slice(4) +
+                '-01',
+              item.effectiveEndDate.slice(0, 4) +
+                '-' +
+                item.effectiveEndDate.slice(4) +
+                '-01',
+              effectiveEndDate.slice(0, 4) +
+                '-' +
+                effectiveEndDate.slice(4) +
+                '-01',
+            )
+          ) 
+        })
+        console.log(index);
         if (index == -1) {
-          this.$message.warning('请选择正确的合同日期')
+          this.$message.warning('此协议匹配不到客户合同，请先录入客户合同')
         } else {
           row.ccId = this.customerArr[index].id
-          API.findOne({
-            id: row.ccId,
-            isCustomerContract: 1, //是否查询客户合同（1是0否）
-            isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
-            isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
-          }).then((res) => {
-            if (res.code === 1000) {
-              row.customerContractSaleAmount =
-                res.data.customerContract.saleAmount
-              row.saleAmount = res.data.customerContract.saleAmount
-            }
-          })
+          // API.findOne({
+          //   id: row.ccId,
+          //   isCustomerContract: 1, //是否查询客户合同（1是0否）
+          //   isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
+          //   isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
+          // }).then((res) => {
+          //   if (res.code === 1000) {
+              
+          //   }
+          // })
         }
       }
+    },
+    //判断经销商的合同区间和系统生效时间是否在客户的合同区间和系统生效时间
+    /**
+     * 日期区间比较，是否在区间里
+     */
+    betweenDate(start, end, compare) {
+      console.log(start,end,compare);
+      let beginDate = new Date(start).getTime()
+      let endDate = new Date(end).getTime()
+      let compareDate = new Date(compare).getTime()
+      return beginDate <= compareDate && compareDate <= endDate
     },
     //编辑一行 API
     updateRowFunction(row) {
@@ -850,8 +913,19 @@ export default {
           '-' +
           row.contractDate[1].substring(5, 7)
       )
-      if (expireDate.getTime() < contractDate.getTime()) {
+      if (
+        expireDate.getTime() < contractDate.getTime() &&
+        row.contractStateName == '通过'
+      ) {
         this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
+        return
+      } else if (
+        row.contractStateName == '过期' ||
+        row.contractStateName == '终止'
+      ) {
+        this.$message.info(
+          '只有状态为“通过”的经销商分摊协议，允许调整生效时间，其他都不允许，请知悉，谢谢！'
+        )
         return
       }
       API.termination({
@@ -933,7 +1007,13 @@ export default {
           //查该现阶段客户下所有经销商的和，新增经销商之和应等于客户目标销售额
           this.addDialog.nowTargetSale = 0
           distList.forEach((item) => {
-            this.addDialog.nowTargetSale += item.saleAmount
+            if (
+              item.contractState != '3' &&
+              item.contractState != '4' &&
+              item.contractState != '5'
+            ) {
+              this.addDialog.nowTargetSale += item.saleAmount
+            }
           })
           let flag = distList.findIndex((item) => {
             return item.contractState == '3'
@@ -1025,8 +1105,9 @@ export default {
         })
       } else {
         if (
-          targetSaleLimit + this.addDialog.nowTargetSale !=
-          this.addDialogCustomer[0].saleAmount
+          (
+            Number(targetSaleLimit) + Number(this.addDialog.nowTargetSale)
+          ).toFixed(2) != this.addDialogCustomer[0].saleAmount
         ) {
           this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
           return
@@ -1034,6 +1115,7 @@ export default {
           API.add(list).then((res) => {
             if (res.code === 1000) {
               this.isAddDialogVisible = false
+              this.$message.success('新增成功')
               this.getTableData()
             }
           })

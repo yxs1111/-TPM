@@ -1,7 +1,11 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
+<<<<<<< HEAD
  * @LastEditTime: 2022-07-19 10:52:06
+=======
+ * @LastEditTime: 2022-08-15 09:39:44
+>>>>>>> 8b50447d1fb1610a176e646b44574a0e88be6d51
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -18,12 +22,13 @@ export default function() {
       meta: { title: 'V0 - Pre city plan 预拆分', icon: 'V0' },
       children: [
         {
-          path: '/costManagement/V0/V0Apply',
+          path: '/costManagement/V0/V0ApplyList',
           code: 'price_nka_v0_apply',
-          name: 'V0Apply',
-          component: () => import('@/views/V0/V0Apply.vue'),
+          name: 'V0ApplyList',
+          component: () => import('@/views/V0/V0ApplyList.vue'),
           meta: { title: '申请', icon: 'apply' },
         },
+<<<<<<< HEAD
         {
           path: '/costManagement/V0/V0ApplyList',
           code: 'price_nka_v0_apply',
@@ -31,11 +36,13 @@ export default function() {
           component: () => import('@/views/V0/V0ApplyList.vue'),
           meta: { title: '申请new', icon: 'apply' },
         },
+=======
+>>>>>>> 8b50447d1fb1610a176e646b44574a0e88be6d51
         {
-          path: '/costManagement/V0/V0Approval',
+          path: '/costManagement/V0/V0ApprovalList',
           code: 'price_nka_v0_approve',
-          name: 'V0Approval',
-          component: () => import('@/views/V0/V0Approval.vue'),
+          name: 'V0ApprovalList',
+          component: () => import('@/views/V0/V0ApprovalList.vue'),
           meta: { title: '审批', icon: 'approve' },
         },
       ]

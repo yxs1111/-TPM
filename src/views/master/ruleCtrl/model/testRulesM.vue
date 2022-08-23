@@ -91,7 +91,7 @@ export default {
               }
             },
             {
-              name: 'Road Show',
+              name: 'Roadshow',
               path: '/master/ruleCtrl/model/splitRulesRoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),

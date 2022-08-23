@@ -9,10 +9,14 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-          <span class="SelectliTitle">待办项:</span>
+          <span class="SelectliTitle">合同类型:</span>
           <el-select v-model="filterObj.item" clearable placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in ['客户合同','经销商合同']" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in ['客户合同','经销商分摊协议']" :key="index" :label="item" :value="item" />
           </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">合同ID:</span>
+          <el-input v-model="filterObj.contractCode" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
@@ -43,9 +47,10 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="待办项" width="150"> </el-table-column>
+      <el-table-column align="center" prop="item" label="合同类型" width="150" > </el-table-column>
+      <el-table-column align="center" prop="contractCode" label="合同ID" width="320" > </el-table-column>
       <el-table-column align="center" prop="customerName" label="客户名称"  width="150"> </el-table-column>
-      <el-table-column align="center" prop="distributorName" label="经销商名称"  width="220"> </el-table-column>
+      <el-table-column align="center" prop="distributorName" label="经销商名称"  width="280"> </el-table-column>
       <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">
         {{row.processStatus===2?'已完成':'进行中'}}
       </el-table-column>
@@ -57,7 +62,7 @@
           {{ scope.row.originatorDate===null ? '': scope.row.originatorDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column v-slot={row}  align="center" prop="assignee" label="办理人">
+      <el-table-column v-slot={row}  align="center" prop="assignee" min-width="280" label="办理人">
         <span v-html="setSplitAssignee(row.assignee)"></span>
       </el-table-column>
       <el-table-column width="150" align="center" label="查看" fixed="right">
@@ -97,6 +102,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        contractCode: '',
         item: '',
         customerMdmCode: '',
         distributorMdmCode: '',
@@ -142,6 +148,7 @@ export default {
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         processStatus: this.filterObj.processStatus,
+        contractCode: this.filterObj.contractCode,
       })
         .then((response) => {
           this.tableData = response.data.records

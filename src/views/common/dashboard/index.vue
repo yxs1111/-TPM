@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-07-19 08:57:39
+ * @LastEditTime: 2022-08-15 09:38:06
 -->
 <template>
   <div class="dashboard-container">
@@ -313,7 +313,7 @@
 
                     </div>
                     <div class="NU" v-if="item.minePackageName=='Roadshow'">
-                      <div class="PointTitle">Road Show-{{item.channelCode}}</div>
+                      <div class="PointTitle">Roadshow-{{item.channelCode}}</div>
                       <div class="NuPoint">
                         <div class="V1">
                           <div class="passIcon" v-if="item.version=='V2'||item.version=='V3'||(item.version=='V1'&&item.processStatus==2)"></div>
@@ -793,9 +793,9 @@ export default {
     goAssignee(version, name, channelCode) {
       if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApplyList', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApprovalList', params: { channelCode } })
         }
       }
       if (version.indexOf('V1')!=-1) {
@@ -828,11 +828,13 @@ export default {
         let allName=''
         list.forEach(item=>{
           let index = item.indexOf('@')
-          allName+='<br>'+item.slice(0, index)
+          if(index!=-1) {
+            allName+='<br>'+item.slice(0, index)
+          }else {
+            allName+='<br>'+item.slice(0)
+          }
         })
         return allName.slice(4)
-        // let index = assigneeStr.indexOf('@')
-        // return assigneeStr.slice(0, index)
       }
     },
   },
@@ -980,7 +982,7 @@ export default {
               // background-color: pink;
             }
             .PointTitle {
-              width: 145px;
+              width: 160px;
               font-size: 16px;
               font-family: Source Han Sans CN;
               font-weight: 500;
