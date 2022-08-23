@@ -1,10 +1,10 @@
 <!--
  * @Description: 
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-18 15:51:31
+ * @LastEditTime: 2022-07-19 10:14:10
 -->
 <template>
-  <div class="MainContent">
+  <div class="V0ApplyList">
     <div class="SelectBarWrap" @keyup.enter="search">
       <div class="SelectBar">
         <div class="Selectli">
@@ -227,7 +227,7 @@
             </el-table-column>
             <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
             <el-table-column align="center" width="120" prop="costTypeName" label="费用类型"></el-table-column>
-            <el-table-column align="center" width="120" prop="minePackageName" label="Mine Package"></el-table-column>
+            <el-table-column align="center" width="160" prop="minePackageName" label="Mine Package"></el-table-column>
             <el-table-column align="center" width="220" prop="costItemName" label="费用科目"></el-table-column>
             <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
             <el-table-column align="center" width="120" prop="dimCustomer" label="客户系统名称"></el-table-column>
@@ -810,99 +810,26 @@ export default {
     FormateNum(num) {
       return FormateThousandNum(num)
     },
+    // 每页显示页面数变更
+    handleSizeChange(size) {
+      this.pageSize = size
+      this.getList()
+    },
+    // 当前页变更
+    handleCurrentChange(num) {
+      this.pageNum = num
+      this.getList()
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.MainContent {
-  height: 103%;
-  position: relative;
-  .TopBar {
-    display: flex;
-    align-items: center;
-    .viewTitle {
-      font-size: 14px;
-      font-family: Microsoft YaHei;
-      font-weight: bold;
-      color: #4192d3;
-      margin-left: 14px;
-    }
-  }
-  .ContentWrap {
-    width: 100%;
-    height: 90%;
-    // min-height: 50vh;
-    .contentli {
-      // height: 480px;
-      padding: 20px;
-      border-radius: 20px;
-      box-sizing: border-box;
-      background: #ffffff;
-      border: 1px solid #f2f3f5;
-      box-shadow: 3px 3px 14px 0px rgba(228, 228, 228, 0.6);
-      margin-bottom: 20px;
-      .contentTop {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        .SKUTitle {
-          font-size: 24px;
-          font-family: Source Han Sans CN;
-          font-weight: 600;
-          color: #111111;
-        }
-        .GuidePriceBar {
-          display: flex;
-          align-items: center;
-          color: #4192d3;
-          font-weight: 500;
-          font-size: 16px;
-          .guide {
-            width: 20px;
-            height: 20px;
-          }
-          .GuidePriceWrap {
-            .guideText {
-              margin: 0 5px;
-            }
-            .GuidePrice {
-              font-size: 20px;
-              margin-left: 5px;
-            }
-          }
-        }
-      }
-      .contentInfoWrap {
-        display: flex;
-        margin-top: 10px;
-        border-radius: 10px 10px 0 0;
-        overflow: hidden;
-        .filstColumn {
-          text-align: center;
-          color: #fff;
-        }
-        .filstColumn_total {
-          text-align: center;
-          color: #001111;
-        }
-      }
-    }
-  }
-  .hide {
-    display: none;
-  }
+.V0ApplyList {
+  height: 100%;
   .importDialog {
     height: 600px;
   }
-  .Final {
-    width: 242px;
-  }
-}
-.ContentWrap {
-  width: 100%;
-  // height: calc(100% - 50px);
-  overflow-y: auto;
 }
 .V0Content {
   height: calc(100% - 0px);

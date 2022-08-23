@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-07-18 17:28:41
+ * @LastEditTime: 2022-07-19 10:52:06
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -24,13 +24,13 @@ export default function() {
           component: () => import('@/views/V0/V0Apply.vue'),
           meta: { title: '申请', icon: 'apply' },
         },
-        // {
-        //   path: '/costManagement/V0/V0ApplyList',
-        //   code: 'price_nka_v0_apply',
-        //   name: 'V0ApplyList',
-        //   component: () => import('@/views/V0/V0ApplyList.vue'),
-        //   meta: { title: '申请', icon: 'apply' },
-        // },
+        {
+          path: '/costManagement/V0/V0ApplyList',
+          code: 'price_nka_v0_apply',
+          name: 'V0ApplyList',
+          component: () => import('@/views/V0/V0ApplyList.vue'),
+          meta: { title: '申请new', icon: 'apply' },
+        },
         {
           path: '/costManagement/V0/V0Approval',
           code: 'price_nka_v0_approve',
