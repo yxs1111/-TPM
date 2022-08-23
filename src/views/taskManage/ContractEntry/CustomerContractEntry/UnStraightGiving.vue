@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-29 17:31:59
+ * @LastEditTime: 2022-08-23 14:30:13
 -->
 <template>
   <div class="MainContent">
@@ -1114,7 +1114,7 @@ export default {
     //删除该行数据
     deleteRow(row, index) {
       //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不受状态影响
-      let isDeleteFlag = this.compareDate(row.systemDate[0])
+      let isDeleteFlag = row.entryDate==null?1:0
       //允许删除：草稿、被拒绝、通过（未汇算）
       if (
         row.contractState === '1' ||
