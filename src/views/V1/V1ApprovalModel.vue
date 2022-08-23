@@ -178,6 +178,14 @@ export default {
                 light: require('@/assets/images/tab/tab_ListingFee_l.png')
               }
             },
+            {
+              name: 'Display',
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalDisplay',
+              img: {
+                dark: require('@/assets/images/tab/UnStraightGiving.png'),
+                light: require('@/assets/images/tab/UnStraightGiving_l.png')
+              }
+            },
           ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))

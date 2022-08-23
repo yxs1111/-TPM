@@ -173,6 +173,14 @@ export default {
               }
             },
             {
+              name: 'Display',
+              path: '/costManagement/V2/V2Apply/V2Display',
+              img: {
+                dark: require('@/assets/images/tab/UnStraightGiving.png'),
+                light: require('@/assets/images/tab/UnStraightGiving_l.png')
+              }
+            },
+            {
               name: '补录',
               path: '/costManagement/V2/V2Apply/V2Collection',
               img: {

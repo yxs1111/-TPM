@@ -7,7 +7,7 @@ import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
 
-export default function() {
+export default function () {
   const V1 = [
     {
       path: '/costManagement/V1',
@@ -89,6 +89,14 @@ export default function() {
               component: () => import('@/views/V1/V1Apply/V1ListingFee.vue'),
               meta: { title: 'Listing Fee', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
             },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1Display',
+              code: 'price_nka_v1_apply',
+              name: 'V1Display',
+              component: () => import('@/views/V1/V1Apply/V1ApplyDisplay.vue'),
+              meta: { title: 'Display', icon: 'form', activeMenu: '/costManagement/V1/V1Apply' }
+            },
           ]
         },
         {
@@ -162,6 +170,14 @@ export default function() {
               name: 'V1ListingFeeApprove',
               component: () => import('@/views/V1/V1Apply/V1ListingFee.vue'),
               meta: { title: 'Listing Fee', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalDisplay',
+              code: 'price_nka_v1_approve',
+              name: 'V1ApplyrovalDisplay',
+              component: () => import('@/views/V1/V1Approval/V1ApplyrovalDisplay.vue'),
+              meta: { title: 'Display', icon: 'form', activeMenu: '/costManagement/V1/V1Approval' }
             },
           ]
         }

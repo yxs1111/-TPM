@@ -90,5 +90,41 @@ export default {
       params: params,
       responseType: 'blob'
     })
-  }
+  },
+  // display 申请列表
+  displayList(params) {
+    return request({
+      url: '/cityplan/investCpDisplayVOneDetail/getPage',
+      method: 'get',
+      params: params,
+    })
+  },
+  // display获取smartplan数据
+  getsmartplanData(data) {
+    return request({
+      url: '/cityplan/investCpDisplayVOneDetail/create',
+      method: 'post',
+      data: data,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  },
+  // display清空数据
+  delsmartplanData(data) {
+    return request({
+      url: '/cityplan/investCpDisplayVOneDetail/deleteAll',
+      method: 'post',
+      data: data,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  },
+  // display导出
+  excdisplayData(data) {
+    return request({
+      url: '/cityplan/investCpDisplayVOneDetail/downExcel',
+      method: 'post',
+      data: data,
+      responseType: 'blob',
+      headers: { 'Content-Type': 'application/json' }
+    })
+  },
 }
