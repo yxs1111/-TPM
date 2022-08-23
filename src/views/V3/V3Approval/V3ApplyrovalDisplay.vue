@@ -6,20 +6,20 @@
             <div class="Selectli">
                 <span class="SelectliTitle">活动月:</span>
                 <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
-                    <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+                    <el-option v-for="(item,index) in monthList" :key="index" :label="item.activityMonth" :value="item.activityMonth" />
                 </el-select>
             </div>
             <div class="Selectli">
                 <span class="SelectliTitle">渠道:</span>
                 <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-                    <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+                    <el-option v-for="(item,index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
                 </el-select>
             </div>
             <div class="Selectli">
                 <span class="SelectliTitle">客户:</span>
                 <!-- <el-date-picker v-model="filterObj.custom" type="yearAndMonth" placeholder="请选择" /> -->
                 <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-                    <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="item.customerCode" />
+                    <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
                 </el-select>
             </div>
             <div class="Selectli">
@@ -43,7 +43,7 @@
             <div class="Selectli">
                 <span class="SelectliTitle">Display item:</span>
                 <el-select v-model="filterObj.displayItem" clearable filterable placeholder="请选择">
-                    <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
+                    <el-option v-for="(item, index) in skuArr" :key="index" :label="item.productEsName" :value="item.productCode" />
                 </el-select>
             </div>
             <div class="OpertionBar">
@@ -379,7 +379,6 @@ export default {
           this.mainId = this.tableData[0].mainId
           this.isSubmit = this.tableData[0].isSubmit
           this.isGainLe = 1
-          this.infoByMainId()
         })
     },
     // 选择导入文件
@@ -534,6 +533,9 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
     },
   },
 }
