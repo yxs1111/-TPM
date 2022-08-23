@@ -257,6 +257,7 @@ export default {
     this.getRegionList()
     // this.getCustomerList()
     this.getDistributorList()
+    this.getAreaList()
   },
   methods: {
     // 格式化--千位分隔符、两位小数
