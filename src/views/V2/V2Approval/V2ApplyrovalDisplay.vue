@@ -528,12 +528,6 @@ export default {
 </script>
 
 <style>
-.el-icon-arrow-left:before{
-    content:'上一页';
-}
-.el-icon-arrow-right:before {
-    content: "下一页";
-}
 .el-icon-my-file {
   background: url('~@/assets/images/selFile.png') no-repeat;
   font-size: 16px;
@@ -561,6 +555,12 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.el-icon-arrow-left:before{
+    content:'上一页';
+}
+.el-icon-arrow-right:before {
+    content: "下一页";
+}
 .SelectBarWrap{
   display: flex;
   flex-direction: column;
