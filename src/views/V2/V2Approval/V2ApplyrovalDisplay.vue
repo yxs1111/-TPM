@@ -67,10 +67,6 @@
             <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
             <span class="text">驳回</span>
           </div>
-          <div class="tip" v-if="!(!isSubmit&&isGainLe)">
-            <span class="tipStar">*</span>
-            注意事项：若未获取到MTD场次日期，不能办理
-          </div>
         </div>
     </div>
     <!-- 列表 -->
@@ -152,6 +148,21 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
+              <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+                <template slot-scope="{row}">
+                  <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                    <div slot="content" v-html="getTip(row)" />
+                    <div class="statusWrap">
+                      <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                      <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                      <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
+                      <span class="judgmentText">{{ row.judgmentType }}</span>
+                    </div>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
+              <el-table-column width="150" align="center" prop="judgmentType" label="系统判定"/>
+              <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容" />
               <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
               <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
               <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -170,8 +181,6 @@
               <el-table-column width="120" align="center" prop="dept" label="费用归属部门" />
               <el-table-column width="120" align="center" prop="cancelCost" label="费用核销方式" />
               <el-table-column width="150" align="center" prop="differenceCost" label="费用差值(RMB)"/>
-              <el-table-column width="150" align="center" prop="judgmentType" label="系统判定"/>
-              <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容" />
               <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
               <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
               <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
