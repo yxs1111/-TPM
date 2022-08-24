@@ -125,7 +125,7 @@
           <div>
             费用差值(RMB)
             <br>
-            <span class="subTitle">KA+Brand+region+经销商+item</span>
+            <span class="subTitle">KA+Brand+Region + item</span>
           </div>
         </template>
       </el-table-column>
@@ -198,7 +198,7 @@
                 </template>
               </el-table-column>
               <el-table-column width="150" align="center" prop="judgmentType" label="系统判定"/>
-              <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容" />
+              <el-table-column width="300" align="center" prop="judgmentContent" label="系统判定内容" />
               <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
               <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
               <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -277,7 +277,7 @@ export default {
       uploadFile:'',
       saveBtn: false,
       isCheck: false, //检测数据按钮显示或隐藏
-      isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSubmit: 0, // 提交状态  1：已提交，0：未提交
       isGainLe: 0, //是否已经从LE接过数据
       mainId:'',
     }

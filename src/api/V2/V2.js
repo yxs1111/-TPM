@@ -174,7 +174,7 @@ export default {
   //display异常项导出
   downExcelError(params) {
     return request({
-      url: this.displayUrl + '/downExcel',
+      url: '/cityplan/investCpDisplayVTwoDetailEb/downExcel',
       method: 'post',
       data: params,
       responseType: 'blob'
