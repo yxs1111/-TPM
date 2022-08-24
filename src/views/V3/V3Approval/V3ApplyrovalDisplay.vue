@@ -469,8 +469,8 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data.slice(0,50)
-            this.isCheck = response.data.some(item=> item.judgmentType === 'Pass')
+            this.ImportData = response.data
+            this.isCheck = response.data.every(item=> item.judgmentType === 'Pass')
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -497,7 +497,7 @@ export default {
       }).then((response) => {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
-          this.ImportData = response.data.slice(0,50)
+          this.ImportData = response.data
           this.saveBtn = response.data.some(item=> item.judgmentType === 'Pass')
         } else {
           this.$message.info(this.messageMap.checkError)
