@@ -86,16 +86,64 @@
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="zoneName" label="大区" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="120" align="center" prop="displayItem" label="Display Item" />
-      <el-table-column width="200" align="center" prop="planCost" label="V1计划费用(RMB)" />
-      <el-table-column width="200" align="center" prop="estimateCost" label="V2预估费用(RMB)" />
-      <el-table-column width="200" align="center" prop="actualCost" label="V3实际费用-默认(RMB)" />
-      <el-table-column width="200" align="center" prop="adjustedCost" label="V3实际费用-调整后(RMB)" />
-      <el-table-column width="120" align="center" prop="dept" label="费用归属部门" />
-      <el-table-column width="120" align="center" prop="cancelCost" label="费用核销方式" />
-      <el-table-column width="150" align="center" prop="differenceCost" label="费用差值(RMB)"/>
+      <el-table-column width="280" align="center" prop="displayItem" label="Display Item">
+        <template v-slot:header>
+          <div>
+            Display Item
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="280" align="center" prop="planCost" label="V1计划费用(RMB)">
+        <template v-slot:header>
+          <div>
+            V1计划费用(RMB)
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="280" align="center" prop="estimateCost" label="V2预估费用(RMB)">
+        <template v-slot:header>
+          <div>
+            V2预估费用(RMB)
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="280" align="center" prop="actualCost" label="V3实际费用-默认(RMB)">
+        <template v-slot:header>
+          <div>
+            V3实际费用-默认(RMB)
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="280" align="center" prop="adjustedCost" label="V3实际费用-调整后(RMB)">
+        <template v-slot:header>
+          <div>
+            V3实际费用-调整后(RMB)
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150" align="center" prop="dept" label="费用归属部门" />
+      <el-table-column width="150" align="center" prop="cancelCost" label="费用核销方式" />
+      <el-table-column width="280" align="center" prop="differenceCost" label="费用差值(RMB)">
+        <template v-slot:header>
+          <div>
+            费用差值(RMB)
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="150" align="center" prop="judgmentType" label="系统判定"/>
-      <el-table-column width="800" align="center" prop="judgmentContent" label="系统判定内容" />
+      <el-table-column width="400" align="center" prop="judgmentContent" label="系统判定内容" />
       <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
       <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />

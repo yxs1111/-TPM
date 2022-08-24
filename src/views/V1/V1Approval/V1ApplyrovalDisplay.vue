@@ -72,8 +72,24 @@
       <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
       <el-table-column width="120" align="center" prop="zoneName" label="大区" />
       <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="120" align="center" prop="displayItem" label="Display Item" />
-      <el-table-column width="200" align="center" prop="planCost" label="V1计划费用(RMB)" />
+      <el-table-column width="280" align="center" prop="displayItem" label="Display Item">
+        <template v-slot:header>
+          <div>
+            Display Item
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="280" align="center" prop="planCost" label="V1计划费用(RMB)">
+        <template v-slot:header>
+          <div>
+            V1计划费用(RMB)
+            <br>
+            <span class="subTitle">KA+Brand+region+经销商+item</span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="120" align="center" prop="dept" label="费用归属部门" />
       <el-table-column width="120" align="center" prop="cancelCost" label="费用核销方式" />
     </el-table>
