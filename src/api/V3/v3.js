@@ -223,4 +223,8 @@ export default {
   approve(params) {
     return requestApi.request_post('/cityplan/investCpDisplayVThreeDetail/approve', params)
   },
+  // 通过与驳回按钮状态
+  infoByMainId(params) {
+    return requestApi.request_get('/cityplan/investCpV/infoByMainId', params)
+  },
 }

@@ -55,11 +55,11 @@
             </div>
         </div>
         <div class="TpmButtonBGWrap" style="align-items: center;">
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+          <div class="TpmButtonBG" :class="isSubmit?'':'noClick'" @click="importData">
             <img src="@/assets/images/import.png" alt="">
             <span class="text">导入</span>
           </div>
-          <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve()">
+          <div class="TpmButtonBG" :class="isSubmit?'':'noClick'" @click="approve()">
             <svg-icon icon-class="passApprove" style="font-size: 24px;" />
             <span class="text">提交</span>
           </div>
@@ -268,7 +268,6 @@ export default {
       customerArr: [],
       distributorArr: [],
       largeAreaDialogList:[],
-      usernameLocal: '',
       maxheight: getHeightHaveTab(),
       importVisible:false,
       uploadFileName: '',
@@ -277,20 +276,20 @@ export default {
       uploadFile:'',
       saveBtn: false,
       isCheck: false, //检测数据按钮显示或隐藏
-      isSubmit: 0, // 提交状态  1：已提交，0：未提交
-      isGainLe: 0, //是否已经从LE接过数据
+      isSubmit: false, 
+      username:'',
       mainId:'',
     }
   },
   computed: {},
   watch: {},
   mounted() {
+    this.username = localStorage.getItem('usernameLocal')
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeightHaveTab()
       })()
     }
-    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
     this.getSKU()
@@ -408,12 +407,25 @@ export default {
         pageSize: this.pageSize, // 每页条数
         ...this.filterObj
       }).then((response) => {
-          this.tableData = response.data.records
-          this.total = response.data.total
-          this.mainId = this.tableData[0].mainId
-          this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = 1
+          if (response.data.records.length > 0) {
+            this.tableData = response.data.records
+            this.total = response.data.total
+            this.mainId = this.tableData[0].mainId
+            this.infoByMainId(response.data.records[0].mainId)
+          }
         })
+    },
+    // 通过与审批按钮控制
+    infoByMainId(id) {
+      API.infoByMainId({mainId: id}).then((res) => {
+        if (res.code === 1000) {
+          if (res.data.assignee.indexOf(this.username) > -1 && res.data.version === 'V2' && res.data.activityName.indexOf('审批') === -1) {
+            this.isSubmit = true
+          }else{
+            this.isSubmit = false
+          }
+        }
+      })
     },
     // 选择导入文件
     parsingExcelBtn() {
@@ -465,7 +477,7 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.save({mainId:this.mainId+''}).then((res) => {
+      API.save({mainId:this.mainId}).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
           this.getTableData()
@@ -484,7 +496,7 @@ export default {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
-          this.saveBtn = response.data.some(item=> item.judgmentType === 'Pass')
+          this.saveBtn = response.data.every(item=> item.judgmentType === 'Pass')
         } else {
           this.$message.info(this.messageMap.checkError)
         }
