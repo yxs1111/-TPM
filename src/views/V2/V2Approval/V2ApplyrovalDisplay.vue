@@ -380,7 +380,7 @@
             v-if="saveBtn"
             type="primary"
             class="TpmButtonBG"
-            @click="confirmImport"
+            @click="importVisible = false"
             >保存</el-button
           >
         </div>
@@ -865,18 +865,6 @@ export default {
           }
         } else {
           this.$message.info(this.messageMap.importError)
-        }
-      })
-    },
-    // 确认导入
-    confirmImport() {
-      API.save({ mainId: this.mainId }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
         }
       })
     },
