@@ -890,7 +890,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_display_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.yearAndMonth}_display_${this.filterObj.channelCode}_V2审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
