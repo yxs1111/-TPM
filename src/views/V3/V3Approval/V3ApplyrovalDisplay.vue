@@ -389,15 +389,6 @@
               @click="downloadTemplate"
               >下载模板</el-button
             >
-            <el-button
-              v-if="isCheck"
-              type="primary"
-              plain
-              class="my-export"
-              icon="el-icon-my-checkData"
-              @click="checkImport"
-              >检测数据</el-button
-            >
           </div>
           <el-button
             v-if="saveBtn"
@@ -696,7 +687,6 @@ export default {
       ImportData: [],
       uploadFile: '',
       saveBtn: false,
-      isCheck: false, //检测数据按钮显示或隐藏
       isSubmit: false,
       username: '',
       mainId: '',
@@ -869,11 +859,9 @@ export default {
       this.uploadFile = ''
       this.ImportData = []
       this.saveBtn = false
-      this.isCheck = false
     },
     // 导入
     parsingExcel(event) {
-      this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
       const formData = new FormData()
@@ -889,9 +877,7 @@ export default {
           } else {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
-            this.isCheck = response.data.every(
-              (item) => item.judgmentType === 'Pass'
-            )
+            this.saveBtn = true
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -907,23 +893,6 @@ export default {
           this.closeImportDialog()
         } else {
           this.$message.info(this.messageMap.saveError)
-        }
-      })
-    },
-    // 校验数据
-    checkImport() {
-      API.exceptionCheck({
-        yearAndMonth: this.filterObj.yearAndMonth,
-        channelCode: this.filterObj.channelCode,
-      }).then((response) => {
-        if (response.code == 1000) {
-          this.$message.success(this.messageMap.checkSuccess)
-          this.ImportData = response.data
-          this.saveBtn = !response.data.some(
-            (item) => item.judgmentType === 'Error'
-          )
-        } else {
-          this.$message.info(this.messageMap.checkError)
         }
       })
     },
