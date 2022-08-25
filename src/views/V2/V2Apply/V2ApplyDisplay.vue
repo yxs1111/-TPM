@@ -496,7 +496,7 @@ export default {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
-          this.saveBtn = response.data.every(item=> item.judgmentType === 'Pass')
+          this.saveBtn = !response.data.some(item=> item.judgmentType === 'Error')
         } else {
           this.$message.info(this.messageMap.checkError)
         }
