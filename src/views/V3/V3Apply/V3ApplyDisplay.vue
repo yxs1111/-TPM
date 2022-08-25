@@ -499,7 +499,7 @@ export default {
     },
     // 校验数据
     checkImport() {
-      API.displayexceptionCheck({
+      API.exceptionCheck({
         yearAndMonth: this.filterObj.yearAndMonth,
         channelCode: this.filterObj.channelCode,
       }).then((response) => {
@@ -522,7 +522,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_display_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.yearAndMonth}_display_${this.filterObj.channelCode}_V3申请.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
