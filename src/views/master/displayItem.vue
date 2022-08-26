@@ -75,11 +75,6 @@
       :row-class-name="tableRowClassName"
       style="width: 100%"
     >
-      <el-table-column
-        type="selection"
-        align="center"
-        :selectable="checkSelectable"
-      />
       <el-table-column fixed align="center" label="操作" width="220">
         <template slot-scope="scope">
           <div class="table_operation">
@@ -94,7 +89,7 @@
             <div
               class="haveText_editor"
               v-show="!scope.row.isEditor"
-              @click="editorRow(scope.$index)"
+              @click="editorRow(scope.$index, scope.row)"
             >
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
@@ -254,9 +249,9 @@ export default {
         this.total = response.data.total
       })
     },
-    getCostItemList() {
+    getCostItemList(code) {
       API.getCostItemList({
-        minePackageCode: this.filterObj.minePackageCode,
+        minePackageCode: this.filterObj.minePackageCode || code,
       }).then((res) => {
         if (res.code === 1000) {
           this.filterObj.costItem = ''
@@ -304,7 +299,11 @@ export default {
         }
       })
     },
-    editorRow(index) {
+    editorRow(index, row) {
+      const code = this.minePackageList.filter(
+        (item) => row.minePackage === item.name
+      )[0].code
+      this.getCostItemList(code)
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
