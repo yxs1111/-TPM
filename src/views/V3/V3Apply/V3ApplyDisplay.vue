@@ -110,10 +110,10 @@
             placeholder="请选择"
           >
             <el-option
-              v-for="(item, index) in skuArr"
-              :key="item.productCode + index"
-              :label="item.productEsName"
-              :value="item.productCode"
+              v-for="(item, index) in displayItemList"
+              :key="index"
+              :label="item.item"
+              :value="item.item"
             />
           </el-select>
         </div>
@@ -686,6 +686,7 @@ export default {
       uploadFileName: '',
       event: '',
       ImportData: [],
+      displayItemList: [],
       uploadFile: '',
       saveBtn: false,
       isCheck: false, //检测数据按钮显示或隐藏
@@ -710,8 +711,17 @@ export default {
     // this.getCustomerList()
     this.getDistributorList()
     this.getAreaList()
+    this.DisolayItem()
   },
   methods: {
+    // 获取display item 数据
+    DisolayItem() {
+      selectAPI.DisplayItemList().then((res) => {
+        if (res.code === 1000) {
+          this.displayItemList = res.data
+        }
+      })
+    },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
       return FormateThousandNum(num)

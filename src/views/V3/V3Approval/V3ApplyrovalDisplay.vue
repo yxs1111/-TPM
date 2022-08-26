@@ -110,10 +110,10 @@
             placeholder="请选择"
           >
             <el-option
-              v-for="(item, index) in skuArr"
+              v-for="(item, index) in displayItemList"
               :key="index"
-              :label="item.productEsName"
-              :value="item.productCode"
+              :label="item.item"
+              :value="item.item"
             />
           </el-select>
         </div>
@@ -680,6 +680,7 @@ export default {
       customerArr: [],
       distributorArr: [],
       largeAreaDialogList: [],
+      displayItemList: [],
       maxheight: getHeightHaveTab(),
       importVisible: false,
       uploadFileName: '',
@@ -708,8 +709,17 @@ export default {
     // this.getCustomerList()
     this.getDistributorList()
     this.getAreaList()
+    this.DisolayItem()
   },
   methods: {
+    // 获取display item 数据
+    DisolayItem() {
+      selectAPI.DisplayItemList().then((res) => {
+        if (res.code === 1000) {
+          this.displayItemList = res.data
+        }
+      })
+    },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
       return FormateThousandNum(num)
