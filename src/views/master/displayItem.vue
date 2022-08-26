@@ -11,8 +11,14 @@
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package</span>
           <el-select
-            v-model="filterObj.minePackageCode"
-            @change="getCostItemList"
+            v-model="filterObj.minePackage"
+            @change="
+              getCostItemList(
+                minePackageList.filter(
+                  (item) => filterObj.minePackage === item.name
+                )[0].code
+              )
+            "
             class="my-el-input"
             filterable
             clearable
@@ -22,7 +28,7 @@
               v-for="item in minePackageList"
               :key="item.code"
               :label="item.name"
-              :value="item.code"
+              :value="item.name"
             />
           </el-select>
         </div>
@@ -80,7 +86,7 @@
           <div class="table_operation">
             <div
               class="haveText_editor"
-              v-show="scope.row.isEditor"
+              v-show="isEditor === scope.$index"
               @click="saveRow(scope.row, scope.$index)"
             >
               <svg-icon icon-class="save-light" class="svgIcon" />
@@ -88,7 +94,7 @@
             </div>
             <div
               class="haveText_editor"
-              v-show="!scope.row.isEditor"
+              v-show="isEditor !== scope.$index"
               @click="editorRow(scope.$index, scope.row)"
             >
               <svg-icon icon-class="editor" class="svgIcon" />
@@ -96,7 +102,7 @@
             </div>
             <div
               class="haveText_editor"
-              v-show="scope.row.isEditor"
+              v-show="isEditor === scope.$index"
               @click="CancelEditorRow(scope.$index)"
             >
               <svg-icon icon-class="editor" class="svgIcon" />
@@ -121,11 +127,11 @@
         align="center"
         prop="costItem"
         label="Cost Item"
-        v-slot="{ row }"
+        v-slot="scope"
       >
         <el-select
-          v-if="row.isEditor"
-          v-model="row.costItem"
+          v-if="isEditor === scope.$index"
+          v-model="scope.row.costItem"
           class="my-el-input"
           filterable
           clearable
@@ -138,7 +144,7 @@
             :value="item"
           />
         </el-select>
-        <span v-if="!row.isEditor">{{ row.costItem }}</span>
+        <span v-if="isEditor !== scope.$index">{{ scope.row.costItem }}</span>
       </el-table-column>
       <el-table-column
         width="150"
@@ -186,10 +192,9 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        minePackageCode: '',
+        minePackage: '',
         costItem: '',
         item: '',
-        state: '',
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -208,11 +213,6 @@ export default {
       editorId: '',
       checkArr: [], //批量删除,存放选中
       maxheight: getHeight(),
-      //取消编辑 --》数据重置（不保存）
-      tempObj: {
-        rowIndex: 0,
-        tempInfo: null,
-      },
     }
   },
   directives: { elDragDialog, permission },
@@ -223,7 +223,6 @@ export default {
       })()
     }
     this.getTableData()
-    this.getCostItemList()
   },
   computed: {},
   watch: {},
@@ -234,24 +233,15 @@ export default {
       API.getDisplayItem({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        minePackageCode: this.filterObj.minePackageCode,
-        costItem: this.filterObj.costItem,
-        item: this.filterObj.item,
-        state: this.filterObj.state,
+        ...this.filterObj,
       }).then((response) => {
-        let list = response.data.records
-        list.forEach((item) => {
-          item.isEditor = 0
-        })
-        this.tableData = list
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
+        this.tableData = response.data.records
         this.total = response.data.total
       })
     },
     getCostItemList(code) {
       API.getCostItemList({
-        minePackageCode: this.filterObj.minePackageCode || code,
+        minePackageCode: code,
       }).then((res) => {
         if (res.code === 1000) {
           this.filterObj.costItem = ''
@@ -265,7 +255,7 @@ export default {
     },
     Reset() {
       this.filterObj = {
-        minePackageCode: '',
+        minePackage: '',
         costItem: '',
         item: '',
         state: '',
@@ -275,10 +265,7 @@ export default {
     //导出数据
     exportData() {
       API.exportDisplayItem({
-        minePackageCode: this.filterObj.minePackageCode,
-        costItem: this.filterObj.costItem,
-        item: this.filterObj.item,
-        state: this.filterObj.state,
+        ...this.filterObj,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, 'Display Item-' + timestamp + '.xlsx') //自定义Excel文件名
@@ -291,9 +278,10 @@ export default {
     saveRow(row, index) {
       API.updateDisplayItem({
         id: row.id,
-        item: row.costItem,
+        costItem: row.costItem,
       }).then((response) => {
         if (response.code === 1000) {
+          this.isEditor = ''
           this.$message.success(`保存成功`)
           this.getTableData()
         }
@@ -304,22 +292,11 @@ export default {
         (item) => row.minePackage === item.name
       )[0].code
       this.getCostItemList(code)
-      if (this.tempObj.tempInfo) {
-        this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
-      }
-      //存放临时数据，用于取消编辑时重置
-      this.tempObj.rowIndex = index
-      this.tempObj.tempInfo = { ...this.tableData[index] }
-      //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
-      this.tableData.forEach((item) => {
-        item.isEditor = 0
-      })
-      this.tableData[index].isEditor = 1
+      this.isEditor = index
       this.$forceUpdate()
     },
     CancelEditorRow(index) {
-      this.tableData[index].isEditor = 0
-      this.tableData[index] = this.tempObj.tempInfo
+      this.isEditor = ''
     },
     handleSelectionChange(val) {
       this.checkArr = val
