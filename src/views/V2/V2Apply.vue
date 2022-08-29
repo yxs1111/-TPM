@@ -185,7 +185,6 @@ export default {
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
               },
             },
-
             {
               name: 'Display',
               path: '/costManagement/V2/V2Apply/V2Display',
