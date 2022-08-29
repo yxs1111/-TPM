@@ -96,7 +96,7 @@ export default function() {
           code: 'resource-report-accrual',
           name: 'AccrualReport',
           component: () => import('@/views/Report/AccrualReport.vue'),
-          meta: { title: 'Accrual报表', icon: 'approve' }
+          meta: { title: '财务预提报表', icon: 'approve' }
         },
         //OverviewKA OverviewDist
         // {
