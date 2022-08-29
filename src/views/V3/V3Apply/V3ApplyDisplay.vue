@@ -97,7 +97,7 @@
               v-for="(item, index) in RegionList"
               :key="index"
               :label="item.name"
-              :value="item.code"
+              :value="item.nameAbridge"
             />
           </el-select>
         </div>
@@ -825,11 +825,13 @@ export default {
         pageSize: this.pageSize, // 每页条数
         ...this.filterObj,
       }).then((response) => {
+        this.tableData = response.data.records
         if (response.data.records.length > 0) {
-          this.tableData = response.data.records
           this.total = response.data.total
           this.mainId = this.tableData[0].mainId
           this.infoByMainId(response.data.records[0].mainId)
+        } else {
+          this.mainId = null
         }
       })
     },

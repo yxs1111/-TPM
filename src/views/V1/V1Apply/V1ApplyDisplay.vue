@@ -97,7 +97,7 @@
               v-for="(item, index) in RegionList"
               :key="index"
               :label="item.name"
-              :value="item.code"
+              :value="item.nameAbridge"
             />
           </el-select>
         </div>
