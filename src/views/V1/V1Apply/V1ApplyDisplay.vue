@@ -2,114 +2,269 @@
   <div class="MainContent">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
-        <div class="SelectBar">
-            <div class="Selectli">
-                <span class="SelectliTitle">活动月:</span>
-                <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
-                    <el-option v-for="(item, index) in monthList" :key="index" :label="item.activityMonth" :value="item.activityMonth" />
-                </el-select>
-            </div>
-            <div class="Selectli">
-                <span class="SelectliTitle">渠道:</span>
-                <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-                    <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
-                </el-select>
-            </div>
-            <div class="Selectli">
-                <span class="SelectliTitle">客户:</span>
-                <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
-                <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-                    <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
-                </el-select>
-            </div>
-            <div class="Selectli">
-                <span class="SelectliTitle">经销商:</span>
-                <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-                    <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode"  />
-                </el-select>
-            </div>
-            <div class="Selectli">
-                <span class="SelectliTitle">大区:</span>
-                <el-select v-model="filterObj.zoneCode" clearable filterable placeholder="请选择">
-                    <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.code"  />
-                </el-select>
-            </div>
-            <div class="Selectli">
-                <span class="SelectliTitle">区域:</span>
-                <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-                    <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
-                </el-select>
-            </div>
-            <div class="Selectli">
-                <span class="SelectliTitle">Display item:</span>
-                <el-select v-model="filterObj.displayItem" clearable filterable placeholder="请选择">
-                    <el-option v-for="(item, index) in skuArr" :key="item.productCode+index" :label="item.productEsName" :value="item.productCode" />
-                </el-select>
-            </div>
-            <div class="OpertionBar">
-                <div class="TpmButtonBG" @click="importsmartplan(filterObj)">
-                    <img src="../../../assets/images/import.png" alt="">
-                    <span class="text">获取smartplan数据</span>
-                </div>
-                <el-button type="primary" class="TpmButtonBG" @click="getTableData()">查询</el-button>
-                <div class="TpmButtonBG" @click="exportExcelInfo(filterObj)">
-                    <img src="../../../assets/images/export.png" alt="">
-                    <span class="text">导出</span>
-                </div>
-                <div class="TpmButtonBG" @click="clearsmartplan()">
-                    <img src="../../../assets/images/delete_l.png" alt="">
-                    <span class="text">清除数据</span>
-                </div>
-            </div>
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">活动月:</span>
+          <el-select
+            v-model="filterObj.yearAndMonth"
+            filterable
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in monthList"
+              :key="index"
+              :label="item.activityMonth"
+              :value="item.activityMonth"
+            />
+          </el-select>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select
+            v-model="filterObj.channelCode"
+            clearable
+            filterable
+            placeholder="请选择"
+            @change="getCustomerList"
+          >
+            <el-option
+              v-for="(item, index) in channelArr"
+              :key="index"
+              :label="item.channelEsName"
+              :value="item.channelCode"
+            />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">客户:</span>
+          <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
+          <el-select
+            v-model="filterObj.customerCode"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in customerArr"
+              :key="index"
+              :label="item.customerCsName"
+              :value="item.customerCode"
+            />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商:</span>
+          <el-select
+            v-model="filterObj.distributorCode"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in distributorArr"
+              :key="index"
+              :label="item.distributorName"
+              :value="item.distributorCode"
+            />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">大区:</span>
+          <el-select
+            v-model="filterObj.zoneCode"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in largeAreaDialogList"
+              :key="index"
+              :label="item.name"
+              :value="item.code"
+            />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">区域:</span>
+          <el-select
+            v-model="filterObj.regionCode"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in RegionList"
+              :key="index"
+              :label="item.name"
+              :value="item.code"
+            />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">Display item:</span>
+          <el-select
+            v-model="filterObj.displayItem"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in displayItemList"
+              :key="index"
+              :label="item.item"
+              :value="item.item"
+            />
+          </el-select>
+        </div>
+        <div class="OpertionBar">
+          <div class="TpmButtonBG" @click="importsmartplan(filterObj)">
+            <img src="../../../assets/images/import.png" alt="" />
+            <span class="text">获取smartplan数据</span>
+          </div>
+          <el-button type="primary" class="TpmButtonBG" @click="getTableData()"
+            >查询</el-button
+          >
+          <div class="TpmButtonBG" @click="exportExcelInfo(filterObj)">
+            <img src="../../../assets/images/export.png" alt="" />
+            <span class="text">导出</span>
+          </div>
+          <div class="TpmButtonBG" @click="clearsmartplan()">
+            <img src="../../../assets/images/delete_l.png" alt="" />
+            <span class="text">清除数据</span>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- 列表 -->
-    <el-table :data="tableData" border stripe
-                :max-height="maxheight"
-                :header-cell-style="HeadTable"
-                :row-class-name="tableRowClassName" 
-                style="width: 100%">
-      <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
-      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
-      <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
-      <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
-      <el-table-column width="120" align="center" prop="channelName" label="渠道" />
-      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
-      <el-table-column width="120" align="center" prop="brandName" label="品牌" />
-      <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
-      <el-table-column width="120" align="center" prop="zoneName" label="大区" />
-      <el-table-column width="120" align="center" prop="regionName" label="区域" />
-      <el-table-column width="280" align="center" prop="displayItem" label="Display Item">
+    <el-table
+      :data="tableData"
+      border
+      stripe
+      :max-height="maxheight"
+      :header-cell-style="HeadTable"
+      :row-class-name="tableRowClassName"
+      style="width: 100%"
+    >
+      <el-table-column
+        width="420"
+        align="center"
+        prop="cpId"
+        label="CPID"
+        fixed
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="yearAndMonth"
+        label="活动月"
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="costTypeName"
+        label="费用类型"
+      />
+      <el-table-column
+        width="150"
+        align="center"
+        prop="minePackageName"
+        label="Mine Package"
+      />
+      <el-table-column
+        width="260"
+        align="center"
+        prop="costItemName"
+        label="费用科目"
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="channelName"
+        label="渠道"
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="customerName"
+        label="客户系统名称"
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="brandName"
+        label="品牌"
+      />
+      <el-table-column
+        width="400"
+        align="center"
+        prop="distributorName"
+        label="经销商"
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="zoneName"
+        label="大区"
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="regionName"
+        label="区域"
+      />
+      <el-table-column
+        width="280"
+        align="center"
+        prop="displayItem"
+        label="Display Item"
+      >
         <template v-slot:header>
           <div>
             Display Item
-            <br>
+            <br />
             <span class="subTitle">KA+Brand+region+经销商+item</span>
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="planCost" label="V1计划费用(RMB)">
+      <el-table-column
+        width="280"
+        align="center"
+        prop="planCost"
+        label="V1计划费用(RMB)"
+      >
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
-            <br>
+            <br />
             <span class="subTitle">KA+Brand+region+经销商+item</span>
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="dept" label="费用归属部门" />
-      <el-table-column width="120" align="center" prop="cancelCost" label="费用核销方式" />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="dept"
+        label="费用归属部门"
+      />
+      <el-table-column
+        width="120"
+        align="center"
+        prop="cancelCost"
+        label="费用核销方式"
+      />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" 
-                    :page-sizes="[5, 10, 50, 100]" 
-                    :page-size="pageSize" 
-                    layout="total, sizes, prev, pager, next, jumper" 
-                    :total="total"
-                    @size-change="handleSizeChange" 
-                    @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -117,10 +272,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import {
-  FormateThousandNum,
-  getHeightHaveTab,
-} from '@/utils'
+import { FormateThousandNum, getHeightHaveTab } from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -139,8 +291,8 @@ export default {
         channelCode: '',
         distributorCode: '',
         displayItem: '',
-        regionCode:'',
-        zoneCode:'',
+        regionCode: '',
+        zoneCode: '',
       },
       monthList: [],
       RegionList: [],
@@ -151,7 +303,8 @@ export default {
       skuArr: [],
       customerArr: [],
       distributorArr: [],
-      largeAreaDialogList:[],
+      largeAreaDialogList: [],
+      displayItemList: [],
       submitBtn: 1,
       localDate: '',
       btnStatus: true,
@@ -175,31 +328,35 @@ export default {
     this.getSKU()
     this.getRegionList()
     this.getDistributorList()
+    this.DisolayItem()
   },
   methods: {
     // clearsmartplan
-    clearsmartplan(){
-      API.delsmartplanData().then(res=>{
-      })
+    clearsmartplan() {
+      API.delsmartplanData().then((res) => {})
     },
     // 获取smartplan数据
-    importsmartplan({yearAndMonth,channelCode}){
-      API.getsmartplanData({yearAndMonth,channelCode}).then(res=>{
+    importsmartplan({ yearAndMonth, channelCode }) {
+      API.getsmartplanData({ yearAndMonth, channelCode }).then((res) => {
         if (res.code === 1000) {
-           this.$message({
+          this.$message({
             message: res.message + ' !',
-            type: 'success'
-          });
+            type: 'success',
+          })
         }
       })
     },
     // 获取display item 数据
-    DisolayItem(){
-     
+    DisolayItem() {
+      selectAPI.DisplayItemList().then((res) => {
+        if (res.code === 1000) {
+          this.displayItemList = res.data
+        }
+      })
     },
     // 获取大区数据
-    getAreaList(){
-      selectAPI.getLargeAreaList({parentCode: ''}).then((res) => {
+    getAreaList() {
+      selectAPI.getLargeAreaList({ parentCode: '' }).then((res) => {
         if (res.code === 1000) {
           this.largeAreaDialogList = res.data
         }
@@ -263,9 +420,10 @@ export default {
         })
     },
     // 导出excel
-    exportExcelInfo({yearAndMonth,channelCode}) {
+    exportExcelInfo({ yearAndMonth, channelCode }) {
       API.excdisplayData({
-        yearAndMonth,channelCode
+        yearAndMonth,
+        channelCode,
       }).then((response) => {
         const fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1_查询.xlsx`
         //   res.data:请求到的二进制数据
@@ -307,20 +465,20 @@ export default {
       API.displayList({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        ...this.filterObj
+        ...this.filterObj,
       }).then((response) => {
-          if (response.data.records.length > 0) {
-            this.tableData = response.data.records
-            this.mainIdLocal = response.data.records[0].mainId
-            this.submitBtn = response.data.records[0].isSubmit
-            this.isCalculation = response.data.records[0].isCalculation
-            this.infoByMainId()
-          } else {
-            this.tableData = []
-            this.mainIdLocal = null
-          }
-          this.total = response.data.total
-        })
+        if (response.data.records.length > 0) {
+          this.tableData = response.data.records
+          this.mainIdLocal = response.data.records[0].mainId
+          this.submitBtn = response.data.records[0].isSubmit
+          this.isCalculation = response.data.records[0].isCalculation
+          this.infoByMainId()
+        } else {
+          this.tableData = []
+          this.mainIdLocal = null
+        }
+        this.total = response.data.total
+      })
     },
     // 通过与审批按钮控制
     infoByMainId() {
@@ -332,7 +490,7 @@ export default {
             if (
               res.data.version === 'V1' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.submitBtn === 0 
+              this.submitBtn === 0
             ) {
               this.btnStatus = true
             } else {
@@ -382,9 +540,11 @@ export default {
 </style>
 
 <style>
-.el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed{
-    border-right: 0 !important;
-    border-bottom: 0 !important;
+.el-table--border td,
+.el-table--border th,
+.el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+  border-right: 0 !important;
+  border-bottom: 0 !important;
 }
 .el-icon-my-down {
   background: url('~@/assets/images/downModel.png') no-repeat;
@@ -397,16 +557,16 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.el-icon-arrow-left:before{
-    content:'上一页';
+.el-icon-arrow-left:before {
+  content: '上一页';
 }
 .el-icon-arrow-right:before {
-    content: "下一页";
+  content: '下一页';
 }
-.OpertionBar{
-    flex: 1;
-    padding-right: 15px;
-    justify-content: flex-end;
+.OpertionBar {
+  flex: 1;
+  padding-right: 15px;
+  justify-content: flex-end;
 }
 ::v-deep.my-el-dialog .upload-demo {
   display: flex;

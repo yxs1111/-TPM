@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-11-18 15:04:46
  * @LastEditTime: 2022-06-13 16:26:42
  */
@@ -22,7 +22,7 @@ export default {
       url: this.url + '/downExcel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //下载模板
@@ -32,13 +32,13 @@ export default {
       url: this.url + '/downExcelTemplate',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //导入excel
   /**
    * 导入excel
-   * @param {params} params 
+   * @param {params} params
    * @returns request
    */
   importExcel(params) {
@@ -46,7 +46,7 @@ export default {
   },
   /**
    * 审批
-   * @returns 
+   * @returns
    */
   approve(params) {
     return requestApi.request_post(this.url + '/approve', params)
@@ -70,7 +70,7 @@ export default {
       url: this.ImportUrl + '/downExcel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //NU
@@ -84,7 +84,7 @@ export default {
       url: this.NUUrl + '/downExcel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //downExcel NU下载模板
@@ -94,12 +94,12 @@ export default {
       url: this.NUUrl + '/downExcelTemplate',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   /**
    * V2NU-导入excel
-   * @param {params} params 
+   * @param {params} params
    * @returns request
    */
   importNUExcel(params) {
@@ -111,7 +111,7 @@ export default {
   },
   /**
    * v2-NU审批
-   * @returns 
+   * @returns
    */
   approveNU(params) {
     return requestApi.request_post(this.NUUrl + '/approve', params)
@@ -127,7 +127,7 @@ export default {
       url: this.ImportNuUrl + '/downExcel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //v1数据异常项保存
@@ -135,7 +135,10 @@ export default {
     return requestApi.request_post(this.ImportNuUrl + '/save', params)
   },
   calculation(params) {
-    return requestApi.request_get('/cityplan/investCpVTwoDetail/toCalculation', params)
+    return requestApi.request_get(
+      '/cityplan/investCpVTwoDetail/toCalculation',
+      params
+    )
   },
   // display 查询列表
   displayList(params) {
@@ -155,7 +158,7 @@ export default {
       url: '/cityplan/investCpDisplayVTwoDetail/downExcel',
       method: 'post',
       data: data,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //display下载模板
@@ -164,7 +167,7 @@ export default {
       url: this.displayUrl + '/downExcelTemplate',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //display导入
@@ -181,16 +184,18 @@ export default {
       url: '/cityplan/investCpDisplayVTwoDetailEb/downExcel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //display保存
   save(params) {
-    return requestApi.request_post('/cityplan/investCpDisplayVTwoDetailEb/save', params)
+    return requestApi.request_post(
+      '/cityplan/investCpDisplayVTwoDetailEb/save',
+      params
+    )
   },
   //display提交、审批
   approve(params) {
     return requestApi.request_post(this.displayUrl + '/approve', params)
   },
 }
-
