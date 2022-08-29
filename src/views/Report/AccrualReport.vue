@@ -120,7 +120,7 @@ export default {
         month: this.filterObj.yearAndMonth,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        this.downloadFile(res, 'Accrual报表-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.downloadFile(res, '财务预提报表-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },

@@ -186,6 +186,14 @@ export default {
               },
             },
             {
+              name: 'Display',
+              path: '/costManagement/V3/V3Apply/V3Display',
+              img: {
+                dark: require('@/assets/images/tab/UnStraightGiving.png'),
+                light: require('@/assets/images/tab/UnStraightGiving_l.png')
+              }
+            },
+            {
               name: '补录',
               path: '/costManagement/V3/V3Apply/V3Collection',
               img: {

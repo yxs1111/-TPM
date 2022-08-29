@@ -133,7 +133,6 @@ export default function () {
                 activeMenu: '/costManagement/V3/V3Apply',
               },
             },
-
             {
               hidden: true,
               path: '/costManagement/V3/V3Apply/V3Collection',
@@ -142,6 +141,18 @@ export default function () {
               component: () => import('@/views/V3/V3Apply/V3Collection.vue'),
               meta: {
                 title: '补录',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3Display',
+              code: 'price_nka_v3_apply',
+              name: 'V3Display',
+              component: () => import('@/views/V3/V3Apply/V3ApplyDisplay.vue'),
+              meta: {
+                title: 'Display',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Apply',
               },
@@ -268,6 +279,19 @@ export default function () {
                 import('@/views/V3/V3Approval/V3POSMApproval.vue'),
               meta: {
                 title: 'POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3ApplyrovalDisplay',
+              code: 'price_nka_v3_approve',
+              name: 'V3ApplyrovalDisplay',
+              component: () =>
+                import('@/views/V3/V3Approval/V3ApplyrovalDisplay.vue'),
+              meta: {
+                title: 'Display',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },

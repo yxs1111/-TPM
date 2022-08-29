@@ -124,12 +124,26 @@ export default function () {
             },
             {
               hidden: true,
+
               path: '/costManagement/V1/V1Apply/V1POSM',
               code: 'price_nka_v1_apply',
               name: 'V1POSM',
               component: () => import('@/views/V1/V1Apply/V1POSM.vue'),
               meta: {
                 title: 'V1POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Apply/V1Display',
+              code: 'price_nka_v1_apply',
+              name: 'V1Display',
+              component: () => import('@/views/V1/V1Apply/V1ApplyDisplay.vue'),
+              meta: {
+                title: 'Display',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -247,12 +261,27 @@ export default function () {
             },
             {
               hidden: true,
+
               path: '/costManagement/V1/V1Approval/V1V1POSMApprove',
               code: 'price_nka_v1_approve',
-              name: 'V1V1POSMApprove',
+              name: 'V1POSMApprove',
               component: () => import('@/views/V1/V1Apply/V1POSM.vue'),
               meta: {
                 title: 'POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalDisplay',
+              code: 'price_nka_v1_approve',
+              name: 'V1ApplyrovalDisplay',
+              component: () =>
+                import('@/views/V1/V1Approval/V1ApplyrovalDisplay.vue'),
+              meta: {
+                title: 'Display',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },
@@ -262,6 +291,7 @@ export default function () {
       ],
     },
   ]
+
   if (showRouter([settings.stageKey])) {
     return []
   } else {

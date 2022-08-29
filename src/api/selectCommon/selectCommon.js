@@ -126,8 +126,16 @@ export default {
       params
     )
   },
+
   // 供应商信息
   getPageMdSupplier(params) {
     return requestApi.request_get('/mdm/mdSupplier/getPage', params)
+  },
+  // displayitem 下拉数据
+  DisplayItemList(params) {
+    return requestApi.request_get(
+      '/mdm/mdDisplayItem/getDisplayItemList',
+      params
+    )
   },
 }

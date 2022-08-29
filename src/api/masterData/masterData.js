@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-08-10 16:49:44
+ * @LastEditTime: 2022-08-29 11:58:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -722,6 +722,12 @@ export default {
     return requestApi.request_get("/mdm/mdDisplayItem/getCostItemList",params)
   },
   exportDisplayItem(params) {
+    return request({
+      url: '/mdm/mdDisplayItem/exportData',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
     return requestApi.request_get("/mdm/mdDisplayItem/exportData",params)
   },
 }

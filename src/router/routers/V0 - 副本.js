@@ -11,7 +11,7 @@ import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
 
-export default function() {
+export default function () {
   const cityPlan = [
     {
       path: '/costManagement/V0',
@@ -28,7 +28,7 @@ export default function() {
           component: () => import('@/views/V0/V0ApplyList.vue'),
           meta: { title: '申请', icon: 'apply' },
         },
-<<<<<<< HEAD
+
         {
           path: '/costManagement/V0/V0ApplyList',
           code: 'price_nka_v0_apply',
@@ -36,8 +36,7 @@ export default function() {
           component: () => import('@/views/V0/V0ApplyList.vue'),
           meta: { title: '申请new', icon: 'apply' },
         },
-=======
->>>>>>> 8b50447d1fb1610a176e646b44574a0e88be6d51
+
         {
           path: '/costManagement/V0/V0ApprovalList',
           code: 'price_nka_v0_approve',
@@ -45,7 +44,7 @@ export default function() {
           component: () => import('@/views/V0/V0ApprovalList.vue'),
           meta: { title: '审批', icon: 'approve' },
         },
-      ]
+      ],
     },
   ]
   if (showRouter([settings.stageKey])) {
