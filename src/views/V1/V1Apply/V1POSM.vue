@@ -36,7 +36,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
+          <el-select v-model="filterObj.customerCode"
                      clearable
                      filterable
                      placeholder="请选择">

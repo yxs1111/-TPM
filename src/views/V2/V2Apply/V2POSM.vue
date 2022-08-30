@@ -36,7 +36,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
+          <el-select v-model="filterObj.customerCode"
                      clearable
                      filterable
                      placeholder="请选择">
@@ -114,16 +114,14 @@
     </div>
     <div class="TpmButtonBGWrap"
          style="align-items: center;">
-      <!--  -->
+      <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="importData">
         <img src="@/assets/images/import.png"
              alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -575,16 +573,16 @@
                   <div slot="content"
                        v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'"
+                    <img v-if="row.systemJudgment=='Pass'"
                          src="@/assets/images/success.png"
                          alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1"
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
                          src="@/assets/images/warning.png"
                          alt="">
-                    <img v-if="row.judgmentType=='Error'"
+                    <img v-if="row.systemJudgment=='Error'"
                          src="@/assets/images/selectError.png"
                          alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
                   </div>
                 </el-tooltip>
               </template>
@@ -1103,7 +1101,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data
+          this.supplierArr = res.data.records
         }
       })
     },
@@ -1212,19 +1210,19 @@ export default {
           } else {
             this.$message.success(this.messageMap.importSuccess)
             let importList = response.data
-            // importList.forEach((item) => {
-            //   if (item.judgmentType == 'Error') {
-            //     item.sort = 1
-            //   } else if (item.judgmentType.indexOf('Exception') != -1) {
-            //     item.sort = 2
-            //   } else {
-            //     item.sort = 3
-            //   }
-            // })
-            // importList.sort((item, nextItem) => item.sort - nextItem.sort)
+            importList.forEach((item) => {
+              if (item.systemJudgment == 'Error') {
+                item.sort = 1
+              } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                item.sort = 2
+              } else {
+                item.sort = 3
+              }
+            })
+            importList.sort((item, nextItem) => item.sort - nextItem.sort)
             this.ImportData = importList
             let isError = this.ImportData.findIndex((item) => {
-              return item.judgmentType == 'Error'
+              return item.systemJudgment == 'Error'
             })
             this.isCheck = isError == -1 ? 1 : 0
             console.log(this.saveBtn)
@@ -1256,19 +1254,20 @@ export default {
           } else {
             this.$message.success(this.messageMap.checkSuccess)
             let checkList = response.data
-            // checkList.forEach((item) => {
-            //   if (item.judgmentType == 'Error') {
-            //     item.sort = 1
-            //   } else if (item.judgmentType.indexOf('Exception') != -1) {
-            //     item.sort = 2
-            //   } else {
-            //     item.sort = 3
-            //   }
-            // })
-            // let isError = checkList.findIndex((item) => {
-            //   return item.judgmentType == 'Error'
-            // })
-            // checkList.sort((item, nextItem) => item.sort - nextItem.sort)
+            checkList.forEach((item) => {
+              if (item.systemJudgment == 'Error') {
+                item.sort = 1
+              } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                item.sort = 2
+              } else {
+                item.sort = 3
+              }
+            })
+            let isError = checkList.findIndex((item) => {
+              return item.systemJudgment == 'Error'
+            })
+            console.log(isError, 'isError')
+            checkList.sort((item, nextItem) => item.sort - nextItem.sort)
             this.ImportData = checkList
             this.saveBtn = isError == -1 ? 1 : 0
             console.log(this.saveBtn)
@@ -1331,8 +1330,8 @@ export default {
     },
     approve() {
       if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
+        const systemJudgment = this.tableData[0].systemJudgment
+        if (systemJudgment != null) {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',

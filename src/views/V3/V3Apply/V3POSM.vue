@@ -36,7 +36,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
+          <el-select v-model="filterObj.customerCode"
                      clearable
                      filterable
                      placeholder="请选择">
@@ -1209,19 +1209,19 @@ export default {
           } else {
             this.$message.success(this.messageMap.importSuccess)
             let importList = response.data
-            // importList.forEach((item) => {
-            //   if (item.judgmentType == 'Error') {
-            //     item.sort = 1
-            //   } else if (item.judgmentType.indexOf('Exception') != -1) {
-            //     item.sort = 2
-            //   } else {
-            //     item.sort = 3
-            //   }
-            // })
-            // importList.sort((item, nextItem) => item.sort - nextItem.sort)
+            importList.forEach((item) => {
+              if (item.systemJudgment == 'Error') {
+                item.sort = 1
+              } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                item.sort = 2
+              } else {
+                item.sort = 3
+              }
+            })
+            importList.sort((item, nextItem) => item.sort - nextItem.sort)
             this.ImportData = importList
             let isError = this.ImportData.findIndex((item) => {
-              return item.judgmentType == 'Error'
+              return item.systemJudgment == 'Error'
             })
             this.isCheck = isError == -1 ? 1 : 0
           }
@@ -1252,19 +1252,19 @@ export default {
           } else {
             this.$message.success(this.messageMap.checkSuccess)
             let checkList = response.data
-            // checkList.forEach((item) => {
-            //   if (item.judgmentType == 'Error') {
-            //     item.sort = 1
-            //   } else if (item.judgmentType.indexOf('Exception') != -1) {
-            //     item.sort = 2
-            //   } else {
-            //     item.sort = 3
-            //   }
-            // })
-            // checkList.sort((item, nextItem) => item.sort - nextItem.sort)
+            checkList.forEach((item) => {
+              if (item.systemJudgment == 'Error') {
+                item.sort = 1
+              } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                item.sort = 2
+              } else {
+                item.sort = 3
+              }
+            })
+            checkList.sort((item, nextItem) => item.sort - nextItem.sort)
             this.ImportData = checkList
             let isError = this.ImportData.findIndex((item) => {
-              return item.judgmentType == 'Error'
+              return item.systemJudgment == 'Error'
             })
             this.saveBtn = isError == -1 ? 1 : 0
             console.log(this.saveBtn)
@@ -1327,8 +1327,8 @@ export default {
     },
     approve() {
       if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
+        const systemJudgment = this.tableData[0].systemJudgment
+        if (systemJudgment != null) {
           this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
