@@ -29,7 +29,13 @@ export default {
   },
   //保存 investCpPosmPipVThree/saveVThree
   saveV3Data(params) {
-    return requestApi.request_put(this.url + '/saveVThree', params)
+    // return request({
+    //   url: this.url + '/exportVThree',
+    //   method: 'post',
+    //   data: data,
+    //   responseType: 'blob',
+    // })
+    return requestApi.request_post(this.url + '/saveVThree', params)
   },
   //下载模板  investCpPosmPipVThree/downloadVThreeTemplate
   downloadTemplate(params) {
