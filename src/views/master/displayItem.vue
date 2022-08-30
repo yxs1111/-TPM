@@ -183,6 +183,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, getHeight, downloadFile } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import item from '@/layout/components/Sidebar/Item'
 export default {
   name: 'displayItem',
 
@@ -296,6 +297,7 @@ export default {
     editorRow(index, row) {
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
+        console.log('编辑', this.tableData[this.tempObj.rowIndex])
       }
       //存放临时数据，用于取消编辑时重置
       this.tempObj.rowIndex = index
@@ -304,20 +306,17 @@ export default {
       this.tableData.forEach((item) => {
         item.isEditor = 0
       })
-      // this.tableData[index].isEditor = 1
-      this.$forceUpdate()
       const code = this.minePackageList.filter(
         (item) => row.minePackage === item.name
       )[0].code
       this.getCostItemList(code)
       this.isEditor = index
       this.$forceUpdate()
-      console.log('点击编辑', row.costItem)
+      console.log('点击编辑',this.tempObj.tempInfo, row.minePackage, this.minePackageList)
     },
     CancelEditorRow(index) {
       this.isEditor = ''
       this.tableData[index] = this.tempObj.tempInfo
-      console.log('取消编辑')
     },
     handleSelectionChange(val) {
       this.checkArr = val
