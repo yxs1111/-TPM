@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2022-04-13 11:50:36
  * @LastEditTime: 2022-08-11 11:31:45
 -->
@@ -212,6 +212,11 @@ export default {
       isEditor: '',
       editorId: '',
       checkArr: [], //批量删除,存放选中
+      //取消编辑 --》数据重置（不保存）
+      tempObj: {
+        rowIndex: 0,
+        tempInfo: null,
+      },
       maxheight: getHeight(),
     }
   },
@@ -235,6 +240,7 @@ export default {
         pageSize: this.pageSize, //每页条数
         ...this.filterObj,
       }).then((response) => {
+        this.tempObj.tempInfo = null
         this.tableData = response.data.records
         this.total = response.data.total
       })
@@ -288,15 +294,30 @@ export default {
       })
     },
     editorRow(index, row) {
+      if (this.tempObj.tempInfo) {
+        this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
+      }
+      //存放临时数据，用于取消编辑时重置
+      this.tempObj.rowIndex = index
+      this.tempObj.tempInfo = { ...this.tableData[index] }
+      //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
+      this.tableData.forEach((item) => {
+        item.isEditor = 0
+      })
+      // this.tableData[index].isEditor = 1
+      this.$forceUpdate()
       const code = this.minePackageList.filter(
         (item) => row.minePackage === item.name
       )[0].code
       this.getCostItemList(code)
       this.isEditor = index
       this.$forceUpdate()
+      console.log('点击编辑', row.costItem)
     },
     CancelEditorRow(index) {
       this.isEditor = ''
+      this.tableData[index] = this.tempObj.tempInfo
+      console.log('取消编辑')
     },
     handleSelectionChange(val) {
       this.checkArr = val
