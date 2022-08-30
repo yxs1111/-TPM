@@ -6,18 +6,21 @@
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link
-        v-for="(item, index) in routerList"
-        :key="index"
-        :to="item.path"
-        tag="div"
-        class="tabli"
-        :class="index === currentIndex ? 'currentTabli' : ''"
-        @click.native="changeTab(index)"
-      >
-        <img v-if="index != currentIndex" :src="item.img.light" alt="">
-        <img v-if="index == currentIndex" :src="item.img.dark" alt="">
-        {{ item.name }}</router-link>
+      <router-link v-for="(item, index) in routerList"
+                   :key="index"
+                   :to="item.path"
+                   tag="div"
+                   class="tabli"
+                   :class="index === currentIndex ? 'currentTabli' : ''"
+                   @click.native="changeTab(index)">
+        <img v-if="index != currentIndex"
+             :src="item.img.light"
+             alt="">
+        <img v-if="index == currentIndex"
+             :src="item.img.dark"
+             alt="">
+        {{ item.name }}
+      </router-link>
     </div>
     <div style="height: calc(100vh - 0px);">
       <router-view />
@@ -73,8 +76,8 @@ export default {
         require('@/assets/images/tab/tab3_l.png'),
         require('@/assets/images/tab/tab1.png'),
         require('@/assets/images/tab/tab2.png'),
-        require('@/assets/images/tab/tab3.png')
-      ]
+        require('@/assets/images/tab/tab3.png'),
+      ],
     }
   },
   computed: {},
@@ -86,91 +89,101 @@ export default {
     queryMinePackageSelect() {
       let signP = 0
       let signN = 0
-      selectAPI.queryMinePackageSelect().then(res => {
-        res.data.forEach(element => {
-          if (element.costType === 'Price Promotion' && signP === 0) {
-            this.routerList.push({
-              name: '折扣项-价促',
-              path: '/costManagement/V3/V3Apply/V3discountDiscount',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
-            })
-            signP = 1
-          } else if (element.costType === 'New User' && signN === 0) {
-            this.routerList.push({
-              name: '折扣项-新客',
-              path: '/costManagement/V3/V3Apply/V3discountNU',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
-            })
-            signN = 1
-          }
-        })
-        if (this.routerList.length === 0 || res.data.length === 0) {
-          this.routerList = [
-            {
-              name: '折扣项-价促',
-              path: '/costManagement/V3/V3Apply/V3discountDiscount',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
-            },
-            {
-              name: '折扣项-新客',
-              path: '/costManagement/V3/V3Apply/V3discountNU',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+      selectAPI
+        .queryMinePackageSelect()
+        .then((res) => {
+          res.data.forEach((element) => {
+            if (element.costType === 'Price Promotion' && signP === 0) {
+              this.routerList.push({
+                name: '折扣项-价促',
+                path: '/costManagement/V3/V3Apply/V3discountDiscount',
+                img: {
+                  dark: require('@/assets/images/tab/tab2.png'),
+                  light: require('@/assets/images/tab/tab2_l.png'),
+                },
+              })
+              signP = 1
+            } else if (element.costType === 'New User' && signN === 0) {
+              this.routerList.push({
+                name: '折扣项-新客',
+                path: '/costManagement/V3/V3Apply/V3discountNU',
+                img: {
+                  dark: require('@/assets/images/tab/tab3.png'),
+                  light: require('@/assets/images/tab/tab3_l.png'),
+                },
+              })
+              signN = 1
             }
-          ]
-        }
-        this.routerList = [
+          })
+          if (this.routerList.length === 0 || res.data.length === 0) {
+            this.routerList = [
+              {
+                name: '折扣项-价促',
+                path: '/costManagement/V3/V3Apply/V3discountDiscount',
+                img: {
+                  dark: require('@/assets/images/tab/tab2.png'),
+                  light: require('@/assets/images/tab/tab2_l.png'),
+                },
+              },
+              {
+                name: '折扣项-新客',
+                path: '/costManagement/V3/V3Apply/V3discountNU',
+                img: {
+                  dark: require('@/assets/images/tab/tab3.png'),
+                  light: require('@/assets/images/tab/tab3_l.png'),
+                },
+              },
+            ]
+          }
+          this.routerList = [
             ...this.routerList,
             {
               name: '折扣项-HIH Rebate',
               path: '/costManagement/V3/V3Apply/V3HIHRebate',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
-                light: require('@/assets/images/tab/tab_HIH_l.png')
-              }
+                light: require('@/assets/images/tab/tab_HIH_l.png'),
+              },
             },
             {
               name: '折扣项-KA Rebate',
               path: '/costManagement/V3/V3Apply/V3KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
-                light: require('@/assets/images/tab/tab_KA_l.png')
-              }
+                light: require('@/assets/images/tab/tab_KA_l.png'),
+              },
             },
             {
               name: 'FMC',
               path: '/costManagement/V3/V3Apply/V3FMC',
               img: {
                 dark: require('@/assets/images/tab/tab_FMC.png'),
-                light: require('@/assets/images/tab/tab_FMC_l.png')
-              }
+                light: require('@/assets/images/tab/tab_FMC_l.png'),
+              },
             },
             {
               name: 'Roadshow',
               path: '/costManagement/V3/V3Apply/V3RoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab_RoadShow.png'),
-                light: require('@/assets/images/tab/tab_RoadShow_l.png')
-              }
+                light: require('@/assets/images/tab/tab_RoadShow_l.png'),
+              },
             },
             {
               name: 'Listing Fee',
               path: '/costManagement/V3/V3Apply/V3ListingFee',
               img: {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
-                light: require('@/assets/images/tab/tab_ListingFee_l.png')
-              }
+                light: require('@/assets/images/tab/tab_ListingFee_l.png'),
+              },
+            },
+            {
+              name: 'POSM-标准',
+              path: '/costManagement/V3/V3Apply/V3POSM',
+              img: {
+                dark: require('@/assets/images/tab/tab_POSM.png'),
+                light: require('@/assets/images/tab/tab_POSM_l.png'),
+              },
             },
             {
               name: 'Display',
@@ -185,32 +198,33 @@ export default {
               path: '/costManagement/V3/V3Apply/V3Collection',
               img: {
                 dark: require('@/assets/images/tab/tab_collection.png'),
-                light: require('@/assets/images/tab/tab_collection_l.png')
-              }
+                light: require('@/assets/images/tab/tab_collection_l.png'),
+              },
             },
           ]
-        if (sessionStorage.getItem('currentIndex')) {
-          this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
-        } else {
-          this.currentIndex = 0
-        }
-        if (!this.$route.query.channelCode) {
-          // 我的待办跳转
-          this.$router.push(this.routerList[this.currentIndex].path)
-        } else {
-          this.$router.push({
-            path: this.routerList[this.currentIndex].path,
-            query: { channelCode: this.$route.query.channelCode }
-          })
-        }
-      }).catch()
+          if (sessionStorage.getItem('currentIndex')) {
+            this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+          } else {
+            this.currentIndex = 0
+          }
+          if (!this.$route.query.channelCode) {
+            // 我的待办跳转
+            this.$router.push(this.routerList[this.currentIndex].path)
+          } else {
+            this.$router.push({
+              path: this.routerList[this.currentIndex].path,
+              query: { channelCode: this.$route.query.channelCode },
+            })
+          }
+        })
+        .catch()
     },
     // tabview 切换
     changeTab(index) {
       this.currentIndex = index
       sessionStorage.setItem('currentIndex', index)
-    }
-  }
+    },
+  },
 }
 </script>
 

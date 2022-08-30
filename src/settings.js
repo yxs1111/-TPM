@@ -1,5 +1,4 @@
 module.exports = {
-
   title: 'FrieslandCampina iInvest System',
 
   /**
@@ -35,6 +34,6 @@ module.exports = {
   // 生产环境
   prodKey: 'production',
   // 测试环境
-  stageKey: 'staging'
-
+  stageKey: 'staging',
+  'eslint.enable': false,
 }
