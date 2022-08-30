@@ -365,6 +365,7 @@ export default {
       this.getCustomerList()
     },
   },
+  created() {},
   mounted() {
     window.onresize = () => {
       return (() => {

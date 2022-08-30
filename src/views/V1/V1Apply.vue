@@ -173,14 +173,17 @@ export default {
                 dark: require('@/assets/images/tab/tab_POSM.png'),
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
               },
+              params: {
+                smartplan: true,
+              },
             },
             {
               name: 'Display',
               path: '/costManagement/V1/V1Apply/V1Display',
               img: {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
-                light: require('@/assets/images/tab/UnStraightGiving_l.png')
-              }
+                light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+              },
             },
           ]
           if (sessionStorage.getItem('currentIndex')) {

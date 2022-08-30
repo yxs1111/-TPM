@@ -43,35 +43,35 @@
             <el-option v-for="(item, index) in customerArr"
                        :key="index"
                        :label="item.customerCsName"
-                       :value="item.customerCode" />
+                       :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.customerCode"
+          <el-select v-model="filterObj.zoneName"
                      clearable
                      filterable
                      placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr"
+            <el-option v-for="(item, index) in zoneArr"
                        :key="index"
-                       :label="item.customerCsName"
-                       :value="item.customerCode" />
+                       :label="item.name"
+                       :value="item.name" />
           </el-select>
         </div>
-        <!-- 下拉数据接口未对接 -->
+
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.customerCode"
+          <el-select v-model="filterObj.regionName"
                      clearable
                      filterable
                      placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr"
+            <el-option v-for="(item, index) in regionArr"
                        :key="index"
-                       :label="item.customerCsName"
-                       :value="item.customerCode" />
+                       :label="item.name"
+                       :value="item.name" />
           </el-select>
         </div>
-        <!-- 下拉数据接口未对接 -->
+
         <div class="Selectli">
           <span class="SelectliTitle">POSM item:</span>
           <el-select v-model="filterObj.brandCode"
@@ -83,10 +83,17 @@
                        :label="item.brandName"
                        :value="item.brandName" />
           </el-select>
+          <!-- 下拉数据接口未对接 -->
         </div>
-        <!-- 下拉数据接口未对接 -->
+
       </div>
       <div class="OpertionBar">
+        <!-- <div class="TpmButtonBG"
+             @click="getSmartPlan">
+          <img src="@/assets/images/huoqu.png"
+               alt="">
+          <span class="text">获取Smart Plan数据</span>
+        </div> -->
         <el-button type="primary"
                    class="TpmButtonBG"
                    @click="search">查询</el-button>
@@ -133,40 +140,40 @@
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="costTypeName"
+                       prop="costType"
                        label="费用类型">
         <template v-slot:header>
           <div>费用类型<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costTypeName }}
+            {{ scope.row.costType }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="190"
                        align="center"
-                       prop="minePackageName"
+                       prop="minePackage"
                        label="Mine Package">
         <template v-slot:header>
           <div>Mine Package<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.minePackageName }}
+            {{ scope.row.minePackage }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="180"
                        align="center"
-                       prop="costItemName"
+                       prop="costItem"
                        label="费用科目">
         <template v-slot:header>
           <div>费用科目<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costItemName }}
+            {{ scope.row.costItem }}
           </div>
         </template>
       </el-table-column>
@@ -211,28 +218,28 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="brandName"
+                       prop="zoneName"
                        label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.brandName }}
+            {{ scope.row.zoneName }}
           </div>
         </template>
         <!-- 未对接接口,字段未改 -->
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="brandName"
+                       prop="regionName"
                        label="区域">
         <template v-slot:header>
           <div>区域<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.brandName }}
+            {{ scope.row.regionName }}
           </div>
         </template>
         <!-- 未对接接口,字段未改 -->
@@ -248,14 +255,14 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.brandName }}
+            {{ scope.row.posmItem }}
           </div>
         </template>
         <!-- 未对接接口,字段未改 -->
       </el-table-column>
       <el-table-column width="220"
                        align="right"
-                       prop="planCost"
+                       prop="voneCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
@@ -266,33 +273,33 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planCost) }}
+            {{ FormatNum(scope.row.voneCost) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costDeptName"
+                       prop="costAscriptionDept"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costDeptName }}
+            {{ scope.row.costAscriptionDept }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="payType"
+                       prop="costWriteoffMethod"
                        label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.payType }}
+            {{ scope.row.costWriteoffMethod }}
           </div>
         </template>
       </el-table-column>
@@ -332,17 +339,21 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        channelCode: '',
-        customerCode: '',
-        month: '',
-        brandCode: '',
+        zoneName: '', //大区
+        regionName: '', //区域
+
+        channelCode: '', //渠道
+        customerCode: '', //客户系统名称
+        month: '', //活动月
+        posmItem: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
       monthList: [],
       customerArr: [],
       tableData: [],
-      RegionList: [],
+      zoneArr: [],
+      regionArr: [],
       BrandList: [],
       maxheight: getHeightHaveTab(),
     }
@@ -354,6 +365,7 @@ export default {
       this.getCustomerList()
     },
   },
+  created() {},
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -363,6 +375,8 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getBrandList()
+    this.getzoneArr()
+    this.getregionArr()
   },
   methods: {
     // 获取表格数据
@@ -380,10 +394,12 @@ export default {
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerCode: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          brandCode: this.filterObj.brandCode,
-          yearAndMonth: this.filterObj.month,
+          customerName: this.filterObj.customerCode, //客户系统名称
+          channelName: this.filterObj.channelCode, //渠道
+          zoneName: this.filterObj.zoneName, //大区
+          regionName: this.filterObj.regionName, //区域
+          yearAndMonth: this.filterObj.month, //活动月
+          posmItem: this.filterObj.posmItem, //活动月
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -433,6 +449,56 @@ export default {
         }
       })
     },
+    //获取大区下拉
+    getzoneArr() {
+      selectAPI.getLargeAreaList({}).then((res) => {
+        if (res.code === 1000) {
+          this.zoneArr = res.data
+        }
+      })
+    },
+    //获取区域下拉
+    getregionArr() {
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.regionArr = res.data
+        }
+      })
+    },
+    getSmartPlan() {
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        this.$confirm('是否获取SmartPlan数据?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            API.getSmartplanData({
+              channelName: this.filterObj.channelCode,
+              yearAndMonth: this.filterObj.month,
+            }).then((res) => {
+              if (res.code === 1000) {
+                this.$message.success('成功获取SmartPlan数据')
+                this.getTableData()
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消',
+            })
+          })
+      }
+    },
     //千分位分隔符+两位小数
     FormatNum(num) {
       return FormateThousandNum(num)
@@ -445,14 +511,16 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportExcel({
-          customerCode: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          brandCode: this.filterObj.brandCode,
-          yearAndMonth: this.filterObj.month,
+          posmItem: this.filterObj.posmItem, //posmItem
+          customerName: this.filterObj.customerCode, //客户系统名称
+          channelName: this.filterObj.channelCode, //渠道
+          zoneName: this.filterObj.zoneName, //大区
+          regionName: this.filterObj.regionName, //区域
+          yearAndMonth: this.filterObj.month, //活动月
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_ListingFee_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_POSM_${this.filterObj.channelCode}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })

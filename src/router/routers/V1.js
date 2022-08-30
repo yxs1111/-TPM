@@ -134,6 +134,9 @@ export default function () {
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
+              params: {
+                smartplan: true,
+              },
             },
             {
               hidden: true,
@@ -265,11 +268,14 @@ export default function () {
               path: '/costManagement/V1/V1Approval/V1V1POSMApprove',
               code: 'price_nka_v1_approve',
               name: 'V1POSMApprove',
-              component: () => import('@/views/V1/V1Apply/V1POSM.vue'),
+              component: () => import('@/views/V1/V1Approval/V1POSM.vue'),
               meta: {
                 title: 'POSM',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
+              },
+              params: {
+                smartplan: false,
               },
             },
             {
