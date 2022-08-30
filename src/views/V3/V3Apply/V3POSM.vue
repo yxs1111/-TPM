@@ -1243,7 +1243,7 @@ export default {
     checkImport() {
       API.exceptionCheck({
         yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
+        channelName: this.filterObj.channelCode,
         isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
@@ -1278,7 +1278,7 @@ export default {
     confirmImport() {
       API.saveV3Data({
         yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
+        channelName: this.filterObj.channelCode,
         isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1295,7 +1295,7 @@ export default {
       if (this.ImportData.length) {
         API.exportV3Error({
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())

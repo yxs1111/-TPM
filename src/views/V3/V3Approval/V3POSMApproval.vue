@@ -1147,7 +1147,7 @@ export default {
       if (this.ImportData.length) {
         API.exportV3Error({
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
