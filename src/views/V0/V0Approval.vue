@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-03 14:17:00
  * @LastEditTime: 2022-05-07 14:24:28
 -->
@@ -297,9 +297,9 @@ export default {
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-          
-        } 
-        
+
+        }
+
       } else {
         API.getApproveList({
           yearAndMonth: this.filterObj.month,
