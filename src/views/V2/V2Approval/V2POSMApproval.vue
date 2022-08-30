@@ -1265,7 +1265,7 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: mainId, // 主表id
+                mainId: this.tableData[0].mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
                 isSubmit: 1, //申请0,审批1
               }).then((response) => {
