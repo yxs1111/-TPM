@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-08-10 09:31:00
+ * @LastEditTime: 2022-08-30 13:51:16
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -273,7 +273,7 @@ export default function () {
             {
               hidden: true,
               path: '/costManagement/V3/V3Approval/V3POSMApproval',
-              code: 'price_nka_v3_apply',
+              code: 'price_nka_v3_approve',
               name: 'V3POSMApproval',
               component: () =>
                 import('@/views/V3/V3Approval/V3POSMApproval.vue'),
