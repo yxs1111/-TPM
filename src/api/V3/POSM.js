@@ -29,12 +29,6 @@ export default {
   },
   //保存 investCpPosmPipVThree/saveVThree
   saveV3Data(params) {
-    // return request({
-    //   url: this.url + '/exportVThree',
-    //   method: 'post',
-    //   data: data,
-    //   responseType: 'blob',
-    // })
     return requestApi.request_post(this.url + '/saveVThree', params)
   },
   //下载模板  investCpPosmPipVThree/downloadVThreeTemplate
@@ -65,7 +59,7 @@ export default {
   },
   //提交
   approve(params) {
-    return requestApi.request_post(this.url + '/v3Approve', params)
+    return requestApi.request_post(this.url + '/approveVThree', params)
   },
   //获取审批
   getApproveList(params) {
