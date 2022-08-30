@@ -552,7 +552,18 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
+          <div class="seeData"
+               style="width: auto;">
+            <div class="exportError"
+                 @click="exportErrorList">
+              <img src="@/assets/exportError_icon.png"
+                   alt=""
+                   class="exportError_icon">
+              <span>导出错误信息</span>
+            </div>
+          </div>
         </div>
+
         <div class="tableWrap">
           <el-table border
                     height="400"
@@ -1130,6 +1141,22 @@ export default {
           this.zoneArr = res.data
         }
       })
+    },
+    // 导出异常信息
+    exportErrorList() {
+      if (this.ImportData.length) {
+        API.exportCheckData({
+          yearAndMonth: this.filterObj.month,
+          channelCode: this.filterObj.channelCode,
+          isSubmit: 0,
+        }).then((res) => {
+          const timestamp = Date.parse(new Date())
+          downloadFile(res, 'V3_POSM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success(this.messageMap.exportErrorSuccess)
+        })
+      } else {
+        this.$message.info('异常数据为空!')
+      }
     },
 
     //千分位分隔符+两位小数
