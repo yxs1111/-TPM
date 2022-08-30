@@ -1066,7 +1066,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version === 'POSM-V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -1200,7 +1200,7 @@ export default {
       formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', 1) //1申请0审批
       formData.append('isSubmit', 0)
-      API.fileImport(formData).then((response) => {
+      API.import(formData).then((response) => {
         //清除input的value ,上传一样的
         this.event.srcElement.value = '' // 置空
         if (response.code == 1000) {
@@ -1241,7 +1241,7 @@ export default {
     },
     // 校验数据
     checkImport() {
-      API.formatCheck({
+      API.exceptionCheck({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
         isSubmit: 0,
@@ -1276,7 +1276,7 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.importSave({
+      API.saveV3Data({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
         isSubmit: 0,
@@ -1293,7 +1293,7 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exportCheckData({
+        API.exportV3Error({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           isSubmit: 0,
@@ -1310,7 +1310,7 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportTemplateExcel({
+        API.downloadTemplate({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
           isSubmit: 0,

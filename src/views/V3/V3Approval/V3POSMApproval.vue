@@ -1069,7 +1069,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version === 'POSM-V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {
@@ -1145,7 +1145,7 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exportCheckData({
+        API.exportV3Error({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           isSubmit: 0,
@@ -1170,7 +1170,7 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportPageExcel({
+        API.exportV3({
           zoneName: this.filterObj.zoneName, //大区
           regionName: this.filterObj.regionName, //区域
           supplierName: this.filterObj.supplierName, //供应商
@@ -1216,7 +1216,7 @@ export default {
       formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', 0) //1申请0审批
       formData.append('isSubmit', 1)
-      API.fileImport(formData).then((response) => {
+      API.import(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
@@ -1279,7 +1279,7 @@ export default {
     downloadTemplate() {
       if (this.tableData.length) {
         // 导出数据筛选
-        API.exportTemplateExcel({
+        API.downloadTemplate({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
           isSubmit: 1,

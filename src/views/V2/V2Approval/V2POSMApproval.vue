@@ -1075,8 +1075,9 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.version === 'POSM-V2' &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.tableData[0].isSubmit
             ) {
               //本人可以提交
               this.isSubmit = false
