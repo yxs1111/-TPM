@@ -106,6 +106,14 @@ export default {
                 light: require('@/assets/images/tab/tab3_l.png')
               }
             },
+            {
+              name: 'Display',
+              path: '/master/ruleCtrl/model/splitRulesDisplay',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            }
           ]
         if (sessionStorage.getItem('currentIndex')) {
           this.currentIndex = Number(sessionStorage.getItem('currentIndex'))

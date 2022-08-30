@@ -946,7 +946,7 @@ export default {
         this.getDefaultRolePermissions(this.roleCode)
       })
     },
-    //获取Mine Package 权限  
+    //获取Mine Package 权限
     getMinePackage() {
       roleApi.getMinePackage().then((res) => {
         let list = res.data.mdCostTypeDTOList
