@@ -113,15 +113,14 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
+      <!--  :class="!isSubmit?'':'noClick'" -->
       <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
            @click="importData">
         <img src="@/assets/images/import.png"
              alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
            @click="approve(1)">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -1318,6 +1317,57 @@ export default {
       } else {
         this.$message.warning('数据不能为空')
       }
+    },
+    // 导出异常信息
+    exportErrorList() {
+      if (this.ImportData.length) {
+        API.exportCheckData({
+          yearAndMonth: this.filterObj.month,
+          channelName: this.filterObj.channelCode,
+          isSubmit: 0,
+        }).then((res) => {
+          const timestamp = Date.parse(new Date())
+          downloadFile(res, 'V3_POSM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success(this.messageMap.exportErrorSuccess)
+        })
+      } else {
+        this.$message.info('异常数据为空!')
+      }
+    },
+    // 校验数据
+    checkImport() {
+      API.formatCheck({
+        yearAndMonth: this.filterObj.month,
+        channelCode: this.filterObj.channelCode,
+        isSubmit: 0,
+      }).then((response) => {
+        if (response.code == 1000) {
+          if (!Array.isArray(response.data)) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.$message.success(this.messageMap.checkSuccess)
+            let checkList = response.data
+            checkList.forEach((item) => {
+              if (item.systemJudgment == 'Error') {
+                item.sort = 1
+              } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                item.sort = 2
+              } else {
+                item.sort = 3
+              }
+            })
+            checkList.sort((item, nextItem) => item.sort - nextItem.sort)
+            this.ImportData = checkList
+            let isError = this.ImportData.findIndex((item) => {
+              return item.systemJudgment == 'Error'
+            })
+            this.saveBtn = isError == -1 ? 1 : 0
+            console.log(this.saveBtn)
+          }
+        } else {
+          this.$message.info(this.messageMap.checkError)
+        }
+      })
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
