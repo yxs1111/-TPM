@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-03 14:17:00
  * @LastEditTime: 2022-08-01 13:59:03
 -->
@@ -48,93 +48,195 @@
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" label="序号" width="80" fixed>
+        <template v-slot:header>
+          <div>序号<br><span class="subTitle">-</span></div>
+        </template>
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
-      </el-table-column>
-      <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月" fixed></el-table-column>
-      <el-table-column align="center" width="180" prop="costTypeName" label="费用类型"></el-table-column>
-      <el-table-column align="center" width="180" prop="minePackageName" label="Mine Package"></el-table-column>
-      <el-table-column align="center" width="220" prop="costItemName" label="费用科目"></el-table-column>
-      <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
-      <el-table-column align="center" width="180" prop="dimCustomer" label="客户系统名称"></el-table-column>
-      <el-table-column align="center" width="120" prop="brandName" label="品牌"></el-table-column>
-      <el-table-column align="center" width="220" prop="dimProduct" label="SKU"></el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-        {{FormateNum(row.cptAveragePrice)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="cptVol" label="CPT总计销量">
-        {{FormateNum(row.cptVol)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="cptCostOne" label="CPT总计费用1(RMB)">
-        {{FormateNum(row.cptCostOne)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="cptCostTwo" label="CPT总计费用2(RMB)">
-        {{FormateNum(row.cptCostTwo)}}
-      </el-table-column>
-      <el-table-column align="center" width="100" prop="gearActivityLevel" label="活动级别">
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="gearPrice" label="价格档位(RMB/Tin)">
-        {{FormateNum(row.gearPrice)}}
-      </el-table-column>
-      <el-table-column align="right" width="250" prop="gearVolMix" label="档位销量占比-默认(%)">
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="gearActualNum" label="档位销量-默认(ctn)">
-        {{FormateNum(row.gearActualNum)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="gearCost" label="档位费用-默认(RMB)">
-        {{FormateNum(row.gearCost)}}
-      </el-table-column>
-      <el-table-column align="right" width="250" prop="adjustedVolMix" label="档位销量占比-调整后(%)">
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="adjustedVol" label="档位销量-调整后(ctn)">
-        {{FormateNum(row.adjustedVol)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="adjustedAveragePriceOne" label="均价1-调整后(RMB)">
-        {{FormateNum(row.adjustedAveragePriceOne)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="adjustedAveragePriceTwo" label="均价2-调整后(RMB)">
-        {{FormateNum(row.adjustedAveragePriceTwo)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="adjustedCostOne" label="费用1-调整后(RMB)">
-        {{FormateNum(row.adjustedCostOne)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="adjustedCostTwo" label="费用2-调整后(RMB)">
-        {{FormateNum(row.adjustedCostTwo)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="adjustedCostThree" label="费用3-调整后(RMB)">
-        {{FormateNum(row.adjustedCostThree)}}
-      </el-table-column>
-      <el-table-column align="center" width="250" prop="dept" label="费用归属部门">
-      </el-table-column>
-      <el-table-column align="right" width="250" prop="differenceAveragePrice" label="均价差值(%)">
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="differenceCostOne" label="费用差值1 (RMB)">
-        {{FormateNum(row.differenceCostOne)}}
-      </el-table-column>
-      <el-table-column align="right" v-slot={row} width="250" prop="differenceCostTwo" label="费用差值2 (RMB)">
-        {{FormateNum(row.differenceCostTwo)}}
-      </el-table-column>
-      <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
-        <template slot-scope="{row}">
-          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-            <div slot="content" v-html="getTip(row)">
-            </div>
-            <div class="statusWrap">
-              <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-              <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
-              <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
-              <span class="judgmentText">{{row.judgmentType}}</span>
-            </div>
-          </el-tooltip>
+        <template v-slot:header>
+          <div>CPID<br><span class="subTitle">-</span></div>
         </template>
       </el-table-column>
-      <el-table-column align="center" width="800" prop="judgmentContent" label="系统判定内容"></el-table-column>
-      <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注"></el-table-column>
-      <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见"></el-table-column>
-      <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见"></el-table-column>
+      <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月" fixed>
+        <template v-slot:header>
+          <div>活动月<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="180" prop="costTypeName" label="费用类型">
+        <template v-slot:header>
+          <div>费用类型<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="180" prop="minePackageName" label="Mine Package">
+        <template v-slot:header>
+          <div>Mine Package<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="220" prop="costItemName" label="费用科目">
+        <template v-slot:header>
+          <div>费用科目<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="120" prop="channelCode" label="渠道">
+        <template v-slot:header>
+          <div>渠道<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="180" prop="dimCustomer" label="客户系统名称">
+        <template v-slot:header>
+          <div>客户系统名称<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="120" prop="brandName" label="品牌">
+        <template v-slot:header>
+          <div>品牌<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="220" prop="dimProduct" label="SKU">
+        <template v-slot:header>
+          <div>SKU<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
+        <template v-slot:header>
+          <div>CPT均价(RMB/Tin)<br><span class="subTitle">渠道+SKU</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="cptVol" label="CPT总计销量">
+        <template v-slot:header>
+          <div>CPT总计销量<br><span class="subTitle">KA+SKU</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="cptCostOne" label="CPT总计费用1(RMB)">
+        <template v-slot:header>
+          <div>CPT总计费用1(RMB)<br><span class="subTitle">KA+SKU（EC及苏宁不参考）</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="cptCostTwo" label="CPT总计费用2(RMB)">
+        <template v-slot:header>
+          <div>CPT总计费用2(RMB)<br><span class="subTitle">KA</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="100" prop="gearActivityLevel" label="活动级别">
+        <template v-slot:header>
+          <div>活动级别<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="gearPrice" label="价格档位(RMB/Tin)">
+        <template v-slot:header>
+          <div>价格档位(RMB/Tin)<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="gearVolMix" label="档位销量占比-默认(%)">
+        <template v-slot:header>
+          <div>档位销量占比-默认(%)<br><span class="subTitle">KA+SKU+档位</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="gearActualNum" label="档位销量-默认(ctn)">
+        <template v-slot:header>
+          <div>档位销量-默认(ctn)<br><span class="subTitle">KA+SKU+档位</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="gearCost" label="档位费用-默认(RMB)">
+        <template v-slot:header>
+          <div>档位费用-默认(RMB)<br><span class="subTitle">KA+SKU+档位</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="adjustedVolMix" label="档位销量占比-调整后(%)">
+        <template v-slot:header>
+          <div>档位销量占比-调整后(%)<br><span class="subTitle">KA+SKU+档位</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="adjustedVol" label="档位销量-调整后(ctn)">
+        <template v-slot:header>
+          <div>档位销量-调整后(ctn)<br><span class="subTitle">KA+SKU+档位</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="adjustedAveragePriceOne" label="均价1-调整后(RMB)">
+        <template v-slot:header>
+          <div>均价1-调整后(RMB)<br><span class="subTitle">KA+SKU</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="adjustedAveragePriceTwo" label="均价2-调整后(RMB)">
+        <template v-slot:header>
+          <div>均价2-调整后(RMB)<br><span class="subTitle">渠道+SKU</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="adjustedCostOne" label="费用1-调整后(RMB)">
+        <template v-slot:header>
+          <div>费用1-调整后(RMB)<br><span class="subTitle">KA+SKU+档位（EC及苏宁不参考）</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="adjustedCostTwo" label="费用2-调整后(RMB)">
+        <template v-slot:header>
+          <div>费用2-调整后(RMB)<br><span class="subTitle">KA+SKU（EC及苏宁不参考）</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="adjustedCostThree" label="费用3-调整后(RMB)">
+        <template v-slot:header>
+          <div>费用3-调整后(RMB)<br><span class="subTitle">KA</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="250" prop="dept" label="费用归属部门">
+        <template v-slot:header>
+          <div>费用归属部门<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="differenceAveragePrice" label="均价差值(%)">
+        <template v-slot:header>
+          <div>均价差值(%)<br><span class="subTitle">渠道+SKU</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="differenceCostOne" label="费用差值1 (RMB)">
+        <template v-slot:header>
+          <div>费用差值1 (RMB)<br><span class="subTitle">KA+SKU（EC及苏宁不参考）</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="right" width="250" prop="differenceCostTwo" label="费用差值2 (RMB)">
+        <template v-slot:header>
+          <div>费用差值2 (RMB)<br><span class="subTitle">KA</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
+        <!--        <template slot-scope="{row}">-->
+        <!--          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">-->
+        <!--            <div slot="content" v-html="getTip(row)">-->
+        <!--            </div>-->
+        <!--            <div class="statusWrap">-->
+        <!--              <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">-->
+        <!--              <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">-->
+        <!--              <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">-->
+        <!--              <span class="judgmentText">{{row.judgmentType}}</span>-->
+        <!--            </div>-->
+        <!--          </el-tooltip>-->
+        <!--        </template>-->
+        <template v-slot:header>
+          <div>系统判定<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="850" prop="judgmentContent" label="系统判定内容">
+        <template v-slot:header>
+          <div>系统判定内容<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="250" prop="applyRemarks" label="申请人备注">
+        <template v-slot:header>
+          <div>申请人备注<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="250" prop="poApprovalComments" label="Package Owner审批意见">
+        <template v-slot:header>
+          <div>Package Owner审批意见<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" width="160" prop="finApprovalComments" label="Finance审批意见">
+        <template v-slot:header>
+          <div>Finance审批意见<br><span class="subTitle">-</span></div>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
