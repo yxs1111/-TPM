@@ -162,9 +162,13 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <el-dialog class="my-el-dialog" title="新增ContractItem" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
+    <el-dialog class="my-el-dialog" title="新增" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="el-form-row">
+          <el-form-item label="Mine Package" prop="contractItem">
+            <el-input v-model="ruleForm.contractItem" class="my-el-input" placeholder="请输入">
+            </el-input>
+          </el-form-item>
           <el-form-item label="Contract Item" prop="contractItem">
             <el-input v-model="ruleForm.contractItem" class="my-el-input" placeholder="请输入">
             </el-input>
