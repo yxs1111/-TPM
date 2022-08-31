@@ -569,7 +569,7 @@ export default {
       this.isChangeData = []
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: 'E',
+        minePackage: 'POSM',
         yearAndMonth: this.filterObj.date,
       })
         .then((response) => {
