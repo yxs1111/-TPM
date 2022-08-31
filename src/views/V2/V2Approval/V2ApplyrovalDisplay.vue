@@ -897,6 +897,7 @@ export default {
                     this.$message.success('提交成功')
                   } else {
                     this.$message.success('驳回成功')
+                    this.isSubmit = false
                   }
                   this.getTableData()
                 }
