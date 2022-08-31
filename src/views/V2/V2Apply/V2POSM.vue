@@ -115,15 +115,23 @@
     <div class="TpmButtonBGWrap"
          style="align-items: center;">
       <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
-      <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
-           @click="importData">
-        <img src="@/assets/images/import.png"
-             alt="">
+<!--      <div class="TpmButtonBG"-->
+<!--           :class="!isSubmit&&isSelf?'':'noClick'"-->
+<!--           @click="importData">-->
+<!--        <img src="@/assets/images/import.png"-->
+<!--             alt="">-->
+<!--        <span class="text">导入</span>-->
+<!--      </div>-->
+      <div
+        class="TpmButtonBG"
+        :class="isSubmit && isSelf ? '' : 'noClick'"
+        @click="importData"
+      >
+        <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
+           :class=" isSubmit && isSelf ?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -564,10 +572,14 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
-            <!-- <el-table-column prop="date"
+            <el-table-column width="180"
                              align="center"
+                             prop="systemJudgment"
                              label="是否通过"
-                             width="200">
+                             fixed>
+              <template v-slot:header>
+                <div>是否通过<br><span class="subTitle">-</span></div>
+              </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
                             placement="bottom"
@@ -589,16 +601,24 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400"
-                             align="center"
-                             prop="judgmentContent"
-                             label="验证信息">
-            </el-table-column> -->
+            <el-table-column align="center"
+                             width="330"
+                             prop="cpId"
+                             label="CPID"
+                             fixed>
+              <template v-slot:header>
+                <div>CPID<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.cpId }}
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
-                             label="系统判定"
-                             fixed>
+                             label="系统判定">
               <template v-slot:header>
                 <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
@@ -626,28 +646,13 @@
             <el-table-column width="270"
                              align="left"
                              prop="systemJudgmentContent"
-                             label="系统判定内容"
-                             fixed>
+                             label="系统判定内容">
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.systemJudgmentContent }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column align="center"
-                             width="330"
-                             prop="cpId"
-                             label="CPID"
-                             fixed>
-              <template v-slot:header>
-                <div>CPID<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.cpId }}
                 </div>
               </template>
             </el-table-column>
