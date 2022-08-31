@@ -74,14 +74,14 @@
 
         <div class="Selectli">
           <span class="SelectliTitle">POSM item:</span>
-          <el-select v-model="filterObj.brandCode"
+          <el-select v-model="filterObj.posmItem"
                      clearable
                      filterable
                      placeholder="请选择">
             <el-option v-for="(item, index) in BrandList"
                        :key="index"
-                       :label="item.brandName"
-                       :value="item.brandName" />
+                       :label="item.item"
+                       :value="item.item" />
           </el-select>
           <!-- 下拉数据接口未对接 -->
         </div>
@@ -443,7 +443,7 @@ export default {
         })
     },
     getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
+      selectAPI.getPosmItemList({}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
