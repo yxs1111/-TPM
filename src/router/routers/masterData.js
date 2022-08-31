@@ -489,6 +489,19 @@ export default function () {
                 },
                 {
                   hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesPOSM',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesPOSM',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesPOSM.vue'),
+                  meta: {
+                    title: 'POSM',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  }
+                },
+                {
+                  hidden: true,
                   path: '/master/ruleCtrl/model/splitRulesDisplay',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesDisplay',

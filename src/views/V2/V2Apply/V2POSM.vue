@@ -597,7 +597,8 @@
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
-                             label="系统判定">
+                             label="系统判定"
+                             fixed>
               <template v-slot:header>
                 <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
@@ -622,10 +623,11 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="270"
                              align="left"
                              prop="systemJudgmentContent"
-                             label="系统判定内容">
+                             label="系统判定内容"
+                             fixed>
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
@@ -636,9 +638,10 @@
               </template>
             </el-table-column>
             <el-table-column align="center"
-                             width="460"
+                             width="330"
                              prop="cpId"
-                             label="CPID">
+                             label="CPID"
+                             fixed>
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>

@@ -107,6 +107,14 @@ export default {
               }
             },
             {
+              name: 'POSM',
+              path: '/master/ruleCtrl/model/splitRulesPOSM',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
               name: 'Display',
               path: '/master/ruleCtrl/model/splitRulesDisplay',
               img: {
