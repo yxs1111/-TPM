@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2022-04-12 08:50:29
  * @LastEditTime: 2022-08-01 15:05:33
 -->
@@ -763,7 +763,7 @@ export default {
         console.log(AllTotalTableData)
         //variable + fix 汇总行
         if(VariableTotalTableData.length||FixedTotalTableData.length) {
-          if(VariableTotalTableData.length) { 
+          if(VariableTotalTableData.length) {
             AllTotalTableData[0].customerInfo.pointCount+=VariableTotalTableData[0].customerInfo.pointCount
             AllTotalTableData[0].customerInfo.taxPrice+=VariableTotalTableData[0].customerInfo.taxPrice
           } else {
@@ -1458,8 +1458,8 @@ export default {
       let { frieslandPointCount, targetSale, pointCount } =
         Obj.dealerList[dealerIndex]
       if (0 <= frieslandPointCount && frieslandPointCount <= pointCount) {
-        this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =Number(Number(pointCount)-Number(frieslandPointCount)).toFixed(2) 
-          // Number(pointCount).toFixed(2) - Number(frieslandPointCount).toFixed(2) 
+        this.AllTableData[index].dealerList[dealerIndex].dealerPointCount =Number(Number(pointCount)-Number(frieslandPointCount)).toFixed(2)
+          // Number(pointCount).toFixed(2) - Number(frieslandPointCount).toFixed(2)
         this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice =
           (Number(frieslandPointCount) * targetSale) / 100
         this.changeDealerPointCount(Obj, index, dealerIndex)

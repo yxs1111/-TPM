@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-16 14:01:16
  * @LastEditTime: 2022-08-25 14:27:36
 -->
@@ -764,7 +764,7 @@ export default {
     },
     //更改合同日期--匹配对应的客户合同
     changeContractDate(row) {
-      
+
     },
     //更改系统生效时间
     changeSystemTime(row) {
@@ -820,7 +820,7 @@ export default {
                 effectiveEndDate.slice(4) +
                 '-01',
             )
-          ) 
+          )
         })
         console.log(index);
         if (index == -1) {
@@ -834,7 +834,7 @@ export default {
           //   isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
           // }).then((res) => {
           //   if (res.code === 1000) {
-              
+
           //   }
           // })
         }

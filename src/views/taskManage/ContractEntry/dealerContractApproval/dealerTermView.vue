@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2022-04-12 08:50:29
  * @LastEditTime: 2022-08-30 16:47:29
 -->
@@ -9,6 +9,7 @@
       <div class="TpmButtonBG cancelButton" @click="cancelSubmit">
         <span class="text">取消</span>
       </div>
+      <div class="TpmPrompt">请注意，亮蓝色的数据，表明经销商分摊协议点数≠客户合同点数</div>
     </div>
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
@@ -159,7 +160,7 @@
                 </div>
               </el-table-column>
             </template>
-          </el-table-column> 
+          </el-table-column>
         </template>
       </el-table-column>
     </el-table>
@@ -630,7 +631,7 @@ export default {
         })
         //variable + fix 汇总行
         if(VariableTotalTableData.length||FixedTotalTableData.length) {
-          if(VariableTotalTableData.length) { 
+          if(VariableTotalTableData.length) {
             AllTotalTableData[0].customerInfo.pointCount+=VariableTotalTableData[0].customerInfo.pointCount
             AllTotalTableData[0].customerInfo.taxPrice+=VariableTotalTableData[0].customerInfo.taxPrice
           } else {
@@ -1210,5 +1211,9 @@ export default {
   .el-input--suffix {
     width: 80px !important;
   }
+}
+.TpmPrompt{
+  font-size: 15px;
+  margin-top: 8px;
 }
 </style>
