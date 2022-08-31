@@ -86,14 +86,14 @@
 
         <div class="Selectli">
           <span class="SelectliTitle">POSM item:</span>
-          <el-select v-model="filterObj.brandCode"
+          <el-select v-model="filterObj.posmItem"
                      clearable
                      filterable
                      placeholder="请选择">
             <el-option v-for="(item, index) in BrandList"
                        :key="index"
-                       :label="item.brandName"
-                       :value="item.brandName" />
+                       :label="item.item"
+                       :value="item.item" />
           </el-select>
           <!-- 下拉数据接口未对接 -->
         </div>
@@ -617,285 +617,255 @@
                   {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
-
-              <el-table-column align="center"
-                               width="460"
-                               prop="cpId"
-                               label="CPID"
-                               fixed>
-                <template v-slot:header>
-                  <div>CPID<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.cpId }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="120"
-                               align="center"
-                               prop="yearAndMonth"
-                               label="活动月">
-                <template v-slot:header>
-                  <div>活动月<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.yearAndMonth }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="120"
-                               align="center"
-                               prop="costType"
-                               label="费用类型">
-                <template v-slot:header>
-                  <div>费用类型<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.costType }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="190"
-                               align="center"
-                               prop="minePackage"
-                               label="Mine Package">
-                <template v-slot:header>
-                  <div>Mine Package<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.minePackage }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="180"
-                               align="center"
-                               prop="costItem"
-                               label="费用科目">
-                <template v-slot:header>
-                  <div>费用科目<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.costItem }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="120"
-                               align="center"
-                               prop="channelCode"
-                               label="渠道">
-                <template v-slot:header>
-                  <div>渠道<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.channelCode }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="center"
-                               prop="customerName"
-                               label="客户系统名称">
-                <template v-slot:header>
-                  <div>客户系统名称<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.customerName }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="center"
-                               prop="brandName"
-                               label="品牌">
-                <template v-slot:header>
-                  <div>品牌<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.brandName }}
-                  </div>
-                </template>
-              </el-table-column>
-              <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
-              <el-table-column width="220"
-                               align="center"
-                               prop="supplierName"
-                               label="供应商">
-                <template v-slot:header>
-                  <div>供应商<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.supplierName }}
-                  </div>
-                </template>
-                <!-- 数据未对接 -->
-              </el-table-column>
-              <!-- <el-table-column width="220"
-                       align="center"
-                       prop="zoneName"
-                       label="经销商">
-        <template v-slot:header>
-          <div>经销商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.zoneName }}
-          </div>
-        </template>
-      </el-table-column> -->
-              <el-table-column width="220"
-                               align="center"
-                               prop="zoneName"
-                               label="大区">
-                <template v-slot:header>
-                  <div>大区<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.zoneName }}
-                  </div>
-                </template>
-                <!-- 数据未对接 -->
-              </el-table-column>
-              <el-table-column width="220"
-                               align="center"
-                               prop="regionName"
-                               label="区域">
-                <template v-slot:header>
-                  <div>区域<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.regionName }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="right"
-                               prop="posmItem"
-                               label="POSM item">
-                <template v-slot:header>
-                  <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{  scope.row.posmItem }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="right"
-                               prop="voneCost"
-                               label="V1计划费用(RMB)">
-                <template v-slot:header>
-                  <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ formatNum(scope.row.voneCost) }}
-                  </div>
-                </template>
-              </el-table-column>
-
-              <el-table-column width="220"
-                               align="right"
-                               prop="vtwoCostAdjust"
-                               label="V2预估费用(RMB)">
-                <template v-slot:header>
-                  <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ formatNum(scope.row.vtwoCostAdjust) }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="right"
-                               prop="vthreeCostDefault"
-                               label="V3实际费用-默认（RMB）">
-                <template v-slot:header>
-                  <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ formatNum(scope.row.vthreeCostDefault) }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="right"
-                               prop="vthreeCostAdjust"
-                               label="V3实际费用-调整后(RMB)">
-                <template v-slot:header>
-                  <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ formatNum(scope.row.vthreeCostAdjust) }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="center"
-                               prop="costAscriptionDept"
-                               label="费用归属部门">
-                <template v-slot:header>
-                  <div>费用归属部门<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.costAscriptionDept }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="center"
-                               prop="costWriteoffMethod"
-                               label="费用核销方式">
-                <template v-slot:header>
-                  <div>费用核销方式<br><span class="subTitle">-</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.costWriteoffMethod }}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column width="220"
-                               align="right"
-                               prop="costDifference"
-                               label="费用差值(RMB)">
-                <template v-slot:header>
-                  <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
-                </template>
-                <template slot-scope="scope">
-                  <div>
-                    {{ formatNum(scope.row.costDifference) }}
-                  </div>
-                </template>
-              </el-table-column>
-
+            </el-table-column>
+            <el-table-column align="center"
+                             width="460"
+                             prop="cpId"
+                             label="CPID">
+              <template v-slot:header>
+                <div>CPID<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.cpId }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="120"
+                             align="center"
+                             prop="yearAndMonth"
+                             label="活动月">
+              <template v-slot:header>
+                <div>活动月<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.yearAndMonth }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="120"
+                             align="center"
+                             prop="costType"
+                             label="费用类型">
+              <template v-slot:header>
+                <div>费用类型<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.costType }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="190"
+                             align="center"
+                             prop="minePackage"
+                             label="Mine Package">
+              <template v-slot:header>
+                <div>Mine Package<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.minePackage }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="180"
+                             align="center"
+                             prop="costItem"
+                             label="费用科目">
+              <template v-slot:header>
+                <div>费用科目<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.costItem }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="120"
+                             align="center"
+                             prop="channelCode"
+                             label="渠道">
+              <template v-slot:header>
+                <div>渠道<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.channelCode }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="center"
+                             prop="customerName"
+                             label="客户系统名称">
+              <template v-slot:header>
+                <div>客户系统名称<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.customerName }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="center"
+                             prop="brandName"
+                             label="品牌">
+              <template v-slot:header>
+                <div>品牌<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.brandName }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="center"
+                             prop="supplierName"
+                             label="供应商">
+              <template v-slot:header>
+                <div>供应商<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.supplierName }}
+                </div>
+              </template>
+              <!-- 数据未对接 -->
+            </el-table-column>
+            <el-table-column width="220"
+                             align="center"
+                             prop="zoneName"
+                             label="大区">
+              <template v-slot:header>
+                <div>大区<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.zoneName }}
+                </div>
+              </template>
+              <!-- 数据未对接 -->
+            </el-table-column>
+            <el-table-column width="220"
+                             align="center"
+                             prop="regionName"
+                             label="区域">
+              <template v-slot:header>
+                <div>区域<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.regionName }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="right"
+                             prop="posmItem"
+                             label="POSM item">
+              <template v-slot:header>
+                <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{  scope.row.posmItem }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="right"
+                             prop="voneCost"
+                             label="V1计划费用(RMB)">
+              <template v-slot:header>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.voneCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="right"
+                             prop="vtwoCostAdjust"
+                             label="V2预估费用(RMB)">
+              <template v-slot:header>
+                <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.vtwoCostAdjust) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="right"
+                             prop="vthreeCostDefault"
+                             label="V3实际费用-默认（RMB）">
+              <template v-slot:header>
+                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.vthreeCostDefault) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="right"
+                             prop="vthreeCostAdjust"
+                             label="V3实际费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.vthreeCostAdjust) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="center"
+                             prop="costAscriptionDept"
+                             label="费用归属部门">
+              <template v-slot:header>
+                <div>费用归属部门<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.costAscriptionDept }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="center"
+                             prop="costWriteoffMethod"
+                             label="费用核销方式">
+              <template v-slot:header>
+                <div>费用核销方式<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.costWriteoffMethod }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220"
+                             align="right"
+                             prop="costDifference"
+                             label="费用差值(RMB)">
+              <template v-slot:header>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.costDifference) }}
+                </div>
+              </template>
             </el-table-column>
             <el-table-column width="120"
                              align="center"
@@ -1125,7 +1095,7 @@ export default {
       }
     },
     getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
+      selectAPI.getPosmItemList({}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }

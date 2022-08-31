@@ -138,4 +138,8 @@ export default {
       params
     )
   },
+  // posmitem 下拉数据 mdm/mdDisplayItem/getPosmItemList
+  getPosmItemList(params) {
+    return requestApi.request_get('/mdm/mdDisplayItem/getPosmItemList', params)
+  },
 }
