@@ -297,7 +297,6 @@ export default {
     editorRow(index, row) {
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
-        console.log('编辑', this.tableData[this.tempObj.rowIndex])
       }
       //存放临时数据，用于取消编辑时重置
       this.tempObj.rowIndex = index
@@ -312,7 +311,7 @@ export default {
       this.getCostItemList(code)
       this.isEditor = index
       this.$forceUpdate()
-      console.log('点击编辑',this.tempObj.tempInfo, row.minePackage, this.minePackageList)
+      console.log('点击编辑', this.tempObj.tempInfo, this.tempObj.rowIndex, this.minePackageList)
     },
     CancelEditorRow(index) {
       this.isEditor = ''

@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-09-16 09:36:50
  * @LastEditTime: 2022-06-14 15:32:28
  */
@@ -107,11 +107,11 @@ export default function() {
             },
           ]
         },
-        
-        
+
+
       ]
     },
-    
+
   ]
   if (showRouter([settings.stageKey])) {
     return []

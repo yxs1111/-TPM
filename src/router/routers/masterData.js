@@ -525,6 +525,15 @@ export default function () {
             import('@/views/master/contractItem/contractItem.vue'),
           meta: { title: 'Contract Item', icon: 'apply' },
         },
+        // 品牌拆分比例
+        {
+          path: '/brandsplitratio',
+          name: 'brandsplitratio',
+          code: 'ContractItem',
+          component: () =>
+            import('@/views/master/brandsplitratio/brandsplitratio.vue'),
+          meta: { title: '品牌拆分比例', icon: 'apply' },
+        },
         // displayItem
         {
           path: '/displayItem',
