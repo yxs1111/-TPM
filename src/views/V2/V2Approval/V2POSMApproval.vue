@@ -332,7 +332,7 @@
                        prop="voneCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -345,7 +345,7 @@
                        prop="vtwoCostDefault"
                        label="V2预估费用-默认(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -397,7 +397,7 @@
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -546,13 +546,13 @@
           </div>
           <div class="seeData"
                style="width: auto;">
-            <div class="exportError"
-                 @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png"
-                   alt=""
-                   class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
+<!--            <div class="exportError"-->
+<!--                 @click="exportErrorList">-->
+<!--              <img src="@/assets/exportError_icon.png"-->
+<!--                   alt=""-->
+<!--                   class="exportError_icon">-->
+<!--              <span>导出错误信息</span>-->
+<!--            </div>-->
           </div>
         </div>
         <div class="tableWrap">
@@ -830,7 +830,7 @@
                              prop="voneCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -843,7 +843,7 @@
                              prop="vtwoCostDefault"
                              label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -895,7 +895,7 @@
                              prop="costDifference"
                              label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
