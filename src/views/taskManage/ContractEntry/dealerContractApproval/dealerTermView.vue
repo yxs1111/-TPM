@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-08-01 15:02:29
+ * @LastEditTime: 2022-08-30 16:47:29
 -->
 <template>
   <div class="ContentDetail">
@@ -390,6 +390,7 @@ export default {
                         ? null
                         : Number(variableItem.payType), //支付方式
                     isEditor: 0,
+                    isException:variableItem.costRatio!=variableObj.customerInfo.pointCount?1:0
                   })
                 }
               })
@@ -1121,6 +1122,12 @@ export default {
       }
       if ((columnIndex - 6) % 11 == 0) {
         return 'background-color: #4192d3 !important;'
+      }
+      if(row.name.indexOf('Variable') !== -1&&columnIndex>6&&(columnIndex - 6) % 11 == 2) {
+        let distributorIndex=Math.floor((columnIndex-6)/11)
+        if(this.AllTableData[rowIndex].dealerList[distributorIndex].isException) {
+          return 'color: #5588ff !important;font-weight:600'
+        }
       }
     },
     HeadTable({ row, column, rowIndex, columnIndex }) {
