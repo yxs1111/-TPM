@@ -247,14 +247,14 @@ export default {
     //     // this.ruleForm.minePackageIndex = ''
     //     this.getMinePackageListDialog()
     //   }
-      
+
     // },
     'ruleForm.minePackageIndex'() {
       if (this.ruleForm.minePackageIndex!==''&&this.minePackageListDialog.length) {
         this.ruleForm.minePackage=this.minePackageListDialog[this.ruleForm.minePackageIndex].costType
         this.ruleForm.minePackageCode=this.minePackageListDialog[this.ruleForm.minePackageIndex].costTypeNumber
       }
-      
+
     },
   },
   computed: {},
@@ -358,7 +358,7 @@ export default {
             this.ruleForm.departmentName=res.data.departmentName.split(",")
             this.oldDepartmentName=res.data.departmentName.split(",")
           }
-          
+
         }
       })
     },
@@ -445,7 +445,7 @@ export default {
         this.ruleForm.zoneName=''
         this.getDepartment()
       }
-      
+
     },
     //提交form
     submitForm(formName) {
@@ -520,6 +520,7 @@ export default {
         minePackage: this.filterObj.minePackage,
         channelName: this.filterObj.channelCode,
         departmentName: this.filterObj.department,
+        state: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, 'Package&部门匹配关系 -' + timestamp + '.xlsx') //自定义Excel文件名
