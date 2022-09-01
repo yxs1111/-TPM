@@ -552,16 +552,16 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <div class="seeData"
-               style="width: auto;">
-            <div class="exportError"
-                 @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png"
-                   alt=""
-                   class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
-          </div>
+<!--          <div class="seeData"-->
+<!--               style="width: auto;">-->
+<!--            <div class="exportError"-->
+<!--                 @click="exportErrorList">-->
+<!--              <img src="@/assets/exportError_icon.png"-->
+<!--                   alt=""-->
+<!--                   class="exportError_icon">-->
+<!--              <span>导出错误信息</span>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
 
         <div class="tableWrap">
@@ -579,10 +579,12 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
+            <!--            是否通过-->
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
-                             label="是否通过">
+                             label="是否通过"
+                            fixed>
               <template v-slot:header>
                 <div>是否通过<br><span class="subTitle">-</span></div>
               </template>
@@ -607,19 +609,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
-                             align="left"
-                             prop="systemJudgmentContent"
-                             label="验证信息">
-              <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
-                </div>
-              </template>
-            </el-table-column>
+            <!--            CPID-->
             <el-table-column align="center"
                              width="460"
                              prop="cpId"
@@ -634,6 +624,21 @@
                 </div>
               </template>
             </el-table-column>
+            <!--            验证信息-->
+            <el-table-column width="400"
+                             align="left"
+                             prop="systemJudgmentContent"
+                             label="验证信息">
+              <template v-slot:header>
+                <div>验证信息<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.systemJudgmentContent }}
+                </div>
+              </template>
+            </el-table-column>
+            <!--            活动月-->
             <el-table-column width="120"
                              align="center"
                              prop="yearAndMonth"
@@ -644,6 +649,48 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.yearAndMonth }}
+                </div>
+              </template>
+            </el-table-column>
+            <!--            系统判定-->
+            <el-table-column width="180"
+                             align="center"
+                             prop="systemJudgment"
+                             label="系统判定">
+              <template v-slot:header>
+                <div>系统判定<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark"
+                            placement="bottom"
+                            popper-class="tooltip">
+                  <div slot="content"
+                       v-html="getTip(row)" />
+                  <div class="statusWrap">
+                    <img v-if="row.systemJudgment=='Pass'"
+                         src="@/assets/images/success.png"
+                         alt="">
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
+                         src="@/assets/images/warning.png"
+                         alt="">
+                    <img v-if="row.systemJudgment=='Error'"
+                         src="@/assets/images/selectError.png"
+                         alt="">
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column width="400"
+                             align="left"
+                             prop="systemJudgmentContent"
+                             label="系统判定内容">
+              <template v-slot:header>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </el-table-column>

@@ -421,15 +421,15 @@
             <div slot="content"
                  v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.systemJudgment=='Pass'"
-                   src="@/assets/images/success.png"
-                   alt="">
-              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                   src="@/assets/images/warning.png"
-                   alt="">
-              <img v-if="row.systemJudgment=='Error'"
-                   src="@/assets/images/selectError.png"
-                   alt="">
+<!--              <img v-if="row.systemJudgment=='Pass'"-->
+<!--                   src="@/assets/images/success.png"-->
+<!--                   alt="">-->
+<!--              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"-->
+<!--                   src="@/assets/images/warning.png"-->
+<!--                   alt="">-->
+<!--              <img v-if="row.systemJudgment=='Error'"-->
+<!--                   src="@/assets/images/selectError.png"-->
+<!--                   alt="">-->
               <span class="judgmentText">{{ row.systemJudgment }}</span>
             </div>
           </el-tooltip>

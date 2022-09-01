@@ -570,10 +570,15 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
-            <!-- <el-table-column prop="date"
+            <!--            是否通过-->
+            <el-table-column prop="date"
                              align="center"
                              label="是否通过"
-                             width="200">
+                             width="180"
+                              fixed>
+              <template v-slot:header>
+                <div>是否通过<br><span class="subTitle">-</span></div>
+              </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
                             placement="bottom"
@@ -595,11 +600,50 @@
                 </el-tooltip>
               </template>
             </el-table-column>
+            <!--            CPID-->
+            <el-table-column align="center"
+                             width="460"
+                             prop="cpId"
+                             label="CPID"
+                             fixed>
+              <template v-slot:header>
+                <div>CPID<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.cpId }}
+                </div>
+              </template>
+            </el-table-column>
+            <!--            验证信息-->
             <el-table-column width="400"
                              align="center"
                              prop="judgmentContent"
                              label="验证信息">
-            </el-table-column> -->
+              <template v-slot:header>
+                <div>验证信息<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.systemJudgmentContent }}
+                </div>
+              </template>
+            </el-table-column>
+            <!--            活动月-->
+            <el-table-column width="120"
+                             align="center"
+                             prop="yearAndMonth"
+                             label="活动月">
+              <template v-slot:header>
+                <div>活动月<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.yearAndMonth }}
+                </div>
+              </template>
+            </el-table-column>
+            <!--            系统判定-->
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
@@ -628,7 +672,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="400"
                              align="left"
                              prop="systemJudgmentContent"
                              label="系统判定内容">
@@ -638,32 +682,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.systemJudgmentContent }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column align="center"
-                             width="460"
-                             prop="cpId"
-                             label="CPID">
-              <template v-slot:header>
-                <div>CPID<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.cpId }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="120"
-                             align="center"
-                             prop="yearAndMonth"
-                             label="活动月">
-              <template v-slot:header>
-                <div>活动月<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.yearAndMonth }}
                 </div>
               </template>
             </el-table-column>
