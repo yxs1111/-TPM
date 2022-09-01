@@ -115,14 +115,14 @@
     <div class="TpmButtonBGWrap"
          style="align-items: center;">
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
+           :class="!isSubmit && isSelf?'':'noClick'"
            @click="importData">
         <img src="@/assets/images/import.png"
              alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
+           :class="!isSubmit && isSelf?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
