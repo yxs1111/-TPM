@@ -397,11 +397,8 @@ export default {
         })
     },
     // 导出excel
-    exportExcelInfo({ yearAndMonth, channelCode }) {
-      API.excdisplayData({
-        yearAndMonth,
-        channelCode,
-      }).then((response) => {
+    exportExcelInfo(filterObj) {
+      API.excdisplayData({ ...filterObj }).then((response) => {
         const fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1_查询.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
