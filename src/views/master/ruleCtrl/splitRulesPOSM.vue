@@ -376,7 +376,7 @@ export default {
     exportExcelInfo() {
       API.excportRuleSave({
         channelCode: this.filterObj.channel,
-        minePackage: 'E',
+        minePackage: 'POSM',
         yearAndMonth: this.filterObj.date,
       }).then((response) => {
         const fileName = '检验数据Excel' + new Date().getTime() + '.xlsx'

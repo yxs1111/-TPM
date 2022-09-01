@@ -498,7 +498,7 @@ export default function () {
                     title: 'POSM',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules',
-                  }
+                  },
                 },
                 {
                   hidden: true,

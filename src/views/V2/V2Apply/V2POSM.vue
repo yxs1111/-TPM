@@ -124,14 +124,14 @@
 <!--      </div>-->
       <div
         class="TpmButtonBG"
-        :class="isSubmit && isSelf ? '' : 'noClick'"
+        :class="!isSubmit && isSelf ? '' : 'noClick'"
         @click="importData"
       >
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class=" isSubmit && isSelf ?'':'noClick'"
+           :class=" !isSubmit && isSelf ?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -491,7 +491,7 @@
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum"
-                     :page-sizes="[5, 10, 50, 100]"
+                     :page-sizes="[100, 200, 500, 1000]"
                      :page-size="pageSize"
                      layout="total, sizes, prev, pager, next, jumper"
                      :total="total"
@@ -995,7 +995,7 @@ export default {
       BrandList: [],
 
       maxheight: getHeightHaveTab(),
-      isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSubmit: 0, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
       mainId: '',
       usernameLocal: '',
@@ -1044,7 +1044,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        this.isSubmit = 1
+        this.isSubmit = 0
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
