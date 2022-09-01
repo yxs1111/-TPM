@@ -36,26 +36,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr"
-                       :key="index"
-                       :label="item.customerCsName"
-                       :value="item.customerCsName" />
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in supplierArr"
-                       :key="index"
-                       :label="item.supplierName"
-                       :value="item.supplierName" />
+          <el-select v-model="filterObj.supplierName" filterable clearable placeholder="请选择">
+            <el-option v-for="item, index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -1000,7 +988,7 @@ export default {
         posmItem: '',
       },
       permissions: getDefaultPermissions(),
-      supplierArr: [], //供应商下拉
+      supplierList: [], //供应商下拉
       zoneArr: [], //大区下拉
       regionArr: [], //区域下拉
       monthList: [],
@@ -1043,7 +1031,8 @@ export default {
     this.getzoneArr()
     // this.getDistributorList()
     this.getRegionList()
-    this.getPageMdSupplier()
+    // this.getPageMdSupplier()
+    this.getSupplierList()
   },
   methods: {
     // 获取表格数据
@@ -1124,10 +1113,10 @@ export default {
         })
     },
     // 供应商
-    getPageMdSupplier() {
-      selectAPI.getPageMdSupplier({}).then((res) => {
+    getSupplierList() {
+      selectAPI.getSupplierList().then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data
+          this.supplierList = res.data
         }
       })
     },

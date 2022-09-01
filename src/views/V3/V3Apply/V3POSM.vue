@@ -440,7 +440,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="800"
+      <el-table-column width="270"
                        align="left"
                        prop="systemJudgmentContent"
                        label="系统判定内容">
@@ -580,7 +580,8 @@
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
-                             label="是否通过">
+                             label="是否通过"
+                             fixed>
               <template v-slot:header>
                 <div>是否通过<br><span class="subTitle">-</span></div>
               </template>
@@ -605,29 +606,58 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
-                             align="left"
-                             prop="systemJudgmentContent"
-                             label="验证信息">
-              <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
-                </div>
-              </template>
-            </el-table-column>
             <el-table-column align="center"
-                             width="460"
+                             width="330"
                              prop="cpId"
-                             label="CPID">
+                             label="CPID"
+                             fixed>
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.cpId }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="180"
+                             align="center"
+                             prop="systemJudgment"
+                             label="系统判定">
+              <template v-slot:header>
+                <div>系统判定<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark"
+                            placement="bottom"
+                            popper-class="tooltip">
+                  <div slot="content"
+                       v-html="getTip(row)" />
+                  <div class="statusWrap">
+                    <!--                    <img v-if="row.systemJudgment=='Pass'"-->
+                    <!--                         src="@/assets/images/success.png"-->
+                    <!--                         alt="">-->
+                    <!--                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"-->
+                    <!--                         src="@/assets/images/warning.png"-->
+                    <!--                         alt="">-->
+                    <!--                    <img v-if="row.systemJudgment=='Error'"-->
+                    <!--                         src="@/assets/images/selectError.png"-->
+                    <!--                         alt="">-->
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column width="270"
+                             align="left"
+                             prop="systemJudgmentContent"
+                             label="系统判定内容">
+              <template v-slot:header>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </el-table-column>
@@ -722,6 +752,19 @@
                 </div>
               </template>
             </el-table-column>
+            <!-- <el-table-column width="220"
+                       align="center"
+                       prop="supplierName"
+                       label="SKU">
+        <template v-slot:header>
+          <div>SKU<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.supplierName }}
+          </div>
+        </template>
+      </el-table-column> -->
             <el-table-column width="220"
                              align="center"
                              prop="supplierName"
@@ -736,6 +779,19 @@
               </template>
               <!-- 数据未对接 -->
             </el-table-column>
+            <!-- <el-table-column width="220"
+                       align="center"
+                       prop="zoneName"
+                       label="经销商">
+        <template v-slot:header>
+          <div>经销商<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.zoneName }}
+          </div>
+        </template>
+      </el-table-column> -->
             <el-table-column width="220"
                              align="center"
                              prop="zoneName"
@@ -781,7 +837,7 @@
                              prop="voneCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -791,10 +847,10 @@
             </el-table-column>
             <el-table-column width="220"
                              align="right"
-                             prop="vtwoCostAdjust"
-                             label="V2预估费用(RMB)">
+                             prop="vtwoCostDefault"
+                             label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -807,7 +863,7 @@
                              prop="vthreeCostDefault"
                              label="V3实际费用-默认（RMB）">
               <template v-slot:header>
-                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -818,9 +874,9 @@
             <el-table-column width="220"
                              align="right"
                              prop="vthreeCostAdjust"
-                             label="V3实际费用-调整后(RMB)">
+                             label="V3实际费用-调整后（RMB）">
               <template v-slot:header>
-                <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+                <div>V3实际费用-调整后（RMB）<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -867,6 +923,7 @@
                 </div>
               </template>
             </el-table-column>
+
             <el-table-column width="120"
                              align="center"
                              prop="applicantRemark"
