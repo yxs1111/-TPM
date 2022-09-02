@@ -36,7 +36,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
+          <el-select v-model="filterObj.customerCode"
                      clearable
                      filterable
                      placeholder="请选择">
@@ -1041,6 +1041,7 @@ export default {
     // this.getDistributorList()
     this.getRegionList()
     this.getPageMdSupplier()
+    this.getCustomerList()
   },
   methods: {
     // 获取表格数据
@@ -1122,7 +1123,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data
+          this.supplierArr = res.data.records
         }
       })
     },

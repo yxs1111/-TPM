@@ -640,7 +640,7 @@ export default {
     return {
       // 导入
       total: 0,
-      pageSize: 10,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
