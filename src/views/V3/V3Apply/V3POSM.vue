@@ -608,7 +608,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column align="center"
-                             width="330"
+                             width="600"
                               field="cpId"
                              title="CPID"
                               fixed="left">
@@ -1418,6 +1418,12 @@ export default {
 <style lang="scss" scoped>
 .tooltip {
   border-radius: 10px;
+}
+.statusWrap{
+  img{height: 25px;width: 25px;margin-right: 5px}
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 .Tip {
   text-align: center;

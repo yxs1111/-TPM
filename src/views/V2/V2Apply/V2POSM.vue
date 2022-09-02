@@ -145,7 +145,7 @@
               :row-class-name="tableRowClassName"
               style="width: 100%">
       <el-table-column align="center"
-                       width="460"
+                       width="600"
                        prop="cpId"
                        label="CPID"
                        fixed>
@@ -1404,6 +1404,12 @@ export default {
 <style lang="scss" scoped>
 .tooltip {
   border-radius: 10px;
+}
+.statusWrap{
+  img{height: 25px;width: 25px;margin-right: 5px}
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 .Tip {
   text-align: center;

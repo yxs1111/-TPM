@@ -1425,6 +1425,12 @@ export default {
 .tooltip {
   border-radius: 10px;
 }
+.statusWrap{
+  img{height: 25px;width: 25px;margin-right: 5px}
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
 .Tip {
   text-align: center;
   font-size: 14px;
