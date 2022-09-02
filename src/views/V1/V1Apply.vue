@@ -178,6 +178,17 @@ export default {
               },
             },
             {
+              name: 'ECM',
+              path: '/costManagement/V1/V1Apply/V1ECM',
+              img: {
+                dark: require('@/assets/images/tab/tab_ECM.png'),
+                light: require('@/assets/images/tab/tab_ECM_l.png'),
+              },
+              params: {
+                smartplan: true,
+              },
+            },
+            {
               name: 'Display',
               path: '/costManagement/V1/V1Apply/V1Display',
               img: {

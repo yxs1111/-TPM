@@ -137,6 +137,18 @@ export default function () {
             },
             {
               hidden: true,
+              path: '/costManagement/V2/V2Apply/V2ECM',
+              code: 'price_nka_v2_apply',
+              name: 'V2ECM',
+              component: () => import('@/views/V2/V2Apply/V2ECM.vue'),
+              meta: {
+                title: 'ECM',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
               path: '/costManagement/V2/V2Apply/V2Collection',
               code: 'price_nka_v2_apply',
               name: 'V2Collection',
@@ -279,6 +291,19 @@ export default function () {
                 import('@/views/V2/V2Approval/V2POSMApproval.vue'),
               meta: {
                 title: 'POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2ECMApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2ECMAApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2ECMApproval.vue'),
+              meta: {
+                title: 'ECM',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },

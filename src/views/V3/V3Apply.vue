@@ -186,12 +186,20 @@ export default {
               },
             },
             {
+              name: 'ECM',
+              path: '/costManagement/V3/V3Apply/V3ECM',
+              img: {
+                dark: require('@/assets/images/tab/tab_POSM.png'),
+                light: require('@/assets/images/tab/tab_POSM_l.png'),
+              },
+            },
+            {
               name: 'Display',
               path: '/costManagement/V3/V3Apply/V3Display',
               img: {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
-                light: require('@/assets/images/tab/UnStraightGiving_l.png')
-              }
+                light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+              },
             },
             {
               name: '补录',

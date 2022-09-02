@@ -185,13 +185,24 @@ export default {
 
             {
               name: 'POSM-标准',
-              path: '/costManagement/V1/V1Approval/V1V1POSMApprove',
+              path: '/costManagement/V1/V1Approval/V1POSMApprove',
               params: {
                 smartplan: false,
               },
               img: {
                 dark: require('@/assets/images/tab/tab_POSM.png'),
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
+              },
+            },
+            {
+              name: 'ECM',
+              path: '/costManagement/V1/V1Approval/V1ECM',
+              img: {
+                dark: require('@/assets/images/tab/tab_ECM.png'),
+                light: require('@/assets/images/tab/tab_ECM_l.png'),
+              },
+              params: {
+                smartplan: true,
               },
             },
             {

@@ -186,6 +186,14 @@ export default {
               },
             },
             {
+              name: 'ECM',
+              path: '/costManagement/V2/V2Apply/V2ECM',
+              img: {
+                dark: require('@/assets/images/tab/tab_POSM.png'),
+                light: require('@/assets/images/tab/tab_POSM_l.png'),
+              },
+            },
+            {
               name: 'Display',
               path: '/costManagement/V2/V2Apply/V2Display',
               img: {

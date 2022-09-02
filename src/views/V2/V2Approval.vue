@@ -186,12 +186,20 @@ export default {
               },
             },
             {
+              name: 'ECM',
+              path: '/costManagement/V2/V2Approval/V2ECMApproval',
+              img: {
+                dark: require('@/assets/images/tab/tab_POSM.png'),
+                light: require('@/assets/images/tab/tab_POSM_l.png'),
+              },
+            },
+            {
               name: 'Display',
               path: '/costManagement/V2/V2Approval/V2ApplyrovalDisplay',
               img: {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
-                light: require('@/assets/images/tab/UnStraightGiving_l.png')
-              }
+                light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+              },
             },
           ]
           if (sessionStorage.getItem('currentIndex')) {

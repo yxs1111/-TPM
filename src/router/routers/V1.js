@@ -141,6 +141,22 @@ export default function () {
             {
               hidden: true,
 
+              path: '/costManagement/V1/V1Apply/V1ECM',
+              code: 'price_nka_v1_apply',
+              name: 'V1ECM',
+              component: () => import('@/views/V1/V1Apply/V1ECM.vue'),
+              meta: {
+                title: 'V1ECM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+              params: {
+                smartplan: true,
+              },
+            },
+            {
+              hidden: true,
+
               path: '/costManagement/V1/V1Apply/V1Display',
               code: 'price_nka_v1_apply',
               name: 'V1Display',
@@ -265,12 +281,28 @@ export default function () {
             {
               hidden: true,
 
-              path: '/costManagement/V1/V1Approval/V1V1POSMApprove',
+              path: '/costManagement/V1/V1Approval/V1POSMApprove',
               code: 'price_nka_v1_approve',
               name: 'V1POSMApprove',
               component: () => import('@/views/V1/V1Approval/V1POSM.vue'),
               meta: {
                 title: 'POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+              params: {
+                smartplan: false,
+              },
+            },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Approval/V1ECMpprove',
+              code: 'price_nka_v1_approve',
+              name: 'V1ECMApprove',
+              component: () => import('@/views/V1/V1Approval/V1ECM.vue'),
+              meta: {
+                title: 'ECM',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },
