@@ -107,7 +107,7 @@ export default {
               }
             },
             {
-              name: 'POSM',
+              name: 'POSM_标准',
               path: '/master/ruleCtrl/model/splitRulesPOSM',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),

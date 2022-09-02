@@ -28,10 +28,12 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']"
-                       :key="item"
-                       :label="item"
-                       :value="item" />
+            <el-option
+              v-for="(item, index) in channelArr"
+              :key="index"
+              :label="item.channelEsName"
+              :value="item.channelCode"
+            />
           </el-select>
         </div>
         <div class="Selectli">
@@ -1009,7 +1011,7 @@ export default {
       monthList: [],
       customerArr: [],
       tableData: [],
-
+      channelArr: [],
       BrandList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
@@ -1046,6 +1048,7 @@ export default {
     // this.getDistributorList()
     this.getRegionList()
     this.getPageMdSupplier()
+    this.getChannel()
   },
   methods: {
     // 获取表格数据
@@ -1124,10 +1127,18 @@ export default {
         })
     },
     // 供应商
-      getPageMdSupplier() {
+    getPageMdSupplier() {
       selectAPI.getPageMdSupplier({}).then((res) => {
         if (res.code === 1000) {
           this.supplierArr = res.data.records
+        }
+      })
+    },
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+          this.getCustomerList(this.filterObj.channelCode)
         }
       })
     },
