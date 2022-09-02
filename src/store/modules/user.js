@@ -91,7 +91,29 @@ const actions = {
       })
     })
   },
-
+  loginOtherSystem({ commit, dispatch }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      user
+        .login({ username, password, model:'noCaptcha' })
+        .then((response) => {
+          console.log(response)
+          if (response.code == 1000) {
+            const { data } = response
+            initUserInfo(data)
+            // console.log('****authuser*****', auth.getLoginNameCheck())
+            localStorage.setItem('usernameLocal', auth.getLoginNameCheck())
+            resetRouter()
+            resolve()
+            dispatch('app/hideBreadcrumb', {}, { root: true }) // 登录之后进首页,默认首页面包屑隐藏
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(error)
+        })
+    })
+  },
   // wx login
   WXlogin({ dispatch }, formdata) {
     const localParams = formdata

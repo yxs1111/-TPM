@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-02 11:13:37
- * @LastEditTime: 2021-12-03 14:42:17
+ * @LastEditTime: 2022-09-02 10:39:43
  */
 import router from './router'
 import store from './store'
@@ -20,7 +20,12 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   // set page title
   document.title = 'FrieslandCampina iInvest System'
-
+  //门户登录
+  if(to.query.loginInfo&&!sessionStorage.getItem('isFirstEntrySystem')) {
+    let {username,password}=JSON.parse(to.query.loginInfo)
+    await store.dispatch('user/loginOtherSystem', {username,password})
+    sessionStorage.setItem('isFirstEntrySystem',1)
+  }
   // determine whether the user has logged in
   const hasToken = auth.getToken()
   if (hasToken) {
@@ -39,6 +44,7 @@ router.beforeEach(async(to, from, next) => {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           const { roles } = auth.getUserInfo()
+          console.log("setMenu");
           const menus = await getAndSetMenu()
           const info = {}
           info.roles = roles
