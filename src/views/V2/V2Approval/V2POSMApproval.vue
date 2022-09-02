@@ -28,10 +28,12 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']"
-                       :key="item"
-                       :label="item"
-                       :value="item" />
+            <el-option
+              v-for="(item, index) in channelArr"
+              :key="index"
+              :label="item.channelEsName"
+              :value="item.channelCode"
+            />
           </el-select>
         </div>
         <div class="Selectli">
@@ -588,6 +590,21 @@
                 </el-tooltip>
               </template>
             </el-table-column>
+            <!--            验证信息-->
+            <el-table-column width="400"
+                             align="center"
+                             prop="judgmentContent"
+                             label="验证信息"
+                              fixed>
+              <template v-slot:header>
+                <div>验证信息<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.systemJudgmentContent }}
+                </div>
+              </template>
+            </el-table-column>
             <!--            CPID-->
             <el-table-column align="center"
                              width="460"
@@ -600,20 +617,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.cpId }}
-                </div>
-              </template>
-            </el-table-column>
-            <!--            验证信息-->
-            <el-table-column width="400"
-                             align="center"
-                             prop="judgmentContent"
-                             label="验证信息">
-              <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </el-table-column>
@@ -994,7 +997,7 @@ export default {
       monthList: [],
       customerArr: [],
       tableData: [],
-
+      channelArr: [],
       BrandList: [],
 
       maxheight: getHeightHaveTab(),
@@ -1033,6 +1036,7 @@ export default {
     this.getRegionList()
     // this.getPageMdSupplier()
     this.getSupplierList()
+    this.getChannel()
   },
   methods: {
     // 获取表格数据
@@ -1117,6 +1121,15 @@ export default {
       selectAPI.getSupplierList().then((res) => {
         if (res.code === 1000) {
           this.supplierList = res.data
+        }
+      })
+    },
+    // 获取下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+          this.getCustomerList(this.filterObj.channelCode)
         }
       })
     },

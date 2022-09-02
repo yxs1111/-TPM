@@ -577,6 +577,7 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
+            <!--            是否通过-->
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
