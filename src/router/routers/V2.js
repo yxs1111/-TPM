@@ -290,7 +290,7 @@ export default function () {
               component: () =>
                 import('@/views/V2/V2Approval/V2POSMApproval.vue'),
               meta: {
-                title: 'POSM',
+                title: 'POSM—标准',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },

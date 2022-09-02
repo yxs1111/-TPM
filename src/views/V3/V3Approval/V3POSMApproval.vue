@@ -28,15 +28,17 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']"
-                       :key="item"
-                       :label="item"
-                       :value="item" />
+            <el-option
+              v-for="(item, index) in channelArr"
+              :key="index"
+              :label="item.channelEsName"
+              :value="item.channelCode"
+            />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
+          <el-select v-model="filterObj.customerCode"
                      clearable
                      filterable
                      placeholder="请选择">
@@ -331,7 +333,7 @@
                        prop="voneCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -358,7 +360,7 @@
                        prop="vthreeCostDefault"
                        label="V3实际费用-默认（RMB）">
         <template v-slot:header>
-          <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -410,7 +412,7 @@
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -552,16 +554,16 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <div class="seeData"
-               style="width: auto;">
-            <div class="exportError"
-                 @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png"
-                   alt=""
-                   class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
-          </div>
+<!--          <div class="seeData"-->
+<!--               style="width: auto;">-->
+<!--            <div class="exportError"-->
+<!--                 @click="exportErrorList">-->
+<!--              <img src="@/assets/exportError_icon.png"-->
+<!--                   alt=""-->
+<!--                   class="exportError_icon">-->
+<!--              <span>导出错误信息</span>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
 
         <div class="tableWrap">
@@ -579,10 +581,12 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
+            <!--            是否通过-->
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
-                             label="是否通过">
+                             label="是否通过"
+                            fixed>
               <template v-slot:header>
                 <div>是否通过<br><span class="subTitle">-</span></div>
               </template>
@@ -607,10 +611,12 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <!--            验证信息-->
+            <el-table-column width="400"
                              align="left"
                              prop="systemJudgmentContent"
-                             label="验证信息">
+                             label="验证信息"
+                              fixed>
               <template v-slot:header>
                 <div>验证信息<br><span class="subTitle">-</span></div>
               </template>
@@ -620,6 +626,7 @@
                 </div>
               </template>
             </el-table-column>
+            <!--            CPID-->
             <el-table-column align="center"
                              width="460"
                              prop="cpId"
@@ -634,6 +641,7 @@
                 </div>
               </template>
             </el-table-column>
+            <!--            活动月-->
             <el-table-column width="120"
                              align="center"
                              prop="yearAndMonth"
@@ -644,6 +652,48 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.yearAndMonth }}
+                </div>
+              </template>
+            </el-table-column>
+            <!--            系统判定-->
+            <el-table-column width="180"
+                             align="center"
+                             prop="systemJudgment"
+                             label="系统判定">
+              <template v-slot:header>
+                <div>系统判定<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark"
+                            placement="bottom"
+                            popper-class="tooltip">
+                  <div slot="content"
+                       v-html="getTip(row)" />
+                  <div class="statusWrap">
+                    <img v-if="row.systemJudgment=='Pass'"
+                         src="@/assets/images/success.png"
+                         alt="">
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
+                         src="@/assets/images/warning.png"
+                         alt="">
+                    <img v-if="row.systemJudgment=='Error'"
+                         src="@/assets/images/selectError.png"
+                         alt="">
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column width="400"
+                             align="left"
+                             prop="systemJudgmentContent"
+                             label="系统判定内容">
+              <template v-slot:header>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </el-table-column>
@@ -784,7 +834,7 @@
                              prop="voneCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -811,7 +861,7 @@
                              prop="vthreeCostDefault"
                              label="V3实际费用-默认（RMB）">
               <template v-slot:header>
-                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -863,7 +913,7 @@
                              prop="costDifference"
                              label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -956,6 +1006,7 @@ export default {
       monthList: [],
       customerArr: [],
       tableData: [],
+      channelArr: [],
 
       BrandList: [],
       maxheight: getHeightHaveTab(),
@@ -994,6 +1045,8 @@ export default {
     // this.getDistributorList()
     this.getRegionList()
     this.getPageMdSupplier()
+    this.getCustomerList()
+    this.getChannel()
   },
   methods: {
     // 获取表格数据
@@ -1075,7 +1128,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data
+          this.supplierArr = res.data.records
         }
       })
     },
@@ -1103,6 +1156,15 @@ export default {
       selectAPI.getPosmItemList({}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
+        }
+      })
+    },
+    // 获取下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+          this.getCustomerList(this.filterObj.channelCode)
         }
       })
     },

@@ -115,15 +115,23 @@
     <div class="TpmButtonBGWrap"
          style="align-items: center;">
       <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
-      <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
-           @click="importData">
-        <img src="@/assets/images/import.png"
-             alt="">
+<!--      <div class="TpmButtonBG"-->
+<!--           :class="!isSubmit&&isSelf?'':'noClick'"-->
+<!--           @click="importData">-->
+<!--        <img src="@/assets/images/import.png"-->
+<!--             alt="">-->
+<!--        <span class="text">导入</span>-->
+<!--      </div>-->
+      <div
+        class="TpmButtonBG"
+        :class="!isSubmit && isSelf ? '' : 'noClick'"
+        @click="importData"
+      >
+        <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
+           :class=" !isSubmit && isSelf ?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -326,7 +334,7 @@
                        prop="voneCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -339,7 +347,7 @@
                        prop="vtwoCostDefault"
                        label="V2预估费用-默认(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -391,7 +399,7 @@
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -413,15 +421,15 @@
             <div slot="content"
                  v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.systemJudgment=='Pass'"
-                   src="@/assets/images/success.png"
-                   alt="">
-              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                   src="@/assets/images/warning.png"
-                   alt="">
-              <img v-if="row.systemJudgment=='Error'"
-                   src="@/assets/images/selectError.png"
-                   alt="">
+<!--              <img v-if="row.systemJudgment=='Pass'"-->
+<!--                   src="@/assets/images/success.png"-->
+<!--                   alt="">-->
+<!--              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"-->
+<!--                   src="@/assets/images/warning.png"-->
+<!--                   alt="">-->
+<!--              <img v-if="row.systemJudgment=='Error'"-->
+<!--                   src="@/assets/images/selectError.png"-->
+<!--                   alt="">-->
               <span class="judgmentText">{{ row.systemJudgment }}</span>
             </div>
           </el-tooltip>
@@ -483,7 +491,7 @@
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum"
-                     :page-sizes="[5, 10, 50, 100]"
+                     :page-sizes="[100, 200, 500, 1000]"
                      :page-size="pageSize"
                      layout="total, sizes, prev, pager, next, jumper"
                      :total="total"
@@ -564,10 +572,14 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
-            <!-- <el-table-column prop="date"
+            <el-table-column width="180"
                              align="center"
+                             prop="systemJudgment"
                              label="是否通过"
-                             width="200">
+                             fixed>
+              <template v-slot:header>
+                <div>是否通过<br><span class="subTitle">-</span></div>
+              </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
                             placement="bottom"
@@ -589,11 +601,20 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400"
-                             align="center"
-                             prop="judgmentContent"
-                             label="验证信息">
-            </el-table-column> -->
+            <el-table-column align="center"
+                             width="330"
+                             prop="cpId"
+                             label="CPID"
+                             fixed>
+              <template v-slot:header>
+                <div>CPID<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.cpId }}
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column width="180"
                              align="center"
                              prop="systemJudgment"
@@ -608,21 +629,21 @@
                   <div slot="content"
                        v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
+<!--                    <img v-if="row.systemJudgment=='Pass'"-->
+<!--                         src="@/assets/images/success.png"-->
+<!--                         alt="">-->
+<!--                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"-->
+<!--                         src="@/assets/images/warning.png"-->
+<!--                         alt="">-->
+<!--                    <img v-if="row.systemJudgment=='Error'"-->
+<!--                         src="@/assets/images/selectError.png"-->
+<!--                         alt="">-->
                     <span class="judgmentText">{{ row.systemJudgment }}</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="270"
                              align="left"
                              prop="systemJudgmentContent"
                              label="系统判定内容">
@@ -632,19 +653,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.systemJudgmentContent }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column align="center"
-                             width="460"
-                             prop="cpId"
-                             label="CPID">
-              <template v-slot:header>
-                <div>CPID<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.cpId }}
                 </div>
               </template>
             </el-table-column>
@@ -824,7 +832,7 @@
                              prop="voneCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -837,7 +845,7 @@
                              prop="vtwoCostDefault"
                              label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -889,7 +897,7 @@
                              prop="costDifference"
                              label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -987,7 +995,7 @@ export default {
       BrandList: [],
 
       maxheight: getHeightHaveTab(),
-      isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSubmit: 0, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
       mainId: '',
       usernameLocal: '',
@@ -1036,7 +1044,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        this.isSubmit = 1
+        this.isSubmit = 0
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
@@ -1304,7 +1312,7 @@ export default {
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V3_POSM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_POSM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {

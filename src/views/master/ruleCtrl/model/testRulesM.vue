@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-10 10:22:56
+ * @LastEditTime: 2022-09-01 11:03:54
 -->
 <template>
   <div>
@@ -107,6 +107,14 @@ export default {
               }
             },
             {
+              name: 'POSM',
+              path: '/master/ruleCtrl/model/splitRulesPOSM',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png')
+              }
+            },
+            {
               name: 'Display',
               path: '/master/ruleCtrl/model/splitRulesDisplay',
               img: {
@@ -138,7 +146,7 @@ export default {
   display: flex;
   margin-left: 25px;
   .tabli {
-    padding: 0 52px;
+    padding: 0 20px;
     height: 36px;
     background: #FFF;
     border-radius: 6px 6px 0px 0px;

@@ -258,7 +258,7 @@
     <div class="TpmPaginationWrap">
       <el-pagination
         :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
+        :page-sizes="[100, 200, 500, 1000]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -283,7 +283,7 @@ export default {
   data() {
     return {
       total: 0,
-      pageSize: 10,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         yearAndMonth: '',
@@ -420,12 +420,9 @@ export default {
         })
     },
     // 导出excel
-    exportExcelInfo({ yearAndMonth, channelCode }) {
-      API.excdisplayData({
-        yearAndMonth,
-        channelCode,
-      }).then((response) => {
-        const fileName = `${this.localDate}_Price_${this.filterObj.channelCode}_V1_查询.xlsx`
+    exportExcelInfo(filterObj) {
+      API.excdisplayData({ ...filterObj }).then((response) => {
+        const fileName = `${this.filterObj.yearAndMonth}_display_${this.filterObj.channelCode}_V1_查询.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
