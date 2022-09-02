@@ -52,20 +52,6 @@ import Layout from '@/layout/index'
  */
 export const constantRoutes = [
   ...common,
-  ...cost(),
-  ...ContractManagement(),
-  ...Report(),
-  ...taskManage(),
-  ...masterData(),
-  ...system(),
-  ...activiti(),
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
   // ...cost(),
   // ...ContractManagement(),
   // ...Report(),
@@ -73,7 +59,21 @@ export const asyncRoutes = [
   // ...masterData(),
   // ...system(),
   // ...activiti(),
-  // ...meta,
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+  ...cost(),
+  ...ContractManagement(),
+  ...Report(),
+  ...taskManage(),
+  ...masterData(),
+  ...system(),
+  ...activiti(),
+  ...meta,
   ...base,
   // 404 page must be placed at the end !!!
   {
