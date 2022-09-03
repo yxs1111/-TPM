@@ -191,11 +191,13 @@
       >
       </el-table-column>
       <el-table-column
+        v-slot="{ row }"
         align="center"
         width="200"
         prop="updateDate"
         label="更新时间"
       >
+        {{ row.updateDate ? row.updateDate.replace('T', ' ') : '' }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
