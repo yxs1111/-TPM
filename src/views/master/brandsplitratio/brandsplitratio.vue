@@ -175,11 +175,13 @@
       >
       </el-table-column>
       <el-table-column
+        v-slot="{ row }"
         align="center"
         width="200"
         prop="createDate"
         label="创建时间"
       >
+        {{ row.createDate ? row.createDate.replace('T', ' ') : '' }}
       </el-table-column>
       <el-table-column
         align="center"
@@ -364,6 +366,13 @@ export default {
       },
       rules: {
         minePackage: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        costItem: [
           {
             required: true,
             message: 'This field is required',
