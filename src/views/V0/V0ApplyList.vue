@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-08-01 13:58:49
+ * @LastEditTime: 2022-09-05 11:33:10
 -->
 <template>
   <div class="V0ApplyList">
@@ -252,7 +252,7 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
           <el-form-item label="Mine package">
             <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-              <el-option v-for="item,index in ['Price Promotion','New User','KA Contract','ListingFee']" :key="index" :label="item" :value="item" />
+              <el-option v-for="item,index in ['Price Promotion','New User','KA Contract','Listing Fee']" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
           <el-form-item label="Scenario" prop="dimScenario">
@@ -810,7 +810,7 @@ export default {
             case 'KA Contract':
               url = API.getContractData
               break
-            case 'ListingFee':
+            case 'Listing Fee':
               url = API.getListingFee
               break
           }
