@@ -1185,7 +1185,7 @@ export default {
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V3_POSM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V3_POSM-标准_异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {

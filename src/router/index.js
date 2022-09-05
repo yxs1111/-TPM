@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-10-14 13:22:15
  * @LastEditTime: 2022-08-10 17:35:16
  */
@@ -24,7 +24,7 @@ import V3 from '@/router/routers/V3'
 import masterData from '@/router/routers/masterData'
 import Report from '@/router/routers/Report'
 import taskManage from '@/router/routers/taskManage'
-import store from "@/store";
+import store from '@/store'
 import Layout from '@/layout/index'
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -51,17 +51,14 @@ import Layout from '@/layout/index'
  * all roles can be accessed
  */
 export const constantRoutes = [
-   ...common,
-  // ...V0(),
-  // ...V1(),
-  // ...V2(),
-  // ...V3(),
+  ...common,
+  // ...cost(),
+  // ...ContractManagement(),
   // ...Report(),
   // ...taskManage(),
   // ...masterData(),
   // ...system(),
   // ...activiti(),
-  
 ]
 
 /**
@@ -76,19 +73,26 @@ export const asyncRoutes = [
   ...masterData(),
   ...system(),
   ...activiti(),
-  // ...meta,
+  ...meta,
   ...base,
   // 404 page must be placed at the end !!!
-  { path: '*', code: '404', redirect: '/dashboard', meta: { title: '首页', icon: 'dashboard' }, hidden: true }
+  {
+    path: '*',
+    code: '404',
+    redirect: '/dashboard',
+    meta: { title: '首页', icon: 'dashboard' },
+    hidden: true,
+  },
   // { path: '*', code: '404', redirect: '/404', meta: {}, hidden: true }
 ]
 
-const createRouter = () => new Router({
-  base: process.env.VUE_APP_BASE_PATH,
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    base: process.env.VUE_APP_BASE_PATH,
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes,
+  })
 
 const router = createRouter()
 
@@ -97,10 +101,10 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
-router.beforeEach((to,from,next)=>{
-  if(to.name=='Dashboard'||from.name=='Dashboard'){
-    store.commit('app/CHANGE_HOMEPATH',to.name)
+router.beforeEach((to, from, next) => {
+  if (to.name == 'Dashboard' || from.name == 'Dashboard') {
+    store.commit('app/CHANGE_HOMEPATH', to.name)
   }
-  next();
+  next()
 })
 export default router

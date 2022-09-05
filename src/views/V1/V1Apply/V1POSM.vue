@@ -28,10 +28,12 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']"
-                       :key="item"
-                       :label="item"
-                       :value="item" />
+            <el-option
+              v-for="(item, index) in channelArr"
+              :key="index"
+              :label="item.channelEsName"
+              :value="item.channelCode"
+            />
           </el-select>
         </div>
         <div class="Selectli">
