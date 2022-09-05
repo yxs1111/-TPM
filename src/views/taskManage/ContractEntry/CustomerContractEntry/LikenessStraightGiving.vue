@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-08-25 14:27:21
+ * @LastEditTime: 2022-09-05 10:44:50
 -->
 <template>
   <div class="MainContent">
@@ -159,7 +159,7 @@
               {{ contractList[scope.row.contractState] }}
             </div>
             <div class="timeOutWrap">
-              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
+              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual"  v-model="scope.row.isPopoverShow">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
                     <span>调整系统生效时间</span>
@@ -172,10 +172,10 @@
                   </div>
                   <div class="PopoverContentFoot">
                     <div class="TpmButtonBG" @click="popoverSubmit(scope.$index,scope.row)">保存</div>
-                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id)">取消</div>
+                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id,scope.$index)">取消</div>
                   </div>
                 </div>
-                <svg-icon :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
+                <svg-icon @click="popoverShow(scope.row.id,scope.$index)" :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
               </el-popover>
             </div>
           </div>
@@ -736,6 +736,7 @@ export default {
         list.forEach((item) => {
           item.isEditor = 0
           item.isNewData = 0
+          item.isPopoverShow = false
           if(item.contractState==='2') {
             item.isRefused=1
           } else {
@@ -873,6 +874,7 @@ export default {
         createDate: '',
         updateBy: '',
         updateDate: '',
+        isPopoverShow: false,  //定时任务弹窗显示
         isEditor: 1, //是否 处于编辑状态
         isNewData: 1, //是否 是新增的数据
         isTimeout: '',
@@ -1268,6 +1270,7 @@ export default {
         createDate: row.createDate,
         updateBy: row.updateBy,
         updateDate: row.updateDate,
+        isPopoverShow: false,  //定时任务弹窗显示
         isEditor: 1, //是否 处于编辑状态
         isNewData: 2, //是否 是新增的数据 0否，1新增，2 copy
         isTimeout: '',
@@ -1384,7 +1387,7 @@ export default {
         }).then((res) => {
           if (res.code === 1000) {
             this.$message.success('调整成功')
-            this.popoverCancel(row.id)
+            this.popoverCancel(row.id,index)
             this.getTableData()
           }
         })
@@ -1401,7 +1404,7 @@ export default {
         }).then((res) => {
           if (res.code === 1000) {
             this.$message.success('调整成功')
-            this.popoverCancel(row.id)
+            this.popoverCancel(row.id,index)
             this.getTableData()
           }
         })
@@ -1410,10 +1413,34 @@ export default {
     dateCompare(expireDate,contractEndDate) {
       return new Date((expireDate).slice(0, 4),Number((expireDate).slice(4)),0).getTime()>new Date(contractEndDate).getTime()
     },
+    popoverShow(id,index) {
+      if (
+        this.tableData[index].contractStateName == '草稿' ||
+        this.tableData[index].contractStateName == '待审批' ||
+        this.tableData[index].contractStateName == '过期' ||
+        this.tableData[index].contractStateName == '终止'
+      ) {
+        this.$message.info(
+          '只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！'
+        )
+        return
+      }
+      //避免同时出现多个el-popover
+      for (const key in this.$refs) {
+        if (key.indexOf('popover-') !== -1) {
+            this.$refs[key].doClose();
+        }
+      }
+      this.tableData[index].isPopoverShow=true
+      //解决fixed 固定列之后 el-popover多个问题
+      let key='popover-'+id
+      this.$nextTick(() => { 
+        document.getElementById(this.$refs[key].$refs.popper.id).style.display = 'none' }
+      )
+    },
     //定时任务取消
-    popoverCancel(id) {
-      this.$refs[`popover-` + id].doClose()
-      this.tableKey++
+    popoverCancel(id,index) {
+      this.tableData[index].isPopoverShow=false
     },
     //条款明细--弹窗展示
     showTermsDetail(index) {
