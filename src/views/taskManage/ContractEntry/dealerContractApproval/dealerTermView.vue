@@ -9,7 +9,7 @@
       <div class="TpmButtonBG cancelButton" @click="cancelSubmit">
         <span class="text">取消</span>
       </div>
-      <div class="TpmPrompt">请注意！亮蓝色的数据，表明经销商分摊协议点数≠客户合同点数</div>
+      <div class="TpmPrompt">请注意：亮蓝色的数据，表明经销商分摊协议点数≠客户合同点数</div>
     </div>
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
