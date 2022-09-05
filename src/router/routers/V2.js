@@ -180,7 +180,7 @@ export default function () {
               meta: {
                 title: 'Premium',
                 icon: 'form',
-                activeMenu: '/costManagement/V2/V2Premium',
+                activeMenu: '/costManagement/V2/V2Apply',
               },
             },
           ],
@@ -329,6 +329,19 @@ export default function () {
                 import('@/views/V2/V2Approval/V2ApplyrovalDisplay.vue'),
               meta: {
                 title: 'Display',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2PremiumApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2PremiumApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2PremiumApproval.vue'),
+              meta: {
+                title: 'Premium',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },

@@ -196,6 +196,17 @@ export default {
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
               },
             },
+            {
+              name: 'Premium',
+              path: '/costManagement/V1/V1Apply/V1Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              params: {
+                smartplan: true,
+              },
+            },
           ]
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
