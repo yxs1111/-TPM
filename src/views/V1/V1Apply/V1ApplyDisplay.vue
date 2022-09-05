@@ -118,7 +118,7 @@
           </el-select>
         </div>
         <div class="OpertionBar">
-          <div class="TpmButtonBG" @click="importsmartplan(filterObj)">
+          <div class="TpmButtonBG" @click="importsmartplan(filterObj)" v-permission="permissions['getCPT']">
             <img src="../../../assets/images/import.png" alt="" />
             <span class="text">获取smartplan数据</span>
           </div>
@@ -272,7 +272,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { FormateThousandNum, getHeightHaveTab } from '@/utils'
+import { FormateThousandNum, getHeightHaveTab,getDefaultPermissions, } from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -311,6 +311,7 @@ export default {
       usernameLocal: '',
       isCalculation: false,
       maxheight: getHeightHaveTab(),
+      permissions: getDefaultPermissions(),
     }
   },
   computed: {},
