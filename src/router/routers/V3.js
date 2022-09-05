@@ -169,6 +169,18 @@ export default function () {
                 activeMenu: '/costManagement/V3/V3Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3Premium',
+              code: 'price_nka_v3_apply',
+              name: 'V3Premium',
+              component: () => import('@/views/V3/V3Apply/V3Premium.vue'),
+              meta: {
+                title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
           ],
         },
         {
@@ -317,6 +329,19 @@ export default function () {
                 import('@/views/V3/V3Approval/V3ApplyrovalDisplay.vue'),
               meta: {
                 title: 'Display',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3PremiumApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3PremiumApproval',
+              component: () =>
+                import('@/views/V3/V3Approval/V3PremiumApproval.vue'),
+              meta: {
+                title: 'Premium',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },

@@ -209,6 +209,14 @@ export default {
                 light: require('@/assets/images/tab/tab_collection_l.png'),
               },
             },
+            {
+              name: 'Premium',
+              path: '/costManagement/V3/V3Apply/V3Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+            },
           ]
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))

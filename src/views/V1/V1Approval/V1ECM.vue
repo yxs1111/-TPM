@@ -330,7 +330,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/ECM'
 export default {
-  name: 'V1POSM',
+  name: 'V1ECM',
   directives: { elDragDialog, permission },
 
   data() {

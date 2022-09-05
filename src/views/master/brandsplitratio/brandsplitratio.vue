@@ -137,16 +137,16 @@
         label="Cost Item"
       >
       </el-table-column>
-      <el-table-column align="center" prop="gold" label="Gold%">
+      <el-table-column align="center" prop="gold" width="120" label="Gold(%)">
       </el-table-column>
       <el-table-column
         align="center"
         width="120"
         prop="prestige"
-        label="Prestige%"
+        label="Prestige(%)"
       >
       </el-table-column>
-      <el-table-column align="center" width="120" prop="novas" label="Novas%">
+      <el-table-column align="center" width="120" prop="novas" label="Novas(%)">
       </el-table-column>
       <el-table-column
         align="center"

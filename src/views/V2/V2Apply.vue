@@ -209,14 +209,14 @@ export default {
                 light: require('@/assets/images/tab/tab_collection_l.png'),
               },
             },
-            // {
-            //   name: 'Premium',
-            //   path: '/costManagement/V2/V2Apply/V2Premium',
-            //   img: {
-            //     dark: require('@/assets/images/tab/StraightGiving.png'),
-            //     light: require('@/assets/images/tab/StraightGiving_l.png'),
-            //   },
-            // },
+            {
+              name: 'Premium',
+              path: '/costManagement/V2/V2Apply/V2Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+            },
           ]
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))

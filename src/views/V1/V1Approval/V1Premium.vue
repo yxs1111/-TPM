@@ -952,7 +952,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/POSM'
 export default {
-  name: 'V2Premium',
+  name: 'V1Premium',
   directives: { elDragDialog, permission },
 
   data() {
