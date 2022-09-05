@@ -171,6 +171,18 @@ export default function () {
                 activeMenu: '/costManagement/V2/V2Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Premium',
+              code: 'price_nka_v2_apply',
+              name: 'V2Premium',
+              component: () => import('@/views/V2/V2Apply/V2Premium.vue'),
+              meta: {
+                title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Premium',
+              },
+            },
           ],
         },
         {

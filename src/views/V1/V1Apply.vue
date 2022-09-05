@@ -237,10 +237,10 @@ export default {
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
-    font-size: 14px;
+    font-size: 11px;
     color: #fff;
     text-align: center;
-    line-height: 38px;
+    line-height: 15px;
     cursor: pointer;
     img {
       width: 17px;
