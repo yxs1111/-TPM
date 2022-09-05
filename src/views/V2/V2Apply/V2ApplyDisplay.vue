@@ -801,7 +801,6 @@ export default {
     // 获取表格数据
     getTableData() {
       API.displayList({
-        pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         ...this.filterObj,
       }).then((response) => {

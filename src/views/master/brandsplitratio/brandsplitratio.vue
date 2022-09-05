@@ -252,7 +252,7 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="Contract Item">
+          <el-form-item label="Cost Item">
             <el-select
               v-model="ruleForm.costItem"
               clearable
