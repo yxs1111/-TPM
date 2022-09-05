@@ -50,11 +50,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(0)">
+      <div class="TpmButtonBG" :class="btnStatus === 1?'':'noClick'" @click="importData(0)">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(1)">
+      <div class="TpmButtonBG" :class="btnStatus === 1?'':'noClick'" @click="importData(1)">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">爱亲/爱婴岛导入</span>
       </div>
@@ -685,7 +685,7 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
-      
+
       API.downExcelTmpForV1({
         // mainId: this.mainIdLocal,
         ImportType: this.isAiQin==0?1:3,
@@ -805,8 +805,8 @@ export default {
             if (
               res.data.version === 'V1' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.submitBtn === 0 
-              
+              this.submitBtn === 0
+
             ) {
               this.btnStatus = true
             } else {

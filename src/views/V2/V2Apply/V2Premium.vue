@@ -262,19 +262,6 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="zoneName"
-                       label="经销商">
-        <template v-slot:header>
-          <div>经销商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.zoneName }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="220"
                        align="center"
                        prop="zoneName"
@@ -346,7 +333,7 @@
                        prop="vtwoCostAdjust"
                        label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor/Dist + 活动类型</span></div>
+          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -385,7 +372,7 @@
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region </span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand </span></div>
         </template>
         <template slot-scope="scope">
           <div>

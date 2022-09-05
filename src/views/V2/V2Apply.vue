@@ -202,19 +202,19 @@ export default {
               },
             },
             {
-              name: '补录',
-              path: '/costManagement/V2/V2Apply/V2Collection',
-              img: {
-                dark: require('@/assets/images/tab/tab_collection.png'),
-                light: require('@/assets/images/tab/tab_collection_l.png'),
-              },
-            },
-            {
               name: 'Premium',
               path: '/costManagement/V2/V2Apply/V2Premium',
               img: {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
                 light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+            },
+            {
+              name: '补录',
+              path: '/costManagement/V2/V2Apply/V2Collection',
+              img: {
+                dark: require('@/assets/images/tab/tab_collection.png'),
+                light: require('@/assets/images/tab/tab_collection_l.png'),
               },
             },
           ]

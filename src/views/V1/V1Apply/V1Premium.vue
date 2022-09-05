@@ -1,7 +1,7 @@
 <!--
- * @Description: V2POSM
- * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-15 09:57:16
+ * @Description: V1Premium
+ * @Date: 2022-09-05 14:44:18
+ * @LastEditTime: 2022-09-05 15:57:16
 -->
 <template>
   <div class="MainContent">
@@ -49,30 +49,6 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in supplierArr"
-                       :key="index"
-                       :label="item.supplierName"
-                       :value="item.supplierName" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.zoneName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in zoneArr"
-                       :key="index"
-                       :label="item.name"
-                       :value="item.name" />
-          </el-select>
-        </div>
-        <div class="Selectli">
           <span class="SelectliTitle">活动类型:</span>
           <el-select v-model="filterObj.regionName"
                      clearable
@@ -96,32 +72,6 @@
                alt="">
           <span class="text">导出</span>
         </div>
-      </div>
-    </div>
-    <div class="TpmButtonBGWrap"
-         style="align-items: center;">
-      <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
-<!--      <div class="TpmButtonBG"-->
-<!--           :class="!isSubmit&&isSelf?'':'noClick'"-->
-<!--           @click="importData">-->
-<!--        <img src="@/assets/images/import.png"-->
-<!--             alt="">-->
-<!--        <span class="text">导入</span>-->
-<!--      </div>-->
-      <div
-        class="TpmButtonBG"
-        :class="!isSubmit && isSelf ? '' : 'noClick'"
-        @click="importData"
-      >
-        <img src="@/assets/images/import.png" alt="" />
-        <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG"
-           :class=" !isSubmit && isSelf ?'':'noClick'"
-           @click="approve()">
-        <svg-icon icon-class="passApprove"
-                  style="font-size: 24px;" />
-        <span class="text">提交</span>
       </div>
     </div>
     <el-table :data="tableData"
@@ -235,46 +185,6 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
-      <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="供应商/经销商">
-        <template v-slot:header>
-          <div>供应商/经销商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-        <!-- 数据未对接 -->
-      </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="zoneName"
-                       label="经销商">
-        <template v-slot:header>
-          <div>经销商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.zoneName }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="220"
                        align="center"
                        prop="zoneName"
@@ -289,32 +199,6 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-<!--      <el-table-column width="220"-->
-<!--                       align="center"-->
-<!--                       prop="regionName"-->
-<!--                       label="区域">-->
-<!--        <template v-slot:header>-->
-<!--          <div>区域<br><span class="subTitle">-</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{ scope.row.regionName }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column width="220"-->
-<!--                       align="right"-->
-<!--                       prop="posmItem"-->
-<!--                       label="POSM item">-->
-<!--        <template v-slot:header>-->
-<!--          <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{  scope.row.posmItem }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column width="220"
                        align="right"
                        prop="voneCost"
@@ -325,32 +209,6 @@
         <template slot-scope="scope">
           <div>
             {{ formatNum(scope.row.voneCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="vtwoCostDefault"
-                       label="V2预估费用-默认(RMB)">
-        <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + 活动类型 </span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.vtwoCostDefault) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="vtwoCostAdjust"
-                       label="V2预估费用-调整后(RMB)">
-        <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor/Dist + 活动类型</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.vtwoCostAdjust) }}
           </div>
         </template>
       </el-table-column>
@@ -377,99 +235,6 @@
         <template slot-scope="scope">
           <div>
             {{ scope.row.costWriteoffMethod }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="costDifference"
-                       label="费用差值(RMB)">
-        <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region </span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.costDifference) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="180"
-                       align="center"
-                       prop="systemJudgment"
-                       label="系统判定">
-        <template v-slot:header>
-          <div>系统判定<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="{row}">
-          <el-tooltip effect="dark"
-                      placement="bottom"
-                      popper-class="tooltip">
-            <div slot="content"
-                 v-html="getTip(row)" />
-            <div class="statusWrap">
-<!--              <img v-if="row.systemJudgment=='Pass'"-->
-<!--                   src="@/assets/images/success.png"-->
-<!--                   alt="">-->
-<!--              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"-->
-<!--                   src="@/assets/images/warning.png"-->
-<!--                   alt="">-->
-<!--              <img v-if="row.systemJudgment=='Error'"-->
-<!--                   src="@/assets/images/selectError.png"-->
-<!--                   alt="">-->
-              <span class="judgmentText">{{ row.systemJudgment }}</span>
-            </div>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column width="800"
-                       align="left"
-                       prop="systemJudgmentContent"
-                       label="系统判定内容">
-        <template v-slot:header>
-          <div>系统判定内容<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.systemJudgmentContent }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="120"
-                       align="center"
-                       prop="applicantRemark"
-                       label="申请人备注">
-        <template v-slot:header>
-          <div>申请人备注<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.applicantRemark }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="poApprovalComments"
-                       label="Package Owner审批意见">
-        <template v-slot:header>
-          <div>Package Owner审批意见<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.poApprovalComments }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="finApprovalComments"
-                       label="Finance审批意见">
-        <template v-slot:header>
-          <div>Finance审批意见<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.finApprovalComments }}
           </div>
         </template>
       </el-table-column>

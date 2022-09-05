@@ -1,5 +1,5 @@
 <!--
- * @Description: V2POSM
+ * @Description: V3Premium
  * @Date: 2022-04-28 14:44:18
  * @LastEditTime: 2022-08-15 09:57:16
 -->
@@ -330,27 +330,40 @@
       </el-table-column>
       <el-table-column width="220"
                        align="right"
-                       prop="vtwoCostDefault"
-                       label="V2预估费用-默认(RMB)">
+                       prop="vtwoCostAdjust"
+                       label="V2预估费用(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + 活动类型 </span></div>
+          <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.vtwoCostDefault) }}
+            {{ formatNum(scope.row.vtwoCostAdjust) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="right"
-                       prop="vtwoCostAdjust"
-                       label="V2预估费用-调整后(RMB)">
+                       prop="vthreeCostDefault"
+                       label="V3实际费用-默认（RMB）">
         <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor/Dist + 活动类型</span></div>
+          <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型 </span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.vtwoCostAdjust) }}
+            {{ formatNum(scope.row.vthreeCostDefault) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="right"
+                       prop="vthreeCostAdjust"
+                       label="V3实际费用-调整后(RMB)">
+        <template v-slot:header>
+          <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.vthreeCostAdjust) }}
           </div>
         </template>
       </el-table-column>
@@ -385,7 +398,7 @@
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region </span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -407,15 +420,6 @@
             <div slot="content"
                  v-html="getTip(row)" />
             <div class="statusWrap">
-<!--              <img v-if="row.systemJudgment=='Pass'"-->
-<!--                   src="@/assets/images/success.png"-->
-<!--                   alt="">-->
-<!--              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"-->
-<!--                   src="@/assets/images/warning.png"-->
-<!--                   alt="">-->
-<!--              <img v-if="row.systemJudgment=='Error'"-->
-<!--                   src="@/assets/images/selectError.png"-->
-<!--                   alt="">-->
               <span class="judgmentText">{{ row.systemJudgment }}</span>
             </div>
           </el-tooltip>

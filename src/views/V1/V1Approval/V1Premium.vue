@@ -49,30 +49,6 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in supplierArr"
-                       :key="index"
-                       :label="item.supplierName"
-                       :value="item.supplierName" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.zoneName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in zoneArr"
-                       :key="index"
-                       :label="item.name"
-                       :value="item.name" />
-          </el-select>
-        </div>
-        <div class="Selectli">
           <span class="SelectliTitle">活动类型:</span>
           <el-select v-model="filterObj.regionName"
                      clearable
@@ -98,32 +74,41 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap"
-         style="align-items: center;">
-      <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
-<!--      <div class="TpmButtonBG"-->
-<!--           :class="!isSubmit&&isSelf?'':'noClick'"-->
-<!--           @click="importData">-->
-<!--        <img src="@/assets/images/import.png"-->
-<!--             alt="">-->
+<!--    <div class="TpmButtonBGWrap"-->
+<!--         style="align-items: center;">-->
+<!--      &lt;!&ndash; :class="!isSubmit&&isSelf?'':'noClick'" &ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="TpmButtonBG"&ndash;&gt;-->
+<!--&lt;!&ndash;           :class="!isSubmit&&isSelf?'':'noClick'"&ndash;&gt;-->
+<!--&lt;!&ndash;           @click="importData">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img src="@/assets/images/import.png"&ndash;&gt;-->
+<!--&lt;!&ndash;             alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;        <span class="text">导入</span>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--      <div-->
+<!--        class="TpmButtonBG"-->
+<!--        :class="!isSubmit && isSelf ? '' : 'noClick'"-->
+<!--        @click="importData"-->
+<!--      >-->
+<!--        <img src="@/assets/images/import.png" alt="" />-->
 <!--        <span class="text">导入</span>-->
 <!--      </div>-->
-      <div
-        class="TpmButtonBG"
-        :class="!isSubmit && isSelf ? '' : 'noClick'"
-        @click="importData"
-      >
-        <img src="@/assets/images/import.png" alt="" />
-        <span class="text">导入</span>
-      </div>
-      <div class="TpmButtonBG"
-           :class=" !isSubmit && isSelf ?'':'noClick'"
-           @click="approve()">
-        <svg-icon icon-class="passApprove"
-                  style="font-size: 24px;" />
-        <span class="text">提交</span>
-      </div>
-    </div>
+<!--      <div-->
+<!--        class="TpmButtonBG"-->
+<!--        :class="!isSubmit && isSelf ? '' : 'noClick'"-->
+<!--        @click="approve('agree')"-->
+<!--      >-->
+<!--        <svg-icon icon-class="passApprove" style="font-size: 24px" />-->
+<!--        <span class="text">通过</span>-->
+<!--      </div>-->
+<!--      <div-->
+<!--        class="TpmButtonBG"-->
+<!--        :class="!isSubmit && isSelf ? '' : 'noClick'"-->
+<!--        @click="approve('reject')"-->
+<!--      >-->
+<!--        <svg-icon icon-class="rejectApprove" style="font-size: 24px" />-->
+<!--        <span class="text">驳回</span>-->
+<!--      </div>-->
+<!--    </div>-->
     <el-table :data="tableData"
               :max-height="maxheight"
               border
@@ -235,46 +220,6 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
-      <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="供应商/经销商">
-        <template v-slot:header>
-          <div>供应商/经销商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-        <!-- 数据未对接 -->
-      </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="zoneName"
-                       label="经销商">
-        <template v-slot:header>
-          <div>经销商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.zoneName }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="220"
                        align="center"
                        prop="zoneName"
@@ -289,32 +234,6 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-<!--      <el-table-column width="220"-->
-<!--                       align="center"-->
-<!--                       prop="regionName"-->
-<!--                       label="区域">-->
-<!--        <template v-slot:header>-->
-<!--          <div>区域<br><span class="subTitle">-</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{ scope.row.regionName }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column width="220"-->
-<!--                       align="right"-->
-<!--                       prop="posmItem"-->
-<!--                       label="POSM item">-->
-<!--        <template v-slot:header>-->
-<!--          <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{  scope.row.posmItem }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column width="220"
                        align="right"
                        prop="voneCost"
@@ -325,32 +244,6 @@
         <template slot-scope="scope">
           <div>
             {{ formatNum(scope.row.voneCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="vtwoCostDefault"
-                       label="V2预估费用-默认(RMB)">
-        <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + 活动类型 </span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.vtwoCostDefault) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="vtwoCostAdjust"
-                       label="V2预估费用-调整后(RMB)">
-        <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor/Dist + 活动类型</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.vtwoCostAdjust) }}
           </div>
         </template>
       </el-table-column>
@@ -377,99 +270,6 @@
         <template slot-scope="scope">
           <div>
             {{ scope.row.costWriteoffMethod }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="costDifference"
-                       label="费用差值(RMB)">
-        <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region </span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.costDifference) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="180"
-                       align="center"
-                       prop="systemJudgment"
-                       label="系统判定">
-        <template v-slot:header>
-          <div>系统判定<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="{row}">
-          <el-tooltip effect="dark"
-                      placement="bottom"
-                      popper-class="tooltip">
-            <div slot="content"
-                 v-html="getTip(row)" />
-            <div class="statusWrap">
-<!--              <img v-if="row.systemJudgment=='Pass'"-->
-<!--                   src="@/assets/images/success.png"-->
-<!--                   alt="">-->
-<!--              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"-->
-<!--                   src="@/assets/images/warning.png"-->
-<!--                   alt="">-->
-<!--              <img v-if="row.systemJudgment=='Error'"-->
-<!--                   src="@/assets/images/selectError.png"-->
-<!--                   alt="">-->
-              <span class="judgmentText">{{ row.systemJudgment }}</span>
-            </div>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column width="800"
-                       align="left"
-                       prop="systemJudgmentContent"
-                       label="系统判定内容">
-        <template v-slot:header>
-          <div>系统判定内容<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.systemJudgmentContent }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="120"
-                       align="center"
-                       prop="applicantRemark"
-                       label="申请人备注">
-        <template v-slot:header>
-          <div>申请人备注<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.applicantRemark }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="poApprovalComments"
-                       label="Package Owner审批意见">
-        <template v-slot:header>
-          <div>Package Owner审批意见<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.poApprovalComments }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="finApprovalComments"
-                       label="Finance审批意见">
-        <template v-slot:header>
-          <div>Finance审批意见<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.finApprovalComments }}
           </div>
         </template>
       </el-table-column>
@@ -530,16 +330,6 @@
                    alt=""
                    class="upview_fileicon">
               <span>{{ uploadFileName }}</span>
-            </div>
-          </div>
-          <div class="seeData"
-               style="width: auto;">
-            <div class="exportError"
-                 @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png"
-                   alt=""
-                   class="exportError_icon">
-              <span>导出错误信息</span>
             </div>
           </div>
         </div>
@@ -751,7 +541,7 @@
                              field="supplierName"
                              title="供应商">
               <template v-slot:header>
-                <div>供应商2222<br><span class="subTitle">-</span></div>
+                <div>供应商<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -1334,25 +1124,31 @@ export default {
         this.$message.info('数据不能为空')
       }
     },
-    approve() {
+    approve(value) {
       if (this.tableData.length) {
-        const systemJudgment = this.tableData[0].systemJudgment
-        if (systemJudgment != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+        if (value == 1) {
+          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
           })
             .then(() => {
-              const mainId = this.tableData[0].mainId
               API.approve({
-                mainId: mainId, // 主表id
+                mainId: this.tableData[0].mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                // isSubmit: 0, //申请0,审批1
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
-                  this.$message.success('提交成功')
+                  this.$message({
+                    type: 'success',
+                    message: '审批成功!',
+                  })
                   this.getTableData()
+                } else {
+                  this.$message({
+                    type: 'info',
+                    message: '审批失败!',
+                  })
                 }
               })
             })
@@ -1363,7 +1159,31 @@ export default {
               })
             })
         } else {
-          this.$message.info('数据未校验，请先进行导入验证')
+          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(() => {
+              API.approve({
+                mainId: this.tableData[0].mainId,
+                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                isSubmit: 1, //申请0,审批1
+              }).then((response) => {
+                if (response.code === 1000) {
+                  this.$message.success('驳回成功!')
+                  this.getTableData()
+                } else {
+                  this.$message.info('驳回失败!')
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         }
       } else {
         this.$message.warning('数据不能为空')

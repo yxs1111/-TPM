@@ -116,12 +116,21 @@
         <img src="@/assets/images/import.png" alt="" />
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"
-           :class=" !isSubmit && isSelf ?'':'noClick'"
-           @click="approve()">
-        <svg-icon icon-class="passApprove"
-                  style="font-size: 24px;" />
-        <span class="text">提交</span>
+      <div
+        class="TpmButtonBG"
+        :class="!isSubmit && isSelf ? '' : 'noClick'"
+        @click="approve('agree')"
+      >
+        <svg-icon icon-class="passApprove" style="font-size: 24px" />
+        <span class="text">通过</span>
+      </div>
+      <div
+        class="TpmButtonBG"
+        :class="!isSubmit && isSelf ? '' : 'noClick'"
+        @click="approve('reject')"
+      >
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px" />
+        <span class="text">驳回</span>
       </div>
     </div>
     <el-table :data="tableData"
@@ -346,7 +355,7 @@
                        prop="vtwoCostAdjust"
                        label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor/Dist + 活动类型</span></div>
+          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -532,16 +541,16 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <div class="seeData"
-               style="width: auto;">
-            <div class="exportError"
-                 @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png"
-                   alt=""
-                   class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
-          </div>
+<!--          <div class="seeData"-->
+<!--               style="width: auto;">-->
+<!--            <div class="exportError"-->
+<!--                 @click="exportErrorList">-->
+<!--              <img src="@/assets/exportError_icon.png"-->
+<!--                   alt=""-->
+<!--                   class="exportError_icon">-->
+<!--              <span>导出错误信息</span>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
         <div class="tableWrap">
           <vxe-table border
@@ -1334,25 +1343,31 @@ export default {
         this.$message.info('数据不能为空')
       }
     },
-    approve() {
+    approve(value) {
       if (this.tableData.length) {
-        const systemJudgment = this.tableData[0].systemJudgment
-        if (systemJudgment != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+        if (value == 1) {
+          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
           })
             .then(() => {
-              const mainId = this.tableData[0].mainId
               API.approve({
-                mainId: mainId, // 主表id
+                mainId: this.tableData[0].mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                // isSubmit: 0, //申请0,审批1
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
-                  this.$message.success('提交成功')
+                  this.$message({
+                    type: 'success',
+                    message: '审批成功!',
+                  })
                   this.getTableData()
+                } else {
+                  this.$message({
+                    type: 'info',
+                    message: '审批失败!',
+                  })
                 }
               })
             })
@@ -1363,7 +1378,31 @@ export default {
               })
             })
         } else {
-          this.$message.info('数据未校验，请先进行导入验证')
+          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          })
+            .then(() => {
+              API.approve({
+                mainId: this.tableData[0].mainId,
+                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                isSubmit: 1, //申请0,审批1
+              }).then((response) => {
+                if (response.code === 1000) {
+                  this.$message.success('驳回成功!')
+                  this.getTableData()
+                } else {
+                  this.$message.info('驳回失败!')
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消提交',
+              })
+            })
         }
       } else {
         this.$message.warning('数据不能为空')
