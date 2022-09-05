@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-08-10 09:30:56
+ * @LastEditTime: 2022-09-05 15:30:52
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -21,7 +21,7 @@ export default function () {
           path: '/costManagement/V2/V2Apply',
           code: 'price_nka_v2_apply',
           name: 'V2Apply',
-          component: () => import('@/views/V2/V2Apply.vue'),
+          component: () => import('@/views/V2/V2ApplyNew.vue'),
           meta: { title: '申请', icon: 'apply' },
           redirect: '/costManagement/V2/V2Apply/V2discountAll',
           children: [
@@ -189,7 +189,7 @@ export default function () {
           path: '/costManagement/V2/V2Approval',
           code: 'price_nka_v2_approve',
           name: 'V2Approval',
-          component: () => import('@/views/V2/V2Approval.vue'),
+          component: () => import('@/views/V2/V2ApprovalNew.vue'),
           meta: { title: '审批', icon: 'approve' },
           redirect: '/costManagement/V2/V2Approval/V2AllApproval',
           children: [

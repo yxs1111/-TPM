@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-05 16:33:06
+ * @LastEditTime: 2022-09-05 16:26:52
 -->
 <template>
   <div class="tabViewsWrap">
@@ -25,7 +25,6 @@
 
 <script>
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
 export default {
   data() {
     return {
@@ -54,7 +53,7 @@ export default {
       this.$router.push(this.routerList[index].path)
       sessionStorage.setItem('currentIndex', index)
     },
-    // tab标签权限
+    // // tab标签权限
     queryMinePackageSelect() {
       let signP = 0
       let signN = 0
@@ -65,7 +64,7 @@ export default {
             if (element.costType === 'Price Promotion' && signP === 0) {
               this.routerList.push({
                 name: '折扣项-价促',
-                path: '/costManagement/V3/V3Approval/V3discountDiscountApproval',
+                path: '/costManagement/V2/V2Apply/V2discountDiscount',
                 img: {
                   dark: require('@/assets/images/tab/tab2.png'),
                   light: require('@/assets/images/tab/tab2_l.png'),
@@ -76,7 +75,7 @@ export default {
             } else if (element.costType === 'New User' && signN === 0) {
               this.routerList.push({
                 name: '折扣项-新客',
-                path: '/costManagement/V3/V3Approval/V3discountNUApproval',
+                path: '/costManagement/V2/V2Apply/V2discountNU',
                 img: {
                   dark: require('@/assets/images/tab/tab3.png'),
                   light: require('@/assets/images/tab/tab3_l.png'),
@@ -90,7 +89,7 @@ export default {
             this.routerList = [
               {
                 name: '折扣项-价促',
-                path: '/costManagement/V3/V3Approval/V3discountDiscountApproval',
+                path: '/costManagement/V2/V2Apply/V2discountDiscount',
                 img: {
                   dark: require('@/assets/images/tab/tab2.png'),
                   light: require('@/assets/images/tab/tab2_l.png'),
@@ -98,7 +97,7 @@ export default {
               },
               {
                 name: '折扣项-新客',
-                path: '/costManagement/V3/V3Approval/V3discountNUApproval',
+                path: '/costManagement/V2/V2Apply/V2discountNU',
                 img: {
                   dark: require('@/assets/images/tab/tab3.png'),
                   light: require('@/assets/images/tab/tab3_l.png'),
@@ -110,7 +109,7 @@ export default {
             ...this.routerList,
             {
               name: '折扣项-HIH Rebate',
-              path: '/costManagement/V3/V3Approval/V3HIHRebateApproval',
+              path: '/costManagement/V2/V2Apply/V2HIHRebate',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
                 light: require('@/assets/images/tab/tab_HIH_l.png'),
@@ -119,7 +118,7 @@ export default {
             },
             {
               name: '折扣项-KA Rebate',
-              path: '/costManagement/V3/V3Approval/V3KARebateApproval',
+              path: '/costManagement/V2/V2Apply/V2KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
                 light: require('@/assets/images/tab/tab_KA_l.png'),
@@ -128,7 +127,7 @@ export default {
             },
             {
               name: 'FMC',
-              path: '/costManagement/V3/V3Approval/V3FMCApproval',
+              path: '/costManagement/V2/V2Apply/V2FMC',
               img: {
                 dark: require('@/assets/images/tab/tab_FMC.png'),
                 light: require('@/assets/images/tab/tab_FMC_l.png'),
@@ -137,7 +136,7 @@ export default {
             },
             {
               name: 'Roadshow',
-              path: '/costManagement/V3/V3Approval/V3RoadShowApproval',
+              path: '/costManagement/V2/V2Apply/V2RoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab_RoadShow.png'),
                 light: require('@/assets/images/tab/tab_RoadShow_l.png'),
@@ -146,7 +145,7 @@ export default {
             },
             {
               name: 'Listing Fee',
-              path: '/costManagement/V3/V3Approval/V3ListingFeeApproval',
+              path: '/costManagement/V2/V2Apply/V2ListingFee',
               img: {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
@@ -155,7 +154,7 @@ export default {
             },
             {
               name: 'POSM-标准',
-              path: '/costManagement/V3/V3Approval/V3POSMApproval',
+              path: '/costManagement/V2/V2Apply/V2POSM',
               img: {
                 dark: require('@/assets/images/tab/tab_POSM.png'),
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
@@ -164,7 +163,7 @@ export default {
             },
             {
               name: 'ECM',
-              path: '/costManagement/V3/V3Approval/V3ECMApproval',
+              path: '/costManagement/V2/V2Apply/V2ECM',
               img: {
                 dark: require('@/assets/images/tab/tab_POSM.png'),
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
@@ -173,7 +172,7 @@ export default {
             },
             {
               name: 'Display',
-              path: '/costManagement/V3/V3Approval/V3ApplyrovalDisplay',
+              path: '/costManagement/V2/V2Apply/V2Display',
               img: {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
@@ -181,8 +180,16 @@ export default {
               minePackageName:'Display',
             },
             {
+              name: '补录',
+              path: '/costManagement/V2/V2Apply/V2Collection',
+              img: {
+                dark: require('@/assets/images/tab/tab_collection.png'),
+                light: require('@/assets/images/tab/tab_collection_l.png'),
+              },
+            },
+            {
               name: 'Premium',
-              path: '/costManagement/V3/V3Approval/V3PremiumApproval',
+              path: '/costManagement/V2/V2Apply/V2Premium',
               img: {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
                 light: require('@/assets/images/tab/StraightGiving_l.png'),
@@ -206,11 +213,6 @@ export default {
         })
         .catch()
     },
-    // tabview 切换
-    changeTab(index) {
-      this.currentIndex = index
-      sessionStorage.setItem('currentIndex', index)
-    },
   },
 }
 </script>
@@ -220,7 +222,7 @@ export default {
   width: 100%;
   height: 38px;
   display: flex;
-  margin-left: 25px;
+  margin-left: 10px;
   .tabli {
     display: flex;
     align-items: center;

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-05 16:33:06
+ * @LastEditTime: 2022-09-05 16:25:48
 -->
 <template>
   <div class="tabViewsWrap">
@@ -65,7 +65,7 @@ export default {
             if (element.costType === 'Price Promotion' && signP === 0) {
               this.routerList.push({
                 name: '折扣项-价促',
-                path: '/costManagement/V3/V3Approval/V3discountDiscountApproval',
+                path: '/costManagement/V3/V3Apply/V3discountDiscount',
                 img: {
                   dark: require('@/assets/images/tab/tab2.png'),
                   light: require('@/assets/images/tab/tab2_l.png'),
@@ -76,7 +76,7 @@ export default {
             } else if (element.costType === 'New User' && signN === 0) {
               this.routerList.push({
                 name: '折扣项-新客',
-                path: '/costManagement/V3/V3Approval/V3discountNUApproval',
+                path: '/costManagement/V3/V3Apply/V3discountNU',
                 img: {
                   dark: require('@/assets/images/tab/tab3.png'),
                   light: require('@/assets/images/tab/tab3_l.png'),
@@ -90,7 +90,7 @@ export default {
             this.routerList = [
               {
                 name: '折扣项-价促',
-                path: '/costManagement/V3/V3Approval/V3discountDiscountApproval',
+                path: '/costManagement/V3/V3Apply/V3discountDiscount',
                 img: {
                   dark: require('@/assets/images/tab/tab2.png'),
                   light: require('@/assets/images/tab/tab2_l.png'),
@@ -98,7 +98,7 @@ export default {
               },
               {
                 name: '折扣项-新客',
-                path: '/costManagement/V3/V3Approval/V3discountNUApproval',
+                path: '/costManagement/V3/V3Apply/V3discountNU',
                 img: {
                   dark: require('@/assets/images/tab/tab3.png'),
                   light: require('@/assets/images/tab/tab3_l.png'),
@@ -110,7 +110,7 @@ export default {
             ...this.routerList,
             {
               name: '折扣项-HIH Rebate',
-              path: '/costManagement/V3/V3Approval/V3HIHRebateApproval',
+              path: '/costManagement/V3/V3Apply/V3HIHRebate',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
                 light: require('@/assets/images/tab/tab_HIH_l.png'),
@@ -119,7 +119,7 @@ export default {
             },
             {
               name: '折扣项-KA Rebate',
-              path: '/costManagement/V3/V3Approval/V3KARebateApproval',
+              path: '/costManagement/V3/V3Apply/V3KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
                 light: require('@/assets/images/tab/tab_KA_l.png'),
@@ -128,7 +128,7 @@ export default {
             },
             {
               name: 'FMC',
-              path: '/costManagement/V3/V3Approval/V3FMCApproval',
+              path: '/costManagement/V3/V3Apply/V3FMC',
               img: {
                 dark: require('@/assets/images/tab/tab_FMC.png'),
                 light: require('@/assets/images/tab/tab_FMC_l.png'),
@@ -137,7 +137,7 @@ export default {
             },
             {
               name: 'Roadshow',
-              path: '/costManagement/V3/V3Approval/V3RoadShowApproval',
+              path: '/costManagement/V3/V3Apply/V3RoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab_RoadShow.png'),
                 light: require('@/assets/images/tab/tab_RoadShow_l.png'),
@@ -146,7 +146,7 @@ export default {
             },
             {
               name: 'Listing Fee',
-              path: '/costManagement/V3/V3Approval/V3ListingFeeApproval',
+              path: '/costManagement/V3/V3Apply/V3ListingFee',
               img: {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
@@ -155,7 +155,7 @@ export default {
             },
             {
               name: 'POSM-标准',
-              path: '/costManagement/V3/V3Approval/V3POSMApproval',
+              path: '/costManagement/V3/V3Apply/V3POSM',
               img: {
                 dark: require('@/assets/images/tab/tab_POSM.png'),
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
@@ -164,7 +164,7 @@ export default {
             },
             {
               name: 'ECM',
-              path: '/costManagement/V3/V3Approval/V3ECMApproval',
+              path: '/costManagement/V3/V3Apply/V3ECM',
               img: {
                 dark: require('@/assets/images/tab/tab_POSM.png'),
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
@@ -173,7 +173,7 @@ export default {
             },
             {
               name: 'Display',
-              path: '/costManagement/V3/V3Approval/V3ApplyrovalDisplay',
+              path: '/costManagement/V3/V3Apply/V3Display',
               img: {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
@@ -181,8 +181,16 @@ export default {
               minePackageName:'Display',
             },
             {
+              name: '补录',
+              path: '/costManagement/V3/V3Apply/V3Collection',
+              img: {
+                dark: require('@/assets/images/tab/tab_collection.png'),
+                light: require('@/assets/images/tab/tab_collection_l.png'),
+              },
+            },
+            {
               name: 'Premium',
-              path: '/costManagement/V3/V3Approval/V3PremiumApproval',
+              path: '/costManagement/V3/V3Apply/V3Premium',
               img: {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
                 light: require('@/assets/images/tab/StraightGiving_l.png'),
@@ -205,11 +213,6 @@ export default {
           this.tabInit()
         })
         .catch()
-    },
-    // tabview 切换
-    changeTab(index) {
-      this.currentIndex = index
-      sessionStorage.setItem('currentIndex', index)
     },
   },
 }
@@ -263,7 +266,7 @@ export default {
   cursor: pointer;
   &:hover {
     // background-color: #fff;
-    color: #fff;
+    color: #fff !important;
   }
   .TabWrap {
     display: flex;
