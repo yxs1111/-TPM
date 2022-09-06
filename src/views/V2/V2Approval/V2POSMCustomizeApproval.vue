@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSMCustomize
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-05 17:26:40
+ * @LastEditTime: 2022-09-06 09:08:54
 -->
 <template>
   <div class="MainContent">
@@ -390,7 +390,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/FMC'
 export default {
-  name: 'V2FMCApproval',
+  name: 'V2POSMCustomizeApproval',
   directives: { elDragDialog, permission },
 
   data() {
@@ -615,14 +615,6 @@ export default {
     confirmImport() {
       this.closeImportDialog()
       this.getTableData()
-    },
-    // 导出异常信息
-    exportErrorList() {
-      if (this.ImportData.length) {
-        this.downloadTemplate()
-      } else {
-        this.$message.info('异常数据为空!')
-      }
     },
     // 下载模板
     downloadTemplate() {

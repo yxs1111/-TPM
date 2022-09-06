@@ -1,7 +1,7 @@
 <!--
- * @Description: V2POSM定制
+ * @Description: V3FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-06 08:40:42
+ * @LastEditTime: 2022-09-06 09:04:19
 -->
 <template>
   <div class="MainContent">
@@ -122,7 +122,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="brandName" label="品牌" >
+      <el-table-column width="220" align="center" prop="customerSystemName" label="品牌" >
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
         </template>
@@ -152,23 +152,33 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
+      <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA+Brand</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.v2DefaultEstimateCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
-        <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
+          <div>V2预估费用(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
         </template>
         <template slot-scope="scope">
           <div>
             {{ formatNum(scope.row.v2AdjustEstimateCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="v3DefaultRealityCost" label="V3实际费用-默认(RMB)">
+        <template v-slot:header>
+          <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.v3DefaultRealityCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="260" align="right" prop="v3AdjustRealityCost" label="V3实际费用-调整后(RMB)">
+        <template v-slot:header>
+          <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.v3AdjustRealityCost) }}
           </div>
         </template>
       </el-table-column>
@@ -194,7 +204,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle">KA+Brand</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -202,7 +212,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="systemJudgment" label="系统判定">
+      <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
         <template v-slot:header>
           <div>系统判定<br><span class="subTitle">-</span></div>
         </template>
@@ -316,7 +326,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />
             <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />
@@ -328,7 +338,7 @@
             <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
             <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -336,19 +346,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA+Brand</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ formatNum(scope.row.v2DefaultEstimateCost) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
-              <template v-slot:header>
-                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
+                <div>V2预估费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -356,11 +356,31 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityCost" label="V3实际费用-默认(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3DefaultRealityCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityCost" label="V3实际费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3AdjustRealityCost) }}
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle">KA+Brand</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -390,9 +410,9 @@ import {
   FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/FMC'
+import API from '@/api/V3/FMC'
 export default {
-  name: 'V2POSMCustomize',
+  name: 'V3POSMCustomize',
   directives: { elDragDialog, permission },
 
   data() {
@@ -403,6 +423,7 @@ export default {
       filterObj: {
         channelCode: '',
         supplierName: '',
+        regionName: '',
         customerCode: '',
         month: '',
       },
@@ -415,8 +436,8 @@ export default {
       supplierList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
-      isSelf: null, //是否是当前审批人
-      isGainLe: 0, //是否已经从LE接过数据getAllMonth
+      isSelf: 0, //是否是当前审批人
+      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -466,6 +487,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit == 1 ? 1 : 0
@@ -487,7 +509,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version=='FMC-V2'  &&
+              res.data.version === 'FMC-V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -534,7 +556,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      return FormateThousandNum(num)
+       return FormateThousandNum(num)
     },
     formateHundredNumber(num) {
       if(num===null||num==="null") {
@@ -554,15 +576,16 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportV2({
+        API.exportV3({
           customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_POSM-定制_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_POSM-定制_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -643,12 +666,12 @@ export default {
         } else {
           this.$message.info(this.messageMap.checkError)
         }
-        this.saveBtn=1
+        this.saveBtn = 1
       })
     },
     // 确认导入
     confirmImport() {
-      API.saveV2Data({
+      API.saveV3Data({
         channelCode: this.filterObj.channelCode,
         yearAndMonth: this.filterObj.month,
       }).then((res) => {
@@ -664,15 +687,16 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.exportV2Error({
+        API.exportV3Error({
           customerSystemName: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           yearAndMonth: this.filterObj.month,
           supplierName: this.filterObj.supplierName,
+          regionName: this.filterObj.regionName,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_POSM-定制_${this.filterObj.channelCode}_V2异常信息.xlsx`
+            `${this.filterObj.month}_POSM-定制_${this.filterObj.channelCode}_V3异常信息.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -690,7 +714,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.month}_POSM-定制_${this.filterObj.channelCode}_V3申请.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
