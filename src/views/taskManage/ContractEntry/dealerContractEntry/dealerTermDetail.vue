@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-08-01 15:05:33
+ * @LastEditTime: 2022-09-06 11:26:02
 -->
 <template>
   <div class="ContentDetail">
@@ -469,6 +469,7 @@ export default {
               //不是第一次进入
               //对每一个经销商 variable 和 客户 variable  比对
               item.variable.forEach((variableItem) => {
+                // debugger
                 if (variableItem.ccDetailId == customerVariableList[index].id) {
                   variableObj.dealerList.push({
                     dcId: variableItem.dcId, //经销商合同id
@@ -487,7 +488,7 @@ export default {
                       variableItem.deductionTaxRate
                     ), //客户扣款税点
                     payType:
-                      variableItem.payType == ''
+                      (variableItem.payType === ''||variableItem.payType === null)
                         ? null
                         : Number(variableItem.payType), //支付方式
                     isEditor: (variableItem.contractState == '0'||variableItem.contractState == '2')&&this.isEditor?1:0,
@@ -518,7 +519,7 @@ export default {
                   distVariableObj.deductionTaxRate
                 ), //客户扣款税点
                 payType:
-                  distVariableObj.payType == ''
+                  (distVariableObj.payType == ''||distVariableObj.payType == null)
                     ? null
                     : Number(distVariableObj.payType), //支付方式
                 isEditor: (distVariableObj.contractState == '0'||distVariableObj.contractState == '2')&&this.isEditor?1:0,
@@ -657,7 +658,7 @@ export default {
                       fixedItem.deductionTaxRate
                     ), //客户扣款税点
                     payType:
-                      fixedItem.payType == ''
+                      (fixedItem.payType == ''||fixedItem.payType == null)
                         ? null
                         : Number(fixedItem.payType), //支付方式
                     isEditor: (fixedItem.contractState == '0'||fixedItem.contractState == '2')&&this.isEditor?1:0,
@@ -688,7 +689,7 @@ export default {
                   distFixObj.deductionTaxRate
                 ), //客户扣款税点
                 payType:
-                  distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
+                  (distFixObj.payType == ''||distFixObj.payType == null) ? null : Number(distFixObj.payType), //支付方式
                 isEditor: (distFixObj.contractState == '0'||distFixObj.contractState == '2')&&this.isEditor?1:0,
                 contractStateName: item.contractStateName,
                 // (distFixObj.contractState == '1' ||
@@ -922,6 +923,7 @@ export default {
         let pointCountEmpty = [] //经销商费比为空
         let taxPriceEmpty = [] //经销商费比为空
         let payTypeRequire = []
+        let taxPriceErrorList = [] //经销商含税金额 汇总 校验（应等于该经销商目标销售额）
         //补录跳过验证--若之前经销商已经通过&&当前状态是草稿的 说明是补录
         this.AllTableData.forEach((item, index) => {
           //对 Variable 异常处理 各经销商费比大于客户费比
@@ -952,7 +954,7 @@ export default {
               if (Number(dealerItem.frieslandPointCount)!=0) {
                 if (
                   dealerItem.customerTaxPoint === '' ||
-                  dealerItem.payType == ''
+                  (dealerItem.payType == ''||dealerItem.payType == null)
                 ) {
                   console.log('客户扣款税点为空')
                   payTypeRequire.push({
@@ -981,7 +983,7 @@ export default {
               if (Number(dealerItem.frieslandPointCount)!=0) {
                 if (
                   dealerItem.customerTaxPoint === '' ||
-                  dealerItem.payType == ''
+                  (dealerItem.payType == ''||dealerItem.payType == null)
                 ) {
                   console.log('客户扣款税点为空')
                   payTypeRequire.push({
@@ -1000,6 +1002,19 @@ export default {
                 rowIndex: index,
               })
             }
+          }
+          //error 经销商含税金额汇总校验（应等于该经销商目标销售额）
+          if(index==0&&item.name=="Total") {
+            item.dealerList.forEach((dealerItem,dealerIndex)=>{
+              if(dealerItem.taxPrice>dealerItem.targetSale) {
+                taxPriceErrorList.push(
+                  {
+                    dealerIndex,
+                    ...dealerItem
+                  }
+                )
+              }
+            })
           }
         })
         console.log(exceptionList)
@@ -1050,6 +1065,19 @@ export default {
             }, 50)
           })
           // this.$message.info('经销商含税金额不能为空,请进行填写')
+          return
+        }
+        //若经销商含税金额不等于经销商目标销售额 报error
+        if (taxPriceErrorList.length) {
+          taxPriceErrorList.forEach((item) => {
+            setTimeout(() => {
+              this.$notify.warning({
+                title: '警告',
+                message: `${item.dealerName}经销商费比total不能超过100%`,
+                duration: 5000,
+              })
+            }, 50)
+          })
           return
         }
         console.log(pointCountEmpty)

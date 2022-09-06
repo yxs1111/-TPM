@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-08-30 16:47:29
+ * @LastEditTime: 2022-09-06 11:03:34
 -->
 <template>
   <div class="ContentDetail">
@@ -387,7 +387,7 @@ export default {
                       variableItem.deductionTaxRate
                     ), //客户扣款税点
                     payType:
-                      variableItem.payType == ''
+                      (variableItem.payType == ''||variableItem.payType == null)
                         ? null
                         : Number(variableItem.payType), //支付方式
                     isEditor: 0,
@@ -413,7 +413,7 @@ export default {
                   distVariableObj.deductionTaxRate
                 ), //客户扣款税点
                 payType:
-                  distVariableObj.payType == ''
+                  (distVariableObj.payType == ''||distVariableObj.payType == null)
                     ? null
                     : Number(distVariableObj.payType), //支付方式
                 isEditor: 0,
@@ -541,7 +541,7 @@ export default {
                       fixedItem.deductionTaxRate
                     ), //客户扣款税点
                     payType:
-                      fixedItem.payType == ''
+                      (fixedItem.payType == ''||fixedItem.payType == null)
                         ? null
                         : Number(fixedItem.payType), //支付方式
                     isEditor: 0,
@@ -566,7 +566,7 @@ export default {
                   distFixObj.deductionTaxRate
                 ), //客户扣款税点
                 payType:
-                  distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
+                  (distFixObj.payType == ''||distFixObj.payType == null) ? null : Number(distFixObj.payType), //支付方式
                 isEditor: 0,
               })
             }
