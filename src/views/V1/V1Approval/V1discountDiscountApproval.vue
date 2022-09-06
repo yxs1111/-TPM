@@ -49,15 +49,15 @@
         </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus ===1?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="btnStatus ===1?'':'noClick'" @click="agree">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="agree">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG" :class="btnStatus ===1?'':'noClick'" @click="reject">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="reject">
         <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
@@ -281,7 +281,7 @@ export default {
       distributorArr: [],
       localDate: '',
       saveBtn: false,
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       uploadFile: '',
       firstIsPass: false,

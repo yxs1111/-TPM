@@ -50,11 +50,11 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="btnStatus === 1?'':'noClick'" @click="importData(0)">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(0)">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="btnStatus === 1?'':'noClick'" @click="importData(1)">
+      <div class="TpmButtonBG" :class="btnStatus?'':'noClick'" @click="importData(1)">
         <img src="../../../assets/images/import.png" alt="">
         <span class="text">爱亲/爱婴岛导入</span>
       </div>
@@ -299,7 +299,7 @@ export default {
       distributorArr: [],
       submitBtn: 1,
       localDate: '',
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       firstIsPass: false,
       isCalculation: false,
