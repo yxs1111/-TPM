@@ -31,7 +31,7 @@
     <el-table :data="tableData" :key="tableKey" :span-method="spanMethod" border :cell-style="cellStyle" :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       style="width: 100%" :max-height="maxheight">
       <el-table-column width="180" align="center" prop="version" label="版本" />
-      <el-table-column width="330" align="left" prop="ruleContentFront" label="验证规则" />
+      <el-table-column width="330" align="center" prop="ruleContentFront" label="验证规则" />
       <el-table-column width="60" align="left" prop="ruleUnit" label="" />
       <el-table-column width="300" align="left" prop="ruleContentAfter" label="">
         <template slot-scope="scope">
@@ -569,7 +569,7 @@ export default {
       this.isChangeData = []
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: 'POSM',
+        minePackage: 'POSM-S',
         yearAndMonth: this.filterObj.date,
       })
         .then((response) => {

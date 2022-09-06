@@ -181,14 +181,6 @@ export default {
               minePackageName:'Display',
             },
             {
-              name: '补录',
-              path: '/costManagement/V3/V3Apply/V3Collection',
-              img: {
-                dark: require('@/assets/images/tab/tab_collection.png'),
-                light: require('@/assets/images/tab/tab_collection_l.png'),
-              },
-            },
-            {
               name: 'Premium',
               path: '/costManagement/V3/V3Apply/V3Premium',
               img: {
@@ -197,6 +189,14 @@ export default {
               },
               minePackageName:'Premium',
             },
+            {
+              name: '补录',
+              path: '/costManagement/V3/V3Apply/V3Collection',
+              img: {
+                dark: require('@/assets/images/tab/tab_collection.png'),
+                light: require('@/assets/images/tab/tab_collection_l.png'),
+              },
+            },
           ]
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
@@ -204,7 +204,7 @@ export default {
             this.currentIndex = 0
           }
           if (!this.$route.query.minePackageName) {
-            
+
           } else {
             // 我的待办跳转
             this.currentIndex=this.routerList.findIndex(item=>item.minePackageName==this.$route.query.minePackageName)
