@@ -22,4 +22,13 @@ export default {
       responseType: 'blob',
     })
   },
+  //清除数据  investCpEcmVOneDetail/deleteAll
+  delsmartplanData(params) {
+    return request({
+      url: this.url + '/deleteAll',
+      method: 'post',
+      data: params,
+      responseType: 'blob',
+    })
+  },
 }

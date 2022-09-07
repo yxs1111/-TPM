@@ -103,6 +103,12 @@
                alt="">
           <span class="text">导出</span>
         </div>
+        <div class="TpmButtonBG"
+             @click="clearsmartplan()">
+          <img src="../../../assets/images/delete_l.png"
+               alt="" />
+          <span class="text">清除数据</span>
+        </div>
       </div>
     </div>
     <el-table :data="tableData"
@@ -352,6 +358,10 @@ export default {
     this.getregionArr()
   },
   methods: {
+    //清除数据
+    clearsmartplan() {
+      API.delsmartplanData().then((res) => {})
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
