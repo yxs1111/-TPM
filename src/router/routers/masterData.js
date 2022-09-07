@@ -513,6 +513,19 @@ export default function () {
                     activeMenu: '/ruleCtrl/testRules',
                   },
                 },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesPremium',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesPremium',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesPremium.vue'),
+                  meta: {
+                    title: 'Premium',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
               ],
             },
             // {
