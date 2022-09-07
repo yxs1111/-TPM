@@ -300,7 +300,7 @@ export default {
       dialogData: [],
       uploadFileName: '',
       usernameLocal: '',
-      btnStatus: true,
+      btnStatus: false,
       localDate: '',
       saveDialog: false,
       maxheight: getHeightHaveTab(),

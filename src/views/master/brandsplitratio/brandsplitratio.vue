@@ -8,10 +8,6 @@
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
-        <!-- <div class="Selectli">
-          <span class="SelectliTitle" style="width:200px">Contract Item 编码</span>
-          <el-input v-model="filterObj.contractItemCode" clearable placeholder="请输入" />
-        </div> -->
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
           <el-select
@@ -38,14 +34,24 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Cost Item:</span>
-          <el-select v-model="filterObj.conditionType" multiple clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in ConditionsTypeList" :key="index" :label="item" :value="item" />
+          <el-select
+            v-model="filterObj.costItem"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in CostItemList"
+              :key="index"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
           <el-select
-            v-model="filterObj.yearAndMonth"
+            v-model="filterObj.activityMonth"
             filterable
             clearable
             placeholder="请选择"
@@ -57,171 +63,257 @@
               :value="item.activityMonth"
             />
           </el-select>
-<!--          <el-select v-model="filterObj.variablePoint" multiple  clearable filterable placeholder="请选择">-->
-<!--            <el-option v-for="item,index in FixOrPointList" :key="index" :label="item" :value="item" />-->
-<!--          </el-select>-->
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
-          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
+          <el-select
+            v-model="filterObj.state"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in ['无效', '有效']"
+              :key="index"
+              :label="item"
+              :value="index"
+            />
           </el-select>
         </div>
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
-        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
+        <el-button type="primary" class="TpmButtonBG" @click="search"
+          >查询</el-button
+        >
+        <!-- v-permission="permissions['get']" -->
+        <div class="TpmButtonBG" @click="exportData">
+          <!-- v-permission="permissions['export']" -->
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
+    <!-- 新增 删除 -->
     <div class="TpmButtonBGWrap">
-      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" @click="add" v-permission="permissions['insert']">新增</el-button>
-      <div class="TpmButtonBG" @click="importData" v-permission="permissions['import']">
-        <img src="@/assets/images/import.png" alt="">
-        <span class="text">导入</span>
-      </div>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel" v-permission="permissions['delete']">删除</el-button>
+      <el-button
+        type="primary"
+        icon="el-icon-plus"
+        class="TpmButtonBG"
+        @click="add"
+        >新增</el-button
+      >
+      <!-- v-permission="permissions['insert']" -->
+      <el-button
+        type="primary"
+        class="TpmButtonBG"
+        icon="el-icon-delete"
+        @click="mutidel"
+        >删除</el-button
+      >
+      <!-- v-permission="permissions['delete']" -->
     </div>
-    <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
-      style="width: 100%">
-      <el-table-column type="selection" align="center" />
-      <el-table-column fixed align="center" label="操作" width="220">
-        <template slot-scope="scope">
-          <div class="table_operation">
-            <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
-              <svg-icon icon-class="save-light" class="svgIcon" />
-              <span>保存</span>
-            </div>
-            <div class="haveText_editor" v-permission="permissions['update']" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
-              <svg-icon icon-class="editor" class="svgIcon" />
-              <span>编辑</span>
-            </div>
-            <div class="haveText_editor" v-show="scope.row.isEditor " @click="CancelEditorRow(scope.$index)">
-              <svg-icon icon-class="editor" class="svgIcon" />
-              <span>取消编辑</span>
-            </div>
-          </div>
+    <!-- 数据列表 -->
+    <el-table
+      :data="tableData"
+      border
+      :max-height="maxheight"
+      :header-cell-style="HeadTable"
+      @selection-change="handleSelectionChange"
+      :row-class-name="tableRowClassName"
+      style="width: 100%"
+    >
+      <el-table-column type="selection" align="center" fixed />
+      <el-table-column
+        align="center"
+        width="150"
+        prop="minePackage"
+        label="Mine Package"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        width="280"
+        prop="costItem"
+        label="Cost Item"
+      >
+      </el-table-column>
+      <el-table-column align="center" prop="gold" width="120" label="Gold(%)">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        width="120"
+        prop="prestige"
+        label="Prestige(%)"
+      >
+      </el-table-column>
+      <el-table-column align="center" width="120" prop="novas" label="Novas(%)">
+      </el-table-column>
+      <el-table-column
+        align="center"
+        width="150"
+        prop="startMonth"
+        label="生效起始月份"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        width="150"
+        prop="endMonth"
+        label="生效结束月份"
+      >
+      </el-table-column>
+      <el-table-column align="center" prop="state" label="状态">
+        <template v-slot="{ row }">
+          {{ row.state === 1 ? '有效' : '无效' }}
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="contractItemCode" label="Contract Item 编码"> </el-table-column>
-      <el-table-column width="220" align="center" prop="contractItem" label="Contract Item">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.contractItem" clearable class="my-el-input" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{ scope.row.contractItem }}
-          </div>
-        </template>
+      <el-table-column
+        align="center"
+        width="150"
+        prop="createBy"
+        label="创建人"
+      >
       </el-table-column>
-      <el-table-column width="360" align="center" prop="conditionType" label="条款类型">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.conditionTypeList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ConditionsTypeList" :key="index" :label="item" :value="item" />
-            </el-select>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{ scope.row.conditionTypeText }}
-          </div>
-        </template>
+      <el-table-column
+        v-slot="{ row }"
+        align="center"
+        width="200"
+        prop="createDate"
+        label="创建时间"
+      >
+        {{ row.createDate ? row.createDate.replace('T', ' ') : '' }}
       </el-table-column>
-      <el-table-column width="360" align="center" label="预提类型">
-        <template slot-scope="scope">
-          <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.variablePointList" multiple class="my-el-input mutiInput" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in FixOrPointList" :key="index" :label="item" :value="item" />
-            </el-select>
-          </div>
-          <div v-show="!scope.row.isEditor">
-            {{ scope.row.variablePointText }}
-          </div>
-        </template>
+      <el-table-column
+        align="center"
+        width="150"
+        prop="updateBy"
+        label="更新人"
+      >
       </el-table-column>
-      <el-table-column width="220" align="center" prop="profitCenter" label="状态">
-        <template slot-scope="{ row }">
-          <div>
-            {{ row.state==0 ? '无效' : '有效' }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="150" align="center" prop="createBy" label="创建人"> </el-table-column>
-      <el-table-column v-slot={row} width="180" align="center" prop="createDate" label="创建时间">
-        {{ row.createDate ? row.createDate.replace("T"," ") : '' }} </el-table-column>
-      <el-table-column width="150" align="center" prop="updateBy" label="修改人"> </el-table-column>
-      <el-table-column v-slot={row} width="180" align="center" prop="updateDate" label="修改时间">
-        {{ row.updateDate ? row.updateDate.replace("T"," ") : '' }}
+      <el-table-column
+        v-slot="{ row }"
+        align="center"
+        width="200"
+        prop="updateDate"
+        label="更新时间"
+      >
+        {{ row.updateDate ? row.updateDate.replace('T', ' ') : '' }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
-    <el-dialog class="my-el-dialog" title="新增" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
+    <!-- 新增 -->
+    <el-dialog
+      class="my-el-dialog"
+      title="新增"
+      :visible="dialogVisible"
+      width="50%"
+      v-el-drag-dialog
+      @close="closeDialog"
+    >
       <div class="el-dialogContent">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="el-form-row">
-          <el-form-item label="Mine Package" prop="contractItem">
-            <el-input v-model="ruleForm.contractItem" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="Contract Item" prop="contractItem">
-            <el-input v-model="ruleForm.contractItem" class="my-el-input" placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="条款类型" prop="conditionType">
-            <el-select v-model="ruleForm.conditionType" multiple class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ConditionsTypeList" :key="index" :label="item" :value="item" />
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="140px"
+          class="el-form-row"
+        >
+          <el-form-item label="Mine Package" prop="minePackage">
+            <el-select
+              v-model="ruleForm.minePackage"
+              @change="
+                getCostItemList(
+                  minePackageList.filter(
+                    (item) => ruleForm.minePackage === item.name
+                  )[0].code
+                )
+              "
+              class="my-el-input"
+              filterable
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in minePackageList"
+                :key="item.code"
+                :label="item.name"
+                :value="item.name"
+              />
             </el-select>
           </el-form-item>
-          <el-form-item label="预提类型" prop="variablePoint">
-            <el-select v-model="ruleForm.variablePoint" multiple class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in FixOrPointList" :key="index" :label="item" :value="item" />
+          <el-form-item label="Cost Item">
+            <el-select
+              v-model="ruleForm.costItem"
+              clearable
+              filterable
+              class="my-el-input"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="(item, index) in CostItemList"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
             </el-select>
+          </el-form-item>
+          <el-form-item label="Gold" prop="gold">
+            <el-input v-model="ruleForm.gold" type="number" class="my-el-input"
+              ><i slot="suffix">%</i>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Prestige" prop="prestige">
+            <el-input
+              v-model="ruleForm.prestige"
+              type="number"
+              class="my-el-input"
+            >
+              <i slot="suffix">%</i>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Novas" prop="novas">
+            <el-input
+              v-model="ruleForm.novas"
+              type="number"
+              class="my-el-input"
+              disabled
+              ><i slot="suffix">%</i></el-input
+            >
           </el-form-item>
           <el-form-item label="状态" prop="state">
-            <el-select v-model="ruleForm.state" class="my-el-input" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
+            <el-select
+              v-model="ruleForm.state"
+              class="my-el-input"
+              filterable
+              clearable
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="(item, index) in ['无效', '有效']"
+                :key="index"
+                :label="item"
+                :value="index"
+              />
             </el-select>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-        <el-button @click="resetForm('ruleForm')">取 消</el-button>
-      </span>
-    </el-dialog>
-    <!-- 导入 -->
-    <el-dialog width="50%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImport">
-      <div class="fileInfo ImportContent">
-        <div class="fileTitle">模板</div>
-        <div class="my-search selectFile" @click="downloadTemplate">
-          <svg-icon icon-class="download_white" style="font-size: 16px;" />
-          <span class="text">下载模板</span>
-        </div>
-      </div>
-      <div class="fileInfo ImportContent">
-        <div class="fileTitle">文件</div>
-        <div class="my-search selectFile" @click="parsingExcelBtn">
-          <img src="@/assets/images/selectFile.png" alt="" />
-          <span class="text">选择文件</span>
-        </div>
-        <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)" />
-        <div v-if="uploadFileName != ''" class="fileName">
-          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-          <span>{{ uploadFileName }}</span>
-        </div>
-      </div>
-      <div v-if="warningShow" class="warningWrap">
-        <el-alert v-for="(item, index) in warningList" :key="index" :title="item" style="margin:10px 0;" type="warning" effect="dark" />
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmImport()">确 定</el-button>
-        <el-button @click="closeImport">取 消</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')"
+          >确 定</el-button
+        >
+        <el-button @click="closeDialog()">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -232,14 +324,12 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  parseTime,
-  getTextMap,
   getHeight,
   contractList,
   downloadFile,
   CustomerDeductionsAndPayType,
 } from '@/utils'
-import API from '@/api/masterData/masterData.js'
+import API from '@/api/brandsplitratio/index.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 export default {
   name: 'contractItem',
@@ -247,13 +337,12 @@ export default {
   data() {
     return {
       total: 0,
-      pageSize: 100,
+      pageSize: 10,
       pageNum: 1,
       filterObj: {
-        contractItemCode: '',
-        contractItem: '',
-        conditionType: [],
-        variablePoint: [],
+        minePackage: '',
+        costItem: '',
+        activityMonth: '',
         state: '',
       },
       monthList: [],
@@ -270,27 +359,43 @@ export default {
         },
       ],
       ruleForm: {
-        contractItem: '',
-        conditionType: [],
-        variablePoint: [],
-        state:1
+        minePackage: '',
+        costItem: '',
+        novas: 0,
+        prestige: '',
+        gold: '',
+        state: 1,
       },
       rules: {
-        contractItem: [
+        minePackage: [
           {
             required: true,
             message: 'This field is required',
             trigger: 'blur',
           },
         ],
-        conditionType: [
+        costItem: [
           {
             required: true,
             message: 'This field is required',
             trigger: 'blur',
           },
         ],
-        variablePoint: [
+        novas: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        prestige: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        gold: [
           {
             required: true,
             message: 'This field is required',
@@ -306,7 +411,6 @@ export default {
         ],
       },
       dialogVisible: false,
-      importVisible: false,
       isEditor: '',
       editorId: '',
       checkArr: [], //批量删除,存放选中
@@ -320,10 +424,11 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      uploadFile:'',
-      uploadFileName:'',
+      uploadFile: '',
+      uploadFileName: '',
       warningList: [],
       warningShow: false,
+      CostItemList: [],
     }
   },
   directives: { elDragDialog, permission },
@@ -337,8 +442,7 @@ export default {
     this.getAllMonth()
   },
   computed: {},
-  watch: {
-  },
+  watch: {},
   methods: {
     //获取表格数据
     getTableData() {
@@ -346,11 +450,7 @@ export default {
       API.getPageContractItem({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        contractItemCode: this.filterObj.contractItemCode,
-        contractItem: this.filterObj.contractItem,
-        conditionType: this.filterObj.conditionType.join(','),
-        variablePoint: this.filterObj.variablePoint.join(','),
-        state: this.filterObj.state,
+        ...this.filterObj,
       }).then((response) => {
         let list = response.data.records
         list.forEach((item) => {
@@ -392,7 +492,7 @@ export default {
       let index = this.CustomerDeductionsAndPayType.findIndex((item) => {
         return item.CustomerDeduction == value
       })
-      return index!=-1?index:0
+      return index != -1 ? index : 0
     },
     add() {
       this.dialogVisible = true
@@ -401,33 +501,13 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
-    Reset() {
-      this.filterObj = {
-        contractItemCode: '',
-        contractItem: '',
-        conditionType: '',
-        state: '',
-      }
-      this.getTableData()
-    },
     //导出数据
     exportData() {
       API.exportContractItem({
-        contractItemCode: this.filterObj.contractItemCode,
-        contractItem: this.filterObj.contractItem,
-        conditionType: this.filterObj.conditionType,
-        state: this.filterObj.state,
+        ...this.filterObj,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, 'Contract Item-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-    },
-    //下载模板
-    downloadTemplate() {
-      API.downloadContractItemTemplate({}).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, 'Contract Item模板-' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '品牌拆分比例' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
@@ -436,31 +516,30 @@ export default {
       this.isEditor = false
       this.editorId = ''
       this.ruleForm = {
-        contractItem: '',
-        conditionType: [],
-        variablePoint: [],
-        state:1
+        minePackage: '',
+        costItem: '',
+        novas: 0,
+        prestige: '',
+        gold: '',
+        state: 1,
       }
     },
     //提交form
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm)
           API.insertContractItem({
-            contractItem: this.ruleForm.contractItem,
-            conditionType: this.ruleForm.conditionType.join(','),
-            variablePoint: this.ruleForm.variablePoint.join(','),
-            state: this.ruleForm.state,
+            ...this.ruleForm,
           }).then((response) => {
-            if (response.code === 1000) {
-              this.$message.success(`添加成功`)
-              this.resetForm(formName)
-              this.getTableData()
-            }
+            response.data
+              ? this.$message.success('新增成功！')
+              : this.$message.error(response.message)
+            this.getTableData()
+            this.closeDialog()
           })
         } else {
           this.$message.error('提交失败')
+          this.closeDialog()
           return false
         }
       })
@@ -493,94 +572,6 @@ export default {
             })
           })
       }
-    },
-    saveRow(row, index) {
-      API.updateContractItem({
-        id: row.id,
-        contractItem: row.contractItem,
-        conditionType: row.conditionTypeList.join(','),
-        variablePoint: row.variablePointList.join(','),
-      }).then((response) => {
-        if (response.code === 1000) {
-          this.$message.success(`保存成功`)
-          this.getTableData()
-        }
-      })
-    },
-    editorRow(index) {
-      if (this.tempObj.tempInfo) {
-        this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
-      }
-      //存放临时数据，用于取消编辑时重置
-      this.tempObj.rowIndex = index
-      this.tempObj.tempInfo = { ...this.tableData[index] }
-      //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
-      this.tableData.forEach((item) => {
-        item.isEditor = 0
-      })
-      this.tableData[index].isEditor = 1
-      this.$forceUpdate()
-    },
-    CancelEditorRow(index) {
-      this.tableData[index].isEditor = 0
-      this.tableData[index] = this.tempObj.tempInfo
-    },
-    //导入数据
-    importData() {
-      this.importVisible = true
-    },
-    //确认
-    confirmImport() {
-      this.closeImport()
-      this.getTableData()
-      // var formData = new FormData()
-      // formData.append('file', this.uploadFile)
-      // API.importContractItem(formData).then((response) => {
-      //   if (response.code == 1000) {
-      //     if(response.data) {
-      //       this.warningShow = true
-      //       this.warningList = response.data.split(";")
-      //     } else {
-      //       this.closeImport()
-      //       this.getTableData()
-      //     }
-      //   }
-      //   this.event.srcElement.value = '' // 置空
-      // })
-    },
-    parsingExcelBtn() {
-      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
-    },
-    //导入
-    parsingExcel(event) {
-      this.event = event
-      this.uploadFile = event.target.files[0]
-      this.uploadFileName = event.target.files[0].name
-      var formData = new FormData()
-      formData.append('file', this.uploadFile)
-      this.warningShow = false
-      this.warningList = []
-      API.importContractItem(formData).then((response) => {
-        if (response.code == 1000) {
-          this.warningShow = true
-          this.warningList = response.data
-        }
-        this.event.srcElement.value = '' // 置空
-      })
-    },
-    //关闭导入
-    closeImport() {
-      this.importVisible = false
-      this.uploadFile = ''
-      this.uploadFileName = ''
-      this.event.target.value = null
-      this.warningList = []
-      this.warningShow = false
-    },
-    //取消
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-      this.closeDialog()
     },
     handleSelectionChange(val) {
       this.checkArr = val
@@ -630,21 +621,21 @@ export default {
   color: #666;
   font-size: 14px;
 }
-.tipStar{
+.tipStar {
   color: #eb4f48;
 }
 </style>
 <style lang="scss">
 .mutiInput {
   width: 300px !important;
-    border-radius: 5px;
-    margin-right: 20px;
-    .el-input__inner {
-      height: 37px;
-      width: 300px !important;
-    }
-    .el-input--suffix {
-      width: 300px !important;
-    }
+  border-radius: 5px;
+  margin-right: 20px;
+  .el-input__inner {
+    height: 37px;
+    width: 300px !important;
+  }
+  .el-input--suffix {
+    width: 300px !important;
+  }
 }
 </style>

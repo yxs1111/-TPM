@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-08-01 13:58:49
+ * @LastEditTime: 2022-09-05 11:33:10
 -->
 <template>
   <div class="V0ApplyList">
@@ -1168,7 +1168,7 @@ export default {
             case 'KA Contract':
               url = API.getContractData
               break
-            case 'ListingFee':
+            case 'Listing Fee':
               url = API.getListingFee
               break
             case 'ECM':

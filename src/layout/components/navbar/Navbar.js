@@ -84,6 +84,9 @@ export default {
       await this.$store.dispatch('user/logout')
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       this.$router.push(`/login`)
+      //退出到CPT登录页
+      // sessionStorage.removeItem('isFirstEntrySystem')
+      // location.href = 'http://localhost:8081/#/login'
     },
     async userinfo() {
       this.$router.push(`/user/personal`)

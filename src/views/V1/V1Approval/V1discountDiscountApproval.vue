@@ -281,7 +281,7 @@ export default {
       distributorArr: [],
       localDate: '',
       saveBtn: false,
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       uploadFile: '',
       firstIsPass: false,
@@ -707,7 +707,7 @@ export default {
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getApprovePageV1({
           pageNum: this.pageNum, // 当前页

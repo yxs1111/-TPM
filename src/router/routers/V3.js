@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-08-30 13:51:16
+ * @LastEditTime: 2022-09-05 16:32:37
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -21,7 +21,7 @@ export default function () {
           path: '/costManagement/V3/V3Apply',
           code: 'price_nka_v3_apply',
           name: 'V3Apply',
-          component: () => import('@/views/V3/V3Apply.vue'),
+          component: () => import('@/views/V3/V3ApplyNew.vue'),
           meta: { title: '申请', icon: 'apply' },
           children: [
             {
@@ -169,13 +169,25 @@ export default function () {
                 activeMenu: '/costManagement/V3/V3Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3Premium',
+              code: 'price_nka_v3_apply',
+              name: 'V3Premium',
+              component: () => import('@/views/V3/V3Apply/V3Premium.vue'),
+              meta: {
+                title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
           ],
         },
         {
           path: '/costManagement/V3/V3Approval',
           code: 'price_nka_v3_approve',
           name: 'V3Approval',
-          component: () => import('@/views/V3/V3ApprovalModel.vue'),
+          component: () => import('@/views/V3/V3Approval.vue'),
           meta: { title: '审批', icon: 'approve' },
           children: [
             {
@@ -317,6 +329,19 @@ export default function () {
                 import('@/views/V3/V3Approval/V3ApplyrovalDisplay.vue'),
               meta: {
                 title: 'Display',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3PremiumApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3PremiumApproval',
+              component: () =>
+                import('@/views/V3/V3Approval/V3PremiumApproval.vue'),
+              meta: {
+                title: 'Premium',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },

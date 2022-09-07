@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-08-10 10:13:21
+ * @LastEditTime: 2022-09-06 10:34:32
 -->
 <template>
   <div class="app-container">
@@ -397,6 +397,14 @@ export default {
         if (valid) {
           if(!this.compareDate(this.ruleForm.startAndEndVTwo[1],this.ruleForm.startAndEndVThree[0])) {
             this.$message.info("V3的开始时间，不应早于V2的结束时间")
+            return
+          }
+          if(!this.compareDate(this.ruleForm.startAndEndVOne[1],this.ruleForm.startAndEndVTwo[0])) {
+            this.$message.info("V2的开始时间，不应早于V1的结束时间")
+            return
+          }
+          if(!this.compareDate(this.ruleForm.startAndEndVZero[1],this.ruleForm.startAndEndVOne[0])) {
+            this.$message.info("V1的开始时间，不应早于V0的结束时间")
             return
           }
           if (this.isConfirm) {

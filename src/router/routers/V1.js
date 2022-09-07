@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-08-10 09:30:43
+ * @LastEditTime: 2022-09-05 16:47:50
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -21,7 +21,7 @@ export default function () {
           path: '/costManagement/V1/V1Apply',
           code: 'price_nka_v1_apply',
           name: 'V1Apply',
-          component: () => import('@/views/V1/V1Apply.vue'),
+          component: () => import('@/views/V1/V1ApplyNew.vue'),
           meta: { title: '申请', icon: 'apply' },
           redirect: '/costManagement/V1/V1Apply/V1discountAll',
           children: [
@@ -134,9 +134,6 @@ export default function () {
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
-              params: {
-                smartplan: true,
-              },
             },
             {
               hidden: true,
@@ -149,9 +146,6 @@ export default function () {
                 title: 'V1ECM',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
-              },
-              params: {
-                smartplan: true,
               },
             },
             {
@@ -167,13 +161,26 @@ export default function () {
                 activeMenu: '/costManagement/V1/V1Apply',
               },
             },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Apply/V1Premium',
+              code: 'price_nka_v1_apply',
+              name: 'V1Premium',
+              component: () => import('@/views/V1/V1Apply/V1Premium.vue'),
+              meta: {
+                title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
           ],
         },
         {
           path: '/costManagement/V1/V1Approval',
           code: 'price_nka_v1_approve',
           name: 'V1Approval',
-          component: () => import('@/views/V1/V1ApprovalModel.vue'),
+          component: () => import('@/views/V1/V1Approval.vue'),
           meta: { title: '审批', icon: 'approve' },
           redirect: '/costManagement/V1/V1Approval/V1discountAllApproval',
           children: [
@@ -280,7 +287,6 @@ export default function () {
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Approval/V1POSMApprove',
               code: 'price_nka_v1_approve',
               name: 'V1POSMApprove',
@@ -290,29 +296,21 @@ export default function () {
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },
-              params: {
-                smartplan: false,
-              },
             },
             {
               hidden: true,
-
-              path: '/costManagement/V1/V1Approval/V1ECMpprove',
+              path: '/costManagement/V1/V1Approval/V1ECMApproval',
               code: 'price_nka_v1_approve',
-              name: 'V1ECMApprove',
+              name: 'V1ECMApproval',
               component: () => import('@/views/V1/V1Approval/V1ECM.vue'),
               meta: {
                 title: 'ECM',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },
-              params: {
-                smartplan: false,
-              },
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Approval/V1ApplyrovalDisplay',
               code: 'price_nka_v1_approve',
               name: 'V1ApplyrovalDisplay',
@@ -320,6 +318,19 @@ export default function () {
                 import('@/views/V1/V1Approval/V1ApplyrovalDisplay.vue'),
               meta: {
                 title: 'Display',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1Premium',
+              code: 'price_nka_v1_approve',
+              name: 'V1Premium',
+              component: () =>
+                import('@/views/V1/V1Approval/V1Premium.vue'),
+              meta: {
+                title: 'Premium',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },

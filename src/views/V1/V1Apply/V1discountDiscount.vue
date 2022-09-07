@@ -299,7 +299,7 @@ export default {
       distributorArr: [],
       submitBtn: 1,
       localDate: '',
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       firstIsPass: false,
       isCalculation: false,
@@ -685,7 +685,7 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
-      
+
       API.downExcelTmpForV1({
         // mainId: this.mainIdLocal,
         ImportType: this.isAiQin==0?1:3,
@@ -805,8 +805,8 @@ export default {
             if (
               res.data.version === 'V1' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.submitBtn === 0 
-              
+              this.submitBtn === 0
+
             ) {
               this.btnStatus = true
             } else {

@@ -182,7 +182,6 @@ export default {
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
               },
             },
-
             {
               name: 'POSM-标准',
               path: '/costManagement/V1/V1Approval/V1POSMApprove',
@@ -196,13 +195,13 @@ export default {
             },
             {
               name: 'ECM',
-              path: '/costManagement/V1/V1Approval/V1ECMpprove',
+              path: '/costManagement/V1/V1Approval/V1ECMApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_ECM.png'),
                 light: require('@/assets/images/tab/tab_ECM_l.png'),
               },
               params: {
-                smartplan: true,
+                smartplan: false,
               },
             },
             {
@@ -211,6 +210,17 @@ export default {
               img: {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+              },
+              params: {
+                smartplan: true,
+              },
+            },
+            {
+              name: 'Premium',
+              path: '/costManagement/V1/V1Approval/V1Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
               },
             },
           ]
@@ -255,10 +265,10 @@ export default {
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
-    font-size: 14px;
+    font-size: 11px;
     color: #fff;
     text-align: center;
-    line-height: 38px;
+    line-height: 15px;
     cursor: pointer;
     img {
       width: 17px;

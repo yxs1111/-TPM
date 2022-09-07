@@ -201,7 +201,14 @@ export default {
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
               },
             },
-
+            {
+              name: 'Premium',
+              path: '/costManagement/V2/V2Apply/V2Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+            },
             {
               name: '补录',
               path: '/costManagement/V2/V2Apply/V2Collection',
@@ -242,7 +249,7 @@ export default {
   width: 100%;
   height: 38px;
   display: flex;
-  margin-left: 25px;
+  margin-left: 10px;
   .tabli {
     display: flex;
     align-items: center;
@@ -251,10 +258,10 @@ export default {
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
-    font-size: 14px;
+    font-size: 11px;
     color: #fff;
     text-align: center;
-    line-height: 38px;
+    line-height: 15px;
     cursor: pointer;
     img {
       width: 17px;

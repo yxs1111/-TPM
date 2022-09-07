@@ -196,6 +196,17 @@ export default {
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
               },
             },
+            {
+              name: 'Premium',
+              path: '/costManagement/V1/V1Apply/V1Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              params: {
+                smartplan: true,
+              },
+            },
           ]
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
@@ -237,10 +248,10 @@ export default {
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
-    font-size: 14px;
+    font-size: 11px;
     color: #fff;
     text-align: center;
-    line-height: 38px;
+    line-height: 15px;
     cursor: pointer;
     img {
       width: 17px;

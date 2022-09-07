@@ -202,6 +202,14 @@ export default {
               },
             },
             {
+              name: 'Premium',
+              path: '/costManagement/V3/V3Apply/V3Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+            },
+            {
               name: '补录',
               path: '/costManagement/V3/V3Apply/V3Collection',
               img: {
@@ -250,10 +258,10 @@ export default {
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
-    font-size: 14px;
+    font-size: 11px;
     color: #fff;
     text-align: center;
-    line-height: 38px;
+    line-height: 15px;
     cursor: pointer;
     img {
       width: 17px;
