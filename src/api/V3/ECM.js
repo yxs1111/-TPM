@@ -5,63 +5,62 @@
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
-// investCpPosmPipVThree/getVThreePage
 
-// url: '/cityplan/investFmcVThree',
 export default {
-  url: '/cityplan/investCpPosmPipVThree',
-  //申请 分页查询 investCpPosmPipVThree/getVThreePage
+  url: '/cityplan/investCpEcmVThreeDetail',
+  saveurl: '/cityplan/investCpEcmVThreeDetailEb',
+  //申请 分页查询 /investCpEcmVThreeDetail/getPage
   getPage(params) {
-    return requestApi.request_get(this.url + '/getVThreePage', params)
+    return requestApi.request_get(this.url + '/getPage', params)
   },
-  //审批分页查询 investCpPosmPipVTwo/getVThreePageApprove
+  //审批分页查询 investCpPosmPipVTwo/getVThreePageApprove 暂无
   getVThreePageApprove(params) {
-    return requestApi.request_get(this.url + '/getVThreePageApprove', params)
+    return requestApi.request_get(this.url + '/getPage', params)
   },
-  //导出V3 exportVThree
+  //导出V3 /investCpEcmVThreeDetail/downExcel
   exportV3(params) {
     return request({
-      url: this.url + '/exportVThree',
-      method: 'get',
-      params: params,
+      url: this.url + '/downExcel',
+      method: 'post',
+      data: params,
       responseType: 'blob',
     })
   },
-  //保存 investCpPosmPipVThree/saveVThree
+  //保存 investCpEcmVThreeDetailEb/save
   saveV3Data(params) {
-    return requestApi.request_post(this.url + '/saveVThree', params)
+    return requestApi.request_post(this.saveurl + '/save', params)
   },
-  //下载模板  investCpPosmPipVThree/downloadVThreeTemplate
+  //下载模板  investCpEcmVThreeDetail/downExcelTemplate
   downloadTemplate(params) {
     return request({
-      url: this.url + '/downloadVThreeTemplate',
-      method: 'get',
-      params: params,
+      url: this.url + '/downExcelTemplate',
+      method: 'post',
+      data: params,
       responseType: 'blob',
     })
   },
-  //导入  investCpPosmPipVThree/importVThree
+  //导入  investCpEcmVThreeDetail/importNormal
   import(params) {
-    return requestApi.request_post(this.url + '/importVThree', params)
+    return requestApi.request_post(this.url + '/importNormal', params)
   },
-  //异常项校验  investCpPosmPipVThree/exceptionCheckVThree
+  //异常项校验  investCpEcmVThreeDetail/exceptionCheck
   exceptionCheck(params) {
-    return requestApi.request_post(this.url + '/exceptionCheckVThree', params)
+    return requestApi.request_post(this.url + '/exceptionCheck', params)
   },
-  //导出错误信息  investCpPosmPipVThree/exportErrorMsg
+  //导出错误信息  investCpEcmVThreeDetailEb/downExcel
   exportV3Error(params) {
     return request({
-      url: this.url + '/exportErrorMsg',
-      method: 'get',
-      params: params,
+      url: this.saveurl + '/downExcel',
+      method: 'post',
+      data: params,
       responseType: 'blob',
     })
   },
-  //提交
+  //提交  investCpEcmVThreeDetail/approve
   approve(params) {
-    return requestApi.request_post(this.url + '/approveVThree', params)
+    return requestApi.request_post(this.url + '/approve', params)
   },
-  //获取审批
+  //获取审批  zanwu
   getApproveList(params) {
     return requestApi.request_get(this.url + '/getV3ApproveList', params)
   },
