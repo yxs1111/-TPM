@@ -7,23 +7,18 @@ import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
-  // investCpPosmPipVOne/getPosmPipVOnePage
-  url: '/cityplan/investCpPosmPipVOne',
-  // 获取SmartplanData
-  getSmartplanData(params) {
-    return requestApi.request_get(this.url + '/getSmarPlanData', params)
-  },
-  //分页查询
+  url: '/cityplan/investCpEcmVOneDetail',
+
+  //分页查询 investCpEcmVOneDetail/getPage
   getPage(params) {
-    return requestApi.request_get(this.url + '/getPosmPipVOnePage', params)
+    return requestApi.request_get(this.url + '/getPage', params)
   },
-  //导出
+  //导出  investCpEcmVOneDetail/downExcel
   exportExcel(params) {
-    // investCpPosmPipVOne/pipVOneExport
     return request({
-      url: this.url + '/pipVOneExport',
-      method: 'get',
-      params: params,
+      url: this.url + '/downExcel',
+      method: 'post',
+      data: params,
       responseType: 'blob',
     })
   },

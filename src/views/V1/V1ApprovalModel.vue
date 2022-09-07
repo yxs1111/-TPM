@@ -196,7 +196,7 @@ export default {
             },
             {
               name: 'ECM',
-              path: '/costManagement/V1/V1Approval/V1ECM',
+              path: '/costManagement/V1/V1Approval/V1ECMpprove',
               img: {
                 dark: require('@/assets/images/tab/tab_ECM.png'),
                 light: require('@/assets/images/tab/tab_ECM_l.png'),
