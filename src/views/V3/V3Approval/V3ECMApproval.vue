@@ -31,7 +31,7 @@
             <el-option v-for="(item) in channelArr"
                        :key="item.channelCsName"
                        :label="item.channelCsName"
-                       :value="item.channelCsName" />
+                       :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -43,7 +43,7 @@
             <el-option v-for="(item, index) in customerArr"
                        :key="index"
                        :label="item.customerCsName"
-                       :value="item.customerCsName" />
+                       :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -55,7 +55,7 @@
             <el-option v-for="(item, index) in supplierArr"
                        :key="index"
                        :label="item.supplierName"
-                       :value="item.supplierName" />
+                       :value="item.supplierCode" />
           </el-select>
         </div>
 
@@ -1017,7 +1017,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data
+          this.supplierArr = res.data.records
         }
       })
     },
