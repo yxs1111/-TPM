@@ -1,7 +1,7 @@
 <!--
- * @Description: V1RoadShow
+ * @Description: V3FreeGoodsTin
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-07 16:42:28
+ * @LastEditTime: 2022-09-07 16:56:16
 -->
 <template>
   <div class="MainContent">
@@ -24,6 +24,24 @@
           <span class="SelectliTitle">客户系统名称:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">经销商:</span>
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">大区:</span>
+          <el-select v-model="filterObj.largeAreaCode" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in largeAreaList" :key="index" :label="item" :value="item" />
+          </el-select>
+        </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">区域:</span>
+          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
       </div>
@@ -106,7 +124,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="brandName" label="品牌">
+      <el-table-column width="280" align="center" prop="supplierName" label="品牌">
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
         </template>
@@ -116,17 +134,113 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+      <el-table-column width="280" align="center" prop="supplierName" label="SKU">
         <template v-slot:header>
-          <div>
-            V1计划费用(RMB)
-            <br>
-            <span class="subTitle">KA+Brand</span>
-          </div>
+          <div>SKU<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planCost) }}
+            {{ scope.row.productName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="zoneName" label="经销商">
+        <template v-slot:header>
+          <div>经销商<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.distributorName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="regionName" label="大区">
+        <template v-slot:header>
+          <div>大区<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.regionName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="regionName" label="区域">
+        <template v-slot:header>
+          <div>区域<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.regionName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+        <template v-slot:header>
+          <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.planCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="estimatePrice" label="V2预估单位费用(RMB/Tin)">
+        <template v-slot:header>
+          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.estimatePrice) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="estimateVol" label="V2预估用量(CTN)">
+        <template v-slot:header>
+          <div>V2预估用量(CTN)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.estimateVol) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="estimateCost" label="V2预估费用(RMB)">
+        <template v-slot:header>
+          <div>V2预估费用(RMB)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.estimateCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="actualPrice" label="V3实际单位费用(RMB/Tin)">
+        <template v-slot:header>
+          <div>V3实际单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.actualPrice) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="actualVol" label="V3实际用量(CTN)">
+        <template v-slot:header>
+          <div>V3实际用量(CTN)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.actualVol) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="actualCost" label="V3实际费用">
+        <template v-slot:header>
+          <div>V3实际费用<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.actualCost) }}
           </div>
         </template>
       </el-table-column>
@@ -153,7 +267,7 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
@@ -167,12 +281,13 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
+  messageMap,
   FormateThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V1/RoadShow'
+import API from '@/api/V3/RoadShow'
 export default {
-  name: 'V1FreeGoodsTin',
+  name: 'V3FreeGoodsTin',
   directives: { elDragDialog, permission },
 
   data() {
@@ -182,7 +297,11 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
+        largeAreaCode: '',
+        regionCode: '',
         customerCode: '',
+        customerMdmCode: '',
+        distributorCode: '',
         month: '',
       },
       permissions: getDefaultPermissions(),
@@ -190,24 +309,28 @@ export default {
       monthList: [],
       customerArr: [],
       tableData: [],
+      RegionList: [],
+      largeAreaList: [],
+      distributorArr: [],
       maxheight: getHeightHaveTab(),
+      mainId: '',
+      usernameLocal: '',
+      messageMap: messageMap(),
     }
   },
   computed: {},
-  watch: {
-    'filterObj.channelCode'() {
-      this.filterObj.customerCode = ''
-      this.getCustomerList()
-    },
-  },
+  watch: {},
   mounted() {
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeightHaveTab()
       })()
     }
+    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
+    this.getRegionList()
+    this.getLargeAreaList()
   },
   methods: {
     // 获取表格数据
@@ -228,47 +351,13 @@ export default {
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
+          regionCode: this.filterObj.regionCode,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
-      }
-    },
-    //获取SmartPlan
-    getSmartPlan() {
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
-        }
-      } else {
-        this.$confirm('是否获取SmartPlan数据?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            API.getSmartplanData({
-              yearAndMonth: this.filterObj.month,
-              channelCode: this.filterObj.channelCode,
-            }).then((res) => {
-              if (res.code === 1000) {
-                this.$message.success('成功获取SmartPlan数据')
-                this.getTableData()
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消',
-            })
-          })
       }
     },
     getAllMonth() {
@@ -297,8 +386,22 @@ export default {
           }
         })
     },
+    getRegionList() {
+      selectAPI.getRegionList({}).then((res) => {
+        if (res.code === 1000) {
+          this.RegionList = res.data
+        }
+      })
+    },
+    getLargeAreaList() {
+      selectAPI.getLargeAreaList().then((res) => {
+        if (res.code === 1000) {
+          this.largeAreaList = res.data
+        }
+      })
+    },
     //千分位分隔符+两位小数
-    FormatNum(num) {
+    formatNum(num) {
       return FormateThousandNum(num)
     },
     search() {
@@ -311,11 +414,12 @@ export default {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
-          menu: 'export', //导出常量 固定传这个
+          customerCode: this.filterObj.customerCode,
+          regionCode: this.filterObj.regionCode,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -349,4 +453,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+.tip {
+  color: #eb4f48;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #eb4f48;
+}
 </style>
