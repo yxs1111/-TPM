@@ -538,10 +538,11 @@
             </el-table-column> -->
             <el-table-column width="180"
                              align="center"
+                             fixed="left"
                              prop="judgmentType  "
-                             label="系统判定">
+                             label="是否通过">
               <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
+                <div>是否通过<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -566,10 +567,11 @@
             </el-table-column>
             <el-table-column width="800"
                              align="left"
+                             fixed="left"
                              prop="judgmentContent"
-                             label="系统判定内容">
+                             label="验证信息">
               <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
+                <div>验证信息<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -581,7 +583,7 @@
                              width="460"
                              prop="cpId"
                              label="CPID"
-                             fixed>
+                             fixed="left">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -1077,7 +1079,7 @@ export default {
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 1,
+          //   isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
@@ -1151,7 +1153,7 @@ export default {
         API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          isSubmit: 1,
+          //   isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
@@ -1175,7 +1177,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -1207,7 +1209,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId,
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')
@@ -1234,7 +1236,7 @@ export default {
         API.exportCheckData({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          isSubmit: 0,
+          //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_ECM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -1249,7 +1251,7 @@ export default {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
-        isSubmit: 0,
+        // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
           if (!Array.isArray(response.data)) {

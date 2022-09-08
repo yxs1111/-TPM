@@ -518,6 +518,7 @@
                     stripe>
             <el-table-column width="180"
                              align="center"
+                             fixed="left"
                              prop="judgmentType"
                              label="是否通过">
               <template v-slot:header>
@@ -546,6 +547,7 @@
             </el-table-column>
             <el-table-column width="800"
                              align="left"
+                             fixed="left"
                              prop="judgmentContent"
                              label="验证信息">
               <template v-slot:header>
@@ -560,6 +562,7 @@
             <el-table-column align="center"
                              width="460"
                              prop="cpId"
+                             fixed="left"
                              label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
@@ -675,33 +678,7 @@
               </template>
               <!-- 数据未对接 -->
             </el-table-column>
-            <el-table-column width="220"
-                             align="center"
-                             prop="zoneName"
-                             label="大区">
-              <template v-slot:header>
-                <div>大区<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.zoneName }}
-                </div>
-              </template>
-              <!-- 数据未对接 -->
-            </el-table-column>
-            <el-table-column width="220"
-                             align="center"
-                             prop="regionName"
-                             label="区域">
-              <template v-slot:header>
-                <div>区域<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.regionName }}
-                </div>
-              </template>
-            </el-table-column>
+
             <el-table-column width="220"
                              align="right"
                              prop="ecmItem"
@@ -1065,7 +1042,7 @@ export default {
           customerCode: this.filterObj.customerCode, //客户系统名称
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 0,
+          //   isSubmit: 1,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V3_ECM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -1093,7 +1070,7 @@ export default {
           customerCode: this.filterObj.customerCode, //客户系统名称
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 1,
+          //   isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
@@ -1199,7 +1176,7 @@ export default {
           customerCode: this.filterObj.customerCode, //客户系统名称
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 1,
+          //   isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
@@ -1223,7 +1200,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId,
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -1255,7 +1232,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId,
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')

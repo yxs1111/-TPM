@@ -532,6 +532,7 @@
             </el-table-column> -->
             <el-table-column width="180"
                              align="center"
+                             fixed="left"
                              prop="judgmentType"
                              label="系统判定">
               <template v-slot:header>
@@ -560,6 +561,7 @@
             </el-table-column>
             <el-table-column width="800"
                              align="left"
+                             fixed="left"
                              prop="judgmentContent"
                              label="系统判定内容">
               <template v-slot:header>
@@ -575,7 +577,7 @@
                              width="460"
                              prop="cpId"
                              label="CPID"
-                             fixed>
+                             fixed="left">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -986,7 +988,7 @@ export default {
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 0,
+          //   isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
