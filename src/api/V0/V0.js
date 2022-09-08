@@ -57,6 +57,13 @@ export default {
       params
     )
   },
+  //获取Premium数据
+  getPremium(params) {
+    return requestApi.request_post(
+      '/cityplan/investCpSalesVOneDetail/createCPT',
+      params
+    )
+  },
   //获取ecm数据 investCpEcmVOneDetail/create
   getECMcreate(params) {
     return requestApi.request_post(

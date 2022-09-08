@@ -36,14 +36,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
+          <el-select v-model="filterObj.customerCode"
                      clearable
                      filterable
                      placeholder="请选择">
             <el-option v-for="(item, index) in customerArr"
                        :key="index"
                        :label="item.customerCsName"
-                       :value="item.customerName" />
+                       :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -268,7 +268,7 @@
                        prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -281,7 +281,7 @@
                        prop="estimateCost"
                        label="V2预估费用-默认(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -333,7 +333,7 @@
                        prop="differenceCost"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -480,7 +480,7 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <div class="seeData"
+          <!-- <div class="seeData"
                style="width: auto;">
             <div class="exportError"
                  @click="exportErrorList">
@@ -489,7 +489,7 @@
                    class="exportError_icon">
               <span>导出错误信息</span>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="tableWrap">
           <el-table border
@@ -538,10 +538,11 @@
             </el-table-column> -->
             <el-table-column width="180"
                              align="center"
+                             fixed="left"
                              prop="judgmentType  "
-                             label="系统判定">
+                             label="是否通过">
               <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
+                <div>是否通过<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -566,10 +567,11 @@
             </el-table-column>
             <el-table-column width="800"
                              align="left"
+                             fixed="left"
                              prop="judgmentContent"
-                             label="系统判定内容">
+                             label="验证信息">
               <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
+                <div>验证信息<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -581,7 +583,7 @@
                              width="460"
                              prop="cpId"
                              label="CPID"
-                             fixed>
+                             fixed="left">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -728,7 +730,7 @@
                              prop="planCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -741,7 +743,7 @@
                              prop="estimateCost"
                              label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -793,7 +795,7 @@
                              prop="differenceCost"
                              label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -1041,7 +1043,7 @@ export default {
       }
     },
     getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+      selectAPI.getPosmItemList({ minePackage: 'ECM' }).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
@@ -1069,15 +1071,13 @@ export default {
         API.exportPageExcel({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
-          supplierName: this.filterObj.supplierName, //供应商
-          channelName: this.filterObj.channelCode, //渠道
-          customerName: this.filterObj.customerCode, //客户系统名称
+          supplierCode: this.filterObj.supplierName, //供应商
+          channelCode: this.filterObj.channelCode, //渠道
+          customerCode: this.filterObj.customerCode, //客户系统名称
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 1,
+          //   isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
@@ -1149,13 +1149,17 @@ export default {
       if (this.tableData.length) {
         // 导出数据筛选
         API.exportTemplateExcel({
+          supplierCode: this.filterObj.supplierName, //供应商
+          channelCode: this.filterObj.channelCode, //渠道
+          customerCode: this.filterObj.customerCode, //客户系统名称
+
+          ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          channelName: this.filterObj.channelCode,
-          isSubmit: 1,
+          //   isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2审批模板.xlsx`
+            `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
@@ -1175,7 +1179,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -1207,7 +1211,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId,
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
+                // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')
@@ -1234,7 +1238,7 @@ export default {
         API.exportCheckData({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          isSubmit: 0,
+          //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_ECM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -1249,7 +1253,7 @@ export default {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
-        isSubmit: 0,
+        // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
           if (!Array.isArray(response.data)) {

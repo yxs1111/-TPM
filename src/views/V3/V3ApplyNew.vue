@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-05 16:25:48
+ * @LastEditTime: 2022-09-08 11:35:52
 -->
 <template>
   <div class="tabViewsWrap">
@@ -210,6 +210,15 @@ export default {
                 light: require('@/assets/images/tab/StraightGiving_l.png'),
               },
               minePackageName: 'Premium',
+            },
+            {
+              name: 'Free Goods-Tin',
+              path: '/costManagement/V3/V3Apply/V3FreeGoodsTin',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              minePackageName:'Free Goods-Tin',
             },
             {
               name: '补录',

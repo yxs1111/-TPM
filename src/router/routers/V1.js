@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-09-05 16:47:50
+ * @LastEditTime: 2022-09-08 10:37:59
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -184,6 +184,19 @@ export default function () {
                 activeMenu: '/costManagement/V1/V1Apply',
               },
             },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Apply/V1FreeGoodsTin',
+              code: 'price_nka_v1_apply',
+              name: 'V1FreeGoodsTin',
+              component: () => import('@/views/V1/V1Apply/V1FreeGoodsTin.vue'),
+              meta: {
+                title: 'Free Goods-Tin',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
           ],
         },
         {
@@ -356,6 +369,18 @@ export default function () {
                 activeMenu: '/costManagement/V1/V1Approval',
               },
             },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Approval/V1FreeGoodsTinApproval',
+              code: 'price_nka_v1_apply',
+              name: 'V1FreeGoodsTinApproval',
+              component: () => import('@/views/V1/V1Apply/V1FreeGoodsTin.vue'),
+              meta: {
+                title: 'Free Goods-Tin',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              }}
           ],
         },
       ],

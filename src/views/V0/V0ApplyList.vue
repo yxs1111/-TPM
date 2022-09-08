@@ -527,8 +527,9 @@
                   'New User',
                   'KA Contract',
                   'ListingFee',
-                  'POSM',
                   'ECM',
+                  'POSM',
+                  'Premium',
                 ]"
                 :key="index"
                 :label="item"
@@ -1395,6 +1396,8 @@ export default {
               break
             case 'POSM':
               url = API.getPOSMData
+            case 'Premium':
+              url = API.getPremium
               break
             case 'ECM':
               url = API.getECMcreate
