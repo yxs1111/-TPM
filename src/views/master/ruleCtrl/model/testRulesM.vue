@@ -5,8 +5,12 @@
 -->
 <template>
   <div class='tabViewsWrap'>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane :label="item.name" :name="item.name" v-for="item,index in routerList" :key="index">
+    <el-tabs v-model="activeName"
+             @tab-click="handleClick">
+      <el-tab-pane :label="item.name"
+                   :name="item.name"
+                   v-for="item,index in routerList"
+                   :key="index">
         <!-- tab 内容 -->
         <template slot="label">
           <div class="TabWrap">
@@ -15,14 +19,13 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div  style="height: calc(100vh - 0px);">
+    <div style="height: calc(100vh - 0px);">
       <router-view />
     </div>
   </div>
 </template>
 
 <script>
-
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -36,7 +39,7 @@ export default {
         // { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
       ],
       currentIndex: 0,
-      activeName: ''
+      activeName: '',
     }
   },
   computed: {},
@@ -63,105 +66,127 @@ export default {
     queryMinePackageSelect() {
       let signP = 0
       let signN = 0
-      selectAPI.queryMinePackageSelect().then(res => {
-        res.data.forEach(element => {
-          if (element.costType === 'Price Promotion' && signP === 0) {
-            this.routerList.push({ name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' })
-            signP = 1
-          } else if (element.costType === 'New User' && signN === 0) {
-            this.routerList.push({ name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' })
-            signN = 1
+      selectAPI
+        .queryMinePackageSelect()
+        .then((res) => {
+          res.data.forEach((element) => {
+            if (element.costType === 'Price Promotion' && signP === 0) {
+              this.routerList.push({
+                name: 'Price Promotion',
+                path: '/master/ruleCtrl/model/TestRules',
+              })
+              signP = 1
+            } else if (element.costType === 'New User' && signN === 0) {
+              this.routerList.push({
+                name: 'New User',
+                path: '/master/ruleCtrl/model/TestRulesNew',
+              })
+              signN = 1
+            }
+          })
+          if (this.routerList.length === 0 || res.data.length === 0) {
+            this.routerList = [
+              {
+                name: 'Price Promotion',
+                path: '/master/ruleCtrl/model/TestRules',
+              },
+              { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' },
+            ]
           }
-        })
-        if (this.routerList.length === 0 || res.data.length === 0) {
           this.routerList = [
-            { name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' },
-            { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
-          ]
-        }
-        this.routerList = [
             ...this.routerList,
             {
               name: 'HIH Rebate',
               path: '/master/ruleCtrl/model/splitRulesHIH',
               img: {
                 dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
+                light: require('@/assets/images/tab/tab2_l.png'),
+              },
             },
             {
               name: 'KA Rebate',
               path: '/master/ruleCtrl/model/splitRulesKA',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
             },
             {
               name: 'FMC',
               path: '/master/ruleCtrl/model/splitRulesFMC',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
             },
             {
               name: 'Roadshow',
               path: '/master/ruleCtrl/model/splitRulesRoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
             },
             {
               name: 'Listing Fee',
               path: '/master/ruleCtrl/model/splitRulesListingFee',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
             },
             {
               name: 'POSM-标准',
               path: '/master/ruleCtrl/model/splitRulesPOSM',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
+            },
+            {
+              name: 'ECM',
+              path: '/master/ruleCtrl/model/splitRulesECM',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
             },
             {
               name: 'Display',
               path: '/master/ruleCtrl/model/splitRulesDisplay',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
             },
-          {
-            name: 'Premium',
-            path: '/master/ruleCtrl/model/splitRulesPremium',
-            img: {
-              dark: require('@/assets/images/tab/tab3.png'),
-              light: require('@/assets/images/tab/tab3_l.png')
-            }
-          },
+            {
+              name: 'Premium',
+              path: '/master/ruleCtrl/model/splitRulesPremium',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
+            },
           ]
-        if (sessionStorage.getItem('currentIndex')) {
-          this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
-        } else {
-          this.currentIndex = 0
-        }
-        if (!this.$route.query.minePackageName) {
-
-        } else {
-          // 我的待办跳转
-          this.currentIndex=this.routerList.findIndex(item=>item.minePackageName==this.$route.query.minePackageName)
-          sessionStorage.setItem("currentIndex",this.currentIndex)
-        }
-        this.tabInit()
-      }).catch()
+          if (sessionStorage.getItem('currentIndex')) {
+            this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+          } else {
+            this.currentIndex = 0
+          }
+          if (!this.$route.query.minePackageName) {
+          } else {
+            // 我的待办跳转
+            this.currentIndex = this.routerList.findIndex(
+              (item) =>
+                item.minePackageName == this.$route.query.minePackageName
+            )
+            sessionStorage.setItem('currentIndex', this.currentIndex)
+          }
+          this.tabInit()
+        })
+        .catch()
     },
-  }
+  },
 }
 </script>
 

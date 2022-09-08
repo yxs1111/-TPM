@@ -502,6 +502,19 @@ export default function () {
                 },
                 {
                   hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesECM',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesECM',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesECM.vue'),
+                  meta: {
+                    title: 'ECM',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
                   path: '/master/ruleCtrl/model/splitRulesDisplay',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesDisplay',
