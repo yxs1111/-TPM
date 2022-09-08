@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FreeGoodsTinApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-07 16:48:35
+ * @LastEditTime: 2022-09-08 11:39:34
 -->
 <template>
   <div class="MainContent">
@@ -35,7 +35,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">大区:</span>
           <el-select v-model="filterObj.largeAreaCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in largeAreaList" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -200,7 +200,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="estimatePrice" label="V2预估单位费用(RMB/Tin)">
         <template v-slot:header>
-          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel+Dist+Region</span></div>
+          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -210,7 +210,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="estimateVol" label="V2预估用量(CTN)">
         <template v-slot:header>
-          <div>V2预估用量(CTN)<br><span class="subTitle">SKU+Channel+Dist+Region</span></div>
+          <div>V2预估用量(CTN)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -220,7 +220,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="estimateCost" label="V2预估费用(RMB)">
         <template v-slot:header>
-          <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel+Dist+Region</span></div>
+          <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -230,7 +230,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="adjustedPrice" label="V2预估单位费用(RMB/Tin)">
         <template v-slot:header>
-          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -240,7 +240,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="adjustedVol" label="V2预估用量-调整后(CTN)">
         <template v-slot:header>
-          <div>V2预估用量-调整后(场)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+          <div>V2预估用量-调整后(场)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -250,7 +250,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+          <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -421,7 +421,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="estimatePrice" label="V2预估单位费用(RMB/Tin)">
               <template v-slot:header>
-                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel+Dist+Region</span></div>
+                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -431,7 +431,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="estimateVol" label="V2预估用量(CTN)">
               <template v-slot:header>
-                <div>V2预估用量(CTN)<br><span class="subTitle">SKU+Channel+Dist+Region</span></div>
+                <div>V2预估用量(CTN)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -441,7 +441,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="estimateCost" label="V2预估费用(RMB)">
               <template v-slot:header>
-                <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel+Dist+Region</span></div>
+                <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -451,7 +451,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="adjustedPrice" label="V2预估单位费用(RMB/Tin)">
               <template v-slot:header>
-                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -461,7 +461,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="adjustedVol" label="V2预估用量-调整后(CTN)">
               <template v-slot:header>
-                <div>V2预估用量-调整后(CTN)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+                <div>V2预估用量-调整后(CTN)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -471,7 +471,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA+Dist+Region</span></div>
+                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
