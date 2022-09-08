@@ -10,155 +10,169 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
-            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+          <el-select
+            v-model="filterObj.yearAndMonth"
+            filterable
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in monthList"
+              :key="item.id"
+              :label="item.activityMonth"
+              :value="item.activityMonth"
+            />
           </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
+          <el-select
+            v-model="filterObj.channelName"
+            clearable
+            filterable
+            placeholder="请选择"
+            @change="getCustomerList"
+          >
+            <el-option
+              v-for="item in ['NKA']"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
+          <el-select
+            v-model="filterObj.customerName"
+            clearable
+            filterable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in customerArr"
+              :key="index"
+              :label="item.customerCsName"
+              :value="item.customerCsName"
+            />
           </el-select>
         </div>
       </div>
       <div class="OpertionBar">
-        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']">
-          <img src="@/assets/images/huoqu.png" alt="">
-          <span class="text">获取Smart Plan数据</span>
-        </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="search"
+          >查询</el-button
+        >
         <div class="TpmButtonBG" @click="downExcel">
-          <img src="@/assets/images/export.png" alt="">
+          <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed>
-        <template v-slot:header>
-          <div>CPID<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.cpId }}
-          </div>
-        </template>
+    <el-table
+      :data="tableData"
+      :max-height="maxheight"
+      border
+      :header-cell-style="HeadTable"
+      :row-class-name="tableRowClassName"
+      style="width: 100%"
+    >
+      <el-table-column
+        align="center"
+        width="520"
+        prop="cpId"
+        label="CPID"
+        fixed
+      >
       </el-table-column>
-      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
-        <template v-slot:header>
-          <div>活动月<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.yearAndMonth }}
-          </div>
-        </template>
+      <el-table-column
+        width="120"
+        align="center"
+        prop="yearAndMonth"
+        label="活动月"
+      >
       </el-table-column>
-      <el-table-column width="120" align="center" prop="costType" label="费用类型">
-        <template v-slot:header>
-          <div>费用类型<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.costType }}
-          </div>
-        </template>
+      <el-table-column
+        width="120"
+        align="center"
+        prop="costType"
+        label="费用类型"
+      >
       </el-table-column>
-      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package">
-        <template v-slot:header>
-          <div>Mine Package<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.minePackage }}
-          </div>
-        </template>
+      <el-table-column
+        width="190"
+        align="center"
+        prop="minePackage"
+        label="Mine Package"
+      >
       </el-table-column>
-      <el-table-column width="180" align="center" prop="costAccount" label="费用科目">
-        <template v-slot:header>
-          <div>费用科目<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.costAccount }}
-          </div>
-        </template>
+      <el-table-column
+        width="240"
+        align="center"
+        prop="costItem"
+        label="费用科目"
+      >
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
-        <template v-slot:header>
-          <div>渠道<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.channelCode }}
-          </div>
-        </template>
+      <el-table-column
+        width="120"
+        align="center"
+        prop="channelName"
+        label="渠道"
+      >
       </el-table-column>
-      <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称">
-        <template v-slot:header>
-          <div>客户系统名称<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.customerSystemName }}
-          </div>
-        </template>
+      <el-table-column
+        width="220"
+        align="center"
+        prop="customerName"
+        label="客户系统名称"
+      >
       </el-table-column>
       <el-table-column width="220" align="center" prop="brandName" label="品牌">
-        <template v-slot:header>
-          <div>品牌<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.brandName }}
-          </div>
-        </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
+      <el-table-column
+        width="220"
+        align="right"
+        prop="voneCost"
+        label="V1计划费用(RMB)"
+      >
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
-            <br>
+            <br />
             <span class="subTitle">KA+Brand</span>
           </div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.v1PlanCost) }}
+            {{ scope.row.voneCost }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门">
-        <template v-slot:header>
-          <div>费用归属部门<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.costAscriptionDept }}
-          </div>
-        </template>
+      <el-table-column
+        width="220"
+        align="center"
+        prop="costAscriptionDept"
+        label="费用归属部门"
+      >
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式">
-        <template v-slot:header>
-          <div>费用核销方式<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.costWriteoffMethod }}
-          </div>
-        </template>
+      <el-table-column
+        width="220"
+        align="center"
+        prop="costWriteoffMethod"
+        label="费用核销方式"
+      >
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[10, 20, 30, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -174,7 +188,7 @@ import {
   FormateThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V1/FMC'
+import API from '@/api/V1/POSM-custom'
 export default {
   name: 'V1POSMCustomize',
   directives: { elDragDialog, permission },
@@ -182,13 +196,12 @@ export default {
   data() {
     return {
       total: 0,
-      pageSize: 100,
+      pageSize: 10,
       pageNum: 1,
       filterObj: {
-        channelCode: '',
-        supplierName: '',
-        customerCode: '',
-        month: '',
+        channelName: '',
+        customerName: '',
+        yearAndMonth: '',
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -200,8 +213,8 @@ export default {
   },
   computed: {},
   watch: {
-    'filterObj.channelCode'() {
-      this.filterObj.customerCode = ''
+    'filterObj.channelName'() {
+      this.filterObj.customerName = ''
       this.getCustomerList()
     },
   },
@@ -218,21 +231,22 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
+      if (
+        this.filterObj.channelName == '' ||
+        this.filterObj.yearAndMonth == ''
+      ) {
+        if (this.filterObj.yearAndMonth == '') {
           this.$message.info(messageObj.requireMonth)
           return
         }
-        if (this.filterObj.channelCode == '') {
+        if (this.filterObj.channelName == '') {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
+          ...this.filterObj,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -259,47 +273,13 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelName,
         })
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
           }
         })
-    },
-    getSmartPlan() {
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
-        }
-      } else {
-        this.$confirm('是否获取SmartPlan数据?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            API.getSmartplanData({
-              channelCode: this.filterObj.channelCode,
-              yearAndMonth: this.filterObj.month,
-            }).then((res) => {
-              if (res.code === 1000) {
-                this.$message.success('成功获取SmartPlan数据')
-                this.getTableData()
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消',
-            })
-          })
-      }
     },
     //千分位分隔符+两位小数
     FormatNum(num) {
@@ -312,14 +292,12 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportV1({
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
+        API.exportExcel({
+          ...this.filterObj,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_POSM-定制_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -352,5 +330,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -6,23 +6,21 @@
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link v-for="(item, index) in routerList"
-                   :key="index"
-                   :to="item.path"
-                   tag="div"
-                   class="tabli"
-                   :class="index === currentIndex ? 'currentTabli' : ''"
-                   @click.native="changeTab(index)">
-        <img v-if="index != currentIndex"
-             :src="item.img.light"
-             alt="">
-        <img v-if="index == currentIndex"
-             :src="item.img.dark"
-             alt="">
+      <router-link
+        v-for="(item, index) in routerList"
+        :key="index"
+        :to="item.path"
+        tag="div"
+        class="tabli"
+        :class="index === currentIndex ? 'currentTabli' : ''"
+        @click.native="changeTab(index)"
+      >
+        <img v-if="index != currentIndex" :src="item.img.light" alt="" />
+        <img v-if="index == currentIndex" :src="item.img.dark" alt="" />
         {{ item.name }}
       </router-link>
     </div>
-    <div style="height: calc(100vh - 0px);">
+    <div style="height: calc(100vh - 0px)">
       <router-view />
     </div>
   </div>
@@ -180,6 +178,14 @@ export default {
             {
               name: 'POSM-标准',
               path: '/costManagement/V2/V2Approval/V2POSMApproval',
+              img: {
+                dark: require('@/assets/images/tab/tab_ListingFee.png'),
+                light: require('@/assets/images/tab/tab_ListingFee_l.png'),
+              },
+            },
+            {
+              name: 'POSM-定制',
+              path: '/costManagement/V2/V2Approval/V2POSMCustomizeApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
