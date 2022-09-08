@@ -489,7 +489,7 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <div class="seeData"
+          <!-- <div class="seeData"
                style="width: auto;">
             <div class="exportError"
                  @click="exportErrorList">
@@ -498,7 +498,7 @@
                    class="exportError_icon">
               <span>导出错误信息</span>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="tableWrap">

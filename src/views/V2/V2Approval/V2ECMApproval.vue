@@ -36,14 +36,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName"
+          <el-select v-model="filterObj.customerCode"
                      clearable
                      filterable
                      placeholder="请选择">
             <el-option v-for="(item, index) in customerArr"
                        :key="index"
                        :label="item.customerCsName"
-                       :value="item.customerName" />
+                       :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -480,7 +480,7 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <div class="seeData"
+          <!-- <div class="seeData"
                style="width: auto;">
             <div class="exportError"
                  @click="exportErrorList">
@@ -489,7 +489,7 @@
                    class="exportError_icon">
               <span>导出错误信息</span>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="tableWrap">
           <el-table border
@@ -1071,11 +1071,9 @@ export default {
         API.exportPageExcel({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
-          supplierName: this.filterObj.supplierName, //供应商
-          channelName: this.filterObj.channelCode, //渠道
-          customerName: this.filterObj.customerCode, //客户系统名称
+          supplierCode: this.filterObj.supplierName, //供应商
+          channelCode: this.filterObj.channelCode, //渠道
+          customerCode: this.filterObj.customerCode, //客户系统名称
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
@@ -1151,13 +1149,17 @@ export default {
       if (this.tableData.length) {
         // 导出数据筛选
         API.exportTemplateExcel({
+          supplierCode: this.filterObj.supplierName, //供应商
+          channelCode: this.filterObj.channelCode, //渠道
+          customerCode: this.filterObj.customerCode, //客户系统名称
+
+          ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          channelName: this.filterObj.channelCode,
           //   isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2审批模板.xlsx`
+            `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
