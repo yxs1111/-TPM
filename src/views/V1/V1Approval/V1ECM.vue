@@ -31,7 +31,7 @@
             <el-option v-for="(item) in channelArr"
                        :key="item.channelCsName"
                        :label="item.channelCsName"
-                       :value="item.channelCsCode" />
+                       :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -43,7 +43,7 @@
             <el-option v-for="(item, index) in customerArr"
                        :key="index"
                        :label="item.customerCsName"
-                       :value="item.customerCsCode" />
+                       :value="item.customerCode" />
           </el-select>
         </div>
         <!-- <div class="Selectli">
