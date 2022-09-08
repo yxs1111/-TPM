@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-05 16:47:18
+ * @LastEditTime: 2022-09-08 10:36:58
 -->
 <template>
   <div class="tabViewsWrap">
@@ -188,6 +188,15 @@ export default {
                 light: require('@/assets/images/tab/StraightGiving_l.png'),
               },
               minePackageName:'Premium',
+            },
+            {
+              name: 'Free Goods-Tin',
+              path: '/costManagement/V1/V1Apply/V1FreeGoodsTin',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              minePackageName:'Free Goods-Tin',
             },
           ]
           if (sessionStorage.getItem('currentIndex')) {
