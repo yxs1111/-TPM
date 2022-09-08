@@ -289,7 +289,7 @@
                        prop="actualCost"
                        label="V3实际费用-默认（RMB）">
         <template v-slot:header>
-          <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -341,7 +341,7 @@
                        prop="differenceCost"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -718,7 +718,7 @@
                              prop="planCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -744,7 +744,7 @@
                              prop="actualCost"
                              label="V3实际费用-默认（RMB）">
               <template v-slot:header>
-                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -796,7 +796,7 @@
                              prop="differenceCost"
                              label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
