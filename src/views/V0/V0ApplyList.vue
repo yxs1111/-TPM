@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-05 11:33:10
+ * @LastEditTime: 2022-09-09 10:37:17
 -->
 <template>
   <div class="V0ApplyList">
@@ -530,6 +530,7 @@
                   'ECM',
                   'POSM',
                   'Premium',
+                  'Free Goods',
                 ]"
                 :key="index"
                 :label="item"
@@ -1379,8 +1380,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let url
-          // var url =
-          //   this.ruleForm.Minepackage == 'Price Promotion'? API.getCPTData: this.ruleForm.Minepackage == 'New User'?API.getNuData: this.ruleForm.Minepackage == 'Contract'? API.getContractData:API.getListingFee
           switch (this.ruleForm.Minepackage) {
             case 'Price Promotion':
               url = V0New.getCPTData
@@ -1396,11 +1395,15 @@ export default {
               break
             case 'POSM':
               url = API.getPOSMData
+              break
             case 'Premium':
               url = API.getPremium
               break
             case 'ECM':
               url = API.getECMcreate
+              break
+            case 'Free Goods':
+              url = API.getFreeGoods
               break
           }
           let obj = {
