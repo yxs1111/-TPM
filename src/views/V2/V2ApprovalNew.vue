@@ -6,18 +6,31 @@
 <template>
   <div class="tabViewsWrap">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane :label="item.name" :name="item.name" v-for="item,index in routerList" :key="index">
+      <el-tab-pane
+        :label="item.name"
+        :name="item.name"
+        v-for="(item, index) in routerList"
+        :key="index"
+      >
         <!-- tab 内容 -->
         <template slot="label">
           <div class="TabWrap">
-            <img v-show="index==currentIndex" class="TabImg" :src="item.img.dark" >
-            <img v-show="index!=currentIndex" class="TabImg" :src="item.img.light" >
-            <div>{{item.name}}</div>
+            <img
+              v-show="index == currentIndex"
+              class="TabImg"
+              :src="item.img.dark"
+            />
+            <img
+              v-show="index != currentIndex"
+              class="TabImg"
+              :src="item.img.light"
+            />
+            <div>{{ item.name }}</div>
           </div>
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: calc(100vh - 0px);">
+    <div style="height: calc(100vh - 0px)">
       <router-view />
     </div>
   </div>
@@ -70,7 +83,7 @@ export default {
                   dark: require('@/assets/images/tab/tab2.png'),
                   light: require('@/assets/images/tab/tab2_l.png'),
                 },
-                minePackageName:'Price Promotion',
+                minePackageName: 'Price Promotion',
               })
               signP = 1
             } else if (element.costType === 'New User' && signN === 0) {
@@ -81,7 +94,7 @@ export default {
                   dark: require('@/assets/images/tab/tab3.png'),
                   light: require('@/assets/images/tab/tab3_l.png'),
                 },
-                minePackageName:'New User',
+                minePackageName: 'New User',
               })
               signN = 1
             }
@@ -115,7 +128,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
                 light: require('@/assets/images/tab/tab_HIH_l.png'),
               },
-              minePackageName:'HIH Rebate',
+              minePackageName: 'HIH Rebate',
             },
             {
               name: '折扣项-KA Rebate',
@@ -124,7 +137,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_KA.png'),
                 light: require('@/assets/images/tab/tab_KA_l.png'),
               },
-              minePackageName:'KA Rebate',
+              minePackageName: 'KA Rebate',
             },
             {
               name: 'FMC',
@@ -133,7 +146,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_FMC.png'),
                 light: require('@/assets/images/tab/tab_FMC_l.png'),
               },
-              minePackageName:'FMC',
+              minePackageName: 'FMC',
             },
             {
               name: 'Roadshow',
@@ -142,7 +155,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_RoadShow.png'),
                 light: require('@/assets/images/tab/tab_RoadShow_l.png'),
               },
-              minePackageName:'Roadshow',
+              minePackageName: 'Roadshow',
             },
             {
               name: 'Listing Fee',
@@ -151,7 +164,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
               },
-              minePackageName:'Listing fee',
+              minePackageName: 'Listing fee',
             },
             {
               name: 'POSM-标准',
@@ -160,7 +173,16 @@ export default {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
               },
-              minePackageName:'POSM',
+              minePackageName: 'POSM',
+            },
+            {
+              name: 'POSM-定制',
+              path: '/costManagement/V2/V2Approval/V2POSMCustomizeApproval',
+              img: {
+                dark: require('@/assets/images/tab/tab_ListingFee.png'),
+                light: require('@/assets/images/tab/tab_ListingFee_l.png'),
+              },
+              minePackageName: 'POSM',
             },
             {
               name: 'ECM',
@@ -169,7 +191,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_POSM.png'),
                 light: require('@/assets/images/tab/tab_POSM_l.png'),
               },
-              minePackageName:'ECM',
+              minePackageName: 'ECM',
             },
             {
               name: 'Display',
@@ -178,7 +200,7 @@ export default {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
               },
-              minePackageName:'Display',
+              minePackageName: 'Display',
             },
             {
               name: 'Premium',
@@ -187,7 +209,7 @@ export default {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
                 light: require('@/assets/images/tab/StraightGiving_l.png'),
               },
-              minePackageName:'Premium',
+              minePackageName: 'Premium',
             },
             {
               name: 'Free Goods-Tin',
@@ -204,11 +226,13 @@ export default {
             this.currentIndex = 0
           }
           if (!this.$route.query.minePackageName) {
-            
           } else {
             // 我的待办跳转
-            this.currentIndex=this.routerList.findIndex(item=>item.minePackageName==this.$route.query.minePackageName)
-            sessionStorage.setItem("currentIndex",this.currentIndex)
+            this.currentIndex = this.routerList.findIndex(
+              (item) =>
+                item.minePackageName == this.$route.query.minePackageName
+            )
+            sessionStorage.setItem('currentIndex', this.currentIndex)
           }
           this.tabInit()
         })

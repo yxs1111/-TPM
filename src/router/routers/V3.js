@@ -135,6 +135,18 @@ export default function () {
             },
             {
               hidden: true,
+              path: '/costManagement/V3/V3Apply/V3POSMCustomize',
+              code: 'price_nka_v3_apply',
+              name: 'V3POSMCustomize',
+              component: () => import('@/views/V3/V3Apply/V3POSMCustomize.vue'),
+              meta: {
+                title: 'POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
+            {
+              hidden: true,
               path: '/costManagement/V3/V3Apply/V3ECM',
               code: 'price_nka_v3_apply',
               name: 'V3ECM',
@@ -313,6 +325,19 @@ export default function () {
               name: 'V3POSMApproval',
               component: () =>
                 import('@/views/V3/V3Approval/V3POSMApproval.vue'),
+              meta: {
+                title: 'POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3POSMCustomizeApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3POSMCustomizeApproval',
+              component: () =>
+                import('@/views/V3/V3Approval/V3POSMCustomizeApproval.vue'),
               meta: {
                 title: 'POSM',
                 icon: 'form',

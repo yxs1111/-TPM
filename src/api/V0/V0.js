@@ -43,6 +43,13 @@ export default {
       params
     )
   },
+  // 获取POSM-定制 数据
+  getPOSMData(params) {
+    return requestApi.request_get(
+      '/cityplan/investCpPosmCustomizedVOne/getCptData',
+      params
+    )
+  },
   //获取ListingFee数据
   getListingFee(params) {
     return requestApi.request_post(

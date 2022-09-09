@@ -124,11 +124,22 @@ export default function () {
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Apply/V1POSM',
               code: 'price_nka_v1_apply',
               name: 'V1POSM',
               component: () => import('@/views/V1/V1Apply/V1POSM.vue'),
+              meta: {
+                title: 'V1POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1POSMCustomize',
+              code: 'price_nka_v1_apply',
+              name: 'V1POSMCustomize',
+              component: () => import('@/views/V1/V1Apply/V1POSMCustomize.vue'),
               meta: {
                 title: 'V1POSM',
                 icon: 'form',
@@ -150,7 +161,6 @@ export default function () {
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Apply/V1Display',
               code: 'price_nka_v1_apply',
               name: 'V1Display',
@@ -312,6 +322,18 @@ export default function () {
             },
             {
               hidden: true,
+              path: '/costManagement/V1/V1Approval/V1POSMCustomize',
+              code: 'price_nka_v1_approve',
+              name: 'V1POSMCustomizeApproval',
+              component: () => import('@/views/V1/V1Apply/V1POSMCustomize.vue'),
+              meta: {
+                title: 'POSM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
               path: '/costManagement/V1/V1Approval/V1ECMApproval',
               code: 'price_nka_v1_approve',
               name: 'V1ECMApproval',
@@ -340,8 +362,7 @@ export default function () {
               path: '/costManagement/V1/V1Approval/V1Premium',
               code: 'price_nka_v1_approve',
               name: 'V1Premium',
-              component: () =>
-                import('@/views/V1/V1Approval/V1Premium.vue'),
+              component: () => import('@/views/V1/V1Approval/V1Premium.vue'),
               meta: {
                 title: 'Premium',
                 icon: 'form',
