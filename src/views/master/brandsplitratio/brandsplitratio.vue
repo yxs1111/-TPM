@@ -1,272 +1,137 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-07-05 17:31:53
+ * @LastEditTime: 2022-09-09 15:25:38
 -->
 <template>
   <div class="app-container">
     <!-- 查询条件 -->
     <div class="SelectBarWrap">
-      <div class="SelectBar"
-           @keyup.enter="search">
+      <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.minePackage"
-                     @change="
+          <el-select v-model="filterObj.minePackage" @change="
               getCostItemList(
                 minePackageList.filter(
                   (item) => filterObj.minePackage === item.name
                 )[0].code
               )
-            "
-                     class="my-el-input"
-                     filterable
-                     clearable
-                     placeholder="请选择">
-            <el-option v-for="item in minePackageList"
-                       :key="item.code"
-                       :label="item.name"
-                       :value="item.name" />
+            " class="my-el-input" filterable clearable placeholder="请选择">
+            <el-option v-for="item in minePackageList" :key="item.code" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Cost Item:</span>
-          <el-select v-model="filterObj.costItem"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in CostItemList"
-                       :key="index"
-                       :label="item"
-                       :value="item" />
+          <el-select v-model="filterObj.costItem" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-select v-model="filterObj.activityMonth"
-                     filterable
-                     clearable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in monthList"
-                       :key="index"
-                       :label="item.activityMonth"
-                       :value="item.activityMonth" />
+          <el-select v-model="filterObj.activityMonth" filterable clearable placeholder="请选择">
+            <el-option v-for="(item, index) in monthList" :key="index" :label="item.activityMonth" :value="item.activityMonth" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
-          <el-select v-model="filterObj.state"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in ['无效', '有效']"
-                       :key="index"
-                       :label="item"
-                       :value="index" />
+          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in ['无效', '有效']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
       </div>
       <div class="OpertionBar">
-        <el-button type="primary"
-                   class="TpmButtonBG"
-                   @click="search">查询</el-button>
-        <!-- v-permission="permissions['get']" -->
-        <div class="TpmButtonBG"
-             @click="exportData">
-          <!-- v-permission="permissions['export']" -->
-          <img src="@/assets/images/export.png"
-               alt="" />
+        <el-button type="primary" class="TpmButtonBG" v-permission="permissions['get']" @click="search">查询</el-button>
+        <div class="TpmButtonBG" v-permission="permissions['export']" @click="exportData">
+          <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <!-- 新增 删除 -->
     <div class="TpmButtonBGWrap">
-      <el-button type="primary"
-                 icon="el-icon-plus"
-                 class="TpmButtonBG"
-                 @click="add">新增</el-button>
-      <!-- v-permission="permissions['insert']" -->
-      <el-button type="primary"
-                 class="TpmButtonBG"
-                 icon="el-icon-delete"
-                 @click="mutidel">删除</el-button>
-      <!-- v-permission="permissions['delete']" -->
+      <el-button type="primary" icon="el-icon-plus" class="TpmButtonBG" v-permission="permissions['insert']" @click="add">新增</el-button>
+      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" v-permission="permissions['delete']" @click="mutidel">删除</el-button>
     </div>
     <!-- 数据列表 -->
-    <el-table :data="tableData"
-              border
-              :max-height="maxheight"
-              :header-cell-style="HeadTable"
-              @selection-change="handleSelectionChange"
-              :row-class-name="tableRowClassName"
-              style="width: 100%">
-      <el-table-column type="selection"
-                       align="center"
-                       fixed />
-      <el-table-column align="center"
-                       width="150"
-                       prop="minePackage"
-                       label="Mine Package">
+    <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
+      style="width: 100%">
+      <el-table-column type="selection" align="center" fixed />
+      <el-table-column align="center" width="150" prop="minePackage" label="Mine Package">
       </el-table-column>
-      <el-table-column align="center"
-                       width="280"
-                       prop="costItem"
-                       label="Cost Item">
+      <el-table-column align="center" width="280" prop="costItem" label="Cost Item">
       </el-table-column>
-      <el-table-column align="center"
-                       prop="gold"
-                       width="120"
-                       label="Gold(%)">
+      <el-table-column align="center" prop="gold" width="120" label="Gold(%)">
       </el-table-column>
-      <el-table-column align="center"
-                       width="120"
-                       prop="prestige"
-                       label="Prestige(%)">
+      <el-table-column align="center" width="120" prop="prestige" label="Prestige(%)">
       </el-table-column>
-      <el-table-column align="center"
-                       width="120"
-                       prop="novas"
-                       label="Novas(%)">
+      <el-table-column align="center" width="120" prop="novas" label="Novas(%)">
       </el-table-column>
-      <el-table-column align="center"
-                       width="150"
-                       prop="startMonth"
-                       label="生效起始月份">
+      <el-table-column align="center" width="150" prop="startMonth" label="生效起始月份">
       </el-table-column>
-      <el-table-column align="center"
-                       width="150"
-                       prop="endMonth"
-                       label="生效结束月份">
+      <el-table-column align="center" width="150" prop="endMonth" label="生效结束月份">
       </el-table-column>
-      <el-table-column align="center"
-                       prop="state"
-                       label="状态">
+      <el-table-column align="center" prop="state" label="状态">
         <template v-slot="{ row }">
           {{ row.state === 1 ? '有效' : '无效' }}
         </template>
       </el-table-column>
-      <el-table-column align="center"
-                       width="150"
-                       prop="createBy"
-                       label="创建人">
+      <el-table-column align="center" width="150" prop="createBy" label="创建人">
       </el-table-column>
-      <el-table-column v-slot="{ row }"
-                       align="center"
-                       width="200"
-                       prop="createDate"
-                       label="创建时间">
+      <el-table-column v-slot="{ row }" align="center" width="200" prop="createDate" label="创建时间">
         {{ row.createDate ? row.createDate.replace('T', ' ') : '' }}
       </el-table-column>
-      <el-table-column align="center"
-                       width="150"
-                       prop="updateBy"
-                       label="更新人">
+      <el-table-column align="center" width="150" prop="updateBy" label="更新人">
       </el-table-column>
-      <el-table-column v-slot="{ row }"
-                       align="center"
-                       width="200"
-                       prop="updateDate"
-                       label="更新时间">
+      <el-table-column v-slot="{ row }" align="center" width="200" prop="updateDate" label="更新时间">
         {{ row.updateDate ? row.updateDate.replace('T', ' ') : '' }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum"
-                     :page-sizes="[5, 10, 20, 50]"
-                     :page-size="pageSize"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="total"
-                     @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange" />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 新增 -->
-    <el-dialog class="my-el-dialog"
-               title="新增"
-               :visible="dialogVisible"
-               width="50%"
-               v-el-drag-dialog
-               @close="closeDialog">
+    <el-dialog class="my-el-dialog" title="新增" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
       <div class="el-dialogContent">
-        <el-form :model="ruleForm"
-                 :rules="rules"
-                 ref="ruleForm"
-                 label-width="140px"
-                 class="el-form-row">
-          <el-form-item label="Mine Package"
-                        prop="minePackage">
-            <el-select v-model="ruleForm.minePackage"
-                       @change="
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="el-form-row">
+          <el-form-item label="Mine Package" prop="minePackage">
+            <el-select v-model="ruleForm.minePackage" @change="
                 getCostItemList(
                   minePackageList.filter(
                     (item) => ruleForm.minePackage === item.name
                   )[0].code
                 )
-              "
-                       class="my-el-input"
-                       filterable
-                       clearable
-                       placeholder="请选择">
-              <el-option v-for="item in minePackageList"
-                         :key="item.code"
-                         :label="item.name"
-                         :value="item.name" />
+              " class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="item in minePackageList" :key="item.code" :label="item.name" :value="item.name" />
             </el-select>
           </el-form-item>
           <el-form-item label="Cost Item">
-            <el-select v-model="ruleForm.costItem"
-                       clearable
-                       filterable
-                       class="my-el-input"
-                       placeholder="请选择">
-              <el-option v-for="(item, index) in CostItemList"
-                         :key="index"
-                         :label="item"
-                         :value="item" />
+            <el-select v-model="ruleForm.costItem" clearable filterable class="my-el-input" placeholder="请选择">
+              <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
-          <el-form-item label="Gold"
-                        prop="gold">
-            <el-input v-model="ruleForm.gold"
-                      type="number"
-                      class="my-el-input"><i slot="suffix">%</i>
+          <el-form-item label="Gold" prop="gold">
+            <el-input v-model="ruleForm.gold" type="number" class="my-el-input"><i slot="suffix">%</i>
             </el-input>
           </el-form-item>
-          <el-form-item label="Prestige"
-                        prop="prestige">
-            <el-input v-model="ruleForm.prestige"
-                      type="number"
-                      class="my-el-input">
+          <el-form-item label="Prestige" prop="prestige">
+            <el-input v-model="ruleForm.prestige" type="number" class="my-el-input">
               <i slot="suffix">%</i>
             </el-input>
           </el-form-item>
-          <el-form-item label="Novas"
-                        prop="novas">
-            <el-input v-model="ruleForm.novas"
-                      type="number"
-                      class="my-el-input"
-                      disabled><i slot="suffix">%</i></el-input>
+          <el-form-item label="Novas" prop="novas">
+            <el-input v-model="ruleForm.novas" type="number" class="my-el-input" disabled><i slot="suffix">%</i></el-input>
           </el-form-item>
-          <el-form-item label="状态"
-                        prop="state">
-            <el-select v-model="ruleForm.state"
-                       class="my-el-input"
-                       filterable
-                       clearable
-                       placeholder="请选择">
-              <el-option v-for="(item, index) in ['无效', '有效']"
-                         :key="index"
-                         :label="item"
-                         :value="index" />
+          <el-form-item label="状态" prop="state">
+            <el-select v-model="ruleForm.state" class="my-el-input" filterable clearable placeholder="请选择">
+              <el-option v-for="(item, index) in ['无效', '有效']" :key="index" :label="item" :value="index" />
             </el-select>
           </el-form-item>
         </el-form>
       </div>
-      <span slot="footer"
-            class="dialog-footer">
-        <el-button type="primary"
-                   @click="submitForm('ruleForm')">确 定</el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
         <el-button @click="closeDialog()">取 消</el-button>
       </span>
     </el-dialog>

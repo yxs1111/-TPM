@@ -568,7 +568,7 @@ export default function () {
         {
           path: '/brandsplitratio',
           name: 'brandsplitratio',
-          code: 'ContractItem',
+          code: 'BrandSplitRatio',
           component: () =>
             import('@/views/master/brandsplitratio/brandsplitratio.vue'),
           meta: { title: '品牌拆分比例', icon: 'apply' },
@@ -577,7 +577,7 @@ export default function () {
         {
           path: '/displayItem',
           name: 'displayItem',
-          code: 'ContractItem',
+          code: 'ItemMatchingRelation',
           component: () => import('@/views/master/displayItem.vue'),
           meta: { title: '细项匹配关系', icon: 'apply' },
         },
