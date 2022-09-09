@@ -1379,8 +1379,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let url
-          // var url =
-          //   this.ruleForm.Minepackage == 'Price Promotion'? API.getCPTData: this.ruleForm.Minepackage == 'New User'?API.getNuData: this.ruleForm.Minepackage == 'Contract'? API.getContractData:API.getListingFee
           switch (this.ruleForm.Minepackage) {
             case 'Price Promotion':
               url = V0New.getCPTData
@@ -1396,6 +1394,7 @@ export default {
               break
             case 'POSM':
               url = API.getPOSMData
+              break
             case 'Premium':
               url = API.getPremium
               break
