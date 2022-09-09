@@ -255,7 +255,7 @@
                        prop="ecmItem"
                        label="ECM item">
         <template v-slot:header>
-          <div>ECM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
+          <div>ECM item<br><span class="subTitle"> KA + Brand + Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -268,7 +268,7 @@
                        prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -281,7 +281,7 @@
                        prop="estimateCost"
                        label="V2预估费用-默认(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -294,7 +294,7 @@
                        prop="adjustedCost"
                        label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor + Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -333,7 +333,7 @@
                        prop="differenceCost"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -717,7 +717,7 @@
                              prop="ecmItem"
                              label="ECM item">
               <template v-slot:header>
-                <div>ECM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
+                <div>ECM item<br><span class="subTitle"> KA + Brand + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -730,7 +730,7 @@
                              prop="planCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -743,7 +743,7 @@
                              prop="estimateCost"
                              label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -756,7 +756,7 @@
                              prop="adjustedCost"
                              label="V2预估费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+                <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -795,7 +795,7 @@
                              prop="differenceCost"
                              label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -956,12 +956,16 @@ export default {
           isSubmit: 1,
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = this.tableData[0].isGainLe
+
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          this.mainId = this.tableData[0].mainId
+
+          if (this.tableData.length > 0) {
+            this.isSubmit = this.tableData[0].isSubmit
+            this.isGainLe = this.tableData[0].isGainLe
+            this.mainId = this.tableData[0].mainId
+          }
           this.infoByMainId()
         })
       }
