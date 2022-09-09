@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-09-05 16:47:50
+ * @LastEditTime: 2022-09-08 10:37:59
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -124,13 +124,24 @@ export default function () {
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Apply/V1POSM',
               code: 'price_nka_v1_apply',
               name: 'V1POSM',
               component: () => import('@/views/V1/V1Apply/V1POSM.vue'),
               meta: {
-                title: 'V1POSM',
+                title: 'POSM—标准',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1POSMCustomize',
+              code: 'price_nka_v1_apply',
+              name: 'V1POSMCustomize',
+              component: () => import('@/views/V1/V1Apply/V1POSMCustomize.vue'),
+              meta: {
+                title: 'POSM-定制',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -140,17 +151,16 @@ export default function () {
 
               path: '/costManagement/V1/V1Apply/V1ECM',
               code: 'price_nka_v1_apply',
-              name: 'V1ECM',
+              name: 'ECM',
               component: () => import('@/views/V1/V1Apply/V1ECM.vue'),
               meta: {
-                title: 'V1ECM',
+                title: 'ECM',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Apply/V1Display',
               code: 'price_nka_v1_apply',
               name: 'V1Display',
@@ -170,6 +180,19 @@ export default function () {
               component: () => import('@/views/V1/V1Apply/V1Premium.vue'),
               meta: {
                 title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Apply/V1FreeGoodsTin',
+              code: 'price_nka_v1_apply',
+              name: 'V1FreeGoodsTin',
+              component: () => import('@/views/V1/V1Apply/V1FreeGoodsTin.vue'),
+              meta: {
+                title: 'Free Goods-Tin',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -292,7 +315,19 @@ export default function () {
               name: 'V1POSMApprove',
               component: () => import('@/views/V1/V1Approval/V1POSM.vue'),
               meta: {
-                title: 'POSM',
+                title: 'POSM—标准',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1POSMCustomize',
+              code: 'price_nka_v1_approve',
+              name: 'V1POSMCustomizeApproval',
+              component: () => import('@/views/V1/V1Apply/V1POSMCustomize.vue'),
+              meta: {
+                title: 'POSM-定制',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },
@@ -327,10 +362,22 @@ export default function () {
               path: '/costManagement/V1/V1Approval/V1Premium',
               code: 'price_nka_v1_approve',
               name: 'V1Premium',
-              component: () =>
-                import('@/views/V1/V1Approval/V1Premium.vue'),
+              component: () => import('@/views/V1/V1Approval/V1Premium.vue'),
               meta: {
                 title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+
+              path: '/costManagement/V1/V1Approval/V1FreeGoodsTinApproval',
+              code: 'price_nka_v1_apply',
+              name: 'V1FreeGoodsTinApproval',
+              component: () => import('@/views/V1/V1Apply/V1FreeGoodsTin.vue'),
+              meta: {
+                title: 'Free Goods-Tin',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },

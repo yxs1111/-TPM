@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-02 11:13:37
- * @LastEditTime: 2022-09-02 10:39:43
+ * @LastEditTime: 2022-09-08 14:17:01
  */
 import router from './router'
 import store from './store'
@@ -10,7 +10,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import auth from '@/utils/auth' // get token
 import getPageTitle from '@/utils/get-page-title'
-
+import { decrypt } from '@/utils/crypto/crypto-util'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login', '/register'] // no redirect whitelist
@@ -22,7 +22,7 @@ router.beforeEach(async(to, from, next) => {
   document.title = 'FrieslandCampina iInvest System'
   //门户登录
   if(to.query.loginInfo&&!sessionStorage.getItem('isFirstEntrySystem')) {
-    let {username,password}=JSON.parse(to.query.loginInfo)
+    let {username,password}=JSON.parse(decrypt(to.query.loginInfo))
     await store.dispatch('user/loginOtherSystem', {username,password})
     sessionStorage.setItem('isFirstEntrySystem',1)
   }

@@ -249,7 +249,7 @@
                        prop="ecmItem"
                        label="ECM item">
         <template v-slot:header>
-          <div>ECM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
+          <div>ECM item<br><span class="subTitle"> KA + Brand + Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -262,7 +262,7 @@
                        prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -275,7 +275,7 @@
                        prop="estimateCost"
                        label="V2预估费用-默认(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+          <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -288,7 +288,7 @@
                        prop="adjustedCost"
                        label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+          <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor + Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -327,7 +327,7 @@
                        prop="differenceCost"
                        label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -532,6 +532,7 @@
             </el-table-column> -->
             <el-table-column width="180"
                              align="center"
+                             fixed="left"
                              prop="judgmentType"
                              label="系统判定">
               <template v-slot:header>
@@ -560,6 +561,7 @@
             </el-table-column>
             <el-table-column width="800"
                              align="left"
+                             fixed="left"
                              prop="judgmentContent"
                              label="系统判定内容">
               <template v-slot:header>
@@ -575,7 +577,7 @@
                              width="460"
                              prop="cpId"
                              label="CPID"
-                             fixed>
+                             fixed="left">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -709,7 +711,7 @@
                              prop="ecmItem"
                              label="ECM item">
               <template v-slot:header>
-                <div>ECM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
+                <div>ECM item<br><span class="subTitle"> KA + Brand + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -722,7 +724,7 @@
                              prop="planCost"
                              label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -735,7 +737,7 @@
                              prop="estimateCost"
                              label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝</span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -748,7 +750,7 @@
                              prop="adjustedCost"
                              label="V2预估费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+                <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor + Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -787,7 +789,7 @@
                              prop="differenceCost"
                              label="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item 拷贝 3</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Item </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -986,14 +988,18 @@ export default {
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 0,
+          //   isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
+
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          this.mainId = this.tableData[0].mainId
+          if (this.tableData.length > 0) {
+            this.isSubmit = this.tableData[0].isSubmit
+            this.mainId = this.tableData[0].mainId
+          }
+
           this.infoByMainId()
         })
       }
@@ -1074,7 +1080,7 @@ export default {
       }
     },
     getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+      selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }

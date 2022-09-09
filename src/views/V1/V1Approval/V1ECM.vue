@@ -223,7 +223,7 @@
                        label="ECM item">
         <template v-slot:header>
           <div>ECM item<br>
-            <span class="subTitle"> KA + Brand + Region + Item</span>
+            <span class="subTitle"> KA + Brand + Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -241,7 +241,7 @@
           <div>
             V1计划费用(RMB)
             <br>
-            <span class="subTitle"> KA + Brand + Region + Item</span>
+            <span class="subTitle"> KA + Brand + Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -416,7 +416,7 @@ export default {
         })
     },
     getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+      selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }

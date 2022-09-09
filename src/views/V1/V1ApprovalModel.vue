@@ -6,25 +6,23 @@
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link v-for="(item, index) in routerList"
-                   :key="index"
-                   :to="item.path"
-                   tag="div"
-                   class="tabli"
-                   :class="index === currentIndex ? 'currentTabli' : ''"
-                   @click.native="changeTab(index)">
-        <img v-if="index != currentIndex"
-             :src="item.img.light"
-             alt="">
-        <img v-if="index == currentIndex"
-             :src="item.img.dark"
-             alt="">
+      <router-link
+        v-for="(item, index) in routerList"
+        :key="index"
+        :to="item.path"
+        tag="div"
+        class="tabli"
+        :class="index === currentIndex ? 'currentTabli' : ''"
+        @click.native="changeTab(index)"
+      >
+        <img v-if="index != currentIndex" :src="item.img.light" alt="" />
+        <img v-if="index == currentIndex" :src="item.img.dark" alt="" />
         <!-- <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
         <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex"> -->
         {{ item.name }}
       </router-link>
     </div>
-    <div style="height: calc(100vh - 0px);">
+    <div style="height: calc(100vh - 0px)">
       <router-view />
     </div>
   </div>
