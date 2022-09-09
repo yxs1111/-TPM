@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-09-09 15:25:38
+ * @LastEditTime: 2022-09-09 16:23:26
 -->
 <template>
   <div class="app-container">
@@ -179,6 +179,10 @@ export default {
         {
           name: 'ECM',
           code: 'C',
+        },
+        {
+          name: 'Premium',
+          code: 'H',
         },
       ],
       ruleForm: {
