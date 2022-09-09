@@ -300,7 +300,7 @@ export default {
     },
     submitFormAdd(formName) {
       const params = {
-        minePackage: 'E',
+        minePackage: 'H',
         targetYearMonth: this.ruleFormAdd.newYear,
         newYearMonth: this.ruleFormAdd.targetYear,
       }
@@ -376,7 +376,7 @@ export default {
     exportExcelInfo() {
       API.excportRuleSave({
         channelCode: this.filterObj.channel,
-        minePackage: 'POSM',
+        minePackage: 'H',
         yearAndMonth: this.filterObj.date,
       }).then((response) => {
         const fileName = '检验数据Excel' + new Date().getTime() + '.xlsx'
@@ -426,7 +426,7 @@ export default {
           for (const item of this.isChangeData) {
             if (this.tableData[item].ruleUnit === '∈') {
               const tempItem = {
-                minePackage: 'Price Promotion',
+                minePackage: 'H',
                 ruleUnit: this.tableData[item].ruleUnit.trim(),
                 startRule: this.tableData[item].startRule + '%',
                 endRule: this.tableData[item].endRule.trim() + '%',
@@ -569,7 +569,7 @@ export default {
       this.isChangeData = []
       API.getPageByDto({
         channelCode: this.filterObj.channel,
-        minePackage: 'POSM-S',
+        minePackage: 'H',
         yearAndMonth: this.filterObj.date,
       })
         .then((response) => {

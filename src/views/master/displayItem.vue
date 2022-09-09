@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-08-11 11:31:45
+ * @LastEditTime: 2022-09-09 15:26:07
 -->
 <template>
   <div class="app-container">
@@ -10,170 +10,78 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package</span>
-          <el-select
-            v-model="filterObj.minePackage"
-            @change="
+          <el-select v-model="filterObj.minePackage" @change="
               getCostItemList(
                 minePackageList.filter(
                   (item) => filterObj.minePackage === item.name
                 )[0].code
               )
-            "
-            class="my-el-input"
-            filterable
-            clearable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in minePackageList"
-              :key="item.code"
-              :label="item.name"
-              :value="item.name"
-            />
+            " class="my-el-input" filterable clearable placeholder="请选择">
+            <el-option v-for="item in minePackageList" :key="item.code" :label="item.name" :value="item.name" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Cost Item</span>
-          <el-select
-            v-model="filterObj.costItem"
-            class="my-el-input"
-            filterable
-            clearable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in CostItemList"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
+          <el-select v-model="filterObj.costItem" class="my-el-input" filterable clearable placeholder="请选择">
+            <el-option v-for="item in CostItemList" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">业务细项</span>
-          <el-input
-            v-model="filterObj.item"
-            class="my-el-input"
-            clearable
-            placeholder="请输入"
-          />
+          <el-input v-model="filterObj.item" class="my-el-input" clearable placeholder="请输入" />
         </div>
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="search"
-          >查询</el-button
-        >
-        <el-button type="primary" class="TpmButtonBG" @click="Reset"
-          >重置</el-button
-        >
-        <div class="TpmButtonBG" @click="exportData">
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
-    <el-table
-      :data="tableData"
-      border
-      :max-height="maxheight"
-      :header-cell-style="HeadTable"
-      @selection-change="handleSelectionChange"
-      :row-class-name="tableRowClassName"
-      style="width: 100%"
-    >
+    <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
+      style="width: 100%">
       <el-table-column fixed align="center" label="操作" width="220">
         <template slot-scope="scope">
           <div class="table_operation">
-            <div
-              class="haveText_editor"
-              v-show="isEditor === scope.$index"
-              @click="saveRow(scope.row, scope.$index)"
-            >
+            <div class="haveText_editor" v-show="isEditor === scope.$index" @click="saveRow(scope.row, scope.$index)">
               <svg-icon icon-class="save-light" class="svgIcon" />
               <span>保存</span>
             </div>
-            <div
-              class="haveText_editor"
-              v-show="isEditor !== scope.$index"
-              @click="editorRow(scope.$index, scope.row)"
-            >
+            <div class="haveText_editor" v-show="isEditor !== scope.$index" @click="editorRow(scope.$index, scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
-            <div
-              class="haveText_editor"
-              v-show="isEditor === scope.$index"
-              @click="CancelEditorRow(scope.$index)"
-            >
+            <div class="haveText_editor" v-show="isEditor === scope.$index" @click="CancelEditorRow(scope.$index)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>取消编辑</span>
             </div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        width="180"
-        align="center"
-        prop="minePackage"
-        label="Mine Package"
-      >
+      <el-table-column width="180" align="center" prop="minePackage" label="Mine Package">
       </el-table-column>
       <el-table-column width="180" align="center" prop="itemId" label="ID">
       </el-table-column>
       <el-table-column width="260" align="center" prop="item" label="业务细项">
       </el-table-column>
-      <el-table-column
-        width="280"
-        align="center"
-        prop="costItem"
-        label="Cost Item"
-        v-slot="scope"
-      >
-        <el-select
-          v-if="isEditor === scope.$index"
-          v-model="scope.row.costItem"
-          class="my-el-input"
-          filterable
-          clearable
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="item in CostItemList"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+      <el-table-column width="280" align="center" prop="costItem" label="Cost Item" v-slot="scope">
+        <el-select v-if="isEditor === scope.$index" v-model="scope.row.costItem" class="my-el-input" filterable clearable placeholder="请选择">
+          <el-option v-for="item in CostItemList" :key="item" :label="item" :value="item" />
         </el-select>
         <span v-if="isEditor !== scope.$index">{{ scope.row.costItem }}</span>
       </el-table-column>
-      <el-table-column
-        width="150"
-        align="center"
-        prop="updateBy"
-        label="修改人"
-      >
+      <el-table-column width="150" align="center" prop="updateBy" label="修改人">
       </el-table-column>
-      <el-table-column
-        v-slot="{ row }"
-        width="180"
-        align="center"
-        prop="updateDate"
-        label="修改时间"
-      >
+      <el-table-column v-slot="{ row }" width="180" align="center" prop="updateDate" label="修改时间">
         {{ row.updateDate ? row.updateDate.replace('T', ' ') : '' }}
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[5, 10, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
@@ -311,7 +219,12 @@ export default {
       this.getCostItemList(code)
       this.isEditor = index
       this.$forceUpdate()
-      console.log('点击编辑', this.tempObj.tempInfo, this.tempObj.rowIndex, this.minePackageList)
+      console.log(
+        '点击编辑',
+        this.tempObj.tempInfo,
+        this.tempObj.rowIndex,
+        this.minePackageList
+      )
     },
     CancelEditorRow(index) {
       this.isEditor = ''

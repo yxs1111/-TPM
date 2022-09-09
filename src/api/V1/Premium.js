@@ -8,20 +8,20 @@ import request from '@/utils/request'
 
 export default {
   // investCpPosmPipVOne/getPosmPipVOnePage
-  url: '/cityplan/investCpPosmPipVOne',
+  url: '/cityplan/investCpSalesVOneDetail',
   // 获取SmartplanData
   getSmartplanData(params) {
     return requestApi.request_get(this.url + '/getSmarPlanData', params)
   },
   //分页查询
   getPage(params) {
-    return requestApi.request_get(this.url + '/getPosmPipVOnePage', params)
+    return requestApi.request_get(this.url + '/getPage', params)
   },
   //导出
   exportExcel(params) {
     // investCpPosmPipVOne/pipVOneExport
     return request({
-      url: this.url + '/pipVOneExport',
+      url: this.url + '/exportExcel',
       method: 'get',
       params: params,
       responseType: 'blob',

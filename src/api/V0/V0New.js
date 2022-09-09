@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-11-18 15:04:46
  * @LastEditTime: 2022-07-20 13:36:14
  */
@@ -68,6 +68,6 @@ export default {
       responseType:'blob'
     })
   },
-  
+
 }
 

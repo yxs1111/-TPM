@@ -8,7 +8,7 @@ import request from '@/utils/request'
 
 export default {
   // investCpPosmPipVTwo/getPosmPipVTwoPage
-  url: '/cityplan/investCpSalesVTwoDetail',
+  url: '/cityplan/investCpSalesVThreeDetail',
   importUrl: '/cityplan/investCpListingVTwoDetailEb',
   //分页查询
   getPage(params) {
