@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-09-08 10:37:59
+ * @LastEditTime: 2022-09-09 15:55:17
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -373,7 +373,7 @@ export default function () {
               hidden: true,
 
               path: '/costManagement/V1/V1Approval/V1FreeGoodsTinApproval',
-              code: 'price_nka_v1_apply',
+              code: 'price_nka_v1_approve',
               name: 'V1FreeGoodsTinApproval',
               component: () => import('@/views/V1/V1Apply/V1FreeGoodsTin.vue'),
               meta: {
