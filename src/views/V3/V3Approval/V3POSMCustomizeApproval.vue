@@ -797,7 +797,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
       formData.append('channelName', this.filterObj.channelName)
-      formData.append('importType', 1)
+      formData.append('importType', 0)
       API.import(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
