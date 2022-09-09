@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-07 16:42:28
+ * @LastEditTime: 2022-09-09 11:09:13
 -->
 <template>
   <div class="MainContent">
@@ -116,7 +116,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="right" prop="onePlanCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
@@ -126,27 +126,27 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ FormatNum(scope.row.planCost) }}
+            {{ FormatNum(scope.row.onePlanCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="dept" label="费用归属部门">
+      <el-table-column width="280" align="center" prop="costDept" label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.dept }}
+            {{ scope.row.costDept }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="cancelCost" label="费用核销方式">
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.cancelCost }}
+            {{ scope.row.costWriteoffMethod }}
           </div>
         </template>
       </el-table-column>
@@ -170,7 +170,7 @@ import {
   FormateThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V1/RoadShow'
+import API from '@/api/V1/FreeGoods'
 export default {
   name: 'V1FreeGoodsTin',
   directives: { elDragDialog, permission },
@@ -226,49 +226,15 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
+          type:1, //（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
         })
-      }
-    },
-    //获取SmartPlan
-    getSmartPlan() {
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
-        }
-      } else {
-        this.$confirm('是否获取SmartPlan数据?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            API.getSmartplanData({
-              yearAndMonth: this.filterObj.month,
-              channelCode: this.filterObj.channelCode,
-            }).then((res) => {
-              if (res.code === 1000) {
-                this.$message.success('成功获取SmartPlan数据')
-                this.getTableData()
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消',
-            })
-          })
       }
     },
     getAllMonth() {
@@ -310,8 +276,9 @@ export default {
       if (this.tableData.length) {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          menu: 'export', //导出常量 固定传这个
+          channelName: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
+          type:1, //（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           downloadFile(
             res,

@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-07-18 11:48:16
+ * @LastEditTime: 2022-09-09 10:37:10
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -68,6 +68,13 @@ export default {
   getECMcreate(params) {
     return requestApi.request_post(
       '/cityplan/investCpEcmVOneDetail/create',
+      params
+    )
+  },
+  //获取Free Goods数据 investCpFreegoodsVOneDetail/createByCPT
+  getFreeGoods(params) {
+    return requestApi.request_post(
+      '/cityplan/investCpFreegoodsVOneDetail/createByCPT',
       params
     )
   },
