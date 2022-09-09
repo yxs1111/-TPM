@@ -131,7 +131,7 @@ export default {
   getPageMdSupplier(params) {
     return requestApi.request_get('/mdm/mdSupplier/getPage', params)
   },
-  // displayitem 下拉数据
+  // displayitem
   DisplayItemList(params) {
     return requestApi.request_get(
       '/mdm/mdDisplayItem/getDisplayItemList',
@@ -141,5 +141,9 @@ export default {
   // posmitem 下拉数据 mdm/mdDisplayItem/getPosmItemList
   getPosmItemList(params) {
     return requestApi.request_get('/mdm/mdDisplayItem/getPosmItemList', params)
+  },
+  // posmitem 下拉数据 下拉数据 mdm/mdDisplayItem/getEcmItemList
+  getECMItemList(params) {
+    return requestApi.request_get('/mdm/mdDisplayItem/getEcmItemList', params)
   },
 }
