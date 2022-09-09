@@ -223,7 +223,7 @@
                        label="ECM item">
         <template v-slot:header>
           <div>ECM item<br>
-            <span class="subTitle"> KA + Brand + Region + Item</span>
+            <span class="subTitle"> KA + Brand + Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -241,7 +241,7 @@
           <div>
             V1计划费用(RMB)
             <br>
-            <span class="subTitle"> KA + Brand + Region + Item</span>
+            <span class="subTitle"> KA + Brand + Item</span>
           </div>
         </template>
         <template slot-scope="scope">
