@@ -990,7 +990,7 @@ export default {
     },
     // 供应商
     getPageMdSupplier() {
-      selectAPI.getPageMdSupplier({}).then((res) => {
+      selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
           this.supplierArr = res.data.records
         }
