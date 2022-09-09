@@ -52,6 +52,17 @@ export default {
       params
     )
   },
+  //活动类型
+  getItemList(params) {
+    return requestApi.request_get(
+      '/cityplan/investCpSalesVOneDetail/getSmarPlanData',
+      params
+    )
+  },
+  // 供应商信息
+  getPageMdSupplier(params) {
+    return requestApi.request_get('/mdm/mdSupplier/getPage', params)
+  },
   //getCostTypeList
   getCostTypeList(params) {
     return requestApi.request_get('mdm/mdCostType/getCostTypeList', params)
@@ -127,10 +138,6 @@ export default {
     )
   },
 
-  // 供应商信息
-  getPageMdSupplier(params) {
-    return requestApi.request_get('/mdm/mdSupplier/getPage', params)
-  },
   // displayitem 下拉数据
   DisplayItemList(params) {
     return requestApi.request_get(

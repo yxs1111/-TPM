@@ -252,7 +252,7 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
           <el-form-item label="Mine package">
             <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-              <el-option v-for="item,index in ['Price Promotion','New User','KA Contract','Listing Fee']" :key="index" :label="item" :value="item" />
+              <el-option v-for="item,index in ['Price Promotion','New User','KA Contract','Listing Fee','Premium']" :key="index" :label="item" :value="item" />
             </el-select>
           </el-form-item>
           <el-form-item label="Scenario" prop="dimScenario">

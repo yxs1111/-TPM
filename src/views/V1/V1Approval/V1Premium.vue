@@ -45,19 +45,19 @@
             <el-option v-for="(item, index) in customerArr"
                        :key="index"
                        :label="item.customerCsName"
-                       :value="item.customerCsName" />
+                       :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动类型:</span>
-          <el-select v-model="filterObj.regionName"
+          <el-select v-model="filterObj.item"
                      clearable
                      filterable
                      placeholder="请选择">
             <el-option v-for="(item, index) in regionArr"
                        :key="index"
-                       :label="item.name"
-                       :value="item.name" />
+                       :label="item.item"
+                       :value="item.item" />
           </el-select>
         </div>
       </div>
@@ -74,41 +74,6 @@
         </div>
       </div>
     </div>
-<!--    <div class="TpmButtonBGWrap"-->
-<!--         style="align-items: center;">-->
-<!--      &lt;!&ndash; :class="!isSubmit&&isSelf?'':'noClick'" &ndash;&gt;-->
-<!--&lt;!&ndash;      <div class="TpmButtonBG"&ndash;&gt;-->
-<!--&lt;!&ndash;           :class="!isSubmit&&isSelf?'':'noClick'"&ndash;&gt;-->
-<!--&lt;!&ndash;           @click="importData">&ndash;&gt;-->
-<!--&lt;!&ndash;        <img src="@/assets/images/import.png"&ndash;&gt;-->
-<!--&lt;!&ndash;             alt="">&ndash;&gt;-->
-<!--&lt;!&ndash;        <span class="text">导入</span>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-<!--      <div-->
-<!--        class="TpmButtonBG"-->
-<!--        :class="!isSubmit && isSelf ? '' : 'noClick'"-->
-<!--        @click="importData"-->
-<!--      >-->
-<!--        <img src="@/assets/images/import.png" alt="" />-->
-<!--        <span class="text">导入</span>-->
-<!--      </div>-->
-<!--      <div-->
-<!--        class="TpmButtonBG"-->
-<!--        :class="!isSubmit && isSelf ? '' : 'noClick'"-->
-<!--        @click="approve('agree')"-->
-<!--      >-->
-<!--        <svg-icon icon-class="passApprove" style="font-size: 24px" />-->
-<!--        <span class="text">通过</span>-->
-<!--      </div>-->
-<!--      <div-->
-<!--        class="TpmButtonBG"-->
-<!--        :class="!isSubmit && isSelf ? '' : 'noClick'"-->
-<!--        @click="approve('reject')"-->
-<!--      >-->
-<!--        <svg-icon icon-class="rejectApprove" style="font-size: 24px" />-->
-<!--        <span class="text">驳回</span>-->
-<!--      </div>-->
-<!--    </div>-->
     <el-table :data="tableData"
               :max-height="maxheight"
               border
@@ -144,40 +109,40 @@
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="costType"
+                       prop="costTypeName"
                        label="费用类型">
         <template v-slot:header>
           <div>费用类型<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costType }}
+            {{ scope.row.costTypeName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="190"
                        align="center"
-                       prop="minePackage"
+                       prop="minePackageName"
                        label="Mine Package">
         <template v-slot:header>
           <div>Mine Package<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.minePackage }}
+            {{ scope.row.minePackageName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="180"
                        align="center"
-                       prop="costItem"
+                       prop="costItemName"
                        label="费用科目">
         <template v-slot:header>
           <div>费用科目<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costItem }}
+            {{ scope.row.costItemName }}
           </div>
         </template>
       </el-table-column>
@@ -222,54 +187,54 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="zoneName"
+                       prop="item"
                        label="活动类型">
         <template v-slot:header>
           <div>活动类型<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.zoneName }}
+            {{ scope.row.item }}
           </div>
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
       <el-table-column width="220"
                        align="right"
-                       prop="voneCost"
+                       prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + 活动类型 </span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.voneCost) }}
+            {{ formatNum(scope.row.planCost) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDept"
+                       prop="costDeptName"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDept }}
+            {{ scope.row.costDeptName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costWriteoffMethod"
+                       prop="payType"
                        label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costWriteoffMethod }}
+            {{ scope.row.payType }}
           </div>
         </template>
       </el-table-column>
@@ -447,40 +412,40 @@
             </vxe-table-column>
             <vxe-table-column width="120"
                              align="center"
-                             field="costType"
+                             field="costTypeName"
                              title="费用类型">
               <template v-slot:header>
                 <div>费用类型<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costType }}
+                  {{ scope.row.costTypeName }}
                 </div>
               </template>
             </vxe-table-column>
             <vxe-table-column width="190"
                              align="center"
-                             field="minePackage"
+                             field="minePackageName"
                              title="Mine Package">
               <template v-slot:header>
                 <div>Mine Package<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.minePackage }}
+                  {{ scope.row.minePackageName }}
                 </div>
               </template>
             </vxe-table-column>
             <vxe-table-column width="180"
                              align="center"
-                             field="costItem"
+                             field="costItemName"
                              title="费用科目">
               <template v-slot:header>
                 <div>费用科目<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costItem }}
+                  {{ scope.row.costItemName }}
                 </div>
               </template>
             </vxe-table-column>
@@ -740,7 +705,7 @@ import {
   FormateThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/POSM'
+import API from '@/api/V1/Premium'
 export default {
   name: 'V1Premium',
   directives: { elDragDialog, permission },
@@ -751,13 +716,15 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        zoneName: '', //大区
-        regionName: '', //区域
+        // zoneName: '', //大区
+        // regionName: '', //区域
         supplierName: '', //供应商
         channelCode: '', //渠道
         customerCode: '', //客户系统名称
         month: '', //活动月
-        posmItem: '',
+        item: '',
+        brandCode: '', //品牌
+        // posmItem: '',
       },
       permissions: getDefaultPermissions(),
       supplierArr: [], //供应商下拉
@@ -772,7 +739,6 @@ export default {
       BrandList: [],
 
       maxheight: getHeightHaveTab(),
-      isSubmit: 0, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
       mainId: '',
       usernameLocal: '',
@@ -804,7 +770,7 @@ export default {
     this.getBrandList()
     this.getzoneArr()
     // this.getDistributorList()
-    this.getRegionList()
+    // this.getRegionList()
     this.getPageMdSupplier()
     this.getChannel()
     // this.getQuerySkuSelect()
@@ -822,57 +788,32 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        this.isSubmit = 0
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
-          supplierName: this.filterObj.supplierName, //供应商
+          // zoneName: this.filterObj.zoneName, //大区
+          // regionName: this.filterObj.regionName, //区域
+          // supplierName: this.filterObj.supplierName, //供应商
           channelName: this.filterObj.channelCode, //渠道
-          customerName: this.filterObj.customerCode, //客户系统名称
-
-          posmItem: this.filterObj.posmItem, //
+          customerCode: this.filterObj.customerCode, //客户系统名称
+          item: this.filterObj.item, //活动
+          // posmItem: this.filterObj.posmItem, //
           yearAndMonth: this.filterObj.month,
-          isSubmit: 0,
+          brandCode: this.filterObj.brandCode, //
+          ...this.filterObj,
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          this.mainId = this.tableData[0].mainId
-          this.infoByMainId()
         })
       }
-    },
-    // 通过与审批按钮控制
-    infoByMainId() {
-      selectAPI
-        .infoByMainId({
-          mainId: this.mainId,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            if (
-              res.data.version === 'POSM-V2' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
-            ) {
-              //本人可以提交
-              this.isSelf = true
-            } else {
-              //其他人禁用
-              this.isSelf = false
-            }
-          }
-        })
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
         this.monthList = res.data
       })
     },
-
     // 客户
     getCustomerList() {
       selectAPI
@@ -901,30 +842,30 @@ export default {
         }
       })
     },
-    //获取区域下拉
-    getRegionList() {
-      if (this.filterObj.distributorCode != '') {
-        selectAPI
-          .getRegionList({
-            zoneName: this.filterObj.distributorCode,
-          })
-          .then((res) => {
-            if (res.code === 1000) {
-              this.regionArr = res.data
-            }
-          })
-      } else {
-        selectAPI.getRegionList().then((res) => {
-          if (res.code === 1000) {
-            this.regionArr = res.data
-          }
-        })
-      }
-    },
+    // //获取区域下拉
+    // getRegionList() {
+    //   if (this.filterObj.distributorCode != '') {
+    //     selectAPI
+    //       .getRegionList({
+    //         zoneName: this.filterObj.distributorCode,
+    //       })
+    //       .then((res) => {
+    //         if (res.code === 1000) {
+    //           this.regionArr = res.data
+    //         }
+    //       })
+    //   } else {
+    //     selectAPI.getRegionList().then((res) => {
+    //       if (res.code === 1000) {
+    //         this.regionArr = res.data
+    //       }
+    //     })
+    //   }
+    // },
     getBrandList() {
       selectAPI.getPosmItemList({}).then((res) => {
         if (res.code === 1000) {
-          this.BrandList = res.data
+          this.regionArr = res.data
         }
       })
     },
@@ -948,23 +889,22 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportPageExcel({
-          //   pageNum: this.pageNum, // 当前页
-          //   pageSize: this.pageSize, // 每页条数
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
-          supplierName: this.filterObj.supplierName, //供应商
-          channelName: this.filterObj.channelCode, //渠道
-          customerName: this.filterObj.customerCode, //客户系统名称
+        API.exportExcel({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
+          // zoneName: this.filterObj.zoneName, //大区
+          item: this.filterObj.item, //区域
+          brandCode: this.filterObj.brandCode, //供应商
+          channelCode: this.filterObj.channelCode, //渠道
+          customerCode: this.filterObj.customerCode, //客户系统名称
 
-          posmItem: this.filterObj.posmItem, //
+          // posmItem: this.filterObj.posmItem, //
           yearAndMonth: this.filterObj.month,
 
-          isSubmit: 0,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Premium_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_Premium_${this.filterObj.channelCode}_V1_审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -996,7 +936,6 @@ export default {
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', 1) //1申请0审批
-      formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
         //清除input的value ,上传一样的
         this.event.srcElement.value = '' // 置空
@@ -1042,7 +981,6 @@ export default {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
         channelName: this.filterObj.channelCode,
-        isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
           if (!Array.isArray(response.data)) {
@@ -1078,7 +1016,6 @@ export default {
       API.importSave({
         yearAndMonth: this.filterObj.month,
         channelName: this.filterObj.channelCode,
-        isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
@@ -1095,7 +1032,6 @@ export default {
         API.exportCheckData({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_POSM-标准_异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -1112,7 +1048,6 @@ export default {
         API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          isSubmit: 0,
         }).then((res) => {
           downloadFile(
             res,
@@ -1136,7 +1071,6 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -1168,7 +1102,6 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId,
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')
