@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-05 11:33:10
+ * @LastEditTime: 2022-09-09 09:59:13
 -->
 <template>
   <div class="V0ApplyList">
@@ -1396,6 +1396,7 @@ export default {
               break
             case 'POSM':
               url = API.getPOSMData
+              break
             case 'Premium':
               url = API.getPremium
               break
