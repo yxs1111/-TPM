@@ -1043,7 +1043,7 @@ export default {
       }
     },
     getBrandList() {
-      selectAPI.getPosmItemList({ minePackage: 'ECM' }).then((res) => {
+      selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }

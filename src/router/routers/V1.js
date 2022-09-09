@@ -129,7 +129,7 @@ export default function () {
               name: 'V1POSM',
               component: () => import('@/views/V1/V1Apply/V1POSM.vue'),
               meta: {
-                title: 'V1POSM',
+                title: 'POSM—标准',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -141,7 +141,7 @@ export default function () {
               name: 'V1POSMCustomize',
               component: () => import('@/views/V1/V1Apply/V1POSMCustomize.vue'),
               meta: {
-                title: 'V1POSM',
+                title: 'POSM-定制',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -151,10 +151,10 @@ export default function () {
 
               path: '/costManagement/V1/V1Apply/V1ECM',
               code: 'price_nka_v1_apply',
-              name: 'V1ECM',
+              name: 'ECM',
               component: () => import('@/views/V1/V1Apply/V1ECM.vue'),
               meta: {
-                title: 'V1ECM',
+                title: 'ECM',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -315,7 +315,7 @@ export default function () {
               name: 'V1POSMApprove',
               component: () => import('@/views/V1/V1Approval/V1POSM.vue'),
               meta: {
-                title: 'POSM',
+                title: 'POSM—标准',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },
@@ -327,7 +327,7 @@ export default function () {
               name: 'V1POSMCustomizeApproval',
               component: () => import('@/views/V1/V1Apply/V1POSMCustomize.vue'),
               meta: {
-                title: 'POSM',
+                title: 'POSM-定制',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },
@@ -380,7 +380,8 @@ export default function () {
                 title: 'Free Goods-Tin',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
-              }}
+              },
+            },
           ],
         },
       ],
