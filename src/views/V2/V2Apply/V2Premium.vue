@@ -58,7 +58,7 @@
             <el-option v-for="(item, index) in supplierArr"
                        :key="index"
                        :label="item.supplierName"
-                       :value="item.supplierName" />
+                       :value="item.supplierCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -228,19 +228,6 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="220"
                        align="center"
                        prop="distributorName"
@@ -250,8 +237,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.distributorName }}
-          </div>
+            {{ scope.row.distributorName == null ? scope.row.supplierName : scope.row.distributorName }}          </div>
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
@@ -269,34 +255,8 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-<!--      <el-table-column width="220"-->
-<!--                       align="center"-->
-<!--                       prop="regionName"-->
-<!--                       label="区域">-->
-<!--        <template v-slot:header>-->
-<!--          <div>区域<br><span class="subTitle">-</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{ scope.row.regionName }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column width="220"-->
-<!--                       align="right"-->
-<!--                       prop="posmItem"-->
-<!--                       label="POSM item">-->
-<!--        <template v-slot:header>-->
-<!--          <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{  scope.row.posmItem }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
@@ -309,7 +269,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="forecastCost"
                        label="V2预估费用-默认(RMB)">
         <template v-slot:header>
@@ -322,15 +282,15 @@
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
-                       prop="vtwoCostAdjust"
+                       align="center"
+                       prop="adjustedCost"
                        label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
           <div>V2预估费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.vtwoCostAdjust) }}
+            {{ formatNum(scope.row.adjustedCost) }}
           </div>
         </template>
       </el-table-column>
@@ -361,7 +321,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
@@ -393,7 +353,7 @@
         </template>
       </el-table-column>
       <el-table-column width="800"
-                       align="left"
+                       align="center"
                        prop="judgmentContent"
                        label="系统判定内容">
         <template v-slot:header>
@@ -592,7 +552,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="270"
-                             align="left"
+                             align="center"
                              field="systemJudgmentContent"
                              title="系统判定内容">
               <template v-slot:header>
@@ -700,17 +660,17 @@
                              field="supplierName"
                              title="供应商">
               <template v-slot:header>
-                <div>供应商<br><span class="subTitle">-</span></div>
+                <div>供应商/经销商<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.supplierName }}
+                  {{ scope.row.distributorName == null ? scope.row.supplierName : scope.row.distributorName }}
                 </div>
               </template>
               <!-- 数据未对接 -->
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="planCost"
                              title="V1计划费用(RMB)">
               <template v-slot:header>
@@ -723,7 +683,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="forecastCost"
                              title="V2预估费用-默认(RMB)">
               <template v-slot:header>
@@ -736,7 +696,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="adjustedCost"
                              title="V2预估费用-调整后(RMB)">
               <template v-slot:header>
@@ -775,7 +735,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="costDifference"
                              title="费用差值(RMB)">
               <template v-slot:header>
@@ -1015,26 +975,6 @@ export default {
         }
       })
     },
-    //获取区域下拉
-    // getRegionList() {
-    //   if (this.filterObj.distributorCode != '') {
-    //     selectAPI
-    //       .getRegionList({
-    //         zoneName: this.filterObj.distributorCode,
-    //       })
-    //       .then((res) => {
-    //         if (res.code === 1000) {
-    //           this.regionArr = res.data
-    //         }
-    //       })
-    //   } else {
-    //     selectAPI.getRegionList().then((res) => {
-    //       if (res.code === 1000) {
-    //         this.regionArr = res.data
-    //       }
-    //     })
-    //   }
-    // },
     //活动类型
     getBrandList() {
       selectAPI.getPosmItemList({}).then((res) => {

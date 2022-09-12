@@ -337,13 +337,8 @@ export default {
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode, //客户系统名称
           channelName: this.filterObj.channelCode, //渠道
-          // zoneName: this.filterObj.zoneName, //大区
           item: this.filterObj.item, //活动
-          // regionName: this.filterObj.regionName, //区域
           yearAndMonth: this.filterObj.month, //活动月
-          brandCode: this.filterObj.brandCode, //
-          // posmItem: this.filterObj.posmItem, //
-          ...this.filterObj,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum

@@ -45,12 +45,12 @@
             <el-option v-for="(item, index) in customerArr"
                        :key="index"
                        :label="item.customerCsName"
-                       :value="item.customerCsName" />
+                       :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierName"
+          <el-select v-model="filterObj.supplierCode"
                      clearable
                      filterable
                      placeholder="请选择">
@@ -185,14 +185,14 @@
       </el-table-column>
       <el-table-column width="180"
                        align="center"
-                       prop="costItem"
+                       prop="costItemCode"
                        label="费用科目">
         <template v-slot:header>
           <div>费用科目<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costItem }}
+            {{ scope.row.costItemName }}
           </div>
         </template>
       </el-table-column>
@@ -235,19 +235,6 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="220"
                        align="center"
                        prop="supplierName"
@@ -262,139 +249,100 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="zoneName"
-                       label="经销商">
-        <template v-slot:header>
-          <div>经销商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.zoneName }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="220"
                        align="center"
-                       prop="zoneName"
+                       prop="item"
                        label="活动类型">
         <template v-slot:header>
           <div>活动类型<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.zoneName }}
+            {{ scope.row.item }}
           </div>
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-<!--      <el-table-column width="220"-->
-<!--                       align="center"-->
-<!--                       prop="regionName"-->
-<!--                       label="区域">-->
-<!--        <template v-slot:header>-->
-<!--          <div>区域<br><span class="subTitle">-</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{ scope.row.regionName }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-<!--      <el-table-column width="220"-->
-<!--                       align="right"-->
-<!--                       prop="posmItem"-->
-<!--                       label="POSM item">-->
-<!--        <template v-slot:header>-->
-<!--          <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>-->
-<!--        </template>-->
-<!--        <template slot-scope="scope">-->
-<!--          <div>-->
-<!--            {{  scope.row.posmItem }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
       <el-table-column width="220"
-                       align="right"
-                       prop="voneCost"
+                       align="center"
+                       prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + 活动类型 </span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.voneCost) }}
+            {{ formatNum(scope.row.planCost) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
-                       prop="vtwoCostAdjust"
+                       align="center"
+                       prop="forecastCost"
                        label="V2预估费用(RMB)">
         <template v-slot:header>
           <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.vtwoCostAdjust) }}
+            {{ formatNum(scope.row.forecastCost) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
-                       prop="vthreeCostDefault"
+                       align="center"
+                       prop="actualCost"
                        label="V3实际费用-默认（RMB）">
         <template v-slot:header>
           <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型 </span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.vthreeCostDefault) }}
+            {{ formatNum(scope.row.actualCost) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
-                       prop="vthreeCostAdjust"
+                       align="center"
+                       prop="adjustedCost"
                        label="V3实际费用-调整后(RMB)">
         <template v-slot:header>
           <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.vthreeCostAdjust) }}
+            {{ formatNum(scope.row.adjustedCost) }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDept"
+                       prop="costDeptCode"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDept }}
+            {{ scope.row.costDeptName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costWriteoffMethod"
+                       prop="payType"
                        label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costWriteoffMethod }}
+            {{ scope.row.payType }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
@@ -408,7 +356,7 @@
       </el-table-column>
       <el-table-column width="180"
                        align="center"
-                       prop="systemJudgment"
+                       prop="judgmentType"
                        label="系统判定">
         <template v-slot:header>
           <div>系统判定<br><span class="subTitle">-</span></div>
@@ -420,34 +368,34 @@
             <div slot="content"
                  v-html="getTip(row)" />
             <div class="statusWrap">
-              <span class="judgmentText">{{ row.systemJudgment }}</span>
+              <span class="judgmentText">{{ row.judgmentType }}</span>
             </div>
           </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column width="800"
-                       align="left"
-                       prop="systemJudgmentContent"
+                       align="center"
+                       prop="judgmentContent"
                        label="系统判定内容">
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.systemJudgmentContent }}
+            {{ scope.row.judgmentContent }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="applicantRemark"
+                       prop="applyRemarks"
                        label="申请人备注">
         <template v-slot:header>
           <div>申请人备注<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.applicantRemark }}
+            {{ scope.row.applyRemarks }}
           </div>
         </template>
       </el-table-column>
@@ -625,7 +573,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="270"
-                             align="left"
+                             align="center"
                              field="systemJudgmentContent"
                              title="系统判定内容">
               <template v-slot:header>
@@ -730,24 +678,24 @@
             </vxe-table-column>
             <vxe-table-column width="220"
                              align="center"
-                             field="distributorCode"
-                             title="供应商">
+                             field="supplierName"
+                             title="供应商/经销商">
               <template v-slot:header>
-                <div>供应商<br><span class="subTitle">-</span></div>
+                <div>供应商/经销商<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.distributorName }}
+                  {{ scope.row.distributorName == null ? scope.row.supplierName : scope.row.distributorName }}
                 </div>
               </template>
               <!-- 数据未对接 -->
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="planCost"
                              title="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + 活动类型</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -757,11 +705,11 @@
             </vxe-table-column>
 
             <vxe-table-column width="220"
-                              align="right"
+                              align="center"
                               field="forecastCost"
                               title="V2预估费用(RMB)">
               <template v-slot:header>
-                <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
+                <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -770,11 +718,11 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="actualCost"
                              title="V3实际费用-默认(RMB)">
               <template v-slot:header>
-                <div>V3实际费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>V3实际费用-默认(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型 </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -783,11 +731,11 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="adjustedCost"
                              title="V3实际费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Vendor/Dist + 活动类型 </span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -822,7 +770,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column width="220"
-                             align="right"
+                             align="center"
                              field="costDifference"
                              title="费用差值(RMB)">
               <template v-slot:header>
@@ -930,7 +878,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        supplierName: '', //供应商
+        supplierCode: '', //供应商
         channelCode: '', //渠道
         customerCode: '', //客户系统名称
         month: '', //活动月
@@ -1279,8 +1227,7 @@ export default {
       if (this.ImportData.length) {
         API.exportCheckData({
           yearAndMonth: this.filterObj.month,
-          channelName: this.filterObj.channelCode,
-          isSubmit: 0,
+          channelCode: this.filterObj.channelCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V3_Premium_异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名

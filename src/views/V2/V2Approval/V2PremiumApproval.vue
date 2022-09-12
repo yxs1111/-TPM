@@ -244,19 +244,6 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column width="220"
                        align="center"
                        prop="distributorCode"
@@ -325,7 +312,7 @@
 <!--        </template>-->
 <!--      </el-table-column>-->
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
@@ -338,7 +325,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="forecastCost"
                        label="V2预估费用-默认(RMB)">
         <template v-slot:header>
@@ -351,7 +338,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="adjustedCost"
                        label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
@@ -390,7 +377,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="costDifference"
                        label="费用差值(RMB)">
         <template v-slot:header>
@@ -539,8 +526,17 @@
             <el-table-column width="120" align="center" prop="channelName" label="渠道" />
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="220" align="center" prop="brandName" label="品牌" />
-            <el-table-column width="220" align="center" prop="distributorName" label="供应商" />
-            <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+            <el-table-column width="220" align="center" prop="distributorName" label="供应商/经销商">
+              <template v-slot:header>
+                <div>供应商/经销商<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.distributorName == null ? scope.row.supplierName : scope.row.distributorName }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="center" prop="planCost" label="V1计划费用(RMB)">
               <template v-slot:header>
                 <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
               </template>
@@ -550,7 +546,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="forecastCost" label="V2预估费用-默认(RMB)">
+            <el-table-column width="220" align="center" prop="forecastCost" label="V2预估费用-默认(RMB)">
               <template v-slot:header>
                 <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
               </template>
@@ -560,7 +556,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估费用-调整后(RMB)">
+            <el-table-column width="220" align="center" prop="adjustedCost" label="V2预估费用-调整后(RMB)">
               <template v-slot:header>
                 <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
               </template>
@@ -572,7 +568,7 @@
             </el-table-column>
             <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="payType" label="费用核销方式"></el-table-column>
-            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
+            <el-table-column width="220" align="center" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
                 <div>费用差值(RMB)<br><span class="subTitle">KA+Brand+Vendor</span></div>
               </template>
@@ -692,7 +688,7 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           supplierCode: this.filterObj.supplierCode, //供应商
-          channelName: this.filterObj.channelCode, //渠道
+          channelCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
           distributorCode: this.filterObj.distributorCode, //
 
@@ -775,26 +771,6 @@ export default {
         }
       })
     },
-    // //获取区域下拉
-    // getRegionList() {
-    //   if (this.filterObj.distributorCode != '') {
-    //     selectAPI
-    //       .getRegionList({
-    //         zoneName: this.filterObj.distributorCode,
-    //       })
-    //       .then((res) => {
-    //         if (res.code === 1000) {
-    //           this.regionArr = res.data
-    //         }
-    //       })
-    //   } else {
-    //     selectAPI.getRegionList().then((res) => {
-    //       if (res.code === 1000) {
-    //         this.regionArr = res.data
-    //       }
-    //     })
-    //   }
-    // },
     // 活动类型
     getBrandList() {
       selectAPI.getPosmItemList({}).then((res) => {
