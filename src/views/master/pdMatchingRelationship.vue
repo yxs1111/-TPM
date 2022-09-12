@@ -23,9 +23,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Department</span>
-          <el-select v-model="ruleForm.departmentName" @change="getDepartmentId" multiple class="my-el-input" clearable filterable placeholder="请选择">
-            <el-option v-for="item in departmentList" :key="item.departmentId" :label="item.departmentName" :value="item.departmentName" />
-          </el-select>
+          <el-input v-model="filterObj.department" clearable placeholder="请输入" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
