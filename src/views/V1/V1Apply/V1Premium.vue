@@ -199,7 +199,7 @@
         <!-- 未对接接口,字段未改 -->
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
@@ -336,7 +336,7 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode, //客户系统名称
-          channelName: this.filterObj.channelCode, //渠道
+          channelCode: this.filterObj.channelCode, //渠道
           item: this.filterObj.item, //活动
           yearAndMonth: this.filterObj.month, //活动月
         }).then((response) => {
@@ -382,7 +382,7 @@ export default {
         })
     },
     getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+      selectAPI.getECMItemList({ minePackage: 'Premium'}).then((res) => {
         if (res.code === 1000) {
           this.regionArr = res.data
         }
@@ -396,14 +396,14 @@ export default {
         }
       })
     },
-    //获取区域下拉
-    getregionArr() {
-      selectAPI.getRegionList({}).then((res) => {
-        if (res.code === 1000) {
-          this.regionArr = res.data
-        }
-      })
-    },
+    // //获取区域下拉
+    // getregionArr() {
+    //   selectAPI.getRegionList({}).then((res) => {
+    //     if (res.code === 1000) {
+    //       this.regionArr = res.data
+    //     }
+    //   })
+    // },
     getSmartPlan() {
       if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         if (this.filterObj.month == '') {

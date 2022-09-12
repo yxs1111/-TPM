@@ -200,7 +200,7 @@
         <!-- 数据未对接 -->
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="planCost"
                        label="V1计划费用(RMB)">
         <template v-slot:header>
@@ -794,7 +794,7 @@ export default {
           // zoneName: this.filterObj.zoneName, //大区
           // regionName: this.filterObj.regionName, //区域
           // supplierName: this.filterObj.supplierName, //供应商
-          channelName: this.filterObj.channelCode, //渠道
+          channelCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
           item: this.filterObj.item, //活动
           // posmItem: this.filterObj.posmItem, //
@@ -863,7 +863,7 @@ export default {
     //   }
     // },
     getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+      selectAPI.getECMItemList({}).then((res) => {
         if (res.code === 1000) {
           this.regionArr = res.data
         }

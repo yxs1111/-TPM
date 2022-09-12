@@ -28,9 +28,18 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-select v-model="filterObj.activityMonth" filterable clearable placeholder="请选择">
-            <el-option v-for="(item, index) in monthList" :key="index" :label="item.activityMonth" :value="item.activityMonth" />
-          </el-select>
+<!--          <el-select v-model="filterObj.activityMonth" filterable clearable placeholder="请选择">-->
+<!--            <el-option v-for="(item, index) in monthList" :key="index" :label="item.activityMonth" :value="item.activityMonth" />-->
+<!--          </el-select>-->
+          <div class="block">
+            <el-date-picker
+              v-model="filterObj.activityMonth"
+              type="month"
+              value-format="yyyyMM"
+              @change="getAllMonth"
+              placeholder="选择月">
+            </el-date-picker>
+          </div>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>

@@ -805,7 +805,7 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           supplierCode: this.filterObj.supplierCode, //供应商
-          channelName: this.filterObj.channelCode, //渠道
+          channelCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
           distributorCode: this.filterObj.distributorCode, //
 
