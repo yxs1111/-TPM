@@ -909,9 +909,9 @@ export default {
     //   }
     // },
     getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+      selectAPI.getECMItemList({ minePackage: 'Premium'}).then((res) => {
         if (res.code === 1000) {
-          this.BrandList = res.data
+          this.regionArr = res.data
         }
       })
     },

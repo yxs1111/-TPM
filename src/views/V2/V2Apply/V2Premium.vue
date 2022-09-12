@@ -977,7 +977,7 @@ export default {
     },
     //活动类型
     getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+      selectAPI.getECMItemList({ minePackage: 'Premium'}).then((res) => {
         if (res.code === 1000) {
           this.regionArr = res.data
         }
