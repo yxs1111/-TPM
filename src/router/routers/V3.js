@@ -128,7 +128,7 @@ export default function () {
               name: 'V3POSM',
               component: () => import('@/views/V3/V3Apply/V3POSM.vue'),
               meta: {
-                title: 'POSM—标准',
+                title: 'POSM-标准',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Apply',
               },
@@ -326,7 +326,7 @@ export default function () {
               component: () =>
                 import('@/views/V3/V3Approval/V3POSMApproval.vue'),
               meta: {
-                title: 'POSM—标准',
+                title: 'POSM-标准',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },

@@ -130,7 +130,7 @@ export default function () {
               name: 'V2POSM',
               component: () => import('@/views/V2/V2Apply/V2POSM.vue'),
               meta: {
-                title: 'POSM—标准',
+                title: 'POSM-标准',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Apply',
               },
@@ -326,7 +326,7 @@ export default function () {
               component: () =>
                 import('@/views/V2/V2Approval/V2POSMApproval.vue'),
               meta: {
-                title: 'POSM—标准',
+                title: 'POSM-标准',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },
