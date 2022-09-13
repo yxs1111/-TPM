@@ -960,7 +960,6 @@ export default {
           supplierCode: this.filterObj.supplierCode, //供应商
 
           yearAndMonth: this.filterObj.month, //活动月
-          isSubmit: 0
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
@@ -1097,7 +1096,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Premium_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_Premium_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
