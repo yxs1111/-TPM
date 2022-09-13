@@ -9,15 +9,9 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-          <span class="SelectliTitle">Mine Package</span>
-          <el-select v-model="filterObj.minePackage" @change="
-              getCostItemList(
-                minePackageList.filter(
-                  (item) => filterObj.minePackage === item.name
-                )[0].code
-              )
-            " class="my-el-input" filterable clearable placeholder="请选择">
-            <el-option v-for="item in minePackageList" :key="item.code" :label="item.name" :value="item.name" />
+          <span class="SelectliTitle">Mine Package:</span>
+          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" @change="getCostItemList">
+            <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -92,6 +86,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import { getDefaultPermissions, getHeight, downloadFile } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import item from '@/layout/components/Sidebar/Item'
+import selectAPI from '@/api/selectCommon/selectCommon'
 export default {
   name: 'displayItem',
 
@@ -108,16 +103,7 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       CostItemList: [],
-      minePackageList: [
-        {
-          name: 'Display',
-          code: 'E',
-        },
-        {
-          name: 'POSM',
-          code: 'D',
-        },
-      ],
+      minePackageList: [],
       isEditor: '',
       editorId: '',
       checkArr: [], //批量删除,存放选中
@@ -137,6 +123,8 @@ export default {
       })()
     }
     this.getTableData()
+    this.getMinePackageSelect()
+    this.getCostItemList()
   },
   computed: {},
   watch: {},
@@ -154,12 +142,9 @@ export default {
         this.total = response.data.total
       })
     },
-    getCostItemList(code) {
-      API.getCostItemList({
-        minePackageCode: code,
-      }).then((res) => {
+    getCostItemList() {
+      selectAPI.getCostItemList({ minePackage: this.filterObj.minePackage }).then((res) => {
         if (res.code === 1000) {
-          this.filterObj.costItem = ''
           this.CostItemList = res.data
         }
       })
@@ -225,6 +210,18 @@ export default {
         this.tempObj.rowIndex,
         this.minePackageList
       )
+    },
+    getMinePackageSelect() {
+      selectAPI
+        .queryMinePackageSelect({
+          parentId: this.filterObj.CostType,
+        })
+        .then((res) => {
+          if (res.code == 1000) {
+            this.minePackageList = res.data
+            this.getCostItemList(this.filterObj.minePackage)
+          }
+        })
     },
     CancelEditorRow(index) {
       this.isEditor = ''
