@@ -1291,7 +1291,7 @@ export default {
       if (this.ImportData.length) {
         API.exportCheckData({
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_Premium_异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名

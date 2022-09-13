@@ -1,5 +1,5 @@
 <!--TodoList
- * @Description: 
+ * @Description:
  * @Date: 2021-11-16 14:01:16
  * @LastEditTime: 2022-04-11 10:20:41
 -->
@@ -21,7 +21,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.MinePackageName" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.MinePackageName" clearable filterable placeholder="请选择" @change="getCostItemList">
             <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
@@ -157,7 +157,7 @@ export default {
         this.filterObj.CostTypeName = ''
       }
       this.filterObj.MinePackageName = ''
-      this.getMinePackageSelect()
+      // this.getMinePackageSelect()
     },
   },
   methods: {
@@ -183,7 +183,7 @@ export default {
     },
     // 获取下拉框
     getCostItemList() {
-      selectAPI.getCostItemList().then((res) => {
+      selectAPI.getCostItemList({ minePackage: this.filterObj.MinePackageName }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
@@ -216,6 +216,7 @@ export default {
         .then((res) => {
           if (res.code == 1000) {
             this.minePackageList = res.data
+            this.getCostItemList(this.filterObj.MinePackageName)
           }
         })
     },
