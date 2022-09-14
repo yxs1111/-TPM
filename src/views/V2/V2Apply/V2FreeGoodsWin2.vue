@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:08:51
+ * @LastEditTime: 2022-09-14 17:24:31
 -->
 <template>
   <div class="MainContent">
@@ -758,7 +758,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadSAPFile)
       formData.append('yearAndMonth', this.ruleForm.month)
-      formData.append('type', 1)
+      formData.append('type', 2)
       formData.append('channelName', this.ruleForm.channelName)
       API.uploadSAP(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -794,7 +794,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelName', this.filterObj.channelCode)
-      formData.append('type', 1) //（1：Free Goods - Tin，2：Free Goods - Win 2）
+      formData.append('type', 2) //（1：Free Goods - Tin，2：Free Goods - Win 2）
       formData.append('importType', 1) //	导入类型（1：申请导入，2：审批导入）
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FreeGoodsTinApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:09:20
+ * @LastEditTime: 2022-09-14 17:25:13
 -->
 <template>
   <div class="MainContent">
@@ -698,7 +698,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelName', this.filterObj.channelCode)
-      formData.append('type', 1) //（1：Free Goods - Tin，2：Free Goods - Win 2）
+      formData.append('type', 2) //（1：Free Goods - Tin，2：Free Goods - Win 2）
       formData.append('importType', 2) //	导入类型（1：申请导入，2：审批导入）
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
