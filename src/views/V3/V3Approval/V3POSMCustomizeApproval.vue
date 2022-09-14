@@ -292,7 +292,7 @@
     <div class="TpmPaginationWrap">
       <el-pagination
         :current-page="pageNum"
-        :page-sizes="[10, 20, 30, 50]"
+        :page-sizes="[100, 200, 500, 1000]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -608,7 +608,7 @@ export default {
   data() {
     return {
       total: 0,
-      pageSize: 10,
+      pageSize: 100,
       pageNum: 1,
       filterObj: {
         channelName: '',
