@@ -34,10 +34,10 @@
             @change="getCustomerList"
           >
             <el-option
-              v-for="item in ['NKA']"
-              :key="item"
-              :label="item"
-              :value="item"
+              v-for="item in channelArr"
+              :key="item.channelCsName"
+              :label="item.channelCsName"
+              :value="item.channelCsName"
             />
           </el-select>
         </div>
@@ -260,7 +260,7 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取下拉框
+    // 获取渠道
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
