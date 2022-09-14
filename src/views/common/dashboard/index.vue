@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-08-30 10:38:43
  * @LastEditTime: 2022-09-13 13:53:19
 -->
@@ -39,7 +39,7 @@
               <div class="monthBg">
                 <!-- <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> -->
                 <div class="monthName">{{MonthItem.month}}</div>
-               
+
               </div>
               <div class="monthPoint">
                 <!-- 渠道 -->
