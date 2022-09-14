@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FreeGoodsTin
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:06:27
+ * @LastEditTime: 2022-09-14 16:09:47
 -->
 <template>
   <div class="MainContent">
@@ -304,7 +304,7 @@ export default {
           channelName: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
           productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -360,7 +360,7 @@ export default {
           channelName: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
           productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           downloadFile(
             res,

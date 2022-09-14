@@ -1,7 +1,7 @@
 <!--
- * @Description: V3FreeGoodsTin
+ * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:06:27
+ * @LastEditTime: 2022-09-14 16:10:27
 -->
 <template>
   <div class="MainContent">
@@ -22,14 +22,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">SKU:</span>
-          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
       </div>
@@ -112,7 +106,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="supplierName" label="品牌">
+      <el-table-column width="280" align="center" prop="brandName" label="品牌">
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
         </template>
@@ -122,87 +116,21 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="supplierName" label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.productName }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="220" align="right" prop="onePlanCost" label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
+          <div>
+            V1计划费用(RMB)
+            <br>
+            <span class="subTitle">KA+Brand</span>
+          </div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.onePlanCost) }}
+            {{ FormatNum(scope.row.onePlanCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedTwoEstimateUnitCost" label="V2预估单位费用(RMB/Tin)">
-        <template v-slot:header>
-          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedTwoEstimateUnitCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedTwoEstimateNum" label="V2预估用量(Tin)">
-        <template v-slot:header>
-          <div>V2预估用量(Tin)<br><span class="subTitle">SKU+KA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedTwoEstimateNum) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedTwoEstimateCost" label="V2预估费用(RMB)">
-        <template v-slot:header>
-          <div>V2预估费用(RMB)<br><span class="subTitle">SKU+KA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.adjustedTwoEstimateCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="actualThreeEstimateUnitCost" label="V3实际单位费用(RMB/Tin)">
-        <template v-slot:header>
-          <div>V3实际单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.actualThreeEstimateUnitCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="actualThreeEstimateNum" label="V3实际用量(Tin)">
-        <template v-slot:header>
-          <div>V3实际用量(Tin)<br><span class="subTitle">SKU+KA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.actualThreeEstimateNum) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="actualThreeEstimateCost" label="V3实际费用">
-        <template v-slot:header>
-          <div>V3实际费用<br><span class="subTitle">SKU+KA</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ formatNum(scope.row.actualThreeEstimateCost) }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="costDept" label="费用归属部门">
+      <el-table-column width="280" align="center" prop="costDept" label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
@@ -225,7 +153,7 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+      <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
@@ -239,13 +167,12 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
-  messageMap,
   FormateThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/FreeGoods'
+import API from '@/api/V1/FreeGoods'
 export default {
-  name: 'V3FreeGoodsTin',
+  name: 'V1FreeGoodsTin',
   directives: { elDragDialog, permission },
 
   data() {
@@ -255,8 +182,7 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        customerName: '',
-        productName: '',
+        customerCode: '',
         month: '',
       },
       permissions: getDefaultPermissions(),
@@ -264,25 +190,24 @@ export default {
       monthList: [],
       customerArr: [],
       tableData: [],
-      skuOptions: [],
       maxheight: getHeightHaveTab(),
-      mainId: '',
-      usernameLocal: '',
-      messageMap: messageMap(),
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.channelCode'() {
+      this.filterObj.customerCode = ''
+      this.getCustomerList()
+    },
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeightHaveTab()
       })()
     }
-    this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -297,14 +222,13 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getV3Page({
+        API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          customerName: this.filterObj.customerName,
-          productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          customerCode: this.filterObj.customerCode,
+          type:2, //（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -339,13 +263,8 @@ export default {
           }
         })
     },
-    getQuerySkuSelect() {
-      selectAPI.querySkuSelect().then((res) => {
-        this.skuOptions = res.data
-      })
-    },
     //千分位分隔符+两位小数
-    formatNum(num) {
+    FormatNum(num) {
       return FormateThousandNum(num)
     },
     search() {
@@ -355,16 +274,15 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.downV3Excel({
+        API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          customerName: this.filterObj.customerName,
-          productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          customerCode: this.filterObj.customerCode,
+          type:2, //（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V3_查询.xlsx`
+            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -398,23 +316,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tooltip {
-  border-radius: 10px;
-}
-.Tip {
-  text-align: center;
-  font-size: 14px;
-  font-family: Source Han Sans CN;
-  font-weight: 400;
-  margin: 3px 0;
-}
-.tip {
-  color: #eb4f48;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-.tipStar {
-  font-size: 12px;
-  color: #eb4f48;
-}
 </style>

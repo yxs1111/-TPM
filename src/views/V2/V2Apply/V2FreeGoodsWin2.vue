@@ -1,7 +1,7 @@
 <!--
- * @Description: V2FreeGoodsTinApproval
+ * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:01:54
+ * @LastEditTime: 2022-09-14 16:08:51
 -->
 <template>
   <div class="MainContent">
@@ -41,18 +41,18 @@
         </div>
       </div>
     </div>
-    <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+    <div class="TpmButtonBGWrap" style="align-items: center;">
+      <div class="TpmButtonBG" :class="isSelf?'':'noClick'" @click="showUploadSAP">
+        <svg-icon icon-class="uploadFile" style="font-size: 15px;" />
+        <span class="text">上传SAP File</span>
+      </div>
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve()">
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
-        <span class="text">通过</span>
-      </div>
-      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
-        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
-        <span class="text">驳回</span>
+        <span class="text">提交</span>
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -314,7 +314,7 @@
         <div class="el-downloadFileBar">
           <div>
             <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
-            <!-- <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
+            <el-button v-if="isCheck" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button>
           </div>
           <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
@@ -329,6 +329,12 @@
             <div v-if="uploadFileName!=''" class="fileName">
               <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
               <span>{{ uploadFileName }}</span>
+            </div>
+          </div>
+          <div class="seeData" style="width: auto;">
+            <div class="exportError" @click="exportErrorList">
+              <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+              <span>导出错误信息</span>
             </div>
           </div>
         </div>
@@ -498,6 +504,35 @@
         </div>
       </div>
     </el-dialog>
+    <!-- 上传SAP  -->
+    <el-dialog width="50%" class="my-el-dialog" title="上传SAP" :visible="isSAPVisible" @close="closeUploadSAP">
+      <div class="el-dialogContent">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
+          <el-form-item label="活动月" prop="month">
+            <el-select v-model="ruleForm.month" filterable clearable placeholder="请选择">
+              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="渠道" prop="channelName">
+            <el-select v-model="ruleForm.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
+              <el-option v-for="(item) in ['NKA','EC']" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="fileInfo ImportContent" style="margin-left: 31px;margin-bottom: 20px;">
+        <div class="fileTitle">文件</div>
+        <div class="my-search selectFile" @click="parsingSAPBtn">
+          <img src="@/assets/images/selectFile.png" alt="">
+          <span class="text">选择文件</span>
+        </div>
+        <input id="fileElem" ref="SAPFile" type="file" style="display: none" @change="uploadSAP($event)">
+        <div v-if="uploadSAPFileName!=''" class="fileName">
+          <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
+          <span>{{ uploadSAPFileName }}</span>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -510,12 +545,12 @@ import {
   messageObj,
   downloadFile,
   messageMap,
-  FormateThousandNum
+  FormateThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/FreeGoods'
 export default {
-  name: 'V2FreeGoodsTinApproval',
+  name: 'V2FreeGoodsTin',
   directives: { elDragDialog, permission },
 
   data() {
@@ -537,15 +572,39 @@ export default {
       skuOptions: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSelf: 0, //是否是当前审批人
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
       // 导入
       importVisible: false, // 导入弹窗
+      isSAPVisible: false, // 导入弹窗
       ImportData: [],
       uploadFileName: '',
+      uploadSAPFileName: '',
       event: '',
       uploadFile: '',
+      uploadSAPFile: '',
+      ruleForm: {
+        month: '',
+        channelName: '',
+      },
+      rules: {
+        month: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+        channelName: [
+          {
+            required: true,
+            message: 'This field is required',
+            trigger: 'blur',
+          },
+        ],
+      },
       saveBtn: false,
       isCheck: false, //检测数据按钮显示或隐藏
     }
@@ -583,9 +642,10 @@ export default {
           channelName: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
           productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
           this.tableData = response.data.records
+          this.isSubmit = this.tableData[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -604,14 +664,13 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'Free Goods-V2' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.tableData[0].isSubmit
+              res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
-              this.isSubmit = false
+              this.isSelf = true
             } else {
               //其他人禁用
-              this.isSubmit = true
+              this.isSelf = false
             }
           }
         })
@@ -649,7 +708,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-       return FormateThousandNum(num)
+      return FormateThousandNum(num)
     },
     search() {
       this.pageNum = 1
@@ -658,12 +717,12 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportApproveExcel({
+        API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
           productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           downloadFile(
             res,
@@ -674,6 +733,43 @@ export default {
       } else {
         this.$message.info('数据为空')
       }
+    },
+    showUploadSAP() {
+      this.isSAPVisible = true
+    },
+    closeUploadSAP() {
+      this.isSAPVisible = false
+    },
+    // 选择导入文件 SAP
+    parsingSAPBtn() {
+      this.$refs['ruleForm'].validate((valid) => {
+        if (valid) {
+          this.$refs.SAPFile.dispatchEvent(new MouseEvent('click'))
+        } else {
+          this.$message.error('请先选择活动月、渠道')
+          return false
+        }
+      })
+    },
+    //SAP 文件上传
+    uploadSAP(event) {
+      this.uploadSAPFileName = event.target.files[0].name
+      this.uploadSAPFile = event.target.files[0]
+      const formData = new FormData()
+      formData.append('file', this.uploadSAPFile)
+      formData.append('yearAndMonth', this.ruleForm.month)
+      formData.append('type', 1)
+      formData.append('channelName', this.ruleForm.channelName)
+      API.uploadSAP(formData).then((response) => {
+        //清除input的value ,上传一样的
+        event.srcElement.value = '' // 置空
+        if (response.code == 1000) {
+          this.$message.success('SAP File 上传成功')
+          this.closeUploadSAP()
+        } else {
+          this.$message.info('SAP File 上传失败')
+        }
+      })
     },
     importData() {
       this.saveBtn = false
@@ -691,26 +787,28 @@ export default {
     },
     // 导入
     parsingExcel(event) {
-      this.event = event
+      this.isCheck = false
       this.uploadFileName = event.target.files[0].name
       this.uploadFile = event.target.files[0]
-      let formData = new FormData()
+      const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelName', this.filterObj.channelCode)
       formData.append('type', 1) //（1：Free Goods - Tin，2：Free Goods - Win 2）
-      formData.append('importType', 2) //	导入类型（1：申请导入，2：审批导入）
+      formData.append('importType', 1) //	导入类型（1：申请导入，2：审批导入）
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
-          if (!Array.isArray(response.data)||response.data.length===0) {
+          if (!Array.isArray(response.data) || response.data.length === 0) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
+            this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
-            this.saveBtn = this.ImportData.length ? true : false
-            this.$message.success('导入成功！')
+            this.isCheck = response.data[0].judgmentType !== 'Error'
           }
+        } else {
+          this.$message.info(this.messageMap.importError)
         }
       })
     },
@@ -723,10 +821,37 @@ export default {
       this.saveBtn = false
       this.isCheck = false
     },
+    // 校验数据
+    checkImport() {
+      API.exceptionCheck({
+        yearAndMonth: this.filterObj.month,
+        channelName: this.filterObj.channelCode,
+        type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+      }).then((response) => {
+        if (response.code == 1000) {
+          this.$message.success(this.messageMap.checkSuccess)
+          this.ImportData = response.data
+          this.saveBtn = response.data[0].judgmentType !== 'Error'
+        } else {
+          this.$message.info(this.messageMap.checkError)
+        }
+      })
+    },
     // 确认导入
     confirmImport() {
-      this.closeImportDialog()
-      this.getTableData()
+      API.save({
+        yearAndMonth: this.filterObj.month,
+        channelName: this.filterObj.channelCode,
+        type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+      }).then((res) => {
+        if (res.code == 1000) {
+          this.$message.success(this.messageMap.saveSuccess)
+          this.getTableData()
+          this.closeImportDialog()
+        } else {
+          this.$message.info(this.messageMap.saveError)
+        }
+      })
     },
     // 导出异常信息
     exportErrorList() {
@@ -734,7 +859,7 @@ export default {
         API.downExcelError({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_Free Goods-Tin异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -751,12 +876,12 @@ export default {
         API.downExcelTemplate({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
-          downType: 2, //下载模板类型（1：申请，2：审批）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          downType: 1, //下载模板类型（1：申请，2：审批）
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V2审批.xlsx`
+            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V2申请.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
@@ -764,64 +889,34 @@ export default {
         this.$message.info('数据不能为空')
       }
     },
-    approve(value) {
+    approve() {
       if (this.tableData.length) {
-        if (value) {
-          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
+        const judgmentType = this.tableData[0].judgmentType
+        if (judgmentType != null) {
+          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
           })
             .then(() => {
-              API.approve({
-                mainId: this.tableData[0].mainId,
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+              const mainId = this.tableData[0].mainId
+              API.submit({
+                mainId: mainId, // 主表id
               }).then((response) => {
                 if (response.code === 1000) {
-                  this.$message({
-                    type: 'success',
-                    message: '审批成功!',
-                  })
+                  this.$message.success('提交成功')
                   this.getTableData()
-                } else {
-                  this.$message({
-                    type: 'info',
-                    message: '审批失败!',
-                  })
                 }
               })
             })
             .catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消通过',
+                message: '已取消提交',
               })
             })
         } else {
-          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              API.approve({
-                mainId: this.tableData[0].mainId,
-                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('驳回成功!')
-                  this.getTableData()
-                } else {
-                  this.$message.info('驳回失败!')
-                }
-              })
-            })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消驳回',
-              })
-            })
+          this.$message.info('数据未校验，请先进行导入验证')
         }
       } else {
         this.$message.warning('数据不能为空')

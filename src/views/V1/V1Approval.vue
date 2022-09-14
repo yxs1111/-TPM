@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 09:23:55
+ * @LastEditTime: 2022-09-14 16:20:14
 -->
 <template>
   <div class="tabViewsWrap">
@@ -222,6 +222,15 @@ export default {
                 light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
               },
               minePackageName:'Free Goods-Tin',
+            },
+            {
+              name: 'Free Goods-Win2',
+              path: '/costManagement/V1/V1Approval/V1FreeGoodsWin2Approval',
+              img: {
+                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
+                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
+              },
+              minePackageName:'Free Goods-Win2',
             },
           ]
           if (sessionStorage.getItem('currentIndex')) {

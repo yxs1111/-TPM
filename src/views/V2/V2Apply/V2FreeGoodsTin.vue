@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 09:45:54
+ * @LastEditTime: 2022-09-14 16:00:08
 -->
 <template>
   <div class="MainContent">
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="isSubmit?'':'noClick'" @click="showUploadSAP">
+      <div class="TpmButtonBG" :class="isSelf?'':'noClick'" @click="showUploadSAP">
         <svg-icon icon-class="uploadFile" style="font-size: 15px;" />
         <span class="text">上传SAP File</span>
       </div>
@@ -158,7 +158,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="twoEstimateUnitCost" label="V2预估单位费用(RMB/Tin)">
         <template v-slot:header>
-          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
+          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -166,9 +166,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="260" align="right" prop="twoEstimateNum" label="V2预估用量(CTN)">
+      <el-table-column width="260" align="right" prop="twoEstimateNum" label="V2预估用量(Tin)">
         <template v-slot:header>
-          <div>V2预估用量(CTN)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
+          <div>V2预估用量(Tin)<br><span class="subTitle">SKU+Channel</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -178,7 +178,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="twoEstimateCost" label="V2预估费用(RMB)">
         <template v-slot:header>
-          <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
+          <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -188,7 +188,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="adjustedTwoEstimateUnitCost" label="V2预估单位费用(RMB/Tin)">
         <template v-slot:header>
-          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
+          <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -196,9 +196,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="260" align="right" prop="adjustedTwoEstimateNum" label="V2预估用量-调整后(CTN)">
+      <el-table-column width="260" align="right" prop="adjustedTwoEstimateNum" label="V2预估用量-调整后(Tin)">
         <template v-slot:header>
-          <div>V2预估用量-调整后(CTN)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
+          <div>V2预估用量-调整后(Tin)<br><span class="subTitle">SKU+KA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -208,7 +208,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="adjustedTwoEstimateCost" label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
+          <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -218,7 +218,7 @@
       </el-table-column>
       <el-table-column width="260" align="center" prop="costDept" label="费用归属部门">
         <template v-slot:header>
-          <div>费用归属部门<br><span class="subTitle">KA+供应商+Region</span></div>
+          <div>费用归属部门<br><span class="subTitle">SKU+KA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -382,7 +382,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="twoEstimateUnitCost" label="V2预估单位费用(RMB/Tin)">
               <template v-slot:header>
-                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
+                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -390,9 +390,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="260" align="right" prop="twoEstimateNum" label="V2预估用量(CTN)">
+            <el-table-column width="260" align="right" prop="twoEstimateNum" label="V2预估用量(Tin)">
               <template v-slot:header>
-                <div>V2预估用量(CTN)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
+                <div>V2预估用量(Tin)<br><span class="subTitle">SKU+Channel</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -402,7 +402,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="twoEstimateCost" label="V2预估费用(RMB)">
               <template v-slot:header>
-                <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
+                <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -412,7 +412,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="adjustedTwoEstimateUnitCost" label="V2预估单位费用(RMB/Tin)">
               <template v-slot:header>
-                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
+                <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -420,9 +420,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="260" align="right" prop="adjustedTwoEstimateNum" label="V2预估用量-调整后(CTN)">
+            <el-table-column width="260" align="right" prop="adjustedTwoEstimateNum" label="V2预估用量-调整后(Tin)">
               <template v-slot:header>
-                <div>V2预估用量-调整后(CTN)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
+                <div>V2预估用量-调整后(CTN)<br><span class="subTitle">SKU+KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -432,7 +432,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="adjustedTwoEstimateCost" label="V2预估费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
+                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -442,7 +442,7 @@
             </el-table-column>
             <el-table-column width="260" align="center" prop="costDept" label="费用归属部门">
               <template v-slot:header>
-                <div>费用归属部门<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>费用归属部门<br><span class="subTitle">SKU+KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -573,7 +573,6 @@ export default {
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
-      isGainLe: 0, //是否已经从LE接过数据
       mainId: '',
       usernameLocal: '',
       messageMap: messageMap(),
@@ -647,7 +646,6 @@ export default {
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
-          this.isGainLe = 1
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -702,13 +700,6 @@ export default {
             this.customerArr = res.data
           }
         })
-    },
-    getRegionList() {
-      selectAPI.getRegionList().then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
     },
     getQuerySkuSelect() {
       selectAPI.querySkuSelect().then((res) => {
@@ -832,11 +823,11 @@ export default {
     },
     // 校验数据
     checkImport() {
-      const formData = new FormData()
-      formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelName', this.filterObj.channelCode)
-      formData.append('type', 1) //（1：Free Goods - Tin，2：Free Goods - Win 2）
-      API.exceptionCheck(formData).then((response) => {
+      API.exceptionCheck({
+        yearAndMonth: this.filterObj.month,
+        channelName: this.filterObj.channelCode,
+        type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+      }).then((response) => {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data

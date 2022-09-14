@@ -1,13 +1,14 @@
 /*
  * @Description: V2 FreeGoodsTin
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-09-14 10:14:48
+ * @LastEditTime: 2022-09-14 15:45:23
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
   url: '/cityplan/investCpFreegoodsVTwoDetail',
+  V3url: '/cityplan/investCpFreegoodsVThreeDetail',
   //分页查询
   getPage(params) {
     return requestApi.request_get(this.url+'/getPage', params)
@@ -66,6 +67,21 @@ export default {
   exportApproveExcel(params) {
     return request({
       url:this.url+'/exportApproveExcel',
+      method:'get',
+      params:params,
+      responseType:'blob'
+    })
+  },
+
+  //V3 FreeGoods
+  //V3 FreeGoods 分页查询
+  getV3Page(params) {
+    return requestApi.request_get(this.V3url+'/getPage', params)
+  },
+  //V3 FreeGoods导出
+  downV3Excel(params) {
+    return request({
+      url:this.V3url+'/exportExcel',
       method:'get',
       params:params,
       responseType:'blob'

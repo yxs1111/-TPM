@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FreeGoodsTinApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:01:54
+ * @LastEditTime: 2022-09-14 16:09:20
 -->
 <template>
   <div class="MainContent">
@@ -583,7 +583,7 @@ export default {
           channelName: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
           productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -663,7 +663,7 @@ export default {
           channelName: this.filterObj.channelCode,
           customerName: this.filterObj.customerName,
           productName: this.filterObj.productName,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           downloadFile(
             res,
@@ -734,7 +734,7 @@ export default {
         API.downExcelError({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_Free Goods-Tin异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -751,7 +751,7 @@ export default {
         API.downExcelTemplate({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
           downType: 2, //下载模板类型（1：申请，2：审批）
         }).then((res) => {
           downloadFile(
