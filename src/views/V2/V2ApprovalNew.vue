@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-08 10:44:17
+ * @LastEditTime: 2022-09-14 09:24:30
 -->
 <template>
   <div class="tabViewsWrap">
@@ -173,7 +173,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
               },
-              minePackageName: 'POSM',
+              minePackageName: 'POSM - Standard',
             },
             {
               name: 'POSM-定制',
@@ -182,7 +182,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
                 light: require('@/assets/images/tab/tab_ListingFee_l.png'),
               },
-              minePackageName: 'POSM',
+              minePackageName: 'POSM - Customized',
             },
             {
               name: 'ECM',
@@ -215,8 +215,8 @@ export default {
               name: 'Free Goods-Tin',
               path: '/costManagement/V2/V2Approval/V2FreeGoodsTinApproval',
               img: {
-                dark: require('@/assets/images/tab/StraightGiving.png'),
-                light: require('@/assets/images/tab/StraightGiving_l.png'),
+                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
+                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
               },
             },
           ]

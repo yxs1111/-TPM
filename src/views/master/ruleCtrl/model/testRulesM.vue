@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-01 11:03:54
+ * @LastEditTime: 2022-09-14 09:54:55
 -->
 <template>
   <div class='tabViewsWrap'>
@@ -162,6 +162,14 @@ export default {
             {
               name: 'Premium',
               path: '/master/ruleCtrl/model/splitRulesPremium',
+              img: {
+                dark: require('@/assets/images/tab/tab3.png'),
+                light: require('@/assets/images/tab/tab3_l.png'),
+              },
+            },
+            {
+              name: 'Free Goods-Tin',
+              path: '/master/ruleCtrl/model/splitRulesFreeGoods-Tin',
               img: {
                 dark: require('@/assets/images/tab/tab3.png'),
                 light: require('@/assets/images/tab/tab3_l.png'),

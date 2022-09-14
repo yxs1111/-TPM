@@ -539,6 +539,19 @@ export default function () {
                     activeMenu: '/ruleCtrl/testRules',
                   },
                 },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesFreeGoods-Tin',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesFreeGoods-Tin',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesFreeGoods-Tin.vue'),
+                  meta: {
+                    title: 'Free Goods-Tin',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
               ],
             },
             // {

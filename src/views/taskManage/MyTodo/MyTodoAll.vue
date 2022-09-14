@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-09-05 16:00:15
+ * @LastEditTime: 2022-09-14 09:22:49
 -->
 <template>
   <div class="MainContent">
@@ -291,6 +291,13 @@ export default {
           minePackageName='HIH Rebate'
         } else if(row.costItemName=='KA rebate') {
           minePackageName='KA Rebate'
+        }
+      }
+      if(minePackageName=='POSM') {
+        if (row.costItemName=='In Store POSM - Standard') {
+          minePackageName='POSM - Standard'
+        } else if(row.costItemName=='In Store POSM - Customized') {
+          minePackageName='POSM - Customized'
         }
       }
       if (version.indexOf('V0')!=-1) {

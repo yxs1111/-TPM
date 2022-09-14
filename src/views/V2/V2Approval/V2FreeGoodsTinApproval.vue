@@ -1,7 +1,7 @@
 <!--
  * @Description: V2FreeGoodsTinApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-08 11:39:34
+ * @LastEditTime: 2022-09-13 17:28:44
 -->
 <template>
   <div class="MainContent">
@@ -22,26 +22,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.largeAreaCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.code" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+          <span class="SelectliTitle">SKU:</span>
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
       </div>
@@ -188,7 +176,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+      <el-table-column width="260" align="right" prop="planCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
         </template>
@@ -198,7 +186,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="estimatePrice" label="V2预估单位费用(RMB/Tin)">
+      <el-table-column width="260" align="right" prop="estimatePrice" label="V2预估单位费用(RMB/Tin)">
         <template v-slot:header>
           <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
         </template>
@@ -208,7 +196,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="estimateVol" label="V2预估用量(CTN)">
+      <el-table-column width="260" align="right" prop="estimateVol" label="V2预估用量(CTN)">
         <template v-slot:header>
           <div>V2预估用量(CTN)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
         </template>
@@ -218,7 +206,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="estimateCost" label="V2预估费用(RMB)">
+      <el-table-column width="260" align="right" prop="estimateCost" label="V2预估费用(RMB)">
         <template v-slot:header>
           <div>V2预估费用(RMB)<br><span class="subTitle">SKU+Channel+Dist.+Region</span></div>
         </template>
@@ -238,7 +226,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedVol" label="V2预估用量-调整后(CTN)">
+      <el-table-column width="260" align="right" prop="adjustedVol" label="V2预估用量-调整后(CTN)">
         <template v-slot:header>
           <div>V2预估用量-调整后(场)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
@@ -248,7 +236,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估费用-调整后(RMB)">
+      <el-table-column width="260" align="right" prop="adjustedCost" label="V2预估费用-调整后(RMB)">
         <template v-slot:header>
           <div>V2预估费用-调整后(RMB)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
@@ -522,9 +510,9 @@ import {
   FormateThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V2/RoadShow'
+import API from '@/api/V2/FreeGoods'
 export default {
-  name: 'V2RoadSHow',
+  name: 'V2FreeGoodsTinApproval',
   directives: { elDragDialog, permission },
 
   data() {
@@ -534,11 +522,8 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        largeAreaCode: '',
-        regionCode: '',
-        customerCode: '',
-        customerMdmCode: '',
-        distributorCode: '',
+        customerName: '',
+        productName: '',
         month: '',
       },
       permissions: getDefaultPermissions(),
@@ -546,9 +531,7 @@ export default {
       monthList: [],
       customerArr: [],
       tableData: [],
-      RegionList: [],
-      largeAreaList: [],
-      distributorArr: [],
+      skuOptions: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       mainId: '',
@@ -575,8 +558,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getLargeAreaList()
-    this.getRegionList()
+    this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -595,9 +577,10 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          regionCode: this.filterObj.regionCode,
+          channelName: this.filterObj.channelCode,
+          customerName: this.filterObj.customerName,
+          productName: this.filterObj.productName,
+          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -656,18 +639,9 @@ export default {
           }
         })
     },
-    getRegionList() {
-      selectAPI.getRegionList({}).then((res) => {
-        if (res.code === 1000) {
-          this.RegionList = res.data
-        }
-      })
-    },
-    getLargeAreaList() {
-      selectAPI.getLargeAreaList().then((res) => {
-        if (res.code === 1000) {
-          this.largeAreaList = res.data
-        }
+    getQuerySkuSelect() {
+      selectAPI.querySkuSelect().then((res) => {
+        this.skuOptions = res.data
       })
     },
     //千分位分隔符+两位小数
@@ -681,11 +655,12 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.downExcel({
+        API.exportApproveExcel({
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          regionCode: this.filterObj.regionCode,
+          channelName: this.filterObj.channelCode,
+          customerName: this.filterObj.customerName,
+          productName: this.filterObj.productName,
+          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           downloadFile(
             res,
@@ -719,7 +694,9 @@ export default {
       let formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('channelName', this.filterObj.channelCode)
+      formData.append('type', 1) //（1：Free Goods - Tin，2：Free Goods - Win 2）
+      formData.append('importType', 2) //	导入类型（1：申请导入，2：审批导入）
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
@@ -753,9 +730,8 @@ export default {
       if (this.ImportData.length) {
         API.downExcelError({
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          regionCode: this.filterObj.regionCode,
+          channelName: this.filterObj.channelCode,
+          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_Free Goods-Tin异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -771,9 +747,9 @@ export default {
         // 导出数据筛选
         API.downExcelTemplate({
           yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerCode,
-          regionCode: this.filterObj.regionCode,
+          channelName: this.filterObj.channelCode,
+          type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          downType: 2, //下载模板类型（1：申请，2：审批）
         }).then((res) => {
           downloadFile(
             res,

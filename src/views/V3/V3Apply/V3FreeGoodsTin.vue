@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FreeGoodsTin
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-08 11:39:11
+ * @LastEditTime: 2022-09-14 10:30:02
 -->
 <template>
   <div class="MainContent">
@@ -27,21 +27,9 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.largeAreaCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in largeAreaList" :key="index" :label="item.name" :value="item.code" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+          <span class="SelectliTitle">SKU:</span>
+          <el-select v-model="filterObj.productName" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in skuOptions" :key="index" :label="item.productEsName" :value="item.productEsName" />
           </el-select>
         </div>
       </div>
@@ -174,93 +162,93 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+      <el-table-column width="220" align="right" prop="onePlanCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle">KA+Brand</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.planCost) }}
+            {{ formatNum(scope.row.onePlanCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="estimatePrice" label="V2预估单位费用(RMB/Tin)">
+      <el-table-column width="220" align="right" prop="adjustedTwoEstimateUnitCost" label="V2预估单位费用(RMB/Tin)">
         <template v-slot:header>
           <div>V2预估单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.estimatePrice) }}
+            {{ formatNum(scope.row.adjustedTwoEstimateUnitCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="estimateVol" label="V2预估用量(CTN)">
+      <el-table-column width="220" align="right" prop="adjustedTwoEstimateNum" label="V2预估用量(CTN)">
         <template v-slot:header>
           <div>V2预估用量(CTN)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.estimateVol) }}
+            {{ formatNum(scope.row.adjustedTwoEstimateNum) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="estimateCost" label="V2预估费用(RMB)">
+      <el-table-column width="220" align="right" prop="adjustedTwoEstimateCost" label="V2预估费用(RMB)">
         <template v-slot:header>
           <div>V2预估费用(RMB)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.estimateCost) }}
+            {{ formatNum(scope.row.adjustedTwoEstimateCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="actualPrice" label="V3实际单位费用(RMB/Tin)">
+      <el-table-column width="220" align="right" prop="actualThreeEstimateUnitCost" label="V3实际单位费用(RMB/Tin)">
         <template v-slot:header>
           <div>V3实际单位费用(RMB/Tin)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.actualPrice) }}
+            {{ formatNum(scope.row.actualThreeEstimateUnitCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="actualVol" label="V3实际用量(CTN)">
+      <el-table-column width="220" align="right" prop="actualThreeEstimateNum" label="V3实际用量(CTN)">
         <template v-slot:header>
           <div>V3实际用量(CTN)<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.actualVol) }}
+            {{ formatNum(scope.row.actualThreeEstimateNum) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="actualCost" label="V3实际费用">
+      <el-table-column width="220" align="right" prop="actualThreeEstimateCost" label="V3实际费用">
         <template v-slot:header>
           <div>V3实际费用<br><span class="subTitle">SKU+KA+Dist.+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.actualCost) }}
+            {{ formatNum(scope.row.actualThreeEstimateCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="dept" label="费用归属部门">
+      <el-table-column width="220" align="center" prop="costDept" label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.dept }}
+            {{ scope.row.costDept }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="cancelCost" label="费用核销方式">
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.cancelCost }}
+            {{ scope.row.costWriteoffMethod }}
           </div>
         </template>
       </el-table-column>
