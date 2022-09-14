@@ -305,15 +305,15 @@
               @click="downloadTemplate"
               >下载模板</el-button
             >
-            <el-button
-              v-if="isCheck"
-              type="primary"
-              plain
-              class="my-export"
-              icon="el-icon-my-checkData"
-              @click="checkImport"
-              >检测数据</el-button
-            >
+<!--            <el-button-->
+<!--              v-if="isCheck"-->
+<!--              type="primary"-->
+<!--              plain-->
+<!--              class="my-export"-->
+<!--              icon="el-icon-my-checkData"-->
+<!--              @click="checkImport"-->
+<!--              >检测数据</el-button-->
+<!--            >-->
           </div>
           <el-button
             v-if="saveBtn"
@@ -779,18 +779,9 @@ export default {
           if (!Array.isArray(response.data) || response.data.length === 0) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
-            this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data.sort(function (a, b) {
-              if (a.systemJudgment > b.systemJudgment) {
-                return 1
-              } else {
-                return -1
-              }
-            })
-            let isError = this.ImportData.findIndex((item) => {
-              return item.systemJudgment == 'Error'
-            })
-            this.isCheck = isError == -1 ? 1 : 0
+            this.ImportData = response.data
+            this.saveBtn = this.ImportData.length ? true : false
+            this.$message.success('导入成功！')
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -837,17 +828,8 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.saveV2Data({
-        ...this.filterObj,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 导出异常信息
     exportErrorList() {
