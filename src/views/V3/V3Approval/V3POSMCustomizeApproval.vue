@@ -360,16 +360,16 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <div class="seeData" style="width: auto">
-            <div class="exportError" @click="exportErrorList">
-              <img
-                src="@/assets/exportError_icon.png"
-                alt=""
-                class="exportError_icon"
-              />
-              <span>导出错误信息</span>
-            </div>
-          </div>
+<!--          <div class="seeData" style="width: auto">-->
+<!--            <div class="exportError" @click="exportErrorList">-->
+<!--              <img-->
+<!--                src="@/assets/exportError_icon.png"-->
+<!--                alt=""-->
+<!--                class="exportError_icon"-->
+<!--              />-->
+<!--              <span>导出错误信息</span>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
         <div class="tableWrap">
           <el-table
