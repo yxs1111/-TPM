@@ -858,6 +858,15 @@ export default {
   computed: {},
   watch: {},
   mounted() {
+    // // 拿到表格挂载后的真实DOM
+    // const table = this.$refs.table;
+    // // 拿到表格中承载数据的div元素
+    // const bodyWrapper = table.bodyWrapper;
+    // // 监听滚动事件
+    // bodyWrapper.onscroll = () => {
+    //   // 滚动条位置强制设置指定行上边缘（48为行高）
+    //   bodyWrapper.scrollTop = Math.round(bodyWrapper.scrollTop / 71.333) * 71.333;
+    // }
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeightHaveTab()
