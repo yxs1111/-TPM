@@ -550,13 +550,13 @@ export const dynamicColumnCost = [
 ]
 
 export function FormateThousandNum(num) {
-  if(num===null||num==="null"||num==='') {
+  if (num === null || num === 'null' || num === '') {
     return ''
   } else {
     const money = num * 1
     return money.toLocaleString('zh', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      maximumFractionDigits: 2
     })
   }
 }
@@ -700,17 +700,20 @@ export function setSplitAssignee(value) {
   }
   return formatString
 }
-export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止','过期']
+export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止', '过期']
 
 //contract 合同 客户扣款点数与支付方式对应关系
 export let CustomerDeductionsAndPayType = [
   {
     CustomerDeduction: 6,
-    payTypeList: [{label:'PO',value:1}]
+    payTypeList: [{ label: 'PO', value: 1 }]
   },
   {
     CustomerDeduction: 13,
-    payTypeList: [{label:'红票',value:2},{label:'票扣',value:3}]
+    payTypeList: [
+      { label: '红票', value: 2 },
+      { label: '票扣', value: 3 }
+    ]
   }
 ]
 /**
@@ -718,31 +721,31 @@ export let CustomerDeductionsAndPayType = [
  * @returns 今年开始日期--今年结束日期
  */
 export function getCurrentYearRange() {
-  let date=new Date()
-  let year=date.getFullYear()
-  let startDate=year+'-'+'01-01'
-  let endDate=year+'-'+'12-31'
-  return [startDate,endDate]
+  let date = new Date()
+  let year = date.getFullYear()
+  let startDate = year + '-' + '01-01'
+  let endDate = year + '-' + '12-31'
+  return [startDate, endDate]
 }
 /**
  * el-date-picker 限制范围 今年
  */
-export let pickerOptions={
+export let pickerOptions = {
   // 限制年月
-  disabledDate: (time) => {
-    const date = new Date() 
+  disabledDate: time => {
+    const date = new Date()
     const year = date.getFullYear()
     return (
       //日期限制（同一年）
-      time.getFullYear() == year ?false:true
+      time.getFullYear() == year ? false : true
     )
-  },
+  }
 }
 
 export function pickerOptionsSystemDate(row) {
   return {
     // 限制年月
-    disabledDate: (time) => {
+    disabledDate: time => {
       //未选择初始日期时，不做限制
       if (!row.contractDate) {
         return false
@@ -751,8 +754,27 @@ export function pickerOptionsSystemDate(row) {
       const year = date.getFullYear()
       return (
         //日期限制（同一年）
-        (time.getFullYear() == year||time.getFullYear() == year+1) ? false : true
+        time.getFullYear() == year || time.getFullYear() == year + 1
+          ? false
+          : true
       )
-    },
+    }
   }
 }
+export let sortList = [
+  'Price Promotion',
+  'Free Goods-Tin',
+  'New User',
+  'Free Goods-Win2',
+  'FMC',
+  'Roadshow',
+  'Listing fee',
+  'KA Rebate',
+  'HIH Rebate',
+  'Display',
+  'POSM - Standard',
+  'POSM - Customized',
+  'ECM',
+  'Premium',
+  'Collection',
+]

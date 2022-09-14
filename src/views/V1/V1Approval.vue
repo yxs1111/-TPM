@@ -1,30 +1,15 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 16:20:14
+ * @LastEditTime: 2022-09-14 17:11:59
 -->
 <template>
   <div class="tabViewsWrap">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane
-        :label="item.name"
-        :name="item.name"
-        v-for="(item, index) in routerList"
-        :key="index"
-      >
+      <el-tab-pane :label="item.name" :name="item.name" v-for="(item, index) in routerList" :key="index">
         <!-- tab 内容 -->
         <template slot="label">
           <div class="TabWrap">
-            <img
-              v-show="index == currentIndex"
-              class="TabImg"
-              :src="item.img.dark"
-            />
-            <img
-              v-show="index != currentIndex"
-              class="TabImg"
-              :src="item.img.light"
-            />
             <div>{{ item.name }}</div>
           </div>
         </template>
@@ -38,7 +23,7 @@
 
 <script>
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
+import { sortList } from '@/utils/index'
 export default {
   data() {
     return {
@@ -77,23 +62,15 @@ export default {
           res.data.forEach((element) => {
             if (element.costType === 'Price Promotion' && signP === 0) {
               this.routerList.push({
-                name: '折扣项-价促',
+                name: '价促',
                 path: '/costManagement/V1/V1Approval/V1discountDiscountApproval',
-                img: {
-                  dark: require('@/assets/images/tab/tab2.png'),
-                  light: require('@/assets/images/tab/tab2_l.png'),
-                },
                 minePackageName: 'Price Promotion',
               })
               signP = 1
             } else if (element.costType === 'New User' && signN === 0) {
               this.routerList.push({
-                name: '折扣项-新客',
+                name: '新客',
                 path: '/costManagement/V1/V1Approval/V1discountNUApproval',
-                img: {
-                  dark: require('@/assets/images/tab/tab3.png'),
-                  light: require('@/assets/images/tab/tab3_l.png'),
-                },
                 minePackageName: 'New User',
               })
               signN = 1
@@ -102,137 +79,88 @@ export default {
           if (this.routerList.length === 0 || res.data.length === 0) {
             this.routerList = [
               {
-                name: '折扣项-价促',
+                name: '价促',
                 path: '/costManagement/V1/V1Approval/V1discountDiscountApproval',
-                img: {
-                  dark: require('@/assets/images/tab/tab2.png'),
-                  light: require('@/assets/images/tab/tab2_l.png'),
-                },
               },
               {
-                name: '折扣项-新客',
+                name: '新客',
                 path: '/costManagement/V1/V1Approval/V1discountNUApproval',
-                img: {
-                  dark: require('@/assets/images/tab/tab3.png'),
-                  light: require('@/assets/images/tab/tab3_l.png'),
-                },
               },
             ]
           }
           this.routerList = [
             ...this.routerList,
             {
-              name: '折扣项-HIH Rebate',
+              name: 'HIH rebate',
               path: '/costManagement/V1/V1Approval/V1HIHRebate',
-              img: {
-                dark: require('@/assets/images/tab/tab_HIH.png'),
-                light: require('@/assets/images/tab/tab_HIH_l.png'),
-              },
               minePackageName: 'HIH Rebate',
             },
             {
-              name: '折扣项-KA Rebate',
+              name: 'KA rebate',
               path: '/costManagement/V1/V1Approval/V1KARebate',
-              img: {
-                dark: require('@/assets/images/tab/tab_KA.png'),
-                light: require('@/assets/images/tab/tab_KA_l.png'),
-              },
               minePackageName: 'KA Rebate',
             },
             {
               name: 'FMC',
               path: '/costManagement/V1/V1Approval/V1FMCApproval',
-              img: {
-                dark: require('@/assets/images/tab/tab_FMC.png'),
-                light: require('@/assets/images/tab/tab_FMC_l.png'),
-              },
               minePackageName: 'FMC',
             },
             {
-              name: 'Roadshow',
+              name: 'RS',
               path: '/costManagement/V1/V1Approval/V1RoadShowApproval',
-              img: {
-                dark: require('@/assets/images/tab/tab_RoadShow.png'),
-                light: require('@/assets/images/tab/tab_RoadShow_l.png'),
-              },
               minePackageName: 'Roadshow',
             },
             {
-              name: 'Listing Fee',
+              name: 'Listing',
               path: '/costManagement/V1/V1Approval/V1ListingFeeApprove',
-              img: {
-                dark: require('@/assets/images/tab/tab_ListingFee.png'),
-                light: require('@/assets/images/tab/tab_ListingFee_l.png'),
-              },
               minePackageName: 'Listing fee',
             },
             {
-              name: 'POSM-标准',
+              name: 'POSM-标',
               path: '/costManagement/V1/V1Approval/V1POSMApprove',
-              img: {
-                dark: require('@/assets/images/tab/tab_POSM.png'),
-                light: require('@/assets/images/tab/tab_POSM_l.png'),
-              },
               minePackageName: 'POSM - Standard',
             },
             {
-              name: 'POSM-定制',
+              name: 'POSM-定',
               path: '/costManagement/V1/V1Approval/V1POSMCustomize',
-              params: {
-                smartplan: false,
-              },
-              img: {
-                dark: require('@/assets/images/tab/tab_POSM.png'),
-                light: require('@/assets/images/tab/tab_POSM_l.png'),
-              },
               minePackageName: 'POSM - Customized',
             },
             {
               name: 'ECM',
               path: '/costManagement/V1/V1Approval/V1ECMApproval',
-              img: {
-                dark: require('@/assets/images/tab/tab_ECM.png'),
-                light: require('@/assets/images/tab/tab_ECM_l.png'),
-              },
               minePackageName: 'ECM',
             },
             {
               name: 'Display',
               path: '/costManagement/V1/V1Approval/V1ApplyrovalDisplay',
-              img: {
-                dark: require('@/assets/images/tab/UnStraightGiving.png'),
-                light: require('@/assets/images/tab/UnStraightGiving_l.png'),
-              },
               minePackageName: 'Display',
             },
             {
               name: 'Premium',
               path: '/costManagement/V1/V1Approval/V1Premium',
-              img: {
-                dark: require('@/assets/images/tab/StraightGiving.png'),
-                light: require('@/assets/images/tab/StraightGiving_l.png'),
-              },
               minePackageName: 'Premium',
             },
             {
-              name: 'Free Goods-Tin',
+              name: '价促-FG tin',
               path: '/costManagement/V1/V1Approval/V1FreeGoodsTinApproval',
-              img: {
-                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
-                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
-              },
-              minePackageName:'Free Goods-Tin',
+              minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'Free Goods-Win2',
+              name: '新客-FG win2',
               path: '/costManagement/V1/V1Approval/V1FreeGoodsWin2Approval',
-              img: {
-                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
-                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
-              },
-              minePackageName:'Free Goods-Win2',
+              minePackageName: 'Free Goods-Win2',
             },
           ]
+          let TabList = []
+          sortList.forEach((item) => {
+            let findIndex = this.routerList.findIndex(
+              (routerItem) => routerItem.minePackageName == item
+            )
+            if (findIndex != -1) {
+              TabList.push(this.routerList[findIndex])
+            }
+          })
+          this.routerList = TabList
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
           } else {
@@ -292,18 +220,19 @@ export default {
   margin-bottom: 0 !important;
 }
 .el-tabs__item {
-  padding: 0 20px !important;
+  padding: 0 10px !important;
   height: 38px;
-  background: #4192d3;
+  background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 20px;
+  margin-right: 10px;
+  border: 1px solid #e8e8ea;
   font-size: 14px;
-  color: #fff;
+  color: #999;
   text-align: center;
   cursor: pointer;
   &:hover {
     // background-color: #fff;
-    color: #fff;
+    color: #999;
   }
   .TabWrap {
     display: flex;
@@ -317,8 +246,8 @@ export default {
   }
 }
 .el-tabs__item.is-active {
-  background-color: #fff !important;
-  color: #666 !important;
+  background-color: #4192d3 !important;
+  color: #fff !important;
 }
 .el-tabs__active-bar {
   display: none;

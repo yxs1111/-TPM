@@ -1,24 +1,13 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-24 14:02:38
+ * @LastEditTime: 2022-09-14 17:17:28
 -->
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link v-for="(item, index) in routerList"
-                   :key="index"
-                   :to="item.path"
-                   tag="div"
-                   class="tabli"
-                   :class="index === currentIndex ? 'currentTabli' : ''"
-                   @click.native="changeTab(index)">
-        <img v-if="index != currentIndex"
-             :src="item.img.light"
-             alt="">
-        <img v-if="index == currentIndex"
-             :src="item.img.dark"
-             alt="">
+      <router-link v-for="(item, index) in routerList" :key="index" :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''"
+        @click.native="changeTab(index)">
         {{ item.name }}
       </router-link>
     </div>
@@ -29,7 +18,7 @@
 </template>
 
 <script>
-import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap,sortList } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -38,46 +27,9 @@ export default {
   directives: { elDragDialog, permission },
   data() {
     return {
-      // routerList: [
-      //   {name:'折扣项-汇总',path:'/V3/V3Apply/V3discountAll'},
-      //   {name:'折扣项-价促',path:'/V3/V3Apply/V3discountDiscount'},
-      //   {name:'折扣项-新客',path:'/V3/V3Apply/V3discountNU'},
-      // ],
       routerList: [
-        // {
-        //   name: '折扣项-汇总',
-        //   path: '/V3/V3Apply/V3discountAll',
-        //   img: {
-        //     dark: require('@/assets/images/tab/tab1.png'),
-        //     light: require('@/assets/images/tab/tab1_l.png'),
-        //   },
-        // },
-        // {
-        //   name: '折扣项-价促',
-        //   path: '/V3/V3Apply/V3discountDiscount',
-        //   img: {
-        //     dark: require('@/assets/images/tab/tab2.png'),
-        //     light: require('@/assets/images/tab/tab2_l.png')
-        //   }
-        // },
-        // {
-        //   name: '折扣项-新客',
-        //   path: '/V3/V3Apply/V3discountNU',
-        //   img: {
-        //     dark: require('@/assets/images/tab/tab3.png'),
-        //     light: require('@/assets/images/tab/tab3_l.png')
-        //   }
-        // }
       ],
       currentIndex: 0,
-      imgSrcList: [
-        require('@/assets/images/tab/tab1_l.png'),
-        require('@/assets/images/tab/tab2_l.png'),
-        require('@/assets/images/tab/tab3_l.png'),
-        require('@/assets/images/tab/tab1.png'),
-        require('@/assets/images/tab/tab2.png'),
-        require('@/assets/images/tab/tab3.png'),
-      ],
     }
   },
   computed: {},
