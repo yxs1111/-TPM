@@ -75,9 +75,7 @@
       </el-table-column>
       <el-table-column width="220" align="center" prop="regionName" label="区域">
       </el-table-column>
-      <el-table-column width="220" align="center" prop="contractItem" label="Contract Item">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="activityType" label="活动类型">
+      <el-table-column width="220" align="center" prop="detailItem" label="业务细项">
       </el-table-column>
       <el-table-column v-slot={row} width="220" align="right" prop="costAmount" label="费用金额">
         {{formatNum(row.costAmount)}}
@@ -170,9 +168,7 @@
             </el-table-column>
             <el-table-column width="220" align="center" prop="regionName" label="区域">
             </el-table-column>
-            <el-table-column width="220" align="center" prop="contractItem" label="Contract Item">
-            </el-table-column>
-            <el-table-column width="220" align="center" prop="activityType" label="活动类型">
+            <el-table-column width="220" align="center" prop="detailItem" label="业务细项">
             </el-table-column>
             <el-table-column v-slot={row} width="220" align="right" prop="costAmount" label="费用金额">
               {{formatNum(row.costAmount)}}
