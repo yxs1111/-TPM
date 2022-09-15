@@ -1,7 +1,7 @@
 <!--
- * @Description: V3FreeGoodsTin
+ * @Description: V3FreeGoodsWin2
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:09:47
+ * @LastEditTime: 2022-09-15 13:29:23
 -->
 <template>
   <div class="MainContent">
@@ -245,7 +245,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/FreeGoods'
 export default {
-  name: 'V3FreeGoodsTin',
+  name: 'V3FreeGoodsWin2',
   directives: { elDragDialog, permission },
 
   data() {
@@ -364,7 +364,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V3_查询.xlsx`
+            `${this.filterObj.month}_Free Goods-Win2_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })

@@ -1,7 +1,7 @@
 <!--
- * @Description: V2RoadSHow
+ * @Description: V2FreeGoodsWin2
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 17:24:31
+ * @LastEditTime: 2022-09-15 13:28:12
 -->
 <template>
   <div class="MainContent">
@@ -550,7 +550,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/FreeGoods'
 export default {
-  name: 'V2FreeGoodsTin',
+  name: 'V2FreeGoodsWin2',
   directives: { elDragDialog, permission },
 
   data() {
@@ -726,7 +726,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_Free Goods-Win2_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -862,7 +862,7 @@ export default {
           type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_Free Goods-Tin异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_Free Goods-Win2异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -881,7 +881,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Free Goods-Tin_${this.filterObj.channelCode}_V2申请.xlsx`
+            `${this.filterObj.month}_Free Goods-Win2_${this.filterObj.channelCode}_V2申请.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
