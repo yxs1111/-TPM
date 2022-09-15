@@ -95,7 +95,7 @@
         {{ (row.avePriceDifference*1).toFixed(2) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="160" align="right" prop="achievementRate" label="达成率（%）">
-        {{ (row.salesDifference*1).toFixed(2) }}
+        {{ (row.achievementRate*1).toFixed(2) }}
       </el-table-column>
       <el-table-column v-slot="{row}" width="150" align="right" prop="costDifference" label="费用差值(RMB)">
         {{ FormateNum(row.costDifference) }}
