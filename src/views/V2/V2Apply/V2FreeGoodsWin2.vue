@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="isSelf?'':'noClick'" @click="showUploadSAP">
+      <div class="TpmButtonBG" v-permission="permissions['SAP']" @click="showUploadSAP">
         <svg-icon icon-class="uploadFile" style="font-size: 15px;" />
         <span class="text">上传SAP File</span>
       </div>
@@ -739,6 +739,8 @@ export default {
     },
     closeUploadSAP() {
       this.isSAPVisible = false
+      this.uploadSAPFile = null
+      this.uploadSAPFileName = null
     },
     // 选择导入文件 SAP
     parsingSAPBtn() {
@@ -766,8 +768,6 @@ export default {
         if (response.code == 1000) {
           this.$message.success('SAP File 上传成功')
           this.closeUploadSAP()
-        } else {
-          this.$message.info('SAP File 上传失败')
         }
       })
     },

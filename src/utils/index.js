@@ -222,7 +222,8 @@ export function getDefaultPermissions() {
     export: 5,
     getCPT: 6,
     submit: 7,
-    rejected: 8
+    rejected: 8,
+    SAP: 9
   }
 }
 
