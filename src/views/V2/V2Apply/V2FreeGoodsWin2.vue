@@ -741,6 +741,8 @@ export default {
       this.isSAPVisible = false
       this.uploadSAPFile = null
       this.uploadSAPFileName = null
+      this.ruleForm.month = null
+      this.ruleForm.channelName = null
     },
     // 选择导入文件 SAP
     parsingSAPBtn() {
