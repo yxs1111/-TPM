@@ -840,7 +840,7 @@ export default {
         if (res.code === 1000) {
           if (
             res.data.assignee.indexOf(this.username) > -1 &&
-            res.data.version === 'V3' &&
+            res.data.version === 'Display-V3' &&
             res.data.activityName.indexOf('审批') === -1
           ) {
             this.isSubmit = true
