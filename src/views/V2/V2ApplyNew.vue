@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:14:56
+ * @LastEditTime: 2022-09-16 12:38:58
 -->
 <template>
   <div class="tabViewsWrap">
@@ -93,6 +93,7 @@ export default {
                   dark: require('@/assets/images/tab/tab2.png'),
                   light: require('@/assets/images/tab/tab2_l.png'),
                 },
+                minePackageName: 'Price Promotion',
               },
               {
                 name: '新客',
@@ -101,6 +102,7 @@ export default {
                   dark: require('@/assets/images/tab/tab3.png'),
                   light: require('@/assets/images/tab/tab3_l.png'),
                 },
+                minePackageName: 'New User',
               },
             ]
           }

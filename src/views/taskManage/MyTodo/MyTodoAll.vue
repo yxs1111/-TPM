@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-09-14 09:22:49
+ * @LastEditTime: 2022-09-16 12:45:12
 -->
 <template>
   <div class="MainContent">
@@ -298,6 +298,20 @@ export default {
           minePackageName='POSM - Standard'
         } else if(row.costItemName=='In Store POSM - Customized') {
           minePackageName='POSM - Customized'
+        }
+      }
+      if(minePackageName=='Price Promotion') {
+        if (row.costItemName=='Free Goods - Tin') {
+          minePackageName='Free Goods-Tin'
+        } else {
+          minePackageName='Price Promotion'
+        }
+      }
+      if(minePackageName=='New User') {
+        if(row.costItemName=='Free Goods - Win 2') {
+          minePackageName='Free Goods-Win2'
+        } else {
+          minePackageName='New User'
         }
       }
       if (version.indexOf('V0')!=-1) {

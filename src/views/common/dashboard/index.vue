@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-09-16 11:31:25
+ * @LastEditTime: 2022-09-16 12:43:07
 -->
 <template>
   <div class="dashboard-container">
@@ -121,7 +121,7 @@
                     <div class="TimeLineTitleli">{{item.activityName}}</div>
                     <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>
                     <div class="TimeLineTitleli">
-                      <div class="TimeLineOpertion" @click="goAssignee(item.version,item.activityName,item.channelCode,item.minePackageName)">办理</div>
+                      <div class="TimeLineOpertion" @click="goAssignee(item.version,item.activityName,item.channelCode,item.minePackageName,item)">办理</div>
                     </div>
                   </div>
                 </el-timeline-item>
@@ -338,7 +338,6 @@ export default {
               if (!cdata[array[index].channelName]) {
                 var arr = []
                 arr.push(array[index])
-                console.log(array[index])
                 //节点序列号
                 array[index].taskNumber = this.PriceTaskIndexList.findIndex(
                   (item) => array[index].version.includes(item)
@@ -527,6 +526,34 @@ export default {
     //办理
     goAssignee(version, name, channelCode, minePackage, row) {
       let minePackageName = minePackage
+      if(minePackageName=='KA Contract') {
+        if (row.costItemName=='HIH rebate') {
+          minePackageName='HIH Rebate'
+        } else if(row.costItemName=='KA rebate') {
+          minePackageName='KA Rebate'
+        }
+      }
+      if(minePackageName=='POSM') {
+        if (row.costItemName=='In Store POSM - Standard') {
+          minePackageName='POSM - Standard'
+        } else if(row.costItemName=='In Store POSM - Customized') {
+          minePackageName='POSM - Customized'
+        }
+      }
+      if(minePackageName=='Price Promotion') {
+        if (row.costItemName=='Free Goods - Tin') {
+          minePackageName='Free Goods-Tin'
+        } else {
+          minePackageName='Price Promotion'
+        }
+      }
+      if(minePackageName=='New User') {
+        if(row.costItemName=='Free Goods - Win 2') {
+          minePackageName='Free Goods-Win2'
+        } else {
+          minePackageName='New User'
+        }
+      }
       if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
           this.$router.push({
@@ -542,21 +569,21 @@ export default {
       }
       if (version.indexOf('V1') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V1/V1Apply', query: { channelCode,minePackageName } })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({ path: '/costManagement/V1/V1Approval', query: { channelCode, minePackageName } })
         }
       }
       if (version.indexOf('V2') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V2/V2Apply', query: { channelCode,minePackageName } })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({ path: '/costManagement/V2/V2Approval', query: { channelCode, minePackageName } })
         }
       }
       if (version.indexOf('V3') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V3/V3Apply', query: { channelCode,minePackageName } })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({ path: '/costManagement/V3/V3Approval', query: { channelCode, minePackageName } })
         }

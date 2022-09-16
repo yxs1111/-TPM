@@ -111,6 +111,7 @@ export default {
     },
     goDashBoard() {
       this.$router.push('/dashboard')
+      sessionStorage.removeItem('currentIndex')
       this.$store.dispatch('app/hideBreadcrumb') // 进入首页隐藏面包屑
     },
     generateTitle,
