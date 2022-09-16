@@ -950,7 +950,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Premium_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_Premium_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
