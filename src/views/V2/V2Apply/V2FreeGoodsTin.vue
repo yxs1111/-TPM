@@ -22,8 +22,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -640,7 +640,7 @@ export default {
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          customerName: this.filterObj.customerName,
+          customerCode: this.filterObj.customerCode,
           productName: this.filterObj.productName,
           type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
@@ -720,7 +720,7 @@ export default {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          customerName: this.filterObj.customerName,
+          customerCode: this.filterObj.customerName,
           productName: this.filterObj.productName,
           type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
