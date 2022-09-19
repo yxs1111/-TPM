@@ -809,8 +809,7 @@ export default {
           customerCode: this.filterObj.customerCode, //客户系统名称
           distributorCode: this.filterObj.distributorCode, //
 
-
-          posmItem: this.filterObj.posmItem, //
+          item: this.filterObj.item, //
           yearAndMonth: this.filterObj.month,
           isSubmit: 1,
         }).then((response) => {
