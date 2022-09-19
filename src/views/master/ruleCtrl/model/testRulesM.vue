@@ -1,16 +1,12 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 09:54:55
+ * @LastEditTime: 2022-09-19 16:03:00
 -->
 <template>
   <div class='tabViewsWrap'>
-    <el-tabs v-model="activeName"
-             @tab-click="handleClick">
-      <el-tab-pane :label="item.name"
-                   :name="item.name"
-                   v-for="item,index in routerList"
-                   :key="index">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane :label="item.name" :name="item.name" v-for="item,index in routerList" :key="index">
         <!-- tab 内容 -->
         <template slot="label">
           <div class="TabWrap">
@@ -29,7 +25,7 @@
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
+import {sortList} from '@/utils/index'
 export default {
   directives: { elDragDialog, permission },
   data() {
@@ -72,14 +68,16 @@ export default {
           res.data.forEach((element) => {
             if (element.costType === 'Price Promotion' && signP === 0) {
               this.routerList.push({
-                name: 'Price Promotion',
+                name: '价促',
                 path: '/master/ruleCtrl/model/TestRules',
+                minePackageName: 'Price Promotion',
               })
               signP = 1
             } else if (element.costType === 'New User' && signN === 0) {
               this.routerList.push({
-                name: 'New User',
+                name: '新客',
                 path: '/master/ruleCtrl/model/TestRulesNew',
+                minePackageName: 'New User',
               })
               signN = 1
             }
@@ -87,10 +85,11 @@ export default {
           if (this.routerList.length === 0 || res.data.length === 0) {
             this.routerList = [
               {
-                name: 'Price Promotion',
+                name: '价促',
                 path: '/master/ruleCtrl/model/TestRules',
+                minePackageName: 'Price Promotion',
               },
-              { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' },
+              { name: '新客', path: '/master/ruleCtrl/model/TestRulesNew', minePackageName: 'New User',},
             ]
           }
           this.routerList = [
@@ -98,84 +97,72 @@ export default {
             {
               name: 'HIH Rebate',
               path: '/master/ruleCtrl/model/splitRulesHIH',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png'),
-              },
+              minePackageName: 'HIH Rebate',
             },
             {
               name: 'KA Rebate',
               path: '/master/ruleCtrl/model/splitRulesKA',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'KA Rebate',
             },
             {
               name: 'FMC',
               path: '/master/ruleCtrl/model/splitRulesFMC',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'FMC',
             },
             {
-              name: 'Roadshow',
+              name: 'RS',
               path: '/master/ruleCtrl/model/splitRulesRoadShow',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'Roadshow',
             },
             {
-              name: 'Listing Fee',
+              name: 'Listing',
               path: '/master/ruleCtrl/model/splitRulesListingFee',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'Listing fee',
             },
             {
-              name: 'POSM-标准',
-              path: '/master/ruleCtrl/model/splitRulesPOSM',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              name: 'POSM-标',
+              path: '/master/ruleCtrl/model/splitRulesPOSMStandard',
+              minePackageName: 'POSM - Standard',
+            },
+            {
+              name: 'POSM-定',
+              path: '/master/ruleCtrl/model/splitRulesPOSMCustomized',
+              minePackageName: 'POSM - Customized',
             },
             {
               name: 'ECM',
               path: '/master/ruleCtrl/model/splitRulesECM',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'ECM',
             },
             {
               name: 'Display',
               path: '/master/ruleCtrl/model/splitRulesDisplay',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'Display',
             },
             {
               name: 'Premium',
               path: '/master/ruleCtrl/model/splitRulesPremium',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'Premium',
             },
             {
-              name: 'Free Goods-Tin',
+              name: '价促-FG tin',
               path: '/master/ruleCtrl/model/splitRulesFreeGoods-Tin',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png'),
-              },
+              minePackageName: 'Free Goods-Tin',
+            },
+            {
+              name: '新客-FG win2',
+              path: '/master/ruleCtrl/model/splitRulesFreeGoods-Win2',
+              minePackageName: 'Free Goods-Win2',
             },
           ]
+          let TabList=[]
+          sortList.forEach(item=>{
+            let findIndex=this.routerList.findIndex(routerItem=>routerItem.minePackageName==item)
+            if(findIndex!=-1) {
+              TabList.push(this.routerList[findIndex])
+            }
+          })
+          this.routerList=TabList
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
           } else {
@@ -230,23 +217,24 @@ export default {
   }
 }
 </style>
-<style lang='scss'>
+<style lang="scss">
 .el-tabs__header {
   margin-bottom: 0 !important;
 }
 .el-tabs__item {
-  padding: 0 20px !important;
+  padding: 0 10px !important;
   height: 38px;
-  background: #4192d3;
+  background: #EFF2F9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 20px;
+  margin-right: 10px;
+  border: 1px solid #E8E8EA;
   font-size: 14px;
-  color: #fff;
+  color: #999;
   text-align: center;
   cursor: pointer;
   &:hover {
     // background-color: #fff;
-    color: #fff;
+    color: #999;
   }
   .TabWrap {
     display: flex;
@@ -260,8 +248,8 @@ export default {
   }
 }
 .el-tabs__item.is-active {
-  background-color: #fff !important;
-  color: #666 !important;
+  background-color: #4192d3 !important;
+  color: #fff !important;
 }
 .el-tabs__active-bar {
   display: none;

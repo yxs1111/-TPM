@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-09-09 16:23:26
+ * @LastEditTime: 2022-09-19 15:36:40
 -->
 <template>
   <div class="app-container">
@@ -177,6 +177,14 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       minePackageList: [
+        {
+          name: 'Price Promotion',
+          code: 'A',
+        },
+        {
+          name: 'New User',
+          code: 'B',
+        },
         {
           name: 'Display',
           code: 'E',

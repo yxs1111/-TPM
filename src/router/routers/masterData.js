@@ -489,13 +489,26 @@ export default function () {
                 },
                 {
                   hidden: true,
-                  path: '/master/ruleCtrl/model/splitRulesPOSM',
+                  path: '/master/ruleCtrl/model/splitRulesPOSMStandard',
                   code: 'mdm_testing_regulations',
-                  name: 'splitRulesPOSM',
+                  name: 'splitRulesPOSMStandard',
                   component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesPOSM.vue'),
+                    import('@/views/master/ruleCtrl/splitRulesPOSMStandard.vue'),
                   meta: {
-                    title: 'POSM',
+                    title: 'POSM-标准',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesPOSMCustomized',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesPOSMCustomized',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesPOSMCustomized.vue'),
+                  meta: {
+                    title: 'POSM-定制',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules',
                   },
@@ -548,6 +561,19 @@ export default function () {
                     import('@/views/master/ruleCtrl/splitRulesFreeGoods-Tin.vue'),
                   meta: {
                     title: 'Free Goods-Tin',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesFreeGoods-Win2',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesFreeGoods-Win2',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesFreeGoods-Win2.vue'),
+                  meta: {
+                    title: 'Free Goods-Win2',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules',
                   },
