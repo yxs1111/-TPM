@@ -638,7 +638,7 @@ import {
   downloadFile,
   messageMap,
 } from '@/utils'
-import API from '@/api/V3/v3.js'
+import API from '@/api/V3/Display.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
