@@ -34,8 +34,8 @@
             @change="getCustomerList"
           >
             <el-option
-              v-for="item in channelArr"
-              :key="item.channelCsName"
+              v-for="(item, index) in channelArr"
+              :key="index"
               :label="item.channelCsName"
               :value="item.channelCode"
             />
@@ -602,7 +602,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        channelName: '',
+        channelCode: '',
         supplierName: '',
         customerName: '',
         yearAndMonth: '',
@@ -649,21 +649,24 @@ export default {
     getTableData() {
       this.tableData = []
       if (
-        this.filterObj.channelName == '' ||
+        this.filterObj.channelCode == '' ||
         this.filterObj.yearAndMonth == ''
       ) {
         if (this.filterObj.yearAndMonth == '') {
           this.$message.info(messageObj.requireyearAndMonth)
           return
         }
-        if (this.filterObj.channelName == '') {
+        if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          ...this.filterObj,
+          supplierName: this.filterObj.supplierName, //供应商
+          customerName: this.filterObj.customerName, //客户系统名称
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelCode, //渠道
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -753,11 +756,12 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportExcel({
-          ...this.filterObj,
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelCode, //渠道
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V3_查询.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -767,7 +771,7 @@ export default {
     },
     importData() {
       this.saveBtn = false
-      if (this.filterObj.channelName == '') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -786,7 +790,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelName', this.filterObj.channelName)
+      formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', 1)
       API.import(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -796,17 +800,23 @@ export default {
             this.$message.info('导入数据为空，请检查模板')
           } else {
             this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data.sort(function (a, b) {
-              if (a.systemJudgment > b.systemJudgment) {
-                return 1
+            let importList = response.data
+            importList.forEach((item) => {
+              if (item.systemJudgment == 'Error') {
+                item.sort = 1
+              } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                item.sort = 2
               } else {
-                return -1
+                item.sort = 3
               }
             })
+            importList.sort((item, nextItem) => item.sort - nextItem.sort)
+            this.ImportData = importList
             let isError = this.ImportData.findIndex((item) => {
               return item.systemJudgment == 'Error'
             })
             this.isCheck = isError == -1 ? 1 : 0
+            console.log(this.saveBtn)
           }
         } else {
           this.$message.info(this.messageMap.importError)
@@ -825,23 +835,30 @@ export default {
     // 校验数据
     checkImport() {
       API.exceptionCheck({
-        ...this.filterObj,
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelName: this.filterObj.channelCode,
       }).then((response) => {
         if (response.code == 1000) {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
-          } else {
+          }  else {
             this.$message.success(this.messageMap.checkSuccess)
-            this.ImportData = response.data.sort(function (a, b) {
-              if (a.systemJudgment > b.systemJudgment) {
-                return 1
+            let checkList = response.data
+            checkList.forEach((item) => {
+              if (item.systemJudgment == 'Error') {
+                item.sort = 1
+              } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                item.sort = 2
               } else {
-                return -1
+                item.sort = 3
               }
             })
-            let isError = this.ImportData.findIndex((item) => {
+            let isError = checkList.findIndex((item) => {
               return item.systemJudgment == 'Error'
             })
+            console.log(isError, 'isError')
+            checkList.sort((item, nextItem) => item.sort - nextItem.sort)
+            this.ImportData = checkList
             this.saveBtn = isError == -1 ? 1 : 0
             console.log(this.saveBtn)
           }
@@ -854,7 +871,8 @@ export default {
     // 确认导入
     confirmImport() {
       API.saveV3Data({
-        ...this.filterObj,
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelName: this.filterObj.channelCode,
       }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
@@ -869,11 +887,12 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportV3Error({
-          ...this.filterObj,
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V3异常信息.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelCode}_V3异常信息.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -886,11 +905,12 @@ export default {
       if (this.tableData.length) {
         // 导出数据筛选
         API.downloadTemplate({
-          ...this.filterObj,
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V3申请.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelCode}_V3申请.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
