@@ -1109,7 +1109,7 @@ export default {
         }
         if (!this.filterObj.channelName) {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getPageV3({
           pageNum: this.pageNum, // 当前页
