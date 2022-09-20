@@ -862,7 +862,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V2审批.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelCode}_V2审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })

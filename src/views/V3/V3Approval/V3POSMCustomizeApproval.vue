@@ -770,7 +770,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V3_查询.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
