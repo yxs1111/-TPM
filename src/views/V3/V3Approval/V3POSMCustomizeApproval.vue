@@ -27,7 +27,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select
-            v-model="filterObj.channelName"
+            v-model="filterObj.channelCode"
             clearable
             filterable
             placeholder="请选择"
@@ -37,7 +37,7 @@
               v-for="item in channelArr"
               :key="item.channelCsName"
               :label="item.channelCsName"
-              :value="item.channelCsName"
+              :value="item.channelCode"
             />
           </el-select>
         </div>
@@ -715,7 +715,7 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.getCustomerList()
+          this.getCustomerList(this.filterObj.channelCode)
         }
       })
     },
@@ -723,7 +723,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelName: this.filterObj.channelName,
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
