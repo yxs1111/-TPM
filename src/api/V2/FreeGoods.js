@@ -13,6 +13,10 @@ export default {
   getPage(params) {
     return requestApi.request_get(this.url+'/getPage', params)
   },
+  //审批分页查询
+  getApprovePage(params) {
+    return requestApi.request_get(this.url+'/getApprovePage', params)
+  },
   uploadSAP(params) {
     return requestApi.request_post(this.url+'/uploadSAP', params)
   },

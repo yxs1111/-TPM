@@ -576,7 +576,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPage({
+        API.getApprovePage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
