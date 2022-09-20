@@ -5,7 +5,7 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">Cost Type:</span>
-          <el-select v-model="filterObj.costType" clearable placeholder="请选择" class="my-el-select">
+          <el-select v-model="filterObj.costType" clearable @change="getMinePackageList" placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in costTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
@@ -230,7 +230,7 @@ export default {
     }
     this.getTableData()
     this.getQueryChannelSelect()
-    this.getMinePackageList()
+    // this.getMinePackageList()
     this.getLargeAreaList()
     this.getDepartmentList()
     this.getCostTypeList()
