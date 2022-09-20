@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-14 16:00:08
+ * @LastEditTime: 2022-09-20 11:37:27
 -->
 <template>
   <div class="MainContent">
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" v-permission="permissions['SAP']" @click="showUploadSAP">
+      <div class="TpmButtonBG"  :class="!isSubmit||isSap?'':'noClick'" v-permission="permissions['SAP']" @click="showUploadSAP">
         <svg-icon icon-class="uploadFile" style="font-size: 15px;" />
         <span class="text">上传SAP File</span>
       </div>
@@ -572,6 +572,7 @@ export default {
       skuOptions: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
+      isSap: 1, // 
       isSelf: 0, //是否是当前审批人
       mainId: '',
       usernameLocal: '',
@@ -626,6 +627,9 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
+      this.isSubmit=0
+      this.isSelf = false
+      this.isSap = 0
       if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         if (this.filterObj.month == '') {
           this.$message.info(messageObj.requireMonth)
@@ -645,12 +649,14 @@ export default {
           type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          this.mainId = this.tableData[0].mainId
-          this.infoByMainId()
+          if(this.tableData.length) {
+            this.isSubmit = this.tableData[0].isSubmit
+            this.mainId = this.tableData[0].mainId
+            this.infoByMainId()
+          }
         })
       }
     },
