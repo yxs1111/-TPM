@@ -27,17 +27,17 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select
-            v-model="filterObj.channelName"
+            v-model="filterObj.channelCode"
             clearable
             filterable
             placeholder="请选择"
             @change="getCustomerList"
           >
             <el-option
-              v-for="item in channelArr"
-              :key="item.channelCsName"
+              v-for="(item, index) in channelArr"
+              :key="index"
               :label="item.channelCsName"
-              :value="item.channelCsName"
+              :value="item.channelCode"
             />
           </el-select>
         </div>
@@ -611,7 +611,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        channelName: '',
+        channelCode: '',
         supplierName: '',
         customerName: '',
         yearAndMonth: '',
@@ -658,21 +658,24 @@ export default {
     getTableData() {
       this.tableData = []
       if (
-        this.filterObj.channelName == '' ||
+        this.filterObj.channelCode == '' ||
         this.filterObj.yearAndMonth == ''
       ) {
         if (this.filterObj.yearAndMonth == '') {
           this.$message.info(messageObj.requireyearAndMonth)
           return
         }
-        if (this.filterObj.channelName == '') {
+        if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
         API.getPageApprove({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          ...this.filterObj,
+          supplierName: this.filterObj.supplierName, //供应商
+          customerName: this.filterObj.customerName, //客户系统名称
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelCode, //渠道
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -715,7 +718,7 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.getCustomerList()
+          this.getCustomerList(this.filterObj.channelCode)
         }
       })
     },
@@ -723,7 +726,7 @@ export default {
     getCustomerList() {
       selectAPI
         .queryCustomerList({
-          channelName: this.filterObj.channelName,
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -762,11 +765,12 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportExcel({
-          ...this.filterObj,
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelCode, //渠道
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V3_查询.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -796,7 +800,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelName', this.filterObj.channelName)
+      formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', 0)
       API.import(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -826,7 +830,8 @@ export default {
     // 校验数据
     checkImport() {
       API.exceptionCheck({
-        ...this.filterObj,
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelName: this.filterObj.channelCode,
       }).then((response) => {
         if (response.code == 1000) {
           if (!Array.isArray(response.data)) {
@@ -878,11 +883,12 @@ export default {
       if (this.tableData.length) {
         // 导出数据筛选
         API.downloadTemplate({
-          ...this.filterObj,
+          yearAndMonth: this.filterObj.yearAndMonth,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelName}_V3审批.xlsx`
+            `${this.filterObj.yearAndMonth}_POSM-定制_${this.filterObj.channelCode}_V3审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })

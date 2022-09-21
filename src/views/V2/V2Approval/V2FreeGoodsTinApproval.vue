@@ -576,7 +576,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPage({
+        API.getApprovePage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
@@ -661,7 +661,7 @@ export default {
         API.exportApproveExcel({
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          customerName: this.filterObj.customerName,
+          customerCode: this.filterObj.customerCode,
           productName: this.filterObj.productName,
           type: 1, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((res) => {
