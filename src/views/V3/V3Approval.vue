@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:20:28
+ * @LastEditTime: 2022-09-21 12:00:36
 -->
 <template>
   <div class="tabViewsWrap">
@@ -212,7 +212,7 @@ export default {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),
                 light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
               },
-              minePackageName: 'Free Goods-Win',
+              minePackageName: 'Free Goods-Win2',
             },
           ]
           let TabList=[]

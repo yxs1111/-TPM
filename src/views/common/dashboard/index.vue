@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-09-16 12:43:07
+ * @LastEditTime: 2022-09-21 11:55:43
 -->
 <template>
   <div class="dashboard-container">
@@ -344,6 +344,9 @@ export default {
                 )
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
+                if(array[index].isPrice&&array[index].costItemName == 'Free Goods - Tin') {
+                  array[index].isPrice=0
+                }
                 array[index].TaskName = this.setTaskName(
                   array[index].minePackageName,
                   array[index].costItemName
@@ -356,6 +359,9 @@ export default {
                 )
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
+                if(array[index].isPrice&&array[index].costItemName == 'Free Goods - Tin') {
+                  array[index].isPrice=0
+                }
                 array[index].TaskName = this.setTaskName(
                   array[index].minePackageName,
                   array[index].costItemName
@@ -757,6 +763,7 @@ export default {
               font-weight: 500;
               color: #999999;
               margin-right: 10px;
+              white-space: nowrap;
             }
             .V0 {
               width: 33%;
