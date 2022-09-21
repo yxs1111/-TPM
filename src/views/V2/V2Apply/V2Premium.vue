@@ -1018,7 +1018,7 @@ export default {
           item: this.filterObj.item, //活动
           supplierName: this.filterObj.supplierName, //供应商
           channelCode: this.filterObj.channelCode, //渠道
-          customerName: this.filterObj.customerCode, //客户系统名称
+          customerCode: this.filterObj.customerCode, //客户系统名称
 
           yearAndMonth: this.filterObj.month,
           brandCode: this.filterObj.brandCode,

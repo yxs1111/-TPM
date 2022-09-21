@@ -230,7 +230,7 @@ export default {
     }
     this.getTableData()
     this.getQueryChannelSelect()
-    // this.getMinePackageList()
+    this.getMinePackageList()
     this.getLargeAreaList()
     this.getDepartmentList()
     this.getCostTypeList()

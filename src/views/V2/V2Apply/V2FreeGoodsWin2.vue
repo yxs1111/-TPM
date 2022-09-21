@@ -644,7 +644,7 @@ export default {
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          customerCode: this.filterObj.customerName,
+          customerCode: this.filterObj.customerCode,
           productName: this.filterObj.productName,
           type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
         }).then((response) => {

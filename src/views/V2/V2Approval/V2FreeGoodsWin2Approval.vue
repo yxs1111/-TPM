@@ -566,6 +566,7 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
+      this.isSubmit = true
       this.tableData = []
       if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         if (this.filterObj.month == '') {
@@ -584,6 +585,7 @@ export default {
           customerCode: this.filterObj.customerCode,
           productName: this.filterObj.productName,
           type: 2, //cost item类型（1：Free Goods - Tin，2：Free Goods - Win 2）
+          isSubmit: 1,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -776,6 +778,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId,
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message({
@@ -807,6 +810,7 @@ export default {
               API.approve({
                 mainId: this.tableData[0].mainId,
                 opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('驳回成功!')

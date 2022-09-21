@@ -1053,7 +1053,7 @@ export default {
       if (this.ImportData.length) {
         API.exportCheckData({
           yearAndMonth: this.filterObj.month,
-          channelName: this.filterObj.channelCode,
+          channelCode: this.filterObj.channelCode,
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())

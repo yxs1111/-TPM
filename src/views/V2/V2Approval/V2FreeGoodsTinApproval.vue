@@ -730,6 +730,7 @@ export default {
     },
     // 导出异常信息
     exportErrorList() {
+      this.isSubmit = true
       if (this.ImportData.length) {
         API.downExcelError({
           yearAndMonth: this.filterObj.month,
