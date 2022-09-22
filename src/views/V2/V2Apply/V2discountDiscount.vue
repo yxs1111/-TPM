@@ -597,8 +597,8 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
+          distributorName: this.filterObj.distributorCode,
+          regionName: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
         }).then((res) => {
           this.downloadFile(

@@ -199,7 +199,7 @@ export default {
         item.isEditor = 0
       })
       const code = this.minePackageList.filter(
-        (item) => row.minePackage === item.name
+        (item) => row.minePackage === item.costType
       )[0].code
       this.getCostItemList(code)
       this.isEditor = index

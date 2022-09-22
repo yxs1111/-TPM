@@ -48,45 +48,48 @@
       </div>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
-      style="width: 100%">
-      <el-table-column type="selection" align="center" />
-      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
-      </el-table-column>
-      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
-      </el-table-column>
-      <el-table-column width="120" align="center" prop="costType" label="费用类型">
-      </el-table-column>
-      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package">
-      </el-table-column>
-      <el-table-column width="180" align="center" prop="costAccount" label="费用科目">
-      </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="customerName" label="客户">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="brandName" label="品牌">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="skuName" label="SKU">
-      </el-table-column>
-      <el-table-column width="280" align="center" prop="distributorOrSupplierName" label="经销商/供应商">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="zoneName" label="大区">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="regionName" label="区域">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="detailItem" label="业务细项">
-      </el-table-column>
-      <el-table-column v-slot={row} width="220" align="right" prop="costAmount" label="费用金额">
-        {{formatNum(row.costAmount)}}
-      </el-table-column>
-      <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见">
-      </el-table-column>
-    </el-table>
+    <div class='collection'>
+      <el-table :data="tableData" ref="myTable" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
+                style="width: 100%">
+        <el-table-column type="selection" align="center">
+        </el-table-column>
+        <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
+        </el-table-column>
+        <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
+        </el-table-column>
+        <el-table-column width="120" align="center" prop="costType" label="费用类型">
+        </el-table-column>
+        <el-table-column width="190" align="center" prop="minePackage" label="Mine Package">
+        </el-table-column>
+        <el-table-column width="180" align="center" prop="costAccount" label="费用科目">
+        </el-table-column>
+        <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="customerName" label="客户">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="brandName" label="品牌">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="skuName" label="SKU">
+        </el-table-column>
+        <el-table-column width="280" align="center" prop="distributorOrSupplierName" label="经销商/供应商">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="zoneName" label="大区">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="regionName" label="区域">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="detailItem" label="业务细项">
+        </el-table-column>
+        <el-table-column v-slot={row} width="220" align="right" prop="costAmount" label="费用金额">
+          {{formatNum(row.costAmount)}}
+        </el-table-column>
+        <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见">
+        </el-table-column>
+        <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见">
+        </el-table-column>
+      </el-table>
+    </div>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
@@ -504,14 +507,30 @@ export default {
     },
     handleSelectionChange(val) {
       this.checkArr = val
+      if (val.length > 1) {
+        this.$refs.myTable.clearSelection()
+        this.$refs.myTable.toggleRowSelection(val.pop());
+      }
+      console.log(this.checkArr)
     },
   },
 }
 </script>
-
+<style>
+.collection .el-table__fixed-header-wrapper .cell .el-checkbox {
+  display: none;
+}
+</style>
 <style lang="scss" scoped>
 .tooltip {
   border-radius: 10px;
+}
+.el-table__fixed-header-wrapper .cell .el-checkbox {
+  display: none;
+}
+.el-table__fixed-header-wrapper .el-checkbox{
+  //找到表头那一行，然后把里面的复选框隐藏掉
+  display:none
 }
 .Tip {
   text-align: center;
