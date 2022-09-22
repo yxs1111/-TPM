@@ -218,7 +218,8 @@ export default {
         loginName: [
           { required: true, message: '登录名不能为空', trigger: 'blur' }
         ],
-        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        // phone: [{ required: false, trigger: 'blur', validator: validatePhone }],
+        phone: [{ required: false, trigger: 'blur'}],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           {
@@ -844,7 +845,7 @@ export default {
           list[i]['dataSecId'] = list[i].id
           list[i]['NodeKey'] = list[i]['dataFirCode']+'-'+list[i].channelCode
           if (list[i].customerList) {
-            
+
             for (let j = 0; j < list[i].children.length; j++) {
               list[i].children[j]['dataFirCode'] = res.data.ka
               list[i].children[j]['label'] = list[i].children[j].customerCsName

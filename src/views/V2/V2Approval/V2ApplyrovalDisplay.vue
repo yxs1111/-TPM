@@ -542,18 +542,34 @@
               prop="regionName"
               label="区域"
             />
+
             <el-table-column
-              width="120"
+              width="280"
               align="center"
               prop="displayItem"
               label="Display Item"
-            />
+            >
+              <template v-slot:header>
+                <div>
+                  Display Item
+                  <br />
+                  <span class="subTitle">KA+Brand+region+经销商+item</span>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column
               width="280"
               align="center"
               prop="planCost"
               label="V1计划费用(RMB)"
             >
+              <template v-slot:header>
+                <div>
+                  V1计划费用(RMB)
+                  <br />
+                  <span class="subTitle">KA+Brand+region+经销商+item</span>
+                </div>
+              </template>
             </el-table-column>
             <el-table-column
               width="280"
@@ -561,6 +577,13 @@
               prop="estimateCost"
               label="V2预估费用-默认(RMB)"
             >
+              <template v-slot:header>
+                <div>
+                  V2预估费用-默认(RMB)
+                  <br />
+                  <span class="subTitle">KA+Brand+region+经销商+item</span>
+                </div>
+              </template>
             </el-table-column>
             <el-table-column
               width="280"
@@ -568,6 +591,13 @@
               prop="adjustedCost"
               label="V2预估费用-调整后(RMB)"
             >
+              <template v-slot:header>
+                <div>
+                  V2预估费用-调整后(RMB)
+                  <br />
+                  <span class="subTitle">KA+Brand+region+经销商+item</span>
+                </div>
+              </template>
             </el-table-column>
             <el-table-column
               width="120"
@@ -582,12 +612,19 @@
               label="费用核销方式"
             />
             <el-table-column
-              width="280"
-              align="center"
-              prop="differenceCost"
-              label="费用差值(RMB)"
-            >
-            </el-table-column>
+            width="280"
+            align="center"
+            prop="differenceCost"
+            label="费用差值(RMB)"
+          >
+            <template v-slot:header>
+              <div>
+                费用差值(RMB)
+                <br />
+                <span class="subTitle">KA+Brand+Region + item</span>
+              </div>
+            </template>
+          </el-table-column>
             <el-table-column
               width="120"
               align="center"
