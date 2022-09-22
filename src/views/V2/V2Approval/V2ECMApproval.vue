@@ -565,7 +565,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="350"
                              align="left"
                              fixed="left"
                              prop="judgmentContent"
@@ -580,7 +580,7 @@
               </template>
             </el-table-column>
             <el-table-column align="center"
-                             width="460"
+                             width="230"
                              prop="cpId"
                              label="CPID"
                              fixed="left">
