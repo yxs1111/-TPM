@@ -656,7 +656,7 @@ export default {
       params: params,
       responseType: 'blob'
     })
-    
+
   },
   MatchingRelationImportExcel(params) {
     return requestApi.request_post('/mdm/mdOrganizationSupplier/importExcel', params)
@@ -705,7 +705,7 @@ export default {
   getDepartmentId(params) {
     return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentId', params)
   },
-  //Display Item 
+  //Display Item
   getDisplayItem(params) {
     return requestApi.request_get("/mdm/mdDisplayItem/getDisplayItemPage",params)
   },

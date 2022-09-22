@@ -10,7 +10,7 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" @change="getCostItemList">
+          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" @change="getCostItemList(filterObj.minePackage)">
             <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
@@ -142,8 +142,8 @@ export default {
         this.total = response.data.total
       })
     },
-    getCostItemList() {
-      selectAPI.getCostItemList({ minePackage: this.filterObj.minePackage }).then((res) => {
+    getCostItemList(minePackage) {
+      selectAPI.getCostItemList({ minePackage }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
@@ -198,10 +198,11 @@ export default {
       this.tableData.forEach((item) => {
         item.isEditor = 0
       })
-      const code = this.minePackageList.filter(
-        (item) => row.minePackage === item.costType
-      )[0].code
-      this.getCostItemList(code)
+      // const code = this.minePackageList.filter(
+      //   (item) => row.minePackage === item.costType
+      // )[0].code
+      // console.log(code)
+      this.getCostItemList(row.minePackage)
       this.isEditor = index
       this.$forceUpdate()
       console.log(

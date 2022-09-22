@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG"  @click="search" v-permission="permissions['get']">查询</el-button>
+        <el-button type="primary" class="TpmButtonBG"  @click="search" >查询</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
         <div class="TpmButtonBG" @click="exportExcelInfo" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
@@ -85,6 +85,8 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="validDate" label="有效至">
       </el-table-column>
+      <el-table-column width="150" align="center" prop="validStartMonth" label="有效起始月份">
+      </el-table-column>
       <el-table-column width="150" align="center" prop="remark" label="备注" />
     </el-table>
     <!-- 分页 -->
@@ -121,13 +123,13 @@
     </el-dialog>
     <!-- 删除 -->
     <el-dialog width="25%" class="my-el-dialog" title="删除" :visible="deleteVisible" @close="closeDeleteDialog">
-      <div class="fileInfo ImportContent">
-        <div class="fileTitle">有效期</div>
-        <div class="my-search selectFile">
-          <el-date-picker v-model="deleteObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">
-          </el-date-picker>
-        </div>
-      </div>
+<!--      <div class="fileInfo ImportContent">-->
+<!--        <div class="fileTitle">有效期</div>-->
+<!--        <div class="my-search selectFile">-->
+<!--          <el-date-picker v-model="deleteObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyyMM">-->
+<!--          </el-date-picker>-->
+<!--        </div>-->
+<!--      </div>-->
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmDelete()">确 定</el-button>
         <el-button @click="closeDeleteDialog">取 消</el-button>
@@ -277,9 +279,9 @@ export default {
     },
     // 多个删除
     mutidel() {
-      if (this.deleteObj.yearAndMonth == '') {
-        this.$message.info('请选择年月')
-      } else {
+      // if (this.deleteObj.yearAndMonth == '') {
+      //   this.$message.info('请选择年月')
+      // } else {
         var that = this
         var ids = that.$refs.Tdata.selection
         var idList = []
@@ -302,13 +304,26 @@ export default {
             this.closeDeleteDialog()
           }
         })
-      }
+      // }
     },
     showDeleteDialog() {
       if (this.checkArr.length == 0) {
         this.$message.info('请选择数据')
       } else {
-        this.deleteVisible = true
+        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            this.mutidel()
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除',
+            })
+          })
       }
     },
     confirmDelete() {
