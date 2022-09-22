@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-09-06 11:26:02
+ * @LastEditTime: 2022-09-22 13:20:22
 -->
 <template>
   <div class="ContentDetail">
@@ -392,7 +392,7 @@ export default {
           }
         })
         let index = distributorList.findIndex((item) => {
-          return item.contractState == '3'
+          return item.contractState == '3'||item.contractState == '5'
         })
         // 是否有可编辑的，若没有则只显示关闭按钮
         let isOtherEditor = distributorList.findIndex((item) => {
@@ -994,8 +994,13 @@ export default {
                 }
               }
             })
+            // error 对草稿或者待审批的进行校验
             let dealerTaxPrice = dealerList.reduce((total, current) => {
-              return total + Number(current.taxPrice)
+              if(current.contractStateName=='草稿'||current.contractStateName=='待审批') {
+                return total + Number(current.taxPrice)
+              } else {
+                return  total + 0
+              }
             }, 0)
             if (dealerTaxPrice != customerTaxPrice) {
               errorList.push({
