@@ -46,12 +46,13 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+<!--      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>-->
     </div>
     <div class='collection'>
-      <el-table :data="tableData" ref="myTable" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
+<!--      <el-table :data="tableData" ref="myTable" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"-->
+      <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
                 style="width: 100%">
-        <el-table-column type="selection" align="center">
+        <el-table-column align="center">
         </el-table-column>
         <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
         </el-table-column>
