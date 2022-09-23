@@ -965,8 +965,8 @@ export default {
             this.isSubmit = this.tableData[0].isSubmit
             this.isGainLe = this.tableData[0].isGainLe
             this.mainId = this.tableData[0].mainId
+            this.infoByMainId()
           }
-          this.infoByMainId()
         })
       }
     },

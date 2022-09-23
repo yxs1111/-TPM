@@ -998,9 +998,8 @@ export default {
           if (this.tableData.length > 0) {
             this.isSubmit = this.tableData[0].isSubmit
             this.mainId = this.tableData[0].mainId
+            this.infoByMainId()
           }
-
-          this.infoByMainId()
         })
       }
     },

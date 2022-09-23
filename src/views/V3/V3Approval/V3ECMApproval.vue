@@ -939,7 +939,10 @@ export default {
           this.total = response.data.total
 
           this.mainId = this.tableData[0].mainId
-          this.infoByMainId()
+
+          if (this.tableData.length > 0) {
+            this.infoByMainId()
+          }
         })
       }
     },
