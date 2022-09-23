@@ -872,6 +872,7 @@ export default {
       this.ImportData = []
       this.saveBtn = false
       this.isCheck = false
+      this.getTableData()
     },
     // 导入
     parsingExcel(event) {

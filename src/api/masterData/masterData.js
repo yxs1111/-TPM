@@ -516,6 +516,10 @@ export default {
   getMdDataInterface(params) {
     return requestApi.request_get('/mdm/mdDataInterface/page', params)
   },
+  //通知管理
+  getNotification(params) {
+    return requestApi.request_get('/mdm/mdEmailRecordRule/getPage', params)
+  },
   //接口名称下拉筛选
   getInterfaceList(params) {
     return requestApi.request_get('/mdm/mdDataInterface/getInterfaceList', params)

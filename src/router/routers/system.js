@@ -62,7 +62,7 @@ export default function() {
         },
         {
           path: 'NotificationManagement',
-          code: 'NotificationManagement',
+          code: 'MonitoringManagement',
           name: 'NotificationManagement',
           component: () => import('@/views/system/NotificationManagement.vue'),
           meta: { title: '通知管理', icon: 'form' }

@@ -4,35 +4,58 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">接口名称</span>
-          <el-select v-model="filterObj.interfaceName" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />
-          </el-select>
+          <span class="SelectliTitle">通知内容</span>
+          <el-input v-model="filterObj.content" filterable clearable placeholder="请输入">
+<!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
+          </el-input>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">修改时间</span>
-          <el-date-picker v-model="filterObj.invokeDateSting" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期">
-          </el-date-picker>
+          <span class="SelectliTitle">接受角色</span>
+          <el-input v-model="filterObj.sendUser" filterable clearable placeholder="请输入">
+            <!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
+          </el-input>
         </div>
+        <div class="Selectli">
+          <span class="SelectliTitle">状态</span>
+          <el-select v-model="filterObj.State" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['有效','无效']" :key="index" :label="item" :value="index" />
+          </el-select>
+        </div>
+<!--        <div class="Selectli">-->
+<!--          <span class="SelectliTitle">修改时间</span>-->
+<!--          <el-date-picker v-model="filterObj.invokeDateSting" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期">-->
+<!--          </el-date-picker>-->
+<!--        </div>-->
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>
+<!--        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>-->
         <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
+    <div class='SelectBar'>
+      <el-button type="primary" class="TpmButtonBG" @click="Reset">写邮件</el-button>
+    </div>
     <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
       style="width: 100%">
-      <el-table-column align="center" prop="interfaceName" label="接口名称"> </el-table-column>
-      <el-table-column align="center" prop="upstreamData" label="表名"> </el-table-column>
-      <el-table-column v-slot={row} align="center" prop="invokeDate" label="修改时间">
-         {{ row.createDate ? row.createDate.replace("T"," ") : '' }}  
+      <el-table-column align="center" prop="interfaceName" label="操作"> </el-table-column>
+      <el-table-column align="center" prop="id" label="编码"> </el-table-column>
+      <el-table-column align="center" prop="invokeDate" label="通知类型">
+<!--         {{ row.createDate ? row.createDate.replace("T"," ") : '' }}-->
       </el-table-column>
-      <el-table-column align="center" prop="success" label="是否成功"> </el-table-column>
-      <el-table-column align="center" prop="dataNum" label="数据条数"> </el-table-column>
+      <el-table-column align="center" prop="success" label="接受角色/接受邮箱"> </el-table-column>
+      <el-table-column v-slot={row} align="center" prop="sendTime" label="发送时间">
+        {{ row.sendTime ? row.sendTime.replace("T"," ") : '' }}
+      </el-table-column>
       <!-- <el-table-column align="center" prop="inData" label="接口参数"> </el-table-column> -->
-      <el-table-column align="center" prop="details" label="详情(失败原因)"> </el-table-column>
+      <el-table-column width="150" align="center" prop="deleteFlag" label="状态">
+        <template slot-scope="{row}">
+          <div>
+            {{row.deleteFlag?'无效':'有效'}}
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -55,7 +78,7 @@ import {
 import API from '@/api/masterData/masterData.js'
 
 export default {
-  name: 'MonitoringManagement',
+  name: 'NotificationManagement',
 
   data() {
     return {
@@ -65,6 +88,9 @@ export default {
       filterObj: {
         interfaceName: '',
         invokeDateSting: '',
+        content: '',
+        sendUser: '',
+        State: ''
       },
       permissions: getDefaultPermissions(),
       InterfaceList: [],
@@ -88,11 +114,12 @@ export default {
     //获取表格数据
     getTableData() {
       this.tableData = []
-      API.getMdDataInterface({
+      API.getNotification({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        interfaceName: this.filterObj.interfaceName,
-        invokeDateSting: this.filterObj.invokeDateSting,
+        content: this.filterObj.content,
+        sendUser: this.filterObj.sendUser,
+        State: this.filterObj.State,
       }).then((response) => {
         this.tableData = response.data.records
         this.pageNum = response.data.pageNum
@@ -108,13 +135,6 @@ export default {
     },
     search() {
       this.pageNum = 1
-      this.getTableData()
-    },
-    Reset() {
-      this.filterObj = {
-        interfaceName: '',
-        invokeDateSting: '',
-      }
       this.getTableData()
     },
     //导出数据
