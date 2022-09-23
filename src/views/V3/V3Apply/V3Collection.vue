@@ -48,7 +48,8 @@
       </div>
       <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
+    <div class='collection'>
+      <el-table :data="tableData" ref="myTable" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
       style="width: 100%">
       <el-table-column type="selection" align="center" />
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
@@ -87,6 +88,7 @@
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见">
       </el-table-column>
     </el-table>
+    </div>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
@@ -503,10 +505,19 @@ export default {
     },
     handleSelectionChange(val) {
       this.checkArr = val
+      if (val.length > 1) {
+        this.$refs.myTable.clearSelection()
+        this.$refs.myTable.toggleRowSelection(val.pop());
+      }
     },
   },
 }
 </script>
+<style>
+.collection .el-table__fixed-header-wrapper .cell .el-checkbox {
+  display: none;
+}
+</style>
 
 <style lang="scss" scoped>
 .tooltip {

@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-08-30 10:38:43
  * @LastEditTime: 2022-03-30 10:20:00
  */
@@ -59,6 +59,13 @@ export default function() {
           name: 'MonitoringManagement',
           component: () => import('@/views/system/MonitoringManagement.vue'),
           meta: { title: '监控管理', icon: 'form' }
+        },
+        {
+          path: 'NotificationManagement',
+          code: 'NotificationManagement',
+          name: 'NotificationManagement',
+          component: () => import('@/views/system/NotificationManagement.vue'),
+          meta: { title: '通知管理', icon: 'form' }
         },
         {
           path: 'InterfaceManage',
