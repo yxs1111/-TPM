@@ -68,20 +68,34 @@
           <div class="SelectBar" @keyup.enter="search">
             <div class="Selectli">
               <span class="SelectliTitle">接收人:</span>
-              <el-select v-model="filterObj.sendUser" filterable clearable placeholder="请选择">
-                <el-option v-for="item in sendUserList" :key="item.id" :label="item.sendUser" :value="item.sendUser" />
-              </el-select>
+              <el-cascader
+                v-model="value"
+                :options="sendUserList"
+                :props="{
+                  expandTrigger: 'hover',
+                  value: 'code',
+                  label: 'email',
+                  children: 'userList'
+                 }"
+                @change="handleChange"></el-cascader>
             </div>
             <div class="Selectli">
               <span class="SelectliTitle">抄送人:</span>
-              <el-select v-model="filterObj.sendUser" filterable clearable placeholder="请选择">
-                <el-option v-for="item in sendUserList" :key="item.id" :label="item.sendUser" :value="item.sendUser" />
-              </el-select>
+              <el-cascader
+                v-model="value"
+                :options="sendUserList"
+                :props="{
+                  expandTrigger: 'hover',
+                  value: 'code',
+                  label: 'email',
+                  children: 'userList'
+                 }"
+                @change="handleChange"></el-cascader>
             </div>
             <div class="Selectli">
               <span class="SelectliTitle">主题:</span>
-              <el-input v-model="filterObj.sendUser" filterable clearable placeholder="请输入">
-  <!--              <el-option v-for="item in sendUserList" :key="item.id" :label="item.sendUser" :value="item.sendUser" />-->
+              <el-input v-model="filterObj.theme" filterable clearable placeholder="请输入">
+  <!--              <el-option v-for="item in sendUserList" :key="item.code" :label="item.name" :value="item.name" />-->
               </el-input>
             </div>
           </div>
@@ -97,25 +111,33 @@
             <Editor
               style="height: 500px; overflow-y: hidden;"
               v-model="html"
-              :defaultConfig="editorConfig"
+              :defaultConfig="filterObj.editorConfig"
               :mode="mode"
               @onCreated="onCreated"
             />
           </div>
           <div style='display: flex; align-items: center;  margin-top: 18px;'>
             <el-button type="primary" class="TpmButtonBG" @click="parsingExcelBtn">上传附件</el-button>
+            <input
+              id="fileElem"
+              ref="filElem"
+              type="file"
+              style="display: none"
+              @change="parsingExcel($event)"
+            />
+            <div v-if="uploadFileName != ''" class="fileName">
+              <img
+                src="@/assets/upview_fileicon.png"
+                alt=""
+                class="upview_fileicon"
+              />
+              <span>{{ uploadFileName }}</span>
+            </div>
           </div>
           <div style='display: flex; align-items: center; justify-content: center; margin-top: 18px;'>
             <el-button type="primary" class="TpmButtonBG" @click="confirmImport">确定</el-button>
             <el-button type="primary" plain class="TpmButtonBG2" @click="parsingExcelBtn">取消</el-button>
           </div>
-          <input
-            id="fileElem"
-            ref="filElem"
-            type="file"
-            style="display: none"
-            @change="parsingExcel($event)"
-          />
         </div>
       </div>
     </el-dialog>
@@ -142,6 +164,15 @@ export default {
 
   data() {
     return {
+      value: [],
+      options: [{
+        value: 'code',
+        label: 'name',
+        children: [{
+          value: 'id',
+          label: 'email',
+        }]
+      }],
       total: 0,
       pageSize: 100,
       pageNum: 1,
@@ -150,11 +181,14 @@ export default {
         invokeDateSting: '',
         content: '',
         sendUser: '',
-        State: ''
+        State: '',
+        theme: '',
+        editorConfig: ''
       },
       addVisible: false, // 导入弹窗
       permissions: getDefaultPermissions(),
       InterfaceList: [],
+      uploadFileName: '',
       sendUserList: [],
       tableData: [],
       dialogVisible: false,
@@ -225,7 +259,11 @@ export default {
       API.recipientSelect().then((res) => {
         if (res.code === 1000) {
           this.sendUserList = res.data
-          // this.getCustomerList(this.filterObj.channelCode)
+          // console.log(this.sendUserList)
+          this.sendUserList.forEach(item => {
+            item.email = item.name
+          })
+          console.log(this.sendUserList)
         }
       })
     },
@@ -241,15 +279,15 @@ export default {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code === 1000) {
-          if (!Array.isArray(response.data) || response.data.length === 0) {
-            this.$message.info('导入数据为空，请检查模板')
-          } else {
+          // if (!Array.isArray(response.data) || response.data.length === 0) {
+          //   this.$message.info('导入数据为空，请检查模板')
+          // } else {
             this.$message.success(this.messageMap.importSuccess)
             this.ImportData = response.data
             this.isCheck = response.data.every(
               (item) => item.judgmentType === 'Pass'
             )
-          }
+          // }
         } else {
           this.$message.info(this.messageMap.importError)
         }
@@ -257,8 +295,13 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.save({ mainId: this.mainId }).then((res) => {
-        if (res.code == 1000) {
+      const formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('toUserList', this.filterObj.toUserList)
+      formData.append('theme', this.filterObj.theme)
+      formData.append('content', this.filterObj.editorConfig)
+      API.importNormal(formData).then((response) => {
+        if (res.code === 1000) {
           this.$message.success(this.messageMap.saveSuccess)
           this.getTableData()
           this.closeImportDialog()
@@ -266,6 +309,9 @@ export default {
           this.$message.info(this.messageMap.saveError)
         }
       })
+    },
+    handleChange (value) {
+      console.log(value);
     },
     // 写邮件
     writeEmail() {

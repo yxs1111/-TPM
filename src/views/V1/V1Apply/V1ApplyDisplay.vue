@@ -129,7 +129,7 @@
             <img src="../../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
-          <div class="TpmButtonBG" @click="clearsmartplan()">
+          <div class="TpmButtonBG" @click="clearsmartplan(filterObj)">
             <img src="../../../assets/images/delete_l.png" alt="" />
             <span class="text">清除数据</span>
           </div>
@@ -333,8 +333,8 @@ export default {
   },
   methods: {
     // clearsmartplan
-    clearsmartplan() {
-      API.delsmartplanData().then((res) => {})
+    clearsmartplan({ yearAndMonth, channelCode }) {
+      API.delsmartplanData({ yearAndMonth, channelCode }).then((res) => {})
     },
     // 获取smartplan数据
     importsmartplan({ yearAndMonth, channelCode }) {

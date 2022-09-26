@@ -520,13 +520,13 @@ export default {
   getNotification(params) {
     return requestApi.request_get('/mdm/mdEmailRecordRule/getPage', params)
   },
-  //导入附件
+  //确认发送
   importNormal(params) {
-    return requestApi.request_post('/mdm/role/getAllRoleUser', params)
+    return requestApi.request_post('/mdm/mdEmailRecordRule/sendEmail', params)
   },
   // 接收人下拉框
   recipientSelect(params) {
-    return requestApi.request_get('/mdm/role/getAllRoleUser', params)
+    return requestApi.request_get('/auth/role/getAllRoleUser', params)
   },
   //接口名称下拉筛选
   getInterfaceList(params) {
