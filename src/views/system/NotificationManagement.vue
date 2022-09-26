@@ -18,7 +18,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
           <el-select v-model="filterObj.State" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ['有效','无效']" :key="index" :label="item" :value="index" />
+            <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
 <!--        <div class="Selectli">-->
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class='SelectBar'>
-      <el-button type="primary" class="TpmButtonBG" @click="Reset">写邮件</el-button>
+      <el-button type="primary" class="TpmButtonBG" @click="writeEmail">写邮件</el-button>
     </div>
     <el-table :data="tableData" border :max-height="maxheight" :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
       style="width: 100%">
@@ -62,12 +62,70 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
+    <el-dialog width="55%"  title="写邮件" :visible="addVisible" @close="closeDialog" class="my-el-dialog">
+      <div class="app-container">
+        <div class="SelectBarWrap">
+          <div class="SelectBar" @keyup.enter="search">
+            <div class="Selectli">
+              <span class="SelectliTitle">接收人:</span>
+              <el-select v-model="filterObj.sendUser" filterable clearable placeholder="请选择">
+                <el-option v-for="item in sendUserList" :key="item.id" :label="item.sendUser" :value="item.sendUser" />
+              </el-select>
+            </div>
+            <div class="Selectli">
+              <span class="SelectliTitle">抄送人:</span>
+              <el-select v-model="filterObj.sendUser" filterable clearable placeholder="请选择">
+                <el-option v-for="item in sendUserList" :key="item.id" :label="item.sendUser" :value="item.sendUser" />
+              </el-select>
+            </div>
+            <div class="Selectli">
+              <span class="SelectliTitle">主题:</span>
+              <el-input v-model="filterObj.sendUser" filterable clearable placeholder="请输入">
+  <!--              <el-option v-for="item in sendUserList" :key="item.id" :label="item.sendUser" :value="item.sendUser" />-->
+              </el-input>
+            </div>
+          </div>
+        </div>
+        <div class="Selectli">
+          <div style="border: 1px solid #ccc;">
+            <Toolbar
+              style="border-bottom: 1px solid #ccc"
+              :editor="editor"
+              :defaultConfig="toolbarConfig"
+              :mode="mode"
+            />
+            <Editor
+              style="height: 500px; overflow-y: hidden;"
+              v-model="html"
+              :defaultConfig="editorConfig"
+              :mode="mode"
+              @onCreated="onCreated"
+            />
+          </div>
+          <div style='display: flex; align-items: center;  margin-top: 18px;'>
+            <el-button type="primary" class="TpmButtonBG" @click="parsingExcelBtn">上传附件</el-button>
+          </div>
+          <div style='display: flex; align-items: center; justify-content: center; margin-top: 18px;'>
+            <el-button type="primary" class="TpmButtonBG" @click="confirmImport">确定</el-button>
+            <el-button type="primary" plain class="TpmButtonBG2" @click="parsingExcelBtn">取消</el-button>
+          </div>
+          <input
+            id="fileElem"
+            ref="filElem"
+            type="file"
+            style="display: none"
+            @change="parsingExcel($event)"
+          />
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import {
   getDefaultPermissions,
   parseTime,
@@ -76,9 +134,11 @@ import {
   downloadFile,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
+import selectAPI from '@/api/selectCommon/selectCommon'
 
 export default {
   name: 'NotificationManagement',
+  components: { Editor, Toolbar },
 
   data() {
     return {
@@ -92,11 +152,18 @@ export default {
         sendUser: '',
         State: ''
       },
+      addVisible: false, // 导入弹窗
       permissions: getDefaultPermissions(),
       InterfaceList: [],
+      sendUserList: [],
       tableData: [],
       dialogVisible: false,
       maxheight: getHeightSingle(),
+      editor: null,
+      html: '<p>hello</p>',
+      toolbarConfig: { },
+      editorConfig: { placeholder: '请输入内容...' },
+      mode: 'default', // or 'simple'
     }
   },
   directives: { elDragDialog, permission },
@@ -106,8 +173,19 @@ export default {
         this.maxheight = getHeightSingle()
       })()
     }
+    // 模拟 ajax 请求，异步渲染编辑器
+    setTimeout(() => {
+      this.html = '<p>模拟 Ajax 异步设置内容 HTML</p>'
+    }, 1500)
     this.getTableData()
     this.getInterfaceList()
+    this.getChannel()
+    // this.getCustomerList()
+  },
+  beforeDestroy() {
+    const editor = this.editor
+    if (editor == null) return
+    editor.destroy() // 组件销毁时，及时销毁编辑器
   },
   computed: {},
   methods: {
@@ -137,7 +215,69 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
-    //导出数据
+    // 选择导入文件
+    parsingExcelBtn() {
+      this.saveBtn = false
+      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
+    },
+    // 获取下拉框
+    getChannel() {
+      API.recipientSelect().then((res) => {
+        if (res.code === 1000) {
+          this.sendUserList = res.data
+          // this.getCustomerList(this.filterObj.channelCode)
+        }
+      })
+    },
+    // 导入
+    parsingExcel(event) {
+      this.uploadFileName = event.target.files[0].name
+      this.uploadFile = event.target.files[0]
+      const formData = new FormData()
+      formData.append('file', this.uploadFile)
+      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
+      formData.append('channelCode', this.filterObj.channelCode)
+      API.importNormal(formData).then((response) => {
+        //清除input的value ,上传一样的
+        event.srcElement.value = '' // 置空
+        if (response.code === 1000) {
+          if (!Array.isArray(response.data) || response.data.length === 0) {
+            this.$message.info('导入数据为空，请检查模板')
+          } else {
+            this.$message.success(this.messageMap.importSuccess)
+            this.ImportData = response.data
+            this.isCheck = response.data.every(
+              (item) => item.judgmentType === 'Pass'
+            )
+          }
+        } else {
+          this.$message.info(this.messageMap.importError)
+        }
+      })
+    },
+    // 确认导入
+    confirmImport() {
+      API.save({ mainId: this.mainId }).then((res) => {
+        if (res.code == 1000) {
+          this.$message.success(this.messageMap.saveSuccess)
+          this.getTableData()
+          this.closeImportDialog()
+        } else {
+          this.$message.info(this.messageMap.saveError)
+        }
+      })
+    },
+    // 写邮件
+    writeEmail() {
+      this.addVisible = true
+    },
+    onCreated(editor) {
+      this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
+    },
+    closeDialog() {
+      this.addVisible = false
+    },
+    // 导出数据
     exportData() {
       let formData = new FormData()
       formData.append('interfaceName', this.filterObj.interfaceName)
@@ -177,4 +317,25 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.TpmButtonBG2{
+  min-width: 84px;
+  height: 38px;
+  border-radius: 3px;
+  padding: 0 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+</style>
+<style src="@wangeditor/editor/dist/css/style.css"></style>

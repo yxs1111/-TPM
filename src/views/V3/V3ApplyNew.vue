@@ -73,7 +73,7 @@ export default {
               signP = 1
             } else if (element.costType === 'New User' && signN === 0) {
               this.routerList.push({
-                name: '新客',
+                name: 'NU',
                 path: '/costManagement/V3/V3Apply/V3discountNU',
                 img: {
                   dark: require('@/assets/images/tab/tab3.png'),
@@ -206,7 +206,7 @@ export default {
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: '新客-FG win2',
+              name: 'NU-FG win2',
               path: '/costManagement/V3/V3Apply/V3FreeGoodsWin2',
               img: {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),
