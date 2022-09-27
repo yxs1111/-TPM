@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-09-22 13:20:22
+ * @LastEditTime: 2022-09-27 08:50:07
 -->
 <template>
   <div class="ContentDetail">
@@ -994,9 +994,9 @@ export default {
                 }
               }
             })
-            // error 对草稿或者待审批的进行校验
+            // error 对草稿、待审批、被拒绝的进行校验
             let dealerTaxPrice = dealerList.reduce((total, current) => {
-              if(current.contractStateName=='草稿'||current.contractStateName=='待审批') {
+              if(current.contractStateName=='草稿'||current.contractStateName=='待审批'||current.contractStateName=='被拒绝') {
                 return total + Number(current.taxPrice)
               } else {
                 return  total + 0
