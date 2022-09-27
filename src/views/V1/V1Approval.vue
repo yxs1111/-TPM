@@ -69,7 +69,7 @@ export default {
               signP = 1
             } else if (element.costType === 'New User' && signN === 0) {
               this.routerList.push({
-                name: '新客',
+                name: 'NU',
                 path: '/costManagement/V1/V1Approval/V1discountNUApproval',
                 minePackageName: 'New User',
               })
@@ -146,7 +146,7 @@ export default {
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: '新客-FG win2',
+              name: 'NU-FG win2',
               path: '/costManagement/V1/V1Approval/V1FreeGoodsWin2Approval',
               minePackageName: 'Free Goods-Win2',
             },
