@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-09-06 11:03:34
+ * @LastEditTime: 2022-09-27 10:04:45
 -->
 <template>
   <div class="ContentDetail">
@@ -58,7 +58,7 @@
       <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
           <div class="topInfoWrap">
-            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}</span>
+            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
           </div>
         </template>
@@ -199,6 +199,7 @@ export default {
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       isEmpty: null,
       customerContract:'',//客户合同
+      contractList:['草稿', '待审批', '被拒绝', '通过', '过期', '终止']
     }
   },
 
@@ -285,6 +286,7 @@ export default {
             }
           } else {
             item.isEmpty = 0
+            item.sortCode=this.contractList.findIndex(statusItem=>statusItem==item.contractStateName)
             item.variable.forEach((variableItem) => {
               variableItem.dcId = item.id
               variableItem.dealerName = item.distributorName
@@ -307,6 +309,8 @@ export default {
         let FixedTotalTableData = []
         let FixedTableData = []
         console.log(distributorList);
+        //经销商条款明细展示排序 ：草稿→被拒绝→待审批→通过→过期→终止
+        distributorList.sort((item1,item2)=>item1.sortCode-item2.sortCode)
         //添加variable-->获得表格variable部分数据（维度：行，行中数据保留客户和经销商）
         for (let index = 0; index < customerVariableList.length; index++) {
           const customerVariableObj = customerVariableList[index]
@@ -391,7 +395,8 @@ export default {
                         ? null
                         : Number(variableItem.payType), //支付方式
                     isEditor: 0,
-                    isException:variableItem.costRatio!=variableObj.customerInfo.pointCount?1:0
+                    isException:variableItem.costRatio!=variableObj.customerInfo.pointCount?1:0,
+                    contractStateName: item.contractStateName,
                   })
                 }
               })
@@ -417,6 +422,7 @@ export default {
                     ? null
                     : Number(distVariableObj.payType), //支付方式
                 isEditor: 0,
+                contractStateName: item.contractStateName,
               })
             }
             //设置 variable 汇总行
@@ -434,6 +440,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distVariableObj.dealerName,
@@ -449,6 +456,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total
@@ -545,6 +553,7 @@ export default {
                         ? null
                         : Number(fixedItem.payType), //支付方式
                     isEditor: 0,
+                    contractStateName: item.contractStateName,
                   })
                 }
               })
@@ -568,6 +577,7 @@ export default {
                 payType:
                   (distFixObj.payType == ''||distFixObj.payType == null) ? null : Number(distFixObj.payType), //支付方式
                 isEditor: 0,
+                contractStateName: item.contractStateName,
               })
             }
             FixedTotalObj.dealerList.push({
@@ -584,6 +594,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distFixObj.dealerName,
@@ -599,6 +610,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total

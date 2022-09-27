@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-09-27 08:50:07
+ * @LastEditTime: 2022-09-27 09:49:26
 -->
 <template>
   <div class="ContentDetail">
@@ -273,6 +273,7 @@ export default {
       isOtherEditor: 0, //是否有可编辑
       isEditor: 0,
       customerContract:'',//客户合同
+      contractList:['草稿', '被拒绝','待审批',  '通过', '过期', '终止']
     }
   },
 
@@ -375,6 +376,7 @@ export default {
             }
           } else {
             item.isEmpty = 0
+            item.sortCode=this.contractList.findIndex(statusItem=>statusItem==item.contractStateName)
             item.variable.forEach((variableItem) => {
               variableItem.dcId = item.id
               variableItem.dealerName = item.distributorName
@@ -391,6 +393,7 @@ export default {
             })
           }
         })
+        //补录不进行校验：客户合同下有“通过”或者“过期” 
         let index = distributorList.findIndex((item) => {
           return item.contractState == '3'||item.contractState == '5'
         })
@@ -407,6 +410,8 @@ export default {
         let FixedTotalTableData = []
         let FixedTableData = []
         console.log(distributorList)
+        //经销商条款明细展示排序 ：草稿→被拒绝→待审批→通过→过期→终止
+        distributorList.sort((item1,item2)=>item1.sortCode-item2.sortCode)
         //添加variable-->获得表格variable部分数据（维度：行，行中数据保留客户和经销商）
         for (let index = 0; index < customerVariableList.length; index++) {
           const customerVariableObj = customerVariableList[index]
