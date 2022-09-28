@@ -277,19 +277,20 @@ export default {
       this.uploadFile = event.target.files
       const formData = new FormData()
       formData.append('files', this.uploadFile)
-      console.log(this.uploadFile, this.arr1)
+      console.log(this.uploadFile)
     },
     // 删除已选择的文件
     deleteLi(index) {
-      console.log(this.uploadFile[index])
+      // console.log(this.uploadFile[index])
       // this.uploadFile.splice(index, 1)
+      this.uploadFileName.splice(index, 1)
       // delete this.uploadFile[]
       // for (let i = 0; i < this.uploadFile.length; i++) {
       //   this.arr1.push(this.uploadFile[i])
+      //   this.uploadFileName = this.arr1[i].name
       // }
-      // this.arr1.splice(index, 1)
+      // // this.arr1.splice(index, 1)
       // this.uploadFile = this.arr1
-      // this.uploadFileName = this.arr1
       // console.log(this.uploadFile, this.uploadFileName)
     },
     // 确认导入
