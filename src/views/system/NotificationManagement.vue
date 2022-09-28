@@ -21,17 +21,12 @@
             <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
           </el-select>
         </div>
-<!--        <div class="Selectli">-->
-<!--          <span class="SelectliTitle">修改时间</span>-->
-<!--          <el-date-picker v-model="filterObj.invokeDateSting" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" placeholder="选择日期">-->
-<!--          </el-date-picker>-->
-<!--        </div>-->
         <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
 <!--        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>-->
-        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
-          <img src="@/assets/images/export.png" alt="" />
-          <span class="text">导出</span>
-        </div>
+<!--        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">-->
+<!--          <img src="@/assets/images/export.png" alt="" />-->
+<!--          <span class="text">导出</span>-->
+<!--        </div>-->
       </div>
     </div>
     <div class='SelectBar'>
@@ -41,10 +36,11 @@
       style="width: 100%">
       <el-table-column align="center" prop="interfaceName" label="操作"> </el-table-column>
       <el-table-column align="center" prop="id" label="编码"> </el-table-column>
-      <el-table-column align="center" prop="invokeDate" label="通知类型">
-<!--         {{ row.createDate ? row.createDate.replace("T"," ") : '' }}-->
+      <el-table-column v-slot={row} align="center" prop="type" label="通知类型">
+         {{ row.type == 1 ? '定时通知' : '即时通知' }}
       </el-table-column>
-      <el-table-column align="center" prop="success" label="接受角色/接受邮箱"> </el-table-column>
+      <el-table-column align="center" prop="theme" label="主题"> </el-table-column>
+      <el-table-column align="center" prop="sendUser" label="接受角色/接受邮箱"> </el-table-column>
       <el-table-column v-slot={row} align="center" prop="sendTime" label="发送时间">
         {{ row.sendTime ? row.sendTime.replace("T"," ") : '' }}
       </el-table-column>
@@ -69,28 +65,20 @@
             <div class="Selectli">
               <span class="SelectliTitle">接收人:</span>
               <el-cascader
-                v-model="value"
+                v-model="filterObj.toUserList"
                 :options="sendUserList"
-                :props="{
-                  expandTrigger: 'hover',
-                  value: 'code',
-                  label: 'email',
-                  children: 'userList'
-                 }"
-                @change="handleChange"></el-cascader>
+                :props="props"
+                @change="handleChange"
+                :show-all-levels="false"></el-cascader>
             </div>
             <div class="Selectli">
               <span class="SelectliTitle">抄送人:</span>
               <el-cascader
-                v-model="value"
+                v-model="filterObj.ccUserList"
                 :options="sendUserList"
-                :props="{
-                  expandTrigger: 'hover',
-                  value: 'code',
-                  label: 'email',
-                  children: 'userList'
-                 }"
-                @change="handleChange"></el-cascader>
+                :props="props"
+                @change="handleChange2"
+                :show-all-levels="false"></el-cascader>
             </div>
             <div class="Selectli">
               <span class="SelectliTitle">主题:</span>
@@ -122,21 +110,25 @@
               id="fileElem"
               ref="filElem"
               type="file"
+              multiple
               style="display: none"
               @change="parsingExcel($event)"
             />
             <div v-if="uploadFileName != ''" class="fileName">
-              <img
-                src="@/assets/upview_fileicon.png"
-                alt=""
-                class="upview_fileicon"
-              />
-              <span>{{ uploadFileName }}</span>
+              <div v-for="(item, index) in uploadFileName">
+                <img
+                  src="@/assets/upview_fileicon.png"
+                  alt=""
+                  class="upview_fileicon"
+                />
+                <span>{{ item }}</span>
+                <span style='color: #4192D3; margin-left: 15px; cursor: pointer' @click='deleteLi(index)'>删除</span>
+              </div>
             </div>
           </div>
           <div style='display: flex; align-items: center; justify-content: center; margin-top: 18px;'>
             <el-button type="primary" class="TpmButtonBG" @click="confirmImport">确定</el-button>
-            <el-button type="primary" plain class="TpmButtonBG2" @click="parsingExcelBtn">取消</el-button>
+            <el-button type="primary" plain class="TpmButtonBG2" @click="cancleWriteEmail">取消</el-button>
           </div>
         </div>
       </div>
@@ -157,6 +149,7 @@ import {
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon'
+import item from '@/layout/components/Sidebar/Item'
 
 export default {
   name: 'NotificationManagement',
@@ -165,14 +158,15 @@ export default {
   data() {
     return {
       value: [],
-      options: [{
-        value: 'code',
-        label: 'name',
-        children: [{
-          value: 'id',
-          label: 'email',
-        }]
-      }],
+      props: {
+        multiple: true,
+        expandTrigger: 'hover',
+        value: 'email',
+        label: 'email',
+        children: 'userList',
+        checkStrictly: true,
+        emitPath: false
+      },
       total: 0,
       pageSize: 100,
       pageNum: 1,
@@ -183,12 +177,15 @@ export default {
         sendUser: '',
         State: '',
         theme: '',
-        editorConfig: ''
+        editorConfig: '',
+        toUserList: [],
+        ccUserList: [],
       },
       addVisible: false, // 导入弹窗
       permissions: getDefaultPermissions(),
       InterfaceList: [],
-      uploadFileName: '',
+      uploadFileName: [],
+      uploadFile: [],
       sendUserList: [],
       tableData: [],
       dialogVisible: false,
@@ -198,6 +195,7 @@ export default {
       toolbarConfig: { },
       editorConfig: { placeholder: '请输入内容...' },
       mode: 'default', // or 'simple'
+      arr1: []
     }
   },
   directives: { elDragDialog, permission },
@@ -259,63 +257,82 @@ export default {
       API.recipientSelect().then((res) => {
         if (res.code === 1000) {
           this.sendUserList = res.data
+          this.ccUserList = res.data
           // console.log(this.sendUserList)
           this.sendUserList.forEach(item => {
             item.email = item.name
           })
-          console.log(this.sendUserList)
+          this.ccUserList.forEach(item => {
+            item.email = item.name
+          })
+          // console.log(this.sendUserList)
         }
       })
     },
     // 导入
     parsingExcel(event) {
-      this.uploadFileName = event.target.files[0].name
-      this.uploadFile = event.target.files[0]
+      for (let i = 0; i < event.target.files.length; i++) {
+        this.uploadFileName.push(event.target.files[i].name)
+      }
+      this.uploadFile = event.target.files
       const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelCode', this.filterObj.channelCode)
-      API.importNormal(formData).then((response) => {
-        //清除input的value ,上传一样的
-        event.srcElement.value = '' // 置空
-        if (response.code === 1000) {
-          // if (!Array.isArray(response.data) || response.data.length === 0) {
-          //   this.$message.info('导入数据为空，请检查模板')
-          // } else {
-            this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data
-            this.isCheck = response.data.every(
-              (item) => item.judgmentType === 'Pass'
-            )
-          // }
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
-      })
+      formData.append('files', this.uploadFile)
+      console.log(this.uploadFile, this.arr1)
+    },
+    // 删除已选择的文件
+    deleteLi(index) {
+      console.log(this.uploadFile[index])
+      // this.uploadFile.splice(index, 1)
+      // delete this.uploadFile[]
+      // for (let i = 0; i < this.uploadFile.length; i++) {
+      //   this.arr1.push(this.uploadFile[i])
+      // }
+      // this.arr1.splice(index, 1)
+      // this.uploadFile = this.arr1
+      // this.uploadFileName = this.arr1
+      // console.log(this.uploadFile, this.uploadFileName)
     },
     // 确认导入
     confirmImport() {
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      formData.append('toUserList', this.filterObj.toUserList)
-      formData.append('theme', this.filterObj.theme)
-      formData.append('content', this.filterObj.editorConfig)
-      API.importNormal(formData).then((response) => {
-        if (res.code === 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
+      if (this.filterObj.theme !== '') {
+        const formData = new FormData()
+        for (let i = 0; i < this.uploadFile.length; i++) {
+          formData.append('files', this.uploadFile[i])
         }
-      })
+        formData.append('toUserList', this.filterObj.toUserList)
+        formData.append('ccUserList', this.filterObj.ccUserList)
+        formData.append('theme', this.filterObj.theme)
+        formData.append('content', this.html)
+        API.importNormal(formData).then((res) => {
+          if (res.code === 1000) {
+            this.getTableData()
+          } else {
+            this.$message.info(this.messageMap.saveError)
+          }
+        })
+      } else {
+        alert('必须填写主题内容')
+      }
     },
-    handleChange (value) {
-      console.log(value);
+    handleChange(value) {
+      this.filterObj.toUserList = value
+      console.log(this.filterObj.toUserList)
+    },
+    handleChange2(value) {
+      this.filterObj.ccUserList = value
+      console.log(this.filterObj.ccUserList)
     },
     // 写邮件
     writeEmail() {
       this.addVisible = true
+    },
+    // 取消写邮件
+    cancleWriteEmail() {
+      this.addVisible = false
+      this.filterObj.toUserList = ''
+      this.filterObj.ccUserList = ''
+      this.filterObj.theme = ''
+      this.html = ''
     },
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
