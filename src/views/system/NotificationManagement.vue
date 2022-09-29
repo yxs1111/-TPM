@@ -75,32 +75,30 @@
     <el-dialog width="55%" title="写邮件" :visible="addVisible" class="my-el-dialog" @close="closeDialog">
       <div class="app-container">
         <div class="SelectBarWrap">
-          <div class="SelectBar" @keyup.enter="search">
-            <div class="Selectli">
+          <div class="SelectBar2" @keyup.enter="search">
+            <div class="Selectli ejectInput">
               <span class="SelectliTitle">接收人:</span>
               <el-cascader
                 v-model="filterObj.toUserList"
                 :options="options"
                 :props="props"
                 clearable
-                collapse-tags
                 filterable
                 @change="handleChange"
               />
             </div>
-            <div class="Selectli">
+            <div class="Selectli ejectInput">
               <span class="SelectliTitle">抄送人:</span>
               <el-cascader
                 v-model="filterObj.ccUserList"
                 :options="options"
                 :props="props"
                 clearable
-                collapse-tags
                 filterable
                 @change="handleChange2"
               />
             </div>
-            <div class="Selectli">
+            <div class="Selectli ejectInput">
               <span class="SelectliTitle">主题:</span>
               <el-input v-model="filterObj.theme" filterable clearable placeholder="请输入" />
             </div>
@@ -128,7 +126,7 @@
               id="fileElem"
               ref="filElem"
               type="file"
-              multiple
+              multiple='multiple'
               style="display: none"
               @change="parsingExcel($event)"
             >
@@ -212,12 +210,22 @@ export default {
         sendUser: '',
         State: '',
         theme: '',
-        editorConfig: '',
+        editorConfig: {
+          placeholder: '请输入内容...',
+          MENU_CONF: {
+            // 配置上传图片
+            uploadImage: {
+              customUpload: this.uploadImg
+            }
+            // 继续其他菜单配置...
+          }
+        },
         toUserList: [],
         ccUserList: [],
         toUser: [],
         ccUser: []
       },
+      changeFile: [],
       addVisible: false, // 导入弹窗
       permissions: getDefaultPermissions(),
       InterfaceList: [],
@@ -232,7 +240,39 @@ export default {
       editor: null,
       html: '<p>hello</p>',
       toolbarConfig: { },
-      editorConfig: { placeholder: '请输入内容...' },
+      editorConfig: {
+        placeholder: '请输入内容...',
+        MENU_CONF: {
+          // 配置上传图片
+          uploadImage: {
+            server: '/api/upload-image',
+            fieldName: 'custom-field-name',
+            // 继续写其他配置...
+            // 【注意】不需要修改的不用写，wangEditor 会去 merge 当前其他配置
+            // 上传之前触发
+            onBeforeUpload(file) {
+              console.log(file)
+              // file 选中的文件，格式如 { key: file }
+              return file
+            },
+            // 单个文件上传失败
+            onFailed(file, res) {
+              console.log(`${file.name} 上传失败`, res)
+            },
+            // 上传错误，或者触发 timeout 超时
+            onError(file, err, res) {
+              console.log(`${file.name} 上传出错`, err, res)
+            },
+            customInsert( result, insertFn) {
+              // result是返回的json格式
+              // 从 result 中找到 url alt href ，然后插图图片
+              console.log(result.data)
+              insertFn(result.data)
+            }
+          }
+          // 继续其他菜单配置...
+        }
+      },
       mode: 'default', // or 'simple'
       arr1: []
     }
@@ -246,7 +286,7 @@ export default {
     }
     // 模拟 ajax 请求，异步渲染编辑器
     setTimeout(() => {
-      this.html = '<p>IDear,User,</p>'
+      this.html = '<p>IDear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
     }, 1500)
     this.getTableData()
     this.getInterfaceList()
@@ -314,22 +354,30 @@ export default {
     },
     // 导入
     parsingExcel(event) {
-      for (let i = 0; i < event.target.files.length; i++) {
-        this.uploadFileName.push(event.target.files[i].name)
-      }
       this.uploadFile = event.target.files
+      let tempFileList=[]
       this.uploadFile.forEach(item => {
-        this.fileArr.push(item)
+        tempFileList.push(item)
       })
-      const formData = new FormData()
-      formData.append('files', this.uploadFile)
-      console.log(this.uploadFile)
+      tempFileList.forEach(item => {
+        // console.log(tempFileList, item.name)
+        const kk = this.uploadFileName.includes(item.name)
+        // console.log(kk)
+        if (kk == false) {
+          this.fileArr.push(item)
+          this.uploadFileName.push(item.name)
+        }
+      })
+      console.log(this.uploadFileName, 'tempFileList=>', tempFileList, 'fileArr=>', this.fileArr)
+      // console.log('导入fileArr=》', this.fileArr, '导入uploadFile=》', this.uploadFile)
+      event.srcElement.value = '' // 置空
+      // event.target.files = ''
     },
     // 删除已选择的文件
     deleteLi(index) {
       this.uploadFileName.splice(index, 1)
       this.fileArr.splice(index, 1)
-      console.log(this.fileArr)
+      console.log('删除=》', this.fileArr,)
     },
     // 确认导入
     confirmImport() {
@@ -349,10 +397,13 @@ export default {
             this.$message.info(this.messageMap.saveError)
           }
         })
+        alert('发送成功')
+        this.cancleWriteEmail()
       } else {
         alert('必须填写主题内容')
       }
     },
+    // 接收人下拉框改变
     handleChange(value) {
       var toUser = []
       value.forEach(item => {
@@ -366,6 +417,7 @@ export default {
       value = this.filterObj.toUser
       this.filterObj.toUser = value
     },
+    // 抄送人下拉框改变
     handleChange2(value) {
       var ccUser = []
       value.forEach(item => {
@@ -379,7 +431,7 @@ export default {
       value = this.filterObj.ccUser
       this.filterObj.ccUser = value
     },
-    // 写邮件
+    // 写邮件弹窗展开
     writeEmail() {
       this.addVisible = true
     },
@@ -389,7 +441,22 @@ export default {
       this.filterObj.toUserList = ''
       this.filterObj.ccUserList = ''
       this.filterObj.theme = ''
-      this.html = ''
+      this.html = '<p>IDear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
+      this.fileArr = []
+      this.uploadFileName = []
+    },
+    uploadImg(file, insertFn) {
+      const imgData = new FormData()
+      imgData.append('file', file)
+      console.log(file, insertFn)
+      // 调用上传图片接口，上传图片  我这里testUpImg是测试接口
+      API.importNormal(imgData).then(response => {
+        if (response.data.code === 1000) {
+          // 插入后端返回的url
+          insertFn(response.data.data.url)
+        } else {
+        }
+      })
     },
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
@@ -436,8 +503,70 @@ export default {
   }
 }
 </script>
-
+<style>
+.ejectInput .el-input--suffix{
+  width: 900px !important;
+}
+.el-cascader .el-cascader__tags span{
+  width: 120px;
+}
+.el-cascader__tags {
+  display: inline-flex;
+  /*flex-wrap: nowrap;*/
+  /*margin-right: 60px;*/
+}
+</style>
 <style lang="scss" scoped>
+
+.SelectBar2 {
+  align-items: center;
+  flex-wrap: wrap;
+  .Selectli {
+    margin-right: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    align-items: center;
+    .SelectliTitle {
+      // width: 70px;
+      font-size: 14px;
+      font-family: Source Han Sans CN Light;
+      font-weight: 400;
+      color: #4d4d4d;
+      margin-right: 10px;
+      white-space: nowrap;
+      width: 85px;
+      text-align: right;
+    }
+    .el-input__inner {
+      background-color: #f0f2fa;
+    }
+    .el-range-input {
+      background-color: #f0f2fa;
+    }
+    .el-select__tags {
+      max-width: 220px !important;
+    }
+    .el-icon-arrow-up:before {
+      content: '\e78f';
+    }
+    // .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    //   width: 230px !important;
+    // }
+    // .el-input--prefix .el-input__inner {
+    //   padding-left: 10px;
+    // }
+    // .el-input__prefix {
+    //   right: -150px;
+    // }
+    input::-webkit-input-placeholder,
+    textarea::-webkit-input-placeholder {
+      color: #888;
+      font-size: 14px;
+    }
+  }
+}
 .TpmButtonBG2{
   min-width: 84px;
   height: 38px;
