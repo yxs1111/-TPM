@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-09-21 11:55:43
+ * @LastEditTime: 2022-09-29 13:22:04
 -->
 <template>
   <div class="dashboard-container">
@@ -49,7 +49,7 @@
                     <div class="PPBar" v-if="item.isPrice">
                       <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}-{{item.channelName}}</div>
                       <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
-                        <div class="passIcon" v-if="item.taskNumber>TaskIndex"></div>
+                        <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
                         <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
                           <div slot="content" v-html="getTip(item)"></div>
                           <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
@@ -67,7 +67,7 @@
                        <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}-{{item.channelName}}</div>
                       <div class="NuPoint">
                         <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
-                          <div class="passIcon" v-if="item.taskNumber>TaskIndex"></div>
+                          <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
                           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
                             <div slot="content" v-html="getTip(item)"></div>
                             <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
@@ -338,14 +338,21 @@ export default {
               if (!cdata[array[index].channelName]) {
                 var arr = []
                 arr.push(array[index])
-                //节点序列号
-                array[index].taskNumber = this.PriceTaskIndexList.findIndex(
-                  (item) => array[index].version.includes(item)
-                )
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
                 if(array[index].isPrice&&array[index].costItemName == 'Free Goods - Tin') {
                   array[index].isPrice=0
+                }
+                if(array[index].isPrice) {
+                  //节点序列号
+                  array[index].taskNumber = this.PriceTaskIndexList.findIndex(
+                    (item) => array[index].version.includes(item)
+                  )
+                } else {
+                  //节点序列号
+                  array[index].taskNumber = this.NoPriceTaskIndexList.findIndex(
+                    (item) => array[index].version.includes(item)
+                  )
                 }
                 array[index].TaskName = this.setTaskName(
                   array[index].minePackageName,
@@ -353,14 +360,21 @@ export default {
                 )
                 cdata[array[index].channelName] = arr
               } else {
-                //节点序列号
-                array[index].taskNumber = this.PriceTaskIndexList.findIndex(
-                  (item) => array[index].version.includes(item)
-                )
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
                 if(array[index].isPrice&&array[index].costItemName == 'Free Goods - Tin') {
                   array[index].isPrice=0
+                }
+                if(array[index].isPrice) {
+                  //节点序列号
+                  array[index].taskNumber = this.PriceTaskIndexList.findIndex(
+                    (item) => array[index].version.includes(item)
+                  )
+                } else {
+                  //节点序列号
+                  array[index].taskNumber = this.NoPriceTaskIndexList.findIndex(
+                    (item) => array[index].version.includes(item)
+                  )
                 }
                 array[index].TaskName = this.setTaskName(
                   array[index].minePackageName,
