@@ -328,6 +328,9 @@ export default {
         name: [
           { required: true, message: '角色名称不能为空', trigger: 'blur' },
         ],
+        code: [
+          { required: true, message: '角色编码不能为空', trigger: 'blur' },
+        ],
       },
       lockedStateOptions: [
         { key: 0, display_name: '未锁定' },
