@@ -1,6 +1,6 @@
 import user from '@/api/system/user'
 import auth from '@/utils/auth'
-import { decrypt } from '@/utils/crypto/crypto-util'
+import { encrypt,decrypt } from '@/utils/crypto/crypto-util'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -76,6 +76,8 @@ const actions = {
   // user login
   login({ commit, dispatch }, userInfo) {
     const { username, password, code, key } = userInfo
+    sessionStorage.setItem("username",username)
+    sessionStorage.setItem("password",password)
     return new Promise((resolve, reject) => {
       user.login({ username: username, password: password, captcha: code, randomId: key }).then(response => {
         const { data } = response
@@ -89,6 +91,25 @@ const actions = {
         console.error(error)
         reject(error)
       })
+    })
+  },
+  loginCPT({ commit, dispatch }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      user
+        .login({ username, password, model:'noCaptcha' })
+        .then((response) => {
+          if (response.code == 1000) {
+            // location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/dashboard?loginInfo=' + JSON.stringify(userInfo)
+            let encryptStr=encrypt(JSON.stringify(userInfo))
+            //encodeURIComponent 对@等特殊字符转义处理 https://uat-cpt.rfc-friso.com/
+            location.href = 'https://uat-cpt.rfc-friso.com/#/dashboard?loginInfo=' + encodeURIComponent(encryptStr)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(error)
+        })
     })
   },
   loginOtherSystem({ commit, dispatch }, userInfo) {

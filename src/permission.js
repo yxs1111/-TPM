@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-02 11:13:37
- * @LastEditTime: 2022-09-08 14:17:01
+ * @LastEditTime: 2022-09-29 14:16:20
  */
 import router from './router'
 import store from './store'
@@ -20,6 +20,9 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start()
   // set page title
   document.title = 'FrieslandCampina iInvest System'
+  if(to.path === '/login') {
+    store.dispatch('user/resetToken')
+  }
   //门户登录
   if(to.query.loginInfo&&!sessionStorage.getItem('isFirstEntrySystem')) {
     let {username,password}=JSON.parse(decrypt(to.query.loginInfo))
