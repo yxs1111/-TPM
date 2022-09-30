@@ -1,7 +1,7 @@
 <!--
  * @Description: V1POSM定制
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-05 17:21:47
+ * @LastEditTime: 2022-09-30 13:36:38
 -->
 <template>
   <div class="MainContent">
@@ -10,130 +10,49 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-select
-            v-model="filterObj.yearAndMonth"
-            filterable
-            clearable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in monthList"
-              :key="item.id"
-              :label="item.activityMonth"
-              :value="item.activityMonth"
-            />
+          <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
           </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select
-            v-model="filterObj.channelName"
-            clearable
-            filterable
-            placeholder="请选择"
-            @change="getCustomerList"
-          >
-            <el-option
-              v-for="item in channelArr"
-              :key="item.channelCsName"
-              :label="item.channelCsName"
-              :value="item.channelCsName"
-            />
+          <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="item in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select
-            v-model="filterObj.customerName"
-            clearable
-            filterable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in customerArr"
-              :key="index"
-              :label="item.customerCsName"
-              :value="item.customerCsName"
-            />
+          <el-select v-model="filterObj.customerName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
       </div>
       <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="search"
-          >查询</el-button
-        >
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="" />
           <span class="text">导出</span>
         </div>
       </div>
     </div>
-    <el-table
-      :data="tableData"
-      :max-height="maxheight"
-      border
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      style="width: 100%"
-    >
-      <el-table-column
-        align="center"
-        width="520"
-        prop="cpId"
-        label="CPID"
-        fixed
-      >
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed>
       </el-table-column>
-      <el-table-column
-        width="120"
-        align="center"
-        prop="yearAndMonth"
-        label="活动月"
-      >
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
       </el-table-column>
-      <el-table-column
-        width="120"
-        align="center"
-        prop="costType"
-        label="费用类型"
-      >
+      <el-table-column width="120" align="center" prop="costType" label="费用类型">
       </el-table-column>
-      <el-table-column
-        width="190"
-        align="center"
-        prop="minePackage"
-        label="Mine Package"
-      >
+      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package">
       </el-table-column>
-      <el-table-column
-        width="240"
-        align="center"
-        prop="costItem"
-        label="费用科目"
-      >
+      <el-table-column width="240" align="center" prop="costItem" label="费用科目">
       </el-table-column>
-      <el-table-column
-        width="120"
-        align="center"
-        prop="channelName"
-        label="渠道"
-      >
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
       </el-table-column>
-      <el-table-column
-        width="220"
-        align="center"
-        prop="customerName"
-        label="客户系统名称"
-      >
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称">
       </el-table-column>
       <el-table-column width="220" align="center" prop="brandName" label="品牌">
       </el-table-column>
-      <el-table-column
-        width="220"
-        align="right"
-        prop="voneCost"
-        label="V1计划费用(RMB)"
-      >
+      <el-table-column width="220" align="right" prop="voneCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
@@ -143,36 +62,19 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.voneCost }}
+            {{ formatNum(scope.row.voneCost) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        width="220"
-        align="center"
-        prop="costAscriptionDept"
-        label="费用归属部门"
-      >
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门">
       </el-table-column>
-      <el-table-column
-        width="220"
-        align="center"
-        prop="costWriteoffMethod"
-        label="费用核销方式"
-      >
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式">
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[100, 200, 500, 1000]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
@@ -185,7 +87,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
-  FormateThousandNum,
+  formatThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/POSM-custom'
@@ -282,8 +184,8 @@ export default {
         })
     },
     //千分位分隔符+两位小数
-    FormatNum(num) {
-      return FormateThousandNum(num)
+    formatNum(num) {
+      return formatThousandNum(num)
     },
     search() {
       this.pageNum = 1

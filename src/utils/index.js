@@ -550,7 +550,7 @@ export const dynamicColumnCost = [
   { title: 'Exception3占比', value: 'exceptionThreeRange' }
 ]
 
-export function FormateThousandNum(num) {
+export function formatThousandNum(num) {
   if (num === null || num === 'null' || num === '') {
     return ''
   } else {

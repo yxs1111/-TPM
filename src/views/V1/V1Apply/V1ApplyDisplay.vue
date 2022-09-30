@@ -5,116 +5,45 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-select
-            v-model="filterObj.yearAndMonth"
-            filterable
-            clearable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in monthList"
-              :key="index"
-              :label="item.activityMonth"
-              :value="item.activityMonth"
-            />
+          <el-select v-model="filterObj.yearAndMonth" filterable clearable placeholder="请选择">
+            <el-option v-for="(item, index) in monthList" :key="index" :label="item.activityMonth" :value="item.activityMonth" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
-          <el-select
-            v-model="filterObj.channelCode"
-            clearable
-            filterable
-            placeholder="请选择"
-            @change="getCustomerList"
-          >
-            <el-option
-              v-for="(item, index) in channelArr"
-              :key="index"
-              :label="item.channelEsName"
-              :value="item.channelCode"
-            />
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <!-- <el-date-picker v-model="filterObj.custom" type="month" placeholder="请选择" /> -->
-          <el-select
-            v-model="filterObj.customerCode"
-            clearable
-            filterable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in customerArr"
-              :key="index"
-              :label="item.customerCsName"
-              :value="item.customerCode"
-            />
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select
-            v-model="filterObj.distributorCode"
-            clearable
-            filterable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in distributorArr"
-              :key="index"
-              :label="item.distributorName"
-              :value="item.distributorCode"
-            />
+          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">大区:</span>
-          <el-select
-            v-model="filterObj.zoneCode"
-            clearable
-            filterable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in largeAreaDialogList"
-              :key="index"
-              :label="item.name"
-              :value="item.code"
-            />
+          <el-select v-model="filterObj.zoneCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select
-            v-model="filterObj.regionCode"
-            clearable
-            filterable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in RegionList"
-              :key="index"
-              :label="item.name"
-              :value="item.nameAbridge"
-            />
+          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Display item:</span>
-          <el-select
-            v-model="filterObj.displayItem"
-            clearable
-            filterable
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, index) in displayItemList"
-              :key="index"
-              :label="item.item"
-              :value="item.item"
-            />
+          <el-select v-model="filterObj.displayItem" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in displayItemList" :key="index" :label="item.item" :value="item.item" />
           </el-select>
         </div>
         <div class="OpertionBar">
@@ -122,9 +51,7 @@
             <img src="../../../assets/images/import.png" alt="" />
             <span class="text">获取smartplan数据</span>
           </div>
-          <el-button type="primary" class="TpmButtonBG" @click="getTableData()"
-            >查询</el-button
-          >
+          <el-button type="primary" class="TpmButtonBG" @click="getTableData()">查询</el-button>
           <div class="TpmButtonBG" @click="exportExcelInfo(filterObj)">
             <img src="../../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
@@ -137,88 +64,19 @@
       </div>
     </div>
     <!-- 列表 -->
-    <el-table
-      :data="tableData"
-      border
-      stripe
-      :max-height="maxheight"
-      :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName"
-      style="width: 100%"
-    >
-      <el-table-column
-        width="420"
-        align="center"
-        prop="cpId"
-        label="CPID"
-        fixed
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="yearAndMonth"
-        label="活动月"
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="costTypeName"
-        label="费用类型"
-      />
-      <el-table-column
-        width="150"
-        align="center"
-        prop="minePackageName"
-        label="Mine Package"
-      />
-      <el-table-column
-        width="260"
-        align="center"
-        prop="costItemName"
-        label="费用科目"
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="channelName"
-        label="渠道"
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="customerName"
-        label="客户系统名称"
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="brandName"
-        label="品牌"
-      />
-      <el-table-column
-        width="400"
-        align="center"
-        prop="distributorName"
-        label="经销商"
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="zoneName"
-        label="大区"
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="regionName"
-        label="区域"
-      />
-      <el-table-column
-        width="280"
-        align="center"
-        prop="displayItem"
-        label="Display Item"
-      >
+    <el-table :data="tableData" border stripe :max-height="maxheight" :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
+      <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
+      <el-table-column width="260" align="center" prop="costItemName" label="费用科目" />
+      <el-table-column width="120" align="center" prop="channelName" label="渠道" />
+      <el-table-column width="120" align="center" prop="customerName" label="客户系统名称" />
+      <el-table-column width="120" align="center" prop="brandName" label="品牌" />
+      <el-table-column width="400" align="center" prop="distributorName" label="经销商" />
+      <el-table-column width="120" align="center" prop="zoneName" label="大区" />
+      <el-table-column width="120" align="center" prop="regionName" label="区域" />
+      <el-table-column width="280" align="center" prop="displayItem" label="Display Item">
         <template v-slot:header>
           <div>
             Display Item
@@ -227,12 +85,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        width="280"
-        align="center"
-        prop="planCost"
-        label="V1计划费用(RMB)"
-      >
+      <el-table-column width="280" align="center" prop="planCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划费用(RMB)
@@ -240,31 +93,19 @@
             <span class="subTitle">KA+Brand+region+经销商+item</span>
           </div>
         </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.planCost) }}
+          </div>
+        </template>
       </el-table-column>
-      <el-table-column
-        width="120"
-        align="center"
-        prop="dept"
-        label="费用归属部门"
-      />
-      <el-table-column
-        width="120"
-        align="center"
-        prop="cancelCost"
-        label="费用核销方式"
-      />
+      <el-table-column width="120" align="center" prop="dept" label="费用归属部门" />
+      <el-table-column width="120" align="center" prop="cancelCost" label="费用核销方式" />
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination
-        :current-page="pageNum"
-        :page-sizes="[100, 200, 500, 1000]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
@@ -272,7 +113,11 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { FormateThousandNum, getHeightHaveTab,getDefaultPermissions, } from '@/utils'
+import {
+  formatThousandNum,
+  getHeightHaveTab,
+  getDefaultPermissions,
+} from '@/utils'
 import API from '@/api/V1/v1.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -364,8 +209,8 @@ export default {
       })
     },
     // 格式化--千位分隔符、两位小数
-    FormateNum(num) {
-      return FormateThousandNum(num)
+    formatNum(num) {
+      return formatThousandNum(num)
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {

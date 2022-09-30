@@ -593,7 +593,7 @@ import API from '@/api/ContractEntry/customer'
 import {
   getDefaultPermissions,
   getContractEntry,
-  FormateThousandNum,
+  formatThousandNum,
   contractList,
   downloadFile,
   getCurrentYearRange,
@@ -1874,7 +1874,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     pickerOptionsSystemDate(row) {
       return pickerOptionsSystemDate(row)

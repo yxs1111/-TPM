@@ -327,7 +327,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
-  FormateThousandNum,
+  formatThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/POSM'
@@ -503,7 +503,7 @@ export default {
     },
     //千分位分隔符+两位小数
     FormatNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     search() {
       this.pageNum = 1

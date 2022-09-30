@@ -70,7 +70,7 @@ import {
   getTextMap,
   getHeightHaveTab,
   messageObj,
-  FormateThousandNum
+  formatThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/v1.js'
@@ -216,7 +216,7 @@ export default {
         .catch()
     },
     getPlanCost(num) {
-       return FormateThousandNum(num)
+       return formatThousandNum(num)
     },
     search() {
       this.getTableData()
