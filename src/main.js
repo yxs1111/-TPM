@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-12-08 19:27:05
- * @LastEditTime: 2021-12-23 15:40:00
+ * @LastEditTime: 2022-09-30 15:45:36
  */
 import Vue from 'vue'
 
@@ -40,7 +40,7 @@ import VXETablePluginElement from 'vxe-table-plugin-element'
 import 'vxe-table-plugin-element/dist/style.css'
 VXETable.use(VXETablePluginElement)
 Vue.use(VXETable)
-
+Vue.use(VWave)
 // 设置所有Dialog，在点击空白处时不关闭
 ElementUI.Dialog.props.closeOnClickModal = false
 // set ElementUI lang to EN
