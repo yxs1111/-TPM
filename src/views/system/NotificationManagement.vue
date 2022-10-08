@@ -286,7 +286,7 @@ export default {
     }
     // 模拟 ajax 请求，异步渲染编辑器
     setTimeout(() => {
-      this.html = '<p>IDear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
+      this.html = '<p>Dear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
     }, 1500)
     this.getTableData()
     this.getInterfaceList()
@@ -441,7 +441,7 @@ export default {
       this.filterObj.toUserList = ''
       this.filterObj.ccUserList = ''
       this.filterObj.theme = ''
-      this.html = '<p>IDear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
+      this.html = '<p>Dear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
       this.fileArr = []
       this.uploadFileName = []
     },
