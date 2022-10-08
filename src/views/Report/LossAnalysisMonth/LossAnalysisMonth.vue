@@ -190,7 +190,7 @@ import {
   getDefaultPermissions,
   getCurrentMonth1,
   ReportBgColorMap,
-  FormateThousandNum,
+  formatThousandNum,
   getYearAndMonthRange,
 } from '@/utils'
 import API from '@/api/masterData/masterData.js'
@@ -610,7 +610,7 @@ export default {
     },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     // 客户
     getCustomerList() {

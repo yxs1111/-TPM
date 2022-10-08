@@ -622,7 +622,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
-  FormateThousandNum
+  formatThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V3/FMC'
@@ -797,7 +797,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-       return FormateThousandNum(num)
+       return formatThousandNum(num)
     },
     formateHundredNumber(num) {
       if(num===null||num==="null") {

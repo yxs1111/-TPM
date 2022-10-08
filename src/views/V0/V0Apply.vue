@@ -265,7 +265,7 @@ import {
   yearAndMonthList,
   VersionList,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
   messageObj,
 } from '@/utils'
 import permission from '@/directive/permission'
@@ -751,7 +751,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }

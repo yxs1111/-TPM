@@ -106,7 +106,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  FormateThousandNum,
+  formatThousandNum,
   getHeight,
   getCurrentMonth,
 } from '@/utils'

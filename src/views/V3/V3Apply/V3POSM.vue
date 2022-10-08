@@ -981,7 +981,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V3/POSM'
@@ -1181,7 +1181,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     search() {
       this.pageNum = 1

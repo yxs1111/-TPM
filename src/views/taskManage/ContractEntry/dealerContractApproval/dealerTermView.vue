@@ -174,7 +174,7 @@ import {
   getTextMap,
   parseTime,
   contractView,
-  FormateThousandNum,
+  formatThousandNum,
   setSplitAssignee,
   CustomerDeductionsAndPayType,
 } from '@/utils'
@@ -1114,7 +1114,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     //弹窗表格样式
     tableRowClassName({ row, rowIndex }) {
