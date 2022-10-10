@@ -166,6 +166,7 @@ import {
 import API from '@/api/masterData/masterData.js'
 import selectAPI from '@/api/selectCommon/selectCommon'
 import item from '@/layout/components/Sidebar/Item'
+import { DomEditor } from '@wangeditor/editor'
 
 export default {
   name: 'NotificationManagement',
@@ -239,7 +240,96 @@ export default {
       maxheight: getHeightSingle(),
       editor: null,
       html: '<p>hello</p>',
-      toolbarConfig: { },
+      toolbarConfig: {
+        /* 工具栏配置 */
+        toolbarKeys: [
+          'headerSelect',
+          'blockquote',
+          '|',
+          'bold',
+          'underline',
+          'italic',
+          {
+            key: 'group-more-style',
+            title: '更多',
+            menuKeys: ['through',
+              'code',
+              'sup',
+              'sub',
+              'clearStyle']
+          },
+          'color',
+          'bgColor',
+          '|',
+          'fontSize',
+          'fontFamily',
+          'lineHeight',
+          '|',
+          'bulletedList',
+          'numberedList',
+          'todo',
+          {
+            iconSvg: '<svg viewBox="0 0 1024 1024"><path d="M768 793.6v102.4H51.2v-102.4h716.8z m204.8-230.4v102.4H51.2v-102.4h921.6z m-204.8-230.4v102.4H51.2v-102.4h716.8zM972.8 102.4v102.4H51.2V102.4h921.6z"></path></svg>',
+            key: 'group-justify',
+            title: '对齐',
+            menuKeys: ['justifyLeft',
+              'justifyRight',
+              'justifyCenter',
+              'justifyJustify']
+          },
+          {
+            iconSvg: '<svg viewBox="0 0 1024 1024"><path d="M0 64h1024v128H0z m384 192h640v128H384z m0 192h640v128H384z m0 192h640v128H384zM0 832h1024v128H0z m0-128V320l256 192z"></path></svg>',
+            key: 'group-indent',
+            title: '缩进',
+            menuKeys: ['indent',
+              'delIndent']
+          },
+          // 菜单组，包含多个菜单
+          // {
+          //   key: 'group-image', // 必填，要以 group 开头
+          //   title: '图片', // 必填
+          //   iconSvg: '<svg></svg>',
+          //   menuKeys: ['uploadImage',
+          //     'insertImage',
+          //     'deleteImage',
+          //     'editImage',
+          //     'viewImageLink']
+          // },
+          // {
+          //   key: 'group-video',
+          //   title: '视频',
+          //   iconSvg: '',
+          //   menuKeys: ['insertVideo',
+          //     'uploadVideo']
+          // },
+          // {
+          //   key: 'group-link',
+          //   title: '链接',
+          //   menuKeys: ['insertLink', 'editLink', 'unLink', 'viewLink']
+          // },
+          '|',
+          'emotion',
+          // 'insertTable',
+          {
+            key: 'group-table',
+            title: '表格',
+            menuKeys: ['insertTable',
+              'deleteTable',
+              'insertTableRow',
+              'deleteTableRow',
+              'insertTableCol',
+              'deleteTableCol',
+              'tableHeader',
+              'tableFullWidth']
+          },
+          'codeBlock',
+          'divider',
+          '|',
+          'undo',
+          'redo',
+          'fullScreen'
+        ]
+      },
       editorConfig: {
         placeholder: '请输入内容...',
         MENU_CONF: {
@@ -263,7 +353,7 @@ export default {
             onError(file, err, res) {
               console.log(`${file.name} 上传出错`, err, res)
             },
-            customInsert( result, insertFn) {
+            customInsert(result, insertFn) {
               // result是返回的json格式
               // 从 result 中找到 url alt href ，然后插图图片
               console.log(result.data)
@@ -278,26 +368,6 @@ export default {
     }
   },
   computed: {},
-  mounted() {
-    window.onresize = () => {
-      return (() => {
-        this.maxheight = getHeightSingle()
-      })()
-    }
-    // 模拟 ajax 请求，异步渲染编辑器
-    setTimeout(() => {
-      this.html = '<p>Dear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
-    }, 1500)
-    this.getTableData()
-    this.getInterfaceList()
-    this.getChannel()
-    // this.getCustomerList()
-  },
-  beforeDestroy() {
-    const editor = this.editor
-    if (editor == null) return
-    editor.destroy() // 组件销毁时，及时销毁编辑器
-  },
   methods: {
     // 获取表格数据
     getTableData() {
@@ -449,11 +519,13 @@ export default {
       const imgData = new FormData()
       imgData.append('file', file)
       console.log(file, insertFn)
+      // alert('上传图片，发送至后台')
       // 调用上传图片接口，上传图片  我这里testUpImg是测试接口
       API.importNormal(imgData).then(response => {
         if (response.data.code === 1000) {
           // 插入后端返回的url
           insertFn(response.data.data.url)
+          alert('图片上传成功!')
         } else {
         }
       })
@@ -500,6 +572,26 @@ export default {
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     }
+  },
+  mounted() {
+    window.onresize = () => {
+      return (() => {
+        this.maxheight = getHeightSingle()
+      })()
+    }
+    // 模拟 ajax 请求，异步渲染编辑器
+    setTimeout(() => {
+      this.html = '<p>Dear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
+    }, 1500)
+    this.getTableData()
+    this.getInterfaceList()
+    this.getChannel()
+    // this.getCustomerList()
+  },
+  beforeDestroy() {
+    const editor = this.editor
+    if (editor == null) return
+    editor.destroy() // 组件销毁时，及时销毁编辑器
   }
 }
 </script>
