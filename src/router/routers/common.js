@@ -32,7 +32,7 @@ export default [
   {
     path: '/',
     component: Layout,
-    redirect: '/portal',
+    redirect: '/dashboard', //portal
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
