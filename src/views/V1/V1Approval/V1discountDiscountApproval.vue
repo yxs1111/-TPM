@@ -236,7 +236,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
   getHeightHaveTab,
   messageObj,
 } from '@/utils'
@@ -281,7 +281,7 @@ export default {
       distributorArr: [],
       localDate: '',
       saveBtn: false,
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       uploadFile: '',
       firstIsPass: false,
@@ -328,7 +328,7 @@ export default {
   methods: {
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     getRegionList() {
       selectAPI
@@ -707,7 +707,7 @@ export default {
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getApprovePageV1({
           pageNum: this.pageNum, // 当前页

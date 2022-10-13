@@ -5,7 +5,7 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">Cost Type:</span>
-          <el-select v-model="filterObj.costType" clearable placeholder="请选择" class="my-el-select">
+          <el-select v-model="filterObj.costType" clearable @change="getMinePackageList" placeholder="请选择" class="my-el-select">
             <el-option v-for="item,index in costTypeList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
@@ -99,7 +99,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="渠道" prop="channelCode">
-            <el-select v-model="ruleForm.channelCode" @change="channelCodeDialog" class="my-el-input" clearable filterable placeholder="请选择">
+            <el-select v-model="ruleForm.channelCode" @change="channelCodeDialog(ruleForm.channelCode)" class="my-el-input" clearable filterable placeholder="请选择">
               <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
             </el-select>
           </el-form-item>
@@ -247,14 +247,14 @@ export default {
     //     // this.ruleForm.minePackageIndex = ''
     //     this.getMinePackageListDialog()
     //   }
-      
+
     // },
     'ruleForm.minePackageIndex'() {
       if (this.ruleForm.minePackageIndex!==''&&this.minePackageListDialog.length) {
         this.ruleForm.minePackage=this.minePackageListDialog[this.ruleForm.minePackageIndex].costType
         this.ruleForm.minePackageCode=this.minePackageListDialog[this.ruleForm.minePackageIndex].costTypeNumber
       }
-      
+
     },
   },
   computed: {},
@@ -358,7 +358,7 @@ export default {
             this.ruleForm.departmentName=res.data.departmentName.split(",")
             this.oldDepartmentName=res.data.departmentName.split(",")
           }
-          
+
         }
       })
     },
@@ -438,9 +438,14 @@ export default {
     getMinePackageIndex(minePackageCode) {
       return this.minePackageListDialog.findIndex(item=>item.costTypeNumber==minePackageCode)
     },
-    channelCodeDialog() {
-      this.ruleForm.zoneName=''
-      this.getDepartment()
+    channelCodeDialog(channelCode) {
+      if(channelCode=='RKA') {
+
+      } else {
+        this.ruleForm.zoneName=''
+        this.getDepartment()
+      }
+
     },
     //提交form
     submitForm(formName) {
@@ -515,6 +520,7 @@ export default {
         minePackage: this.filterObj.minePackage,
         channelName: this.filterObj.channelCode,
         departmentName: this.filterObj.department,
+        state: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, 'Package&部门匹配关系 -' + timestamp + '.xlsx') //自定义Excel文件名

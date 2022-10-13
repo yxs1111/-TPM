@@ -1,7 +1,7 @@
 <!--
  * @Description: V1 申请 FMC
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-28 14:04:31
+ * @LastEditTime: 2022-09-05 11:43:07
 -->
 <template>
   <div class="MainContent">
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="OpertionBar">
-        <div class="TpmButtonBG" @click="getSmartPlan">
+        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']">
           <img src="@/assets/images/huoqu.png" alt="">
           <span class="text">获取Smart Plan数据</span>
         </div>
@@ -231,7 +231,7 @@ import {
   getHeightHaveTab,
   messageObj,
   downloadFile,
-  FormateThousandNum,
+  formatThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/FMC'
@@ -404,7 +404,7 @@ export default {
     },
     //千分位分隔符+两位小数
     FormatNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     search() {
       this.pageNum = 1

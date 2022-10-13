@@ -328,6 +328,9 @@ export default {
         name: [
           { required: true, message: '角色名称不能为空', trigger: 'blur' },
         ],
+        code: [
+          { required: true, message: '角色编码不能为空', trigger: 'blur' },
+        ],
       },
       lockedStateOptions: [
         { key: 0, display_name: '未锁定' },
@@ -946,7 +949,7 @@ export default {
         this.getDefaultRolePermissions(this.roleCode)
       })
     },
-    //获取Mine Package 权限  
+    //获取Mine Package 权限
     getMinePackage() {
       roleApi.getMinePackage().then((res) => {
         let list = res.data.mdCostTypeDTOList

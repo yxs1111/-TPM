@@ -18,7 +18,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerIndex" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="item.customerCode" :label="item.customerCsName" :value="index" />
+            <el-option v-for="(item, index) in customerArr" :key="item.customerCode + index" :label="item.customerCsName" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -255,7 +255,7 @@ import {
   parseTime,
   getTextMap,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
   getHeightHaveTab,
   messageObj,
 } from '@/utils'
@@ -597,8 +597,8 @@ export default {
           yearAndMonth: this.filterObj.yearAndMonth,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
-          distributorCode: this.filterObj.distributorCode,
-          regionCode: this.filterObj.regionCode,
+          distributorName: this.filterObj.distributorCode,
+          regionName: this.filterObj.regionCode,
           dimProduct: this.filterObj.dim_product,
         }).then((res) => {
           this.downloadFile(
@@ -728,7 +728,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }

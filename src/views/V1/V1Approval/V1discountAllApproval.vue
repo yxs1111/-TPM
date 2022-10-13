@@ -66,7 +66,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, parseTime, getTextMap ,FormateThousandNum} from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap ,formatThousandNum} from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/v1.js'
 export default {
@@ -196,7 +196,7 @@ export default {
     },
     //千分位分隔符+两位小数
     getPlanCost(num) {
-       return FormateThousandNum(num)
+       return formatThousandNum(num)
     },
     search() {
       this.pageNum=1

@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-11-15 19:40:28
- * @LastEditTime: 2022-07-08 17:39:00
+ * @LastEditTime: 2022-10-13 14:06:19
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -91,13 +91,13 @@ export default function() {
           component: () => import('@/views/Report/POSDifferenceAnalysis/POSDifferenceAnalysis.vue'),
           meta: { title: '月结POS差异分析报表', icon: 'approve' }
         },
-        // {
-        //   path: '/AccrualReport',
-        //   code: 'resource-report-accrual',
-        //   name: 'AccrualReport',
-        //   component: () => import('@/views/Report/AccrualReport.vue'),
-        //   meta: { title: 'Accrual报表', icon: 'approve' }
-        // },
+        {
+          path: '/AccrualReport',
+          code: 'resource-report-accrual',
+          name: 'AccrualReport',
+          component: () => import('@/views/Report/AccrualReport.vue'),
+          meta: { title: '财务预提报表', icon: 'approve' }
+        },
         //OverviewKA OverviewDist
         // {
         //   path: '/OverviewKA',

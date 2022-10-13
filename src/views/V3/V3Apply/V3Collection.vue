@@ -16,8 +16,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costType" />
+          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select" @change="getCostItemList">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in ['NKA','EC','RKA']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
       </div>
@@ -46,11 +46,13 @@
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>
+<!--      <el-button type="primary" class="TpmButtonBG" icon="el-icon-delete" @click="mutidel">删除</el-button>-->
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"
+    <div class='collection'>
+<!--      <el-table :data="tableData" ref="myTable" :max-height="maxheight" border :header-cell-style="HeadTable" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName"-->
+      <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName"
       style="width: 100%">
-      <el-table-column type="selection" align="center" />
+      <el-table-column align="center" />
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
       </el-table-column>
       <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
@@ -75,9 +77,7 @@
       </el-table-column>
       <el-table-column width="220" align="center" prop="regionName" label="区域">
       </el-table-column>
-      <el-table-column width="220" align="center" prop="contractItem" label="Contract Item">
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="activityType" label="活动类型">
+      <el-table-column width="220" align="center" prop="detailItem" label="业务细项">
       </el-table-column>
       <el-table-column v-slot={row} width="220" align="right" prop="costAmount" label="费用金额">
         {{formatNum(row.costAmount)}}
@@ -89,6 +89,7 @@
       <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见">
       </el-table-column>
     </el-table>
+    </div>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
@@ -170,9 +171,7 @@
             </el-table-column>
             <el-table-column width="220" align="center" prop="regionName" label="区域">
             </el-table-column>
-            <el-table-column width="220" align="center" prop="contractItem" label="Contract Item">
-            </el-table-column>
-            <el-table-column width="220" align="center" prop="activityType" label="活动类型">
+            <el-table-column width="220" align="center" prop="detailItem" label="业务细项">
             </el-table-column>
             <el-table-column v-slot={row} width="220" align="right" prop="costAmount" label="费用金额">
               {{formatNum(row.costAmount)}}
@@ -199,7 +198,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V3/Collection'
@@ -325,8 +324,10 @@ export default {
           this.MinePackageList = res.data
         })
     },
-    getCostItemList() {
-      API.getCostItemList().then((res) => {
+    getCostItemList(code) {
+      API.getCostItemList({
+        minePackage: code,
+      }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
@@ -334,7 +335,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     search() {
       this.pageNum = 1
@@ -507,10 +508,19 @@ export default {
     },
     handleSelectionChange(val) {
       this.checkArr = val
+      if (val.length > 1) {
+        this.$refs.myTable.clearSelection()
+        this.$refs.myTable.toggleRowSelection(val.pop());
+      }
     },
   },
 }
 </script>
+<style>
+.collection .el-table__fixed-header-wrapper .cell .el-checkbox {
+  display: none;
+}
+</style>
 
 <style lang="scss" scoped>
 .tooltip {

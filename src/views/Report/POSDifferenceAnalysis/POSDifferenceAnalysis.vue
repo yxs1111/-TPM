@@ -271,7 +271,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  FormateThousandNum,
+  formatThousandNum,
   getHeight,
   getCurrentMonth,
   messageObj,
@@ -722,7 +722,7 @@ export default {
     },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     // 行样式
     tableRowClassName({ row, rowIndex }) {

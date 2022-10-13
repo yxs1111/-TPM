@@ -213,7 +213,7 @@ import {
   parseTime,
   getTextMap,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
   getHeightHaveTab,
   messageObj
 } from '@/utils'
@@ -586,7 +586,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }

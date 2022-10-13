@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-02-14 10:41:05
+ * @LastEditTime: 2022-09-14 16:36:02
 -->
 <template>
   <section class="app-main">
@@ -38,7 +38,7 @@ export default {
     padding: 21px 20px;
     box-sizing: border-box;
     // padding-bottom: 50px;
-    background-color: #EFF3FA;
+    background-color: #F4F9FF;
   }
 
   .fixed-header+.app-main {

@@ -1,5 +1,5 @@
 <!--TodoList
- * @Description: 
+ * @Description:
  * @Date: 2021-11-16 14:01:16
  * @LastEditTime: 2022-04-11 10:20:41
 -->
@@ -21,8 +21,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.MinePackageName" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
+          <el-select v-model="filterObj.MinePackageName" clearable filterable placeholder="请选择" @change="getCostItemList">
+            <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -142,7 +142,7 @@ export default {
     this.getQueryChannelSelect()
     this.getCostTypeList()
     this.getCostItemList()
-    this.getMinePackageSelect()
+    // this.getMinePackageSelect()
   },
   components: {
     FlowDiagram,
@@ -157,7 +157,7 @@ export default {
         this.filterObj.CostTypeName = ''
       }
       this.filterObj.MinePackageName = ''
-      this.getMinePackageSelect()
+      this.getMinePackageSelect(this.filterObj.CostTypeName)
     },
   },
   methods: {
@@ -182,8 +182,8 @@ export default {
         .catch((error) => {})
     },
     // 获取下拉框
-    getCostItemList() {
-      selectAPI.getCostItemList().then((res) => {
+    getCostItemList(MinePackageCode) {
+      selectAPI.getCostItemList({ minePackage: MinePackageCode }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
@@ -200,14 +200,6 @@ export default {
           }
         })
     },
-    // 获取下拉框 渠道
-    getQueryChannelSelect() {
-      selectAPI.queryChannelSelect().then((res) => {
-        if (res.code == 1000) {
-          this.channelOptons = res.data
-        }
-      })
-    },
     getMinePackageSelect() {
       selectAPI
         .queryMinePackageSelect({
@@ -216,8 +208,17 @@ export default {
         .then((res) => {
           if (res.code == 1000) {
             this.minePackageList = res.data
+            this.getCostItemList(this.filterObj.MinePackageCode)
           }
         })
+    },
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code == 1000) {
+          this.channelOptons = res.data
+        }
+      })
     },
     search() {
       this.pageNum = 1

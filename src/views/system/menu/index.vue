@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    
+
     <div class="treeWrap">
       <!--查询条件-->
       <el-form ref="menuForm" :inline="true" :model="menuQuery" class="demo-form-inline">
@@ -16,7 +16,7 @@
       <!--搜索框-->
       <el-input v-model="filterText" placeholder="输入菜单名称进行过滤" clearable />
       <!--菜单树 属性：draggable，拖拽排序待后期完善-->
-      <div class="ContentWrap">  
+      <div class="ContentWrap">
       <el-tree ref="menuTree" class="filter-tree" :data="treeProps.data" :props="defaultProps" :current-node-key="currentNodeKey" :filter-node-method="filterNode" accordion
         node-key="code" highlight-current :expand-on-click-node="true" :default-expanded-keys="['root']" @node-click="handleNodeClick" @current-change="handleCurrentChange">
         <span slot-scope="{ node, data }" class="custom-tree-node">
@@ -40,7 +40,7 @@
         </span>
       </el-tree>
       </div>
-    
+
     </div>
     <!--编辑窗口-->
     <div v-show="editVisible" class="tableWrap">

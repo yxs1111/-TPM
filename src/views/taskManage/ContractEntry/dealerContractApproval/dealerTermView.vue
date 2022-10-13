@@ -1,7 +1,11 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2022-04-12 08:50:29
+<<<<<<< HEAD
  * @LastEditTime: 2022-08-01 15:02:29
+=======
+ * @LastEditTime: 2022-09-27 10:04:45
+>>>>>>> dev
 -->
 <template>
   <div class="ContentDetail">
@@ -9,6 +13,7 @@
       <div class="TpmButtonBG cancelButton" @click="cancelSubmit">
         <span class="text">取消</span>
       </div>
+      <div class="TpmPrompt">请注意：亮蓝色的数据，表明经销商分摊协议点数≠客户合同点数</div>
     </div>
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
@@ -57,7 +62,7 @@
       <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
           <div class="topInfoWrap">
-            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}</span>
+            <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
           </div>
         </template>
@@ -159,7 +164,7 @@
                 </div>
               </el-table-column>
             </template>
-          </el-table-column> 
+          </el-table-column>
         </template>
       </el-table-column>
     </el-table>
@@ -173,7 +178,7 @@ import {
   getTextMap,
   parseTime,
   contractView,
-  FormateThousandNum,
+  formatThousandNum,
   setSplitAssignee,
   CustomerDeductionsAndPayType,
 } from '@/utils'
@@ -198,6 +203,7 @@ export default {
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       isEmpty: null,
       customerContract:'',//客户合同
+      contractList:['草稿', '待审批', '被拒绝', '通过', '过期', '终止']
     }
   },
 
@@ -284,6 +290,7 @@ export default {
             }
           } else {
             item.isEmpty = 0
+            item.sortCode=this.contractList.findIndex(statusItem=>statusItem==item.contractStateName)
             item.variable.forEach((variableItem) => {
               variableItem.dcId = item.id
               variableItem.dealerName = item.distributorName
@@ -306,6 +313,8 @@ export default {
         let FixedTotalTableData = []
         let FixedTableData = []
         console.log(distributorList);
+        //经销商条款明细展示排序 ：草稿→被拒绝→待审批→通过→过期→终止
+        distributorList.sort((item1,item2)=>item1.sortCode-item2.sortCode)
         //添加variable-->获得表格variable部分数据（维度：行，行中数据保留客户和经销商）
         for (let index = 0; index < customerVariableList.length; index++) {
           const customerVariableObj = customerVariableList[index]
@@ -386,10 +395,12 @@ export default {
                       variableItem.deductionTaxRate
                     ), //客户扣款税点
                     payType:
-                      variableItem.payType == ''
+                      (variableItem.payType == ''||variableItem.payType == null)
                         ? null
                         : Number(variableItem.payType), //支付方式
                     isEditor: 0,
+                    isException:variableItem.costRatio!=variableObj.customerInfo.pointCount?1:0,
+                    contractStateName: item.contractStateName,
                   })
                 }
               })
@@ -411,10 +422,11 @@ export default {
                   distVariableObj.deductionTaxRate
                 ), //客户扣款税点
                 payType:
-                  distVariableObj.payType == ''
+                  (distVariableObj.payType == ''||distVariableObj.payType == null)
                     ? null
                     : Number(distVariableObj.payType), //支付方式
                 isEditor: 0,
+                contractStateName: item.contractStateName,
               })
             }
             //设置 variable 汇总行
@@ -432,6 +444,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distVariableObj.dealerName,
@@ -447,6 +460,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total
@@ -539,10 +553,11 @@ export default {
                       fixedItem.deductionTaxRate
                     ), //客户扣款税点
                     payType:
-                      fixedItem.payType == ''
+                      (fixedItem.payType == ''||fixedItem.payType == null)
                         ? null
                         : Number(fixedItem.payType), //支付方式
                     isEditor: 0,
+                    contractStateName: item.contractStateName,
                   })
                 }
               })
@@ -564,8 +579,9 @@ export default {
                   distFixObj.deductionTaxRate
                 ), //客户扣款税点
                 payType:
-                  distFixObj.payType == '' ? null : Number(distFixObj.payType), //支付方式
+                  (distFixObj.payType == ''||distFixObj.payType == null) ? null : Number(distFixObj.payType), //支付方式
                 isEditor: 0,
+                contractStateName: item.contractStateName,
               })
             }
             FixedTotalObj.dealerList.push({
@@ -582,6 +598,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
             variableAndFixObj.dealerList.push({
               dealerName: distFixObj.dealerName,
@@ -597,6 +614,7 @@ export default {
               dealerTaxPrice: '',
               customerTaxPoint: '',
               payType: '',
+              contractStateName: item.contractStateName,
             })
           })
           //variable+fix Total
@@ -629,7 +647,11 @@ export default {
         })
         //variable + fix 汇总行
         if(VariableTotalTableData.length||FixedTotalTableData.length) {
+<<<<<<< HEAD
           if(VariableTotalTableData.length) { 
+=======
+          if(VariableTotalTableData.length) {
+>>>>>>> dev
             AllTotalTableData[0].customerInfo.pointCount+=VariableTotalTableData[0].customerInfo.pointCount
             AllTotalTableData[0].customerInfo.taxPrice+=VariableTotalTableData[0].customerInfo.taxPrice
           } else {
@@ -1100,7 +1122,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     //弹窗表格样式
     tableRowClassName({ row, rowIndex }) {
@@ -1121,6 +1143,12 @@ export default {
       }
       if ((columnIndex - 6) % 11 == 0) {
         return 'background-color: #4192d3 !important;'
+      }
+      if(row.name.indexOf('Variable') !== -1&&columnIndex>6&&(columnIndex - 6) % 11 == 2) {
+        let distributorIndex=Math.floor((columnIndex-6)/11)
+        if(this.AllTableData[rowIndex].dealerList[distributorIndex].isException) {
+          return 'color: #5588ff !important;font-weight:600'
+        }
       }
     },
     HeadTable({ row, column, rowIndex, columnIndex }) {
@@ -1203,5 +1231,10 @@ export default {
   .el-input--suffix {
     width: 80px !important;
   }
+}
+.TpmPrompt{
+  color: #4192d3;
+  font-size: 15px;
+  margin-top: 8px;
 }
 </style>

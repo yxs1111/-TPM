@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ListingFeeApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-13 17:06:18
+ * @LastEditTime: 2022-08-15 09:57:58
 -->
 <template>
   <div class="MainContent">
@@ -445,7 +445,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
-  FormateThousandNum
+  formatThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V3/ListingFee'
@@ -526,6 +526,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
+        this.isSubmit=1
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
@@ -536,6 +537,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
+          isSubmit:1
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -639,7 +641,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-       return FormateThousandNum(num)
+       return formatThousandNum(num)
     },
     search() {
       this.pageNum = 1
@@ -656,6 +658,7 @@ export default {
           distributorCode: this.filterObj.distributorCode,
           regionCode: this.filterObj.regionCode,
           yearAndMonth: this.filterObj.month,
+          isSubmit:1
         }).then((res) => {
           downloadFile(
             res,

@@ -117,7 +117,7 @@ import {
   parseTime,
   getTextMap,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
 } from '@/utils'
 import API from '@/api/V2/V2'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -371,7 +371,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }

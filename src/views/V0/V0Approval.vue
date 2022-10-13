@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-03 14:17:00
  * @LastEditTime: 2022-05-07 14:24:28
 -->
@@ -228,7 +228,7 @@ import {
   getCPTMonth,
   parseTime,
   getTextMap,
-  FormateThousandNum,
+  formatThousandNum,
   messageObj
 } from '@/utils'
 import permission from '@/directive/permission'
@@ -297,9 +297,9 @@ export default {
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-          
-        } 
-        
+
+        }
+
       } else {
         API.getApproveList({
           yearAndMonth: this.filterObj.month,
@@ -577,7 +577,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }

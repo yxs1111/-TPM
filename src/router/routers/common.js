@@ -1,11 +1,16 @@
 /*
  * @Description: 
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2021-12-12 15:22:47
+ * @LastEditTime: 2022-09-29 14:19:19
  */
 import Layout from '@/layout/index'
 
 export default [
+  {
+    path: '/portal',
+    component: () => import('@/views/common/portal/portal.vue'),
+    hidden: true
+  },
   {
     path: '/login',
     component: () => import('@/views/common/login/index'),
@@ -27,7 +32,7 @@ export default [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/portal',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',

@@ -246,7 +246,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
   getHeightHaveTab,
   messageObj,
 } from '@/utils'
@@ -299,7 +299,7 @@ export default {
       distributorArr: [],
       submitBtn: 1,
       localDate: '',
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       firstIsPass: false,
       isCalculation: false,
@@ -348,7 +348,7 @@ export default {
   methods: {
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
@@ -685,7 +685,7 @@ export default {
     },
     // 下载excel模板
     downLoadElxModel() {
-      
+
       API.downExcelTmpForV1({
         // mainId: this.mainIdLocal,
         ImportType: this.isAiQin==0?1:3,
@@ -805,8 +805,8 @@ export default {
             if (
               res.data.version === 'V1' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.submitBtn === 0 
-              
+              this.submitBtn === 0
+
             ) {
               this.btnStatus = true
             } else {

@@ -1,7 +1,7 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-11-30 08:52:13
- * @LastEditTime: 2022-05-16 17:08:02
+ * @LastEditTime: 2022-09-19 13:09:09
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -9,14 +9,17 @@ import request from '@/utils/request'
 export default {
   // 分页查询接口
   getPageV3(params) {
-    return requestApi.request_get('/cityplan/investCpVThreeDetail/getPage', params)
+    return requestApi.request_get(
+      '/cityplan/investCpVThreeDetail/getPage',
+      params
+    )
   },
   exportV3(params) {
     return request({
       url: '/cityplan/investCpVThreeDetail/export',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   exportTemplate(params) {
@@ -24,7 +27,7 @@ export default {
       url: '/cityplan/investCpVThreeDetail/exportTemplate',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   exportException(params) {
@@ -32,7 +35,7 @@ export default {
       url: '/cityplan/investCpVThreeDetail/exportException',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   importV3(formData) {
@@ -40,7 +43,7 @@ export default {
       url: '/cityplan/investCpVThreeDetail/import',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   importV3MakeUp(formData) {
@@ -48,20 +51,29 @@ export default {
       url: '/cityplan/investCpVThreeDetail/makeUp',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   // 文件检索后保存
   saveImportInfo(params) {
-    return requestApi.request_post('/cityplan/investCpVThreeDetail/save', params)
+    return requestApi.request_post(
+      '/cityplan/investCpVThreeDetail/save',
+      params
+    )
   },
   // 提交
   submitApply(params) {
-    return requestApi.request_post('/cityplan/investCpVThreeDetail/submit', params)
+    return requestApi.request_post(
+      '/cityplan/investCpVThreeDetail/submit',
+      params
+    )
   },
   // 审批 通过 驳回
   approve(params) {
-    return requestApi.request_post('/cityplan/investCpVThreeDetail/approve', params)
+    return requestApi.request_post(
+      '/cityplan/investCpVThreeDetail/approve',
+      params
+    )
   },
   // 通过与驳回按钮状态
   infoByMainId(params) {
@@ -71,14 +83,17 @@ export default {
   // ********NU*********
   // 分页查询接口
   getPageV3NU(params) {
-    return requestApi.request_get('/cityplan/investCpNuVThreeDetail/getPage', params)
+    return requestApi.request_get(
+      '/cityplan/investCpNuVThreeDetail/getPage',
+      params
+    )
   },
   exportV3NU(params) {
     return request({
       url: '/cityplan/investCpNuVThreeDetail/export',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   exportTemplateNU(params) {
@@ -86,7 +101,7 @@ export default {
       url: '/cityplan/investCpNuVThreeDetail/exportTemplate',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   exportExceptionNU(params) {
@@ -94,7 +109,7 @@ export default {
       url: '/cityplan/investCpNuVThreeDetail/exportException',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   importV3NU(formData) {
@@ -102,7 +117,7 @@ export default {
       url: '/cityplan/investCpNuVThreeDetail/import',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   importV3MakeUpNU(formData) {
@@ -110,24 +125,36 @@ export default {
       url: '/cityplan/investCpNuVThreeDetail/makeUp',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   // 文件检索后保存
   saveImportInfoNU(params) {
-    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/save', params)
+    return requestApi.request_post(
+      '/cityplan/investCpNuVThreeDetail/save',
+      params
+    )
   },
   // 提交
   submitApplyNU(params) {
-    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/submit', params)
+    return requestApi.request_post(
+      '/cityplan/investCpNuVThreeDetail/submit',
+      params
+    )
   },
   // 审批 通过 驳回
   approveNU(params) {
-    return requestApi.request_post('/cityplan/investCpNuVThreeDetail/approve', params)
+    return requestApi.request_post(
+      '/cityplan/investCpNuVThreeDetail/approve',
+      params
+    )
   },
   // 通过与驳回按钮状态
   infoByMainIdNU(params) {
-    return requestApi.request_get('/cityplan/investCpNuVThreeDetail/infoByMainId', params)
+    return requestApi.request_get(
+      '/cityplan/investCpNuVThreeDetail/infoByMainId',
+      params
+    )
   },
   // 第一次校验数据
   formatCheck(formData) {
@@ -135,7 +162,7 @@ export default {
       url: '/cityplan/investCpVThreeDetail/formatCheck',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   // 第二次校验数据
@@ -145,7 +172,7 @@ export default {
       url: '/cityplan/investCpVThreeDetail/exceptionCheck',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   // 第一次校验数据  NU
@@ -154,7 +181,7 @@ export default {
       url: '/cityplan/investCpNuVThreeDetail/formatCheck',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   // 第二次校验数据  NU
@@ -164,11 +191,14 @@ export default {
       url: '/cityplan/investCpNuVThreeDetail/exceptionCheck',
       method: 'post',
       data: formData,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   //计算
   calculation(params) {
-    return requestApi.request_get('/cityplan/investCpVThreeDetail/toCalculation', params)
+    return requestApi.request_get(
+      '/cityplan/investCpVThreeDetail/toCalculation',
+      params
+    )
   },
 }

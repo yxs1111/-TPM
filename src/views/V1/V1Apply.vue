@@ -6,17 +6,19 @@
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link
-        v-for="(item, index) in routerList"
-        :key="index"
-        :to="item.path"
-        tag="div"
-        class="tabli"
-        :class="index === currentIndex ? 'currentTabli' : ''"
-        @click.native="changeTab(index)"
-      >
-        <img v-if="index != currentIndex" :src="item.img.light" alt="">
-        <img v-if="index == currentIndex" :src="item.img.dark" alt="">
+      <router-link v-for="(item, index) in routerList"
+                   :key="index"
+                   :to="item.path"
+                   tag="div"
+                   class="tabli"
+                   :class="index === currentIndex ? 'currentTabli' : ''"
+                   @click.native="changeTab(index)">
+        <img v-if="index != currentIndex"
+             :src="item.img.light"
+             alt="">
+        <img v-if="index == currentIndex"
+             :src="item.img.dark"
+             alt="">
         <!-- <img :src="imgSrcList[index]" alt="" v-if="index != currentIndex">
         <img :src="imgSrcList[index+3]" alt="" v-if="index == currentIndex"> -->
         {{ item.name }}
@@ -64,7 +66,7 @@ export default {
         //   }
         // }
       ],
-      currentIndex: 0
+      currentIndex: 0,
     }
   },
   computed: {},
@@ -76,115 +78,159 @@ export default {
     queryMinePackageSelect() {
       let signP = 0
       let signN = 0
-      selectAPI.queryMinePackageSelect().then(res => {
-        res.data.forEach(element => {
-          if (element.costType === 'Price Promotion' && signP === 0) {
-            this.routerList.push({
-              name: '折扣项-价促',
-              path: '/costManagement/V1/V1Apply/V1discountDiscount',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
-            })
-            signP = 1
-          } else if (element.costType === 'New User' && signN === 0) {
-            this.routerList.push({
-              name: '折扣项-新客',
-              path: '/costManagement/V1/V1Apply/V1discountNU',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
-            })
-            signN = 1
-          }
-        })
-        if (this.routerList.length === 0 || res.data.length === 0) {
-          this.routerList = [
-            {
-              name: '折扣项-价促',
-              path: '/costManagement/V1/V1Apply/V1discountDiscount',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
-            },
-            {
-              name: '折扣项-新客',
-              path: '/costManagement/V1/V1Apply/V1discountNU',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+      selectAPI
+        .queryMinePackageSelect()
+        .then((res) => {
+          res.data.forEach((element) => {
+            if (element.costType === 'Price Promotion' && signP === 0) {
+              this.routerList.push({
+                name: '折扣项-价促',
+                path: '/costManagement/V1/V1Apply/V1discountDiscount',
+                img: {
+                  dark: require('@/assets/images/tab/tab2.png'),
+                  light: require('@/assets/images/tab/tab2_l.png'),
+                },
+              })
+              signP = 1
+            } else if (element.costType === 'New User' && signN === 0) {
+              this.routerList.push({
+                name: '折扣项-新客',
+                path: '/costManagement/V1/V1Apply/V1discountNU',
+                img: {
+                  dark: require('@/assets/images/tab/tab3.png'),
+                  light: require('@/assets/images/tab/tab3_l.png'),
+                },
+              })
+              signN = 1
             }
-          ]
-        }
-        this.routerList = [
+          })
+          if (this.routerList.length === 0 || res.data.length === 0) {
+            this.routerList = [
+              {
+                name: '折扣项-价促',
+                path: '/costManagement/V1/V1Apply/V1discountDiscount',
+                img: {
+                  dark: require('@/assets/images/tab/tab2.png'),
+                  light: require('@/assets/images/tab/tab2_l.png'),
+                },
+              },
+              {
+                name: '折扣项-新客',
+                path: '/costManagement/V1/V1Apply/V1discountNU',
+                img: {
+                  dark: require('@/assets/images/tab/tab3.png'),
+                  light: require('@/assets/images/tab/tab3_l.png'),
+                },
+              },
+            ]
+          }
+          this.routerList = [
             ...this.routerList,
             {
               name: '折扣项-HIH Rebate',
               path: '/costManagement/V1/V1Apply/V1HIHRebate',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
-                light: require('@/assets/images/tab/tab_HIH_l.png')
-              }
+                light: require('@/assets/images/tab/tab_HIH_l.png'),
+              },
             },
             {
               name: '折扣项-KA Rebate',
               path: '/costManagement/V1/V1Apply/V1KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
-                light: require('@/assets/images/tab/tab_KA_l.png')
-              }
+                light: require('@/assets/images/tab/tab_KA_l.png'),
+              },
             },
             {
               name: 'FMC',
               path: '/costManagement/V1/V1Apply/V1FMC',
               img: {
                 dark: require('@/assets/images/tab/tab_FMC.png'),
-                light: require('@/assets/images/tab/tab_FMC_l.png')
-              }
+                light: require('@/assets/images/tab/tab_FMC_l.png'),
+              },
             },
             {
-              name: 'Road Show',
+              name: 'Roadshow',
               path: '/costManagement/V1/V1Apply/V1RoadShow',
               img: {
                 dark: require('@/assets/images/tab/tab_RoadShow.png'),
-                light: require('@/assets/images/tab/tab_RoadShow_l.png')
-              }
+                light: require('@/assets/images/tab/tab_RoadShow_l.png'),
+              },
             },
             {
               name: 'Listing Fee',
               path: '/costManagement/V1/V1Apply/V1ListingFee',
               img: {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),
-                light: require('@/assets/images/tab/tab_ListingFee_l.png')
-              }
+                light: require('@/assets/images/tab/tab_ListingFee_l.png'),
+              },
+            },
+            {
+              name: 'POSM-标准',
+              path: '/costManagement/V1/V1Apply/V1POSM',
+              img: {
+                dark: require('@/assets/images/tab/tab_POSM.png'),
+                light: require('@/assets/images/tab/tab_POSM_l.png'),
+              },
+              params: {
+                smartplan: true,
+              },
+            },
+            {
+              name: 'ECM',
+              path: '/costManagement/V1/V1Apply/V1ECM',
+              img: {
+                dark: require('@/assets/images/tab/tab_ECM.png'),
+                light: require('@/assets/images/tab/tab_ECM_l.png'),
+              },
+              params: {
+                smartplan: true,
+              },
+            },
+            {
+              name: 'Display',
+              path: '/costManagement/V1/V1Apply/V1Display',
+              img: {
+                dark: require('@/assets/images/tab/UnStraightGiving.png'),
+                light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+              },
+            },
+            {
+              name: 'Premium',
+              path: '/costManagement/V1/V1Apply/V1Premium',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              params: {
+                smartplan: true,
+              },
             },
           ]
-        if (sessionStorage.getItem('currentIndex')) {
-          this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
-        } else {
-          this.currentIndex = 0
-        }
-        if (!this.$route.query.channelCode) {
-          // 我的待办跳转
-          this.$router.push(this.routerList[this.currentIndex].path)
-        } else {
-          this.$router.push({
-            path: this.routerList[this.currentIndex].path,
-            query: { channelCode: this.$route.query.channelCode }
-          })
-        }
-      }).catch()
+          if (sessionStorage.getItem('currentIndex')) {
+            this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+          } else {
+            this.currentIndex = 0
+          }
+          if (!this.$route.query.channelCode) {
+            // 我的待办跳转
+            this.$router.push(this.routerList[this.currentIndex].path)
+          } else {
+            this.$router.push({
+              path: this.routerList[this.currentIndex].path,
+              query: { channelCode: this.$route.query.channelCode },
+            })
+          }
+        })
+        .catch()
     },
     // tabview 切换
     changeTab(index) {
       this.currentIndex = index
       sessionStorage.setItem('currentIndex', index)
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -202,10 +248,10 @@ export default {
     background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
-    font-size: 14px;
+    font-size: 11px;
     color: #fff;
     text-align: center;
-    line-height: 38px;
+    line-height: 15px;
     cursor: pointer;
     img {
       width: 17px;

@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-03 14:17:00
  * @LastEditTime: 2022-07-13 15:47:32
 -->
@@ -136,7 +136,14 @@
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">
               <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in ['Price Promotion','New User','KA Contract','ListingFee']" :key="index" :label="item" :value="item" />
+                <el-option v-for="item,index in ['Price Promotion',
+                  'New User',
+                  'KA Contract',
+                  'ListingFee',
+                  'ECM',
+                  'POSM',
+                  'Premium',
+                  'Free Goods',]" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
@@ -265,7 +272,7 @@ import {
   yearAndMonthList,
   VersionList,
   messageMap,
-  FormateThousandNum,
+  formatThousandNum,
   messageObj,
 } from '@/utils'
 import permission from '@/directive/permission'
@@ -651,13 +658,35 @@ export default {
             case 'ListingFee':
               url = API.getListingFee
               break
+            case 'POSM':
+              url = API.getPOSMData
+              break
+            case 'Premium':
+              url = API.getPremium
+              break
+            case 'ECM':
+              url = API.getECMcreate
+              break
+            case 'Free Goods':
+              url = API.getFreeGoods
+              break
           }
-          url({
+          let obj = {
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
-          }).then((response) => {
+          }
+          if (this.ruleForm.Minepackage === 'POSM') {
+            obj = {
+              yearAndMonth: this.filterObj.month,
+              channelName: this.ruleForm.channelCode,
+              dimScenario: this.ruleForm.dimScenario,
+              dimVersion: this.ruleForm.dimVersion,
+            }
+          }
+          console.log(url)
+          url(obj).then((response) => {
             if (response.code == 1000) {
               this.$message.success('成功获取数据!')
               this.getList()
@@ -748,7 +777,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }

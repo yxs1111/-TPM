@@ -1,7 +1,11 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
+<<<<<<< HEAD
  * @LastEditTime: 2022-08-23 14:30:13
+=======
+ * @LastEditTime: 2022-09-05 10:44:40
+>>>>>>> dev
 -->
 <template>
   <div class="MainContent">
@@ -160,7 +164,7 @@
               {{ contractList[scope.row.contractState] }}
             </div>
             <div class="timeOutWrap">
-              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
+              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual"  v-model="scope.row.isPopoverShow">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
                     <span>调整系统生效时间</span>
@@ -173,10 +177,10 @@
                   </div>
                   <div class="PopoverContentFoot">
                     <div class="TpmButtonBG" @click="popoverSubmit(scope.$index,scope.row)">保存</div>
-                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id)">取消</div>
+                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id,scope.$index)">取消</div>
                   </div>
                 </div>
-                <svg-icon :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
+                <svg-icon @click="popoverShow(scope.row.id,scope.$index)" :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
               </el-popover>
             </div>
           </div>
@@ -593,7 +597,7 @@ import API from '@/api/ContractEntry/customer'
 import {
   getDefaultPermissions,
   getContractEntry,
-  FormateThousandNum,
+  formatThousandNum,
   contractList,
   downloadFile,
   getCurrentYearRange,
@@ -737,6 +741,7 @@ export default {
         list.forEach((item) => {
           item.isEditor = 0
           item.isNewData = 0
+          item.isPopoverShow = false
           //被拒绝状态，不允许编辑客户名称、合同期间
           if (item.contractState === '2') {
             item.isRefused = 1
@@ -875,6 +880,7 @@ export default {
         createDate: '',
         updateBy: '',
         updateDate: '',
+        isPopoverShow: false, 
         isEditor: 1, //是否 处于编辑状态
         isNewData: 1, //是否 是新增的数据
         isTimeout: '',
@@ -1284,6 +1290,7 @@ export default {
         createDate: row.createDate,
         updateBy: row.updateBy,
         updateDate: row.updateDate,
+        isPopoverShow: false,  //定时任务弹窗显示
         isEditor: 1, //是否 处于编辑状态
         isNewData: 2, //是否 是新增的数据 0否，1新增，2 copy
         isTimeout: '',
@@ -1318,7 +1325,7 @@ export default {
       })
     },
     //定时任务确定--终止合同
-    popoverSubmit(index, row) {
+    async popoverSubmit(index, row) {
       let newStr =
         row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
       let expireDate = new Date(newStr)
@@ -1334,6 +1341,8 @@ export default {
         this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
         return
       } else if (
+        row.contractStateName == '草稿' ||
+        row.contractStateName == '待审批' ||
         row.contractStateName == '过期' ||
         row.contractStateName == '终止'
       ) {
@@ -1342,21 +1351,120 @@ export default {
         )
         return
       }
-      API.termination({
+      let distributorContract=[]
+      let isCheck=0
+      await API.findOne({
         id: row.id,
-        date: row.expireDate,
+        isCustomerContract: 1, //是否查询客户合同（1是0否）
+        isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
+        isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
       }).then((res) => {
-        if (res.code === 1000) {
-          this.$message.success('调整成功')
-          this.popoverCancel(row.id)
-          this.getTableData()
-        }
+        distributorContract=res.data.distributorContract
+        console.log(distributorContract);
+        if(distributorContract.findIndex(item=>item.contractStateName=='待审批')!=-1) {
+          this.$message.info(
+          '该客户合同下存在待审批状态的经销商分摊协议不允许修改系统生效时间结束时间'
+          )
+          return
+        }  
+        
       })
+      //往后调
+      if(Number(row.expireDate)>Number(row.systemDate[1])) {
+        this.$message.info(
+        '此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！'
+        )
+      }else {
+        isCheck=1
+        //系统生效时间前调
+        distributorContract.forEach((item,index)=>{
+          //若“调整后的客户合同系统生效时间结束时间”早于“经销商分摊协议系统生效时间开始时间”
+          if(Number(row.expireDate)<Number(item.effectiveBeginDate)) {
+            item.checkInfo=`${index+1} 若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`
+            console.log(`若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`);
+          } 
+          //若“调整后的客户合同系统生效时间结束时间”处于“经销商分摊协议系统生效时间”之内，且晚于“经销商分摊协议合同期间结束时间”
+          if(Number(item.effectiveBeginDate)<=Number(row.expireDate)&&Number(row.expireDate)<=Number(item.effectiveEndDate)&&this.dateCompare(row.expireDate,item.contractEndDate)){
+            item.checkInfo=`${index+1} 此操作会使得${item.distributorName}经销商分摊协议（${item.contractCode}）系统生效时间结束时间随之变动，调整为“${row.expireDate}”`
+          }
+          //若“调整后的客户合同系统生效时间结束时间”晚于“经销商分摊协议系统生效时间结束时间”，
+          if(Number(row.expireDate)>Number(item.effectiveEndDate)) {
+            item.checkInfo=`${index+1} 此修改只修改客户合同，${item.distributorName}分摊协议（${item.contractCode}）的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢`
+            console.log(`此修改只修改客户合同，${item.distributorName}分摊协议（${item.contractCode}）的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢`)
+          }
+        })
+      }
+      if(isCheck) {
+        let str=''
+        distributorContract.forEach(item=>{
+          str+=item.checkInfo+'<br/>'
+        })
+        this.$confirm(str, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true
+        }).then(() => {
+          API.termination({
+          id: row.id,
+          date: row.expireDate,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('调整成功')
+            this.popoverCancel(row.id,index)
+            this.getTableData()
+          }
+        })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          });          
+        });
+      } else {
+        API.termination({
+          id: row.id,
+          date: row.expireDate,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('调整成功')
+            this.popoverCancel(row.id,index)
+            this.getTableData()
+          }
+        })
+      }
+    },
+    dateCompare(expireDate,contractEndDate) {
+      return new Date((expireDate).slice(0, 4),Number((expireDate).slice(4)),0).getTime()>new Date(contractEndDate).getTime()
+    },
+    popoverShow(id,index) {
+      if (
+        this.tableData[index].contractStateName == '草稿' ||
+        this.tableData[index].contractStateName == '待审批' ||
+        this.tableData[index].contractStateName == '过期' ||
+        this.tableData[index].contractStateName == '终止'
+      ) {
+        this.$message.info(
+          '只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！'
+        )
+        return
+      }
+      //避免同时出现多个el-popover
+      for (const key in this.$refs) {
+        if (key.indexOf('popover-') !== -1) {
+            this.$refs[key].doClose();
+        }
+      }
+      this.tableData[index].isPopoverShow=true
+      //解决fixed 固定列之后相同的el-popover问题
+      let key='popover-'+id
+      this.$nextTick(() => { 
+        document.getElementById(this.$refs[key].$refs.popper.id).style.display = 'none' }
+      )
     },
     //定时任务取消
-    popoverCancel(id) {
-      this.$refs[`popover-` + id].doClose()
-      this.tableKey++
+    popoverCancel(id,index) {
+      this.tableData[index].isPopoverShow=false
     },
     //条款明细--弹窗展示
     showTermsDetail(index) {
@@ -1770,7 +1878,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     pickerOptionsSystemDate(row) {
       return pickerOptionsSystemDate(row)

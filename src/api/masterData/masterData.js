@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-10-27 08:56:27
- * @LastEditTime: 2022-06-23 14:01:42
+ * @LastEditTime: 2022-08-29 11:58:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \april-ui\src\api\masterData\masterData.js
@@ -516,6 +516,18 @@ export default {
   getMdDataInterface(params) {
     return requestApi.request_get('/mdm/mdDataInterface/page', params)
   },
+  //通知管理
+  getNotification(params) {
+    return requestApi.request_get('/mdm/mdEmailRecordRule/getPage', params)
+  },
+  //确认发送
+  importNormal(params) {
+    return requestApi.request_post('/mdm/mdEmailRecordRule/sendEmail', params)
+  },
+  // 接收人下拉框
+  recipientSelect(params) {
+    return requestApi.request_get('/auth/role/getAllRoleUser', params)
+  },
   //接口名称下拉筛选
   getInterfaceList(params) {
     return requestApi.request_get('/mdm/mdDataInterface/getInterfaceList', params)
@@ -656,7 +668,7 @@ export default {
       params: params,
       responseType: 'blob'
     })
-    
+
   },
   MatchingRelationImportExcel(params) {
     return requestApi.request_post('/mdm/mdOrganizationSupplier/importExcel', params)
@@ -705,5 +717,29 @@ export default {
   getDepartmentId(params) {
     return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentId', params)
   },
-  
+  //Display Item
+  getDisplayItem(params) {
+    return requestApi.request_get("/mdm/mdDisplayItem/getDisplayItemPage",params)
+  },
+  addDisplayItem(params) {
+    return requestApi.request_post("/mdm/mdDisplayItem/saveData",params)
+  },
+  updateDisplayItem(params) {
+    return requestApi.request_post("/mdm/mdDisplayItem/updateData",params)
+  },
+  deleteDisplayItem(params) {
+    return requestApi.request_post("/mdm/mdDisplayItem/deleteByIds",params)
+  },
+  getCostItemList(params) {
+    return requestApi.request_get("/mdm/mdDisplayItem/getCostItemList",params)
+  },
+  exportDisplayItem(params) {
+    return request({
+      url: '/mdm/mdDisplayItem/exportData',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+    return requestApi.request_get("/mdm/mdDisplayItem/exportData",params)
+  },
 }

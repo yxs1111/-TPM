@@ -58,7 +58,7 @@
       </div>
       <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
         <span class="tipStar">*</span>
-        注意事项：未获取到MTD人数，无法办理
+        注意事项：请筛选活动月和渠道办理，若未获取到MTD人数，则无法办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -570,7 +570,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
-  FormateThousandNum
+  formatThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/FMC'
@@ -747,7 +747,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     formateHundredNumber(num) {
       if(num===null||num==="null") {

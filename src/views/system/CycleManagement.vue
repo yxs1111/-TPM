@@ -1,7 +1,7 @@
 <!--
  * @Description: 周期管理
  * @Date: 2022-02-28 13:50:00
- * @LastEditTime: 2022-08-03 14:50:23
+ * @LastEditTime: 2022-10-13 14:02:41
 -->
 <template>
   <div class="app-container">
@@ -187,7 +187,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  FormateThousandNum,
+  formatThousandNum,
   getHeight,
   parseTime,
 } from '@/utils'
@@ -395,6 +395,18 @@ export default {
     confirmAdd(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if(!this.compareDate(this.ruleForm.startAndEndVTwo[1],this.ruleForm.startAndEndVThree[0])) {
+            this.$message.info("V3的开始时间，不应早于V2的结束时间")
+            return
+          }
+          if(!this.compareDate(this.ruleForm.startAndEndVOne[1],this.ruleForm.startAndEndVTwo[0])) {
+            this.$message.info("V2的开始时间，不应早于V1的结束时间")
+            return
+          }
+          if(!this.compareDate(this.ruleForm.startAndEndVZero[1],this.ruleForm.startAndEndVOne[0])) {
+            this.$message.info("V1的开始时间，不应早于V0的结束时间")
+            return
+          }
           if (this.isConfirm) {
             let url=this.isEditor?API.updateCycleConfig:API.confirmCycleConfig
             url({
@@ -463,6 +475,11 @@ export default {
           return false
         }
       })
+    },
+    compareDate(start,end) {
+      let startDate=new Date(start)
+      let endDate=new Date(end)
+      return startDate.getTime()<endDate.getTime()
     },
     getFormatDateRange(dateStr) {
       if(dateStr) {
@@ -577,7 +594,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }

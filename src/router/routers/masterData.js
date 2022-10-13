@@ -2,7 +2,7 @@ import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
 
-export default function() {
+export default function () {
   const activiti = [
     {
       path: '/master',
@@ -27,7 +27,11 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'NKA',
               component: () => import('@/views/master/nkaec/pages/nka.vue'),
-              meta: { title: 'NKA Rawdata', icon: 'apply', activeMenu: '/NKAEC' }
+              meta: {
+                title: 'NKA Rawdata',
+                icon: 'apply',
+                activeMenu: '/NKAEC',
+              },
             },
             {
               hidden: true,
@@ -35,7 +39,11 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'EC',
               component: () => import('@/views/master/nkaec/pages/EC.vue'),
-              meta: { title: 'EC Rawdata', icon: 'apply', activeMenu: '/NKAEC' }
+              meta: {
+                title: 'EC Rawdata',
+                icon: 'apply',
+                activeMenu: '/NKAEC',
+              },
             },
             {
               hidden: true,
@@ -43,7 +51,11 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'NKALine',
               component: () => import('@/views/master/nkaec/pages/NKALine.vue'),
-              meta: { title: 'NKA Guideline', icon: 'apply', activeMenu: '/NKAEC' }
+              meta: {
+                title: 'NKA Guideline',
+                icon: 'apply',
+                activeMenu: '/NKAEC',
+              },
             },
             {
               hidden: true,
@@ -51,9 +63,13 @@ export default function() {
               code: 'mdm_NKAEC',
               name: 'ECLine',
               component: () => import('@/views/master/nkaec/pages/ECLine.vue'),
-              meta: { title: 'EC Guideline', icon: 'apply', activeMenu: '/NKAEC' }
-            }
-          ]
+              meta: {
+                title: 'EC Guideline',
+                icon: 'apply',
+                activeMenu: '/NKAEC',
+              },
+            },
+          ],
         },
         {
           path: '/organization',
@@ -71,7 +87,7 @@ export default function() {
               name: 'Channel',
               component: () =>
                 import('@/views/master/organization/Channel.vue'),
-              meta: { title: '渠道', icon: 'approve' }
+              meta: { title: '渠道', icon: 'approve' },
             },
             {
               path: '/organization/Customer',
@@ -79,7 +95,7 @@ export default function() {
               name: 'Customer',
               component: () =>
                 import('@/views/master/organization/Customer.vue'),
-              meta: { title: '客户', icon: 'approve' }
+              meta: { title: '客户', icon: 'approve' },
             },
             // {
             //   path: '/organization/CustomerTeam',
@@ -94,7 +110,7 @@ export default function() {
               code: 'mdm_store',
               name: 'Store',
               component: () => import('@/views/master/organization/Store.vue'),
-              meta: { title: '门店', icon: 'approve' }
+              meta: { title: '门店', icon: 'approve' },
             },
             {
               path: '/organization/Dealers',
@@ -102,7 +118,7 @@ export default function() {
               name: 'Dealers',
               component: () =>
                 import('@/views/master/organization/Dealers.vue'),
-              meta: { title: '经销商', icon: 'approve' }
+              meta: { title: '经销商', icon: 'approve' },
             },
             {
               path: '/organization/Supplier',
@@ -110,14 +126,14 @@ export default function() {
               name: 'Supplier',
               component: () =>
                 import('@/views/master/organization/Supplier.vue'),
-              meta: { title: '供应商', icon: 'approve' }
+              meta: { title: '供应商', icon: 'approve' },
             },
             {
               path: '/organization/SaleKJ',
               code: 'mdm_Sales_structure',
               name: 'SaleKJ',
               component: () => import('@/views/master/organization/saleKJ.vue'),
-              meta: { title: '销售架构', icon: 'approve' }
+              meta: { title: '销售架构', icon: 'approve' },
             },
             // {
             //   path: '/organization/CustomerSupplier',
@@ -127,7 +143,7 @@ export default function() {
             //     import('@/views/master/organization/CustomerSupplier.vue'),
             //   meta: { title: '客户&经销商对应关系', icon: 'apply' }
             // }
-          ]
+          ],
         },
         // 产品信息
         {
@@ -144,16 +160,16 @@ export default function() {
               code: 'mdm_brand',
               name: 'Brand',
               component: () => import('@/views/master/itemInfo/Brand.vue'),
-              meta: { title: '品牌', icon: 'approve' }
+              meta: { title: '品牌', icon: 'approve' },
             },
             {
               path: '/itemInfo/SKU',
               code: 'mdm_product',
               name: 'SKU',
               component: () => import('@/views/master/itemInfo/SKU.vue'),
-              meta: { title: '产品', icon: 'approve' }
-            }
-          ]
+              meta: { title: '产品', icon: 'approve' },
+            },
+          ],
         },
         // 价格促销
         {
@@ -174,8 +190,8 @@ export default function() {
                 import('@/views/master/priceSale/priceMasterData.vue'),
               meta: {
                 title: '价格主数据',
-                icon: 'approve'
-              }
+                icon: 'approve',
+              },
             },
             {
               // 价格档位维护
@@ -186,8 +202,8 @@ export default function() {
                 import('@/views/master/priceSale/priceLevelKeep.vue'),
               meta: {
                 title: '价格档位维护',
-                icon: 'approve'
-              }
+                icon: 'approve',
+              },
             },
             // 促销计算维护
             {
@@ -198,8 +214,8 @@ export default function() {
                 import('@/views/master/priceSale/saleComputeKeep.vue'),
               meta: {
                 title: '价促计算维护',
-                icon: 'approve'
-              }
+                icon: 'approve',
+              },
             },
             // {
             //   path: '/priceSale/PriceStallMasterData',
@@ -227,8 +243,8 @@ export default function() {
                   meta: {
                     title: 'Price Promotion',
                     icon: 'apply',
-                    activeMenu: '/priceSale/systemPool'
-                  }
+                    activeMenu: '/priceSale/systemPool',
+                  },
                 },
                 {
                   hidden: true,
@@ -240,12 +256,12 @@ export default function() {
                   meta: {
                     title: 'New User',
                     icon: 'apply',
-                    activeMenu: '/priceSale/systemPool'
-                  }
-                }
-              ]
-            }
-          ]
+                    activeMenu: '/priceSale/systemPool',
+                  },
+                },
+              ],
+            },
+          ],
         },
         // 财务信息
         {
@@ -264,7 +280,7 @@ export default function() {
               name: 'RoleCostSubjectControl',
               component: () =>
                 import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
-              meta: { title: '费用科目', icon: 'approve' }
+              meta: { title: '费用科目', icon: 'approve' },
             },
             {
               path: '/WBSCodeEntity',
@@ -272,7 +288,7 @@ export default function() {
               name: 'WBSCodeEntity',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeEntity.vue'),
-              meta: { title: 'WBS Code - Entity', icon: 'approve' }
+              meta: { title: 'WBS Code - Entity', icon: 'approve' },
             },
             // {
             //   path: '/WBSCodeYear',
@@ -288,7 +304,7 @@ export default function() {
               name: 'WBSCodeBrand',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeBrand.vue'),
-              meta: { title: 'WBS Code - Brand', icon: 'approve' }
+              meta: { title: 'WBS Code - Brand', icon: 'approve' },
             },
             {
               path: '/WBSCodeDepartment',
@@ -296,7 +312,7 @@ export default function() {
               name: 'WBSCodeDepartment',
               component: () =>
                 import('@/views/master/financeInfo/WBSCodeDepartment.vue'),
-              meta: { title: 'WBS Code - Department', icon: 'approve' }
+              meta: { title: 'WBS Code - Department', icon: 'approve' },
             },
             {
               path: '/WbsMaintenance',
@@ -304,7 +320,7 @@ export default function() {
               name: 'WbsMaintenance',
               component: () =>
                 import('@/views/master/financeInfo/WbsMaintenance.vue'),
-              meta: { title: 'WBS Code - Customer', icon: 'approve' }
+              meta: { title: 'WBS Code - Customer', icon: 'approve' },
             },
             {
               path: '/IoMaintenance',
@@ -312,9 +328,9 @@ export default function() {
               name: 'IoMaintenance',
               component: () =>
                 import('@/views/master/financeInfo/IoMaintenance.vue'),
-              meta: { title: 'IO维护', icon: 'approve' }
+              meta: { title: 'IO维护', icon: 'approve' },
             },
-          ]
+          ],
         },
         // 规则控制
         {
@@ -335,7 +351,7 @@ export default function() {
                 import('@/views/master/ruleCtrl/model/splitRulesM.vue'),
               meta: {
                 title: '拆分规则',
-                icon: 'approve'
+                icon: 'approve',
               },
               redirect: '/master/ruleCtrl/model/splitRules',
               children: [
@@ -349,8 +365,8 @@ export default function() {
                   meta: {
                     title: 'Price Promotion',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/splitRules'
-                  }
+                    activeMenu: '/ruleCtrl/splitRules',
+                  },
                 },
                 {
                   hidden: true,
@@ -362,10 +378,10 @@ export default function() {
                   meta: {
                     title: 'New User',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/splitRules'
-                  }
-                }
-              ]
+                    activeMenu: '/ruleCtrl/splitRules',
+                  },
+                },
+              ],
             },
             // 价格主数据
             {
@@ -376,7 +392,7 @@ export default function() {
                 import('@/views/master/ruleCtrl/model/testRulesM.vue'),
               meta: {
                 title: '检验规则',
-                icon: 'approve'
+                icon: 'approve',
               },
               redirect: '/master/ruleCtrl/model/testRules',
               children: [
@@ -390,8 +406,8 @@ export default function() {
                   meta: {
                     title: 'Price Promotion',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/testRules'
-                  }
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
                 },
                 {
                   hidden: true,
@@ -403,8 +419,8 @@ export default function() {
                   meta: {
                     title: 'New User',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/testRules'
-                  }
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
                 },
                 {
                   hidden: true,
@@ -416,8 +432,8 @@ export default function() {
                   meta: {
                     title: 'HIH',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/testRules'
-                  }
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
                 },
                 {
                   hidden: true,
@@ -429,8 +445,8 @@ export default function() {
                   meta: {
                     title: 'KA',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/testRules'
-                  }
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
                 },
                 {
                   hidden: true,
@@ -442,8 +458,8 @@ export default function() {
                   meta: {
                     title: 'FMC',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/testRules'
-                  }
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
                 },
                 {
                   hidden: true,
@@ -455,8 +471,8 @@ export default function() {
                   meta: {
                     title: 'RoadShow',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/testRules'
-                  }
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
                 },
                 {
                   hidden: true,
@@ -466,13 +482,104 @@ export default function() {
                   component: () =>
                     import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
                   meta: {
-                    title: 'ListingFee',
+                    title: 'Listing Fee',
                     icon: 'form',
-                    activeMenu: '/ruleCtrl/testRules'
-                  }
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
                 },
-              ]
-            }
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesPOSMStandard',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesPOSMStandard',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesPOSMStandard.vue'),
+                  meta: {
+                    title: 'POSM-标准',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesPOSMCustomized',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesPOSMCustomized',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesPOSMCustomized.vue'),
+                  meta: {
+                    title: 'POSM-定制',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesECM',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesECM',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesECM.vue'),
+                  meta: {
+                    title: 'ECM',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesDisplay',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesDisplay',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesDisplay.vue'),
+                  meta: {
+                    title: 'Display',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesPremium',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesPremium',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesPremium.vue'),
+                  meta: {
+                    title: 'Premium',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesFreeGoods-Tin',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesFreeGoods-Tin',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesFreeGoods-Tin.vue'),
+                  meta: {
+                    title: 'Free Goods-Tin',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesFreeGoods-Win2',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesFreeGoods-Win2',
+                  component: () =>
+                    import('@/views/master/ruleCtrl/splitRulesFreeGoods-Win2.vue'),
+                  meta: {
+                    title: 'Free Goods-Win2',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+              ],
+            },
             // {
             //   path: '/ruleCtrl/newUserC',
             //   name: 'NewUserC',
@@ -485,15 +592,33 @@ export default function() {
             //     icon: 'form'
             //   }
             // }
-          ]
+          ],
         },
         // 产品信息
         {
           path: '/contractItem',
           name: 'contractItem',
           code: 'ContractItem',
-          component: () => import('@/views/master/contractItem/contractItem.vue'),
+          component: () =>
+            import('@/views/master/contractItem/contractItem.vue'),
           meta: { title: 'Contract Item', icon: 'apply' },
+        },
+        // 品牌拆分比例
+        {
+          path: '/brandsplitratio',
+          name: 'brandsplitratio',
+          code: 'BrandSplitRatio',
+          component: () =>
+            import('@/views/master/brandsplitratio/brandsplitratio.vue'),
+          meta: { title: '品牌拆分比例', icon: 'apply' },
+        },
+        // displayItem
+        {
+          path: '/displayItem',
+          name: 'displayItem',
+          code: 'ItemMatchingRelation',
+          component: () => import('@/views/master/displayItem.vue'),
+          meta: { title: '细项匹配关系', icon: 'apply' },
         },
         // 匹配关系
         {
@@ -510,8 +635,8 @@ export default function() {
           component: () => import('@/views/master/pdMatchingRelationship.vue'),
           meta: { title: 'Package&部门匹配关系', icon: 'apply' },
         },
-      ]
-    }
+      ],
+    },
   ]
   if (showRouter([settings.stageKey])) {
     return []

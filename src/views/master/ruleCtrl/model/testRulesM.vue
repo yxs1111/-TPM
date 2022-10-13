@@ -1,33 +1,35 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
+<<<<<<< HEAD
  * @LastEditTime: 2022-07-19 18:13:10
+=======
+ * @LastEditTime: 2022-09-19 16:03:00
+>>>>>>> dev
 -->
 <template>
-  <div>
-    <div class="tabViews">
-      <router-link
-        v-for="(item, index) in routerList"
-        :key="index"
-        :to="item.path"
-        tag="div"
-        class="tabli"
-        :class="index === currentIndex ? '' : 'currentTabli'"
-        @click.native="changeTab(index)"
-      >{{ item.name }}</router-link>
-    </div>
-    <div>
+  <div class='tabViewsWrap'>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane :label="item.name" :name="item.name" v-for="item,index in routerList" :key="index">
+        <!-- tab 内容 -->
+        <template slot="label">
+          <div class="TabWrap">
+            <div>{{item.name}}</div>
+          </div>
+        </template>
+      </el-tab-pane>
+    </el-tabs>
+    <div style="height: calc(100vh - 0px);">
       <router-view />
     </div>
   </div>
 </template>
 
 <script>
-
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
+import {sortList} from '@/utils/index'
 export default {
   directives: { elDragDialog, permission },
   data() {
@@ -36,7 +38,8 @@ export default {
         // { name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' },
         // { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
       ],
-      currentIndex: 0
+      currentIndex: 0,
+      activeName: '',
     }
   },
   computed: {},
@@ -44,107 +47,215 @@ export default {
     this.queryMinePackageSelect()
   },
   methods: {
+    tabInit() {
+      if (sessionStorage.getItem('currentIndex')) {
+        this.activeName = this.routerList[Number(this.currentIndex)].name
+        this.$router.push(this.routerList[Number(this.currentIndex)].path)
+      } else {
+        this.activeName = this.routerList[0].name
+        this.$router.push(this.routerList[0].path)
+      }
+    },
+    handleClick(tab) {
+      let index = Number(tab.index)
+      this.currentIndex = index
+      this.$router.push(this.routerList[index].path)
+      sessionStorage.setItem('currentIndex', index)
+    },
     // tab标签权限
     queryMinePackageSelect() {
       let signP = 0
       let signN = 0
-      selectAPI.queryMinePackageSelect().then(res => {
-        res.data.forEach(element => {
-          if (element.costType === 'Price Promotion' && signP === 0) {
-            this.routerList.push({ name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' })
-            signP = 1
-          } else if (element.costType === 'New User' && signN === 0) {
-            this.routerList.push({ name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' })
-            signN = 1
+      selectAPI
+        .queryMinePackageSelect()
+        .then((res) => {
+          res.data.forEach((element) => {
+            if (element.costType === 'Price Promotion' && signP === 0) {
+              this.routerList.push({
+                name: '价促',
+                path: '/master/ruleCtrl/model/TestRules',
+                minePackageName: 'Price Promotion',
+              })
+              signP = 1
+            } else if (element.costType === 'New User' && signN === 0) {
+              this.routerList.push({
+                name: '新客',
+                path: '/master/ruleCtrl/model/TestRulesNew',
+                minePackageName: 'New User',
+              })
+              signN = 1
+            }
+          })
+          if (this.routerList.length === 0 || res.data.length === 0) {
+            this.routerList = [
+              {
+                name: '价促',
+                path: '/master/ruleCtrl/model/TestRules',
+                minePackageName: 'Price Promotion',
+              },
+              { name: '新客', path: '/master/ruleCtrl/model/TestRulesNew', minePackageName: 'New User',},
+            ]
           }
-        })
-        if (this.routerList.length === 0 || res.data.length === 0) {
           this.routerList = [
-            { name: 'Price Promotion', path: '/master/ruleCtrl/model/TestRules' },
-            { name: 'New User', path: '/master/ruleCtrl/model/TestRulesNew' }
-          ]
-        }
-        this.routerList = [
             ...this.routerList,
             {
               name: 'HIH Rebate',
               path: '/master/ruleCtrl/model/splitRulesHIH',
-              img: {
-                dark: require('@/assets/images/tab/tab2.png'),
-                light: require('@/assets/images/tab/tab2_l.png')
-              }
+              minePackageName: 'HIH Rebate',
             },
             {
               name: 'KA Rebate',
               path: '/master/ruleCtrl/model/splitRulesKA',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+              minePackageName: 'KA Rebate',
             },
             {
               name: 'FMC',
               path: '/master/ruleCtrl/model/splitRulesFMC',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+              minePackageName: 'FMC',
             },
             {
-              name: 'Road Show',
+              name: 'RS',
               path: '/master/ruleCtrl/model/splitRulesRoadShow',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+              minePackageName: 'Roadshow',
             },
             {
-              name: 'Listing Fee',
+              name: 'Listing',
               path: '/master/ruleCtrl/model/splitRulesListingFee',
-              img: {
-                dark: require('@/assets/images/tab/tab3.png'),
-                light: require('@/assets/images/tab/tab3_l.png')
-              }
+              minePackageName: 'Listing fee',
+            },
+            {
+              name: 'POSM-标',
+              path: '/master/ruleCtrl/model/splitRulesPOSMStandard',
+              minePackageName: 'POSM - Standard',
+            },
+            {
+              name: 'POSM-定',
+              path: '/master/ruleCtrl/model/splitRulesPOSMCustomized',
+              minePackageName: 'POSM - Customized',
+            },
+            {
+              name: 'ECM',
+              path: '/master/ruleCtrl/model/splitRulesECM',
+              minePackageName: 'ECM',
+            },
+            {
+              name: 'Display',
+              path: '/master/ruleCtrl/model/splitRulesDisplay',
+              minePackageName: 'Display',
+            },
+            {
+              name: 'Premium',
+              path: '/master/ruleCtrl/model/splitRulesPremium',
+              minePackageName: 'Premium',
+            },
+            {
+              name: '价促-FG tin',
+              path: '/master/ruleCtrl/model/splitRulesFreeGoods-Tin',
+              minePackageName: 'Free Goods-Tin',
+            },
+            {
+              name: '新客-FG win2',
+              path: '/master/ruleCtrl/model/splitRulesFreeGoods-Win2',
+              minePackageName: 'Free Goods-Win2',
             },
           ]
-        if (sessionStorage.getItem('currentIndex')) {
-          this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
-        } else {
-          this.currentIndex = 0
-        }
-      }).catch()
+          let TabList=[]
+          sortList.forEach(item=>{
+            let findIndex=this.routerList.findIndex(routerItem=>routerItem.minePackageName==item)
+            if(findIndex!=-1) {
+              TabList.push(this.routerList[findIndex])
+            }
+          })
+          this.routerList=TabList
+          if (sessionStorage.getItem('currentIndex')) {
+            this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+          } else {
+            this.currentIndex = 0
+          }
+          if (!this.$route.query.minePackageName) {
+          } else {
+            // 我的待办跳转
+            this.currentIndex = this.routerList.findIndex(
+              (item) =>
+                item.minePackageName == this.$route.query.minePackageName
+            )
+            sessionStorage.setItem('currentIndex', this.currentIndex)
+          }
+          this.tabInit()
+        })
+        .catch()
     },
-    // tabview 切换
-    changeTab(index) {
-      this.currentIndex = index
-      sessionStorage.setItem('currentIndex', index)
-    }
-  }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .tabViews {
   width: 100%;
-  height: 36px;
+  height: 38px;
   display: flex;
-  margin-left: 25px;
+  margin-left: 10px;
   .tabli {
-    padding: 0 52px;
-    height: 36px;
-    background: #FFF;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 38px;
+    background: #4192d3;
     border-radius: 6px 6px 0px 0px;
     margin-right: 20px;
-    font-size: 14px;
-    color: #666;
+    font-size: 11px;
+    color: #fff;
     text-align: center;
-    line-height: 36px;
+    line-height: 15px;
     cursor: pointer;
+    img {
+      width: 17px;
+      height: 17px;
+      margin-right: 10px;
+    }
   }
   .currentTabli {
-    background-color: #4192D3;
-    color: #fff;
+    background-color: #fff;
+    color: #666;
     font-weight: 600;
   }
+}
+</style>
+<style lang="scss">
+.el-tabs__header {
+  margin-bottom: 0 !important;
+}
+.el-tabs__item {
+  padding: 0 10px !important;
+  height: 38px;
+  background: #EFF2F9;
+  border-radius: 6px 6px 0px 0px;
+  margin-right: 10px;
+  border: 1px solid #E8E8EA;
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  cursor: pointer;
+  &:hover {
+    // background-color: #fff;
+    color: #999;
+  }
+  .TabWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .TabImg {
+      width: 17px;
+      height: 17px;
+      margin-right: 10px;
+    }
+  }
+}
+.el-tabs__item.is-active {
+  background-color: #4192d3 !important;
+  color: #fff !important;
+}
+.el-tabs__active-bar {
+  display: none;
 }
 </style>

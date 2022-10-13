@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierName" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
+            <el-option v-for="item, index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -563,7 +563,7 @@ import {
   messageObj,
   downloadFile,
   messageMap,
-  FormateThousandNum
+  formatThousandNum
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/FMC'
@@ -736,7 +736,7 @@ export default {
     },
     //千分位分隔符+两位小数
     formatNum(num) {
-       return FormateThousandNum(num)
+       return formatThousandNum(num)
     },
     formateHundredNumber(num) {
       if(num===null||num==="null") {

@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-08-30 10:38:43
  * @LastEditTime: 2022-03-30 10:20:00
  */
@@ -61,19 +61,45 @@ export default function() {
           meta: { title: '监控管理', icon: 'form' }
         },
         {
+          path: '/os/NotificationManagement',
+          code: 'MonitoringManagement',
+          name: 'NotificationManagement',
+          component: () => import('@/views/system/NotificationManagement.vue'),
+          meta: { title: '通知管理', icon: 'form' },
+          redirect: '/os/NotificationManagement/NotificationManagement',
+          children: [
+            {
+              hidden: true,
+              path: '/os/NotificationManagement/NotificationManagement',
+              code: 'MonitoringManagement',
+              name: 'NotificationManagement',
+              component: () => import('@/views/system/NotificationManagement/NotificationManagement.vue'),
+              meta: { title: '通知清单', icon: 'form' , activeMenu: '/NotificationManagement' },
+            },
+            {
+              hidden: true,
+              path: '/os/NotificationManagement/MockManage',
+              code: 'MonitoringManagement',
+              name: 'MockManage',
+              component: () => import('@/views/system/NotificationManagement/MockManage.vue'),
+              meta: { title: '模拟管理', icon: 'form' , activeMenu: '/MockManage' },
+            },
+          ],
+        },
+        {
           path: 'InterfaceManage',
           code: 'authPage_interface',
           name: 'InterfaceManage',
           component: () => import('@/views/system/InterfaceManage.vue'),
           meta: { title: '接口管理', icon: 'tree' }
         },
-        {
-          path: 'MessageManage',
-          code: 'authPage_message',
-          name: 'MessageManage',
-          component: () => import('@/views/system/MessageManage.vue'),
-          meta: { title: '通知管理', icon: 'tree' }
-        },
+        // {
+        //   path: 'MessageManage',
+        //   code: 'authPage_message',
+        //   name: 'MessageManage',
+        //   component: () => import('@/views/system/MessageManage.vue'),
+        //   meta: { title: '通知管理', icon: 'tree' }
+        // },
       ]
     }
   ]

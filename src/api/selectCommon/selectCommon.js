@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-12-04 08:20:46
  * @LastEditTime: 2022-07-18 10:23:36
  */
@@ -32,7 +32,10 @@ export default {
     return requestApi.request_get('/auth/dict/info/getDictInfoByType', params)
   },
   getMonth(params) {
-    return requestApi.request_get('/cityplan/baseEffectiveDateConfig/getEffectiveDate', params)
+    return requestApi.request_get(
+      '/cityplan/baseEffectiveDateConfig/getEffectiveDate',
+      params
+    )
   },
   //品牌
   getBrand(params) {
@@ -44,7 +47,21 @@ export default {
   },
   //大区
   getLargeAreaList(params) {
-    return requestApi.request_get('/cityplan/mdOrganizationIo/getLargetArea', params)
+    return requestApi.request_get(
+      '/cityplan/mdOrganizationIo/getLargetArea',
+      params
+    )
+  },
+  //活动类型
+  getItemList(params) {
+    return requestApi.request_get(
+      '/cityplan/investCpSalesVOneDetail/getSmarPlanData',
+      params
+    )
+  },
+  // 供应商信息
+  getPageMdSupplier(params) {
+    return requestApi.request_get('/mdm/mdSupplier/getPage', params)
   },
   //getCostTypeList
   getCostTypeList(params) {
@@ -56,14 +73,20 @@ export default {
   },
   //客户合同审批  通过与驳回按钮状态
   contractInfoByMainId(params) {
-    return requestApi.request_post('/cityplan/investCpV/getMultInfoByMainId', params)
+    return requestApi.request_post(
+      '/cityplan/investCpV/getMultInfoByMainId',
+      params
+    )
   },
   timeout(params) {
     return requestApi.request_put('/job/job/pause', params)
   },
   // 报表 多渠道获取用户
   getCustomerListByChannels(data) {
-    return requestApi.request_post('/mdm/common/getCustomerListByChannels', data)
+    return requestApi.request_post(
+      '/mdm/common/getCustomerListByChannels',
+      data
+    )
   },
   // V0-V3获取活动月List
   getAllMonth(data) {
@@ -79,24 +102,54 @@ export default {
   },
   // 合同录入-客户
   getCustomerContract(data) {
-    return requestApi.request_post('/cityplan/customerContract/customerContract', data)
+    return requestApi.request_post(
+      '/cityplan/customerContract/customerContract',
+      data
+    )
   },
   // 合同录入-经销商
   getDistributorService(data) {
     return requestApi.request_post('/mdm/common/getDistributorService', data)
   },
-  //contract Item 
+  //contract Item
   getContractItemList(params) {
-    return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)
+    return requestApi.request_get(
+      '/mdm/mdContractItem/getContractItemList',
+      params
+    )
   },
   getSupplierList(params) {
-    return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
+    return requestApi.request_get(
+      '/mdm/mdOrganizationSupplier/getSupplier',
+      params
+    )
   },
   //部门下拉
   getDepartmentList(params) {
-    return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentList', params)
-  },//费用科目下拉
+    return requestApi.request_get(
+      '/mdm/mdDeptPackageMatching/getDepartmentList',
+      params
+    )
+  }, //费用科目下拉
   getCostItemList(params) {
-    return requestApi.request_get('/cityplan/investSrVThree/getCostItemList', params)
+    return requestApi.request_get(
+      '/cityplan/investSrVThree/getCostItemList',
+      params
+    )
+  },
+  // displayitem
+  DisplayItemList(params) {
+    return requestApi.request_get(
+      '/mdm/mdDisplayItem/getDisplayItemList',
+      params
+    )
+  },
+  // posmitem 下拉数据 mdm/mdDisplayItem/getPosmItemList
+  getPosmItemList(params) {
+    return requestApi.request_get('/mdm/mdDisplayItem/getPosmItemList', params)
+  },
+  // posmitem 下拉数据 下拉数据 mdm/mdDisplayItem/getEcmItemList
+  getECMItemList(params) {
+    return requestApi.request_get('/mdm/mdDisplayItem/getEcmItemList', params)
   },
 }

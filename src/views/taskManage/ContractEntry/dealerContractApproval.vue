@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-16 14:01:16
  * @LastEditTime: 2022-08-23 15:25:11
 -->
@@ -53,7 +53,7 @@
     <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column type="selection" align="center" :selectable="checkSelectable" />
-      
+
       <el-table-column fixed align="center" width="80" label="序号">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
@@ -177,7 +177,7 @@ import {
   parseTime,
   getContractEntry,
   contractList,
-  FormateThousandNum,
+  formatThousandNum,
   downloadFile,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
@@ -305,7 +305,7 @@ export default {
                   item.name=mItem.activityName
                   let isFlag=mItem.assignee.indexOf(this.usernameLocal) != -1?1:0
                   item.isCanSubmit=isFlag
-                } 
+                }
               })
             })
           }
@@ -511,7 +511,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     //弹窗表格样式
     tableRowClassNameDialog({ row, rowIndex }) {

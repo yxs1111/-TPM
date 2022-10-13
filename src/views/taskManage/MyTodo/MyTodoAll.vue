@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-18 16:17:22
+ * @LastEditTime: 2022-09-16 12:45:12
 -->
 <template>
   <div class="MainContent">
@@ -77,7 +77,7 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
-          <div class="operation" @click="operateProcess(row.version,row.activityName,row.channelCode)">
+          <div class="operation" @click="operateProcess(row.version,row.activityName,row.channelCode,row.minePackageName,row)">
             <svg-icon icon-class="submit_l" class="submit_icon" />
             办理
           </div>
@@ -284,33 +284,62 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
-    operateProcess(version, name, channelCode) {
+    operateProcess(version, name, channelCode,minePackage,row) {
+      let minePackageName=minePackage
+      if(minePackageName=='KA Contract') {
+        if (row.costItemName=='HIH rebate') {
+          minePackageName='HIH Rebate'
+        } else if(row.costItemName=='KA rebate') {
+          minePackageName='KA Rebate'
+        }
+      }
+      if(minePackageName=='POSM') {
+        if (row.costItemName=='In Store POSM - Standard') {
+          minePackageName='POSM - Standard'
+        } else if(row.costItemName=='In Store POSM - Customized') {
+          minePackageName='POSM - Customized'
+        }
+      }
+      if(minePackageName=='Price Promotion') {
+        if (row.costItemName=='Free Goods - Tin') {
+          minePackageName='Free Goods-Tin'
+        } else {
+          minePackageName='Price Promotion'
+        }
+      }
+      if(minePackageName=='New User') {
+        if(row.costItemName=='Free Goods - Win 2') {
+          minePackageName='Free Goods-Win2'
+        } else {
+          minePackageName='New User'
+        }
+      }
       if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApplyList', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0ApprovalList', params: { channelCode } })
         }
       }
       if (version.indexOf('V1')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V1/V1Apply', query: { channelCode ,minePackageName} })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V1/V1Approval', query: { channelCode,minePackageName } })
         }
       }
       if (version.indexOf('V2')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V2/V2Apply', query: { channelCode,minePackageName } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V2/V2Approval', query: { channelCode ,minePackageName} })
         }
       }
       if (version.indexOf('V3')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V3/V3Apply', query: { channelCode ,minePackageName} })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Approval', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V3/V3Approval', query: { channelCode ,minePackageName} })
         }
       }
     },

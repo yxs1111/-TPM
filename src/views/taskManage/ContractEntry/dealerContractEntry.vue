@@ -1,7 +1,11 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-16 14:01:16
+<<<<<<< HEAD
  * @LastEditTime: 2022-08-23 14:37:43
+=======
+ * @LastEditTime: 2022-09-05 10:45:21
+>>>>>>> dev
 -->
 <template>
   <div class="MainContent">
@@ -160,7 +164,7 @@
               {{ contractList[scope.row.contractState] }}
             </div>
             <div class="timeOutWrap">
-              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="click">
+              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual"  v-model="scope.row.isPopoverShow">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
                     <span>调整系统生效时间</span>
@@ -173,10 +177,10 @@
                   </div>
                   <div class="PopoverContentFoot">
                     <div class="TpmButtonBG" @click="popoverSubmit(scope.$index,scope.row)">保存</div>
-                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id)">取消</div>
+                    <div class="TpmButtonBG cancelButton" @click="popoverCancel(scope.row.id,scope.$index)">取消</div>
                   </div>
                 </div>
-                <svg-icon :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
+                <svg-icon @click="popoverShow(scope.row.id,scope.$index)" :icon-class="scope.row.earlyExpireDate!=null?'timeout':'timeout_dark'" slot="reference" class="svgIcon" />
               </el-popover>
             </div>
           </div>
@@ -343,7 +347,7 @@ import {
   parseTime,
   getContractEntry,
   contractList,
-  FormateThousandNum,
+  formatThousandNum,
   downloadFile,
   pickerOptions,
   pickerOptionsSystemDate,
@@ -458,11 +462,8 @@ export default {
       }
     },
     'filterObj.customerMdmCode'(value) {
-      if (value == '') {
-        this.filterObj.distributorMdmCode = ''
-      } else {
-        this.getDistributorList()
-      }
+      this.filterObj.distributorMdmCode = ''
+      this.getDistributorList()
     },
     'addDialog.id'(value) {
       if (value == '') {
@@ -493,6 +494,7 @@ export default {
           } else {
             item.isRefused = 0
           }
+          item.isPopoverShow = false
           item.isEditor = 0
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
@@ -760,6 +762,7 @@ export default {
         fixed: row.fixed,
         customerMdmCode: row.customerMdmCode,
         isEditor: 2,
+        isPopoverShow: false,  //定时任务弹窗显示
         expireDate: row.expireDate,
         contractDate: row.contractDate,
         systemDate: row.systemDate,
@@ -767,7 +770,7 @@ export default {
     },
     //更改合同日期--匹配对应的客户合同
     changeContractDate(row) {
-      
+
     },
     //更改系统生效时间
     changeSystemTime(row) {
@@ -823,7 +826,7 @@ export default {
                 effectiveEndDate.slice(4) +
                 '-01',
             )
-          ) 
+          )
         })
         console.log(index);
         if (index == -1) {
@@ -837,7 +840,7 @@ export default {
           //   isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
           // }).then((res) => {
           //   if (res.code === 1000) {
-              
+
           //   }
           // })
         }
@@ -937,15 +940,39 @@ export default {
       }).then((res) => {
         if (res.code === 1000) {
           this.$message.success('调整成功')
-          this.popoverCancel(row.id)
+          this.popoverCancel(row.id,index)
           this.getTableData()
         }
       })
     },
+    popoverShow(id,index) {
+      if (
+        this.tableData[index].contractStateName == '草稿' ||
+        this.tableData[index].contractStateName == '待审批' ||
+        this.tableData[index].contractStateName == '过期' ||
+        this.tableData[index].contractStateName == '终止'
+      ) {
+        this.$message.info(
+          '只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！'
+        )
+        return
+      }
+      //避免同时出现多个el-popover
+      for (const key in this.$refs) {
+        if (key.indexOf('popover-') !== -1) {
+            this.$refs[key].doClose();
+        }
+      }
+      this.tableData[index].isPopoverShow=true
+      //解决fixed 固定列之后 el-popover多个问题
+      let key='popover-'+id
+      this.$nextTick(() => { 
+        document.getElementById(this.$refs[key].$refs.popper.id).style.display = 'none' }
+      )
+    },
     //定时任务取消
-    popoverCancel(id) {
-      this.$refs[`popover-` + id].doClose()
-      this.tableKey++
+    popoverCancel(id,index) {
+      this.tableData[index].isPopoverShow=false
     },
     //导出数据
     async exportData() {
@@ -1169,7 +1196,7 @@ export default {
     },
     //格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
     //弹窗表格样式
     tableRowClassNameDialog({ row, rowIndex }) {

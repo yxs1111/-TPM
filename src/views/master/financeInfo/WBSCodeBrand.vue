@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-06-07 14:12:02
+ * @LastEditTime: 2022-08-10 10:02:59
 -->
 <template>
   <div class="app-container">
@@ -258,6 +258,7 @@ export default {
               id: this.editorId,
               brandID: this.ruleForm.brandID,
               brandName: this.ruleForm.brandName,
+              state:this.ruleForm.state
             }).then((response) => {
               if (response.code === 1000) {
                 this.$message.success(`修改成功`)

@@ -175,7 +175,7 @@ import {
   parseTime,
   getTextMap,
   ReportCheckList,
-  FormateThousandNum,
+  formatThousandNum,
   dynamicColumn,
   dynamicColumnCost,
   getCurrentMonth,
@@ -588,7 +588,7 @@ export default {
     },
     // 格式化--千位分隔符、两位小数
     FormateNum(num) {
-      return FormateThousandNum(num)
+      return formatThousandNum(num)
     },
   },
 }
