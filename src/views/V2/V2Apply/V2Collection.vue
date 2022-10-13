@@ -16,8 +16,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select" @change="getCostItemList">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
+            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -216,6 +216,7 @@ export default {
         channelCode: '',
         minePackage: '',
         costAccount: '',
+        MinePackageIndex: '',
         month: '',
       },
       permissions: getDefaultPermissions(),
@@ -245,7 +246,19 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.MinePackageIndex'(value) {
+      console.log(this.MinePackageList)
+      if(value!=='') {
+        this.filterObj.MinePackageName=this.MinePackageList[this.filterObj.MinePackageIndex].costType
+        this.filterObj.MinePackage=this.MinePackageList[this.filterObj.MinePackageIndex].costTypeNumber
+      } else {
+        this.filterObj.MinePackage = ''
+      }
+      this.filterObj.costItem = ''
+      this.getCostItemList(this.filterObj.MinePackage)
+    },
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -271,7 +284,7 @@ export default {
           pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
           channelName: this.filterObj.channelCode,
-          minePackage: this.filterObj.minePackage,
+          minePackage: this.filterObj.MinePackageName,
           costAccount: this.filterObj.costAccount,
           version: 'V2',
         }).then((response) => {
@@ -333,7 +346,7 @@ export default {
         })
         .then((res) => {
           this.MinePackageList = res.data
-          this.getCostItemList(this.filterObj.MinePackageCode)
+          // this.getCostItemList(this.filterObj.MinePackageCode)
         })
     },
     //千分位分隔符+两位小数

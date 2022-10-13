@@ -16,8 +16,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" @change="getCostItemList(filterObj.minePackage)">
-            <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择">
+            <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -104,6 +104,7 @@ export default {
       filterObj: {
         minePackage: '',
         costItem: '',
+        // MinePackageIndex: '',
         item: '',
       },
       permissions: getDefaultPermissions(),
@@ -146,6 +147,16 @@ export default {
       this.filterObj.MinePackageName = ''
       this.getMinePackageSelect(this.filterObj.CostTypeName)
     },
+    'filterObj.MinePackageIndex'(value) {
+      if(value!=='') {
+        this.filterObj.MinePackageName=this.minePackageList[this.filterObj.MinePackageIndex].costType
+        this.filterObj.MinePackage=this.minePackageList[this.filterObj.MinePackageIndex].costTypeNumber
+      } else {
+        this.filterObj.MinePackage = ''
+      }
+      this.filterObj.costItem = ''
+      this.getCostItemList(this.filterObj.MinePackage)
+    },
   },
   methods: {
     //获取表格数据
@@ -154,7 +165,10 @@ export default {
       API.getDisplayItem({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
-        ...this.filterObj,
+        minePackage: this.filterObj.MinePackageName,
+        // ...this.filterObj,
+        costItem: this.filterObj.costItem,
+        item: this.filterObj.item,
       }).then((response) => {
         this.tempObj.tempInfo = null
         this.tableData = response.data.records
