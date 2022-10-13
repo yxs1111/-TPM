@@ -1,11 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
-<<<<<<< HEAD
- * @LastEditTime: 2022-08-01 14:58:16
-=======
  * @LastEditTime: 2022-09-27 09:49:26
->>>>>>> dev
 -->
 <template>
   <div class="ContentDetail">
@@ -773,11 +769,7 @@ export default {
         console.log(AllTotalTableData)
         //variable + fix 汇总行
         if(VariableTotalTableData.length||FixedTotalTableData.length) {
-<<<<<<< HEAD
-          if(VariableTotalTableData.length) { 
-=======
           if(VariableTotalTableData.length) {
->>>>>>> dev
             AllTotalTableData[0].customerInfo.pointCount+=VariableTotalTableData[0].customerInfo.pointCount
             AllTotalTableData[0].customerInfo.taxPrice+=VariableTotalTableData[0].customerInfo.taxPrice
           } else {
