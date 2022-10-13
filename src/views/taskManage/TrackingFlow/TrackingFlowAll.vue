@@ -178,7 +178,7 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
-        minePackage: this.filterObj.MinePackageName,
+        minePackageName: this.filterObj.MinePackageName,
         channelCode: this.filterObj.channelCode,
         processStatus: this.filterObj.processStatus,
         costTypeName: this.filterObj.CostTypeName,
