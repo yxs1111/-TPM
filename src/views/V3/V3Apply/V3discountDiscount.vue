@@ -593,22 +593,7 @@ export default {
     // 提交
     submitApply() {
       if (this.tableData[0].judgmentType === null) {
-        this.$confirm('数据未校验，请先进行导入验证', '提示', {
-          confirmButtonText: '确定',
-          type: 'warning',
-        })
-          .then(() => {
-            this.$message({
-              type: 'success',
-              message: '好的!',
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消',
-            })
-          })
+        this.$message.info('系统判定不能为空')
       } else {
         this.$confirm(`此操作将进行${this.isBeforeOrAfter==0?'谈判前':'谈判后'}提交操作, 是否继续?`, '提示', {
           confirmButtonText: '确定',
