@@ -56,10 +56,10 @@
             <img src="../../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
-          <div class="TpmButtonBG" @click="clearsmartplan(filterObj)">
-            <img src="../../../assets/images/delete_l.png" alt="" />
-            <span class="text">清除数据</span>
-          </div>
+<!--          <div class="TpmButtonBG" @click="clearsmartplan(filterObj)">-->
+<!--            <img src="../../../assets/images/delete_l.png" alt="" />-->
+<!--            <span class="text">清除数据</span>-->
+<!--          </div>-->
         </div>
       </div>
     </div>

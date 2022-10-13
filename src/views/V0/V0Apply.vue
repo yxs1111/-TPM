@@ -658,16 +658,35 @@ export default {
             case 'ListingFee':
               url = API.getListingFee
               break
+            case 'POSM':
+              url = API.getPOSMData
+              break
             case 'Premium':
               url = API.getPremium
               break
+            case 'ECM':
+              url = API.getECMcreate
+              break
+            case 'Free Goods':
+              url = API.getFreeGoods
+              break
           }
-          url({
+          let obj = {
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
-          }).then((response) => {
+          }
+          if (this.ruleForm.Minepackage === 'POSM') {
+            obj = {
+              yearAndMonth: this.filterObj.month,
+              channelName: this.ruleForm.channelCode,
+              dimScenario: this.ruleForm.dimScenario,
+              dimVersion: this.ruleForm.dimVersion,
+            }
+          }
+          console.log(url)
+          url(obj).then((response) => {
             if (response.code == 1000) {
               this.$message.success('成功获取数据!')
               this.getList()
