@@ -16,8 +16,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costType" />
+          <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select" @change="getCostItemList">
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -317,8 +317,10 @@ export default {
       })
     },
     // 获取下拉框
-    getCostItemList() {
-      API.getCostItemList().then((res) => {
+    getCostItemList(code) {
+      API.getCostItemList({
+        minePackage: code,
+      }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
@@ -331,6 +333,7 @@ export default {
         })
         .then((res) => {
           this.MinePackageList = res.data
+          this.getCostItemList(this.filterObj.MinePackageCode)
         })
     },
     //千分位分隔符+两位小数

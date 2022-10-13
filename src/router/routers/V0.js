@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-09-16 09:36:50
  * @LastEditTime: 2022-08-15 09:39:44
  */
@@ -18,17 +18,17 @@ export default function() {
       meta: { title: 'V0 - Pre city plan 预拆分', icon: 'V0' },
       children: [
         {
-          path: '/costManagement/V0/V0ApplyList',
+          path: '/costManagement/V0/V0Apply',
           code: 'price_nka_v0_apply',
-          name: 'V0ApplyList',
-          component: () => import('@/views/V0/V0ApplyList.vue'),
+          name: 'V0Apply',
+          component: () => import('@/views/V0/V0Apply.vue'),
           meta: { title: '申请', icon: 'apply' },
         },
         {
-          path: '/costManagement/V0/V0ApprovalList',
+          path: '/costManagement/V0/V0Approva',
           code: 'price_nka_v0_approve',
-          name: 'V0ApprovalList',
-          component: () => import('@/views/V0/V0ApprovalList.vue'),
+          name: 'V0Approval',
+          component: () => import('@/views/V0/V0Approval.vue'),
           meta: { title: '审批', icon: 'approve' },
         },
       ]

@@ -9,6 +9,12 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
+          <span class="SelectliTitle">Cost Type:</span>
+          <el-select v-model="filterObj.CostTypeIndex" clearable placeholder="请选择" class="my-el-select">
+            <el-option v-for="item,index in CostTypeList" :key="index" :label="item.costType" :value="index" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
           <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" @change="getCostItemList(filterObj.minePackage)">
             <el-option v-for="item,index in minePackageList" :key="index" :label="item.costType" :value="item.costType" />
@@ -103,6 +109,7 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       CostItemList: [],
+      CostTypeList: [],
       minePackageList: [],
       isEditor: '',
       editorId: '',
@@ -123,11 +130,23 @@ export default {
       })()
     }
     this.getTableData()
+    this.getCostTypeList()
     this.getMinePackageSelect()
     this.getCostItemList()
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.CostTypeIndex'(value) {
+      if(value!=='') {
+        this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+        this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+      } else {
+        this.filterObj.CostTypeName = ''
+      }
+      this.filterObj.MinePackageName = ''
+      this.getMinePackageSelect(this.filterObj.CostTypeName)
+    },
+  },
   methods: {
     //获取表格数据
     getTableData() {
@@ -211,6 +230,17 @@ export default {
         this.tempObj.rowIndex,
         this.minePackageList
       )
+    },
+    getCostTypeList() {
+      selectAPI
+        .getCostTypeList({
+          costLevel: 1,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.CostTypeList = res.data
+          }
+        })
     },
     getMinePackageSelect() {
       selectAPI

@@ -142,7 +142,7 @@ export default {
     this.getQueryChannelSelect()
     this.getCostTypeList()
     this.getCostItemList()
-    this.getMinePackageSelect()
+    // this.getMinePackageSelect()
   },
   components: {
     FlowDiagram,
@@ -157,7 +157,7 @@ export default {
         this.filterObj.CostTypeName = ''
       }
       this.filterObj.MinePackageName = ''
-      // this.getMinePackageSelect()
+      this.getMinePackageSelect(this.filterObj.CostTypeName)
     },
   },
   methods: {
@@ -182,8 +182,8 @@ export default {
         .catch((error) => {})
     },
     // 获取下拉框
-    getCostItemList() {
-      selectAPI.getCostItemList({ minePackage: this.filterObj.MinePackageName }).then((res) => {
+    getCostItemList(MinePackageCode) {
+      selectAPI.getCostItemList({ minePackage: MinePackageCode }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
@@ -200,14 +200,6 @@ export default {
           }
         })
     },
-    // 获取下拉框 渠道
-    getQueryChannelSelect() {
-      selectAPI.queryChannelSelect().then((res) => {
-        if (res.code == 1000) {
-          this.channelOptons = res.data
-        }
-      })
-    },
     getMinePackageSelect() {
       selectAPI
         .queryMinePackageSelect({
@@ -216,9 +208,17 @@ export default {
         .then((res) => {
           if (res.code == 1000) {
             this.minePackageList = res.data
-            this.getCostItemList(this.filterObj.MinePackageName)
+            this.getCostItemList(this.filterObj.MinePackageCode)
           }
         })
+    },
+    // 获取下拉框 渠道
+    getQueryChannelSelect() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code == 1000) {
+          this.channelOptons = res.data
+        }
+      })
     },
     search() {
       this.pageNum = 1
