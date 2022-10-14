@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM定制
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-09-30 13:27:29
+ * @LastEditTime: 2022-10-14 15:19:04
 -->
 <template>
   <div class="MainContent">
@@ -335,6 +335,7 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
+      this.isSubmit = false
       if (
         this.filterObj.channelCode == '' ||
         this.filterObj.yearAndMonth == ''

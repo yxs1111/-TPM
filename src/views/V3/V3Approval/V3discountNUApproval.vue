@@ -694,6 +694,7 @@ export default {
     // 获取表格数据
     getTableData() {
       this.tableData = []
+      this.btnStatus = false
       if (!this.filterObj.channelCode || !this.localDate) {
         if (!this.localDate) {
           this.$message.info(messageObj.requireMonth)

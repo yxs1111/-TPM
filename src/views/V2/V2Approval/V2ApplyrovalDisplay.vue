@@ -466,6 +466,7 @@ export default {
     },
     // 获取表格数据
     getTableData() {
+      this.isSubmit = false
       API.displayList({
         pageSize: this.pageSize, // 每页条数
         ...this.filterObj,
