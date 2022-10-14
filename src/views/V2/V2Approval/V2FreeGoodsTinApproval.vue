@@ -576,6 +576,7 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
+        this.isSubmit = 1
         API.getApprovePage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
