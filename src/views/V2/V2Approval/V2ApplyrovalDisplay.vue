@@ -519,6 +519,7 @@ export default {
       this.uploadFile = ''
       this.ImportData = []
       this.saveBtn = false
+      this.getTableData()
     },
     // 导入
     parsingExcel(event) {
