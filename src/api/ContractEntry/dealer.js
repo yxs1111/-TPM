@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-15 13:29:35
- * @LastEditTime: 2022-06-23 10:24:00
+ * @LastEditTime: 2022-10-14 17:45:59
  */
 /*
  * @Description: 客户合同录入
@@ -62,6 +62,14 @@ export default {
   exportDistributorContractDetail(params) {
     return request({
       url: this.url+'/exportDistributorContractDetail',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  exportDistributorContract(params) {
+    return request({
+      url: this.url+'/exportDistributorContract',
       method: 'get',
       params: params,
       responseType: 'blob'
