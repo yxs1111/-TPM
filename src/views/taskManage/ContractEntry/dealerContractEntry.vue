@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-10-14 17:48:24
+ * @LastEditTime: 2022-10-21 18:59:07
 -->
 <template>
   <div class="MainContent">
@@ -81,7 +81,7 @@
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
-            <div class="haveText_editor" v-show="scope.row.isEditor" @click="CancelEditorRow(scope.$index)">
+            <div class="haveText_editor" v-show="scope.row.isEditor==1" @click="CancelEditorRow(scope.$index,scope.row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>取消编辑</span>
             </div>
@@ -347,6 +347,7 @@ import {
   downloadFile,
   pickerOptions,
   pickerOptionsSystemDate,
+  deepClone,
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -568,7 +569,55 @@ export default {
       this.$forceUpdate()
       sessionStorage.setItem('isEditor', `1-${index}`)
     },
-    CancelEditorRow(index) {
+    CancelEditorRow(index,row) {
+      //复制出来的 取消编辑
+      if(row.isEditor==2) {
+        // this.tableData.splice(index,1)
+        //找到源数据 进行重置操作
+        let findIndex= this.tableData.findIndex(item => item.id == row.id&&item.isEditor==0)
+        let originData = this.tableData[findIndex]
+        let newObj = {
+          id: originData.id,
+          createBy: originData.createBy,
+          createDate: originData.createDate,
+          customerChannelCode: originData.customerChannelCode,
+          updateBy: originData.updateBy,
+          updateDate: originData.updateDate,
+          deleteFlag: originData.deleteFlag,
+          ccId: originData.ccId,
+          distributorMdmCode: originData.distributorMdmCode,
+          distributorName: originData.distributorName,
+          saleAmount: originData.saleAmount,
+          contractBeginDate: originData.contractBeginDate,
+          contractEndDate: originData.contractEndDate,
+          effectiveBeginDate: originData.effectiveBeginDate,
+          effectiveEndDate: originData.effectiveEndDate,
+          contractState: 0,
+          remark: originData.remark,
+          poApprovalComments: originData.poApprovalComments,
+          finApprovalComments: originData.finApprovalComments,
+          isSupplement: originData.isSupplement,
+          earlyExpireDate: originData.earlyExpireDate,
+          entryDate: originData.entryDate,
+          customerName: originData.customerName,
+          customerRegionCode: originData.customerRegionCode,
+          customerRegionName: originData.customerRegionName,
+          customerContractSaleAmount: originData.customerContractSaleAmount,
+          contractStateName: '草稿',
+          variable: originData.variable,
+          fixed: originData.fixed,
+          customerMdmCode: originData.customerMdmCode,
+          isEditor: 2,
+          isPopoverShow: false,  //定时任务弹窗显示
+          expireDate: originData.expireDate,
+          contractDate: originData.contractDate,
+          systemDate: originData.systemDate,
+          originId:originData.id
+          }
+        this.$set(this.tableData,index,newObj)
+        this.$forceUpdate()
+        return
+      }
       // this.tableData.forEach((item) => (item.isEditor = 0))
       this.tableData[index].isEditor = 0
       this.tableData[index] = this.tempObj.tempInfo
@@ -762,6 +811,7 @@ export default {
         expireDate: row.expireDate,
         contractDate: row.contractDate,
         systemDate: row.systemDate,
+        originId:row.id
       })
     },
     //更改合同日期--匹配对应的客户合同
