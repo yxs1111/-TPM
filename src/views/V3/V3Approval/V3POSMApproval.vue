@@ -1064,7 +1064,6 @@ export default {
         this.isSubmit = 1
         API.getVThreePageApprove({
           pageNum: this.pageNum, // 当前页
-          pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           zoneName: this.filterObj.zoneName, //大区
           regionName: this.filterObj.regionName, //区域
