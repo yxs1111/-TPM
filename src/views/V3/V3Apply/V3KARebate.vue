@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2022-04-28 14:44:18
  * @LastEditTime: 2022-08-11 09:38:51
 -->
@@ -738,12 +738,13 @@ export default {
           yearAndMonth: this.filterObj.month,
           distributorCode: this.filterObj.distributorCode,
           costItemCode: 'KA rebate',
-          isSubmit:0
+          isSubmit: ''
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          // console.log(response.data.records)
           this.isSubmit = this.tableData[0].isSubmit
           this.isGainLe = this.tableData[0].isGainLe
           this.mainId = this.tableData[0].mainId
@@ -1025,7 +1026,7 @@ export default {
               API.approve({
                 mainId: mainId, // 主表id
                 opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                isSubmit: 0, //申请0,审批1
+                // isSubmit: 0, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
                   this.$message.success('提交成功')
