@@ -726,7 +726,7 @@ export default {
           supplierName: this.filterObj.supplierName,
           regionName: this.filterObj.regionName,
         }).then((response) => {
-          this.tableData = response.data
+          this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total

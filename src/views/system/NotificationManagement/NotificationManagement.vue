@@ -109,8 +109,8 @@
               <span class="SelectliTitle">主题:</span>
               <el-input v-model="filterObj.theme" filterable clearable placeholder="请输入" />
               <span style='margin-left: 18px'>发送方式：</span>
-              <el-checkbox v-model="interior">站内</el-checkbox>
-              <el-checkbox v-model="email">邮件</el-checkbox>
+              <el-checkbox v-model="filterObj.interior">站内</el-checkbox>
+              <el-checkbox v-model="filterObj.email">邮件</el-checkbox>
             </div>
           </div>
         </div>
@@ -213,8 +213,6 @@ export default {
       }],
       total: 0,
       pageSize: 100,
-      interior: false,
-      email: false,
       pageNum: 1,
       filterObj: {
         interfaceName: '',
@@ -223,6 +221,8 @@ export default {
         sendUser: '',
         State: '',
         theme: '',
+        interior: true,
+        email: false,
         editorConfig: {
           placeholder: '请输入内容...',
           MENU_CONF: {
