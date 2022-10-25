@@ -226,7 +226,7 @@
             <el-table-column width="220" align="right" prop="vtwoCostAdjust" label="V2预估费用">
               <template v-slot:header>
                 <div>
-                  V2预估费用<br /><span class="subTitle">KA+Brand</span>
+                  V2预估费用<br /><span class="subTitle">KA+Brand+供应商</span>
                 </div>
               </template>
               <template slot-scope="scope">
