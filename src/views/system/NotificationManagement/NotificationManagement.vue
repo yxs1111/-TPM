@@ -300,7 +300,7 @@ export default {
           // {
           //   key: 'group-image', // 必填，要以 group 开头
           //   title: '图片', // 必填
-          //   iconSvg: '<svg></svg>',
+          //   iconSvg: '',
           //   menuKeys: ['uploadImage',
           //     'insertImage',
           //     'deleteImage',
