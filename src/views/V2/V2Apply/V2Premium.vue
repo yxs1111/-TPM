@@ -911,10 +911,11 @@ export default {
           yearAndMonth: this.filterObj.month, //活动月
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          console.log(this.pageNum, this.pageSize, this.total, 'dangqianye')
+          this.isSubmit = this.tableData[0].isSubmit
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })

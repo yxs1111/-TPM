@@ -723,11 +723,11 @@ export default {
           regionCode: this.filterObj.regionCode,
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
           this.isGainLe = 1
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          this.isSubmit = this.tableData[0].isSubmit
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })
