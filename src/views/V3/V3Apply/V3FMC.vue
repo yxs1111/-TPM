@@ -264,7 +264,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="v3AdjustRealityPeopleNum" label="V3实际人数-调整后(人)">
         <template v-slot:header>
-          <div>V3实际人数-调整后(人)<br><span class="subTitle">从BI接入实际人数(需要汇总)</span></div>
+          <div>V3实际人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -559,7 +559,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="v3AdjustRealityPeopleNum" label="V3实际人数-调整后(人)">
               <template v-slot:header>
-                <div>V3实际人数-调整后(人)<br><span class="subTitle">从BI接入实际人数(需要汇总)</span></div>
+                <div>V3实际人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
