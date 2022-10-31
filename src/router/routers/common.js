@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-08-30 10:38:43
  * @LastEditTime: 2022-09-29 14:19:19
  */
@@ -36,7 +36,8 @@ export default [
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
-      component: () => import('@/views/common/dashboard/index'),
+      // component: () => import('@/views/common/dashboard/index'),
+      component: () => import('@/views/common/dashboard/indexNew'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
   }
