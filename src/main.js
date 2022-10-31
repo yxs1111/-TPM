@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-12-08 19:27:05
- * @LastEditTime: 2022-09-30 15:45:36
+ * @LastEditTime: 2022-10-31 17:42:12
  */
 import Vue from 'vue'
 
@@ -51,7 +51,7 @@ Vue.use(ElementUI, {
 })
 Vue.config.productionTip = false
 
-new Vue({
+const app =new Vue({
   el: '#app',
   router,
   store,
@@ -61,39 +61,25 @@ new Vue({
   },
   render: h => h(App)
 })
-let ganttState, ganttInstance;
+let ganttState, ganttInstance
 app.$on('gantt-elastic-ready', ganttElasticInstance => {
-  ganttInstance = ganttElasticInstance;
-  ganttState = ganttElasticInstance.state;
-  ganttInstance.$on('chart-task-mouseenter', ({ event, data }) => {
+  ganttInstance = ganttElasticInstance
+  ganttState = ganttElasticInstance.state
+  ganttInstance.$on('chart-task-click', ({ event, data }) => {
+    //点击task 切换 当前Task
+    // console.log('task list clicked! (chart)', { event, data });
+    app.$emit('changeActive', data.parentId)
+    app.$emit('isActiveId', data.parentId)
+  })
+ ganttInstance.$on('chart-task-mouseenter', ({ event, data }) => {
     console.log(data);
     app.$emit('taskMouseEnter', { event, data })
   })
   ganttInstance.$on('chart-task-mouseout', ({ event, data }) => {
     // console.log('task list mouseout! (chart)', { event, data });
     app.$emit('taskMouseout', { event, data })
-  })
-  // ganttInstance.$on('chart-task-click', ({ event, data }) => {
-  //   //点击task 切换 当前Task
-  //   // console.log('task list clicked! (chart)', { event, data });
-  //   app.$emit('changeActive',data.parentId)
-  //   app.$emit('isActiveId',data.parentId)
-  // });
-  // ganttInstance.$on('chart-task-mouseenter', ({ event, data }) => {
-  //   // console.log('task list mouseenter! (chart)', { event, data });
-  //   app.popUpShow = true;
-  //   const x = event.pageX + 5 + 'px';
-  //   const y = event.pageY + 10 + 'px';
-  //   app.content.label = data.label;
-  //   app.content.startTime = data.startTime;
-  //   app.content.endTime = data.endTime;
-  //   app.positionStyle = { top: y, left: x };
-  // });
-  ganttInstance.$on('chart-task-mouseout', ({ event, data }) => {
-    // console.log('task list mouseout! (chart)', { event, data });
-    app.popUpShow = false;
-  });
-});
+  }) 
+})
 //监听更改CurrentTask
 app.$on('changeActive',data=>{
   console.log(data);
