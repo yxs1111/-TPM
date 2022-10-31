@@ -7,7 +7,7 @@ import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
 
-export default function() {
+export default function () {
   const system = [
     {
       path: '/os',
@@ -23,42 +23,42 @@ export default function() {
           code: 'authPage_user',
           name: 'UserInfo',
           component: () => import('@/views/system/user/index.vue'),
-          meta: { title: '用户管理', icon: 'user' }
+          meta: { title: '用户管理', icon: 'user' },
         },
         {
           path: 'role',
           code: 'role',
           name: 'RoleInfo',
           component: () => import('@/views/system/RoleManage.vue'),
-          meta: { title: '角色管理', icon: 'user' }
+          meta: { title: '角色管理', icon: 'user' },
         },
         {
           path: 'permission',
           code: 'permission',
           name: 'Permission',
           component: () => import('@/views/system/permission/index.vue'),
-          meta: { title: '权限信息', icon: 'form' }
+          meta: { title: '权限信息', icon: 'form' },
         },
         {
           path: 'menu',
           code: 'menu',
           name: 'MenuInfo',
           component: () => import('@/views/system/menu/index.vue'),
-          meta: { title: '菜单管理', icon: 'tree' }
+          meta: { title: '菜单管理', icon: 'tree' },
         },
         {
           path: 'CycleManagement',
           code: 'authPage_cycle',
           name: 'CycleManagement',
           component: () => import('@/views/system/CycleManagement.vue'),
-          meta: { title: '周期管理', icon: 'form' }
+          meta: { title: '周期管理', icon: 'form' },
         },
         {
           path: 'MonitoringManagement',
           code: 'MonitoringManagement',
           name: 'MonitoringManagement',
           component: () => import('@/views/system/MonitoringManagement.vue'),
-          meta: { title: '监控管理', icon: 'form' }
+          meta: { title: '监控管理', icon: 'form' },
         },
         {
           path: '/os/NotificationManagement',
@@ -73,16 +73,28 @@ export default function() {
               path: '/os/NotificationManagement/NotificationManagement',
               code: 'MonitoringManagement',
               name: 'NotificationManagement',
-              component: () => import('@/views/system/NotificationManagement/NotificationManagement.vue'),
-              meta: { title: '通知清单', icon: 'form' , activeMenu: '/NotificationManagement' },
+              component: () =>
+                import(
+                  '@/views/system/NotificationManagement/NotificationManagement.vue'
+                ),
+              meta: {
+                title: '通知清单',
+                icon: 'form',
+                activeMenu: '/NotificationManagement',
+              },
             },
             {
               hidden: true,
               path: '/os/NotificationManagement/MockManage',
               code: 'MonitoringManagement',
               name: 'MockManage',
-              component: () => import('@/views/system/NotificationManagement/MockManage.vue'),
-              meta: { title: '模拟管理', icon: 'form' , activeMenu: '/MockManage' },
+              component: () =>
+                import('@/views/system/NotificationManagement/MockManage.vue'),
+              meta: {
+                title: '模拟管理',
+                icon: 'form',
+                activeMenu: '/MockManage',
+              },
             },
           ],
         },
@@ -91,17 +103,17 @@ export default function() {
           code: 'authPage_interface',
           name: 'InterfaceManage',
           component: () => import('@/views/system/InterfaceManage.vue'),
-          meta: { title: '接口管理', icon: 'tree' }
+          meta: { title: '接口管理', icon: 'tree' },
         },
-        // {
-        //   path: 'MessageManage',
-        //   code: 'authPage_message',
-        //   name: 'MessageManage',
-        //   component: () => import('@/views/system/MessageManage.vue'),
-        //   meta: { title: '通知管理', icon: 'tree' }
-        // },
-      ]
-    }
+        {
+          path: 'UserDocumentationCenter',
+          code: 'MonitoringManagement',
+          name: 'UserDocumentationCenter',
+          component: () => import('@/views/system/UserDocumentationCenter.vue'),
+          meta: { title: '用户文档中心', icon: 'form' },
+        },
+      ],
+    },
   ]
   if (showRouter([settings.stageKey])) {
     return []
