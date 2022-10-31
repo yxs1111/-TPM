@@ -199,9 +199,9 @@ export default {
               type: 'task',
               style: {
                 base: {
-                  fill: '#C0E2D9',
+                  fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor:'#5EBCA2'
+                  textColor:'#4795D4'
                 }
               },
               parentId:'task-4'
@@ -215,9 +215,9 @@ export default {
               type: 'task',
               style: {
                 base: {
-                  fill: '#C0E2D9',
+                  fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor:'#5EBCA2'
+                  textColor:'#4795D4'
                 }
               },
               parentId:'task-4'
