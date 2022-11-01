@@ -14,5 +14,8 @@ export default {
   //流程+日历
   getHomePageData(params) {
     return requestApi.request_get(this.url + '/homePage', params)
+  },
+  getActivity(params) {
+    return requestApi.request_get('/cityplan' + '/mdCycleConfig/getCycleListByThree', params)
   }
 }

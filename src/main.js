@@ -51,7 +51,7 @@ Vue.use(ElementUI, {
 })
 Vue.config.productionTip = false
 
-const app =new Vue({
+const app = new Vue({
   el: '#app',
   router,
   store,
@@ -78,7 +78,7 @@ app.$on('gantt-elastic-ready', ganttElasticInstance => {
   ganttInstance.$on('chart-task-mouseout', ({ event, data }) => {
     // console.log('task list mouseout! (chart)', { event, data });
     app.$emit('taskMouseout', { event, data })
-  }) 
+  })
 })
 //监听更改CurrentTask
 app.$on('changeActive',data=>{
