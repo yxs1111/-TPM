@@ -987,3 +987,25 @@ input::-webkit-inner-spin-button {
     resize: none !important;
   }
 }
+//loading 效果
+.el-loading-spinner .circular{
+  width: 202px;
+  height: 202px;
+  animation: loading-rotate 2s linear infinite;
+  display: none;
+}
+.el-loading-spinner{
+  /* 图片替换为你自定义的即可 */
+  background: url('../assets/loading.gif') no-repeat;
+  background-size: 300px 148px;
+  width: 300px;
+  height: 148px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.el-icon-loading ,.el-loading-text {
+  display: none;
+}
+
