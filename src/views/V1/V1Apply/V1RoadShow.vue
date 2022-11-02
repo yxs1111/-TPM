@@ -17,7 +17,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in ['NKA', 'EC']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -26,13 +26,13 @@
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-show='this.filterObj.channelCode == "NKA"'>
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-show='this.filterObj.channelCode == "NKA"'>
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
@@ -46,10 +46,11 @@
         </div> -->
       </div>
       <div class="OpertionBar">
-        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']">
+        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']" v-show='this.filterObj.channelCode == "NKA"'>
           <img src="@/assets/images/huoqu.png" alt="">
           <span class="text">获取Smart Plan数据</span>
         </div>
+        <el-button type="primary" class="TpmButtonBG" @click="clear"  v-if='this.filterObj.channelCode == "EC"'>清除数据</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -128,7 +129,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="supplierName" label="供应商">
+      <el-table-column width="280" align="center" prop="supplierName" label="供应商" v-if='this.filterObj.channelCode == "NKA"'>
         <template v-slot:header>
           <div>供应商<br><span class="subTitle">-</span></div>
         </template>
@@ -138,7 +139,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="zoneName" label="大区">
+      <el-table-column width="220" align="center" prop="zoneName" label="大区" v-if='this.filterObj.channelCode == "NKA"'>
         <template v-slot:header>
           <div>大区<br><span class="subTitle">-</span></div>
         </template>
@@ -148,7 +149,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="regionName" label="区域">
+      <el-table-column width="220" align="center" prop="regionName" label="区域" v-if='this.filterObj.channelCode == "NKA"'>
         <template v-slot:header>
           <div>区域<br><span class="subTitle">-</span></div>
         </template>
@@ -158,7 +159,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="activityType" label="活动类型">
+      <el-table-column width="220" align="center" prop="activityType" label="活动类型" v-if='this.filterObj.channelCode == "NKA"'>
         <template v-slot:header>
           <div>活动类型<br><span class="subTitle">-</span></div>
         </template>
@@ -168,7 +169,27 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planPrice" label="V1计划单价(RMB/场)">
+      <el-table-column width="220" align="center" prop="brandName" label="品牌" v-if='this.filterObj.channelCode == "EC"'>
+        <template v-slot:header>
+          <div>品牌<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.brandName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="activityType" label="业务细项" v-if='this.filterObj.channelCode == "EC"'>
+        <template v-slot:header>
+          <div>业务细项<br><span class="subTitle">KA+Brand+Item</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.activityType }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="planPrice" label="V1计划单价(RMB/场)" v-if='this.filterObj.channelCode == "NKA"'>
         <template v-slot:header>
           <div>
             V1计划单价(RMB/人)
@@ -182,7 +203,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planVol" label="V1计划场次(场)">
+      <el-table-column width="220" align="right" prop="planVol" label="V1计划场次(场)" v-if='this.filterObj.channelCode == "NKA"'>
         <template v-slot:header>
           <div>
             V1计划场次(场)
@@ -299,6 +320,17 @@ export default {
     this.getSupplierList()
   },
   methods: {
+    // 清除数据
+    clearData() {
+      API.clearData({
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        yearAndMonth: this.filterObj.month,
+        channelCode: this.filterObj.channelCode,
+      }).then(() => {
+        alert('清除数据成功')
+      })
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -411,6 +443,10 @@ export default {
     search() {
       this.pageNum = 1
       this.getTableData()
+    },
+    clear() {
+      this.pageNum = 1
+      this.clearData()
     },
     // 导出
     downExcel() {

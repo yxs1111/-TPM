@@ -82,6 +82,6 @@ app.$on('gantt-elastic-ready', ganttElasticInstance => {
 })
 //监听更改CurrentTask
 app.$on('changeActive',data=>{
-  console.log(data);
-  app.$emit('currentMonthChange','2022.07.01')
+  // console.log(data);
+  app.$emit('currentMonthChange',data)
 })

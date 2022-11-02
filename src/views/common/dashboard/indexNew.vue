@@ -12,7 +12,7 @@
 <!--      &lt;!&ndash;      <div class="month">年月</div>&ndash;&gt;-->
 <!--      &lt;!&ndash;      <div class="cycle">活动周期</div>&ndash;&gt;-->
 <!--    </div>-->
-    <GanttElastic :tasks="tasks" :options="options">
+    <GanttElastic :tasks="tasks" :options="options" ref='data'>
       <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
     </GanttElastic>
     <div v-show="popUpShow" class="hover_con" :style="positionStyle">
@@ -23,13 +23,14 @@
     </div>
     <div class="CityPlan">
       <div class="CityPlanTop">
-        <span class="date">202207</span>
+        <span class="date">{{this.activeMoon}}</span>
       </div>
       <div class="PointTipWrap">
         <div class="PointTipWrap3">
-          <div>NKA</div>
-          <div>EC</div>
-          <div>RKA</div>
+<!--          <div v-for="item in ['NKA', 'EC', 'RKA']" :key='item' @click="lpl(item)">{{item}}</div>-->
+          <el-button-group>
+            <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' @click="getHomePageData(item)">{{item}}</el-button>
+          </el-button-group>
         </div>
         <div class="PointTipWrap2">
           <div class="PointTip">
@@ -111,6 +112,7 @@
         </div>
       </div>
     </div>
+<!--    我的代办-->
     <div class="BottomBar">
       <div class="MyToDo">
         <div class="BarTitleWrap">
@@ -205,6 +207,7 @@
           </div>
         </div>
       </div>
+      <div class='needHelp'>？</div>
     </div>
   </div>
 </template>
@@ -281,11 +284,13 @@ export default {
             html: true,
             events: {
               click({ data, column }) {
-                alert('description clicked!\n' + data.label)
-              },
-            },
-          },
-        ],
+                // alert('description clicked!\n' + data.label)
+                // this.activeMoon = data.label
+                // // console.log(data)
+              }
+            }
+          }
+        ]
       },
       locale: {
         weekdays: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
@@ -335,6 +340,8 @@ export default {
       SalesAmountChart: '',
       ActualSalesChart: '',
       currentIndex: 0,
+      activeMoon: '',
+      tabPosition: 'left',
       TabList: [
         { id: 0, title: '待完成' },
         { id: 1, title: '已完成' },
@@ -486,17 +493,6 @@ export default {
           ]
         },
       ],
-      lpl: [
-        {
-          lol: '2022011'
-        },
-        {
-          lol: '202210'
-        },
-        {
-          lol: '202209'
-        }
-      ],
       options: options,
       content: {
         label: '',
@@ -513,6 +509,13 @@ export default {
   },
   created() {},
   mounted() {
+    this.$bus.$on('currentMonthChange', data=>{
+      this.tasks.forEach((item) => {
+        if (item.id == data) {
+          this.activeMoon = item.label
+        }
+      })
+    })
     this.$bus.$on('taskMouseEnter', (content) => {
       console.log(content)
       const { event, data } = content
@@ -524,12 +527,9 @@ export default {
       this.content.endTime = data.endTime
       this.positionStyle = { top: y, left: x }
     })
-    this.$bus.$on('taskMouseout', (content) => {
-      this.popUpShow = false
-    })
-    // let date = new Date()
-    // console.log(date.getTime())
-    // console.log(dayjs('2022-06-16').valueOf())
+    // this.$bus.$on('taskMouseout', (content) => {
+    //   this.popUpShow = false
+    // })
     this.getMesList()
     this.getHomePageData()
     this.getToDoData()
@@ -546,26 +546,97 @@ export default {
     },
   },
   methods: {
+    lpl(item) {
+      console.log(item,'渠道')
+    },
     getActivitycycle() {
       this.tasks = []
       API.getActivity().then((res) => {
-        // this.lpl.forEach((item) => {
-        //   item.label = item.lol
-        //   console.log(item.label)
-        //   this.tasks.push(item)
-        //   // item.startVOne = item.startAndEndVOne.substring(0, 10)
-        //   // item.EndVOne = item.startAndEndVOne.substring(item.startAndEndVOne.length - 10, item.startAndEndVOne.length)
-        //   // item.start = item.startVOne
-        //   // item.end = item.EndVOne
-        // })
-        console.log(res)
-        res.data.forEach((item)=>{
-          this.tasks.push({
-           label:item.activityMonth
-          })
+        res.data.forEach((item,index) => {
+          this.activeMoon = res.data[0].activityMonth
+          item.label = item.activityMonth
+          item.id = item.id
+          item.startVZero = item.startAndEndVZero.substring(0, 10)
+          item.EndVZero = item.startAndEndVZero.substring(item.startAndEndVZero.length - 10, item.startAndEndVZero.length)
+          item.startVOne = item.startAndEndVOne.substring(0, 10)
+          item.EndVOne = item.startAndEndVOne.substring(item.startAndEndVOne.length - 10, item.startAndEndVOne.length)
+          item.startVTwo = item.startAndEndVTwo.substring(0, 10)
+          item.EndVTwo = item.startAndEndVTwo.substring(item.startAndEndVTwo.length - 10, item.startAndEndVTwo.length)
+          item.startVThree = item.startAndEndVThree.substring(0, 10)
+          item.EndVThree = item.startAndEndVThree.substring(item.startAndEndVThree.length - 10, item.startAndEndVThree.length)
+          item.start = dayjs('2022-07-01').valueOf(),
+          item.end = dayjs('2022-12-30').valueOf()
+          item.type = 'group'
+          item.tasks = []
+          item.tasks.push(
+            {
+              id: item.id + 'v0',
+              label: 'V0',
+              start: dayjs(item.startVZero).valueOf(),
+              end: dayjs(item.EndVZero).valueOf(),
+              percent: 50,
+              type: 'task',
+              style: {
+                base: {
+                  fill: '#C6EBFE',
+                  stroke: '#C0E2D9',
+                  textColor: '#4795D4'
+                }
+              },
+              parentId: item.id
+            },
+            {
+              id: item.id + 'v1',
+              label: 'V1',
+              start: dayjs(item.startVOne).valueOf(),
+              end: dayjs(item.EndVOne).valueOf(),
+              percent: 50,
+              type: 'task',
+              style: {
+                base: {
+                  fill: '#C6EBFE',
+                  stroke: '#C0E2D9',
+                  textColor: '#4795D4'
+                }
+              },
+              parentId: item.id
+            },
+            {
+              id: item.id + 'v2',
+              label: 'V2',
+              start: dayjs(item.startVTwo).valueOf(),
+              end: dayjs(item.EndVTwo).valueOf(),
+              percent: 50,
+              type: 'task',
+              style: {
+                base: {
+                  fill: '#C6EBFE',
+                  stroke: '#C0E2D9',
+                  textColor: '#4795D4'
+                }
+              },
+              parentId: item.id
+            },
+            {
+              id: item.id + 'v3',
+              label: 'V3',
+              start: dayjs(item.startVThree).valueOf(),
+              end: dayjs(item.EndVThree).valueOf(),
+              percent: 50,
+              type: 'task',
+              style: {
+                base: {
+                  fill: '#C6EBFE',
+                  stroke: '#C0E2D9',
+                  textColor: '#4795D4'
+                }
+              },
+              parentId: item.id
+            }
+          )
+          this.tasks.push(item)
         })
       })
-      console.log(this.tasks)
     },
     dayjs(time) {
       return dayjs(time).format('YYYY-MM-DD')
@@ -621,8 +692,11 @@ export default {
       this.$router.push('/os/MessageManage')
     },
     // 日历和流程
-    getHomePageData() {
-      API.getHomePageData().then((res) => {
+    getHomePageData(item) {
+      API.getHomePageData({
+        yearAndMonth: this.activeMoon,
+        channelName: item
+      }).then((res) => {
         let array = res.data.investList
         //流程处理 日期分组
         let data = {}
@@ -1190,13 +1264,13 @@ export default {
   }
   .PointTipWrap3 {
     border-radius: 10px;
-    width: 11%;
+    width: 25%;
     margin: 5px 0px 5px 20px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    div{
+    el-button{
       padding: 5px 20px;
       background-color: #00afff
     }
@@ -1617,5 +1691,17 @@ export default {
 ::-webkit-scrollbar-thumb {
   background-color: #d1d1d1;
   border-radius: 3px;
+}
+.needHelp{
+  position: absolute;
+  background-color: #00afff;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  text-align: center;
+  display: inline-block;
+  line-height: 80px;
+  color: #fff;
+  font-size: 20px;
 }
 </style>
