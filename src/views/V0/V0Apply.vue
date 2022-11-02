@@ -143,7 +143,8 @@
                   'ECM',
                   'POSM',
                   'Premium',
-                  'Free Goods',]" :key="index" :label="item" :value="item" />
+                  'Free Goods',
+                  'RoadShow']" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
@@ -669,6 +670,9 @@ export default {
               break
             case 'Free Goods':
               url = API.getFreeGoods
+              break
+            case 'RoadShow':
+              url = API.getRoadShow
               break
           }
           let obj = {

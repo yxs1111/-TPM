@@ -64,6 +64,13 @@ export default {
       params
     )
   },
+  //获取RoadShow数据
+  getRoadShow(params) {
+    return requestApi.request_post(
+      '/cityplan/investCpRoadshowVOneDetail/create',
+      params
+    )
+  },
   //获取ecm数据 investCpEcmVOneDetail/create
   getECMcreate(params) {
     return requestApi.request_post(
