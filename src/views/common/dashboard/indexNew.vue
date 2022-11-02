@@ -207,7 +207,7 @@
           </div>
         </div>
       </div>
-      <div style='display: none'>
+      <div style='display: none; position: absolute; background-color: #fff6e5; box-shadow: 0px 0px 3px 5px #989797'>
         <div>用户文档中心</div>
         <div>
           <div>文档名称</div>
