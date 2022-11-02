@@ -18,7 +18,7 @@ export default {
   },
   // 清除数据
   clearData(params) {
-    return requestApi.request_get('/investCpRoadshowVOneDetail'+'/deleteAll', params)
+    return requestApi.request_post('/investCpRoadshowVOneDetail'+'/deleteAll', params)
   },
   // 导出
   downExcel(params) {

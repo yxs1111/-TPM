@@ -207,6 +207,13 @@
           </div>
         </div>
       </div>
+      <div style='display: none'>
+        <div>用户文档中心</div>
+        <div>
+          <div>文档名称</div>
+          <div>文件大小</div>
+        </div>
+      </div>
       <div class='needHelp'>？</div>
     </div>
   </div>
@@ -1703,5 +1710,6 @@ export default {
   line-height: 80px;
   color: #fff;
   font-size: 20px;
+  margin: 250px 20px 30px 1470px
 }
 </style>

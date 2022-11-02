@@ -323,8 +323,6 @@ export default {
     // 清除数据
     clearData() {
       API.clearData({
-        pageNum: this.pageNum, // 当前页
-        pageSize: this.pageSize, // 每页条数
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
       }).then(() => {
