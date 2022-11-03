@@ -17,7 +17,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in ['NKA', 'EC']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -26,13 +26,13 @@
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-show='this.filterObj.channelCode == "NKA"'>
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-show='this.filterObj.channelCode == "NKA"'>
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
@@ -46,10 +46,11 @@
         </div> -->
       </div>
       <div class="OpertionBar">
-        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']">
+        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']" v-show='this.filterObj.channelCode == "NKA"'>
           <img src="@/assets/images/huoqu.png" alt="">
           <span class="text">获取Smart Plan数据</span>
         </div>
+        <el-button type="primary" class="TpmButtonBG" @click="clear">清除数据</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -57,7 +58,7 @@
         </div>
       </div>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
@@ -231,6 +232,132 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-table v-if='this.filterObj.channelCode == "EC"' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
+        <template v-slot:header>
+          <div>CPID<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.cpId }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
+        <template v-slot:header>
+          <div>活动月<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.yearAndMonth }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型">
+        <template v-slot:header>
+          <div>费用类型<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costTypeName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package">
+        <template v-slot:header>
+          <div>Mine Package<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.minePackageName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="180" align="center" prop="costItemName" label="费用科目">
+        <template v-slot:header>
+          <div>费用科目<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costItemName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+        <template v-slot:header>
+          <div>渠道<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.channelCode }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称">
+        <template v-slot:header>
+          <div>客户系统名称<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.customerName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="brandName" label="品牌">
+        <template v-slot:header>
+          <div>品牌<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.brandName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="activityType" label="业务细项">
+        <template v-slot:header>
+          <div>业务细项<br><span class="subTitle">KA+Brand+Item</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.activityType }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="planCost" label="V1计划费用(RMB)">
+        <template v-slot:header>
+          <div>
+            V1计划费用(RMB)
+            <br>
+            <span class="subTitle">KA+Brand+Item</span>
+          </div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ FormatNum(scope.row.planCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="dept" label="费用归属部门">
+        <template v-slot:header>
+          <div>费用归属部门<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.dept }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="cancelCost" label="费用核销方式">
+        <template v-slot:header>
+          <div>费用核销方式<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.cancelCost }}
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
@@ -299,6 +426,15 @@ export default {
     this.getSupplierList()
   },
   methods: {
+    // 清除数据
+    clearData() {
+      API.clearData({
+        yearAndMonth: this.filterObj.month,
+        channelCode: this.filterObj.channelCode,
+      }).then(() => {
+        alert('清除数据成功')
+      })
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -412,12 +548,17 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
+    clear() {
+      this.pageNum = 1
+      this.clearData()
+    },
     // 导出
     downExcel() {
       if (this.tableData.length) {
         API.downExcel({
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
+          customerCode: this.filterObj.customerCode,
           menu: 'export', //导出常量 固定传这个
         }).then((res) => {
           downloadFile(
