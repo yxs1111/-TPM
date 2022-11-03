@@ -27,7 +27,6 @@
       </div>
       <div class="PointTipWrap">
         <div class="PointTipWrap3">
-<!--          <div v-for="item in ['NKA', 'EC', 'RKA']" :key='item' @click="lpl(item)">{{item}}</div>-->
           <el-button-group>
             <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' @click="getHomePageData(item)">{{item}}</el-button>
           </el-button-group>
@@ -207,25 +206,17 @@
           </div>
         </div>
       </div>
-      <div style='display: none; position: absolute; background-color: #fff6e5; box-shadow: 0px 0px 3px 5px #989797'>
-        <div>用户文档中心</div>
-        <div style='display: flex'>
-          <div style='display: inline-block'>文档名称</div>
-          <div style='display: inline-block'>文件大小</div>
-        </div>
-      </div>
-<!--      <div class='needHelp'>？</div>-->
-<!--      <el-button class='needHelp' type="primary" icon="el-icon-headset" circle></el-button>-->
       <el-popover
         placement="right"
         width="400"
         trigger="click">
         <el-table :data="gridData">
-          <el-table-column width="150" property="date" label="日期"></el-table-column>
-          <el-table-column width="100" property="name" label="姓名"></el-table-column>
-          <el-table-column width="300" property="address" label="地址"></el-table-column>
+          <el-table-column width="150" property="date" label=""></el-table-column>
+          <el-table-column width="100" property="name" label="文件名称"></el-table-column>
+          <el-table-column width="300" property="size" label="文件大小"></el-table-column>
+          <el-table-column width="300" property="address" label=""></el-table-column>
         </el-table>
-        <el-button class='needHelp' slot="reference" icon="el-icon-headset"></el-button>
+        <el-button class='needHelp' slot="reference" icon="el-icon-headset" @click='needHelp'></el-button>
       </el-popover>
     </div>
   </div>
@@ -357,18 +348,7 @@ export default {
       gridData: [{
         date: '2016-05-02',
         name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
+        size: '45kb',
         address: '上海市普陀区金沙江路 1518 弄'
       }],
       avatar: auth.getAvatar(),
@@ -582,8 +562,18 @@ export default {
     },
   },
   methods: {
-    lpl(item) {
-      console.log(item,'渠道')
+    needHelp() {
+      this.gridData = []
+      TaskAPI.getNeedHelp().then((res) => {
+        res.data.forEach((item, index) => {
+          item.date = item.fileName
+          item.name = item.fileName
+          item.size = item.fileSize
+          item.address = item.fileUrl
+          this.gridData.push(item)
+          // console.log(item)
+        })
+      })
     },
     getActivitycycle() {
       this.tasks = []

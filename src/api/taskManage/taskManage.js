@@ -28,6 +28,10 @@ export default {
   getContractListTodo(params) {
     return requestApi.request_get('/cityplan/myHandle/getTaskPageContract', params)
   },
+  //我的帮助
+  getNeedHelp(params) {
+    return requestApi.request_get('/mdm/mdUserDocument/getAllFile', params)
+  },
   //合同待办导出
   contractExport(params) {
     return request({
