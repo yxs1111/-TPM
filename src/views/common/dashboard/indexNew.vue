@@ -209,12 +209,24 @@
       </div>
       <div style='display: none; position: absolute; background-color: #fff6e5; box-shadow: 0px 0px 3px 5px #989797'>
         <div>用户文档中心</div>
-        <div>
-          <div>文档名称</div>
-          <div>文件大小</div>
+        <div style='display: flex'>
+          <div style='display: inline-block'>文档名称</div>
+          <div style='display: inline-block'>文件大小</div>
         </div>
       </div>
-      <div class='needHelp'>？</div>
+<!--      <div class='needHelp'>？</div>-->
+<!--      <el-button class='needHelp' type="primary" icon="el-icon-headset" circle></el-button>-->
+      <el-popover
+        placement="right"
+        width="400"
+        trigger="click">
+        <el-table :data="gridData">
+          <el-table-column width="150" property="date" label="日期"></el-table-column>
+          <el-table-column width="100" property="name" label="姓名"></el-table-column>
+          <el-table-column width="300" property="address" label="地址"></el-table-column>
+        </el-table>
+        <el-button class='needHelp' slot="reference" icon="el-icon-headset"></el-button>
+      </el-popover>
     </div>
   </div>
 </template>
@@ -342,6 +354,23 @@ export default {
        }*/
     }
     return {
+      gridData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }],
       avatar: auth.getAvatar(),
       name: auth.getName(),
       SalesAmountChart: '',
@@ -1703,13 +1732,12 @@ export default {
   position: absolute;
   background-color: #00afff;
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   text-align: center;
   display: inline-block;
-  line-height: 80px;
   color: #fff;
   font-size: 20px;
-  margin: 250px 20px 30px 1470px
+  margin: 0px 0px 0px -80px
 }
 </style>
