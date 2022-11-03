@@ -4,34 +4,51 @@
     <div class="SelectBarWrap">
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
-          <span class="SelectliTitle">通知内容</span>
-          <el-input v-model="filterObj.content" filterable clearable placeholder="请输入">
-            <!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
+          <span class="SelectliTitle">主题</span>
+          <el-input
+            v-model="filterObj.theme"
+            filterable
+            clearable
+            placeholder="请输入"
+          >
           </el-input>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">接受角色</span>
-          <el-input v-model="filterObj.sendUser" filterable clearable placeholder="请输入">
-            <!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
+          <el-input
+            v-model="filterObj.sendUser"
+            filterable
+            clearable
+            placeholder="请输入"
+          >
           </el-input>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">状态</span>
-          <el-select v-model="filterObj.State" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />
+          <el-select
+            v-model="filterObj.State"
+            filterable
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="(item, index) in ['无效', '有效']"
+              :key="index"
+              :label="item"
+              :value="index"
+            />
           </el-select>
         </div>
-        <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <!--        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>-->
-        <!--        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">-->
-        <!--          <img src="@/assets/images/export.png" alt="" />-->
-        <!--          <span class="text">导出</span>-->
-        <!--        </div>-->
+        <el-button
+          v-permission="permissions['get']"
+          type="primary"
+          class="TpmButtonBG"
+          @click="search"
+          >查询</el-button
+        >
       </div>
     </div>
-<!--    <div class="SelectBar">-->
-<!--      <el-button type="primary" class="TpmButtonBG" @click="writeEmail">即时通知</el-button>-->
-<!--    </div>-->
+    <!-- 列表 -->
     <el-table
       :data="tableData"
       border
@@ -39,48 +56,82 @@
       :header-cell-style="HeadTable"
       :row-class-name="tableRowClassName"
       style="width: 100%"
-      @selection-change="handleSelectionChange"
     >
       <!--      <el-table-column align="center" prop="interfaceName" label="操作"> </el-table-column>-->
-      <el-table-column align="center" prop="id" label="序号" fixed/>
-      <el-table-column align="center" prop="id" label="操作" fixed>
+      <el-table-column align="center" prop="id" label="序号" fixed />
+      <el-table-column align="center" prop="id" label="操作" fixed width="180">
         <template slot-scope="scope">
           <div class="table_operation">
-            <div class="haveText_editor" @click="writeEmail(scope.$index,scope.row)">
+            <div
+              class="haveText_editor"
+              @click="writeEmail(scope.$index, scope.row)"
+            >
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
+            </div>
+            <div
+              class="haveText_editor"
+              @click="writeEmail(scope.$index, scope.row, true)"
+            >
+              <svg-icon icon-class="editor" class="svgIcon" />
+              <span>查看</span>
             </div>
           </div>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="theme" label="主题" />
-      <el-table-column align="center" prop="sendUser" label="接受角色/接受角色" />
-      <el-table-column align="center" prop="sendUser" label="触发条件" />
-      <el-table-column v-slot="{row}" align="center" prop="type" label="通知类型">
-        {{ row.type == 1 ? '定时通知' : '即时通知' }}
+      <el-table-column
+        align="center"
+        prop="sendUser"
+        label="接受角色/接受角色"
+        width="180"
+      />
+      <el-table-column
+        align="center"
+        prop="triggerCondition"
+        label="触发条件"
+      />
+      <el-table-column
+        v-slot="{ row }"
+        align="center"
+        prop="type"
+        label="通知类型"
+      >
+        {{ row.type ? '定时通知' : '即时通知' }}
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" prop="type" label="站内">
-        {{ row.type == 1 ? '是' : '否' }}
+      <el-table-column v-slot="{ row }" align="center" prop="isZn" label="站内">
+        {{ row.isZn ? '是' : '否' }}
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" prop="type" label="邮件">
-        {{ row.type == 1 ? '是' : '否' }}
+      <el-table-column
+        v-slot="{ row }"
+        align="center"
+        prop="isEmail"
+        label="邮件"
+      >
+        {{ row.isEmail ? '是' : '否' }}
       </el-table-column>
-      <el-table-column width="150" align="center" prop="deleteFlag" label="状态">
-        <template slot-scope="{row}">
+      <el-table-column width="150" align="center" prop="state" label="状态">
+        <template slot-scope="{ row }">
           <div>
-            {{ row.deleteFlag?'无效':'有效' }}
+            {{ row.state ? '有效' : '无效' }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="deleteFlag" label="修改人">
-        <template slot-scope="{row}">
-          <div>
-            {{ row.deleteFlag?'无效':'有效' }}
-          </div>
-        </template>
+      <el-table-column
+        width="150"
+        align="center"
+        prop="updateBy"
+        label="修改人"
+      >
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" prop="sendTime" label="修改时间">
-        {{ row.sendTime ? row.sendTime.replace("T"," ") : '' }}
+      <el-table-column
+        v-slot="{ row }"
+        align="center"
+        prop="updateDate"
+        label="修改时间"
+        width="180"
+      >
+        {{ row.updateDate ? row.updateDate.replace('T', ' ') : null }}
       </el-table-column>
       <!-- <el-table-column align="center" prop="inData" label="接口参数"> </el-table-column> -->
     </el-table>
@@ -96,36 +147,64 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <el-dialog width="55%" title="修改模板" :visible="addVisible" class="my-el-dialog" @close="closeDialog">
+    <!-- 编辑 -->
+    <el-dialog
+      width="55%"
+      title="修改模板"
+      :visible="addVisible"
+      class="my-el-dialog"
+      @close="cancleWriteEmail"
+    >
       <div>
         <div class="SelectBarWrap">
           <div class="SelectBar2" @keyup.enter="search">
             <div class="Selectli ejectInput2">
               <span class="SelectliTitle">主题:</span>
-              <el-input v-model="filterObj.theme" filterable clearable placeholder="请输入" />
-              <span style='margin-left: 18px'>发送方式：</span>
-              <el-checkbox v-model="interior">站内</el-checkbox>
-              <el-checkbox v-model="email">邮件</el-checkbox>
+              <el-input
+                v-model="row.theme"
+                filterable
+                clearable
+                placeholder="请输入"
+                :disabled="diaState"
+              />
+              <span style="margin-left: 18px">发送方式：</span>
+              <el-checkbox v-model="row.isZn" :disabled="diaState"
+                >站内</el-checkbox
+              >
+              <el-checkbox v-model="row.isEmail" :disabled="diaState"
+                >邮件</el-checkbox
+              >
             </div>
             <div class="Selectli ejectInput3">
               <span class="SelectliTitle">接收角色:</span>
-              <el-cascader
-                v-model="filterObj.toUserList"
-                :options="options"
-                :props="props"
+              <el-select
+                v-model="row.sendUser"
+                multiple
                 clearable
-                filterable
-                @change="handleChange"
-              />
-              <span style='margin-left: 18px'>状</span>
-              <span style='margin-left: 28px'>态：</span>
-              <el-radio v-model="radio" label="1">有效</el-radio>
-              <el-radio v-model="radio" label="2">无效</el-radio>
+                :disabled="diaState"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code"
+                >
+                </el-option>
+              </el-select>
+              <span style="margin-left: 18px">状</span>
+              <span style="margin-left: 28px">态：</span>
+              <el-radio v-model="row.state" :disabled="diaState" :label="1"
+                >有效</el-radio
+              >
+              <el-radio v-model="row.state" :disabled="diaState" :label="0"
+                >无效</el-radio
+              >
             </div>
           </div>
         </div>
         <div class="Selectli">
-          <div style="border: 1px solid #ccc;">
+          <div style="border: 1px solid #ccc; position: relative">
             <Toolbar
               style="border-bottom: 1px solid #ccc"
               :editor="editor"
@@ -133,38 +212,33 @@
               :mode="mode"
             />
             <Editor
-              v-model="html"
-              style="height: 500px; overflow-y: hidden;"
+              v-model="row.content"
+              style="height: 500px; overflow-y: hidden"
               :default-config="filterObj.editorConfig"
               :mode="mode"
               @onCreated="onCreated"
             />
+            <div v-if="diaState" class="zhezhao"></div>
           </div>
-<!--          <div style="display: flex; align-items: center;  margin-top: 18px;">-->
-<!--            <el-button type="primary" class="TpmButtonBG" @click="parsingExcelBtn">上传附件</el-button>-->
-<!--            <input-->
-<!--              id="fileElem"-->
-<!--              ref="filElem"-->
-<!--              type="file"-->
-<!--              multiple='multiple'-->
-<!--              style="display: none"-->
-<!--              @change="parsingExcel($event)"-->
-<!--            >-->
-<!--            <div v-if="uploadFileName != ''" class="fileName">-->
-<!--              <div v-for="(item, index) in uploadFileName">-->
-<!--                <img-->
-<!--                  src="@/assets/upview_fileicon.png"-->
-<!--                  alt=""-->
-<!--                  class="upview_fileicon"-->
-<!--                >-->
-<!--                <span>{{ item }}</span>-->
-<!--                <span style="color: #4192D3; margin-left: 15px; cursor: pointer" @click="deleteLi(index)">删除</span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-          <div style="display: flex; align-items: center; justify-content: center; margin-top: 18px;">
-            <el-button type="primary" class="TpmButtonBG" @click="confirm">保存</el-button>
-            <el-button type="primary" plain class="TpmButtonBG2" @click="cancleWriteEmail">取消</el-button>
+          <div
+            v-if="!diaState"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-top: 18px;
+            "
+          >
+            <el-button type="primary" class="TpmButtonBG" @click="confirm"
+              >保存</el-button
+            >
+            <el-button
+              type="primary"
+              plain
+              class="TpmButtonBG2"
+              @click="cancleWriteEmail"
+              >取消</el-button
+            >
           </div>
         </div>
       </div>
@@ -176,17 +250,8 @@
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import {
-  getDefaultPermissions,
-  parseTime,
-  getTextMap,
-  getHeightSingle,
-  downloadFile
-} from '@/utils'
+import { getDefaultPermissions, getHeightSingle } from '@/utils'
 import API from '@/api/masterData/masterData.js'
-import selectAPI from '@/api/selectCommon/selectCommon'
-import item from '@/layout/components/Sidebar/Item'
-import { DomEditor } from '@wangeditor/editor'
 
 export default {
   name: 'MockManage',
@@ -195,38 +260,14 @@ export default {
 
   data() {
     return {
-      value: [],
-      props: {
-        multiple: true,
-        expandTrigger: 'hover',
-        emitPath: false,
-        value: 'name',
-        label: 'email',
-        children: 'userList'
-      },
-      options: [{
-        name: 1,
-        email: '东南',
-        userList: [
-          { name: 2, email: '上海' },
-          { name: 3, email: '上海' },
-          { name: 4, email: '上海' }
-        ]
-      }, {
-        name: 5,
-        email: '东北',
-        userList: [
-          { name: 6, email: '北京' },
-          { name: 7, email: '北京' },
-          { name: 9, email: '北京' }
-        ]
-      }],
+      options: [],
       total: 0,
       pageSize: 100,
       interior: false,
       email: false,
       radio: '1',
       pageNum: 1,
+      diaState: false,
       filterObj: {
         interfaceName: '',
         invokeDateSting: '',
@@ -239,30 +280,17 @@ export default {
           MENU_CONF: {
             // 配置上传图片
             uploadImage: {
-              customUpload: this.uploadImg
-            }
+              customUpload: this.uploadImg,
+            },
             // 继续其他菜单配置...
-          }
+          },
         },
-        toUserList: [],
-        ccUserList: [],
-        toUser: [],
-        ccUser: []
       },
-      changeFile: [],
       addVisible: false, // 导入弹窗
       permissions: getDefaultPermissions(),
-      InterfaceList: [],
-      uploadFileName: [],
-      uploadFile: [],
-      fileArr: [],
-      sendUserList: [],
-      ccUserList: [],
       tableData: [],
-      dialogVisible: false,
       maxheight: getHeightSingle(),
       editor: null,
-      html: '<p>hello</p>',
       toolbarConfig: {
         /* 工具栏配置 */
         toolbarKeys: [
@@ -275,11 +303,7 @@ export default {
           {
             key: 'group-more-style',
             title: '更多',
-            menuKeys: ['through',
-              'code',
-              'sup',
-              'sub',
-              'clearStyle']
+            menuKeys: ['through', 'code', 'sup', 'sub', 'clearStyle'],
           },
           'color',
           'bgColor',
@@ -292,20 +316,23 @@ export default {
           'numberedList',
           'todo',
           {
-            iconSvg: '<svg viewBox="0 0 1024 1024"><path d="M768 793.6v102.4H51.2v-102.4h716.8z m204.8-230.4v102.4H51.2v-102.4h921.6z m-204.8-230.4v102.4H51.2v-102.4h716.8zM972.8 102.4v102.4H51.2V102.4h921.6z"></path></svg>',
+            iconSvg:
+              '<svg viewBox="0 0 1024 1024"><path d="M768 793.6v102.4H51.2v-102.4h716.8z m204.8-230.4v102.4H51.2v-102.4h921.6z m-204.8-230.4v102.4H51.2v-102.4h716.8zM972.8 102.4v102.4H51.2V102.4h921.6z"></path></svg>',
             key: 'group-justify',
             title: '对齐',
-            menuKeys: ['justifyLeft',
+            menuKeys: [
+              'justifyLeft',
               'justifyRight',
               'justifyCenter',
-              'justifyJustify']
+              'justifyJustify',
+            ],
           },
           {
-            iconSvg: '<svg viewBox="0 0 1024 1024"><path d="M0 64h1024v128H0z m384 192h640v128H384z m0 192h640v128H384z m0 192h640v128H384zM0 832h1024v128H0z m0-128V320l256 192z"></path></svg>',
+            iconSvg:
+              '<svg viewBox="0 0 1024 1024"><path d="M0 64h1024v128H0z m384 192h640v128H384z m0 192h640v128H384z m0 192h640v128H384zM0 832h1024v128H0z m0-128V320l256 192z"></path></svg>',
             key: 'group-indent',
             title: '缩进',
-            menuKeys: ['indent',
-              'delIndent']
+            menuKeys: ['indent', 'delIndent'],
           },
           // 菜单组，包含多个菜单
           // {
@@ -336,22 +363,24 @@ export default {
           {
             key: 'group-table',
             title: '表格',
-            menuKeys: ['insertTable',
+            menuKeys: [
+              'insertTable',
               'deleteTable',
               'insertTableRow',
               'deleteTableRow',
               'insertTableCol',
               'deleteTableCol',
               'tableHeader',
-              'tableFullWidth']
+              'tableFullWidth',
+            ],
           },
           'codeBlock',
           'divider',
           '|',
           'undo',
           'redo',
-          'fullScreen'
-        ]
+          'fullScreen',
+        ],
       },
       editorConfig: {
         placeholder: '请输入内容...',
@@ -381,26 +410,34 @@ export default {
               // 从 result 中找到 url alt href ，然后插图图片
               console.log(result.data)
               insertFn(result.data)
-            }
-          }
+            },
+          },
           // 继续其他菜单配置...
-        }
+        },
       },
       mode: 'default', // or 'simple'
-      arr1: []
+      row: {
+        theme: '',
+        content: '',
+        sendUser: [],
+        isZn: '',
+        isEmail: '',
+        state: '',
+        id: '',
+      },
     }
   },
-  computed: {},
   methods: {
     // 获取表格数据
     getTableData() {
       this.tableData = []
-      API.getNotification({
+      const { theme, sendUser, State } = this.filterObj
+      API.getSimulation({
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
-        content: this.filterObj.content,
-        sendUser: this.filterObj.sendUser,
-        State: this.filterObj.State
+        theme,
+        sendUser,
+        State,
       }).then((response) => {
         this.tableData = response.data.records
         this.pageNum = response.data.pageNum
@@ -408,159 +445,63 @@ export default {
         this.total = response.data.total
       })
     },
-    getInterfaceList() {
-      API.getInterfaceList({
-      }).then((response) => {
-        this.InterfaceList = response.data
-      })
-    },
     search() {
       this.pageNum = 1
       this.getTableData()
-    },
-    // 选择导入文件
-    parsingExcelBtn() {
-      this.saveBtn = false
-      this.$refs.filElem.dispatchEvent(new MouseEvent('click'))
     },
     // 获取下拉框
     getChannel() {
       API.recipientSelect().then((res) => {
         if (res.code === 1000) {
-          this.sendUserList = res.data
-          this.ccUserList = res.data
           this.options = res.data
-          this.sendUserList.forEach(item => {
-            item.email = item.name
-            item.email1 = item.name
-            item.userList.forEach(kk => {
-              kk.email = kk.name + '(' + kk.email + ')'
-              kk.name = item.email1 + kk.email
-            })
-          })
-          this.ccUserList.forEach(item => {
-            item.email = item.name
-          })
-          // console.log(this.options)
         }
       })
-    },
-    // 导入
-    parsingExcel(event) {
-      this.uploadFile = event.target.files
-      let tempFileList=[]
-      this.uploadFile.forEach(item => {
-        tempFileList.push(item)
-      })
-      tempFileList.forEach(item => {
-        // console.log(tempFileList, item.name)
-        const kk = this.uploadFileName.includes(item.name)
-        // console.log(kk)
-        if (kk == false) {
-          this.fileArr.push(item)
-          this.uploadFileName.push(item.name)
-        }
-      })
-      console.log(this.uploadFileName, 'tempFileList=>', tempFileList, 'fileArr=>', this.fileArr)
-      // console.log('导入fileArr=》', this.fileArr, '导入uploadFile=》', this.uploadFile)
-      event.srcElement.value = '' // 置空
-      // event.target.files = ''
-    },
-    // 删除已选择的文件
-    deleteLi(index) {
-      this.uploadFileName.splice(index, 1)
-      this.fileArr.splice(index, 1)
-      console.log('删除=》', this.fileArr,)
     },
     // 导入弹出框
     confirm() {
-      if (this.filterObj.theme !== '') {
-        this.$confirm('请确认保存，同时请知悉：修改后的定时通知，将在下一次触发条件发送，谢谢！', '模板修改确认', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.confirmImport()
-          this.$message({
-            type: 'success',
-            message: '发送成功!'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消发送'
-          })
-        })
-      } else {
-        alert('必须填写主题内容')
-      }
-    },
-    // 确认导入
-    confirmImport() {
-      console.log(this.interior, this.email)
-      if (this.filterObj.theme !== '') {
-        const formData = new FormData()
-        for (let i = 0; i < this.fileArr.length; i++) {
-          formData.append('files', this.fileArr[i])
-        }
-        formData.append('toUserList', this.filterObj.toUser)
-        formData.append('ccUserList', this.filterObj.ccUser)
-        formData.append('theme', this.filterObj.theme)
-        formData.append('content', this.html)
-        API.importNormal(formData).then((res) => {
+      if (this.row.theme !== '') {
+        const { theme, content, sendUser, isZn, isEmail, state, id } = this.row
+        API.editSimulation({
+          theme,
+          content,
+          sendUser: sendUser.join(),
+          isZn: isZn ? 1 : 0,
+          isEmail: isEmail ? 1 : 0,
+          state,
+          id,
+        }).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
           } else {
             this.$message.info(this.messageMap.saveError)
           }
+          this.cancleWriteEmail()
         })
-        alert('发送成功')
-        this.cancleWriteEmail()
       } else {
         alert('必须填写主题内容')
       }
     },
-    // 接收人下拉框改变
-    handleChange(value) {
-      var toUser = []
-      value.forEach(item => {
-        var encode = item
-        var re = /\([^\)]+\)/g
-        encode = encode.match(re)[0]
-        encode = encode.substring(1, encode.length - 1)
-        toUser.push(encode)
-      })
-      this.filterObj.toUser = toUser
-      value = this.filterObj.toUser
-      this.filterObj.toUser = value
-    },
-    // 抄送人下拉框改变
-    handleChange2(value) {
-      var ccUser = []
-      value.forEach(item => {
-        var encode = item
-        var re = /\([^\)]+\)/g
-        encode = encode.match(re)[0]
-        encode = encode.substring(1, encode.length - 1)
-        ccUser.push(encode)
-      })
-      this.filterObj.ccUser = ccUser
-      value = this.filterObj.ccUser
-      this.filterObj.ccUser = value
-    },
     // 写邮件弹窗展开
-    writeEmail() {
+    writeEmail(i, row, bool) {
+      this.diaState = bool
       this.addVisible = true
+      this.row = row
+      this.row.isZn = row.isZn === 1 ? true : false
+      this.row.isEmail = row.isEmail === 1 ? true : false
+      this.row.sendUser = row.sendUser ? row.sendUser.split(',') : []
     },
     // 取消写邮件
     cancleWriteEmail() {
       this.addVisible = false
-      this.filterObj.toUserList = ''
-      this.filterObj.ccUserList = ''
-      this.filterObj.theme = ''
-      this.html = '<p>Dear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
-      this.fileArr = []
-      this.uploadFileName = []
+      this.row = {
+        theme: '',
+        content: '',
+        sendUser: [],
+        isZn: '',
+        isEmail: '',
+        state: '',
+        id: '',
+      }
     },
     uploadImg(file, insertFn) {
       const imgData = new FormData()
@@ -568,7 +509,7 @@ export default {
       console.log(file, insertFn)
       // alert('上传图片，发送至后台')
       // 调用上传图片接口，上传图片  我这里testUpImg是测试接口
-      API.importNormal(imgData).then(response => {
+      API.importNormal(imgData).then((response) => {
         if (response.data.code === 1000) {
           // 插入后端返回的url
           insertFn(response.data.data.url)
@@ -579,24 +520,6 @@ export default {
     },
     onCreated(editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
-    },
-    closeDialog() {
-      this.addVisible = false
-    },
-    // 导出数据
-    exportData() {
-      const formData = new FormData()
-      formData.append('interfaceName', this.filterObj.interfaceName)
-      formData.append('invokeDateSting', this.filterObj.invokeDateSting)
-      API.exportMdDataInterface(formData).then((res) => {
-        const timestamp = Date.parse(new Date())
-        downloadFile(res, '监控管理 -' + timestamp + '.xlsx') // 自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-    },
-    handleSelectionChange(val) {
-      this.checkArr = val
-      console.log(val)
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
@@ -618,7 +541,7 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    }
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -626,30 +549,24 @@ export default {
         this.maxheight = getHeightSingle()
       })()
     }
-    // 模拟 ajax 请求，异步渲染编辑器
-    setTimeout(() => {
-      this.html = '<p>Dear,User,</p>' + '</br></br></br></br></br></br></br></br></br></br>' + '<p>祝顺商祺！</p>' + '<p>iInvest运维团队</p>'
-    }, 1500)
     this.getTableData()
-    this.getInterfaceList()
     this.getChannel()
-    // this.getCustomerList()
   },
   beforeDestroy() {
     const editor = this.editor
     if (editor == null) return
     editor.destroy() // 组件销毁时，及时销毁编辑器
-  }
+  },
 }
 </script>
 <style>
-.ejectInput3 .el-input--suffix{
+.ejectInput3 .el-input--suffix {
   width: 630px !important;
 }
-.ejectInput2 .el-input--suffix{
+.ejectInput2 .el-input--suffix {
   width: 630px !important;
 }
-.el-cascader .el-cascader__tags span{
+.el-cascader .el-cascader__tags span {
   width: 120px;
 }
 .el-cascader__tags {
@@ -659,7 +576,16 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-
+.zhezhao {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  background-color: rgba($color: #f5f7fa, $alpha: 0.5);
+  cursor: not-allowed;
+}
 .SelectBar2 {
   align-items: center;
   flex-wrap: wrap;
@@ -709,7 +635,7 @@ export default {
     }
   }
 }
-.TpmButtonBG2{
+.TpmButtonBG2 {
   min-width: 84px;
   height: 38px;
   border-radius: 3px;
