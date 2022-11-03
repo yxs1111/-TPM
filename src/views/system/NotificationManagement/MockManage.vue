@@ -57,22 +57,22 @@
       :row-class-name="tableRowClassName"
       style="width: 100%"
     >
-      <!--      <el-table-column align="center" prop="interfaceName" label="操作"> </el-table-column>-->
-      <el-table-column align="center" prop="id" label="序号" fixed />
-      <el-table-column align="center" prop="id" label="操作" fixed width="180">
-        <template slot-scope="scope">
+      <el-table-column
+        align="center"
+        type="index"
+        label="序号"
+        width="65"
+        fixed
+      >
+      </el-table-column>
+      <el-table-column align="center" label="操作" fixed width="180">
+        <template v-slot="{ $index, row }">
           <div class="table_operation">
-            <div
-              class="haveText_editor"
-              @click="writeEmail(scope.$index, scope.row)"
-            >
+            <div class="haveText_editor" @click="writeEmail($index, row)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>编辑</span>
             </div>
-            <div
-              class="haveText_editor"
-              @click="writeEmail(scope.$index, scope.row, true)"
-            >
+            <div class="haveText_editor" @click="writeEmail($index, row, true)">
               <svg-icon icon-class="editor" class="svgIcon" />
               <span>查看</span>
             </div>
@@ -393,7 +393,6 @@ export default {
             // 【注意】不需要修改的不用写，wangEditor 会去 merge 当前其他配置
             // 上传之前触发
             onBeforeUpload(file) {
-              console.log(file)
               // file 选中的文件，格式如 { key: file }
               return file
             },
@@ -408,7 +407,6 @@ export default {
             customInsert(result, insertFn) {
               // result是返回的json格式
               // 从 result 中找到 url alt href ，然后插图图片
-              console.log(result.data)
               insertFn(result.data)
             },
           },
@@ -459,7 +457,7 @@ export default {
     },
     // 导入弹出框
     confirm() {
-      if (this.row.theme !== '') {
+      if (this.row.theme) {
         const { theme, content, sendUser, isZn, isEmail, state, id } = this.row
         API.editSimulation({
           theme,
@@ -472,41 +470,37 @@ export default {
         }).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
+            this.cancleWriteEmail()
           } else {
             this.$message.info(this.messageMap.saveError)
           }
-          this.cancleWriteEmail()
         })
       } else {
         alert('必须填写主题内容')
       }
     },
-    // 写邮件弹窗展开
+    // 编辑
     writeEmail(i, row, bool) {
       this.diaState = bool
+      const { theme, content, sendUser, isZn, isEmail, state, id } = row
+      this.row = {
+        theme,
+        content,
+        sendUser: sendUser ? sendUser.split(',') : [],
+        isZn: isZn ? true : false,
+        isEmail: isEmail ? true : false,
+        state,
+        id,
+      }
       this.addVisible = true
-      this.row = row
-      this.row.isZn = row.isZn === 1 ? true : false
-      this.row.isEmail = row.isEmail === 1 ? true : false
-      this.row.sendUser = row.sendUser ? row.sendUser.split(',') : []
     },
-    // 取消写邮件
+    // 取消
     cancleWriteEmail() {
       this.addVisible = false
-      this.row = {
-        theme: '',
-        content: '',
-        sendUser: [],
-        isZn: '',
-        isEmail: '',
-        state: '',
-        id: '',
-      }
     },
     uploadImg(file, insertFn) {
       const imgData = new FormData()
       imgData.append('file', file)
-      console.log(file, insertFn)
       // alert('上传图片，发送至后台')
       // 调用上传图片接口，上传图片  我这里testUpImg是测试接口
       API.importNormal(imgData).then((response) => {
