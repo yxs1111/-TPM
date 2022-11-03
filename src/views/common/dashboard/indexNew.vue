@@ -216,13 +216,16 @@
           <el-table-column width="100" property="size" label="文件大小"></el-table-column>
           <el-table-column width="100" label="">
             <template slot-scope="scope">
-              <el-link icon="el-icon-edit-outline" :href="scope.row.fileUrl">
-                下载
+              <el-link :href="scope.row.fileUrl">
+                <img src='../../../assets/images/dwonload.png'>
               </el-link>
             </template>
           </el-table-column>
         </el-table>
-        <el-button class='needHelp' slot="reference" icon="el-icon-headset" @click='needHelp'></el-button>
+        <el-button class='needHelp' slot="reference" @click='needHelp'>
+<!--          <img src='../../../assets/images/help.png'>-->
+          <div style=' border-radius: 50%; border: 1px solid #000;'>？</div>
+        </el-button>
       </el-popover>
     </div>
   </div>

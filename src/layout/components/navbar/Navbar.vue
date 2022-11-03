@@ -104,7 +104,8 @@
   color: #586aba;
 }
 .navbar-first {
-  background-color: #4192d3;
+  border-bottom: 1px solid #b2afaf;
+  background-color: #fff;
   background-size: 100% 100%;
 }
 .navbar-second {
@@ -215,7 +216,7 @@
           margin-right: 10px;
           font-size: 16px;
           margin-left: 10px;
-          color: #fff;
+          color: #000;
         }
 
         .el-icon-caret-bottom {
@@ -229,7 +230,7 @@
           float: left;
           width: 1px;
           height: 30px;
-          background-color: #f4f8ff;
+          background-color: #000;
           border-radius: 1px;
           margin-left: 10px;
           margin-top: 20px;
