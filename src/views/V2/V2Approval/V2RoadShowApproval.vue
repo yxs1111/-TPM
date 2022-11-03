@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
+            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode == "NKA"'>
