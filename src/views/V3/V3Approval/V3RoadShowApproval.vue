@@ -1115,6 +1115,7 @@ export default {
           customerCode: this.filterObj.customerCode,
           supplierCode: this.filterObj.supplierCode,
           regionCode: this.filterObj.regionCode,
+          isSubmit: 1
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit

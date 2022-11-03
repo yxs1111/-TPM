@@ -208,13 +208,13 @@
       </div>
       <el-popover
         placement="right"
-        width="400"
+        width="600"
         trigger="click">
         <el-table :data="gridData">
           <el-table-column width="150" property="date" label=""></el-table-column>
-          <el-table-column width="100" property="name" label="文件名称"></el-table-column>
-          <el-table-column width="300" property="size" label="文件大小"></el-table-column>
-          <el-table-column width="300" property="address" label=""></el-table-column>
+          <el-table-column width="250" property="name" label="文件名称"></el-table-column>
+          <el-table-column width="100" property="size" label="文件大小"></el-table-column>
+          <el-table-column width="100" property="address" label="">下载</el-table-column>
         </el-table>
         <el-button class='needHelp' slot="reference" icon="el-icon-headset" @click='needHelp'></el-button>
       </el-popover>
@@ -569,7 +569,7 @@ export default {
           item.date = item.fileName
           item.name = item.fileName
           item.size = item.fileSize
-          item.address = item.fileUrl
+          // item.address = item.fileUrl
           this.gridData.push(item)
           // console.log(item)
         })

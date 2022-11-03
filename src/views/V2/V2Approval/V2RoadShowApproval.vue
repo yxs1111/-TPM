@@ -1009,6 +1009,7 @@ export default {
           customerCode: this.filterObj.customerCode,
           supplierCode: this.filterObj.supplierCode,
           regionCode: this.filterObj.regionCode,
+          isSubmit: 1
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
