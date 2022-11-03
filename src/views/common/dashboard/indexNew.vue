@@ -151,7 +151,7 @@
 <!--            </el-table-column>-->
 <!--          </el-table>-->
           <div class="TimeLineTop">
-            <div class="TimeLineTitleli">年月2</div>
+            <div class="TimeLineTitleli">年月</div>
             <div class="TimeLineTitleli">版本号</div>
             <div class="TimeLineTitleli">当前节点</div>
             <div class="TimeLineTitleli">办理人</div>
