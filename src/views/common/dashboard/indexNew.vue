@@ -70,7 +70,7 @@
               <div v-for="item,index in value" :key="index">
                 <!-- PP -->
                 <div class="PPBar" v-if="item.isPrice">
-                  <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}-{{item.channelName}}</div>
+                  <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}</div>
                   <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
                     <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
                     <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
@@ -214,7 +214,13 @@
           <el-table-column width="150" property="date" label=""></el-table-column>
           <el-table-column width="250" property="name" label="文件名称"></el-table-column>
           <el-table-column width="100" property="size" label="文件大小"></el-table-column>
-          <el-table-column width="100" property="address" label="">下载</el-table-column>
+          <el-table-column width="100" label="">
+            <template slot-scope="scope">
+              <el-link icon="el-icon-edit-outline" :href="scope.row.fileUrl">
+                下载
+              </el-link>
+            </template>
+          </el-table-column>
         </el-table>
         <el-button class='needHelp' slot="reference" icon="el-icon-headset" @click='needHelp'></el-button>
       </el-popover>
