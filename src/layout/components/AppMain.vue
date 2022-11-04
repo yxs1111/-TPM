@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-08-30 10:38:43
  * @LastEditTime: 2022-09-14 16:36:02
 -->
@@ -38,7 +38,7 @@ export default {
     padding: 21px 20px;
     box-sizing: border-box;
     // padding-bottom: 50px;
-    background-color: #F4F9FF;
+    background-color: #EBEFF5;
   }
 
   .fixed-header+.app-main {

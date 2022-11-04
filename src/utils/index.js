@@ -779,3 +779,55 @@ export let sortList = [
   'Premium',
   'Collection',
 ]
+//文件格式正则
+//根据文件名获取文件类型
+export function getFileType(fileName) {
+  const fileReg = {
+    // 图片格式
+    imgReg: /\.(jpg|jpeg|png|gif|bmp|JPG|PNG)$/,
+    // excel格式
+    excelReg: /\.(xls|xlsx|XLS|XLSX)$/,
+    // word格式
+    wordReg: /\.(doc|docx|DOC|DOCX)$/,
+    // pdf格式
+    pdfReg: /\.(pdf|PDF)$/,
+    // ppt格式
+    pptReg: /\.(ppt|pptx|PPT|PPTX)$/,
+    // txt格式
+    txtReg: /\.(txt|TXT)$/,
+    // rar格式
+    rarReg: /\.(rar|RAR)$/,
+    // zip格式
+    zipReg: /\.(zip|ZIP)$/,
+    // 视频格式
+    videoReg: /\.(mp4|MP4)$/,
+    // 音频格式
+    audioReg: /\.(mp3|MP3)$/,
+    // 其他格式
+    otherReg: /\.(jpg|jpeg|png|gif|bmp|JPG|PNG|xls|xlsx|XLS|XLSX|doc|docx|DOC|DOCX|pdf|PDF|ppt|pptx|PPT|PPTX|txt|TXT|rar|RAR|zip|ZIP|mp4|MP4|mp3|MP3)$/,
+
+  }
+  if (fileReg.imgReg.test(fileName)) {
+    return 'img'
+  } else if (fileReg.excelReg.test(fileName)) {
+    return 'excel'
+  } else if (fileReg.wordReg.test(fileName)) {
+    return 'word'
+  } else if (fileReg.pdfReg.test(fileName)) {
+    return 'pdf'
+  } else if (fileReg.pptReg.test(fileName)) {
+    return 'ppt'
+  } else if (fileReg.txtReg.test(fileName)) {
+    return 'txt'
+  } else if (fileReg.rarReg.test(fileName)) {
+    return 'rar'
+  } else if (fileReg.zipReg.test(fileName)) {
+    return 'zip'
+  } else if (fileReg.videoReg.test(fileName)) {
+    return 'video'
+  } else if (fileReg.audioReg.test(fileName)) {
+    return 'audio'
+  } else {
+    return 'other'
+  }
+}

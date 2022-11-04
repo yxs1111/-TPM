@@ -12,83 +12,66 @@
 <!--      &lt;!&ndash;      <div class="month">年月</div>&ndash;&gt;-->
 <!--      &lt;!&ndash;      <div class="cycle">活动周期</div>&ndash;&gt;-->
 <!--    </div>-->
-    <GanttElastic :tasks="tasks" :options="options" ref='data'>
-      <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
-    </GanttElastic>
-    <div v-show="popUpShow" class="hover_con" :style="positionStyle">
-      <div class="triangle"></div>
-      {{ content.label }}<br />
-      开始日期:{{ dayjs(content.startTime) }} <br />
-      结束日期:{{ dayjs(content.endTime) }} <br />
-    </div>
-    <div class="CityPlan">
-      <div class="CityPlanTop">
-        <span class="date">{{this.activeMoon}}</span>
+    <div style=' border-radius: 50px;background-color: #fff; padding-bottom: 20px'>
+      <GanttElastic style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options" ref='data'>
+        <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
+      </GanttElastic>
+      <div v-show="popUpShow" class="hover_con" :style="positionStyle">
+        <div class="triangle"></div>
+        {{ content.label }}<br />
+        开始日期:{{ dayjs(content.startTime) }} <br />
+        结束日期:{{ dayjs(content.endTime) }} <br />
       </div>
-      <div class="PointTipWrap">
-        <div class="PointTipWrap3">
-          <el-button-group>
-            <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' @click="getHomePageData(item)">{{item}}</el-button>
-          </el-button-group>
+      <div class="CityPlan">
+        <div class="CityPlanTop">
+          <span class="date">{{this.activeMoon}}</span>
         </div>
-        <div class="PointTipWrap2">
-          <div class="PointTip">
-            <img src="@/assets/images/index/point_right.png" alt="" class="pointTipImg">
-            <span>已完成</span>
+        <div class="PointTipWrap">
+          <div class="PointTipWrap3">
+            <el-button-group>
+              <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' @click="getHomePageData(item)">{{item}}</el-button>
+            </el-button-group>
           </div>
-          <div class="PointTip">
-            <img src="@/assets/images/index/point_circle.png" alt="" class="pointTipImg">
-            <span>当前节点</span>
-          </div>
-          <div class="PointTip">
-            <img src="@/assets/images/index/point_amaze.png" alt="" class="pointTipImg">
-            <span>延误节点</span>
-          </div>
-          <div class="PointTip">
-            <img src="@/assets/images/index/point.png" alt="" class="pointTipImg">
-            <span>未开始</span>
+          <div class="PointTipWrap2">
+            <div class="PointTip">
+              <img src="@/assets/images/index/point_right.png" alt="" class="pointTipImg">
+              <span>已完成</span>
+            </div>
+            <div class="PointTip">
+              <img src="@/assets/images/index/point_circle.png" alt="" class="pointTipImg">
+              <span>当前节点</span>
+            </div>
+            <div class="PointTip">
+              <img src="@/assets/images/index/point_amaze.png" alt="" class="pointTipImg">
+              <span>延误节点</span>
+            </div>
+            <div class="PointTip">
+              <img src="@/assets/images/index/point.png" alt="" class="pointTipImg">
+              <span>未开始</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="CityPlanTop2">
-        <span class="V0">V0</span>
-        <span class="V1">V1</span>
-        <span class="V2">V2</span>
-        <span class="V3">V3</span>
-      </div>
-      <!-- 活动月 -->
-      <div class="monthBarWrap">
-        <!-- 流程 -->
-        <div class="monthBar" v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex">
-<!--          <div class="monthBg">-->
-<!--            &lt;!&ndash; <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> &ndash;&gt;-->
-<!--            <div class="monthName">{{MonthItem.month}}</div>-->
-<!--          </div>-->
-          <div class="monthPoint">
-            <!-- 渠道 -->
-            <div v-for="(value,ckey) in MonthItem.channelList" :key="ckey">
-              <div v-for="item,index in value" :key="index">
-                <!-- PP -->
-                <div class="PPBar" v-if="item.isPrice">
-                  <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}</div>
-                  <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
-                    <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
-                      <div slot="content" v-html="getTip(item)"></div>
-                      <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
-                    </el-tooltip>
-                    <div class="pointCircle" v-if="TaskIndex>item.taskNumber"></div>
-                    <div class="line" v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'"></div>
-                    <div class="lineDark" v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'"></div>
-                  </div>
-                </div>
-                <div class="NU" v-if="!item.isPrice">
-                  <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}-{{item.channelName}}</div>
-                  <div class="NuPoint">
+        <div class="CityPlanTop2">
+          <span class="V0">V0</span>
+          <span class="V1">V1</span>
+          <span class="V2">V2</span>
+          <span class="V3">V3</span>
+        </div>
+        <!-- 活动月 -->
+        <div class="monthBarWrap">
+          <!-- 流程 -->
+          <div class="monthBar" v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex">
+            <!--          <div class="monthBg">-->
+            <!--            &lt;!&ndash; <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> &ndash;&gt;-->
+            <!--            <div class="monthName">{{MonthItem.month}}</div>-->
+            <!--          </div>-->
+            <div class="monthPoint">
+              <!-- 渠道 -->
+              <div v-for="(value,ckey) in MonthItem.channelList" :key="ckey">
+                <div v-for="item,index in value" :key="index">
+                  <!-- PP -->
+                  <div class="PPBar" v-if="item.isPrice">
+                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}</div>
                     <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
                       <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
                       <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
@@ -102,6 +85,25 @@
                       <div class="pointCircle" v-if="TaskIndex>item.taskNumber"></div>
                       <div class="line" v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'"></div>
                       <div class="lineDark" v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'"></div>
+                    </div>
+                  </div>
+                  <div class="NU" v-if="!item.isPrice">
+                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}</div>
+                    <div class="NuPoint">
+                      <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
+                        <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
+                          <div slot="content" v-html="getTip(item)"></div>
+                          <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
+                        </el-tooltip>
+                        <div class="pointCircle" v-if="TaskIndex>item.taskNumber"></div>
+                        <div class="line" v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'"></div>
+                        <div class="lineDark" v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -124,74 +126,73 @@
           </div>
         </div>
         <div class="TimeLineWrap" v-show="currentIndex == 0">
-<!--          <el-table-->
-<!--            :data="TodoList"-->
-<!--            style="width: 100%">-->
-<!--            <el-table-column-->
-<!--              prop="date"-->
-<!--              label="年月"-->
-<!--              width="180">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="name"-->
-<!--              label="版本号"-->
-<!--              width="180">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="address"-->
-<!--              label="当前节点">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="address"-->
-<!--              label="办理人">-->
-<!--            </el-table-column>-->
-<!--            <el-table-column-->
-<!--              prop="address"-->
-<!--              label="操作">-->
-<!--            </el-table-column>-->
-<!--          </el-table>-->
-          <div class="TimeLineTop">
-            <div class="TimeLineTitleli">年月</div>
-            <div class="TimeLineTitleli">版本号</div>
-            <div class="TimeLineTitleli">当前节点</div>
-            <div class="TimeLineTitleli">办理人</div>
-            <div class="TimeLineTitleli">操作</div>
-          </div>
-          <div class="TimeLineBar">
-            <el-timeline>
-              <el-timeline-item color="#4192d3" v-for="item,index in TodoList" :key="index">
-                <div class="TimeLineli">
-                  <div class="TimeLineTitleli">{{item.yearAndMonth}}</div>
-                  <div class="TimeLineTitleli">{{item.version}}</div>
-                  <div class="TimeLineTitleli">{{item.activityName}}</div>
-                  <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>
-                  <div class="TimeLineTitleli">
-                    <div class="TimeLineOpertion" @click="goAssignee(item.version,item.activityName,item.channelCode,item.minePackageName,item)">办理</div>
-                  </div>
+          <el-table
+            max-height="190"
+            :data="TodoList"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              prop="yearAndMonth"
+              label="年月"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="version"
+              label="版本号"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="activityName"
+              label="当前节点">
+            </el-table-column>
+            <el-table-column
+              prop="assignee"
+              label="办理人">
+              <template slot-scope="scope">
+                <div class="TimeLineTitleli" v-html="getAssigneeName(scope.row.assignee)"></div>
+              </template>
+<!--              <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>-->
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="操作">
+              <template slot-scope="scope">
+                <div class="TimeLineTitleli">
+                  <div class="transact" @click="goAssignee(scope.row.version,scope.row.activityName,scope.row.channelCode,scope.row.minePackageName,scope.row)">办理</div>
                 </div>
-              </el-timeline-item>
-            </el-timeline>
-          </div>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
         <div class="TimeLineWrap" v-show="currentIndex == 1">
-          <div class="TimeLineTop">
-            <div class="TimeLineTitleli">年月</div>
-            <div class="TimeLineTitleli">版本号</div>
-            <div class="TimeLineTitleli">当前节点</div>
-            <div class="TimeLineTitleli">提交人</div>
-          </div>
-          <div class="TimeLineBar">
-            <el-timeline>
-              <el-timeline-item color="#4192d3" v-for="item,index in completeData" :key="index">
-                <div class="TimeLineli">
-                  <div class="TimeLineTitleli">{{item.yearAndMonth}}</div>
-                  <div class="TimeLineTitleli">{{item.version}}</div>
-                  <div class="TimeLineTitleli">{{item.name}}</div>
-                  <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>
-                </div>
-              </el-timeline-item>
-            </el-timeline>
-          </div>
+          <el-table
+            max-height="190"
+            :data="TodoList"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              prop="yearAndMonth"
+              label="年月"
+              width="80">
+            </el-table-column>
+            <el-table-column
+              prop="version"
+              label="版本号"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="activityName"
+              label="当前节点">
+            </el-table-column>
+            <el-table-column
+              prop="assignee"
+              label="办理人">
+              <template slot-scope="scope">
+                <div class="TimeLineTitleli" v-html="getAssigneeName(scope.row.assignee)"></div>
+              </template>
+              <!--              <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>-->
+            </el-table-column>
+          </el-table>
         </div>
       </div>
       <div class="Message MyToDo">
@@ -208,13 +209,23 @@
       </div>
       <el-popover
         placement="right"
-        width="600"
+        width="500"
         trigger="click">
+        <div class='documentation'>用户文档中心</div>
         <el-table :data="gridData">
-          <el-table-column width="150" property="date" label=""></el-table-column>
+          <el-table-column width="50" property="" label="">
+            <template slot-scope="scope">
+              <img src='../../../assets/images/EXCEL.png' v-if='scope.row.format == "excel"'>
+              <img src='../../../assets/images/word.png' v-if='scope.row.format == "word"'>
+              <img src='../../../assets/images/yasuowenjian.png' v-if='scope.row.format == "zip"'>
+              <img src='../../../assets/images/PPT.png' v-if='scope.row.format == "ppt"'>
+              <img src='../../../assets/images/tupian.png' v-if='scope.row.format == "pdf"'>
+              <img src='../../../assets/images/shipin.png' v-if='scope.row.format == "video"'>
+            </template>
+          </el-table-column>
           <el-table-column width="250" property="name" label="文件名称"></el-table-column>
           <el-table-column width="100" property="size" label="文件大小"></el-table-column>
-          <el-table-column width="100" label="">
+          <el-table-column width="60" label="">
             <template slot-scope="scope">
               <el-link :href="scope.row.fileUrl">
                 <img src='../../../assets/images/dwonload.png'>
@@ -224,7 +235,7 @@
         </el-table>
         <el-button class='needHelp' slot="reference" @click='needHelp'>
 <!--          <img src='../../../assets/images/help.png'>-->
-          <div style=' border-radius: 50%; border: 1px solid #000;'>？</div>
+          <div style=' border-radius: 50%; border: 1px solid #fff; font-size: 20px; width: 30px; height: 30px; padding-top: 3px'>?</div>
         </el-button>
       </el-popover>
     </div>
@@ -241,6 +252,7 @@ import API from '@/api/index/index.js'
 import completeAPI from '@/api/taskManage/taskManage.js'
 import { logger } from 'runjs/lib/common'
 import item from '@/layout/components/Sidebar/Item'
+import { getFileType } from '@/utils'
 export default {
   name: 'Dashboard',
 
@@ -355,7 +367,7 @@ export default {
     }
     return {
       gridData: [{
-        date: '2016-05-02',
+        format: '2016-05-02',
         name: '王小虎',
         size: '45kb',
         address: '上海市普陀区金沙江路 1518 弄'
@@ -556,7 +568,6 @@ export default {
     //   this.popUpShow = false
     // })
     this.getMesList()
-    this.getHomePageData()
     this.getToDoData()
     this.getCompleteData()
     this.getActivitycycle()
@@ -575,20 +586,21 @@ export default {
       this.gridData = []
       TaskAPI.getNeedHelp().then((res) => {
         res.data.forEach((item, index) => {
-          item.date = item.fileName
           item.name = item.fileName
           item.size = item.fileSize
-          // item.address = item.fileUrl
           this.gridData.push(item)
-          // console.log(item)
+          item.format = getFileType(item.fileName)
         })
       })
     },
     getActivitycycle() {
       this.tasks = []
       API.getActivity().then((res) => {
-        res.data.forEach((item,index) => {
+        if (this.activeMoon == '') {
           this.activeMoon = res.data[0].activityMonth
+          this.getHomePageData()
+        }
+        res.data.forEach((item,index) => {
           item.label = item.activityMonth
           item.id = item.id
           item.startVZero = item.startAndEndVZero.substring(0, 10)
@@ -599,7 +611,7 @@ export default {
           item.EndVTwo = item.startAndEndVTwo.substring(item.startAndEndVTwo.length - 10, item.startAndEndVTwo.length)
           item.startVThree = item.startAndEndVThree.substring(0, 10)
           item.EndVThree = item.startAndEndVThree.substring(item.startAndEndVThree.length - 10, item.startAndEndVThree.length)
-          item.start = dayjs('2022-07-01').valueOf(),
+          item.start = dayjs('2022-05-01').valueOf(),
           item.end = dayjs('2022-12-30').valueOf()
           item.type = 'group'
           item.tasks = []
@@ -728,6 +740,9 @@ export default {
     },
     // 日历和流程
     getHomePageData(item) {
+      if (item === undefined) {
+        item = 'NKA'
+      }
       API.getHomePageData({
         yearAndMonth: this.activeMoon,
         channelName: item
@@ -1202,9 +1217,10 @@ export default {
   border-radius: 10px;
 }
 .CityPlan {
-  width: 100%;
+  margin: 10px 10px 0px 10px;
+  width: 99%;
   height: 310px;
-  background-color: #fff;
+  background-color: #f0fbff;
   border-radius: 20px;
   box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
   .CityPlanTop {
@@ -1218,7 +1234,7 @@ export default {
     display: flex;
     align-items: center;
     padding-right: 60px;
-    border-bottom: 1px solid #dce1e6;
+    //border-bottom: 1px solid #dce1e6;
     .V0 {
       width: 33%;
     }
@@ -1240,7 +1256,7 @@ export default {
     display: flex;
     align-items: center;
     padding-right: 60px;
-    border-bottom: 1px solid #dce1e6;
+    //border-bottom: 1px solid #dce1e6;
     .V0 {
       width: 33%;
     }
@@ -1345,12 +1361,12 @@ export default {
     .monthBar {
       width: 100%;
       // height: 110px;
-      background: #ffffff;
-      box-shadow: 0px 0px 18px 0px rgba(114, 114, 114, 0.07);
+      //background: #ffffff;
+      //box-shadow: 0px 0px 18px 0px rgba(114, 114, 114, 0.07);
       border-radius: 15px;
       box-sizing: border-box;
       display: flex;
-      margin-bottom: 20px;
+      //margin-bottom: 20px;
 
       .monthBg {
         width: 150px;
@@ -1378,7 +1394,7 @@ export default {
         width: calc(100% - 0px);
         // height: 110px;
         overflow-y: scroll;
-        padding: 20px;
+        //padding: 20px;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -1411,8 +1427,8 @@ export default {
           width: 160px;
           font-size: 16px;
           font-family: Source Han Sans CN;
-          font-weight: 500;
-          color: #999999;
+          font-weight: bold;
+          color: #000;
           margin-right: 10px;
           white-space: nowrap;
         }
@@ -1446,8 +1462,8 @@ export default {
         .line {
           width: calc(100% - 28px);
           height: 10px;
-          background: linear-gradient(90deg, #8de6cd 0%, #55ba9e 100%);
-          box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
+          background-color: #e5e5e5;
+          //box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
         }
         .lineDark {
           width: calc(100% - 28px);
@@ -1646,6 +1662,16 @@ export default {
       }
     }
   }
+  .transact {
+    width: 80px;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    background-color: #4192d3;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+  }
   .Message {
     width: 33%;
     .MessgaeWrap {
@@ -1713,6 +1739,12 @@ export default {
     }
   }
 }
+.documentation {
+  text-align: center;
+  font-size: 17px;
+  font-weight: bold;
+  color: #a39d9d;
+}
 .dashWrap {
   height: calc(100% - 33px);
   overflow-y: auto;
@@ -1731,12 +1763,11 @@ export default {
   position: absolute;
   background-color: #00afff;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  text-align: center;
+  width: 70px;
+  height: 70px;
   display: inline-block;
   color: #fff;
   font-size: 20px;
-  margin: 0px 0px 0px -80px
+  margin: 0px 0px 0px -90px
 }
 </style>
