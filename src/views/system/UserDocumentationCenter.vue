@@ -23,14 +23,14 @@
           <span class="SelectliTitle">上传时间</span>
           <el-date-picker
             v-model="filterObj.startDate"
-            type="month"
+            type="date"
             placeholder="开始时间"
           >
           </el-date-picker>
           <span style="margin: 0 15px"> - </span>
           <el-date-picker
             v-model="filterObj.endDate"
-            type="month"
+            type="date"
             placeholder="结束时间"
           >
           </el-date-picker>
@@ -189,11 +189,20 @@ export default {
     getTableData() {
       this.tableData = []
       const obj = JSON.parse(JSON.stringify(this.filterObj))
+      const DateFun = (date) => {
+        return {
+          Year: new Date(date).getFullYear(),
+          Month: new Date(date).getMonth() + 1,
+          Day: new Date(date).getDate(),
+        }
+      }
       if (obj.startDate) {
-        obj.startDate = obj.startDate.slice(0, 10) + ' 00:00'
+        const { Year, Month, Day } = DateFun(obj.startDate)
+        obj.startDate = Year + '-' + Month + '-' + Day + ' 00:00'
       }
       if (obj.endDate) {
-        obj.endDate = obj.endDate.slice(0, 10) + ' 23:59'
+        const { Year, Month, Day } = DateFun(obj.endDate)
+        obj.endDate = Year + '-' + Month + '-' + Day + ' 23:59'
       }
       API.getMdDataInterface({
         pageNum: this.pageNum, //当前页
