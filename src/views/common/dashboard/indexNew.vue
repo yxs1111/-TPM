@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-10-20 14:25:01
+ * @LastEditTime: 2022-11-04 09:13:33
 -->
 <template>
   <div>
@@ -13,7 +13,7 @@
 <!--      &lt;!&ndash;      <div class="cycle">活动周期</div>&ndash;&gt;-->
 <!--    </div>-->
     <div style=' border-radius: 50px;background-color: #fff; padding-bottom: 20px'>
-      <GanttElastic style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options" ref='data'>
+      <GanttElastic ref="ganttGroup" style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
       </GanttElastic>
       <div v-show="popUpShow" class="hover_con" :style="positionStyle">
@@ -564,9 +564,9 @@ export default {
       this.content.endTime = data.endTime
       this.positionStyle = { top: y, left: x }
     })
-    // this.$bus.$on('taskMouseout', (content) => {
-    //   this.popUpShow = false
-    // })
+    this.$bus.$on('taskMouseout', (content) => {
+      this.popUpShow = false
+    })
     this.getMesList()
     this.getToDoData()
     this.getCompleteData()
@@ -601,6 +601,10 @@ export default {
           this.getHomePageData()
         }
         res.data.forEach((item,index) => {
+          if(index==0) {
+            console.log(this.$refs.ganttGroup);
+            this.$refs.ganttGroup.state.isActiveId=item.id
+          }
           item.label = item.activityMonth
           item.id = item.id
           item.startVZero = item.startAndEndVZero.substring(0, 10)
