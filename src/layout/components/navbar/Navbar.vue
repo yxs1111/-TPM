@@ -109,7 +109,7 @@
   background-size: 100% 100%;
 }
 .navbar-second {
-  background-color: #4192d3;
+  background-color: #fff;
   background-size: 100% 100%;
 }
 .navbar {

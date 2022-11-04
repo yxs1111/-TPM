@@ -12,7 +12,7 @@
 <!--      &lt;!&ndash;      <div class="month">年月</div>&ndash;&gt;-->
 <!--      &lt;!&ndash;      <div class="cycle">活动周期</div>&ndash;&gt;-->
 <!--    </div>-->
-    <div style=' border-radius: 50px;background-color: #fff; padding-bottom: 20px'>
+    <div style=' border-radius: 25px;background-color: #fff; padding-bottom: 20px'>
       <GanttElastic ref="ganttGroup" style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
       </GanttElastic>
@@ -384,6 +384,8 @@ export default {
         { id: 1, title: '已完成' },
       ],
       MessageList: [], //消息列表
+      startTimeArr: [],
+      endTimeArr: [],
       ActivityList: [],
       TodoList: [],
       completeData: [],
@@ -601,12 +603,11 @@ export default {
           this.getHomePageData()
         }
         res.data.forEach((item,index) => {
-          if(index==0) {
-            console.log(this.$refs.ganttGroup);
-            this.$refs.ganttGroup.state.isActiveId=item.id
+          if (index==0) {
+            this.$refs.ganttGroup.state.isActiveId = item.id
           }
+          this.startTimeArr = []
           item.label = item.activityMonth
-          item.id = item.id
           item.startVZero = item.startAndEndVZero.substring(0, 10)
           item.EndVZero = item.startAndEndVZero.substring(item.startAndEndVZero.length - 10, item.startAndEndVZero.length)
           item.startVOne = item.startAndEndVOne.substring(0, 10)
@@ -615,8 +616,21 @@ export default {
           item.EndVTwo = item.startAndEndVTwo.substring(item.startAndEndVTwo.length - 10, item.startAndEndVTwo.length)
           item.startVThree = item.startAndEndVThree.substring(0, 10)
           item.EndVThree = item.startAndEndVThree.substring(item.startAndEndVThree.length - 10, item.startAndEndVThree.length)
-          item.start = dayjs('2022-05-01').valueOf(),
-          item.end = dayjs('2022-12-30').valueOf()
+          this.startTimeArr.push(new Date(item.startVZero), new Date(item.EndVZero), new Date(item.startVOne), new Date(item.EndVOne), new Date(item.startVTwo), new Date(item.EndVTwo), new Date(item.startVThree), new Date(item.EndVThree))
+          let maxDate = new Date(Math.max.apply(null, this.startTimeArr))
+          let minDate = new Date(Math.min.apply(null, this.startTimeArr))
+          const formatDateTime = function (date) {
+            const y = date.getFullYear()
+            let m = date.getMonth() + 1
+            m = m < 10 ? ('0' + m) : m
+            let d = date.getDate()
+            d = d < 10 ? ('0' + d) : d
+            return y + '-' + m + '-' + d
+          }
+          maxDate = formatDateTime(maxDate)
+          minDate = formatDateTime(minDate)
+          item.start = dayjs(minDate).valueOf(),
+          item.end = dayjs(maxDate).valueOf()
           item.type = 'group'
           item.tasks = []
           item.tasks.push(
@@ -686,6 +700,7 @@ export default {
             }
           )
           this.tasks.push(item)
+          console.log(minDate, maxDate)
         })
       })
     },
@@ -1472,7 +1487,7 @@ export default {
         .lineDark {
           width: calc(100% - 28px);
           height: 10px;
-          background-color: #e5e5e5;
+          background-color: #C6DCEE;
           // box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
         }
         .pointCircle {
