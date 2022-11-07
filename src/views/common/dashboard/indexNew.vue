@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-11-07 13:20:07
+ * @LastEditTime: 2022-11-07 13:29:06
 -->
 <template>
   <div>
@@ -1123,6 +1123,10 @@ export default {
 }
 </style>
 <style lang="scss">
+.gantt-elastic__calendar-row-text--month {
+  font-size: 14px !important;
+  font-weight: 600;
+}
 //gannttGroup
 .gantt-elastic {
   
