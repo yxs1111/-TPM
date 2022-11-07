@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-11-04 09:13:33
+ * @LastEditTime: 2022-11-07 13:20:07
 -->
 <template>
   <div>
@@ -273,7 +273,7 @@ export default {
       return new Date(timeStamp + hours * 60 * 60 * 1000).getTime()
     }
     let options = {
-      maxRows: 100,
+      maxRows: 3,
       maxHeight: 800,
       title: {
         label: 'Your project title as html (link or whatever...)',
@@ -1125,7 +1125,7 @@ export default {
 <style lang="scss">
 //gannttGroup
 .gantt-elastic {
-  height: 180px;
+  
   overflow-y: scroll;
 }
 .gantt-elastic__task-list-wrapper {
