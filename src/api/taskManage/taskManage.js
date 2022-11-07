@@ -12,6 +12,10 @@ export default {
   getList(params) {
     return requestApi.request_get(this.url+'/pageList', params)
   },
+  //获取合同管理列表
+  getContract(params) {
+    return requestApi.request_get(this.url+'/getTaskPageContract', params)
+  },
   //获取流程跟踪
   getInvestCpVList(params) {
     return requestApi.request_get('/cityplan/investCpV/getPage', params)

@@ -137,9 +137,29 @@
               width="80">
             </el-table-column>
             <el-table-column
+              prop="costTypeName"
+              label="Cost Type"
+              width="100">
+            </el-table-column>
+            <el-table-column
+              prop="minePackageName"
+              label="Mine Package"
+              width="110">
+            </el-table-column>
+            <el-table-column
+              prop="costItemName"
+              label="Cost Item"
+              width="140">
+            </el-table-column>
+            <el-table-column
+              prop="channelName"
+              label="渠道"
+              width="60">
+            </el-table-column>
+            <el-table-column
               prop="version"
               label="版本号"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="activityName"
@@ -167,17 +187,26 @@
         <div class="TimeLineWrap" v-show="currentIndex == 1">
           <el-table
             max-height="190"
-            :data="TodoList"
+            :data="contractList"
             stripe
             style="width: 100%">
             <el-table-column
-              prop="yearAndMonth"
-              label="年月"
-              width="80">
+              prop="item"
+              label="合同类型">
             </el-table-column>
             <el-table-column
-              prop="version"
-              label="版本号"
+              prop="contractCode"
+              label="合同ID"
+              width="240">
+            </el-table-column>
+            <el-table-column
+              prop="customerName"
+              label="客户名称"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="distributorName"
+              label="经销商名称"
               width="180">
             </el-table-column>
             <el-table-column
@@ -185,12 +214,11 @@
               label="当前节点">
             </el-table-column>
             <el-table-column
-              prop="assignee"
-              label="办理人">
-              <template slot-scope="scope">
-                <div class="TimeLineTitleli" v-html="getAssigneeName(scope.row.assignee)"></div>
+              prop=""
+              label="操作">
+              <template slot-scope="{row}">
+                <div class="transact" @click="operateProcess(row.minePackageCode,row.name)">办理</div>
               </template>
-              <!--              <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>-->
             </el-table-column>
           </el-table>
         </div>
@@ -380,14 +408,15 @@ export default {
       activeMoon: '',
       tabPosition: 'left',
       TabList: [
-        { id: 0, title: '待完成' },
-        { id: 1, title: '已完成' },
+        { id: 0, title: '费用管理' },
+        { id: 1, title: '合同管理' },
       ],
       MessageList: [], //消息列表
       startTimeArr: [],
       endTimeArr: [],
       ActivityList: [],
       TodoList: [],
+      contractList: [],
       completeData: [],
       BackGroundColorList: ['#FB5A56', '#2C85FF', '#FFAA30'],
       PriceTaskIndexList: ['V0', 'V1', 'V2', 'V3'],
@@ -571,6 +600,7 @@ export default {
     })
     this.getMesList()
     this.getToDoData()
+    this.getContract()
     this.getCompleteData()
     this.getActivitycycle()
   },
@@ -992,13 +1022,22 @@ export default {
       let activityMonth = firstMonth + '+' + secondMonth
       return activityMonth
     },
-    //获取待办数据
+    // 获取待办数据
     getToDoData() {
       TaskAPI.getList({
         pageNum: 1, //当前页
         pageSize: 999, //每页条数
       }).then((response) => {
         this.TodoList = response.data.records
+      })
+    },
+    //获取合同管理数据
+    getContract() {
+      TaskAPI.getContract({
+        pageNum: 1, //当前页
+        pageSize: 999, //每页条数
+      }).then((response) => {
+        this.contractList = response.data.records
       })
     },
     //获取表格数据
@@ -1011,6 +1050,21 @@ export default {
         .then((response) => {
           this.completeData = response.data.records
         })
+    },
+    operateProcess(version, name) {
+      if(version=='DISTRIBUTOR-CONTRACT') {
+        if(name.indexOf('审批') != -1) {
+          this.$router.push('/contractManagement/dealer/dealerContractApproval')
+        } else {
+          this.$router.push('/contractManagement/dealer/dealerContractEntry')
+        }
+      } else if(version=='CUSTOMER-CONTRACT') {
+        if(name.indexOf('审批') != -1) {
+          this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
+        } else {
+          this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
+        }
+      }
     },
     //办理
     goAssignee(version, name, channelCode, minePackage, row) {
@@ -1129,7 +1183,7 @@ export default {
 }
 //gannttGroup
 .gantt-elastic {
-  
+
   overflow-y: scroll;
 }
 .gantt-elastic__task-list-wrapper {
@@ -1495,7 +1549,7 @@ export default {
         .lineDark {
           width: calc(100% - 28px);
           height: 10px;
-          background-color: #C6DCEE;
+          background-color: #e5e5e5;
           // box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
         }
         .pointCircle {
