@@ -29,7 +29,7 @@
         <div class="PointTipWrap">
           <div class="PointTipWrap3">
             <el-button-group>
-              <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' @click="getHomePageData(item)">{{item}}</el-button>
+              <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus='true' @click="getHomePageData(item)">{{item}}</el-button>
             </el-button-group>
           </div>
           <div class="PointTipWrap2">
@@ -1247,9 +1247,9 @@ export default {
     height: 52px;
     padding-left: 20px;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 600;
-    color: #333333;
+    color: #4192D3;
     display: flex;
     align-items: center;
     padding-right: 60px;
@@ -1270,7 +1270,7 @@ export default {
     padding-left: 200px;
     box-sizing: border-box;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     color: #333333;
     display: flex;
     align-items: center;
@@ -1340,9 +1340,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .el-button--primary{
+      font-size: 16px;
+      color: #333333;
+    }
     el-button{
       padding: 5px 20px;
-      background-color: #00afff
+      background-color: #00afff;
     }
     div:first-child {
       border-top-left-radius: 10px;
