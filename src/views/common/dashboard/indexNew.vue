@@ -5,13 +5,6 @@
 -->
 <template>
   <div>
-    <!-- <div class="out"><b>类别</b> <em>姓名</em></div> -->
-<!--    <div class="gunterTitle">-->
-<!--      &lt;!&ndash; <b>活动周期</b>-->
-<!--      <em>年月</em> &ndash;&gt;-->
-<!--      &lt;!&ndash;      <div class="month">年月</div>&ndash;&gt;-->
-<!--      &lt;!&ndash;      <div class="cycle">活动周期</div>&ndash;&gt;-->
-<!--    </div>-->
     <div style=' border-radius: 25px;background-color: #fff; padding-bottom: 20px'>
       <GanttElastic ref="ganttGroup" style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
@@ -28,6 +21,11 @@
         </div>
         <div class="PointTipWrap">
           <div class="PointTipWrap3">
+<!--            <el-radio-group v-model="tabPosition" @tab-click='getHomePageData'>-->
+<!--              <el-radio-button label="NKA">NKA</el-radio-button>-->
+<!--              <el-radio-button label="EC">EC</el-radio-button>-->
+<!--              <el-radio-button label="RKA">RKA</el-radio-button>-->
+<!--            </el-radio-group>-->
             <el-button-group>
               <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus='true' @click="getHomePageData(item)">{{item}}</el-button>
             </el-button-group>
@@ -125,6 +123,7 @@
             <!-- <div class="Tabli ">已完成</div> -->
           </div>
         </div>
+<!--        费用管理-->
         <div class="TimeLineWrap" v-show="currentIndex == 0">
           <el-table
             max-height="190"
@@ -162,16 +161,14 @@
               width="120">
             </el-table-column>
             <el-table-column
-              prop="activityName"
-              label="当前节点">
-            </el-table-column>
-            <el-table-column
-              prop="assignee"
-              label="办理人">
-              <template slot-scope="scope">
-                <div class="TimeLineTitleli" v-html="getAssigneeName(scope.row.assignee)"></div>
+              prop=""
+              label="查看"
+              width="120">
+              <template slot-scope="{row}">
+                <div class="transact" @click="openFlowDiagram(row)">
+                  查看流程
+                </div>
               </template>
-<!--              <div class="TimeLineTitleli" v-html="getAssigneeName(item.assignee)"></div>-->
             </el-table-column>
             <el-table-column
               prop=""
@@ -184,6 +181,7 @@
             </el-table-column>
           </el-table>
         </div>
+<!--        合同管理-->
         <div class="TimeLineWrap" v-show="currentIndex == 1">
           <el-table
             max-height="190"
@@ -192,12 +190,13 @@
             style="width: 100%">
             <el-table-column
               prop="item"
-              label="合同类型">
+              label="合同类型"
+              width="140">
             </el-table-column>
             <el-table-column
               prop="contractCode"
               label="合同ID"
-              width="240">
+              width="280">
             </el-table-column>
             <el-table-column
               prop="customerName"
@@ -212,6 +211,16 @@
             <el-table-column
               prop="activityName"
               label="当前节点">
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="查看"
+              width="120">
+              <template slot-scope="{row}">
+                <div class="transact" @click="openFlowDiagram(row)">
+                  查看流程
+                </div>
+              </template>
             </el-table-column>
             <el-table-column
               prop=""
@@ -267,6 +276,9 @@
         </el-button>
       </el-popover>
     </div>
+    <div v-if="flowDiagram.visible">
+      <flow-diagram svg-type="instance" :business-id="flowDiagram.businessId" :process-id="flowDiagram.processId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
+    </div>
   </div>
 </template>
 
@@ -278,6 +290,7 @@ import auth from '@/utils/auth'
 import TaskAPI from '@/api/taskManage/taskManage.js'
 import API from '@/api/index/index.js'
 import completeAPI from '@/api/taskManage/taskManage.js'
+import FlowDiagram from '@/components/FlowDiagram'
 import { logger } from 'runjs/lib/common'
 import item from '@/layout/components/Sidebar/Item'
 import { getFileType } from '@/utils'
@@ -400,17 +413,23 @@ export default {
         size: '45kb',
         address: '上海市普陀区金沙江路 1518 弄'
       }],
+      tabPosition: 'NKA',
       avatar: auth.getAvatar(),
       name: auth.getName(),
       SalesAmountChart: '',
       ActualSalesChart: '',
       currentIndex: 0,
       activeMoon: '',
-      tabPosition: 'left',
       TabList: [
         { id: 0, title: '费用管理' },
         { id: 1, title: '合同管理' },
       ],
+      flowDiagram: {
+        visible: false,
+        activate: false,
+        businessId: null,
+        processId: null,
+      },
       MessageList: [], //消息列表
       startTimeArr: [],
       endTimeArr: [],
@@ -574,6 +593,7 @@ export default {
   components: {
     GanttElastic,
     GanttElasticHeader,
+    FlowDiagram
   },
   created() {},
   mounted() {
@@ -789,6 +809,7 @@ export default {
     },
     // 日历和流程
     getHomePageData(item) {
+      console.log('时间触发')
       if (item === undefined) {
         item = 'NKA'
       }
@@ -1065,6 +1086,12 @@ export default {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
         }
       }
+    },
+    //查看流程
+    openFlowDiagram(row) {
+      this.flowDiagram.businessId = row.businessKey
+      this.flowDiagram.processId = row.processId
+      this.flowDiagram.visible = true
     },
     //办理
     goAssignee(version, name, channelCode, minePackage, row) {
@@ -1398,20 +1425,28 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .el-button--primary{
+    .el-button{
       font-size: 16px;
       color: #333333;
     }
+    .el-button--primary {
+      background-color: #C5EBFE;
+      border-color: #C5EBFE;
+    }
+    .el-button--primary:focus, .el-button--primary:hover {
+      background: #4192D3;
+      color: #ffffff;
+    }
     el-button{
       padding: 5px 20px;
-      background-color: #00afff;
+      //background-color: #00afff;
     }
     div:first-child {
       border-top-left-radius: 10px;
       border-bottom-left-radius: 10px;
     }
     div:last-child {
-      border-right: 10px;
+      //border-right: 10px;
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
     }
@@ -1543,19 +1578,19 @@ export default {
         .line {
           width: calc(100% - 28px);
           height: 10px;
-          background-color: #e5e5e5;
+          background-color: #C6DCEE;
           //box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
         }
         .lineDark {
           width: calc(100% - 28px);
           height: 10px;
-          background-color: #e5e5e5;
+          background-color: #C6DCEE;
           // box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
         }
         .pointCircle {
           width: 27px;
           height: 27px;
-          background-color: #e5e5e5;
+          background-color: #C6DCEE;
           border: 1px solid #fff;
           border-radius: 50%;
         }
