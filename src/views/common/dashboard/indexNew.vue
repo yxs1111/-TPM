@@ -27,7 +27,7 @@
 <!--              <el-radio-button label="RKA">RKA</el-radio-button>-->
 <!--            </el-radio-group>-->
             <el-button-group>
-              <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus='true' @click="getHomePageData(item)">{{item}}</el-button>
+              <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus @click="getHomePageData(item)">{{item}}</el-button>
             </el-button-group>
           </div>
           <div class="PointTipWrap2">
@@ -750,7 +750,6 @@ export default {
             }
           )
           this.tasks.push(item)
-          console.log(minDate, maxDate)
         })
       })
     },
@@ -809,7 +808,6 @@ export default {
     },
     // 日历和流程
     getHomePageData(item) {
-      console.log('时间触发')
       if (item === undefined) {
         item = 'NKA'
       }
@@ -906,6 +904,7 @@ export default {
                   return b.sortCode - a.sortCode
                 })
               }
+
             }
             data[key] = cdata
           }

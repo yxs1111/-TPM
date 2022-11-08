@@ -201,6 +201,10 @@ export default {
           name: 'Premium',
           code: 'H',
         },
+        {
+          name: 'Roadshow',
+          code: 'L',
+        },
       ],
       ruleForm: {
         minePackage: '',
