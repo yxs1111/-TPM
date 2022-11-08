@@ -91,7 +91,7 @@ export default function () {
               component: () =>
                 import('@/views/system/NotificationManagement/MockManage.vue'),
               meta: {
-                title: '模拟管理',
+                title: '模板管理',
                 icon: 'form',
                 activeMenu: '/MockManage',
               },

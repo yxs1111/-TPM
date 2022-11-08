@@ -79,7 +79,7 @@
       </el-table-column>
       <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
-          <el-link icon="el-icon-edit-outline" :href="scope.row.fileUrl">
+          <el-link icon="el-icon-download" :href="scope.row.fileUrl">
             下载
           </el-link>
         </template>
