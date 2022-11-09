@@ -904,7 +904,6 @@ export default {
                   return b.sortCode - a.sortCode
                 })
               }
-
             }
             data[key] = cdata
           }
@@ -1049,6 +1048,9 @@ export default {
         pageSize: 999, //每页条数
       }).then((response) => {
         this.TodoList = response.data.records
+        // response.data.records.forEach((item) => {
+        //   item.num = item.version.substring(item.version.length - 2, item.version.length)
+        // })
       })
     },
     //获取合同管理数据
@@ -1207,9 +1209,19 @@ export default {
   font-size: 14px !important;
   font-weight: 600;
 }
-//gannttGroup
+.gantt-elastic__calendar-row-rect--month {
+  line-height: 33px !important;
+}
+.gantt-elastic__calendar-row--month {
+  height: 35px !important;
+}
+.gantt-elastic{
+  border: 0px;
+  div {
+    border: 0px solid #ffffff !important;
+  }
+}
 .gantt-elastic {
-
   overflow-y: scroll;
 }
 .gantt-elastic__task-list-wrapper {
@@ -1232,6 +1244,12 @@ export default {
   width: 100px !important;
   height: 100% !important;
   margin-right: 20px;
+}
+.gantt-elastic__task-list-item-column {
+  height: 30px !important;
+}
+.gantt-elastic__task-list-item-value {
+  line-height: 30px !important;
 }
 .gantt-elastic__main-container {
   height: 100% !important;
@@ -1427,6 +1445,7 @@ export default {
     .el-button{
       font-size: 16px;
       color: #333333;
+      height: 35px;
     }
     .el-button--primary {
       background-color: #C5EBFE;
@@ -1710,6 +1729,21 @@ export default {
     box-sizing: border-box;
     box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
     .TimeLineWrap {
+      .el-table--enable-row-transition {
+        max-height: 220px !important;
+      }
+      .is-scrolling-left {
+        max-height: 170px !important;
+      }
+      .is-scrolling-right {
+        max-height: 170px !important;
+      }
+      .is-scrolling-middle {
+        max-height: 170px !important;
+      }
+      .is-scrolling-none {
+        max-height: 170px !important;
+      }
       width: 100%;
       margin-top: 20px;
       height: calc(100% - 80px);
@@ -1822,7 +1856,7 @@ export default {
     justify-content: space-between;
     .TabBar {
       width: 180px;
-      height: 48px;
+      height: 42px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1834,8 +1868,8 @@ export default {
       background-color: #f3f7f8;
       .Tabli {
         width: 90px;
-        height: 40px;
-        line-height: 40px;
+        height: 30px;
+        line-height: 30px;
         text-align: center;
         font-size: 15px;
         cursor: pointer;

@@ -48,10 +48,16 @@
       <el-button
         type="primary"
         class="TpmButtonBG"
-        @click="upload"
+        @click="parsingExcelBtn"
         icon="el-icon-upload2"
-        >上传</el-button
-      >
+        >上传</el-button>
+      <input
+        id="fileElem"
+        ref="filElem"
+        type="file"
+        style="display: none"
+        @change="parsingExcel($event)"
+      />
       <el-button
         type="primary"
         class="TpmButtonBG"
@@ -119,8 +125,7 @@
           icon="el-icon-upload2"
           type="primary"
           @click="parsingExcelBtn"
-          >上传附件</el-button
-        >
+          >上传附件</el-button>
         <input
           id="fileElem"
           ref="filElem"

@@ -43,7 +43,7 @@
     >
       <!--      <el-table-column align="center" prop="interfaceName" label="操作"> </el-table-column>-->
       <el-table-column align="center" prop="id" label="序号" />
-      <el-table-column align="center" prop="theme" label="主题" />
+      <el-table-column align="center" prop="theme" show-overflow-tooltip label="主题" />
       <el-table-column align="center" prop="sendUser" label="接受角色/接受人" />
       <el-table-column v-slot="{row}" align="center" prop="type" label="通知类型">
         {{ row.type == 1 ? '定时通知' : '即时通知' }}
@@ -368,7 +368,7 @@ export default {
             customInsert(result, insertFn) {
               // result是返回的json格式
               // 从 result 中找到 url alt href ，然后插图图片
-              console.log(result.data)
+              // console.log(result.data)
               insertFn(result.data)
             }
           }
@@ -476,7 +476,6 @@ export default {
           })
         }).catch(() => {
           this.$message({
-
             type: 'info',
             message: '已取消发送'
           })
@@ -495,6 +494,8 @@ export default {
       formData.append('ccUserList', this.filterObj.ccUser)
       formData.append('theme', this.filterObj.theme)
       formData.append('content', this.html)
+      formData.append('isZn', this.filterObj.interior ? 1 : 0)
+      formData.append('isEmail', this.filterObj.email ? 1 : 0)
       API.importNormal(formData).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
@@ -502,7 +503,6 @@ export default {
           this.$message.info(this.messageMap.saveError)
         }
       })
-      alert('发送成功')
       this.cancleWriteEmail()
     },
     // 接收人下拉框改变
