@@ -132,38 +132,31 @@
             style="width: 100%">
             <el-table-column
               prop="yearAndMonth"
-              label="年月"
-              width="80">
+              label="年月">
             </el-table-column>
             <el-table-column
               prop="costTypeName"
-              label="Cost Type"
-              width="100">
+              label="Cost Type">
             </el-table-column>
             <el-table-column
               prop="minePackageName"
-              label="Mine Package"
-              width="110">
+              label="Mine Package">
             </el-table-column>
             <el-table-column
               prop="costItemName"
-              label="Cost Item"
-              width="140">
+              label="Cost Item">
             </el-table-column>
             <el-table-column
               prop="channelName"
-              label="渠道"
-              width="60">
+              label="渠道">
             </el-table-column>
             <el-table-column
               prop="version"
-              label="版本号"
-              width="120">
+              label="版本号">
             </el-table-column>
             <el-table-column
               prop=""
-              label="查看"
-              width="120">
+              label="查看">
               <template slot-scope="{row}">
                 <div class="transact" @click="openFlowDiagram(row)">
                   查看流程
@@ -200,13 +193,11 @@
             </el-table-column>
             <el-table-column
               prop="customerName"
-              label="客户名称"
-              width="120">
+              label="客户名称">
             </el-table-column>
             <el-table-column
               prop="distributorName"
-              label="经销商名称"
-              width="180">
+              label="经销商名称">
             </el-table-column>
             <el-table-column
               prop="activityName"

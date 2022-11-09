@@ -32,10 +32,10 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <div class="notice-box">
-          <notice class="right-menu-item" />
-        </div>
-        <div style="clear: both"></div>
+<!--        <div class="notice-box">-->
+<!--          <notice class="right-menu-item" />-->
+<!--        </div>-->
+<!--        <div style="clear: both"></div>-->
       </div>
     </div>
     <!-- 信息 -->
