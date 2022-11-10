@@ -5,7 +5,7 @@
       <div class="SelectBar" @keyup.enter="search">
         <div class="Selectli">
           <span class="SelectliTitle">主题:</span>
-          <el-input v-model="filterObj.content" filterable clearable placeholder="请输入">
+          <el-input v-model="filterObj.theme" filterable clearable placeholder="请输入">
             <!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
           </el-input>
         </div>
@@ -388,6 +388,7 @@ export default {
         pageNum: this.pageNum, // 当前页
         pageSize: this.pageSize, // 每页条数
         content: this.filterObj.content,
+        theme: this.filterObj.theme,
         sendUser: this.filterObj.sendUser,
         State: this.filterObj.State
       }).then((response) => {
