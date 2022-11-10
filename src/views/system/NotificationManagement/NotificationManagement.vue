@@ -54,7 +54,7 @@
       <el-table-column v-slot="{row}" align="center" prop="type" label="邮件">
         {{ row.type == 1 ? '是' : '否' }}
       </el-table-column>
-      <el-table-column align="center" prop="sendUser" label="发送人" />
+      <el-table-column align="center" prop="createBy" label="发送人" />
       <el-table-column v-slot="{row}" align="center" prop="sendTime" label="发送时间">
         {{ row.sendTime ? row.sendTime.replace("T"," ") : '' }}
       </el-table-column>
