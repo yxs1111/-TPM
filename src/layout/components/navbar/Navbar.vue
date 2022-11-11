@@ -113,7 +113,7 @@
   background-size: 100% 100%;
 }
 .navbar {
-  height: 80px;
+  height: 60px;
   overflow: hidden;
   position: relative;
   top: 0;
@@ -154,6 +154,7 @@
   }
 
   .breadcrumb-container {
+    width: 222px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -161,7 +162,7 @@
     font-size: 20px;
     font-weight: bold;
     color: #105aae;
-    height: 80px;
+    height: 60px;
     line-height: 80px;
     padding-left: 36px;
   }
@@ -197,7 +198,7 @@
       float: left;
 
       .avatar-wrapper {
-        margin-top: 5px;
+        margin-top: -3px;
         position: relative;
         float: left;
         .user-avatar {

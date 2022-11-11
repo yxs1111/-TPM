@@ -11,9 +11,8 @@
       </GanttElastic>
       <div v-show="popUpShow" class="hover_con" :style="positionStyle">
         <div class="triangle"></div>
-        {{ content.label }}<br />
-        开始日期:{{ dayjs(content.startTime) }} <br />
-        结束日期:{{ dayjs(content.endTime) }} <br />
+<!--        {{ content.label }}<br />-->
+        {{ dayjs(content.startTime) }} - {{ dayjs(content.endTime) }} <br />
       </div>
       <div class="CityPlan">
         <div class="CityPlanTop">
@@ -21,30 +20,30 @@
         </div>
         <div class="PointTipWrap">
           <div class="PointTipWrap3">
-<!--            <el-radio-group v-model="tabPosition" @tab-click='getHomePageData'>-->
-<!--              <el-radio-button label="NKA">NKA</el-radio-button>-->
-<!--              <el-radio-button label="EC">EC</el-radio-button>-->
-<!--              <el-radio-button label="RKA">RKA</el-radio-button>-->
-<!--            </el-radio-group>-->
-            <el-button-group>
-              <el-button type="primary" v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus @click="getHomePageData(item)">{{item}}</el-button>
-            </el-button-group>
+            <el-radio-group v-model="tabPosition" @change='getHomePageData'>
+              <el-radio-button label="NKA">NKA</el-radio-button>
+              <el-radio-button label="EC">EC</el-radio-button>
+              <el-radio-button label="RKA">RKA</el-radio-button>
+            </el-radio-group>
+<!--            <el-button-group>-->
+<!--              <el-button type="primary" size='small' v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus @click="getHomePageData(item)"><span>{{item}}</span></el-button>-->
+<!--            </el-button-group>-->
           </div>
           <div class="PointTipWrap2">
             <div class="PointTip">
-              <img src="@/assets/images/index/point_right.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_right2.png" alt="" class="pointTipImg">
               <span>已完成</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point_circle.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_circle2.png" alt="" class="pointTipImg">
               <span>当前节点</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point_amaze.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_amaze2.png" alt="" class="pointTipImg">
               <span>延误节点</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point5.png" alt="" class="pointTipImg">
               <span>未开始</span>
             </div>
           </div>
@@ -80,7 +79,7 @@
                         <div slot="content" v-html="getTip(item)"></div>
                         <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <div class="pointCircle" v-if="TaskIndex>item.taskNumber"></div>
+                      <div class="noStart" v-if="TaskIndex>item.taskNumber"></div>
                       <div class="line" v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'"></div>
                       <div class="lineDark" v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'"></div>
                     </div>
@@ -98,7 +97,7 @@
                           <div slot="content" v-html="getTip(item)"></div>
                           <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
                         </el-tooltip>
-                        <div class="pointCircle" v-if="TaskIndex>item.taskNumber"></div>
+                        <div class="noStart" v-if="TaskIndex>item.taskNumber"></div>
                         <div class="line" v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'"></div>
                         <div class="lineDark" v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'"></div>
                       </div>
@@ -165,10 +164,12 @@
             </el-table-column>
             <el-table-column
               prop=""
+              fixed= 'right'
               label="操作">
               <template slot-scope="scope">
-                <div class="TimeLineTitleli">
-                  <div class="transact" @click="goAssignee(scope.row.version,scope.row.activityName,scope.row.channelCode,scope.row.minePackageName,scope.row)">办理</div>
+                <div class="operation" @click="goAssignee(scope.row.version,scope.row.activityName,scope.row.channelCode,scope.row.minePackageName,scope.row)">
+                  <svg-icon icon-class="submit_l" class="submit_icon" />
+                  办理
                 </div>
               </template>
             </el-table-column>
@@ -209,15 +210,19 @@
               width="120">
               <template slot-scope="{row}">
                 <div class="transact" @click="openFlowDiagram(row)">
-                  查看流程
+                  <div class='transctTxt'>查看流程</div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
               prop=""
+              fixed= 'right'
               label="操作">
               <template slot-scope="{row}">
-                <div class="transact" @click="operateProcess(row.minePackageCode,row.name)">办理</div>
+                <div class="operation" @click="operateProcess(row.minePackageCode,row.name)">
+                  <svg-icon icon-class="submit_l" class="submit_icon" />
+                  办理
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -235,9 +240,11 @@
           </div>
         </div>
       </div>
+<!--      左下角问号-->
       <el-popover
-        placement="right"
+        placement="left"
         width="500"
+        :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }"
         trigger="click">
         <div class='documentation'>用户文档中心</div>
         <el-table :data="gridData">
@@ -261,9 +268,8 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button class='needHelp' slot="reference" @click='needHelp'>
-<!--          <img src='../../../assets/images/help.png'>-->
-          <div style=' border-radius: 50%; border: 1px solid #fff; font-size: 20px; width: 30px; height: 30px; padding-top: 3px'>?</div>
+        <el-button class='needHelp' slot="reference">
+          <div class='needHelpTxt'>?</div>
         </el-button>
       </el-popover>
     </div>
@@ -614,6 +620,7 @@ export default {
     this.getContract()
     this.getCompleteData()
     this.getActivitycycle()
+    this.needHelp()
   },
   watch: {
     '$store.state.app.sidebar.opened'() {
@@ -660,7 +667,7 @@ export default {
           this.startTimeArr.push(new Date(item.startVZero), new Date(item.EndVZero), new Date(item.startVOne), new Date(item.EndVOne), new Date(item.startVTwo), new Date(item.EndVTwo), new Date(item.startVThree), new Date(item.EndVThree))
           let maxDate = new Date(Math.max.apply(null, this.startTimeArr))
           let minDate = new Date(Math.min.apply(null, this.startTimeArr))
-          const formatDateTime = function (date) {
+          const formatDateTime = function(date) {
             const y = date.getFullYear()
             let m = date.getMonth() + 1
             m = m < 10 ? ('0' + m) : m
@@ -798,13 +805,13 @@ export default {
       this.$router.push('/os/MessageManage')
     },
     // 日历和流程
-    getHomePageData(item) {
+    getHomePageData(item, event) {
       if (item === undefined) {
         item = 'NKA'
       }
       API.getHomePageData({
         yearAndMonth: this.activeMoon,
-        channelName: item
+        channelName: this.tabPosition
       }).then((res) => {
         let array = res.data.investList
         //流程处理 日期分组
@@ -939,43 +946,6 @@ export default {
         let reverseList = []
         reverseList = list.reverse()
         this.ActivityList = [...reverseList]
-        //日期处理
-        let DateArray = res.data.calendar
-        let DateData = {}
-        for (let m = 0; m < DateArray.length; m++) {
-          DateArray[m].dateObj = this.createDate(DateArray[m].date)
-          //对date 进行分组
-          if (!DateData[DateArray[m].yearMonth]) {
-            var arr = []
-            arr.push(DateArray[m])
-            DateData[DateArray[m].yearMonth] = arr
-          } else {
-            DateData[DateArray[m].yearMonth].push(DateArray[m])
-          }
-        }
-        let ColorIndex = 0 //颜色初始值
-        //日历格式化
-        // for (const key in DateData) {
-        //   let pointList = DateData[key]
-        //   for (let index = 0; index < pointList.length; index++) {
-        //     let obj = {
-        //       key: pointList[index].yearMonth + '-' + pointList[index].version,
-        //       dot: {
-        //         style: {
-        //           //dot 样式设置
-        //           backgroundColor: this.BackGroundColorList[ColorIndex % 3],
-        //         },
-        //       },
-        //       dates: pointList[index].dateObj,
-        //       popover: {
-        //         label:
-        //           pointList[index].yearMonth + '-' + pointList[index].version,
-        //       },
-        //     }
-        //     this.attrs.push(obj)
-        //   }
-        //   ColorIndex++
-        // }
       })
     },
     setTaskName(minePackageName, costItemName) {
@@ -1008,10 +978,6 @@ export default {
         TaskName = minePackageName
       }
       return TaskName
-    },
-    //获取date 日期对象
-    createDate(value) {
-      return new Date(Date.parse(value.replace(/-/g, '/'))) //转换成Data();
     },
     //获取活动月
     getCPTMonth(value) {
@@ -1177,9 +1143,9 @@ export default {
   position: fixed;
   max-width: 220px;
   padding: 10px;
-  border: 1px solid #666;
-  background: #303133;
-  color: #fff;
+  border: 1px solid #fff;
+  background: #ffffff;
+  color: #999999;
   border-radius: 10px;
   font-size: 14px;
 }
@@ -1189,7 +1155,7 @@ export default {
   line-height: 0px;
   font-size: 0px;
   border: 10px solid transparent;
-  border-bottom-color: #303133;
+  border-bottom-color: #fff;
   /* background-color: #fff; */
   position: absolute;
   top: -15px;
@@ -1278,16 +1244,16 @@ export default {
   font-weight: 600;
   font-size: 16px;
   justify-content: center;
-  margin: 4px 0 !important;
+  margin: 7px 0 !important;
 }
 /* taskList active */
 .gantt-elastic__task-list-item_active {
-  background-color: #4192d3 !important;
-  color: #fff !important;
+  background-color: #C5EBFE !important;
+  color: #4192D3 !important;
 }
 .gantt-elastic__task-list-item_active
 .gantt-elastic__task-list-item-value-wrapper {
-  color: #fff !important;
+  color: #4192D3 !important;
   background-color: transparent;
 }
 .gantt-elastic__task-list-item-value {
@@ -1323,6 +1289,14 @@ export default {
 //   left: -70px;
 //   width: 55x;
 // }
+.el-button-group>.el-button:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+.el-button-group>.el-button:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
 .date{
   background-color: rgb(198, 235, 254);
   padding: 5px 15px;
@@ -1437,6 +1411,13 @@ export default {
       font-size: 16px;
       color: #333333;
       height: 35px;
+    }
+    .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+      background-color: #4192D3;
+    }
+    .el-radio-button__inner {
+      background-color: #C5EBFE;
+      font-size: 16px;
     }
     .el-button--primary {
       background-color: #C5EBFE;
@@ -1584,17 +1565,31 @@ export default {
             height: 28px;
           }
         }
+        .V3 {
+          width: 3%;
+          display: flex;
+          align-items: center;
+          img {
+            width: 28px;
+            height: 28px;
+          }
+        }
         .line {
-          width: calc(100% - 28px);
-          height: 10px;
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+          width: calc(100% - 0px);
+          height: 26px;
           background-color: #C6DCEE;
-          //box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
+          box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
+          margin: 0;
         }
         .lineDark {
-          width: calc(100% - 28px);
-          height: 10px;
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+          width: calc(100% - 0px);
+          height: 26px;
           background-color: #C6DCEE;
-          // box-shadow: 0px 2px 6px 0px rgba(251, 113, 119, 0.31);
+          box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
         }
         .pointCircle {
           width: 27px;
@@ -1604,15 +1599,17 @@ export default {
           border-radius: 50%;
         }
         .passIcon {
+          position: absolute;
           width: 28px;
           height: 28px;
-          background: url('../../../assets/images/index/point_right.png');
+          background: url('../../../assets/images/index/point_right2.png');
           background-size: 100% 100%;
           box-shadow: 0px 6px 13px 0px rgba(85, 186, 158, 0.38);
           border-radius: 50%;
           overflow: hidden;
         }
         .currentPoint {
+          position: absolute;
           width: 28px;
           height: 28px;
           background: url('../../../assets/images/index/point_circle.png');
@@ -1622,20 +1619,26 @@ export default {
           overflow: hidden;
         }
         .delayPoint {
+          position: absolute;
           width: 28px;
           height: 28px;
-          background: url('../../../assets/images/index/point_amaze.png');
+          background: url('../../../assets/images/index/point_amaze2.png');
           background-size: 100% 100%;
           box-shadow: 0px 6px 13px 0px rgba(251, 90, 86, 0.38);
           border-radius: 50%;
           overflow: hidden;
         }
         .noStart {
+          margin-left: -20px;
+          position: absolute;
           width: 27px;
           height: 27px;
-          background-color: #fee4e4;
-          border: 1px solid #fff;
+          background: url('../../../assets/images/index/point5.png');
+          background-size: 100% 100%;
+          box-shadow: 0px 6px 13px 0px rgba(103, 102, 102, 0.38);
+          //border: 1px solid #fff;
           border-radius: 50%;
+          overflow: hidden;
         }
       }
     }
@@ -1803,13 +1806,14 @@ export default {
     }
   }
   .transact {
+    font-size: 16px;
     width: 80px;
     height: 40px;
     line-height: 40px;
-    color: #fff;
-    background-color: #4192d3;
+    background-color: rgb(89, 190, 135, 0.15);
     border-radius: 4px;
     text-align: center;
+    color: #59BE87;
     cursor: pointer;
   }
   .Message {
@@ -1867,9 +1871,9 @@ export default {
         font-family: SourceHanSansCN-Medium;
       }
       .currentTabli {
-        background-color: #ffffff;
+        background-color: #4192D3;
         border-radius: 4px;
-        color: #4192d3;
+        color: #ffffff;
       }
     }
     .more {
@@ -1901,13 +1905,34 @@ export default {
 }
 .needHelp{
   position: absolute;
-  background-color: #00afff;
+  background-color: rgba(65, 146, 211, 1);
   border-radius: 50%;
   width: 70px;
   height: 70px;
   display: inline-block;
   color: #fff;
   font-size: 20px;
-  margin: 0px 0px 0px -90px
+  margin: 0px 0px 0px -90px;
+  .needHelpTxt {
+    font-weight: 600;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    padding-top: 3px
+  }
+}
+.operation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4192d3;
+  font-size: 16px;
+  cursor: pointer;
+
+  .submit_icon {
+    font-size: 26px;
+  }
 }
 </style>
