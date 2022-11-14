@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-11-07 13:29:06
 -->
 <template>
-  <div>
+  <div style='padding: 11px'>
     <div style=' border-radius: 25px;background-color: #fff; padding-bottom: 20px'>
       <GanttElastic ref="ganttGroup" style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
@@ -36,11 +36,11 @@
             </div>
             <div class="PointTip">
               <img src="@/assets/images/index/point_circle2.png" alt="" class="pointTipImg">
-              <span>当前节点</span>
+              <span>待办</span>
             </div>
             <div class="PointTip">
               <img src="@/assets/images/index/point_amaze2.png" alt="" class="pointTipImg">
-              <span>延误节点</span>
+              <span>延误</span>
             </div>
             <div class="PointTip">
               <img src="@/assets/images/index/point5.png" alt="" class="pointTipImg">
@@ -71,11 +71,11 @@
                     <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}</div>
                     <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
                       <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
+                      <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
                         <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
-                      <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
+                      <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
                         <div slot="content" v-html="getTip(item)"></div>
                         <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
                       </el-tooltip>
@@ -89,11 +89,11 @@
                     <div class="NuPoint">
                       <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
                         <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
-                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
+                        <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
                           <div slot="content" v-html="getTip(item)"></div>
                           <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
                         </el-tooltip>
-                        <el-tooltip effect="dark" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
+                        <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
                           <div slot="content" v-html="getTip(item)"></div>
                           <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
                         </el-tooltip>
@@ -125,6 +125,7 @@
 <!--        费用管理-->
         <div class="TimeLineWrap" v-show="currentIndex == 0">
           <el-table
+            :header-cell-style="{'color':'#000000'}"
             max-height="190"
             :data="TodoList"
             stripe
@@ -178,6 +179,7 @@
 <!--        合同管理-->
         <div class="TimeLineWrap" v-show="currentIndex == 1">
           <el-table
+            :header-cell-style="{'color':'#000000'}"
             max-height="190"
             :data="contractList"
             stripe
@@ -228,7 +230,7 @@
           </el-table>
         </div>
       </div>
-      <div class="Message MyToDo">
+      <div class="Message MyToDo" style='margin-left: 30px'>
         <div class="BarTitleWrap">
           <span>消息</span>
           <span class="more" @click="MoreMsg">更多</span>
@@ -767,20 +769,8 @@ export default {
         assigneeStr += `<span>${item}</span></br>`
       })
       return `<div class="Tip">
-                <span class="TipTitle">节点名称: </span>
-                <span>${value.activityName}</span>
-              </div>
-              <div class="Tip">
-                <span class="TipTitle">渠道: </span>
-                <span>${value.channelName}</span>
-              </div>
-              <div class="Tip">
-                <span class="TipTitle">办理人: </span>
-                <span>${assigneeStr}</span>
-              </div>
-              <div class="Tip">
-                <span class="TipTitle">办理状态: </span>
-                <span>${value.processStatus == 2 ? '已办理' : value.workDateFlag == '1' ? '未办理(延误)' : '未办理'}</span>
+                <span>${value.createDate?value.createDate.substring(0,19).replaceAll("T",' '):""}</span>-
+                <span>${value.updateDate?value.updateDate.substring(0,19).replaceAll("T",' '):""}</span>
               </div>`
     },
     // 获取信息列表
@@ -1304,7 +1294,7 @@ export default {
 }
 .CityPlan {
   margin: 10px 10px 0px 10px;
-  width: 99%;
+  width: 98%;
   height: 310px;
   background-color: #f0fbff;
   border-radius: 20px;
@@ -1414,6 +1404,9 @@ export default {
     }
     .el-radio-button__orig-radio:checked+.el-radio-button__inner {
       background-color: #4192D3;
+    }
+    .el-radio-button__inner, .el-radio-group {
+      line-height: 0.5;
     }
     .el-radio-button__inner {
       background-color: #C5EBFE;
@@ -1806,6 +1799,7 @@ export default {
     }
   }
   .transact {
+    font-weight: bold;
     font-size: 16px;
     width: 80px;
     height: 40px;
@@ -1828,6 +1822,7 @@ export default {
         color: #999999;
         margin-bottom: 24px;
         .MessageDate {
+          font-weight: 600;
           white-space: nowrap;
           color: #333333;
           margin-right: 10px;
@@ -1862,6 +1857,7 @@ export default {
       color: #999;
       background-color: #f3f7f8;
       .Tabli {
+        font-weight: bold;
         width: 90px;
         height: 30px;
         line-height: 30px;
