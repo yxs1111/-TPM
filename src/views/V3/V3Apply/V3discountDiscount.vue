@@ -5,10 +5,10 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-            <span class="SelectliTitle">活动月:</span>
-            <el-select v-model="localDate" filterable clearable placeholder="请选择">
-              <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
-            </el-select>
+          <span class="SelectliTitle">活动月:</span>
+          <el-select v-model="localDate" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
@@ -42,13 +42,13 @@
         </div>
       </div>
       <div class="OpertionBar">
-          <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
-          <div class="TpmButtonBG" @click="exportData">
-            <img src="../../../assets/images/export.png" alt="">
-            <span class="text">导出</span>
-            <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
-          </div>
+        <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
+        <div class="TpmButtonBG" @click="exportData">
+          <img src="../../../assets/images/export.png" alt="">
+          <span class="text">导出</span>
+          <!-- <a href="/investCpVThreeDetail/export" download="exportTemplate.xlsx">导出</a> -->
         </div>
+      </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
       <el-tooltip class="item" effect="dark" :content="isBeforeOrAfter?'谈判后':'谈判前'" placement="bottom">

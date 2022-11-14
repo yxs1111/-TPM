@@ -21,19 +21,37 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户系统名称:</span>
+          <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
-        <div class="Selectli" v-show='this.filterObj.channelCode == "NKA"'>
-          <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
+<!--        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>-->
+<!--          <span class="SelectliTitle">供应商:</span>-->
+<!--          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">-->
+<!--            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />-->
+<!--          </el-select>-->
+<!--        </div>-->
+        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
+          <span class="SelectliTitle">大区:</span>
+          <el-select v-model="filterObj.zoneCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
-        <div class="Selectli" v-show='this.filterObj.channelCode == "NKA"'>
+        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">区域:</span>
+          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+          </el-select>
+        </div>
+        <div class="Selectli"v-show='this.filterObj.channelCode !== "EC"'>
+          <span class="SelectliTitle">活动类型:</span>
+          <el-select v-model="filterObj.item" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in regionArr" :key="index" :label="item.item" :value="item.item" />
+          </el-select>
+        </div>
+        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
+          <span class="SelectliTitle">Sub_item:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
@@ -129,16 +147,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="supplierName" label="供应商">
-        <template v-slot:header>
-          <div>供应商<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column>
       <el-table-column width="220" align="center" prop="zoneName" label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle">-</span></div>
@@ -169,12 +177,22 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="280" align="center" prop="supplierName" label="Sub_item">
+        <template v-slot:header>
+          <div>Sub_item<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.supplierName }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="220" align="right" prop="planPrice" label="V1计划单价(RMB/场)">
         <template v-slot:header>
           <div>
-            V1计划单价(RMB/人)
+            V1计划单价(RMB/场)
             <br>
-            <span class="subTitle">KA+供应商+Region</span>
+            <span class="subTitle">KA+Region+业务细项+Sub_item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -188,7 +206,7 @@
           <div>
             V1计划场次(场)
             <br>
-            <span class="subTitle">KA+供应商+Region</span>
+            <span class="subTitle">KA+Region+业务细项+Sub_item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -202,7 +220,7 @@
           <div>
             V1计划费用(RMB)
             <br>
-            <span class="subTitle">KA+供应商+Region</span>
+            <span class="subTitle">KA+Region+业务细项+Sub_item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -402,6 +420,8 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList: [],
+      regionArr: [],
+      largeAreaDialogList: [],
       supplierList: [],
       activityList: [],
       maxheight: getHeightHaveTab(),
@@ -423,6 +443,8 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getRegionList()
+    this.getBrandList()
+    this.getAreaList()
     this.getSupplierList()
   },
   methods: {
@@ -465,7 +487,7 @@ export default {
         })
       }
     },
-    //获取SmartPlan
+    // 获取SmartPlan
     getSmartPlan() {
       if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         if (this.filterObj.month == '') {
@@ -525,6 +547,22 @@ export default {
             this.customerArr = res.data
           }
         })
+    },
+    // 获取大区数据
+    getAreaList() {
+      selectAPI.getLargeAreaList({ parentCode: '' }).then((res) => {
+        if (res.code === 1000) {
+          this.largeAreaDialogList = res.data
+        }
+      })
+    },
+    // 活动类型
+    getBrandList() {
+      selectAPI.getECMItemList({ minePackage: 'Premium'}).then((res) => {
+        if (res.code === 1000) {
+          this.regionArr = res.data
+        }
+      })
     },
     getRegionList() {
       selectAPI.getRegionList({}).then((res) => {

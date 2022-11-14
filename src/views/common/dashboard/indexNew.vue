@@ -769,8 +769,8 @@ export default {
         assigneeStr += `<span>${item}</span></br>`
       })
       return `<div class="Tip">
-                <span>${value.createDate?value.createDate.substring(0,19).replaceAll("T",' '):""}</span>-
-                <span>${value.updateDate?value.updateDate.substring(0,19).replaceAll("T",' '):""}</span>
+                <span style='font-weight: bold'>${value.createDate?value.createDate.substring(0,19).replaceAll("T",' '):""}</span>-
+                <span style='font-weight: bold'>${value.updateDate?value.updateDate.substring(0,19).replaceAll("T",' '):""}</span>
               </div>`
     },
     // 获取信息列表
@@ -1152,6 +1152,10 @@ export default {
 }
 </style>
 <style lang="scss">
+.title {
+  font-size: 13px !important;
+  font-weight: bold !important;
+}
 .gantt-elastic__calendar-row-text--month {
   font-size: 14px !important;
   font-weight: 600;
@@ -1327,7 +1331,7 @@ export default {
     padding-left: 200px;
     box-sizing: border-box;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: bold;
     color: #333333;
     display: flex;
     align-items: center;
@@ -1371,7 +1375,7 @@ export default {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: end;
 
     .PointTip {
       margin-right: 40px;
@@ -1411,6 +1415,7 @@ export default {
     .el-radio-button__inner {
       background-color: #C5EBFE;
       font-size: 16px;
+      font-weight: bold;
     }
     .el-button--primary {
       background-color: #C5EBFE;
@@ -1854,7 +1859,7 @@ export default {
       box-sizing: border-box;
       border-radius: 4px;
 
-      color: #999;
+      color: #000000;
       background-color: #f3f7f8;
       .Tabli {
         font-weight: bold;
