@@ -1508,6 +1508,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-table {
+  .el-table__fixed {
+    height:auto !important;
+    bottom:17px !important;
+  }
+}
+.el-table__fixed-body-wrapper {
+  max-height: 537px !important;
+  bottom: 5px !important;
+}
 .tooltip {
   border-radius: 10px;
 }
