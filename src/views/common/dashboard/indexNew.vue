@@ -4,8 +4,8 @@
  * @LastEditTime: 2022-11-07 13:29:06
 -->
 <template>
-  <div style='padding: 11px'>
-    <div style=' border-radius: 25px;background-color: #fff; padding-bottom: 20px'>
+  <div style='padding: 11px; overflow-x: hidden'>
+    <div class='' style=' border-radius: 25px;background-color: #fff; padding-bottom: 20px'>
       <GanttElastic ref="ganttGroup" style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
       </GanttElastic>
@@ -1245,7 +1245,9 @@ export default {
   height: 177px !important;
 }
 .gantt-elastic__task-list-item {
-  border-radius: 10px;
+  margin: 0 5px;
+  box-shadow: 0px 0px 12px 0px rgba(127,127,127,0.1);
+  border-radius: 6px;
   text-align: center;
   color: #000 !important;
   font-weight: 600;
@@ -1320,6 +1322,7 @@ export default {
   background-color: rgb(198, 235, 254);
   padding: 8px 24px;
   border-radius: 6px;
+  font-size: 20px;
 }
 ::-webkit-scrollbar {
   height: 6px !important;
@@ -1441,10 +1444,11 @@ export default {
       line-height: 0.5;
     }
     .el-radio-button__inner {
+      border: 0px;
       background-color: #C5EBFE;
       font-size: 16px;
       font-weight: bold;
-      padding: 20px 30px !important;
+      padding: 15px 30px !important;
     }
     .el-button--primary {
       background-color: #C5EBFE;
@@ -1754,14 +1758,14 @@ export default {
 }
 .BottomBar {
   width: 100%;
-  height: 270px;
+  height: 344px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 17px 0;
   .MyToDo {
     width: 65%;
-    height: 265px;
+    height: 100%;
     background-color: #fff;
     border-radius: 20px;
     padding: 20px;
@@ -1769,23 +1773,27 @@ export default {
     box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
     .TimeLineWrap {
       .el-table--enable-row-transition {
-        max-height: 184px !important;
+        max-height: 260px !important;
       }
       .is-scrolling-left {
-        max-height: 170px !important;
+        max-height: 215px !important;
       }
       .is-scrolling-right {
-        max-height: 170px !important;
+        max-height: 215px !important;
       }
       .is-scrolling-middle {
-        max-height: 170px !important;
+        max-height: 215px !important;
       }
       .is-scrolling-none {
-        max-height: 170px !important;
+        max-height: 215px !important;
+      }
+      .el-table__fixed-body-wrapper {
+        top: 48px !important;
+        max-height: 215px !important;
       }
       width: 100%;
       margin-top: 10px;
-      height: calc(100% - 150px);
+      height: calc(100% - 40px);
       background-color: #f5f5f5;
       border-radius: 4px;
       .TimeLineTop {
