@@ -636,7 +636,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .el-table {
   .el-table__fixed {
     height:auto !important;

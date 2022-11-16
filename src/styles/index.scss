@@ -12,7 +12,16 @@ body {
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
     Source Han Sans CN Light, Arial, sans-serif;
 }
-
+el-table {
+  .el-table__fixed {
+    height:auto !important;
+    bottom:17px !important;
+  }
+}
+el-table__fixed-body-wrapper {
+  max-height: 537px !important;
+  bottom: 5px !important;
+}
 label {
   font-weight: 700;
 }
@@ -935,7 +944,7 @@ div:focus {
     font-weight: 400;
     color: #666666;
   }
-  
+
 }
 .tabViewsWrap {
   height: calc(100vh - 161px);
