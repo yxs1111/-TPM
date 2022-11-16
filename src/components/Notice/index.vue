@@ -1,9 +1,10 @@
 <template>
   <div class="header-notice">
     <div class="notice-box" @click.stop="click">
-      <img src="@/assets/images/message.png" alt="" class="messageIcon" />
-      <!-- <i class="el-icon-bell notice-box-i"></i>
-      <div class="notice-box-txt">消息&nbsp;&nbsp;({{unreadNumberAll}})</div> -->
+<!--      <img src="@/assets/images/message.png" alt="" class="messageIcon" />-->
+<!--      <i class="el-icon-bell notice-box-i"></i>-->
+<!--      <div class="notice-box-txt">消息&nbsp;&nbsp;({{unreadNumberAll}})</div>-->
+      <div class="notice-box-txt">更多</div>
     </div>
     <el-dialog :visible.sync="noticePage.dialogVisible" title="消息" width="70%" height="40%" class="my-el-dialog">
       <div class="flex_start">
@@ -427,15 +428,18 @@ export default {
   height: 40px;
   border-radius: 20px;
   // background: #f3f6fc;
-  margin-top: 25px;
-  margin-right: 20px;
+  //margin-top: 25px;
+  //margin-right: 20px;
 }
 .notice-box-txt {
-  height: 40px;
-  font-size: 12px;
-  color: #586aba;
-  float: left;
+  //height: 40px;
+  //font-size: 12px;
+  //color: #586aba;
+  //float: left;
   line-height: 45px;
+  font-size: 17px;
+  color: #4192d3;
+  cursor: pointer;
 }
 .notice-box-i {
   font-size: 20px;

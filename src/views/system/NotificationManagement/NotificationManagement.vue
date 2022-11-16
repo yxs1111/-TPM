@@ -22,11 +22,11 @@
 <!--          </el-select>-->
 <!--        </div>-->
         <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <!--        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>-->
-        <!--        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">-->
-        <!--          <img src="@/assets/images/export.png" alt="" />-->
-        <!--          <span class="text">导出</span>-->
-        <!--        </div>-->
+<!--        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>-->
+<!--        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">-->
+<!--          <img src="@/assets/images/export.png" alt="" />-->
+<!--          <span class="text">导出</span>-->
+<!--        </div>-->
       </div>
     </div>
     <div class="SelectBar">

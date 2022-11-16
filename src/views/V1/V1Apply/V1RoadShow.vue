@@ -44,7 +44,7 @@
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
           </el-select>
         </div>
-        <div class="Selectli"v-show='this.filterObj.channelCode !== "EC"'>
+        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">活动类型:</span>
           <el-select v-model="filterObj.item" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in regionArr" :key="index" :label="item.item" :value="item.item" />
@@ -52,8 +52,8 @@
         </div>
         <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">Sub_item:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+          <el-select v-model="filterObj.subCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in ['场地费', '执行费', 'POSM费用']" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <!-- <div class="Selectli">
@@ -406,6 +406,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        item: '',
         channelCode: '',
         customerCode: '',
         month: '',
@@ -413,6 +414,7 @@ export default {
         regionCode: '',
         zoneCode: '',
         activityType: '',
+        subCode: ''
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -478,7 +480,7 @@ export default {
           supplierCode: this.filterObj.supplierCode,
           zoneCode: this.filterObj.zoneCode,
           regionCode: this.filterObj.regionCode,
-          activityType: this.filterObj.activityType,
+          activityType: this.filterObj.item,
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -558,7 +560,7 @@ export default {
     },
     // 活动类型
     getBrandList() {
-      selectAPI.getECMItemList({ minePackage: 'Premium'}).then((res) => {
+      selectAPI.getECMItemList({ minePackage: 'Roadshow' }).then((res) => {
         if (res.code === 1000) {
           this.regionArr = res.data
         }

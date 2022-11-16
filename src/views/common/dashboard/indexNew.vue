@@ -233,7 +233,8 @@
       <div class="Message MyToDo" style='margin-left: 30px'>
         <div class="BarTitleWrap">
           <span>消息</span>
-          <span class="more" @click="MoreMsg">更多</span>
+<!--          <span class="more" @click="MoreMsg">更多</span>-->
+          <notice />
         </div>
         <div class="MessgaeWrap">
           <div class="Messgaeli" v-for="item,index in MessageList" :key="index">
@@ -282,6 +283,7 @@
 </template>
 
 <script>
+import Notice from '@/components/Notice'
 import GanttElastic from 'gantt-group'
 import GanttElasticHeader from 'gantt-elastic-header'
 import dayjs from 'dayjs'
@@ -320,7 +322,7 @@ export default {
         html: false,
       },
       row: {
-        height: 24,
+        height: 36,
       },
       times: {
         timeScale: 60 * 1000,
@@ -592,7 +594,8 @@ export default {
   components: {
     GanttElastic,
     GanttElasticHeader,
-    FlowDiagram
+    FlowDiagram,
+    Notice
   },
   created() {},
   mounted() {
@@ -1152,16 +1155,19 @@ export default {
 }
 </style>
 <style lang="scss">
+.gantt-elastic__main-view-container {
+  width: 91% !important;
+}
 .title {
-  font-size: 13px !important;
+  font-size: 18px !important;
   font-weight: bold !important;
 }
 .gantt-elastic__calendar-row-text--month {
-  font-size: 14px !important;
+  font-size: 16px !important;
   font-weight: 600;
 }
 .gantt-elastic__calendar-row-rect--month {
-  line-height: 33px !important;
+  line-height: 36px !important;
 }
 .gantt-elastic__calendar-row--month {
   height: 35px !important;
@@ -1172,11 +1178,15 @@ export default {
     border: 0px solid #ffffff !important;
   }
 }
+.el-table th>.cell {
+  text-align: center;
+}
 .gantt-elastic {
   overflow-y: scroll;
 }
 .gantt-elastic__task-list-wrapper {
   margin-top: 60px;
+  height: 78% !important;
 }
 .gantt-elastic__task-list-expander-wrapper {
   display: none !important;
@@ -1202,11 +1212,11 @@ export default {
 .gantt-elastic__task-list-item-value {
   line-height: 30px !important;
 }
-.gantt-elastic__main-container {
-  height: 100% !important;
-}
+//.gantt-elastic__main-container {
+//  height: 100% !important;
+//}
 .gantt-elastic__main-container-wrapper {
-  height: 100% !important;
+  height: 240px !important;
 }
 .gantt-elastic__main-container-wrapper {
   // height: 75px !important;
@@ -1231,6 +1241,9 @@ export default {
   background-color: #a1a3a9;
   border-radius: 3px;
 }
+.gantt-elastic__task-list-items {
+  height: 177px !important;
+}
 .gantt-elastic__task-list-item {
   border-radius: 10px;
   text-align: center;
@@ -1238,7 +1251,19 @@ export default {
   font-weight: 600;
   font-size: 16px;
   justify-content: center;
-  margin: 7px 0 !important;
+  margin-top: 27px !important;
+}
+.gantt-elastic__chart-graph-container {
+  margin-top: 24px !important;
+  height: 146px !important;
+  div {
+    height: 146px !important;
+  }
+}
+.gantt-elastic__chart-graph {
+  svg {
+    height: 146px !important;
+  }
 }
 /* taskList active */
 .gantt-elastic__task-list-item_active {
@@ -1251,7 +1276,7 @@ export default {
   background-color: transparent;
 }
 .gantt-elastic__task-list-item-value {
-  font-size: 14px !important;
+  font-size: 16px !important;
   text-align: center !important;
 }
 .gantt-elastic__chart-scroll-container--horizontal {
@@ -1293,11 +1318,14 @@ export default {
 }
 .date{
   background-color: rgb(198, 235, 254);
-  padding: 5px 15px;
-  border-radius: 10px;
+  padding: 8px 24px;
+  border-radius: 6px;
+}
+::-webkit-scrollbar {
+  height: 6px !important;
 }
 .CityPlan {
-  margin: 10px 10px 0px 10px;
+  margin: 20px 10px 0px 10px;
   width: 98%;
   height: 310px;
   background-color: #f0fbff;
@@ -1308,7 +1336,7 @@ export default {
     height: 52px;
     padding-left: 20px;
     box-sizing: border-box;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     color: #4192D3;
     display: flex;
@@ -1395,7 +1423,7 @@ export default {
   }
   .PointTipWrap3 {
     border-radius: 10px;
-    width: 25%;
+    width: 40%;
     margin: 5px 0px 5px 20px;
     box-sizing: border-box;
     display: flex;
@@ -1416,6 +1444,7 @@ export default {
       background-color: #C5EBFE;
       font-size: 16px;
       font-weight: bold;
+      padding: 20px 30px !important;
     }
     .el-button--primary {
       background-color: #C5EBFE;
@@ -1705,16 +1734,34 @@ export default {
     color: #999;
   }
 }
+.right-menu-item {
+  display: inline-block;
+  padding: 0 8px;
+  height: 20px;
+  width: 20px;
+  font-size: 18px;
+  color: #5a5e66;
+  vertical-align: text-bottom;
+
+  & .hover-effect {
+    cursor: pointer;
+    transition: background 0.3s;
+
+    & :hover {
+      background: rgba(0, 0, 0, 0.025);
+    }
+  }
+}
 .BottomBar {
   width: 100%;
-  height: 310px;
+  height: 270px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 32px 0;
+  margin: 17px 0;
   .MyToDo {
     width: 65%;
-    height: 345px;
+    height: 265px;
     background-color: #fff;
     border-radius: 20px;
     padding: 20px;
@@ -1722,7 +1769,7 @@ export default {
     box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
     .TimeLineWrap {
       .el-table--enable-row-transition {
-        max-height: 220px !important;
+        max-height: 184px !important;
       }
       .is-scrolling-left {
         max-height: 170px !important;
@@ -1737,8 +1784,8 @@ export default {
         max-height: 170px !important;
       }
       width: 100%;
-      margin-top: 20px;
-      height: calc(100% - 80px);
+      margin-top: 10px;
+      height: calc(100% - 150px);
       background-color: #f5f5f5;
       border-radius: 4px;
       .TimeLineTop {

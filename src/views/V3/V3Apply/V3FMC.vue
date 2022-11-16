@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in ['NKA', 'EC']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -32,7 +32,7 @@
             <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
@@ -61,7 +61,7 @@
         注意事项：未获取到实际人数，无法办理
       </div>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed >
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
@@ -356,6 +356,214 @@
             <div>
               {{ scope.row.systemJudgmentContent }}
             </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注" >
+        <template v-slot:header>
+          <div>申请人备注<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.applicantRemark }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" >
+        <template v-slot:header>
+          <div>Package Owner审批意见<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.poApprovalComments }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" >
+        <template v-slot:header>
+          <div>Finance审批意见<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.finApprovalComments }}
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-table v-if='this.filterObj.channelCode == "EC"' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed >
+        <template v-slot:header>
+          <div>CPID<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.cpId }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" >
+        <template v-slot:header>
+          <div>活动月<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.yearAndMonth }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="costType" label="费用类型" >
+        <template v-slot:header>
+          <div>费用类型<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costType }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" >
+        <template v-slot:header>
+          <div>Mine Package<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.minePackage }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="180" align="center" prop="costAccount" label="费用科目" >
+        <template v-slot:header>
+          <div>费用科目<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costAccount }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道" >
+        <template v-slot:header>
+          <div>渠道<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.channelCode }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" >
+        <template v-slot:header>
+          <div>客户系统名称<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.customerSystemName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="supplierName" label="供应商" >
+        <template v-slot:header>
+          <div>供应商<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.supplierName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
+        <template v-slot:header>
+          <div>V1计划费用(RMB)<br><span class="subTitle">KA</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.v1PlanCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用(RMB)">
+        <template v-slot:header>
+          <div>V2预估费用(RMB)<br><span class="subTitle">KA+供应商</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.v2AdjustEstimateCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="v3DefaultRealityCost" label="V3实际费用-默认(RMB)">
+        <template v-slot:header>
+          <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+供应商</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.v3DefaultRealityCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="260" align="right" prop="v3AdjustRealityCost" label="V3实际费用-调整后(RMB)">
+        <template v-slot:header>
+          <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+供应商</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.v3AdjustRealityCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门">
+        <template v-slot:header>
+          <div>费用归属部门<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costAscriptionDept }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式">
+        <template v-slot:header>
+          <div>费用核销方式<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costWriteoffMethod }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
+        <template v-slot:header>
+          <div>费用差值(RMB)<br><span class="subTitle">KA</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ formatNum(scope.row.costDifference) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
+        <template v-slot:header>
+          <div>系统判定<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="{row}">
+          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+            <div slot="content" v-html="getTip(row)" />
+            <div class="statusWrap">
+              <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
+              <span class="judgmentText">{{ row.systemJudgment }}</span>
+            </div>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column width="800" align="left" prop="systemJudgmentContent" label="系统判定内容">
+        <template v-slot:header>
+          <div>系统判定内容<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.systemJudgmentContent }}
+          </div>
         </template>
       </el-table-column>
       <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注" >
