@@ -1515,7 +1515,6 @@ export default {
   }
 }
 .el-table__fixed-body-wrapper {
-  max-height: 537px !important;
   bottom: 5px !important;
 }
 .tooltip {

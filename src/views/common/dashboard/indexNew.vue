@@ -1161,6 +1161,7 @@ export default {
 .title {
   font-size: 18px !important;
   font-weight: bold !important;
+  margin-left: 5px !important;
 }
 .gantt-elastic__calendar-row-text--month {
   font-size: 16px !important;
@@ -1179,7 +1180,7 @@ export default {
   }
 }
 .el-table th>.cell {
-  text-align: center;
+  text-align: left;
 }
 .gantt-elastic {
   overflow-y: scroll;
@@ -1320,7 +1321,7 @@ export default {
 }
 .date{
   background-color: rgb(198, 235, 254);
-  padding: 8px 24px;
+  padding: 6px 16px;
   border-radius: 6px;
   font-size: 20px;
 }
@@ -1335,6 +1336,7 @@ export default {
   border-radius: 20px;
   box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
   .CityPlanTop {
+    padding-top: 10px;
     width: 100%;
     height: 52px;
     padding-left: 20px;
@@ -1557,11 +1559,12 @@ export default {
             align-items: center;
             justify-content: flex-end;
             padding-left: 18px;
+            padding-right: 42px;
           }
           // background-color: pink;
         }
         .PointTitle {
-          width: 160px;
+          width: 153px;
           font-size: 16px;
           font-family: Source Han Sans CN;
           font-weight: bold;
@@ -1579,7 +1582,7 @@ export default {
           }
         }
         .V1 {
-          width: 33%;
+          width: 32.5%;
           display: flex;
           align-items: center;
           img {
@@ -1588,7 +1591,7 @@ export default {
           }
         }
         .V2 {
-          width: 33%;
+          width: 34%;
           display: flex;
           align-items: center;
           img {
@@ -1597,7 +1600,7 @@ export default {
           }
         }
         .V3 {
-          width: 3%;
+          width: 0%;
           display: flex;
           align-items: center;
           img {
@@ -1703,6 +1706,16 @@ export default {
       no-repeat;
       background-size: 100% 100%;
     }
+  }
+}
+.el-table_1_column_1 {
+  .cell {
+    text-align: left !important;
+  }
+}
+.el-table {
+  .cell {
+    padding: 0 10px;
   }
 }
 .gunterTitle {
@@ -1897,6 +1910,7 @@ export default {
     }
   }
   .BarTitleWrap {
+    padding-left: 10px;
     font-family: SourceHanSansCN-Medium;
     font-size: 18px;
     color: #333333;
