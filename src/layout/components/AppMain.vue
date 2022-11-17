@@ -30,7 +30,7 @@ export default {
 <style lang="scss" scoped>
   .app-main {
     /* 50= navbar  50  */
-    height: calc(100vh - 50px);
+    //height: calc(100vh - 50px);
     width: 100%;
     // height: 100vh;
     position: relative;

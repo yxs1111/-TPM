@@ -629,6 +629,9 @@ export default {
 }
 </script>
 <style>
+.el-table .cell.el-tooltip {
+  text-align: left !important;
+}
 .ejectInput .el-input--suffix{
   width: 850px !important;
 }
@@ -645,7 +648,6 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-
 .SelectBar2 {
   align-items: center;
   flex-wrap: wrap;

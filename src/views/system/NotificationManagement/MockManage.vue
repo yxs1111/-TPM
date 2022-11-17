@@ -79,7 +79,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="theme" label="主题" />
+      <el-table-column align="left" prop="theme" label="主题" />
       <el-table-column
         align="center"
         prop="sendUser"
@@ -87,7 +87,7 @@
         width="180"
       />
       <el-table-column
-        align="center"
+        align="left"
         prop="triggerCondition"
         label="触发条件"
       />
@@ -161,19 +161,12 @@
             <div class="Selectli ejectInput2">
               <span class="SelectliTitle">主题:</span>
               <el-input
-                v-model="row.theme"
+                v-model="row.content"
                 filterable
                 clearable
                 placeholder="请输入"
-                :disabled="diaState"
+                :disabled="true"
               />
-              <span style="margin-left: 18px">发送方式：</span>
-              <el-checkbox v-model="row.isZn" :disabled="diaState"
-                >站内</el-checkbox
-              >
-              <el-checkbox v-model="row.isEmail" :disabled="diaState"
-                >邮件</el-checkbox
-              >
             </div>
             <div class="Selectli ejectInput3">
               <span class="SelectliTitle">接收角色:</span>
@@ -192,14 +185,18 @@
                 >
                 </el-option>
               </el-select>
-              <span style="margin-left: 18px">状</span>
-              <span style="margin-left: 28px">态：</span>
-              <el-radio v-model="row.state" :disabled="diaState" :label="1"
-                >有效</el-radio
-              >
-              <el-radio v-model="row.state" :disabled="diaState" :label="0"
-                >无效</el-radio
-              >
+            </div>
+          </div>
+          <div class='Selectli2'>
+            <div class='way'>
+              <span>发送方式：</span>
+              <el-checkbox v-model="row.isZn" :disabled="diaState">站内</el-checkbox>
+              <el-checkbox v-model="row.isEmail" :disabled="diaState">邮件</el-checkbox>
+            </div>
+            <div class='state'>
+              <span>状态：</span>
+              <el-radio v-model="row.state" :disabled="diaState" :label="1">有效</el-radio>
+              <el-radio v-model="row.state" :disabled="diaState" :label="0">无效</el-radio>
             </div>
           </div>
         </div>
@@ -584,6 +581,7 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   .Selectli {
+    display: inline-block;
     margin-right: 20px;
     margin-bottom: 10px;
     display: flex;
@@ -599,7 +597,7 @@ export default {
       margin-right: 10px;
       white-space: nowrap;
       width: 85px;
-      text-align: right;
+      text-align: left;
     }
     .el-input__inner {
       background-color: #f0f2fa;
@@ -626,6 +624,24 @@ export default {
     textarea::-webkit-input-placeholder {
       color: #888;
       font-size: 14px;
+    }
+  }
+}
+.Selectli2 {
+  display: inline-block;
+  .way {
+    text-align: right;
+    line-height: 50px;
+  }
+  .state {
+    text-align: right;
+    line-height: 50px;
+    span:first-child {
+      display: inline-block;
+      width: 70px;
+      text-align: justify;
+      text-justify:distribute-all-lines; // 这行必加，兼容ie浏览器
+      text-align-last: justify;
     }
   }
 }

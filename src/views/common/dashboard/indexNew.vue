@@ -1328,6 +1328,11 @@ export default {
 ::-webkit-scrollbar {
   height: 6px !important;
 }
+.gantt-elastic__chart-row-task {
+  text {
+    font-size: 16px !important;
+  }
+}
 .CityPlan {
   margin: 20px 10px 0px 10px;
   width: 98%;
@@ -1359,6 +1364,7 @@ export default {
     }
   }
   .CityPlanTop2 {
+    padding-top: 20px;
     width: 100%;
     height: 30px;
     padding-left: 200px;
@@ -1429,7 +1435,7 @@ export default {
   .PointTipWrap3 {
     border-radius: 10px;
     width: 40%;
-    margin: 5px 0px 5px 20px;
+    margin: 17px 0px 5px 20px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -1565,7 +1571,7 @@ export default {
         }
         .PointTitle {
           width: 153px;
-          font-size: 16px;
+          font-size: 18px;
           font-family: Source Han Sans CN;
           font-weight: bold;
           color: #000;
