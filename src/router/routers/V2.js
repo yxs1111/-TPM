@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-09-14 16:18:30
+ * @LastEditTime: 2022-11-18 14:23:33
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -219,6 +219,18 @@ export default function () {
                 activeMenu: '/costManagement/V2/V2Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2DM',
+              code: 'price_nka_v2_apply',
+              name: 'V2DM',
+              component: () => import('@/views/V2/V2Apply/V2DM.vue'),
+              meta: {
+                title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
           ],
         },
         {
@@ -415,6 +427,19 @@ export default function () {
               name: 'V2FreeGoodsWin2Approval',
               component: () =>
                 import('@/views/V2/V2Approval/V2FreeGoodsWin2Approval.vue'),
+              meta: {
+                title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2DMApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2DMApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2DMApproval.vue'),
               meta: {
                 title: 'Free Goods-Win2',
                 icon: 'form',

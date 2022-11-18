@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-13 15:47:32
+ * @LastEditTime: 2022-11-18 15:20:53
 -->
 <template>
   <div class="V0Content">
@@ -667,6 +667,9 @@ export default {
               break
             case 'ECM':
               url = API.getECMcreate
+              break
+            case 'DM':
+              url = API.getDMcreate
               break
             case 'Free Goods':
               url = API.getFreeGoods

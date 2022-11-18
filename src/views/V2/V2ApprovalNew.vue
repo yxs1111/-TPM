@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:16:21
+ * @LastEditTime: 2022-11-18 14:24:06
 -->
 <template>
   <div class="tabViewsWrap">
@@ -213,6 +213,15 @@ export default {
                 light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
               },
               minePackageName: 'Free Goods-Win2',
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V2/V2Approval/V2DMApproval',
+              img: {
+                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
+                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
+              },
+              minePackageName: 'DM',
             },
           ]
           let TabList=[]

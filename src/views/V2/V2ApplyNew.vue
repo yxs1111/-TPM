@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-16 12:38:58
+ * @LastEditTime: 2022-11-18 14:23:36
 -->
 <template>
   <div class="tabViewsWrap">
@@ -172,6 +172,11 @@ export default {
               name: '补录',
               path: '/costManagement/V2/V2Apply/V2Collection',
               minePackageName: 'Collection',
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V2/V2Apply/V2DM',
+              minePackageName: 'DM',
             },
           ]
           let TabList=[]
