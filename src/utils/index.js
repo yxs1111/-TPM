@@ -778,6 +778,8 @@ export let sortList = [
   'ECM',
   'Premium',
   'Collection',
+  'DM',
+
 ]
 //文件格式正则
 //根据文件名获取文件类型

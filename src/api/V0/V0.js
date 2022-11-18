@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-09-09 10:37:10
+ * @LastEditTime: 2022-11-18 15:20:32
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -75,6 +75,13 @@ export default {
   getECMcreate(params) {
     return requestApi.request_post(
       '/cityplan/investCpEcmVOneDetail/create',
+      params
+    )
+  },
+  //获取dm数据 investCpEcmVOneDetail/create
+  getDMcreate(params) {
+    return requestApi.request_post(
+      '/cityplan/investCpDmVOneDetail/create',
       params
     )
   },

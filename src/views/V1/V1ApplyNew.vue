@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:10:09
+ * @LastEditTime: 2022-11-18 13:07:59
 -->
 <template>
   <div class="tabViewsWrap">
@@ -151,6 +151,11 @@ export default {
               name: 'NU-FG win2',
               path: '/costManagement/V1/V1Apply/V1FreeGoodsWin2',
               minePackageName: 'Free Goods-Win2',
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V1/V1Apply/V1DM',
+              minePackageName: 'DM',
             },
           ]
           let TabList=[]
