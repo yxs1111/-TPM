@@ -1655,6 +1655,18 @@ export default {
             justify-content: flex-end;
             padding-left: 18px;
             padding-right: 42px;
+            .V2 {
+              .line {
+                border-top-left-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                border-top-right-radius: 10px !important;
+                border-bottom-right-radius: 10px !important;
+                width: calc(100% - 0px) !important;
+                height: 26px !important;
+                background-color: #C6DCEE;
+                box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31) !important;
+              }
+            }
           }
           // background-color: pink;
         }
@@ -1698,6 +1710,9 @@ export default {
           width: 0%;
           display: flex;
           align-items: center;
+          .currentPoint {
+            margin-left: -20px;
+          }
           img {
             width: 28px;
             height: 28px;
