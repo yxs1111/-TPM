@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-11-18 14:23:33
+ * @LastEditTime: 2022-11-18 17:04:26
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -231,6 +231,18 @@ export default function () {
                 activeMenu: '/costManagement/V2/V2Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Transport',
+              code: 'price_nka_v2_apply',
+              name: 'V2Transport',
+              component: () => import('@/views/V2/V2Apply/V2Transport.vue'),
+              meta: {
+                title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
           ],
         },
         {
@@ -442,6 +454,19 @@ export default function () {
                 import('@/views/V2/V2Approval/V2DMApproval.vue'),
               meta: {
                 title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2TransportApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2TransportApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2TransportApproval.vue'),
+              meta: {
+                title: 'Transport',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },

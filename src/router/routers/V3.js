@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-11-18 15:12:44
+ * @LastEditTime: 2022-11-18 17:21:43
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -229,6 +229,18 @@ export default function () {
                 activeMenu: '/costManagement/V3/V3Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3Transport',
+              code: 'price_nka_v3_apply',
+              name: 'V3Transport',
+              component: () => import('@/views/V3/V3Apply/V3Transport.vue'),
+              meta: {
+                title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
           ],
         },
         {
@@ -439,6 +451,18 @@ export default function () {
               component: () => import('@/views/V3/V3Approval/V3DMApproval.vue'),
               meta: {
                 title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3TransportApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3TransportApproval',
+              component: () => import('@/views/V3/V3Approval/V3TransportApproval.vue'),
+              meta: {
+                title: 'Transport',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-18 14:23:36
+ * @LastEditTime: 2022-11-18 16:54:28
 -->
 <template>
   <div class="tabViewsWrap">
@@ -177,6 +177,11 @@ export default {
               name: 'DM',
               path: '/costManagement/V2/V2Apply/V2DM',
               minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/costManagement/V2/V2Apply/V2Transport',
+              minePackageName: 'Transport',
             },
           ]
           let TabList=[]
