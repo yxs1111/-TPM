@@ -159,7 +159,8 @@
         <div class="SelectBarWrap">
           <div class="SelectBar2" @keyup.enter="search">
             <div class="Selectli ejectInput2">
-              <span class="SelectliTitle">主题:</span>
+              <span class="SelectliTitle2">主题</span>
+              <span class='SelectliTitle3'>：</span>
               <el-input
                 v-model="row.content"
                 filterable
@@ -194,7 +195,8 @@
               <el-checkbox v-model="row.isEmail" :disabled="diaState">邮件</el-checkbox>
             </div>
             <div class='state'>
-              <span>状态：</span>
+              <span>状态</span>
+              <span>：</span>
               <el-radio v-model="row.state" :disabled="diaState" :label="1">有效</el-radio>
               <el-radio v-model="row.state" :disabled="diaState" :label="0">无效</el-radio>
             </div>
@@ -551,11 +553,14 @@ export default {
 }
 </script>
 <style>
+.el-select {
+  width: 100%;
+}
 .ejectInput3 .el-input--suffix {
-  width: 630px !important;
+  width: 100% !important;
 }
 .ejectInput2 .el-input--suffix {
-  width: 630px !important;
+  width: 100% !important;
 }
 .el-cascader .el-cascader__tags span {
   width: 120px;
@@ -578,6 +583,7 @@ export default {
   cursor: not-allowed;
 }
 .SelectBar2 {
+  width: 77%;
   align-items: center;
   flex-wrap: wrap;
   .Selectli {
@@ -598,6 +604,31 @@ export default {
       white-space: nowrap;
       width: 85px;
       text-align: left;
+    }
+    .SelectliTitle2 {
+      display: inline-block;
+      width: 58px;
+      text-align: justify;
+      text-justify:distribute-all-lines; // 这行必加，兼容ie浏览器
+      text-align-last: justify;
+      // width: 70px;
+      font-size: 14px;
+      font-family: Source Han Sans CN Light;
+      font-weight: 400;
+      color: #4d4d4d;
+      //width: 85px;
+      //text-align: left;
+    }
+    .SelectliTitle3 {
+       width: 15px;
+      font-size: 14px;
+      font-family: Source Han Sans CN Light;
+      font-weight: 400;
+      color: #4d4d4d;
+      margin-right: 22px;
+      white-space: nowrap;
+      //width: 85px;
+      //text-align: left;
     }
     .el-input__inner {
       background-color: #f0f2fa;
@@ -628,6 +659,7 @@ export default {
   }
 }
 .Selectli2 {
+  width: 23%;
   display: inline-block;
   .way {
     text-align: right;
@@ -638,7 +670,7 @@ export default {
     line-height: 50px;
     span:first-child {
       display: inline-block;
-      width: 70px;
+      width: 56px;
       text-align: justify;
       text-justify:distribute-all-lines; // 这行必加，兼容ie浏览器
       text-align-last: justify;

@@ -49,10 +49,10 @@
         {{ row.type == 1 ? '定时通知' : '即时通知' }}
       </el-table-column>
       <el-table-column v-slot="{row}" align="center" prop="type" label="站内">
-        {{ row.type == 1 ? '是' : '否' }}
+        {{ row.isZn == 1 ? '是' : '否' }}
       </el-table-column>
       <el-table-column v-slot="{row}" align="center" prop="type" label="邮件">
-        {{ row.type == 1 ? '是' : '否' }}
+        {{ row.isEmail == 1 ? '是' : '否' }}
       </el-table-column>
       <el-table-column align="center" prop="createBy" label="发送人" />
       <el-table-column v-slot="{row}" align="center" prop="sendTime" label="发送时间">

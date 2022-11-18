@@ -4,30 +4,30 @@
  * @LastEditTime: 2022-11-07 13:29:06
 -->
 <template>
-  <div style='padding: 11px; overflow-x: hidden'>
-    <div class='' style=' border-radius: 25px;background-color: #fff; padding-bottom: 20px'>
-      <GanttElastic ref="ganttGroup" style='padding-top: 10px; padding-left: 10px; padding-right: 10px' :tasks="tasks" :options="options">
+  <div style="padding: 11px; overflow-x: hidden">
+    <div class="" style=" border-radius: 25px;background-color: #fff; padding-bottom: 20px">
+      <GanttElastic ref="ganttGroup" style="padding-top: 10px; padding-left: 10px; padding-right: 10px" :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
       </GanttElastic>
       <div v-show="popUpShow" class="hover_con" :style="positionStyle">
-        <div class="triangle"></div>
-<!--        {{ content.label }}<br />-->
-        {{ dayjs(content.startTime) }} - {{ dayjs(content.endTime) }} <br />
+        <div class="triangle" />
+        <!--        {{ content.label }}<br />-->
+        {{ dayjs(content.startTime) }} - {{ dayjs(content.endTime) }} <br>
       </div>
       <div class="CityPlan">
         <div class="CityPlanTop">
-          <span class="date">{{this.activeMoon}}</span>
+          <span class="date">{{ this.activeMoon }}</span>
         </div>
         <div class="PointTipWrap">
           <div class="PointTipWrap3">
-            <el-radio-group v-model="tabPosition" @change='getHomePageData'>
+            <el-radio-group v-model="tabPosition" @change="getHomePageData">
               <el-radio-button label="NKA">NKA</el-radio-button>
               <el-radio-button label="EC">EC</el-radio-button>
               <el-radio-button label="RKA">RKA</el-radio-button>
             </el-radio-group>
-<!--            <el-button-group>-->
-<!--              <el-button type="primary" size='small' v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus @click="getHomePageData(item)"><span>{{item}}</span></el-button>-->
-<!--            </el-button-group>-->
+            <!--            <el-button-group>-->
+            <!--              <el-button type="primary" size='small' v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus @click="getHomePageData(item)"><span>{{item}}</span></el-button>-->
+            <!--            </el-button-group>-->
           </div>
           <div class="PointTipWrap2">
             <div class="PointTip">
@@ -57,7 +57,7 @@
         <!-- 活动月 -->
         <div class="monthBarWrap">
           <!-- 流程 -->
-          <div class="monthBar" v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex">
+          <div v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex" class="monthBar">
             <!--          <div class="monthBg">-->
             <!--            &lt;!&ndash; <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> &ndash;&gt;-->
             <!--            <div class="monthName">{{MonthItem.month}}</div>-->
@@ -67,39 +67,39 @@
               <div v-for="(value,ckey) in MonthItem.channelList" :key="ckey">
                 <div v-for="item,index in value" :key="index">
                   <!-- PP -->
-                  <div class="PPBar" v-if="item.isPrice">
-                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}</div>
-                    <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
-                      <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
-                      <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
-                        <div slot="content" v-html="getTip(item)"></div>
-                        <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
+                  <div v-if="item.isPrice" class="PPBar">
+                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{ item.TaskName }}</div>
+                    <div v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
+                      <div v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))" class="passIcon" />
+                      <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                        <div slot="content" v-html="getTip(item)" />
+                        <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" class="currentPoint" />
                       </el-tooltip>
-                      <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
-                        <div slot="content" v-html="getTip(item)"></div>
-                        <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
+                      <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                        <div slot="content" v-html="getTip(item)" />
+                        <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" class="delayPoint" />
                       </el-tooltip>
-                      <div class="noStart" v-if="TaskIndex>item.taskNumber"></div>
-                      <div class="line" v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'"></div>
-                      <div class="lineDark" v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'"></div>
+                      <div v-if="TaskIndex>item.taskNumber" class="noStart" />
+                      <div v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'" class="line" />
+                      <div v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'" class="lineDark" />
                     </div>
                   </div>
-                  <div class="NU" v-if="!item.isPrice">
-                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{item.TaskName}}</div>
+                  <div v-if="!item.isPrice" class="NU">
+                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{ item.TaskName }}</div>
                     <div class="NuPoint">
-                      <div :class="TaskLi" v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi">
-                        <div class="passIcon" v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))"></div>
-                        <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)">
-                          <div slot="content" v-html="getTip(item)"></div>
-                          <div class="currentPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)"></div>
+                      <div v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
+                        <div v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))" class="passIcon" />
+                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                          <div slot="content" v-html="getTip(item)" />
+                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" class="currentPoint" />
                         </el-tooltip>
-                        <el-tooltip effect="light" placement="bottom" popper-class="tooltip" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)">
-                          <div slot="content" v-html="getTip(item)"></div>
-                          <div class="delayPoint" v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)"></div>
+                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                          <div slot="content" v-html="getTip(item)" />
+                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" class="delayPoint" />
                         </el-tooltip>
-                        <div class="noStart" v-if="TaskIndex>item.taskNumber"></div>
-                        <div class="line" v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'"></div>
-                        <div class="lineDark" v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'"></div>
+                        <div v-if="TaskIndex>item.taskNumber" class="noStart" />
+                        <div v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'" class="line" />
+                        <div v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'" class="lineDark" />
                       </div>
                     </div>
                   </div>
@@ -110,53 +110,59 @@
         </div>
       </div>
     </div>
-<!--    我的代办-->
+    <!--    我的代办-->
     <div class="BottomBar">
       <div class="MyToDo">
         <div class="BarTitleWrap">
           <span>我的待办</span>
           <div class="TabBar">
-            <div class="Tabli " :class="currentIndex == index ? 'currentTabli' : ''" v-for="(item, index) in TabList" :key="item.id" @click="changeCurrent(index)">
+            <div v-for="(item, index) in TabList" :key="item.id" class="Tabli " :class="currentIndex == index ? 'currentTabli' : ''" @click="changeCurrent(index)">
               {{ item.title }}
             </div>
             <!-- <div class="Tabli ">已完成</div> -->
           </div>
         </div>
-<!--        费用管理-->
-        <div class="TimeLineWrap" v-show="currentIndex == 0">
+        <!--        费用管理-->
+        <div v-show="currentIndex == 0" class="TimeLineWrap">
           <el-table
             :header-cell-style="{'color':'#000000'}"
             max-height="190"
             :data="TodoList"
             stripe
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-table-column
+              align="left"
               prop="yearAndMonth"
-              label="年月">
-            </el-table-column>
+              label="年月"
+            />
             <el-table-column
+              width='120'
               prop="costTypeName"
-              label="Cost Type">
-            </el-table-column>
+              label="Cost Type"
+            />
             <el-table-column
+              width='150'
               prop="minePackageName"
-              label="Mine Package">
-            </el-table-column>
+              label="Mine Package"
+            />
             <el-table-column
               prop="costItemName"
-              label="Cost Item">
-            </el-table-column>
+              label="Cost Item"
+            />
             <el-table-column
               prop="channelName"
-              label="渠道">
-            </el-table-column>
+              label="渠道"
+            />
             <el-table-column
               prop="version"
-              label="版本号">
-            </el-table-column>
+              label="版本号"
+            />
             <el-table-column
+              align="left"
               prop=""
-              label="查看">
+              label="查看"
+            >
               <template slot-scope="{row}">
                 <div class="transact" @click="openFlowDiagram(row)">
                   查看流程
@@ -164,9 +170,11 @@
               </template>
             </el-table-column>
             <el-table-column
+              align="center"
               prop=""
-              fixed= 'right'
-              label="操作">
+              fixed="right"
+              label="操作"
+            >
               <template slot-scope="scope">
                 <div class="operation" @click="goAssignee(scope.row.version,scope.row.activityName,scope.row.channelCode,scope.row.minePackageName,scope.row)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
@@ -176,50 +184,53 @@
             </el-table-column>
           </el-table>
         </div>
-<!--        合同管理-->
-        <div class="TimeLineWrap" v-show="currentIndex == 1">
+        <!--        合同管理-->
+        <div v-show="currentIndex == 1" class="TimeLineWrap">
           <el-table
             :header-cell-style="{'color':'#000000'}"
             max-height="190"
             :data="contractList"
             stripe
-            style="width: 100%">
+            style="width: 100%"
+          >
             <el-table-column
               prop="item"
               label="合同类型"
-              width="140">
-            </el-table-column>
+              width="140"
+            />
             <el-table-column
               prop="contractCode"
               label="合同ID"
-              width="280">
-            </el-table-column>
+              width="280"
+            />
             <el-table-column
               prop="customerName"
-              label="客户名称">
-            </el-table-column>
+              label="客户名称"
+            />
             <el-table-column
               prop="distributorName"
-              label="经销商名称">
-            </el-table-column>
+              label="经销商名称"
+            />
             <el-table-column
               prop="activityName"
-              label="当前节点">
-            </el-table-column>
+              label="当前节点"
+            />
             <el-table-column
               prop=""
               label="查看"
-              width="120">
+              width="120"
+            >
               <template slot-scope="{row}">
                 <div class="transact" @click="openFlowDiagram(row)">
-                  <div class='transctTxt'>查看流程</div>
+                  <div class="transctTxt">查看流程</div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column
               prop=""
-              fixed= 'right'
-              label="操作">
+              fixed="right"
+              label="操作"
+            >
               <template slot-scope="{row}">
                 <div class="operation" @click="operateProcess(row.minePackageCode,row.name)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
@@ -230,49 +241,50 @@
           </el-table>
         </div>
       </div>
-      <div class="Message MyToDo" style='margin-left: 30px'>
+      <div class="Message MyToDo" style="margin-left: 30px">
         <div class="BarTitleWrap">
           <span>消息</span>
-<!--          <span class="more" @click="MoreMsg">更多</span>-->
+          <!--          <span class="more" @click="MoreMsg">更多</span>-->
           <notice />
         </div>
         <div class="MessgaeWrap">
-          <div class="Messgaeli" v-for="item,index in MessageList" :key="index">
-            <span class="MessageDate">[{{item.time}}]</span>
-            <span class="MessageContent">{{item.msg}}</span>
+          <div v-for="item,index in MessageList" :key="index" class="Messgaeli">
+            <span class="MessageDate">[{{ item.time }}]</span>
+            <span class="MessageContent">{{ item.msg }}</span>
           </div>
         </div>
       </div>
-<!--      左下角问号-->
+      <!--      左下角问号-->
       <el-popover
         placement="left"
         width="500"
         :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }"
-        trigger="click">
-        <div class='documentation'>用户文档中心</div>
+        trigger="click"
+      >
+        <div class="documentation">用户文档中心</div>
         <el-table :data="gridData">
           <el-table-column width="50" property="" label="">
             <template slot-scope="scope">
-              <img src='../../../assets/images/EXCEL.png' v-if='scope.row.format == "excel"'>
-              <img src='../../../assets/images/word.png' v-if='scope.row.format == "word"'>
-              <img src='../../../assets/images/yasuowenjian.png' v-if='scope.row.format == "zip"'>
-              <img src='../../../assets/images/PPT.png' v-if='scope.row.format == "ppt"'>
-              <img src='../../../assets/images/tupian.png' v-if='scope.row.format == "pdf"'>
-              <img src='../../../assets/images/shipin.png' v-if='scope.row.format == "video"'>
+              <img v-if="scope.row.format == &quot;excel&quot;" src="../../../assets/images/EXCEL.png">
+              <img v-if="scope.row.format == &quot;word&quot;" src="../../../assets/images/word.png">
+              <img v-if="scope.row.format == &quot;zip&quot;" src="../../../assets/images/yasuowenjian.png">
+              <img v-if="scope.row.format == &quot;ppt&quot;" src="../../../assets/images/PPT.png">
+              <img v-if="scope.row.format == &quot;pdf&quot;" src="../../../assets/images/tupian.png">
+              <img v-if="scope.row.format == &quot;video&quot;" src="../../../assets/images/shipin.png">
             </template>
           </el-table-column>
-          <el-table-column width="250" property="name" label="文件名称"></el-table-column>
-          <el-table-column width="100" property="size" label="文件大小"></el-table-column>
+          <el-table-column width="250" property="name" label="文件名称" />
+          <el-table-column width="100" property="size" label="文件大小" />
           <el-table-column width="60" label="">
             <template slot-scope="scope">
               <el-link :href="scope.row.fileUrl">
-                <img src='../../../assets/images/dwonload.png'>
+                <img src="../../../assets/images/dwonload.png">
               </el-link>
             </template>
           </el-table-column>
         </el-table>
-        <el-button class='needHelp' slot="reference">
-          <div class='needHelpTxt'>?</div>
+        <el-button slot="reference" class="needHelp">
+          <div class="needHelpTxt">?</div>
         </el-button>
       </el-popover>
     </div>
@@ -297,6 +309,12 @@ import item from '@/layout/components/Sidebar/Item'
 import { getFileType } from '@/utils'
 export default {
   name: 'Dashboard',
+  components: {
+    GanttElastic,
+    GanttElasticHeader,
+    FlowDiagram,
+    Notice
+  },
 
   data() {
     function getDate(hours) {
@@ -314,37 +332,37 @@ export default {
       ).getTime()
       return new Date(timeStamp + hours * 60 * 60 * 1000).getTime()
     }
-    let options = {
+    const options = {
       maxRows: 3,
       maxHeight: 800,
       title: {
         label: 'Your project title as html (link or whatever...)',
-        html: false,
+        html: false
       },
       row: {
-        height: 36,
+        height: 36
       },
       times: {
         timeScale: 60 * 1000,
-        timeZoom: 22, //24
-        stepDuration: 'day',
+        timeZoom: 22, // 24
+        stepDuration: 'day'
       },
       calendar: {
         hour: {
-          display: false,
-        },
+          display: false
+        }
       },
       chart: {
         progress: {
-          bar: false,
+          bar: false
         },
         expander: {
-          display: true,
-        },
+          display: true
+        }
       },
       taskList: {
         expander: {
-          straight: false,
+          straight: false
         },
         columns: [
           {
@@ -379,9 +397,9 @@ export default {
           '09',
           '10',
           '11',
-          '12',
-        ],
-      },
+          '12'
+        ]
+      }
       /* locale:{
           name: 'pl', // name String
           weekdays: 'Poniedziałek_Wtorek_Środa_Czwartek_Piątek_Sobota_Niedziela'.split('_'), // weekdays Array
@@ -423,15 +441,15 @@ export default {
       activeMoon: '',
       TabList: [
         { id: 0, title: '费用管理' },
-        { id: 1, title: '合同管理' },
+        { id: 1, title: '合同管理' }
       ],
       flowDiagram: {
         visible: false,
         activate: false,
         businessId: null,
-        processId: null,
+        processId: null
       },
-      MessageList: [], //消息列表
+      MessageList: [], // 消息列表
       startTimeArr: [],
       endTimeArr: [],
       ActivityList: [],
@@ -442,16 +460,16 @@ export default {
       PriceTaskIndexList: ['V0', 'V1', 'V2', 'V3'],
       NoPriceTaskIndexList: ['V1', 'V2', 'V3'],
       TaskMapper: {
-        'In Store Promo - Price Related': '价促', //price
-        'Free Goods - Tin': '价促-FG tin', //Free Goods - Tin
-        'New user costs': '新客', //NU
+        'In Store Promo - Price Related': '价促', // price
+        'Free Goods - Tin': '价促-FG tin', // Free Goods - Tin
+        'New user costs': '新客', // NU
         'Free Goods - Win 2': '新客-FG win2',
         'CRM Rep Cost': 'FMC',
         'Roadshows and Weekend Events': 'RS',
         'Listing fee': 'Listing',
         'HIH rebate': 'HIH rebate',
         'KA rebate': 'KA rebate',
-        'In Store POSM - Customized': 'POSM-定',
+        'In Store POSM - Customized': 'POSM-定'
       },
       tasks: [
         {
@@ -473,10 +491,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor:'#4795D4'
+                  textColor: '#4795D4'
                 }
               },
-              parentId:'task-3'
+              parentId: 'task-3'
             },
             {
               id: 13,
@@ -489,11 +507,11 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor:'#4795D4'
+                  textColor: '#4795D4'
                 }
               },
-              parentId:'task-3'
-            },
+              parentId: 'task-3'
+            }
           ]
         },
         {
@@ -515,10 +533,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor:'#4795D4'
+                  textColor: '#4795D4'
                 }
               },
-              parentId:'task-4'
+              parentId: 'task-4'
             },
             {
               id: 13,
@@ -531,75 +549,36 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor:'#4795D4'
+                  textColor: '#4795D4'
                 }
               },
-              parentId:'task-4'
-            },
+              parentId: 'task-4'
+            }
           ]
-        },
-        {
-          id: 'task-5',
-          label: '202204',
-          start: dayjs('2022-06-02').valueOf(),
-          end: dayjs('2022-09-15').valueOf(),
-          percent: 25,
-          type: 'group',
-          tasks: [
-            {
-              id: 12,
-              label: 'V0',
-              start: dayjs('2022-06-01').valueOf(),
-              end: dayjs('2022-07-16').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
-                  textColor:'#4795D4'
-                }
-              },
-              parentId:'task-5'
-            },
-            {
-              id: 13,
-              label: 'V1',
-              start: dayjs('2022-07-18').valueOf(),
-              end: dayjs('2022-08-28').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
-                  textColor:'#4795D4'
-                }
-              },
-              parentId:'task-5'
-            },
-          ]
-        },
+        }
       ],
       options: options,
       content: {
         label: '',
         startTime: '',
-        endTime: '',
+        endTime: ''
       },
       popUpShow: false,
-      positionStyle: { top: '0px', left: '0px' },
+      positionStyle: { top: '0px', left: '0px' }
     }
   },
-  components: {
-    GanttElastic,
-    GanttElasticHeader,
-    FlowDiagram,
-    Notice
+  watch: {
+    '$store.state.app.sidebar.opened'() {
+      // setTimeout(() => {
+      //   console.log('change')
+      //   this.SalesAmountChart.resize()
+      //   this.ActualSalesChart.resize()
+      // }, 200)
+    }
   },
   created() {},
   mounted() {
-    this.$bus.$on('currentMonthChange', data=>{
+    this.$bus.$on('currentMonthChange', data => {
       this.tasks.forEach((item) => {
         if (item.id == data) {
           this.activeMoon = item.label
@@ -627,15 +606,6 @@ export default {
     this.getActivitycycle()
     this.needHelp()
   },
-  watch: {
-    '$store.state.app.sidebar.opened'() {
-      // setTimeout(() => {
-      //   console.log('change')
-      //   this.SalesAmountChart.resize()
-      //   this.ActualSalesChart.resize()
-      // }, 200)
-    },
-  },
   methods: {
     needHelp() {
       this.gridData = []
@@ -655,8 +625,8 @@ export default {
           this.activeMoon = res.data[0].activityMonth
           this.getHomePageData()
         }
-        res.data.forEach((item,index) => {
-          if (index==0) {
+        res.data.forEach((item, index) => {
+          if (index == 0) {
             this.$refs.ganttGroup.state.isActiveId = item.id
           }
           this.startTimeArr = []
@@ -682,10 +652,36 @@ export default {
           }
           maxDate = formatDateTime(maxDate)
           minDate = formatDateTime(minDate)
-          item.start = dayjs(minDate).valueOf(),
-          item.end = dayjs(maxDate).valueOf()
+          const date = new Date()
+          const seperator1 = '-'
+          let month1 = date.getMonth()
+          let month2 = date.getMonth() + 1
+          let month3 = date.getMonth() + 2
+          let strDate = date.getDate()
+          let strDate1 = '01'
+          let strDate2 = '30'
+          if (month1 >= 1 && month1 <= 9) {
+            month1 = '0' + month1
+          }
+          if (month2 >= 1 && month2 <= 9) {
+            month2 = '0' + month2
+          }
+          if (month3 >= 1 && month3 <= 9) {
+            month3 = '0' + month3
+          }
+          // if (strDate >= 0 && strDate <= 9) {
+          //   strDate = '0' + strDate
+          // }
+          // const currentdate1 = '2022-9-01'
+          // const currentdate3 = '2022-12-31'
+          const currentdate1 = date.getFullYear() + seperator1 + month1 + seperator1 + strDate1
+          // const currentdate2 = date.getFullYear() + seperator1 + month2 + seperator1 + strDate
+          const currentdate3 = date.getFullYear() + seperator1 + month3 + seperator1 + strDate2
+          item.start = dayjs(currentdate1).valueOf()
+          item.end = dayjs(currentdate3).valueOf()
           item.type = 'group'
           item.tasks = []
+          // this.tasks.push(
           item.tasks.push(
             {
               id: item.id + 'v0',
@@ -751,6 +747,80 @@ export default {
               },
               parentId: item.id
             }
+            // {
+            //   id: item.id,
+            //   label: item.activityMonth,
+            //   start: dayjs(item.start).valueOf(),
+            //   end: dayjs(item.end).valueOf(),
+            //   percent: 50,
+            //   type: 'group',
+            //   tasks: [
+            //     {
+            //       id: item.id + 'v0',
+            //       label: 'V0',
+            //       start: dayjs(item.startVZero).valueOf(),
+            //       end: dayjs(item.EndVZero).valueOf(),
+            //       percent: 50,
+            //       type: 'task',
+            //       style: {
+            //         base: {
+            //           fill: '#C6EBFE',
+            //           stroke: '#C0E2D9',
+            //           textColor: '#4795D4'
+            //         }
+            //       },
+            //       parentId: item.id
+            //     },
+            //     {
+            //       id: item.id + 'v1',
+            //       label: 'V1',
+            //       start: dayjs(item.startVOne).valueOf(),
+            //       end: dayjs(item.EndVOne).valueOf(),
+            //       percent: 50,
+            //       type: 'task',
+            //       style: {
+            //         base: {
+            //           fill: '#C6EBFE',
+            //           stroke: '#C0E2D9',
+            //           textColor: '#4795D4'
+            //         }
+            //       },
+            //       parentId: item.id
+            //     },
+            //     {
+            //       id: item.id + 'v2',
+            //       label: 'V2',
+            //       start: dayjs(item.startVTwo).valueOf(),
+            //       end: dayjs(item.EndVTwo).valueOf(),
+            //       percent: 50,
+            //       type: 'task',
+            //       style: {
+            //         base: {
+            //           fill: '#C6EBFE',
+            //           stroke: '#C0E2D9',
+            //           textColor: '#4795D4'
+            //         }
+            //       },
+            //       parentId: item.id
+            //     },
+            //     {
+            //       id: item.id + 'v3',
+            //       label: 'V3',
+            //       start: dayjs(item.startVThree).valueOf(),
+            //       end: dayjs(item.EndVThree).valueOf(),
+            //       percent: 50,
+            //       type: 'task',
+            //       style: {
+            //         base: {
+            //           fill: '#C6EBFE',
+            //           stroke: '#C0E2D9',
+            //           textColor: '#4795D4'
+            //         }
+            //       },
+            //       parentId: item.id
+            //     }
+            //   ]
+            // },
           )
           this.tasks.push(item)
         })
@@ -766,30 +836,31 @@ export default {
       if (!value.assignee) {
         return null
       }
-      let assigneeList = value.assignee.split(',')
+      const assigneeList = value.assignee.split(',')
       let assigneeStr = ''
       assigneeList.forEach((item) => {
         assigneeStr += `<span>${item}</span></br>`
       })
       return `<div class="Tip">
-                <span style='font-weight: bold'>${value.createDate?value.createDate.substring(0,19).replaceAll("T",' '):""}</span>-
-                <span style='font-weight: bold'>${value.updateDate?value.updateDate.substring(0,19).replaceAll("T",' '):""}</span>
+                <span style='font-weight: bold'>${value.createDate ? value.createDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>-
+                <span style='font-weight: bold'>${value.updateDate ? value.updateDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>
               </div>`
     },
     // 获取信息列表
     getMesList() {
       API.getHomePageMsg().then((res) => {
-        let obj = {
+        const obj = {
           time: '',
-          msg: '',
+          msg: ''
         }
         res.data.forEach((item) => {
           obj.time = item.substring(1, 10)
           obj.msg = item.substring(12)
-          if (this.MessageList.length < 5)
+          if (this.MessageList.length < 5) {
             this.MessageList.push({
-              ...obj,
+              ...obj
             })
+          }
         })
       })
     },
@@ -806,59 +877,59 @@ export default {
         yearAndMonth: this.activeMoon,
         channelName: this.tabPosition
       }).then((res) => {
-        let array = res.data.investList
-        //流程处理 日期分组
-        let data = {}
+        const array = res.data.investList
+        // 流程处理 日期分组
+        const data = {}
         for (let m = 0; m < array.length; m++) {
-          //对date 进行分组
+          // 对date 进行分组
           array[m].activityMonth = this.getCPTMonth(array[m].yearAndMonth)
-          //设置排序
+          // 设置排序
           if (array[m].minePackageName == 'Price Promotion') {
             array[m].sortCode = 1
           } else {
             array[m].sortCode = 0
           }
-          //根据yearAndMonth 进行分组
+          // 根据yearAndMonth 进行分组
           if (!data[array[m].yearAndMonth]) {
             var arr = []
             arr.push(array[m])
             data[array[m].yearAndMonth] = arr
           } else {
             data[array[m].yearAndMonth].push(array[m])
-            //PP、NU 排序
-            data[array[m].yearAndMonth].sort(function (a, b) {
+            // PP、NU 排序
+            data[array[m].yearAndMonth].sort(function(a, b) {
               return b.sortCode - a.sortCode
             })
           }
         }
-        //流程--渠道分组处理
+        // 流程--渠道分组处理
         for (const key in data) {
           if (Object.hasOwnProperty.call(data, key)) {
             const array = data[key]
-            let cdata = {} //活动月下进行渠道分组
+            const cdata = {} // 活动月下进行渠道分组
             for (let index = 0; index < array.length; index++) {
-              //设置排序
+              // 设置排序
               if (array[index].minePackageName == 'Price Promotion') {
                 array[index].sortCode = 1
               } else {
                 array[index].sortCode = 0
               }
-              //根据渠道进行分组
+              // 根据渠道进行分组
               if (!cdata[array[index].channelName]) {
                 var arr = []
                 arr.push(array[index])
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
-                if(array[index].isPrice&&array[index].costItemName == 'Free Goods - Tin') {
-                  array[index].isPrice=0
+                if (array[index].isPrice && array[index].costItemName == 'Free Goods - Tin') {
+                  array[index].isPrice = 0
                 }
-                if(array[index].isPrice) {
-                  //节点序列号
+                if (array[index].isPrice) {
+                  // 节点序列号
                   array[index].taskNumber = this.PriceTaskIndexList.findIndex(
                     (item) => array[index].version.includes(item)
                   )
                 } else {
-                  //节点序列号
+                  // 节点序列号
                   array[index].taskNumber = this.NoPriceTaskIndexList.findIndex(
                     (item) => array[index].version.includes(item)
                   )
@@ -871,16 +942,16 @@ export default {
               } else {
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
-                if(array[index].isPrice&&array[index].costItemName == 'Free Goods - Tin') {
-                  array[index].isPrice=0
+                if (array[index].isPrice && array[index].costItemName == 'Free Goods - Tin') {
+                  array[index].isPrice = 0
                 }
-                if(array[index].isPrice) {
-                  //节点序列号
+                if (array[index].isPrice) {
+                  // 节点序列号
                   array[index].taskNumber = this.PriceTaskIndexList.findIndex(
                     (item) => array[index].version.includes(item)
                   )
                 } else {
-                  //节点序列号
+                  // 节点序列号
                   array[index].taskNumber = this.NoPriceTaskIndexList.findIndex(
                     (item) => array[index].version.includes(item)
                   )
@@ -890,8 +961,8 @@ export default {
                   array[index].costItemName
                 )
                 cdata[array[index].channelName].push(array[index])
-                //PP、NU 排序
-                cdata[array[index].channelName].sort(function (a, b) {
+                // PP、NU 排序
+                cdata[array[index].channelName].sort(function(a, b) {
                   return b.sortCode - a.sortCode
                 })
               }
@@ -923,13 +994,13 @@ export default {
         //     }
         //   }
         // }
-        let list = []
+        const list = []
         for (const key in data) {
           if (Object.hasOwnProperty.call(data, key)) {
             const element = data[key]
-            let obj = {
+            const obj = {
               month: '',
-              channelList: [],
+              channelList: []
             }
             obj.month = key
             obj.channelList = element
@@ -972,30 +1043,30 @@ export default {
       }
       return TaskName
     },
-    //获取活动月
+    // 获取活动月
     getCPTMonth(value) {
-      let dateStr = value.substring(0, 4) + '-' + value.substring(4, 6)
-      let date = new Date(dateStr)
-      //月份
-      let month = date.getMonth() + 1
-      //活动月计算 9  -> 6+6
+      const dateStr = value.substring(0, 4) + '-' + value.substring(4, 6)
+      const date = new Date(dateStr)
+      // 月份
+      const month = date.getMonth() + 1
+      // 活动月计算 9  -> 6+6
       let firstMonth = ''
       if (month <= 3) {
         firstMonth = month + 9
-        //0+12
+        // 0+12
         if (month == 3) firstMonth = 0
       } else {
         firstMonth = month - 3
       }
-      let secondMonth = 12 - firstMonth
-      let activityMonth = firstMonth + '+' + secondMonth
+      const secondMonth = 12 - firstMonth
+      const activityMonth = firstMonth + '+' + secondMonth
       return activityMonth
     },
     // 获取待办数据
     getToDoData() {
       TaskAPI.getList({
-        pageNum: 1, //当前页
-        pageSize: 999, //每页条数
+        pageNum: 1, // 当前页
+        pageSize: 999 // 每页条数
       }).then((response) => {
         this.TodoList = response.data.records
         // response.data.records.forEach((item) => {
@@ -1003,121 +1074,121 @@ export default {
         // })
       })
     },
-    //获取合同管理数据
+    // 获取合同管理数据
     getContract() {
       TaskAPI.getContract({
-        pageNum: 1, //当前页
-        pageSize: 999, //每页条数
+        pageNum: 1, // 当前页
+        pageSize: 999 // 每页条数
       }).then((response) => {
         this.contractList = response.data.records
       })
     },
-    //获取表格数据
+    // 获取表格数据
     getCompleteData() {
       completeAPI
         .getMyHandleList({
-          pageNum: 1, //当前页
-          pageSize: 999, //每页条数
+          pageNum: 1, // 当前页
+          pageSize: 999 // 每页条数
         })
         .then((response) => {
           this.completeData = response.data.records
         })
     },
     operateProcess(version, name) {
-      if(version=='DISTRIBUTOR-CONTRACT') {
-        if(name.indexOf('审批') != -1) {
+      if (version == 'DISTRIBUTOR-CONTRACT') {
+        if (name.indexOf('审批') != -1) {
           this.$router.push('/contractManagement/dealer/dealerContractApproval')
         } else {
           this.$router.push('/contractManagement/dealer/dealerContractEntry')
         }
-      } else if(version=='CUSTOMER-CONTRACT') {
-        if(name.indexOf('审批') != -1) {
+      } else if (version == 'CUSTOMER-CONTRACT') {
+        if (name.indexOf('审批') != -1) {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
         } else {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
         }
       }
     },
-    //查看流程
+    // 查看流程
     openFlowDiagram(row) {
       this.flowDiagram.businessId = row.businessKey
       this.flowDiagram.processId = row.processId
       this.flowDiagram.visible = true
     },
-    //办理
+    // 办理
     goAssignee(version, name, channelCode, minePackage, row) {
       let minePackageName = minePackage
-      if(minePackageName=='KA Contract') {
-        if (row.costItemName=='HIH rebate') {
-          minePackageName='HIH Rebate'
-        } else if(row.costItemName=='KA rebate') {
-          minePackageName='KA Rebate'
+      if (minePackageName == 'KA Contract') {
+        if (row.costItemName == 'HIH rebate') {
+          minePackageName = 'HIH Rebate'
+        } else if (row.costItemName == 'KA rebate') {
+          minePackageName = 'KA Rebate'
         }
       }
-      if(minePackageName=='POSM') {
-        if (row.costItemName=='In Store POSM - Standard') {
-          minePackageName='POSM - Standard'
-        } else if(row.costItemName=='In Store POSM - Customized') {
-          minePackageName='POSM - Customized'
+      if (minePackageName == 'POSM') {
+        if (row.costItemName == 'In Store POSM - Standard') {
+          minePackageName = 'POSM - Standard'
+        } else if (row.costItemName == 'In Store POSM - Customized') {
+          minePackageName = 'POSM - Customized'
         }
       }
-      if(minePackageName=='Price Promotion') {
-        if (row.costItemName=='Free Goods - Tin') {
-          minePackageName='Free Goods-Tin'
+      if (minePackageName == 'Price Promotion') {
+        if (row.costItemName == 'Free Goods - Tin') {
+          minePackageName = 'Free Goods-Tin'
         } else {
-          minePackageName='Price Promotion'
+          minePackageName = 'Price Promotion'
         }
       }
-      if(minePackageName=='New User') {
-        if(row.costItemName=='Free Goods - Win 2') {
-          minePackageName='Free Goods-Win2'
+      if (minePackageName == 'New User') {
+        if (row.costItemName == 'Free Goods - Win 2') {
+          minePackageName = 'Free Goods-Win2'
         } else {
-          minePackageName='New User'
+          minePackageName = 'New User'
         }
       }
-      if (version.indexOf('V0')!=-1) {
+      if (version.indexOf('V0') != -1) {
         if (name.indexOf('调整') != -1) {
           this.$router.push({
             path: '/costManagement/V0/V0ApplyList',
-            params: { channelCode },
+            params: { channelCode }
           })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({
             path: '/costManagement/V0/V0ApprovalList',
-            params: { channelCode },
+            params: { channelCode }
           })
         }
       }
       if (version.indexOf('V1') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Apply', query: { channelCode,minePackageName } })
+          this.$router.push({ path: '/costManagement/V1/V1Apply', query: { channelCode, minePackageName }})
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Approval', query: { channelCode, minePackageName } })
+          this.$router.push({ path: '/costManagement/V1/V1Approval', query: { channelCode, minePackageName }})
         }
       }
       if (version.indexOf('V2') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Apply', query: { channelCode,minePackageName } })
+          this.$router.push({ path: '/costManagement/V2/V2Apply', query: { channelCode, minePackageName }})
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Approval', query: { channelCode, minePackageName } })
+          this.$router.push({ path: '/costManagement/V2/V2Approval', query: { channelCode, minePackageName }})
         }
       }
       if (version.indexOf('V3') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Apply', query: { channelCode,minePackageName } })
+          this.$router.push({ path: '/costManagement/V3/V3Apply', query: { channelCode, minePackageName }})
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Approval', query: { channelCode, minePackageName } })
+          this.$router.push({ path: '/costManagement/V3/V3Approval', query: { channelCode, minePackageName }})
         }
       }
-      //this.$router.push({ path: '/process', query: currentRow })
+      // this.$router.push({ path: '/process', query: currentRow })
     },
-    //获取办理人姓名
+    // 获取办理人姓名
     getAssigneeName(assigneeStr) {
       if (assigneeStr != '') {
-        let list = assigneeStr.split(',')
+        const list = assigneeStr.split(',')
         let allName = ''
         list.forEach((item) => {
-          let index = item.indexOf('@')
+          const index = item.indexOf('@')
           if (index != -1) {
             allName += '<br>' + item.slice(0, index)
           } else {
@@ -1126,8 +1197,8 @@ export default {
         })
         return allName.slice(4)
       }
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -1159,6 +1230,7 @@ export default {
   width: 91% !important;
 }
 .title {
+  padding-bottom: 17px !important;
   font-size: 18px !important;
   font-weight: bold !important;
   margin-left: 5px !important;
@@ -1179,9 +1251,12 @@ export default {
     border: 0px solid #ffffff !important;
   }
 }
-.el-table th>.cell {
-  text-align: left;
-}
+//.el-table td {
+//  text-align: center;
+//}
+//.el-table th>.cell {
+//  text-align: center;
+//}
 .gantt-elastic {
   overflow-y: scroll;
 }
@@ -1588,7 +1663,7 @@ export default {
           }
         }
         .V1 {
-          width: 32.5%;
+          width: 32.8%;
           display: flex;
           align-items: center;
           img {
@@ -1719,9 +1794,17 @@ export default {
     text-align: left !important;
   }
 }
-.el-table {
-  .cell {
-    padding: 0 10px;
+//.el-table_1_column_7 {
+//  .cell {
+//    text-align: left !important;
+//  }
+//}
+.TimeLineWrap {
+  .el-table {
+    border: 1px solid #EBEFF5;
+    .cell {
+      padding: 0 10px;
+    }
   }
 }
 .gunterTitle {
@@ -1775,6 +1858,10 @@ export default {
     }
   }
 }
+.el-popover{
+  height: 410px;
+  overflow: auto;
+}
 .BottomBar {
   width: 100%;
   height: 344px;
@@ -1790,25 +1877,28 @@ export default {
     padding: 20px;
     box-sizing: border-box;
     box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
+    //.el-table__body-wrapper {
+    //  max-height: 260px !important;
+    //}
     .TimeLineWrap {
       .el-table--enable-row-transition {
         max-height: 260px !important;
       }
       .is-scrolling-left {
-        max-height: 215px !important;
+        max-height: 210px !important;
       }
       .is-scrolling-right {
-        max-height: 215px !important;
+        max-height: 210px !important;
       }
       .is-scrolling-middle {
-        max-height: 215px !important;
+        max-height: 210px !important;
       }
       .is-scrolling-none {
-        max-height: 215px !important;
+        max-height: 210px !important;
       }
       .el-table__fixed-body-wrapper {
         top: 48px !important;
-        max-height: 215px !important;
+        max-height: 210px !important;
       }
       width: 100%;
       margin-top: 10px;
@@ -1880,7 +1970,7 @@ export default {
   .transact {
     font-weight: bold;
     font-size: 16px;
-    width: 80px;
+    //width: 80px;
     height: 40px;
     line-height: 40px;
     background-color: rgb(89, 190, 135, 0.15);
@@ -1916,7 +2006,7 @@ export default {
     }
   }
   .BarTitleWrap {
-    padding-left: 10px;
+    //padding-left: 10px;
     font-family: SourceHanSansCN-Medium;
     font-size: 18px;
     color: #333333;
@@ -1959,6 +2049,10 @@ export default {
     }
   }
 }
+.gantt-elastic {
+  padding-left: 30px !important;
+  padding-top: 33px !important;
+}
 .documentation {
   text-align: center;
   font-size: 17px;
@@ -1980,23 +2074,48 @@ export default {
   border-radius: 3px;
 }
 .needHelp{
+  box-shadow: 0px 0px 13px 0px rgba(127,127,127,0.1);
   position: absolute;
-  background-color: rgba(65, 146, 211, 1);
+  //background-color: rgba(65, 146, 211, 1);
   border-radius: 50%;
   width: 70px;
   height: 70px;
   display: inline-block;
-  color: #fff;
+  color: rgba(65, 146, 211, 1);
   font-size: 20px;
   margin: 0px 0px 0px -90px;
   .needHelpTxt {
     font-weight: 600;
     border-radius: 50%;
-    border: 2px solid #fff;
+    border: 2px solid rgba(65, 146, 211, 1);
     font-size: 20px;
     width: 30px;
     height: 30px;
     padding-top: 3px
+  }
+}
+.needHelp:active {
+  background: #126c9e !important;
+  font-weight: bold;
+}
+/*按钮悬浮*/
+.needHelp:hover {
+  background: rgba(65, 146, 211, 1) !important;
+  color: white !important;
+  font-weight: bold;
+  border-color: rgba(65, 146, 211, 1) !important;
+  .needHelpTxt {
+    border: 2px solid #fff;
+  }
+}
+/*按钮点击*/
+.needHelp:focus {
+  background: rgba(65, 146, 211, 1) !important;
+  color: white !important;
+  font-weight: bold;
+  border-color: rgba(65, 146, 211, 1) !important;
+  .needHelpTxt {
+    border: 2px solid #fff;
   }
 }
 .operation {
