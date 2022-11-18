@@ -4,8 +4,8 @@
  * @LastEditTime: 2022-11-07 13:29:06
 -->
 <template>
-  <div style="padding: 11px; overflow-x: hidden">
-    <div class="" style=" border-radius: 25px;background-color: #fff; padding-bottom: 20px">
+  <div class='indexNew'>
+    <div class="index_container">
       <GanttElastic ref="ganttGroup" style="padding-top: 10px; padding-left: 10px; padding-right: 10px" :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
       </GanttElastic>
@@ -1226,8 +1226,18 @@ export default {
 }
 </style>
 <style lang="scss">
-.main-container {
-  overflow-y: auto;
+//.main-container {
+//  overflow-y: auto;
+//}
+.indexNew {
+  height: 100%;
+  padding: 11px;
+  overflow-x: hidden;
+}
+.index_container {
+  border-radius: 25px;
+  background-color: #fff;
+  padding-bottom: 20px
 }
 .gantt-elastic__main-view-container {
   width: 91% !important;
@@ -1614,6 +1624,7 @@ export default {
         }
       }
       .monthPoint {
+        position: relative;
         width: calc(100% - 0px);
         // height: 110px;
         overflow-y: scroll;
