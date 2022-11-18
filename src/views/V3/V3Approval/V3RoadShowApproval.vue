@@ -26,15 +26,15 @@
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择" @change='getService'>
+          <el-select v-model="filterObj.supplierCode" filterable :disabled='showSelect1' clearable placeholder="请选择" @change='getService1'>
             <el-option v-for="item,index in contractItemList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.supplierCode" filterable :disabled='showSelect' clearable placeholder="请选择">
+          <el-select v-model="filterObj.supplierCode" filterable :disabled='showSelect2' clearable placeholder="请选择" @change='getService2'>
             <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
@@ -1308,7 +1308,8 @@ export default {
 
   data() {
     return {
-      showSelect: false,
+      showSelect1: false,
+      showSelect2: false,
       total: 0,
       pageSize: 100,
       pageNum: 1,
@@ -1371,11 +1372,18 @@ export default {
     this.getBrandList()
   },
   methods: {
-    getService() {
+    getService1() {
       if (this.filterObj.supplierCode !== '') {
-        this.showSelect = true
+        this.showSelect2 = true
       } else {
-        this.showSelect = false
+        this.showSelect2 = false
+      }
+    },
+    getService2() {
+      if (this.filterObj.supplierCode !== '') {
+        this.showSelect1 = true
+      } else {
+        this.showSelect1 = false
       }
     },
     // 获取表格数据
