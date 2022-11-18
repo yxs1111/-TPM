@@ -32,7 +32,7 @@ export default {
     /* 50= navbar  50  */
     //height: calc(100vh - 50px);
     width: 100%;
-    // height: 100vh;
+     height: 100vh;
     position: relative;
     // overflow: auto;
     padding: 21px 20px;

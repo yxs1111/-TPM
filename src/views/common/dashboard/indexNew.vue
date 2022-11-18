@@ -241,7 +241,7 @@
           </el-table>
         </div>
       </div>
-      <div class="Message MyToDo" style="margin-left: 30px">
+      <div class="Message MyToDo new">
         <div class="BarTitleWrap">
           <span>消息</span>
           <!--          <span class="more" @click="MoreMsg">更多</span>-->
@@ -1226,6 +1226,9 @@ export default {
 }
 </style>
 <style lang="scss">
+.main-container {
+  overflow-y: auto;
+}
 .gantt-elastic__main-view-container {
   width: 91% !important;
 }
@@ -1869,6 +1872,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin: 17px 0;
+  .new {
+    margin-left: 20px;
+  }
   .MyToDo {
     width: 65%;
     height: 100%;
