@@ -88,7 +88,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
-  //overflow-y: hidden;
+  overflow-y: hidden;
   overflow-x: hidden;
 
   &.mobile.openSidebar {
@@ -125,7 +125,7 @@ export default {
 .content {
   position: relative;
   display: flex;
-  //height: calc(100% - 80px);
+  height: calc(100% - 80px);
 }
 
 </style>

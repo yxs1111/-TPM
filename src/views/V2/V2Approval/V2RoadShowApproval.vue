@@ -28,8 +28,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
+          <el-select v-model="filterObj.contractItemCode" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in contractItemList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
@@ -40,26 +40,26 @@
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+          <el-select v-model="filterObj.zoneCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">活动类型:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+          <el-select v-model="filterObj.item" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in regionArr" :key="index" :label="item.item" :value="item.item" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">Sub_item:</span>
-          <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+          <el-select v-model="filterObj.subItem" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in ['场地费', '执行费', 'POSM费用']" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
       </div>
@@ -196,13 +196,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="activityType" label="Sub_item">
+      <el-table-column width="220" align="center" prop="subItem" label="Sub_item">
         <template v-slot:header>
           <div>Sub_item<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.activityType }}
+            {{ scope.row.subItem }}
           </div>
         </template>
       </el-table-column>
@@ -652,7 +652,21 @@
         </div>
         <div class="tableWrap">
           <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
+            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                  <div slot="content" v-html="getTip(row)" />
+                  <div class="statusWrap">
+                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
+                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column width="400" fixed align="center" prop="judgmentContent" label="判定内容" />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -762,13 +776,13 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="activityType" label="Sub_item">
+            <el-table-column width="220" align="center" prop="subItem" label="Sub_item">
               <template v-slot:header>
                 <div>Sub_item<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.activityType }}
+                  {{ scope.row.subItem }}
                 </div>
               </template>
             </el-table-column>
@@ -1159,10 +1173,15 @@ export default {
       pageNum: 1,
       filterObj: {
         channelCode: '',
-        supplierCode: '',
-        regionCode: '',
         customerCode: '',
         month: '',
+        supplierCode: '',
+        regionCode: '',
+        zoneCode: '',
+        activityType: '',
+        item: '',
+        subItem: '',
+        subCode: ''
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -1170,7 +1189,11 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList: [],
+      regionArr: [],
+      largeAreaDialogList: [],
+      activityList: [],
       supplierList: [],
+      contractItemList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       mainId: '',
@@ -1201,7 +1224,10 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getSupplierList()
+    this.getPageMdSupplier()
     this.getRegionList()
+    this.getAreaList()
+    this.getBrandList()
   },
   methods: {
     // 获取表格数据
@@ -1224,13 +1250,17 @@ export default {
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           supplierCode: this.filterObj.supplierCode,
+          zoneCode: this.filterObj.zoneCode,
           regionCode: this.filterObj.regionCode,
+          activityType: this.filterObj.item,
+          subItem: this.filterObj.subItem,
           isSubmit: 1
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          console.log(response)
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })
@@ -1283,6 +1313,29 @@ export default {
             this.customerArr = res.data
           }
         })
+    },
+    // 获取大区数据
+    getAreaList() {
+      selectAPI.getLargeAreaList({ parentCode: '' }).then((res) => {
+        if (res.code === 1000) {
+          this.largeAreaDialogList = res.data
+        }
+      })
+    },
+    // 活动类型
+    getBrandList() {
+      selectAPI.getECMItemList({ minePackage: 'Roadshow' }).then((res) => {
+        if (res.code === 1000) {
+          this.regionArr = res.data
+        }
+      })
+    },
+    getPageMdSupplier() {
+      selectAPI.getPageMdSupplier().then((res) => {
+        if (res.code === 1000) {
+          this.contractItemList = res.data.records
+        }
+      })
     },
     getRegionList() {
       selectAPI.getRegionList({}).then((res) => {
