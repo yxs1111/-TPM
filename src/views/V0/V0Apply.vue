@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-18 15:20:53
+ * @LastEditTime: 2022-11-18 15:39:16
 -->
 <template>
   <div class="V0Content">
@@ -141,6 +141,7 @@
                   'KA Contract',
                   'ListingFee',
                   'ECM',
+                  'DM',
                   'POSM',
                   'Premium',
                   'Free Goods',
