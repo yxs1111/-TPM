@@ -162,7 +162,7 @@
               <span class="SelectliTitle2">主题</span>
               <span class='SelectliTitle3'>：</span>
               <el-input
-                v-model="row.content"
+                v-model="row.theme"
                 filterable
                 clearable
                 placeholder="请输入"
