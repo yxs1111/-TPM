@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-11-18 11:38:39
+ * @LastEditTime: 2022-11-18 16:24:55
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -152,8 +152,12 @@ export default {
   getECMItemList(params) {
     return requestApi.request_get('/mdm/mdDisplayItem/getEcmItemList', params)
   },
-  // posmitem 下拉数据 下拉数据 mdm/mdDisplayItem/getDmItemList
+  // DMitem 下拉数据 下拉数据 mdm/mdDisplayItem/getDmItemList
   getDMItemList(params) {
     return requestApi.request_get('/mdm/mdDisplayItem/getDmItemList', params)
+  },
+  // TransportItemm 下拉数据 下拉数据 mdm/mdDisplayItem/getDmItemList
+  getTransportItemList(params) {
+    return requestApi.request_get('/mdm/mdDisplayItem/getTransportItemList', params)
   },
 }

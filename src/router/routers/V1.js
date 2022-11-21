@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-11-18 13:38:49
+ * @LastEditTime: 2022-11-18 16:34:02
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -221,6 +221,18 @@ export default function () {
                 activeMenu: '/costManagement/V1/V1Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1Transport',
+              code: 'price_nka_v1_apply',
+              name: 'V1Transport',
+              component: () => import('@/views/V1/V1Apply/V1Transport.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
           ],
         },
         {
@@ -424,6 +436,18 @@ export default function () {
               code: 'price_nka_v1_approve',
               name: 'V1DMApproval',
               component: () => import('@/views/V1/V1Apply/V1DM.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1Transport',
+              code: 'price_nka_v1_approve',
+              name: 'V1TransportApproval',
+              component: () => import('@/views/V1/V1Apply/V1Transport.vue'),
               meta: {
                 title: 'DM',
                 icon: 'form',

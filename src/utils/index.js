@@ -779,6 +779,7 @@ export let sortList = [
   'Premium',
   'Collection',
   'DM',
+  'Transport',
 
 ]
 //文件格式正则
