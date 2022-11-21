@@ -664,7 +664,7 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table v-if="this.filterObj.channelCode == 'NKA' || this.filterObj.channelCode == ''" :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+          <el-table v-if="this.filterObj.channelCode == 'NKA' || this.filterObj.channelCode == ''" :data="ImportData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
             <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
