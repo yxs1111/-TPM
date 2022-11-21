@@ -112,7 +112,7 @@
     </div>
     <!--    我的代办-->
     <div class="BottomBar">
-      <div class="MyToDo">
+      <div class="MyToDo agent">
         <div class="BarTitleWrap">
           <span>我的待办</span>
           <div class="TabBar">
@@ -1904,7 +1904,11 @@ export default {
   align-items: center;
   margin: 17px 0;
   .new {
-    margin-left: 20px;
+    margin-left: 15px;
+    padding-right: 20px !important;
+  }
+  .agent {
+    padding-right: 20px !important;
   }
   .MyToDo {
     width: 65%;
@@ -2017,7 +2021,7 @@ export default {
     cursor: pointer;
   }
   .Message {
-    width: 33%;
+    width: 34%;
     .MessgaeWrap {
       width: 100%;
       margin-top: 30px;
