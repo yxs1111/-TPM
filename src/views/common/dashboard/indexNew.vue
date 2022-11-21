@@ -1337,6 +1337,7 @@ export default {
 }
 .gantt-elastic__task-list-items {
   height: 177px !important;
+  padding-top: 20px !important;
 }
 .gantt-elastic__task-list-item {
   margin: 0 5px;
@@ -1347,10 +1348,10 @@ export default {
   font-weight: 600;
   font-size: 16px;
   justify-content: center;
-  margin-top: 27px !important;
+  margin-top: 18px !important;
 }
 .gantt-elastic__chart-graph-container {
-  margin-top: 24px !important;
+  margin-top: 10px !important;
   height: 146px !important;
   div {
     height: 146px !important;
