@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-18 15:14:39
+ * @LastEditTime: 2022-11-21 13:55:49
 -->
 <template>
   <div class="MainContent">
@@ -149,7 +149,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.supplierName }}
+            {{scope.row.distributorName?scope.row.distributorName:scope.row.supplierName }}
           </div>
         </template>
         <!-- 数据未对接 -->
@@ -448,7 +448,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.supplierName }}
+                  {{scope.row.distributorName?scope.row.distributorName:scope.row.supplierName }}
                 </div>
               </template>
               <!-- 数据未对接 -->

@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-18 15:16:20
+ * @LastEditTime: 2022-11-21 13:56:24
 -->
 <template>
   <div class="MainContent">
@@ -147,13 +147,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="220" align="center" prop="supplierName" label="供应商">
+      <el-table-column width="220" align="center" prop="supplierName" label="经销商/供应商">
         <template v-slot:header>
-          <div>供应商<br><span class="subTitle">-</span></div>
+          <div>经销商/供应商<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.supplierName }}
+            {{scope.row.distributorName?scope.row.distributorName:scope.row.supplierName }}
           </div>
         </template>
         <!-- 数据未对接 -->
@@ -440,13 +440,13 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="supplierName" label="供应商">
+            <el-table-column width="220" align="center" prop="supplierName" label="经销商/供应商">
               <template v-slot:header>
-                <div>供应商<br><span class="subTitle">-</span></div>
+                <div>经销商/供应商<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.supplierName }}
+                  {{scope.row.distributorName?scope.row.distributorName:scope.row.supplierName }}
                 </div>
               </template>
               <!-- 数据未对接 -->
