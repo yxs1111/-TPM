@@ -132,6 +132,7 @@
             style="width: 100%"
           >
             <el-table-column
+              width='75'
               align="left"
               prop="yearAndMonth"
               label="年月"
@@ -142,23 +143,27 @@
               label="Cost Type"
             />
             <el-table-column
-              width='150'
+              width='120'
               prop="minePackageName"
               label="Mine Package"
             />
             <el-table-column
+              width='170'
               prop="costItemName"
               label="Cost Item"
             />
             <el-table-column
+              width='60'
               prop="channelName"
               label="渠道"
             />
             <el-table-column
+              width='160'
               prop="version"
               label="版本号"
             />
             <el-table-column
+              width='160'
               align="left"
               prop=""
               label="查看"
@@ -1231,7 +1236,7 @@ export default {
 //}
 .indexNew {
   height: 100%;
-  padding: 11px;
+  //padding: 11px;
   overflow-x: hidden;
 }
 .index_container {
@@ -1422,8 +1427,8 @@ export default {
   }
 }
 .CityPlan {
-  margin: 20px 10px 0px 10px;
-  width: 98%;
+  margin: 20px 20px 0px 20px;
+  width: 97%;
   height: 310px;
   background-color: #f0fbff;
   border-radius: 20px;

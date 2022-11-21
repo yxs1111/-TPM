@@ -1533,11 +1533,16 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.downExcel({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
           supplierCode: this.filterObj.supplierCode,
+          zoneCode: this.filterObj.zoneCode,
           regionCode: this.filterObj.regionCode,
+          activityType: this.filterObj.item,
+          subItem: this.filterObj.subItem
         }).then((res) => {
           downloadFile(
             res,
