@@ -1,23 +1,23 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-11-18 16:39:21
+ * @LastEditTime: 2022-11-21 17:11:43
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
-  // investCpTransportPipVTwo/getTransportPipVTwoPage
-  url: '/cityplan/investCpTransportPipVTwo',
+  // investCpTransportVTwo/getTransportVTwoPage
+  url: '/cityplan/investCpTransportVTwo',
   importUrl: '/cityplan/investCpListingVTwoDetailEb',
   //分页查询
   getPage(params) {
-    return requestApi.request_get(this.url + '/getTransportPipVTwoPage', params)
+    return requestApi.request_get(this.url + '/getTransportVTwoPage', params)
   },
-  //审批分页查询 investCpTransportPipVTwo/getTransportPipVTwoPageApproval
-  getTransportPipVTwoPageApproval(params) {
+  //审批分页查询 investCpTransportVTwo/getTransportVTwoPageApproval
+  getTransportVTwoPageApproval(params) {
     return requestApi.request_get(
-      this.url + '/getTransportPipVTwoPageApproval',
+      this.url + '/getTransportVTwoPageApproval',
       params
     )
   },
@@ -39,16 +39,16 @@ export default {
       responseType: 'blob',
     })
   },
-  //导入 investCpTransportPipVTwo/importVTwo
+  //导入 investCpTransportVTwo/importVTwo
   fileImport(params) {
     return requestApi.request_post(this.url + '/importVTwo', params)
   },
 
-  //formatCheck 校验数据 investCpTransportPipVTwo/exceptionCheckVTwo
+  //formatCheck 校验数据 investCpTransportVTwo/exceptionCheckVTwo
   formatCheck(params) {
     return requestApi.request_post(this.url + '/exceptionCheckVTwo', params)
   },
-  //异常信息导出 investCpTransportPipVTwo/exportErrorMsg
+  //异常信息导出 investCpTransportVTwo/exportErrorMsg
   exportCheckData(params) {
     return request({
       url: this.url + '/exportErrorMsg',
@@ -57,7 +57,7 @@ export default {
       responseType: 'blob',
     })
   },
-  //保存  investCpTransportPipVTwo/saveVTwo
+  //保存  investCpTransportVTwo/saveVTwo
   importSave(params) {
     return requestApi.request_post(this.url + '/saveVTwo', params)
   },

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-18 16:18:45
+ * @LastEditTime: 2022-11-21 17:04:40
 -->
 <template>
   <div class="V0Content">
@@ -689,7 +689,7 @@ export default {
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
           }
-          if (this.ruleForm.Minepackage === 'POSM') {
+          if (this.ruleForm.Minepackage === 'POSM'||this.ruleForm.Minepackage === 'Transport') {
             obj = {
               yearAndMonth: this.filterObj.month,
               channelName: this.ruleForm.channelCode,

@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-11-18 16:18:41
+ * @LastEditTime: 2022-11-21 17:03:51
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -85,10 +85,10 @@ export default {
       params
     )
   },
-  //获取Transport数据 investCpEcmVOneDetail/create
+  //获取Transport数据 investCpEcmVOneDetail/getCptData
   getTransportCreate(params) {
-    return requestApi.request_post(
-      '/cityplan/investCpTransportVOneDetail/create',
+    return requestApi.request_get(
+      '/cityplan/investCpTransportVOneDetail/getCptData',
       params
     )
   },

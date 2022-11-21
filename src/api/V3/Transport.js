@@ -1,20 +1,20 @@
 /*
  * @Description: V1 合同
  * @Date: 2021-12-10 08:52:01
- * @LastEditTime: 2022-11-18 17:16:13
+ * @LastEditTime: 2022-11-21 17:11:51
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
-// investCpTransportPipVThree/getVThreePage
+// investCpTransportVThree/getVThreePage
 
 // url: '/cityplan/investFmcVThree',
 export default {
-  url: '/cityplan/investCpTransportPipVThree',
-  //申请 分页查询 investCpTransportPipVThree/getVThreePage
+  url: '/cityplan/investCpTransportVThree',
+  //申请 分页查询 investCpTransportVThree/getVThreePage
   getPage(params) {
     return requestApi.request_get(this.url + '/getVThreePage', params)
   },
-  //审批分页查询 investCpTransportPipVTwo/getVThreePageApprove
+  //审批分页查询 investCpTransportVTwo/getVThreePageApprove
   getVThreePageApprove(params) {
     return requestApi.request_get(this.url + '/getVThreePageApprove', params)
   },
@@ -27,11 +27,11 @@ export default {
       responseType: 'blob',
     })
   },
-  //保存 investCpTransportPipVThree/saveVThree
+  //保存 investCpTransportVThree/saveVThree
   saveV3Data(params) {
     return requestApi.request_post(this.url + '/saveVThree', params)
   },
-  //下载模板  investCpTransportPipVThree/downloadVThreeTemplate
+  //下载模板  investCpTransportVThree/downloadVThreeTemplate
   downloadTemplate(params) {
     return request({
       url: this.url + '/downloadVThreeTemplate',
@@ -40,15 +40,15 @@ export default {
       responseType: 'blob',
     })
   },
-  //导入  investCpTransportPipVThree/importVThree
+  //导入  investCpTransportVThree/importVThree
   import(params) {
     return requestApi.request_post(this.url + '/importVThree', params)
   },
-  //异常项校验  investCpTransportPipVThree/exceptionCheckVThree
+  //异常项校验  investCpTransportVThree/exceptionCheckVThree
   exceptionCheck(params) {
     return requestApi.request_post(this.url + '/exceptionCheckVThree', params)
   },
-  //导出错误信息  investCpTransportPipVThree/exportErrorMsg
+  //导出错误信息  investCpTransportVThree/exportErrorMsg
   exportV3Error(params) {
     return request({
       url: this.url + '/exportErrorMsg',
