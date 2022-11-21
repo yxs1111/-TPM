@@ -663,7 +663,7 @@ export default {
           let month2 = date.getMonth() + 1
           let month3 = date.getMonth() + 2
           let strDate = date.getDate()
-          let strDate1 = '01'
+          let strDate1 = '02'
           let strDate2 = '30'
           if (month1 >= 1 && month1 <= 9) {
             month1 = '0' + month1
@@ -691,7 +691,7 @@ export default {
             {
               id: item.id + 'v0',
               label: 'V0',
-              start: dayjs(item.startVZero).valueOf(),
+              start: dayjs(currentdate1).valueOf(),
               end: dayjs(item.EndVZero).valueOf(),
               percent: 50,
               type: 'task',
