@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-11-07 13:29:06
+ * @LastEditTime: 2022-11-21 16:32:00
 -->
 <template>
   <div class='indexNew'>
@@ -124,62 +124,21 @@
         </div>
         <!--        费用管理-->
         <div v-show="currentIndex == 0" class="TimeLineWrap">
-          <el-table
-            :header-cell-style="{'color':'#000000'}"
-            max-height="190"
-            :data="TodoList"
-            stripe
-            style="width: 100%"
-          >
-            <el-table-column
-              width='75'
-              align="left"
-              prop="yearAndMonth"
-              label="年月"
-            />
-            <el-table-column
-              width='120'
-              prop="costTypeName"
-              label="Cost Type"
-            />
-            <el-table-column
-              width='120'
-              prop="minePackageName"
-              label="Mine Package"
-            />
-            <el-table-column
-              width='170'
-              prop="costItemName"
-              label="Cost Item"
-            />
-            <el-table-column
-              width='60'
-              prop="channelName"
-              label="渠道"
-            />
-            <el-table-column
-              width='160'
-              prop="version"
-              label="版本号"
-            />
-            <el-table-column
-              width='160'
-              align="left"
-              prop=""
-              label="查看"
-            >
+          <el-table :header-cell-style="{'color':'#000000'}" max-height="190" :data="TodoList" stripe style="width: 100%">
+            <el-table-column width='75' align="left" prop="yearAndMonth" label="年月" />
+            <el-table-column width='120' prop="costTypeName" label="Cost Type" />
+            <el-table-column width='120' prop="minePackageName" label="Mine Package" />
+            <el-table-column width='170' prop="costItemName" label="Cost Item" />
+            <el-table-column width='60' prop="channelName" label="渠道" />
+            <el-table-column width='160' prop="version" label="版本号" />
+            <el-table-column width='160' align="left" prop="" label="查看">
               <template slot-scope="{row}">
                 <div class="transact" @click="openFlowDiagram(row)">
                   查看流程
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              align="center"
-              prop=""
-              fixed="right"
-              label="操作"
-            >
+            <el-table-column align="center" prop="" fixed="right" label="操作">
               <template slot-scope="scope">
                 <div class="operation" @click="goAssignee(scope.row.version,scope.row.activityName,scope.row.channelCode,scope.row.minePackageName,scope.row)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
@@ -191,51 +150,20 @@
         </div>
         <!--        合同管理-->
         <div v-show="currentIndex == 1" class="TimeLineWrap">
-          <el-table
-            :header-cell-style="{'color':'#000000'}"
-            max-height="190"
-            :data="contractList"
-            stripe
-            style="width: 100%"
-          >
-            <el-table-column
-              prop="item"
-              label="合同类型"
-              width="140"
-            />
-            <el-table-column
-              prop="contractCode"
-              label="合同ID"
-              width="280"
-            />
-            <el-table-column
-              prop="customerName"
-              label="客户名称"
-            />
-            <el-table-column
-              prop="distributorName"
-              label="经销商名称"
-            />
-            <el-table-column
-              prop="activityName"
-              label="当前节点"
-            />
-            <el-table-column
-              prop=""
-              label="查看"
-              width="120"
-            >
+          <el-table :header-cell-style="{'color':'#000000'}" max-height="190" :data="contractList" stripe style="width: 100%">
+            <el-table-column prop="item" label="合同类型" width="140" />
+            <el-table-column prop="contractCode" label="合同ID" width="280" />
+            <el-table-column prop="customerName" label="客户名称" />
+            <el-table-column prop="distributorName" label="经销商名称" />
+            <el-table-column prop="activityName" label="当前节点" />
+            <el-table-column prop="" label="查看" width="120">
               <template slot-scope="{row}">
                 <div class="transact" @click="openFlowDiagram(row)">
                   <div class="transctTxt">查看流程</div>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column
-              prop=""
-              fixed="right"
-              label="操作"
-            >
+            <el-table-column prop="" fixed="right" label="操作">
               <template slot-scope="{row}">
                 <div class="operation" @click="operateProcess(row.minePackageCode,row.name)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
@@ -260,12 +188,7 @@
         </div>
       </div>
       <!--      左下角问号-->
-      <el-popover
-        placement="left"
-        width="500"
-        :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }"
-        trigger="click"
-      >
+      <el-popover placement="left" width="500" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
         <div class="documentation">用户文档中心</div>
         <el-table :data="gridData">
           <el-table-column width="50" property="" label="">
@@ -318,7 +241,7 @@ export default {
     GanttElastic,
     GanttElasticHeader,
     FlowDiagram,
-    Notice
+    Notice,
   },
 
   data() {
@@ -342,32 +265,32 @@ export default {
       maxHeight: 800,
       title: {
         label: 'Your project title as html (link or whatever...)',
-        html: false
+        html: false,
       },
       row: {
-        height: 36
+        height: 36,
       },
       times: {
         timeScale: 60 * 1000,
-        timeZoom: 22, // 24
-        stepDuration: 'day'
+        timeZoom: 22.9, // 24
+        stepDuration: 'day',
       },
       calendar: {
         hour: {
-          display: false
-        }
+          display: false,
+        },
       },
       chart: {
         progress: {
-          bar: false
+          bar: false,
         },
         expander: {
-          display: true
-        }
+          display: true,
+        },
       },
       taskList: {
         expander: {
-          straight: false
+          straight: false,
         },
         columns: [
           {
@@ -383,10 +306,10 @@ export default {
                 // alert('description clicked!\n' + data.label)
                 // this.activeMoon = data.label
                 // // console.log(data)
-              }
-            }
-          }
-        ]
+              },
+            },
+          },
+        ],
       },
       locale: {
         weekdays: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
@@ -402,9 +325,9 @@ export default {
           '09',
           '10',
           '11',
-          '12'
-        ]
-      }
+          '12',
+        ],
+      },
       /* locale:{
           name: 'pl', // name String
           weekdays: 'Poniedziałek_Wtorek_Środa_Czwartek_Piątek_Sobota_Niedziela'.split('_'), // weekdays Array
@@ -431,12 +354,14 @@ export default {
        }*/
     }
     return {
-      gridData: [{
-        format: '2016-05-02',
-        name: '王小虎',
-        size: '45kb',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
+      gridData: [
+        {
+          format: '2016-05-02',
+          name: '王小虎',
+          size: '45kb',
+          address: '上海市普陀区金沙江路 1518 弄',
+        },
+      ],
       tabPosition: 'NKA',
       avatar: auth.getAvatar(),
       name: auth.getName(),
@@ -446,13 +371,13 @@ export default {
       activeMoon: '',
       TabList: [
         { id: 0, title: '费用管理' },
-        { id: 1, title: '合同管理' }
+        { id: 1, title: '合同管理' },
       ],
       flowDiagram: {
         visible: false,
         activate: false,
         businessId: null,
-        processId: null
+        processId: null,
       },
       MessageList: [], // 消息列表
       startTimeArr: [],
@@ -474,7 +399,7 @@ export default {
         'Listing fee': 'Listing',
         'HIH rebate': 'HIH rebate',
         'KA rebate': 'KA rebate',
-        'In Store POSM - Customized': 'POSM-定'
+        'In Store POSM - Customized': 'POSM-定',
       },
       tasks: [
         {
@@ -496,10 +421,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: 'task-3'
+              parentId: 'task-3',
             },
             {
               id: 13,
@@ -512,12 +437,12 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: 'task-3'
-            }
-          ]
+              parentId: 'task-3',
+            },
+          ],
         },
         {
           id: 'task-4',
@@ -538,10 +463,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: 'task-4'
+              parentId: 'task-4',
             },
             {
               id: 13,
@@ -554,36 +479,93 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: 'task-4'
-            }
-          ]
-        }
+              parentId: 'task-4',
+            },
+          ],
+        },
       ],
       options: options,
       content: {
         label: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
       },
       popUpShow: false,
-      positionStyle: { top: '0px', left: '0px' }
+      positionStyle: { top: '0px', left: '0px' },
+      screenWidth: 0,
     }
   },
   watch: {
     '$store.state.app.sidebar.opened'() {
-      // setTimeout(() => {
-      //   console.log('change')
-      //   this.SalesAmountChart.resize()
-      //   this.ActualSalesChart.resize()
-      // }, 200)
-    }
+      const width = document.body.clientWidth
+      if (this.$store.state.app.sidebar.opened) {
+        //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
+        if (width <= 1366) {
+          this.options.times.timeZoom = 22.9
+        } else if (width <= 1440) {
+          this.options.times.timeZoom = 22.9
+        } else if (width <= 1920) {
+          this.options.times.timeZoom = 22.2
+        } 
+      } else {
+        if (width <= 1366) {
+          this.options.times.timeZoom = 22.6
+        } else if (width <= 1440) {
+          this.options.times.timeZoom = 22.5
+        } else if (width <= 1920) {
+          this.options.times.timeZoom = 21.9
+        } 
+      }
+    },
+    screenWidth() {
+      const width = document.body.clientWidth
+      console.log("screenWidth")
+      if (this.$store.state.app.sidebar.opened) {
+        //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
+        if (width <= 1366) {
+          this.options.times.timeZoom = 22.9
+        } else if (width <= 1440) {
+          this.options.times.timeZoom = 22.9
+        } else if (width <= 1920) {
+          this.options.times.timeZoom = 22.2
+        } 
+      } else {
+        if (width <= 1366) {
+          this.options.times.timeZoom = 22.6
+        } else if (width <= 1440) {
+          this.options.times.timeZoom = 22.5
+        } else if (width <= 1920) {
+          this.options.times.timeZoom = 21.9
+        } 
+      }
+    },
   },
   created() {},
   mounted() {
-    this.$bus.$on('currentMonthChange', data => {
+    const width = document.body.clientWidth
+    if (this.$store.state.app.sidebar.opened) {
+      //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
+      if (width <= 1366) {
+        this.options.times.timeZoom = 22.9
+      } else if (width <= 1440) {
+        this.options.times.timeZoom = 22.9
+      } else if (width <= 1920) {
+        this.options.times.timeZoom = 22.2
+      } else if (width <= 2560) {
+        this.options.times.timeZoom = 21.8
+      } else {
+        this.options.times.timeZoom = 21
+      }
+    }
+    window.onresize = () => {
+      return (() => {
+        this.screenWidth = width
+      })()
+    }
+    this.$bus.$on('currentMonthChange', (data) => {
       this.tasks.forEach((item) => {
         if (item.id == data) {
           this.activeMoon = item.label
@@ -637,22 +619,43 @@ export default {
           this.startTimeArr = []
           item.label = item.activityMonth
           item.startVZero = item.startAndEndVZero.substring(0, 10)
-          item.EndVZero = item.startAndEndVZero.substring(item.startAndEndVZero.length - 10, item.startAndEndVZero.length)
+          item.EndVZero = item.startAndEndVZero.substring(
+            item.startAndEndVZero.length - 10,
+            item.startAndEndVZero.length
+          )
           item.startVOne = item.startAndEndVOne.substring(0, 10)
-          item.EndVOne = item.startAndEndVOne.substring(item.startAndEndVOne.length - 10, item.startAndEndVOne.length)
+          item.EndVOne = item.startAndEndVOne.substring(
+            item.startAndEndVOne.length - 10,
+            item.startAndEndVOne.length
+          )
           item.startVTwo = item.startAndEndVTwo.substring(0, 10)
-          item.EndVTwo = item.startAndEndVTwo.substring(item.startAndEndVTwo.length - 10, item.startAndEndVTwo.length)
+          item.EndVTwo = item.startAndEndVTwo.substring(
+            item.startAndEndVTwo.length - 10,
+            item.startAndEndVTwo.length
+          )
           item.startVThree = item.startAndEndVThree.substring(0, 10)
-          item.EndVThree = item.startAndEndVThree.substring(item.startAndEndVThree.length - 10, item.startAndEndVThree.length)
-          this.startTimeArr.push(new Date(item.startVZero), new Date(item.EndVZero), new Date(item.startVOne), new Date(item.EndVOne), new Date(item.startVTwo), new Date(item.EndVTwo), new Date(item.startVThree), new Date(item.EndVThree))
+          item.EndVThree = item.startAndEndVThree.substring(
+            item.startAndEndVThree.length - 10,
+            item.startAndEndVThree.length
+          )
+          this.startTimeArr.push(
+            new Date(item.startVZero),
+            new Date(item.EndVZero),
+            new Date(item.startVOne),
+            new Date(item.EndVOne),
+            new Date(item.startVTwo),
+            new Date(item.EndVTwo),
+            new Date(item.startVThree),
+            new Date(item.EndVThree)
+          )
           let maxDate = new Date(Math.max.apply(null, this.startTimeArr))
           let minDate = new Date(Math.min.apply(null, this.startTimeArr))
-          const formatDateTime = function(date) {
+          const formatDateTime = function (date) {
             const y = date.getFullYear()
             let m = date.getMonth() + 1
-            m = m < 10 ? ('0' + m) : m
+            m = m < 10 ? '0' + m : m
             let d = date.getDate()
-            d = d < 10 ? ('0' + d) : d
+            d = d < 10 ? '0' + d : d
             return y + '-' + m + '-' + d
           }
           maxDate = formatDateTime(maxDate)
@@ -679,9 +682,11 @@ export default {
           // }
           // const currentdate1 = '2022-9-01'
           // const currentdate3 = '2022-12-31'
-          const currentdate1 = date.getFullYear() + seperator1 + month1 + seperator1 + strDate1
+          const currentdate1 =
+            date.getFullYear() + seperator1 + month1 + seperator1 + strDate1
           // const currentdate2 = date.getFullYear() + seperator1 + month2 + seperator1 + strDate
-          const currentdate3 = date.getFullYear() + seperator1 + month3 + seperator1 + strDate2
+          const currentdate3 =
+            date.getFullYear() + seperator1 + month3 + seperator1 + strDate2
           item.start = dayjs(currentdate1).valueOf()
           item.end = dayjs(currentdate3).valueOf()
           item.type = 'group'
@@ -699,10 +704,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: item.id
+              parentId: item.id,
             },
             {
               id: item.id + 'v1',
@@ -715,10 +720,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: item.id
+              parentId: item.id,
             },
             {
               id: item.id + 'v2',
@@ -731,10 +736,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: item.id
+              parentId: item.id,
             },
             {
               id: item.id + 'v3',
@@ -747,10 +752,10 @@ export default {
                 base: {
                   fill: '#C6EBFE',
                   stroke: '#C0E2D9',
-                  textColor: '#4795D4'
-                }
+                  textColor: '#4795D4',
+                },
               },
-              parentId: item.id
+              parentId: item.id,
             }
             // {
             //   id: item.id,
@@ -847,8 +852,16 @@ export default {
         assigneeStr += `<span>${item}</span></br>`
       })
       return `<div class="Tip">
-                <span style='font-weight: bold'>${value.createDate ? value.createDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>-
-                <span style='font-weight: bold'>${value.updateDate ? value.updateDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>
+                <span style='font-weight: bold'>${
+                  value.createDate
+                    ? value.createDate.substring(0, 19).replaceAll('T', ' ')
+                    : ''
+                }</span>-
+                <span style='font-weight: bold'>${
+                  value.updateDate
+                    ? value.updateDate.substring(0, 19).replaceAll('T', ' ')
+                    : ''
+                }</span>
               </div>`
     },
     // 获取信息列表
@@ -856,14 +869,14 @@ export default {
       API.getHomePageMsg().then((res) => {
         const obj = {
           time: '',
-          msg: ''
+          msg: '',
         }
         res.data.forEach((item) => {
           obj.time = item.substring(1, 10)
           obj.msg = item.substring(12)
           if (this.MessageList.length < 5) {
             this.MessageList.push({
-              ...obj
+              ...obj,
             })
           }
         })
@@ -880,7 +893,7 @@ export default {
       }
       API.getHomePageData({
         yearAndMonth: this.activeMoon,
-        channelName: this.tabPosition
+        channelName: this.tabPosition,
       }).then((res) => {
         const array = res.data.investList
         // 流程处理 日期分组
@@ -902,7 +915,7 @@ export default {
           } else {
             data[array[m].yearAndMonth].push(array[m])
             // PP、NU 排序
-            data[array[m].yearAndMonth].sort(function(a, b) {
+            data[array[m].yearAndMonth].sort(function (a, b) {
               return b.sortCode - a.sortCode
             })
           }
@@ -925,7 +938,10 @@ export default {
                 arr.push(array[index])
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
-                if (array[index].isPrice && array[index].costItemName == 'Free Goods - Tin') {
+                if (
+                  array[index].isPrice &&
+                  array[index].costItemName == 'Free Goods - Tin'
+                ) {
                   array[index].isPrice = 0
                 }
                 if (array[index].isPrice) {
@@ -947,7 +963,10 @@ export default {
               } else {
                 array[index].isPrice =
                   array[index].minePackageName == 'Price Promotion' ? 1 : 0
-                if (array[index].isPrice && array[index].costItemName == 'Free Goods - Tin') {
+                if (
+                  array[index].isPrice &&
+                  array[index].costItemName == 'Free Goods - Tin'
+                ) {
                   array[index].isPrice = 0
                 }
                 if (array[index].isPrice) {
@@ -967,7 +986,7 @@ export default {
                 )
                 cdata[array[index].channelName].push(array[index])
                 // PP、NU 排序
-                cdata[array[index].channelName].sort(function(a, b) {
+                cdata[array[index].channelName].sort(function (a, b) {
                   return b.sortCode - a.sortCode
                 })
               }
@@ -1005,7 +1024,7 @@ export default {
             const element = data[key]
             const obj = {
               month: '',
-              channelList: []
+              channelList: [],
             }
             obj.month = key
             obj.channelList = element
@@ -1071,7 +1090,7 @@ export default {
     getToDoData() {
       TaskAPI.getList({
         pageNum: 1, // 当前页
-        pageSize: 999 // 每页条数
+        pageSize: 999, // 每页条数
       }).then((response) => {
         this.TodoList = response.data.records
         // response.data.records.forEach((item) => {
@@ -1083,7 +1102,7 @@ export default {
     getContract() {
       TaskAPI.getContract({
         pageNum: 1, // 当前页
-        pageSize: 999 // 每页条数
+        pageSize: 999, // 每页条数
       }).then((response) => {
         this.contractList = response.data.records
       })
@@ -1093,7 +1112,7 @@ export default {
       completeAPI
         .getMyHandleList({
           pageNum: 1, // 当前页
-          pageSize: 999 // 每页条数
+          pageSize: 999, // 每页条数
         })
         .then((response) => {
           this.completeData = response.data.records
@@ -1108,9 +1127,13 @@ export default {
         }
       } else if (version == 'CUSTOMER-CONTRACT') {
         if (name.indexOf('审批') != -1) {
-          this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
+          this.$router.push(
+            '/contractManagement/ContractEntry/CustomerContractApproval'
+          )
         } else {
-          this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
+          this.$router.push(
+            '/contractManagement/ContractEntry/CustomerContractEntry'
+          )
         }
       }
     },
@@ -1155,34 +1178,52 @@ export default {
         if (name.indexOf('调整') != -1) {
           this.$router.push({
             path: '/costManagement/V0/V0ApplyList',
-            params: { channelCode }
+            params: { channelCode },
           })
         } else if (name.indexOf('审批') != -1) {
           this.$router.push({
             path: '/costManagement/V0/V0ApprovalList',
-            params: { channelCode }
+            params: { channelCode },
           })
         }
       }
       if (version.indexOf('V1') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Apply', query: { channelCode, minePackageName }})
+          this.$router.push({
+            path: '/costManagement/V1/V1Apply',
+            query: { channelCode, minePackageName },
+          })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Approval', query: { channelCode, minePackageName }})
+          this.$router.push({
+            path: '/costManagement/V1/V1Approval',
+            query: { channelCode, minePackageName },
+          })
         }
       }
       if (version.indexOf('V2') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Apply', query: { channelCode, minePackageName }})
+          this.$router.push({
+            path: '/costManagement/V2/V2Apply',
+            query: { channelCode, minePackageName },
+          })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Approval', query: { channelCode, minePackageName }})
+          this.$router.push({
+            path: '/costManagement/V2/V2Approval',
+            query: { channelCode, minePackageName },
+          })
         }
       }
       if (version.indexOf('V3') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Apply', query: { channelCode, minePackageName }})
+          this.$router.push({
+            path: '/costManagement/V3/V3Apply',
+            query: { channelCode, minePackageName },
+          })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Approval', query: { channelCode, minePackageName }})
+          this.$router.push({
+            path: '/costManagement/V3/V3Approval',
+            query: { channelCode, minePackageName },
+          })
         }
       }
       // this.$router.push({ path: '/process', query: currentRow })
@@ -1202,8 +1243,8 @@ export default {
         })
         return allName.slice(4)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -1242,7 +1283,7 @@ export default {
 .index_container {
   border-radius: 25px;
   background-color: #fff;
-  padding-bottom: 20px
+  padding-bottom: 20px;
 }
 .gantt-elastic__main-view-container {
   width: 91% !important;
@@ -1263,7 +1304,7 @@ export default {
 .gantt-elastic__calendar-row--month {
   height: 35px !important;
 }
-.gantt-elastic{
+.gantt-elastic {
   border: 0px;
   div {
     border: 0px solid #ffffff !important;
@@ -1340,7 +1381,7 @@ export default {
 }
 .gantt-elastic__task-list-item {
   margin: 0 5px;
-  box-shadow: 0px 0px 12px 0px rgba(127,127,127,0.1);
+  box-shadow: 0px 0px 12px 0px rgba(127, 127, 127, 0.1);
   border-radius: 6px;
   text-align: center;
   color: #000 !important;
@@ -1363,12 +1404,12 @@ export default {
 }
 /* taskList active */
 .gantt-elastic__task-list-item_active {
-  background-color: #C5EBFE !important;
-  color: #4192D3 !important;
+  background-color: #c5ebfe !important;
+  color: #4192d3 !important;
 }
 .gantt-elastic__task-list-item_active
-.gantt-elastic__task-list-item-value-wrapper {
-  color: #4192D3 !important;
+  .gantt-elastic__task-list-item-value-wrapper {
+  color: #4192d3 !important;
   background-color: transparent;
 }
 .gantt-elastic__task-list-item-value {
@@ -1404,15 +1445,15 @@ export default {
 //   left: -70px;
 //   width: 55x;
 // }
-.el-button-group>.el-button:first-child {
+.el-button-group > .el-button:first-child {
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
 }
-.el-button-group>.el-button:last-child {
+.el-button-group > .el-button:last-child {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
 }
-.date{
+.date {
   background-color: rgb(198, 235, 254);
   padding: 6px 16px;
   border-radius: 6px;
@@ -1441,7 +1482,7 @@ export default {
     box-sizing: border-box;
     font-size: 16px;
     font-weight: 600;
-    color: #4192D3;
+    color: #4192d3;
     display: flex;
     align-items: center;
     padding-right: 60px;
@@ -1533,33 +1574,35 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .el-button{
+    .el-button {
       font-size: 16px;
       color: #333333;
       height: 35px;
     }
-    .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-      background-color: #4192D3;
+    .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+      background-color: #4192d3;
     }
-    .el-radio-button__inner, .el-radio-group {
+    .el-radio-button__inner,
+    .el-radio-group {
       line-height: 0.5;
     }
     .el-radio-button__inner {
       border: 0px;
-      background-color: #C5EBFE;
+      background-color: #c5ebfe;
       font-size: 16px;
       font-weight: bold;
       padding: 15px 30px !important;
     }
     .el-button--primary {
-      background-color: #C5EBFE;
-      border-color: #C5EBFE;
+      background-color: #c5ebfe;
+      border-color: #c5ebfe;
     }
-    .el-button--primary:focus, .el-button--primary:hover {
-      background: #4192D3;
+    .el-button--primary:focus,
+    .el-button--primary:hover {
+      background: #4192d3;
       color: #ffffff;
     }
-    el-button{
+    el-button {
       padding: 5px 20px;
       //background-color: #00afff;
     }
@@ -1615,8 +1658,7 @@ export default {
         align-items: center;
         justify-content: center;
         color: #fff;
-        background: url('../../../assets/images/index/month (1).png')
-        no-repeat;
+        background: url('../../../assets/images/index/month (1).png') no-repeat;
         background-size: 100% 100%;
         padding-left: 30px;
         box-sizing: border-box;
@@ -1668,7 +1710,7 @@ export default {
                 border-bottom-right-radius: 10px !important;
                 width: calc(100% - 0px) !important;
                 height: 26px !important;
-                background-color: #C6DCEE;
+                background-color: #c6dcee;
                 box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31) !important;
               }
             }
@@ -1728,7 +1770,7 @@ export default {
           border-bottom-left-radius: 10px;
           width: calc(100% - 0px);
           height: 26px;
-          background-color: #C6DCEE;
+          background-color: #c6dcee;
           box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
           margin: 0;
         }
@@ -1737,13 +1779,13 @@ export default {
           border-bottom-right-radius: 10px;
           width: calc(100% - 0px);
           height: 26px;
-          background-color: #C6DCEE;
+          background-color: #c6dcee;
           box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31);
         }
         .pointCircle {
           width: 27px;
           height: 27px;
-          background-color: #C6DCEE;
+          background-color: #c6dcee;
           border: 1px solid #fff;
           border-radius: 50%;
         }
@@ -1797,8 +1839,7 @@ export default {
         font-weight: bold;
         color: #fb5a56;
       }
-      background: url('../../../assets/images/index/monthNew (1).png')
-      no-repeat;
+      background: url('../../../assets/images/index/monthNew (1).png') no-repeat;
       background-size: 100% 100%;
     }
     .monthBar:nth-child(3n + 2) .monthBg {
@@ -1807,8 +1848,7 @@ export default {
         font-weight: bold;
         color: #2c85ff;
       }
-      background: url('../../../assets/images/index/monthNew (2).png')
-      no-repeat;
+      background: url('../../../assets/images/index/monthNew (2).png') no-repeat;
       background-size: 100% 100%;
     }
     .monthBar:nth-child(3n + 3) .monthBg {
@@ -1817,8 +1857,7 @@ export default {
         font-weight: bold;
         color: #ffaa30;
       }
-      background: url('../../../assets/images/index/monthNew (3).png')
-      no-repeat;
+      background: url('../../../assets/images/index/monthNew (3).png') no-repeat;
       background-size: 100% 100%;
     }
   }
@@ -1835,7 +1874,7 @@ export default {
 //}
 .TimeLineWrap {
   .el-table {
-    border: 1px solid #EBEFF5;
+    border: 1px solid #ebeff5;
     .cell {
       padding: 0 10px;
     }
@@ -1892,7 +1931,7 @@ export default {
     }
   }
 }
-.el-popover{
+.el-popover {
   height: 410px;
   overflow: auto;
 }
@@ -2013,7 +2052,7 @@ export default {
     background-color: rgb(89, 190, 135, 0.15);
     border-radius: 4px;
     text-align: center;
-    color: #59BE87;
+    color: #59be87;
     cursor: pointer;
   }
   .Message {
@@ -2074,7 +2113,7 @@ export default {
         font-family: SourceHanSansCN-Medium;
       }
       .currentTabli {
-        background-color: #4192D3;
+        background-color: #4192d3;
         border-radius: 4px;
         color: #ffffff;
       }
@@ -2110,8 +2149,8 @@ export default {
   background-color: #d1d1d1;
   border-radius: 3px;
 }
-.needHelp{
-  box-shadow: 0px 0px 13px 0px rgba(127,127,127,0.1);
+.needHelp {
+  box-shadow: 0px 0px 13px 0px rgba(127, 127, 127, 0.1);
   position: absolute;
   //background-color: rgba(65, 146, 211, 1);
   border-radius: 50%;
@@ -2128,7 +2167,7 @@ export default {
     font-size: 20px;
     width: 30px;
     height: 30px;
-    padding-top: 3px
+    padding-top: 3px;
   }
 }
 .needHelp:active {
