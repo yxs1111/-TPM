@@ -782,8 +782,8 @@ export let sortList = [
   'Transport',
 
 ]
-//文件格式正则
-//根据文件名获取文件类型
+// 文件格式正则
+// 根据文件名获取文件类型
 export function getFileType(fileName) {
   const fileReg = {
     // 图片格式

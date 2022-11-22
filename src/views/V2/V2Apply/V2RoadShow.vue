@@ -29,13 +29,13 @@
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierCode" filterable :disabled='showSelect1' clearable placeholder="请选择" @change='getService1'>
-            <el-option v-for="item,index in contractItemList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
+            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.supplierCode" filterable :disabled='showSelect2' clearable placeholder="请选择" @change='getService2'>
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
+          <el-select v-model="filterObj.distributorCode" clearable :disabled='showSelect2' filterable placeholder="请选择" @change='getService2'>
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div v-if="this.filterObj.channelCode !== &quot;EC&quot;" class="Selectli">
@@ -1187,6 +1187,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        distributorCode: '',
         channelCode: '',
         customerCode: '',
         month: '',
@@ -1208,6 +1209,7 @@ export default {
       largeAreaDialogList: [],
       activityList: [],
       supplierList: [],
+      distributorArr: [],
       contractItemList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
@@ -1241,7 +1243,7 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getSupplierList()
-    this.getPageMdSupplier()
+    this.getDistributorList()
     this.getRegionList()
     this.getAreaList()
     this.getBrandList()
@@ -1255,8 +1257,9 @@ export default {
       }
     },
     getService2() {
-      if (this.filterObj.supplierCode !== '') {
+      if (this.filterObj.distributorCode !== '') {
         this.showSelect1 = true
+        this.filterObj.supplierCode = this.filterObj.distributorCode
       } else {
         this.showSelect1 = false
       }
@@ -1359,17 +1362,21 @@ export default {
         }
       })
     },
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+    },
     getRegionList() {
       selectAPI.getRegionList().then((res) => {
         if (res.code === 1000) {
           this.RegionList = res.data
-        }
-      })
-    },
-    getPageMdSupplier() {
-      selectAPI.getPageMdSupplier().then((res) => {
-        if (res.code === 1000) {
-          this.contractItemList = res.data.records
         }
       })
     },

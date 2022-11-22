@@ -12,21 +12,10 @@
         <div class="Selectli">
           <span class="SelectliTitle">接受角色/接收人:</span>
           <el-input v-model="filterObj.sendUser" style='margin-left: 18px' filterable clearable placeholder="请输入">
-            <!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
+<!--             <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
           </el-input>
         </div>
-<!--        <div class="Selectli">-->
-<!--          <span class="SelectliTitle">状态</span>-->
-<!--          <el-select v-model="filterObj.State" filterable clearable placeholder="请选择">-->
-<!--            <el-option v-for="item,index in ['无效','有效']" :key="index" :label="item" :value="index" />-->
-<!--          </el-select>-->
-<!--        </div>-->
         <el-button v-permission="permissions['get']" type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-<!--        <el-button type="primary" class="TpmButtonBG" @click="Reset">重置</el-button>-->
-<!--        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">-->
-<!--          <img src="@/assets/images/export.png" alt="" />-->
-<!--          <span class="text">导出</span>-->
-<!--        </div>-->
       </div>
     </div>
     <div class="SelectBar">
@@ -43,6 +32,16 @@
     >
       <!--      <el-table-column align="center" prop="interfaceName" label="操作"> </el-table-column>-->
       <el-table-column align="center" prop="id" label="序号" />
+      <el-table-column align="center" label="操作" width="180">
+        <template v-slot="{ $index, row }">
+          <div class="table_operation">
+            <div class="haveText_editor" @click="writeEmail2($index, row, true)">
+              <svg-icon icon-class="editor" class="svgIcon" />
+              <span>查看</span>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="theme" show-overflow-tooltip label="主题" />
       <el-table-column align="center" prop="sendUser" label="接受角色/接受人" />
       <el-table-column v-slot="{row}" align="center" prop="type" label="通知类型">
@@ -58,14 +57,6 @@
       <el-table-column v-slot="{row}" align="center" prop="sendTime" label="发送时间">
         {{ row.sendTime ? row.sendTime.replace("T"," ") : '' }}
       </el-table-column>
-      <!-- <el-table-column align="center" prop="inData" label="接口参数"> </el-table-column> -->
-<!--      <el-table-column width="150" align="center" prop="deleteFlag" label="状态">-->
-<!--        <template slot-scope="{row}">-->
-<!--          <div>-->
-<!--            {{ row.deleteFlag?'无效':'有效' }}-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -79,6 +70,7 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <!-- 新增即时通知-->
     <el-dialog width="55%" title="新增即时通知" :visible="addVisible" class="my-el-dialog" @close="closeDialog">
       <div>
         <div class="SelectBarWrap">
@@ -159,6 +151,76 @@
         </div>
       </div>
     </el-dialog>
+    <!-- 查看模板-->
+    <el-dialog width="55%" title="查看清单" :visible="addVisible2" class="my-el-dialog" @close="cancleWriteEmail2">
+      <div>
+        <div class="SelectBarWrap">
+          <div class="SelectBar2" @keyup.enter="search">
+            <div class="Selectli ejectInput2">
+              <span class="SelectliTitle2">主题</span>
+              <span class='SelectliTitle3'>：</span>
+              <el-input
+                v-model="row.theme"
+                filterable
+                clearable
+                placeholder="请输入"
+                :disabled="true"
+              />
+            </div>
+            <div class="Selectli ejectInput2">
+              <span class="SelectliTitle2">接收角色</span>
+              <span class='SelectliTitle3'>：</span>
+              <el-select
+                v-model="row.sendUser"
+                multiple
+                clearable
+                :disabled="diaState"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code"
+                >
+                </el-option>
+              </el-select>
+            </div>
+          </div>
+          <div class='Selectli2'>
+            <div class='way'>
+              <span>发送方式：</span>
+              <el-checkbox v-model="row.isZn" :disabled="diaState">站内</el-checkbox>
+              <el-checkbox v-model="row.isEmail" :disabled="diaState">邮件</el-checkbox>
+            </div>
+            <div class='state'>
+              <span>状态</span>
+              <span>：</span>
+              <el-radio v-model="row.state" :disabled="diaState" :label="1">有效</el-radio>
+              <el-radio v-model="row.state" :disabled="diaState" :label="0">无效</el-radio>
+            </div>
+          </div>
+        </div>
+        <div class="Selectli">
+          <div style="border: 1px solid #ccc; position: relative">
+            <Toolbar
+              style="border-bottom: 1px solid #ccc"
+              :editor="editor"
+              :default-config="toolbarConfig"
+              :mode="mode"
+            />
+            <Editor
+              v-model="row.content"
+              style="height: 500px; overflow-y: hidden"
+              :default-config="filterObj.editorConfig"
+              :mode="mode"
+              @onCreated="onCreated"
+            />
+            <div v-if="diaState" class="zhezhao"></div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -214,6 +276,16 @@ export default {
       total: 0,
       pageSize: 100,
       pageNum: 1,
+      diaState: false,
+      row: {
+        theme: '',
+        content: '',
+        sendUser: [],
+        isZn: '',
+        isEmail: '',
+        state: '',
+        id: '',
+      },
       filterObj: {
         interfaceName: '',
         invokeDateSting: '',
@@ -240,6 +312,7 @@ export default {
       },
       changeFile: [],
       addVisible: false, // 导入弹窗
+      addVisible2: false, // 查看弹窗
       permissions: getDefaultPermissions(),
       InterfaceList: [],
       uploadFileName: [],
@@ -538,6 +611,25 @@ export default {
     writeEmail() {
       this.addVisible = true
     },
+    // 查看邮件弹窗展开
+    writeEmail2(i, row, bool) {
+      this.diaState = bool
+      const { theme, content, sendUser, isZn, isEmail, state, id } = row
+      this.row = {
+        theme,
+        content,
+        sendUser: sendUser ? sendUser.split(',') : [],
+        isZn: isZn ? true : false,
+        isEmail: isEmail ? true : false,
+        state,
+        id,
+      }
+      this.addVisible2 = true
+    },
+    // 取消查看
+    cancleWriteEmail2() {
+      this.addVisible2 = false
+    },
     // 取消写邮件
     cancleWriteEmail() {
       this.addVisible = false
@@ -632,6 +724,9 @@ export default {
 .el-table .cell.el-tooltip {
   text-align: left !important;
 }
+.ejectInput3 .el-input--suffix {
+  width: 100% !important;
+}
 .ejectInput .el-input--suffix{
   width: 850px !important;
 }
@@ -648,6 +743,16 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.zhezhao {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  background-color: rgba($color: #f5f7fa, $alpha: 0.5);
+  cursor: not-allowed;
+}
 .SelectBar2 {
   align-items: center;
   flex-wrap: wrap;
@@ -668,6 +773,31 @@ export default {
       white-space: nowrap;
       width: 85px;
       text-align: right;
+    }
+    .SelectliTitle2 {
+      display: inline-block;
+      width: 58px;
+      text-align: justify;
+      text-justify:distribute-all-lines; // 这行必加，兼容ie浏览器
+      text-align-last: justify;
+      // width: 70px;
+      font-size: 14px;
+      font-family: Source Han Sans CN Light;
+      font-weight: 400;
+      color: #4d4d4d;
+      //width: 85px;
+      //text-align: left;
+    }
+    .SelectliTitle3 {
+      width: 15px;
+      font-size: 14px;
+      font-family: Source Han Sans CN Light;
+      font-weight: 400;
+      color: #4d4d4d;
+      margin-right: 22px;
+      white-space: nowrap;
+      //width: 85px;
+      //text-align: left;
     }
     .el-input__inner {
       background-color: #f0f2fa;
@@ -694,6 +824,25 @@ export default {
     textarea::-webkit-input-placeholder {
       color: #888;
       font-size: 14px;
+    }
+  }
+}
+.Selectli2 {
+  width: 23%;
+  display: inline-block;
+  .way {
+    text-align: right;
+    line-height: 50px;
+  }
+  .state {
+    text-align: right;
+    line-height: 50px;
+    span:first-child {
+      display: inline-block;
+      width: 56px;
+      text-align: justify;
+      text-justify:distribute-all-lines; // 这行必加，兼容ie浏览器
+      text-align-last: justify;
     }
   }
 }
