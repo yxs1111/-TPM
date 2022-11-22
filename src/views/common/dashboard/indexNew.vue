@@ -193,12 +193,19 @@
         <el-table :data="gridData">
           <el-table-column width="50" property="" label="">
             <template slot-scope="scope">
-              <img v-if="scope.row.format == &quot;excel&quot;" src="../../../assets/images/EXCEL.png">
-              <img v-if="scope.row.format == &quot;word&quot;" src="../../../assets/images/word.png">
-              <img v-if="scope.row.format == &quot;zip&quot;" src="../../../assets/images/yasuowenjian.png">
-              <img v-if="scope.row.format == &quot;ppt&quot;" src="../../../assets/images/PPT.png">
-              <img v-if="scope.row.format == &quot;pdf&quot;" src="../../../assets/images/tupian.png">
-              <img v-if="scope.row.format == &quot;video&quot;" src="../../../assets/images/shipin.png">
+              <img src='../../../assets/images/EXCEL.png' v-if='scope.row.format == "excel"'>
+              <img src='../../../assets/images/word.png' v-if='scope.row.format == "word"'>
+              <img src='../../../assets/images/yasuowenjian.png' v-if='scope.row.format == "zip"'>
+              <img src='../../../assets/images/PPT.png' v-if='scope.row.format == "ppt"'>
+              <img src='../../../assets/images/tupian.png' v-if='scope.row.format == "pdf"'>
+              <img src='../../../assets/images/shipin.png' v-if='scope.row.format == "video"'>
+
+<!--              <img v-if="scope.row.format == &quot;excel&quot;" src="../../../assets/images/EXCEL.png">-->
+<!--              <img v-if="scope.row.format == &quot;word&quot;" src="../../../assets/images/word.png">-->
+<!--              <img v-if="scope.row.format == &quot;zip&quot;" src="../../../assets/images/yasuowenjian.png">-->
+<!--              <img v-if="scope.row.format == &quot;ppt&quot;" src="../../../assets/images/PPT.png">-->
+<!--              <img v-if="scope.row.format == &quot;pdf&quot;" src="../../../assets/images/tupian.png">-->
+<!--              <img v-if="scope.row.format == &quot;video&quot;" src="../../../assets/images/shipin.png">-->
             </template>
           </el-table-column>
           <el-table-column width="250" property="name" label="文件名称" />
@@ -211,9 +218,9 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button slot="reference" class="needHelp">
-          <div class="needHelpTxt">?</div>
-        </el-button>
+<!--        <el-button slot="reference" class="needHelp">-->
+<!--          <div class="needHelpTxt">?</div>-->
+<!--        </el-button>-->
       </el-popover>
     </div>
     <div v-if="flowDiagram.visible">
@@ -509,7 +516,7 @@ export default {
           this.options.times.timeZoom = 22.9
         } else if (width <= 1920) {
           this.options.times.timeZoom = 22.2
-        } 
+        }
       } else {
         if (width <= 1366) {
           this.options.times.timeZoom = 22.6
@@ -517,7 +524,7 @@ export default {
           this.options.times.timeZoom = 22.5
         } else if (width <= 1920) {
           this.options.times.timeZoom = 21.9
-        } 
+        }
       }
     },
     screenWidth() {
@@ -531,7 +538,7 @@ export default {
           this.options.times.timeZoom = 22.9
         } else if (width <= 1920) {
           this.options.times.timeZoom = 22.2
-        } 
+        }
       } else {
         if (width <= 1366) {
           this.options.times.timeZoom = 22.6
@@ -539,7 +546,7 @@ export default {
           this.options.times.timeZoom = 22.5
         } else if (width <= 1920) {
           this.options.times.timeZoom = 21.9
-        } 
+        }
       }
     },
   },

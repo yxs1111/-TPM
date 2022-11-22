@@ -7,37 +7,34 @@
       <div class="notice-box-txt">更多</div>
     </div>
     <el-dialog :visible.sync="noticePage.dialogVisible" title="消息" width="70%" height="40%" class="my-el-dialog">
-      <div class="flex_start">
-        <el-button type="primary" class="TpmButtonBG" @click="ReadAll">全部已读</el-button>
-        <el-button type="primary" class="TpmButtonBG" @click="ReadMuti">标记已读</el-button>
-      </div>
+<!--      <div class="flex_start">-->
+<!--        <el-button type="primary" class="TpmButtonBG" @click="ReadAll">全部已读</el-button>-->
+<!--        <el-button type="primary" class="TpmButtonBG" @click="ReadMuti">标记已读</el-button>-->
+<!--      </div>-->
 
       <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" element-loading-text="正在查询" border fit stripe height="400"
         highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" align="center" />
-        <el-table-column align="center" prop="title" label="标题" />
-        <el-table-column align="center" prop="senderName" label="发送人" />
-        <el-table-column align="center" prop="createDate" label="日期">
-          <template slot-scope="{ row }">
-            <div>
-              {{ row.createDate.slice(0, 10) }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="状态">
-          <template slot-scope="{ row }">
-            <div>
-              {{ row.state | statusWordFilter(row.state) }}
-            </div>
-          </template>
-        </el-table-column>
+<!--        <el-table-column type="selection" align="center" />-->
+        <el-table-column align="center" prop="id" label="序号" />
         <el-table-column align="center" prop="createDate" label="操作">
           <template slot-scope="{ row }">
             <div class="flex">
-              <el-button type="primary" class="TpmButtonBG" @click="Read(row.id)">标记已读</el-button>
-              <el-button type="primary" class="TpmButtonBG" @click="detail(row)">查看</el-button>
+<!--              <el-button type="primary" class="TpmButtonBG" @click="Read(row.id)">标记已读</el-button>-->
+              <div class="haveText_editor" @click="detail(row)">
+                <svg-icon icon-class="editor" class="svgIcon" />
+                <span>查看</span>
+              </div>
+<!--              <el-button type="primary" class="TpmButtonBG" @click="detail(row)">查看</el-button>-->
             </div>
           </template>
+        </el-table-column>
+        <el-table-column align="center" prop="theme" label="主题" />
+        <el-table-column v-slot="{row}" align="center" prop="type" label="通知类型">
+          {{ row.type == 1 ? '定时通知' : '即时通知' }}
+        </el-table-column>
+        <el-table-column align="center" prop="createBy" label="发送人" />
+        <el-table-column v-slot="{row}" align="center" prop="sendTime" label="发送时间">
+          {{ row.sendTime ? row.sendTime.replace("T"," ") : '' }}
         </el-table-column>
       </el-table>
       <div class="TpmPaginationWrap">
@@ -48,26 +45,20 @@
     <!--信息框-->
     <el-dialog :title="noticePage.detailDialog.title" :visible.sync="noticePage.detailDialog.visible">
       <el-form :model="noticePage.detailDialog.data" label-position="left" label-width="120px" style="width: 600px; margin-left:50px;">
-        <el-form-item prop="title" label="标题">
-          <span>{{ noticePage.detailDialog.data.title }}</span>
+        <el-form-item prop="id" label="序号">
+          <span>{{ noticePage.detailDialog.data.id }}</span>
         </el-form-item>
-        <el-form-item prop="senderName" label="发送方">
-          <span>{{ noticePage.detailDialog.data.senderName }}</span>
+        <el-form-item prop="theme" label="主题">
+          <span>{{ noticePage.detailDialog.data.theme }}</span>
         </el-form-item>
-        <el-form-item prop="createDate" label="发送时间">
-          <span>{{ noticePage.detailDialog.data.createDate }}</span>
+        <el-form-item prop="type" label="通知类型">
+          <span>{{ noticePage.detailDialog.data.type == 1 ? '定时通知' : '即时通知' }}</span>
         </el-form-item>
-        <el-form-item prop="markName" label="已读">
-          <span>{{ noticePage.detailDialog.data.markName }}</span>
+        <el-form-item prop="createBy" label="发送人">
+          <span>{{ noticePage.detailDialog.data.createBy }}</span>
         </el-form-item>
-        <el-form-item prop="markDate" label="已读时间">
-          <span>{{ noticePage.detailDialog.data.markDate }}</span>
-        </el-form-item>
-        <el-form-item prop="source" label="消息来源">
-          <span>{{ noticePage.detailDialog.data.source }}</span>
-        </el-form-item>
-        <el-form-item prop="stateFlg" label="状态">
-          <span>{{ noticePage.detailDialog.data.stateFlg }}</span>
+        <el-form-item prop="sendTime" label="发送时间">
+          <span>{{ noticePage.detailDialog.data.sendTime ? noticePage.detailDialog.data.sendTime.replace("T"," ") : ''  }}</span>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -234,7 +225,7 @@ export default {
     fetchData(newTitle) {
       this.noticePage.searchLoading = true
       requestApi
-        .request_get('/cityplan/messageAudit/getPageByDto', {
+        .request_get('/mdm/mdEmailRecordRule/getPage', {
           title: this.filterObj.title,
           state: this.filterObj.state,
           category: this.noticePage.category,
@@ -405,6 +396,12 @@ export default {
 }
 </script>
 <style>
+.flex .haveText_editor {
+  cursor: pointer;
+  display: flex;
+  color: #3684fe;
+  align-items: center;
+}
 .item .el-badge__content {
   position: absolute;
   top: 7px !important;
