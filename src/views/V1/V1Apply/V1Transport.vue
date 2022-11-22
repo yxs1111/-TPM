@@ -1,7 +1,7 @@
 <!--
  * @Description: V1Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-22 11:44:48
+ * @LastEditTime: 2022-11-22 16:33:51
 -->
 <template>
   <div class="MainContent">
@@ -289,7 +289,7 @@ export default {
         })
     },
     getTransportItemList() {
-      selectAPI.getTransportItemList({minePackage:'Transport costs'}).then((res) => {
+      selectAPI.getTransportItemList({minePackage:'Transport Costs'}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
