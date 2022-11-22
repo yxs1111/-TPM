@@ -1,7 +1,7 @@
 <!--
  * @Description: V2TransportApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-22 16:34:00
+ * @LastEditTime: 2022-11-22 17:36:55
 -->
 <template>
   <div class="MainContent">
@@ -672,7 +672,7 @@ export default {
         }
       } else {
         this.isSubmit = 1
-        API.getTransportPipVTwoPageApproval({
+        API.getTransportVTwoPageApproval({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           supplierName: this.filterObj.supplierName, //供应商
