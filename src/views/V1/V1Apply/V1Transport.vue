@@ -1,7 +1,7 @@
 <!--
  * @Description: V1Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-18 16:37:38
+ * @LastEditTime: 2022-11-22 10:32:24
 -->
 <template>
   <div class="MainContent">
@@ -200,9 +200,6 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        zoneName: '', //大区
-        regionName: '', //区域
-
         channelCode: '', //渠道
         customerCode: '', //客户系统名称
         month: '', //活动月
@@ -236,8 +233,6 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getBrandList()
-    this.getzoneArr()
-    this.getregionArr()
   },
   methods: {
     // 获取表格数据
@@ -257,8 +252,6 @@ export default {
           pageSize: this.pageSize, // 每页条数
           customerName: this.filterObj.customerCode, //客户系统名称
           channelName: this.filterObj.channelCode, //渠道
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
           yearAndMonth: this.filterObj.month, //活动月
           transportItem: this.filterObj.transportItem, //活动月
         }).then((response) => {
@@ -272,14 +265,6 @@ export default {
     getAllMonth() {
       selectAPI.getAllMonth().then((res) => {
         this.monthList = res.data
-      })
-    },
-    // 获取ContractItem
-    getContractItemList() {
-      selectAPI.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.ContractItemList = res.data
-        }
       })
     },
     // 获取下拉框
@@ -325,8 +310,6 @@ export default {
           transportItem: this.filterObj.transportItem, //transportItem
           customerName: this.filterObj.customerCode, //客户系统名称
           channelName: this.filterObj.channelCode, //渠道
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
           yearAndMonth: this.filterObj.month, //活动月
         }).then((res) => {
           downloadFile(
