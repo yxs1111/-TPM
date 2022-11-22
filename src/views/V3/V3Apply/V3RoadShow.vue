@@ -974,7 +974,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="differencePrice" label="单价差值(%)">
               <template v-slot:header>
-                <div>单价差值(%)<br><span class="subTitle">KA+Region+业务细项 + Sub_item</span></div>
+                <div>单价差值(%)<br><span class="subTitle">KA+Region+业务细项+Sub_item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
