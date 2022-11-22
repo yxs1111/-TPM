@@ -1282,6 +1282,16 @@ export default {
 //.main-container {
 //  overflow-y: auto;
 //}
+.Selectli {
+  .el-input {
+    margin-left: 20px;
+    .el-input__inner {
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      text-overflow: ellipsis !important;
+    }
+  }
+}
 .indexNew {
   height: 100%;
   //padding: 11px;
