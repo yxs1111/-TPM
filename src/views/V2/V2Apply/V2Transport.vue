@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-22 11:23:49
+ * @LastEditTime: 2022-11-22 13:20:23
 -->
 <template>
   <div class="MainContent">
@@ -11,7 +11,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
           <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
-            <el-option v-for="item in monthList" :key="item.id" :label="iteposmm.activityMonth" :value="item.activityMonth" />
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
           </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
