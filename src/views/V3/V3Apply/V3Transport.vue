@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-22 10:50:33
+ * @LastEditTime: 2022-11-22 11:18:33
 -->
 <template>
   <div class="MainContent">
@@ -775,7 +775,7 @@ export default {
       })
     },
     getTransportItemList() {
-      selectAPI.getTransportItemList({}).then((res) => {
+      selectAPI.getTransportItemList({minePackage:'Transportcosts'}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
