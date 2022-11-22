@@ -146,6 +146,7 @@
                   'Transport',
                   'Premium',
                   'Free Goods',
+                  'FMC',
                   'RoadShow']" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
@@ -404,6 +405,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((response) => {
           if (response.code === 1000) {
             this.ContentData = response.data
@@ -575,6 +577,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -592,6 +595,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           this.downloadFile(
             res,
@@ -611,6 +615,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           this.downloadFile(
             res,
@@ -679,6 +684,9 @@ export default {
             case 'Free Goods':
               url = API.getFreeGoods
               break
+            case 'FMC':
+              url = API.getFMC
+              break
             case 'RoadShow':
               url = API.getRoadShow
               break
@@ -686,6 +694,7 @@ export default {
           let obj = {
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
+            channelName: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
           }
@@ -697,7 +706,7 @@ export default {
               dimVersion: this.ruleForm.dimVersion,
             }
           }
-          console.log(url)
+          // console.log(url)
           url(obj).then((response) => {
             if (response.code == 1000) {
               this.$message.success('成功获取数据!')

@@ -8,14 +8,27 @@ import request from '@/utils/request'
 
 export default {
   url: '/cityplan/investFmcVTwo',
-  //申请 分页查询
+  //申请 分页查询NKA
   getPage(params) {
     return requestApi.request_get(this.url+'/getV2Page', params)
+  },
+  //申请 分页查询EC
+  getECPage(params) {
+    return requestApi.request_get('/cityplan/investCpVTwoEFmc/getVTwoPage', params)
   },
   //导出V2
   exportV2(params) {
     return request({
       url: this.url+'/exportV2',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //导出V2
+  exportVTwo(params) {
+    return request({
+      url: '/cityplan/investCpVTwoEFmc/exportVTwo',
       method: 'get',
       params: params,
       responseType: 'blob'

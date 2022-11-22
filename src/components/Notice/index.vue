@@ -446,9 +446,6 @@ export default {
     text-align: right;
   }
 }
-.TpmButtonBG {
-  display: inline-block !important;
-}
 .flex .haveText_editor {
   cursor: pointer;
   display: flex;
