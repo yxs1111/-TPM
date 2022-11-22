@@ -1,7 +1,7 @@
 <!--
  * @Description: V1Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-22 11:23:53
+ * @LastEditTime: 2022-11-22 11:44:48
 -->
 <template>
   <div class="MainContent">
@@ -232,7 +232,6 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
     this.getTransportItemList()
   },
   methods: {
@@ -315,7 +314,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Transport-标准_${this.filterObj.channelCode}_V1_查询.xlsx`
+            `${this.filterObj.month}_Transport_${this.filterObj.channelCode}_V1_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
