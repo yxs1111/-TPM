@@ -236,33 +236,33 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="260" align="right" prop="adjustedPrice" label="V2预估单价(RMB/场)">
+      <el-table-column width="260" align="right" prop="estimatePrice" label="V2预估单价(RMB/场)">
         <template v-slot:header>
           <div>V2预估单价(RMB/场)<br><span class="subTitle">KA+Region+供应商/经销商+业务细项+Sub_item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.adjustedPrice) }}
+            {{ formatNum(scope.row.estimatePrice) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedVol" label="V2预估场次(场)">
+      <el-table-column width="220" align="right" prop="estimateVol" label="V2预估场次(场)">
         <template v-slot:header>
           <div>V2预估场次(场)<br><span class="subTitle">KA+Region+供应商/经销商+业务细项+Sub_item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.adjustedVol) }}
+            {{ formatNum(scope.row.estimateVol) }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估费用(RMB)">
+      <el-table-column width="220" align="right" prop="estimateCost" label="V2预估费用(RMB)">
         <template v-slot:header>
           <div>V2预估费用(RMB)<br><span class="subTitle">KA+Region+供应商/经销商+业务细项+Sub_item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ formatNum(scope.row.adjustedCost) }}
+            {{ formatNum(scope.row.estimateCost) }}
           </div>
         </template>
       </el-table-column>
@@ -862,33 +862,33 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="260" align="right" prop="adjustedPrice" label="V2预估单价(RMB/场)">
+            <el-table-column width="260" align="right" prop="estimatePrice" label="V2预估单价(RMB/场)">
               <template v-slot:header>
                 <div>V2预估单价(RMB/场)<br><span class="subTitle">KA+Region+供应商/经销商+业务细项+Sub_item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.adjustedPrice) }}
+                  {{ formatNum(scope.row.estimatePrice) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="adjustedVol" label="V2预估场次(场)">
+            <el-table-column width="220" align="right" prop="estimateVol" label="V2预估场次(场)">
               <template v-slot:header>
                 <div>V2预估场次(场)<br><span class="subTitle">KA+Region+供应商/经销商+业务细项+Sub_item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.adjustedVol) }}
+                  {{ formatNum(scope.row.estimateVol) }}
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="adjustedCost" label="V2预估费用(RMB)">
+            <el-table-column width="220" align="right" prop="estimateCost" label="V2预估费用(RMB)">
               <template v-slot:header>
                 <div>V2预估费用(RMB)<br><span class="subTitle">KA+Region+供应商/经销商+业务细项+Sub_item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ formatNum(scope.row.adjustedCost) }}
+                  {{ formatNum(scope.row.estimateCost) }}
                 </div>
               </template>
             </el-table-column>
@@ -1325,6 +1325,7 @@ export default {
     getService1() {
       if (this.filterObj.supplierCode !== '') {
         this.showSelect2 = true
+        this.filterObj.distributorCode = ''
       } else {
         this.showSelect2 = false
       }
@@ -1332,7 +1333,7 @@ export default {
     getService2() {
       if (this.filterObj.distributorCode !== '') {
         this.showSelect1 = true
-        this.filterObj.supplierCode = this.filterObj.distributorCode
+        this.filterObj.supplierCode = ''
       } else {
         this.showSelect1 = false
       }

@@ -242,6 +242,7 @@ import FlowDiagram from '@/components/FlowDiagram'
 import { logger } from 'runjs/lib/common'
 import item from '@/layout/components/Sidebar/Item'
 import { getFileType } from '@/utils'
+import requestApi from '@/api/request-api'
 export default {
   name: 'Dashboard',
   components: {
@@ -873,14 +874,18 @@ export default {
     },
     // 获取信息列表
     getMesList() {
-      API.getHomePageMsg().then((res) => {
+      requestApi.request_get('/mdm/mdEmailRecordRule/getPage', {
+        receiverCode: localStorage.usernameLocal,
+      }).then((res) => {
         const obj = {
           time: '',
           msg: '',
         }
-        res.data.forEach((item) => {
-          obj.time = item.substring(1, 10)
-          obj.msg = item.substring(12)
+        res.data.records.forEach((item) => {
+          // console.log(item)
+          obj.time = item.createDate.substring(0, 10)
+          obj.msg = item.theme
+          console.log(obj.msg)
           if (this.MessageList.length < 5) {
             this.MessageList.push({
               ...obj,
@@ -1284,7 +1289,7 @@ export default {
 //}
 .Selectli {
   .el-input {
-    margin-left: 20px;
+    //margin-left: 20px;
     .el-input__inner {
       overflow: hidden !important;
       white-space: nowrap !important;
