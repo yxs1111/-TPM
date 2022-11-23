@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="OpertionBar">
-        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']">
+        <div class="TpmButtonBG" v-show='this.filterObj.channelCode !== "EC"' @click="getSmartPlan" v-permission="permissions['getCPT']">
           <img src="@/assets/images/huoqu.png" alt="">
           <span class="text">获取Smart Plan数据</span>
         </div>

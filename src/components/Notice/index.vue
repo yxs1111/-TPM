@@ -19,16 +19,6 @@
       <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" border fit stripe height="400"
         highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
         <el-table-column align="center" width='70' prop="id" label="序号" />
-<!--        <el-table-column align="center" width='80' prop="createDate" label="操作">-->
-<!--          <template slot-scope="{ row }">-->
-<!--            <div class="flex">-->
-<!--              <div class="haveText_editor" @click="detail(row)">-->
-<!--                <svg-icon icon-class="editor" class="svgIcon" />-->
-<!--                <span>查看</span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
         <el-table-column align="center" label="操作" width="180">
           <template v-slot="{ $index, row }">
             <div class="table_operation">
@@ -39,7 +29,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" width='420' prop="theme" label="主题" />
+        <el-table-column align="center" show-overflow-tooltip width='420' prop="theme" label="主题" />
         <el-table-column v-slot="{row}" align="center" prop="type" label="通知类型">
           {{ row.type == 1 ? '定时通知' : '即时通知' }}
         </el-table-column>

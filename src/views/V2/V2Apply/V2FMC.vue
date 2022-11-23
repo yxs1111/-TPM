@@ -833,26 +833,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v3DefaultRealityCost" label="V3实际费用-默认(RMB)">
-              <template v-slot:header>
-                <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ formatNum(scope.row.v3DefaultRealityCost) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="260" align="right" prop="v3AdjustRealityCost" label="V3实际费用-调整后(RMB)">
-              <template v-slot:header>
-                <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ formatNum(scope.row.v3AdjustRealityCost) }}
-                </div>
-              </template>
-            </el-table-column>
             <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
