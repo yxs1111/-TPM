@@ -1,7 +1,7 @@
 <!--
  * @Description: V2TransportApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-22 17:36:55
+ * @LastEditTime: 2022-11-23 15:34:40
 -->
 <template>
   <div class="MainContent">
@@ -356,7 +356,7 @@
               </template>
             </vxe-table-column>
             <!--            CPID-->
-            <vxe-table-column align="center" width="460" field="cpId" title="CPID" fixed="left">
+            <vxe-table-column align="center" width="460" field="cpId" title="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -1021,7 +1021,7 @@ export default {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     getTip(row) {
-      return `<div class="Tip">${row.judgmentContent}</div>`
+      return `<div class="Tip">${row.systemJudgmentContent}</div>`
     },
   },
 }
