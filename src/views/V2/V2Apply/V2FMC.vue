@@ -1040,32 +1040,61 @@ export default {
     },
     // 导入
     parsingExcel(event) {
-      this.isCheck = false
-      this.uploadFileName = event.target.files[0].name
-      this.uploadFile = event.target.files[0]
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelCode', this.filterObj.channelCode)
-      formData.append('importType', 1)
-      API.import(formData).then((response) => {
-        //清除input的value ,上传一样的
-        event.srcElement.value = '' // 置空
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)||response.data.length===0) {
-            this.$message.info('导入数据为空，请检查模板')
+      if (this.filterObj.channelCode == 'NKA') {
+        this.isCheck = false
+        this.uploadFileName = event.target.files[0].name
+        this.uploadFile = event.target.files[0]
+        const formData = new FormData()
+        formData.append('file', this.uploadFile)
+        formData.append('yearAndMonth', this.filterObj.month)
+        formData.append('channelCode', this.filterObj.channelCode)
+        formData.append('importType', 1)
+        API.import(formData).then((response) => {
+          //清除input的value ,上传一样的
+          event.srcElement.value = '' // 置空
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)||response.data.length===0) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.importSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.isCheck = isError == -1 ? 1 : 0
+            }
           } else {
-            this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data
-            let isError = this.ImportData.findIndex((item) => {
-              return item.systemJudgment == 'Error'
-            })
-            this.isCheck = isError == -1 ? 1 : 0
+            this.$message.info(this.messageMap.importError)
           }
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
-      })
+        })
+      } else {
+        this.isCheck = false
+        this.uploadFileName = event.target.files[0].name
+        this.uploadFile = event.target.files[0]
+        const formData = new FormData()
+        formData.append('file', this.uploadFile)
+        formData.append('yearAndMonth', this.filterObj.month)
+        formData.append('channelName', this.filterObj.channelCode)
+        formData.append('importType', 1)
+        API.importEC(formData).then((response) => {
+          //清除input的value ,上传一样的
+          event.srcElement.value = '' // 置空
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)||response.data.length===0) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.importSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.isCheck = isError == -1 ? 1 : 0
+            }
+          } else {
+            this.$message.info(this.messageMap.importError)
+          }
+        })
+      }
     },
     // 关闭导入
     closeImportDialog() {
@@ -1078,113 +1107,225 @@ export default {
     },
     // 校验数据
     checkImport() {
-      API.exceptionCheck({
-        channelCode: this.filterObj.channelCode,
-        yearAndMonth: this.filterObj.month,
-      }).then((response) => {
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
-            this.$message.info('导入数据为空，请检查模板')
+      if (this.filterObj.channelCode == 'NKA') {
+        API.exceptionCheck({
+          channelCode: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((response) => {
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.checkSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.saveBtn = isError == -1 ? 1 : 0
+              console.log(this.saveBtn)
+            }
           } else {
-            this.$message.success(this.messageMap.checkSuccess)
-            this.ImportData = response.data
-            let isError = this.ImportData.findIndex((item) => {
-              return item.systemJudgment == 'Error'
-            })
-            this.saveBtn = isError == -1 ? 1 : 0
-            console.log(this.saveBtn)
+            this.$message.info(this.messageMap.checkError)
           }
-        } else {
-          this.$message.info(this.messageMap.checkError)
-        }
-        this.saveBtn=1
-      })
+          this.saveBtn=1
+        })
+      } else {
+        API.exceptionCheckEC({
+          channelName: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((response) => {
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.checkSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.saveBtn = isError == -1 ? 1 : 0
+              console.log(this.saveBtn)
+            }
+          } else {
+            this.$message.info(this.messageMap.checkError)
+          }
+          this.saveBtn=1
+        })
+      }
     },
     // 确认导入
     confirmImport() {
-      API.saveV2Data({
-        channelCode: this.filterObj.channelCode,
-        yearAndMonth: this.filterObj.month,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      if (this.filterObj.channelCode == 'NKA') {
+        API.saveV2Data({
+          channelCode: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((res) => {
+          if (res.code == 1000) {
+            this.$message.success(this.messageMap.saveSuccess)
+            this.getTableData()
+            this.closeImportDialog()
+          } else {
+            this.$message.info(this.messageMap.saveError)
+          }
+        })
+      } else {
+        API.saveV2DataEC({
+          channelName: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((res) => {
+          if (res.code == 1000) {
+            this.$message.success(this.messageMap.saveSuccess)
+            this.getTableData()
+            this.closeImportDialog()
+          } else {
+            this.$message.info(this.messageMap.saveError)
+          }
+        })
+      }
     },
     // 导出异常信息
     exportErrorList() {
-      if (this.ImportData.length) {
-        API.exportV2Error({
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success('导出成功!')
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.ImportData.length) {
+          API.exportV2Error({
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('异常数据为空!')
+        }
       } else {
-        this.$message.info('异常数据为空!')
+        if (this.ImportData.length) {
+          API.exportV2ErrorEC({
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('异常数据为空!')
+        }
       }
     },
     // 下载模板
     downloadTemplate() {
-      if (this.tableData.length) {
-        // 导出数据筛选
-        API.downloadTemplate({
-          yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2申请.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success(this.messageMap.exportSuccess)
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          // 导出数据筛选
+          API.downloadTemplate({
+            yearAndMonth: this.filterObj.month,
+            channelCode: this.filterObj.channelCode,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2申请.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success(this.messageMap.exportSuccess)
+          })
+        } else {
+          this.$message.info('数据不能为空')
+        }
       } else {
-        this.$message.info('数据不能为空')
+        if (this.tableData.length) {
+          // 导出数据筛选
+          API.downloadTemplateEC({
+            yearAndMonth: this.filterObj.month,
+            channelName: this.filterObj.channelCode,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2申请.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success(this.messageMap.exportSuccess)
+          })
+        } else {
+          this.$message.info('数据不能为空')
+        }
       }
     },
     approve() {
-      if (this.tableData.length) {
-        const judgmentType = this.tableData[0].systemJudgment
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              const mainId = this.tableData[0].mainId
-              API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('提交成功')
-                  this.getTableData()
-                }
-              })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          const judgmentType = this.tableData[0].systemJudgment
+          if (judgmentType != null) {
+            this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
             })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
+              .then(() => {
+                const mainId = this.tableData[0].mainId
+                API.approve({
+                  mainId: mainId, // 主表id
+                  opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message.success('提交成功')
+                    this.getTableData()
+                  }
+                })
               })
-            })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          } else {
+            this.$message.info('数据未校验，请先进行导入验证')
+          }
         } else {
-          this.$message.info('数据未校验，请先进行导入验证')
+          this.$message.warning('数据不能为空')
         }
       } else {
-        this.$message.warning('数据不能为空')
+        if (this.tableData.length) {
+          const judgmentType = this.tableData[0].systemJudgment
+          if (judgmentType != null) {
+            this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(() => {
+                const mainId = this.tableData[0].mainId
+                API.approveEC({
+                  mainId: mainId, // 主表id
+                  opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message.success('提交成功')
+                    this.getTableData()
+                  }
+                })
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          } else {
+            this.$message.info('数据未校验，请先进行导入验证')
+          }
+        } else {
+          this.$message.warning('数据不能为空')
+        }
       }
     },
     // 每页显示页面数变更

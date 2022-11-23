@@ -14,20 +14,28 @@
             <!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
           </el-input>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="primary" style='display: inline-block' class="TpmButtonBG" @click="search">查询</el-button>
       </div>
       <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" border fit stripe height="400"
         highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
         <el-table-column align="center" width='70' prop="id" label="序号" />
-        <el-table-column align="center" width='80' prop="createDate" label="操作">
-          <template slot-scope="{ row }">
-            <div class="flex">
-<!--              <el-button type="primary" class="TpmButtonBG" @click="Read(row.id)">标记已读</el-button>-->
-              <div class="haveText_editor" @click="detail(row)">
+<!--        <el-table-column align="center" width='80' prop="createDate" label="操作">-->
+<!--          <template slot-scope="{ row }">-->
+<!--            <div class="flex">-->
+<!--              <div class="haveText_editor" @click="detail(row)">-->
+<!--                <svg-icon icon-class="editor" class="svgIcon" />-->
+<!--                <span>查看</span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
+        <el-table-column align="center" label="操作" width="180">
+          <template v-slot="{ $index, row }">
+            <div class="table_operation">
+              <div class="haveText_editor" @click="writeEmail2($index, row, true)">
                 <svg-icon icon-class="editor" class="svgIcon" />
                 <span>查看</span>
               </div>
-<!--              <el-button type="primary" class="TpmButtonBG" @click="detail(row)">查看</el-button>-->
             </div>
           </template>
         </el-table-column>
@@ -46,28 +54,73 @@
       </div>
     </el-dialog>
     <!--信息框-->
-    <el-dialog :title="noticePage.detailDialog.title" :visible.sync="noticePage.detailDialog.visible">
-      <el-form :model="noticePage.detailDialog.data" label-position="left" label-width="120px" style="width: 600px; margin-left:50px;">
-        <el-form-item prop="id" label="序号">
-          <span>{{ noticePage.detailDialog.data.id }}</span>
-        </el-form-item>
-        <el-form-item prop="theme" label="主题">
-          <span>{{ noticePage.detailDialog.data.theme }}</span>
-        </el-form-item>
-        <el-form-item prop="type" label="通知类型">
-          <span>{{ noticePage.detailDialog.data.type == 1 ? '定时通知' : '即时通知' }}</span>
-        </el-form-item>
-        <el-form-item prop="createBy" label="发送人">
-          <span>{{ noticePage.detailDialog.data.createBy }}</span>
-        </el-form-item>
-        <el-form-item prop="sendTime" label="发送时间">
-          <span>{{ noticePage.detailDialog.data.sendTime ? noticePage.detailDialog.data.sendTime.replace("T"," ") : ''  }}</span>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="noticePage.detailDialog.visible = false">
-          关闭
-        </el-button>
+    <el-dialog width="55%" title="查看清单" :visible="addVisible2" class="my-el-dialog" @close="cancleWriteEmail2">
+      <div>
+        <div class="SelectBarWrap">
+          <div class="SelectBar2" @keyup.enter="search">
+            <div class="Selectli ejectInput2">
+              <span class="SelectliTitle2">主题</span>
+              <span class='SelectliTitle3'>：</span>
+              <el-input
+                v-model="row.theme"
+                filterable
+                clearable
+                placeholder="请输入"
+                :disabled="true"
+              />
+            </div>
+            <div class="Selectli ejectInput2">
+              <span class="SelectliTitle2">接收角色</span>
+              <span class='SelectliTitle3'>：</span>
+              <el-select
+                v-model="row.sendUser"
+                multiple
+                clearable
+                :disabled="diaState"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.code"
+                  :label="item.name"
+                  :value="item.code"
+                >
+                </el-option>
+              </el-select>
+            </div>
+          </div>
+          <div class='Selectli2'>
+            <div class='way'>
+              <span>发送方式：</span>
+              <el-checkbox v-model="row.isZn" :disabled="diaState">站内</el-checkbox>
+              <el-checkbox v-model="row.isEmail" :disabled="diaState">邮件</el-checkbox>
+            </div>
+            <div class='state'>
+              <span>状态</span>
+              <span>：</span>
+              <el-radio v-model="row.state" :disabled="diaState" :label="1">有效</el-radio>
+              <el-radio v-model="row.state" :disabled="diaState" :label="0">无效</el-radio>
+            </div>
+          </div>
+        </div>
+        <div class="Selectli">
+          <div style="border: 1px solid #ccc; position: relative">
+            <Toolbar
+              style="border-bottom: 1px solid #ccc"
+              :editor="editor"
+              :default-config="toolbarConfig"
+              :mode="mode"
+            />
+            <Editor
+              v-model="row.content"
+              style="height: 500px; overflow-y: hidden"
+              :default-config="filterObj.editorConfig"
+              :mode="mode"
+              @onCreated="onCreated"
+            />
+            <div v-if="diaState" class="zhezhao"></div>
+          </div>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -77,6 +130,7 @@
 // fuse is a lightweight fuzzy-search module
 // make search results more in line with expectations
 import { Message } from 'element-ui'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import requestApi from '@/api/request-api'
 import { getDefaultPermissions, parseTime } from '@/utils'
 import permission from '@/directive/permission'
@@ -84,6 +138,7 @@ import auth from '@/utils/auth'
 import API from '@/api/masterData/masterData'
 export default {
   name: 'Notice',
+  components: { Editor, Toolbar },
   directives: { permission },
   filters: {
     // 状态样式
@@ -135,13 +190,156 @@ export default {
           },
         },
       },
+      options: [{
+        name: 1,
+        email: '东南',
+        userList: [
+          { name: 2, email: '上海' },
+          { name: 3, email: '上海' },
+          { name: 4, email: '上海' }
+        ]
+      }, {
+        name: 5,
+        email: '东北',
+        userList: [
+          { name: 6, email: '北京' },
+          { name: 7, email: '北京' },
+          { name: 9, email: '北京' }
+        ]
+      }],
       unreadNumberAll: 0,
       unreadNumber: {},
+      addVisible2: false, // 查看弹窗
+      diaState: false,
       filterObj: {
         title: '',
         source: '',
         state: '',
+        interfaceName: '',
+        invokeDateSting: '',
+        content: '',
+        sendUser: '',
+        State: '',
+        theme: '',
+        interior: true,
+        email: false,
+        editor: null,
+        editorConfig: {
+          placeholder: '请输入内容...',
+          MENU_CONF: {
+            // 配置上传图片
+            uploadImage: {
+              customUpload: this.uploadImg
+            }
+            // 继续其他菜单配置...
+          }
+        },
+        toUserList: [],
+        ccUserList: [],
+        toUser: [],
+        ccUser: []
       },
+      row: {
+        theme: '',
+        content: '',
+        sendUser: [],
+        isZn: '',
+        isEmail: '',
+        state: '',
+        id: '',
+      },
+      editor: null,
+      toolbarConfig: {
+        /* 工具栏配置 */
+        toolbarKeys: [
+          'headerSelect',
+          'blockquote',
+          '|',
+          'bold',
+          'underline',
+          'italic',
+          {
+            key: 'group-more-style',
+            title: '更多',
+            menuKeys: ['through',
+              'code',
+              'sup',
+              'sub',
+              'clearStyle']
+          },
+          'color',
+          'bgColor',
+          '|',
+          'fontSize',
+          'fontFamily',
+          'lineHeight',
+          '|',
+          'bulletedList',
+          'numberedList',
+          'todo',
+          {
+            iconSvg: '<svg viewBox="0 0 1024 1024"><path d="M768 793.6v102.4H51.2v-102.4h716.8z m204.8-230.4v102.4H51.2v-102.4h921.6z m-204.8-230.4v102.4H51.2v-102.4h716.8zM972.8 102.4v102.4H51.2V102.4h921.6z"></path></svg>',
+            key: 'group-justify',
+            title: '对齐',
+            menuKeys: ['justifyLeft',
+              'justifyRight',
+              'justifyCenter',
+              'justifyJustify']
+          },
+          {
+            iconSvg: '<svg viewBox="0 0 1024 1024"><path d="M0 64h1024v128H0z m384 192h640v128H384z m0 192h640v128H384z m0 192h640v128H384zM0 832h1024v128H0z m0-128V320l256 192z"></path></svg>',
+            key: 'group-indent',
+            title: '缩进',
+            menuKeys: ['indent',
+              'delIndent']
+          },
+          // 菜单组，包含多个菜单
+          // {
+          //   key: 'group-image', // 必填，要以 group 开头
+          //   title: '图片', // 必填
+          //   iconSvg: '',
+          //   menuKeys: ['uploadImage',
+          //     'insertImage',
+          //     'deleteImage',
+          //     'editImage',
+          //     'viewImageLink']
+          // },
+          // {
+          //   key: 'group-video',
+          //   title: '视频',
+          //   iconSvg: '',
+          //   menuKeys: ['insertVideo',
+          //     'uploadVideo']
+          // },
+          // {
+          //   key: 'group-link',
+          //   title: '链接',
+          //   menuKeys: ['insertLink', 'editLink', 'unLink', 'viewLink']
+          // },
+          '|',
+          'emotion',
+          // 'insertTable',
+          {
+            key: 'group-table',
+            title: '表格',
+            menuKeys: ['insertTable',
+              'deleteTable',
+              'insertTableRow',
+              'deleteTableRow',
+              'insertTableCol',
+              'deleteTableCol',
+              'tableHeader',
+              'tableFullWidth']
+          },
+          'codeBlock',
+          'divider',
+          '|',
+          'undo',
+          'redo',
+          'fullScreen'
+        ]
+      },
+      mode: 'default', // or 'simple'
       checkarr:[], //选中的数组
     }
   },
@@ -191,6 +389,9 @@ export default {
         this.total = response.data.total
       })
     },
+    onCreated(editor) {
+      this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
+    },
     click() {
       this.noticePage.dialogVisible = true
       // this.getUnReadNum()
@@ -217,6 +418,25 @@ export default {
     setOnopenMessage() {
       console.log('WebSocket连接成功    状态码：' + this.websocket.readyState)
       this.getUnReadNum()
+    },
+    // 查看邮件弹窗展开
+    writeEmail2(i, row, bool) {
+      this.diaState = bool
+      const { theme, content, sendUser, isZn, isEmail, state, id } = row
+      this.row = {
+        theme,
+        content,
+        sendUser: sendUser ? sendUser.split(',') : [],
+        isZn: isZn ? true : false,
+        isEmail: isEmail ? true : false,
+        state,
+        id,
+      }
+      this.addVisible2 = true
+    },
+    // 取消查看
+    cancleWriteEmail2() {
+      this.addVisible2 = false
     },
     setOnmessageMessage(event) {
       // 根据服务器推送的消息做自己的业务处理
@@ -412,11 +632,16 @@ export default {
       this.checkarr=val
       console.log(this.checkarr);
     },
-    //查看详情
+    // 查看详情
     detail(res) {
       this.getRowData(res)
     },
-  },
+    beforeDestroy() {
+      const editor = this.editor
+      if (editor == null) return
+      editor.destroy() // 组件销毁时，及时销毁编辑器
+    }
+  }
 }
 </script>
 <style>
@@ -445,6 +670,50 @@ export default {
     width: 85px;
     text-align: right;
   }
+  .SelectliTitle2 {
+    display: inline-block;
+    width: 58px;
+    text-align: justify;
+    text-justify:distribute-all-lines;
+    text-align-last: justify;
+    /*width: 70px;*/
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #4d4d4d;
+    /*width: 85px;*/
+    /*text-align: left;*/
+  }
+  .SelectliTitle3 {
+    width: 15px;
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #4d4d4d;
+    margin-right: 22px;
+    white-space: nowrap;
+    /*width: 85px;*/
+    /*text-align: left;*/
+  }
+}
+.Selectli2 {
+  width: 23%;
+  display: inline-block;
+  .way {
+    text-align: right;
+    line-height: 50px;
+  }
+  .state {
+    text-align: right;
+    line-height: 50px;
+    span:first-child {
+      display: inline-block;
+      width: 56px;
+      text-align: justify;
+      text-justify:distribute-all-lines;
+      text-align-last: justify;
+    }
+  }
 }
 .flex .haveText_editor {
   cursor: pointer;
@@ -464,6 +733,76 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.Selectli {
+  margin-right: 20px;
+  margin-bottom: 10px;
+  display: inline-block;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  align-items: center;
+  .el-input {
+    .el-input__inner {
+      overflow:hidden !important;
+      white-space:nowrap !important;
+      text-overflow:ellipsis !important;
+    }
+  }
+  .SelectliTitle {
+    /*width: 70px;*/
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #4d4d4d;
+    margin-right: 10px;
+    white-space: nowrap;
+    width: 85px;
+    text-align: right;
+  }
+  .SelectliTitle2 {
+    display: inline-block;
+    width: 58px;
+    text-align: justify;
+    text-justify:distribute-all-lines;
+    text-align-last: justify;
+    /*width: 70px;*/
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #4d4d4d;
+    /*width: 85px;*/
+    /*text-align: left;*/
+  }
+  .SelectliTitle3 {
+    width: 15px;
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #4d4d4d;
+    margin-right: 22px;
+    white-space: nowrap;
+    /*width: 85px;*/
+    /*text-align: left;*/
+  }
+}
+.Selectli2 {
+  width: 23%;
+  display: inline-block;
+  .way {
+    text-align: right;
+    line-height: 50px;
+  }
+  .state {
+    text-align: right;
+    line-height: 50px;
+    span:first-child {
+      display: inline-block;
+      width: 56px;
+      text-align: justify;
+      text-justify:distribute-all-lines;
+      text-align-last: justify;
+    }
+  }
+}
 .flex {
   display: flex;
   justify-content: center;
@@ -534,3 +873,4 @@ export default {
   color: #fff;
 }
 </style>
+<style src="@wangeditor/editor/dist/css/style.css"></style>
