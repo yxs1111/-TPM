@@ -518,22 +518,42 @@ export default {
     },
     // 导出
     downExcel() {
-      if (this.tableData.length) {
-        API.exportV1({
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          regionName: this.filterObj.regionName,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success('导出成功!')
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          API.exportV1({
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       } else {
-        this.$message.info('数据为空')
+        if (this.tableData.length) {
+          API.exportVOne({
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       }
     },
     // 每页显示页面数变更

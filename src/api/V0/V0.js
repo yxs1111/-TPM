@@ -99,6 +99,13 @@ export default {
       params
     )
   },
+  //获取Free Goods数据 investCpVOneEFmc/createVOneByCpt
+  getFMC(params) {
+    return requestApi.request_get(
+      '/cityplan/investCpVOneEFmc/createVOneByCpt',
+      params
+    )
+  },
   //excel 导出
   exportExcel(params) {
     //二进制数据流转blob

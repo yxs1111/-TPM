@@ -24,4 +24,12 @@ export default {
       responseType: 'blob'
     })
   },
+  exportVOne(params) {
+    return request({
+      url: '/cityplan/investCpVOneEFmc/exportVOne',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
 }

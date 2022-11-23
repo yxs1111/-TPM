@@ -7,16 +7,19 @@
       <div class="notice-box-txt">更多</div>
     </div>
     <el-dialog :visible.sync="noticePage.dialogVisible" title="消息" width="70%" height="40%" class="my-el-dialog">
-<!--      <div class="flex_start">-->
-<!--        <el-button type="primary" class="TpmButtonBG" @click="ReadAll">全部已读</el-button>-->
-<!--        <el-button type="primary" class="TpmButtonBG" @click="ReadMuti">标记已读</el-button>-->
-<!--      </div>-->
-
-      <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" element-loading-text="正在查询" border fit stripe height="400"
+      <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">主题:</span>
+          <el-input v-model="filterObj.theme" class='themeInput' filterable clearable placeholder="请输入">
+            <!--            <el-option v-for="item,index in InterfaceList" :key="index" :label="item.interfaceName" :value="item.interfaceName" />-->
+          </el-input>
+        </div>
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+      </div>
+      <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" border fit stripe height="400"
         highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
-<!--        <el-table-column type="selection" align="center" />-->
-        <el-table-column align="center" prop="id" label="序号" />
-        <el-table-column align="center" prop="createDate" label="操作">
+        <el-table-column align="center" width='70' prop="id" label="序号" />
+        <el-table-column align="center" width='80' prop="createDate" label="操作">
           <template slot-scope="{ row }">
             <div class="flex">
 <!--              <el-button type="primary" class="TpmButtonBG" @click="Read(row.id)">标记已读</el-button>-->
@@ -28,7 +31,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="theme" label="主题" />
+        <el-table-column align="center" width='420' prop="theme" label="主题" />
         <el-table-column v-slot="{row}" align="center" prop="type" label="通知类型">
           {{ row.type == 1 ? '定时通知' : '即时通知' }}
         </el-table-column>
@@ -78,6 +81,7 @@ import requestApi from '@/api/request-api'
 import { getDefaultPermissions, parseTime } from '@/utils'
 import permission from '@/directive/permission'
 import auth from '@/utils/auth'
+import API from '@/api/masterData/masterData'
 export default {
   name: 'Notice',
   directives: { permission },
@@ -101,6 +105,7 @@ export default {
   },
   data() {
     return {
+      permissions: getDefaultPermissions(),
       noticePage: {
         searchLoading: false,
         noticePageProps: {
@@ -116,7 +121,6 @@ export default {
         ],
         dialogVisible: false,
         category: '1',
-        permissions: getDefaultPermissions(),
         detailDialog: {
           title: '详情',
           visible: false,
@@ -167,7 +171,26 @@ export default {
     // this.onbeforeunload()
   },
   methods: {
-    handleClick() {},
+    search() {
+      this.pageNum = 1
+      this.getTableData()
+    },
+    getTableData() {
+      this.tableData = []
+      API.getNotification({
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
+        content: this.filterObj.content,
+        theme: this.filterObj.theme,
+        sendUser: this.filterObj.sendUser,
+        State: this.filterObj.State
+      }).then((response) => {
+        this.noticePage.noticePageProps.record = response.data.records
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+      })
+    },
     click() {
       this.noticePage.dialogVisible = true
       // this.getUnReadNum()
@@ -223,13 +246,14 @@ export default {
     },
     // 查询方法
     fetchData(newTitle) {
+      console.log(localStorage.usernameLocal, '本地账户，当前账户')
       this.noticePage.searchLoading = true
       requestApi
         .request_get('/mdm/mdEmailRecordRule/getPage', {
           title: this.filterObj.title,
           state: this.filterObj.state,
           category: this.noticePage.category,
-          receiverCode: 'admin',
+          receiverCode: localStorage.usernameLocal,
           pageSize: this.noticePage.noticePageProps.pageSize,
           pageNum: this.noticePage.noticePageProps.pageNum,
         })
@@ -396,6 +420,32 @@ export default {
 }
 </script>
 <style>
+.Selectli {
+  margin-right: 20px;
+  margin-bottom: 10px;
+  display: inline-block;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  align-items: center;
+  .el-input {
+    .el-input__inner {
+      overflow:hidden !important;
+      white-space:nowrap !important;
+      text-overflow:ellipsis !important;
+    }
+  }
+  .SelectliTitle {
+    /*width: 70px;*/
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #4d4d4d;
+    margin-right: 10px;
+    white-space: nowrap;
+    width: 85px;
+    text-align: right;
+  }
+}
 .flex .haveText_editor {
   cursor: pointer;
   display: flex;
