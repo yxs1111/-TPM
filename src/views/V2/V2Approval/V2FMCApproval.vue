@@ -1154,6 +1154,7 @@ export default {
             } else {
               this.$message.success(this.messageMap.importSuccess)
               this.ImportData = response.data
+              this.saveBtn = this.ImportData.length ? true : false
               let isError = this.ImportData.findIndex((item) => {
                 return item.systemJudgment == 'Error'
               })
@@ -1224,66 +1225,130 @@ export default {
       }
     },
     approve(value) {
-      if (this.tableData.length) {
-        if (value) {
-          this.$confirm('此操作将审批通过, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              API.approve({
-                mainId: this.mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message({
-                    type: 'success',
-                    message: '审批成功!',
-                  })
-                  this.getTableData()
-                } else {
-                  this.$message({
-                    type: 'info',
-                    message: '审批失败!',
-                  })
-                }
-              })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          if (value) {
+            this.$confirm('此操作将审批通过, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
             })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
+              .then(() => {
+                API.approve({
+                  mainId: this.mainId, // 主表id
+                  opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message({
+                      type: 'success',
+                      message: '审批成功!',
+                    })
+                    this.getTableData()
+                  } else {
+                    this.$message({
+                      type: 'info',
+                      message: '审批失败!',
+                    })
+                  }
+                })
               })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          } else {
+            this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
             })
+              .then(() => {
+                API.approve({
+                  mainId: this.mainId, // 主表id
+                  opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message.success('驳回成功!')
+                    this.getTableData()
+                  } else {
+                    this.$message.info('驳回失败!')
+                  }
+                })
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          }
         } else {
-          this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              API.approve({
-                mainId: this.mainId, // 主表id
-                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('驳回成功!')
-                  this.getTableData()
-                } else {
-                  this.$message.info('驳回失败!')
-                }
-              })
-            })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
-              })
-            })
+          this.$message.warning('数据不能为空')
         }
       } else {
-        this.$message.warning('数据不能为空')
+        if (this.tableData.length) {
+          if (value) {
+            this.$confirm('此操作将审批通过, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(() => {
+                API.approveEC({
+                  mainId: this.mainId, // 主表id
+                  opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message({
+                      type: 'success',
+                      message: '审批成功!',
+                    })
+                    this.getTableData()
+                  } else {
+                    this.$message({
+                      type: 'info',
+                      message: '审批失败!',
+                    })
+                  }
+                })
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          } else {
+            this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(() => {
+                API.approveEC({
+                  mainId: this.mainId, // 主表id
+                  opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message.success('驳回成功!')
+                    this.getTableData()
+                  } else {
+                    this.$message.info('驳回失败!')
+                  }
+                })
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          }
+        } else {
+          this.$message.warning('数据不能为空')
+        }
       }
     },
     // 每页显示页面数变更
