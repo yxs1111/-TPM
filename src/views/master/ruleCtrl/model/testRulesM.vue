@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-19 16:03:00
+ * @LastEditTime: 2022-11-23 09:48:07
 -->
 <template>
   <div class='tabViewsWrap'>
@@ -153,6 +153,16 @@ export default {
               name: '新客-FG win2',
               path: '/master/ruleCtrl/model/splitRulesFreeGoods-Win2',
               minePackageName: 'Free Goods-Win2',
+            },
+            {
+              name: 'DM',
+              path: '/master/ruleCtrl/model/splitRulesDM',
+              minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/master/ruleCtrl/model/splitRulesTransport',
+              minePackageName: 'Transport',
             },
           ]
           let TabList=[]
