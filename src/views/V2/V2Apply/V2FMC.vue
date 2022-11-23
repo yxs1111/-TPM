@@ -595,7 +595,7 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
+          <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -616,7 +616,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />
             <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />
@@ -657,39 +657,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2DefaultEstimatePrice" label="V2预估单价-默认(RMB/人)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimatePrice" label="V2预估单价(RMB/人)">
               <template v-slot:header>
-                <div>V2预估单价-默认(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ formatNum(scope.row.v2DefaultEstimatePrice) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="v2DefaultEstimatePeopleNum" label="V2预估人数-默认(人)">
-              <template v-slot:header>
-                <div>V2预估人数-默认(人)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.v2DefaultEstimatePeopleNum }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
-              <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ formatNum(scope.row.v2DefaultEstimateCost) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="240" align="right" prop="v2AdjustEstimatePrice" label="V2预估单价-调整后(RMB/人)">
-              <template v-slot:header>
-                <div>V2预估单价-调整后(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V2预估单价(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -697,9 +667,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2AdjustEstimatePeopleNum" label="V2预估人数-调整后(人)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimatePeopleNum" label="V2预估人数(人)">
               <template v-slot:header>
-                <div>V2预估人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V2预估人数(人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -707,13 +677,73 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V2预估费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ formatNum(scope.row.v2AdjustEstimateCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityPrice" label="V3实际单价-默认(RMB/人)">
+              <template v-slot:header>
+                <div>V3实际单价-默认(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3DefaultRealityPrice) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityPeopleNum" label="V3实际人数-默认(人)">
+              <template v-slot:header>
+                <div>V3实际人数-默认(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.v3DefaultRealityPeopleNum }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityCost" label="V3实际费用-默认(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3DefaultRealityCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityPrice" label="V3实际单价-调整后(RMB/人)">
+              <template v-slot:header>
+                <div>V3实际单价-调整后(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3AdjustRealityPrice) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityPeopleNum" label="V3实际人数-调整后(人)">
+              <template v-slot:header>
+                <div>V3实际人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.v3AdjustRealityPeopleNum }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityCost" label="V3实际费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3AdjustRealityCost) }}
                 </div>
               </template>
             </el-table-column>
@@ -739,6 +769,92 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
+              <template v-slot:header>
+                <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.costDifference) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注" />
+            <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
+            <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+          </el-table>
+          <el-table v-if='this.filterObj.channelCode == "EC"' border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
+              background: '#fff',
+              color: '#333',
+              fontSize: '16px',
+              textAlign: 'center',
+              fontWeight: 400,
+              fontFamily: 'Source Han Sans CN'
+            }" :row-class-name="tableRowClassName" stripe>
+            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                  <div slot="content" v-html="getTip(row)" />
+                  <div class="statusWrap">
+                    <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
+            <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+            <el-table-column width="120" align="center" prop="costType" label="费用类型" />
+            <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
+            <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
+            <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+            <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
+            <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+            <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
+              <template v-slot:header>
+                <div>V1计划费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v1PlanCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用(RMB)">
+              <template v-slot:header>
+                <div>V2预估费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v2AdjustEstimateCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityCost" label="V3实际费用-默认(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3DefaultRealityCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityCost" label="V3实际费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3AdjustRealityCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
+            <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
             <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
                 <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
