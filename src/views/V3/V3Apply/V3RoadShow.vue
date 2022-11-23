@@ -1325,6 +1325,7 @@ export default {
     getService1() {
       if (this.filterObj.supplierCode !== '') {
         this.showSelect2 = true
+        this.filterObj.distributorCode = ''
       } else {
         this.showSelect2 = false
       }
@@ -1332,7 +1333,7 @@ export default {
     getService2() {
       if (this.filterObj.distributorCode !== '') {
         this.showSelect1 = true
-        this.filterObj.supplierCode = this.filterObj.distributorCode
+        this.filterObj.supplierCode = ''
       } else {
         this.showSelect1 = false
       }
