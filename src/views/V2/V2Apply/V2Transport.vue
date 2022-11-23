@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-23 15:33:54
+ * @LastEditTime: 2022-11-23 15:41:17
 -->
 <template>
   <div class="MainContent">
@@ -236,6 +236,9 @@
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
+              <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
               <span class="judgmentText">{{ row.systemJudgment }}</span>
             </div>
           </el-tooltip>
