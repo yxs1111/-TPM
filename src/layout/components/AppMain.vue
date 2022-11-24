@@ -6,9 +6,9 @@
 <template>
   <section class="app-main">
     <!--      左下角问号-->
-    <el-popover placement="left" width="500" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
+    <el-popover class='el-popoverTwo' placement="left" width="500" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
       <div class="documentation">用户文档中心</div>
-      <el-table :data="gridData">
+      <el-table :data="gridData" max-height='380'>
         <el-table-column width="50" property="" label="">
           <template slot-scope="scope">
             <img src='../../assets/images/EXCEL.png' v-if='scope.row.format == "excel"'>
