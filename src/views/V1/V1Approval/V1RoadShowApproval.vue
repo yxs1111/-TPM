@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:12:37
+ * @LastEditTime: 2022-11-24 14:37:41
 -->
 <template>
   <div class="MainContent">
@@ -35,7 +35,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select>
         </div>
         <!-- <div class="Selectli">
