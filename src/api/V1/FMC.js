@@ -16,6 +16,10 @@ export default {
   getPage(params) {
     return requestApi.request_get('/cityplan/investFmcVOne/getVOnePage', params)
   },
+  //申请 分页查询
+  getPageEC(params) {
+    return requestApi.request_get('/cityplan/investCpVOneEFmc/getVOnePage', params)
+  },
   exportV1(params) {
     return request({
       url: '/cityplan/investFmcVOne/exportV1',

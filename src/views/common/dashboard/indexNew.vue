@@ -276,7 +276,7 @@ export default {
         html: false,
       },
       row: {
-        height: 36,
+        height: 34,
       },
       times: {
         timeScale: 60 * 1000,
@@ -1312,12 +1312,12 @@ export default {
 }
 .title {
   padding-bottom: 17px !important;
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: bold !important;
   margin-left: 5px !important;
 }
 .gantt-elastic__calendar-row-text--month {
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 600;
 }
 .gantt-elastic__calendar-row-rect--month {
@@ -1436,7 +1436,7 @@ export default {
   background-color: transparent;
 }
 .gantt-elastic__task-list-item-value {
-  font-size: 16px !important;
+  font-size: 14px !important;
   text-align: center !important;
 }
 .gantt-elastic__chart-scroll-container--horizontal {
@@ -1480,14 +1480,14 @@ export default {
   background-color: rgb(198, 235, 254);
   padding: 6px 16px;
   border-radius: 6px;
-  font-size: 20px;
+  font-size: 16px;
 }
 ::-webkit-scrollbar {
   height: 6px !important;
 }
 .gantt-elastic__chart-row-task {
   text {
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
 }
 .CityPlan {
@@ -1526,7 +1526,7 @@ export default {
     height: 30px;
     padding-left: 200px;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: #333333;
     display: flex;
@@ -1742,7 +1742,7 @@ export default {
         }
         .PointTitle {
           width: 153px;
-          font-size: 18px;
+          font-size: 14px;
           font-family: Source Han Sans CN;
           font-weight: bold;
           color: #000;
@@ -1762,6 +1762,10 @@ export default {
           width: 32.8%;
           display: flex;
           align-items: center;
+          .lineDark {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+          }
           img {
             width: 28px;
             height: 28px;
@@ -1771,6 +1775,10 @@ export default {
           width: 34%;
           display: flex;
           align-items: center;
+          .lineDark {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+          }
           img {
             width: 28px;
             height: 28px;
@@ -1780,6 +1788,12 @@ export default {
           width: 0%;
           display: flex;
           align-items: center;
+          .noStart {
+            margin-left: -20px !important;
+          }
+          .passIcon {
+            margin-left: -20px !important;
+          }
           .currentPoint {
             margin-left: -20px;
           }
@@ -1798,8 +1812,6 @@ export default {
           margin: 0;
         }
         .lineDark {
-          border-top-right-radius: 10px;
-          border-bottom-right-radius: 10px;
           width: calc(100% - 0px);
           height: 26px;
           background-color: #c6dcee;
@@ -1843,7 +1855,6 @@ export default {
           overflow: hidden;
         }
         .noStart {
-          margin-left: -20px;
           position: absolute;
           width: 27px;
           height: 27px;
@@ -2111,7 +2122,7 @@ export default {
   .BarTitleWrap {
     //padding-left: 10px;
     font-family: SourceHanSansCN-Medium;
-    font-size: 18px;
+    font-size: 17px;
     color: #333333;
     font-weight: 600;
     display: flex;
@@ -2135,7 +2146,7 @@ export default {
         height: 30px;
         line-height: 30px;
         text-align: center;
-        font-size: 15px;
+        font-size: 14px;
         cursor: pointer;
         font-family: SourceHanSansCN-Medium;
       }
@@ -2154,7 +2165,7 @@ export default {
 }
 .gantt-elastic {
   padding-left: 30px !important;
-  padding-top: 33px !important;
+  padding-top: 20px !important;
 }
 .documentation {
   text-align: center;

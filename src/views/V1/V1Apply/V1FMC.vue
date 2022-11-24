@@ -408,30 +408,58 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableData = []
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
+      if (this.filterObj.channelCode == 'NKA') {
+        this.tableData = []
+        if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+          if (this.filterObj.month == '') {
+            this.$message.info(messageObj.requireMonth)
+            return
+          }
+          if (this.filterObj.channelCode == '') {
+            this.$message.info(messageObj.requireChannel)
+          }
+        } else {
+          API.getPage({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
         }
       } else {
-        API.getPage({
-          pageNum: this.pageNum, // 当前页
-          pageSize: this.pageSize, // 每页条数
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
+        this.tableData = []
+        if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+          if (this.filterObj.month == '') {
+            this.$message.info(messageObj.requireMonth)
+            return
+          }
+          if (this.filterObj.channelCode == '') {
+            this.$message.info(messageObj.requireChannel)
+          }
+        } else {
+          API.getPageEC({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+        }
       }
     },
     getAllMonth() {

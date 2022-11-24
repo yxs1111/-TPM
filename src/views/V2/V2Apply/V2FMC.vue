@@ -804,8 +804,8 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
+            <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column align="center" fixed width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
@@ -815,7 +815,7 @@
             <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
             <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle">KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -823,9 +823,19 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用(RMB)">
+            <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
               <template v-slot:header>
-                <div>V2预估费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v2DefaultEstimateCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+供应商</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -835,9 +845,9 @@
             </el-table-column>
             <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
             <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
-            <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
+            <el-table-column width="220" align="right" prop="costDifference" label="费用差值">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>费用差值(RMB)<br><span class="subTitle">KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -1290,9 +1300,10 @@ export default {
             supplierName: this.filterObj.supplierName,
             regionName: this.filterObj.regionName,
           }).then((res) => {
+            const timestamp = Date.parse(new Date())
             downloadFile(
               res,
-              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
+              'V2_FMC异常信息 -' + timestamp + '.xlsx'
             ) //自定义Excel文件名
             this.$message.success('导出成功!')
           })
