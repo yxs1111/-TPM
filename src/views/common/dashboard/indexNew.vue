@@ -188,7 +188,7 @@
         </div>
       </div>
       <!--      左下角问号-->
-      <el-popover placement="left" width="500" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
+      <el-popover class='el-popoverTwo' placement="left" width="500" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
         <div class="documentation">用户文档中心</div>
         <el-table :data="gridData">
           <el-table-column width="50" property="" label="">
@@ -276,7 +276,7 @@ export default {
         html: false,
       },
       row: {
-        height: 36,
+        height: 34,
       },
       times: {
         timeScale: 60 * 1000,
@@ -1279,6 +1279,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*滚动条的宽度*/
+::-webkit-scrollbar {
+  width: 0px;
+  height: 2px;
+}
+/* //滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: #d1d1d1;
+  border-radius: 3px;
+}
 .hover_con {
   position: fixed;
   max-width: 220px;
@@ -1305,6 +1315,10 @@ export default {
 //.main-container {
 //  overflow-y: auto;
 //}
+.el-popoverTwo {
+  height: 410px !important;
+  overflow: auto !important;
+}
 .Selectli {
   .el-input {
     //margin-left: 20px;
@@ -1330,12 +1344,12 @@ export default {
 }
 .title {
   padding-bottom: 17px !important;
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: bold !important;
   margin-left: 5px !important;
 }
 .gantt-elastic__calendar-row-text--month {
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 600;
 }
 .gantt-elastic__calendar-row-rect--month {
@@ -1406,16 +1420,6 @@ export default {
 .gantt-elastic__chart-scroll-container--vertical {
   display: none;
 }
-/*滚动条的宽度*/
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-/* //滚动条的滑块 */
-::-webkit-scrollbar-thumb {
-  background-color: #a1a3a9;
-  border-radius: 3px;
-}
 .gantt-elastic__task-list-items {
   height: 177px !important;
   padding-top: 20px !important;
@@ -1454,7 +1458,7 @@ export default {
   background-color: transparent;
 }
 .gantt-elastic__task-list-item-value {
-  font-size: 16px !important;
+  font-size: 14px !important;
   text-align: center !important;
 }
 .gantt-elastic__chart-scroll-container--horizontal {
@@ -1498,14 +1502,11 @@ export default {
   background-color: rgb(198, 235, 254);
   padding: 6px 16px;
   border-radius: 6px;
-  font-size: 20px;
-}
-::-webkit-scrollbar {
-  height: 6px !important;
+  font-size: 16px;
 }
 .gantt-elastic__chart-row-task {
   text {
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
 }
 .CityPlan {
@@ -1544,7 +1545,7 @@ export default {
     height: 30px;
     padding-left: 200px;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     color: #333333;
     display: flex;
@@ -1742,7 +1743,7 @@ export default {
             align-items: center;
             justify-content: flex-end;
             padding-left: 18px;
-            padding-right: 42px;
+            padding-right: 40px;
             .V2 {
               .line {
                 border-top-left-radius: 0px !important;
@@ -1760,7 +1761,7 @@ export default {
         }
         .PointTitle {
           width: 153px;
-          font-size: 18px;
+          font-size: 14px;
           font-family: Source Han Sans CN;
           font-weight: bold;
           color: #000;
@@ -1777,18 +1778,26 @@ export default {
           }
         }
         .V1 {
-          width: 32.8%;
+          width: 32.5%;
           display: flex;
           align-items: center;
+          .lineDark {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+          }
           img {
             width: 28px;
             height: 28px;
           }
         }
         .V2 {
-          width: 34%;
+          width: 34.2%;
           display: flex;
           align-items: center;
+          .lineDark {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+          }
           img {
             width: 28px;
             height: 28px;
@@ -1798,6 +1807,12 @@ export default {
           width: 0%;
           display: flex;
           align-items: center;
+          .noStart {
+            margin-left: -20px !important;
+          }
+          .passIcon {
+            margin-left: -20px !important;
+          }
           .currentPoint {
             margin-left: -20px;
           }
@@ -1816,8 +1831,6 @@ export default {
           margin: 0;
         }
         .lineDark {
-          border-top-right-radius: 10px;
-          border-bottom-right-radius: 10px;
           width: calc(100% - 0px);
           height: 26px;
           background-color: #c6dcee;
@@ -1861,7 +1874,6 @@ export default {
           overflow: hidden;
         }
         .noStart {
-          margin-left: -20px;
           position: absolute;
           width: 27px;
           height: 27px;
@@ -1971,10 +1983,6 @@ export default {
       background: rgba(0, 0, 0, 0.025);
     }
   }
-}
-.el-popover {
-  height: 410px;
-  overflow: auto;
 }
 .BottomBar {
   width: 100%;
@@ -2129,7 +2137,7 @@ export default {
   .BarTitleWrap {
     //padding-left: 10px;
     font-family: SourceHanSansCN-Medium;
-    font-size: 18px;
+    font-size: 17px;
     color: #333333;
     font-weight: 600;
     display: flex;
@@ -2153,7 +2161,7 @@ export default {
         height: 30px;
         line-height: 30px;
         text-align: center;
-        font-size: 15px;
+        font-size: 14px;
         cursor: pointer;
         font-family: SourceHanSansCN-Medium;
       }
@@ -2172,7 +2180,7 @@ export default {
 }
 .gantt-elastic {
   padding-left: 30px !important;
-  padding-top: 33px !important;
+  padding-top: 20px !important;
 }
 .documentation {
   text-align: center;
@@ -2183,16 +2191,6 @@ export default {
 .dashWrap {
   height: calc(100% - 33px);
   overflow-y: auto;
-}
-/*滚动条的宽度*/
-::-webkit-scrollbar {
-  width: 0px;
-  height: 2px;
-}
-/* //滚动条的滑块 */
-::-webkit-scrollbar-thumb {
-  background-color: #d1d1d1;
-  border-radius: 3px;
 }
 .needHelp {
   box-shadow: 0px 0px 13px 0px rgba(127, 127, 127, 0.1);
@@ -2250,5 +2248,23 @@ export default {
   .submit_icon {
     font-size: 26px;
   }
+}
+/*滚动条的宽度*/
+::-webkit-scrollbar {
+   width: 0px !important;
+   height: 2px;
+}
+/* //滚动条的滑块 */
+::-webkit-scrollbar-thumb {
+   background-color: #d1d1d1;
+   border-radius: 3px;
+}
+.gantt-elastic ::-webkit-scrollbar {
+   width: 0px !important;
+   height: 6px!important;
+}
+.gantt-elastic ::-webkit-scrollbar-thumb {
+   background-color: #d1d1d1;
+   border-radius: 3px;
 }
 </style>

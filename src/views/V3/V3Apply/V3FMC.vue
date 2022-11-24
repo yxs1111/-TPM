@@ -1055,6 +1055,7 @@ export default {
             supplierName: this.filterObj.supplierName,
             regionName: this.filterObj.regionName,
           }).then((response) => {
+            this.isGainLe = 1
             this.tableData = response.data.records
             // this.isGainLe = this.tableData[0].isGet
             this.pageNum = response.data.pageNum
