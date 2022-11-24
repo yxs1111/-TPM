@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-21 13:54:44
+ * @LastEditTime: 2022-11-24 15:16:22
 -->
 <template>
   <div class="MainContent">
@@ -148,7 +148,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{scope.row.distributorName?scope.row.distributorName:scope.row.supplierName }}
+            {{scope.row.disOrSupName }}
           </div>
         </template>
         <!-- 数据未对接 -->
@@ -437,7 +437,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{scope.row.distributorName?scope.row.distributorName:scope.row.supplierName }}
+                  {{scope.row.disOrSupName }}
                 </div>
               </template>
               <!-- 数据未对接 -->
