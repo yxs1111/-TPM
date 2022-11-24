@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-11-21 16:32:00
+ * @LastEditTime: 2022-11-24 13:05:11
 -->
 <template>
   <div class='indexNew'>
@@ -428,7 +428,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
@@ -444,7 +444,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
@@ -470,7 +470,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
@@ -486,7 +486,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
@@ -504,6 +504,7 @@ export default {
       popUpShow: false,
       positionStyle: { top: '0px', left: '0px' },
       screenWidth: 0,
+      tempScreen: 0, //中间，比较
     }
   },
   watch: {
@@ -528,31 +529,11 @@ export default {
         }
       }
     },
-    screenWidth() {
-      const width = document.body.clientWidth
-      console.log("screenWidth")
-      if (this.$store.state.app.sidebar.opened) {
-        //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
-        if (width <= 1366) {
-          this.options.times.timeZoom = 22.9
-        } else if (width <= 1440) {
-          this.options.times.timeZoom = 22.9
-        } else if (width <= 1920) {
-          this.options.times.timeZoom = 22.2
-        }
-      } else {
-        if (width <= 1366) {
-          this.options.times.timeZoom = 22.6
-        } else if (width <= 1440) {
-          this.options.times.timeZoom = 22.5
-        } else if (width <= 1920) {
-          this.options.times.timeZoom = 21.9
-        }
-      }
-    },
   },
   created() {},
   mounted() {
+    //浏览器放大缩小 监听
+    window.addEventListener('resize',this.changeScreen)
     const width = document.body.clientWidth
     if (this.$store.state.app.sidebar.opened) {
       //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
@@ -612,6 +593,43 @@ export default {
           item.format = getFileType(item.fileName)
         })
       })
+    },
+    changeScreen() {
+      const width = document.body.clientWidth
+      //是否放大
+      let isAmplification=this.tempScreen<width
+      console.log(isAmplification)
+      if (this.$store.state.app.sidebar.opened) {
+        //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
+        if (width <= 1366) {
+          this.options.times.timeZoom = 22.9
+        } else if (width <= 1440) {
+          this.options.times.timeZoom = 22.9
+        } else if (width <= 1920) {
+          this.options.times.timeZoom = 22.2
+        }else {
+          if(!isAmplification) {
+            this.options.times.timeZoom+=0.8
+          } else {
+            this.options.times.timeZoom-=0.8
+          }
+        }
+      } else {
+        if (width <= 1366) {
+          this.options.times.timeZoom = 22.6
+        } else if (width <= 1440) {
+          this.options.times.timeZoom = 22.5
+        } else if (width <= 1920) {
+          this.options.times.timeZoom = 21.9
+        } else {
+          if(!isAmplification) {
+            this.options.times.timeZoom+=0.8
+          } else {
+            this.options.times.timeZoom-=0.8
+          }
+        }
+      }
+      this.tempScreen = width
     },
     getActivitycycle() {
       this.tasks = []
@@ -711,7 +729,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
@@ -727,7 +745,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
@@ -743,7 +761,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
@@ -759,7 +777,7 @@ export default {
               style: {
                 base: {
                   fill: '#C6EBFE',
-                  stroke: '#C0E2D9',
+                  stroke: '#E7E7E7',
                   textColor: '#4795D4',
                 },
               },
