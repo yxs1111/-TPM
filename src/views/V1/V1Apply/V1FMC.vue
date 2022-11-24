@@ -49,6 +49,7 @@
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
+        <el-button v-show='this.filterObj.channelCode == "EC"' type="primary" class="TpmButtonBG" @click="clear">清除数据</el-button>
       </div>
     </div>
     <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -406,6 +407,20 @@ export default {
     this.getSupplierList()
   },
   methods: {
+    // 清除数据
+    clear() {
+      this.pageNum = 1
+      this.clearData()
+    },
+    // 清除数据
+    clearData() {
+      API.clearData({
+        yearAndMonth: this.filterObj.month,
+        channelName: this.filterObj.channelCode,
+      }).then(() => {
+        alert('清除数据成功')
+      })
+    },
     // 获取表格数据
     getTableData() {
       if (this.filterObj.channelCode == 'NKA') {
