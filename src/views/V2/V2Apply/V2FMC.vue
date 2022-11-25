@@ -1300,10 +1300,9 @@ export default {
             supplierName: this.filterObj.supplierName,
             regionName: this.filterObj.regionName,
           }).then((res) => {
-            const timestamp = Date.parse(new Date())
             downloadFile(
               res,
-              'V2_FMC异常信息 -' + timestamp + '.xlsx'
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
             ) //自定义Excel文件名
             this.$message.success('导出成功!')
           })
@@ -1319,9 +1318,10 @@ export default {
             supplierName: this.filterObj.supplierName,
             regionName: this.filterObj.regionName,
           }).then((res) => {
+            const timestamp = Date.parse(new Date())
             downloadFile(
               res,
-              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
+              'V2_FMC异常信息 -' + timestamp + '.xlsx'
             ) //自定义Excel文件名
             this.$message.success('导出成功!')
           })
