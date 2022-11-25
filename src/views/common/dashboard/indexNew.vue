@@ -241,7 +241,7 @@ export default {
         html: false,
       },
       row: {
-        height: 34,
+        height: 26,
       },
       times: {
         timeScale: 60 * 1000,
@@ -1305,6 +1305,7 @@ export default {
   overflow-x: hidden;
 }
 .index_container {
+  height: 60%;
   border-radius: 25px;
   background-color: #fff;
   padding-bottom: 20px;
@@ -1482,7 +1483,7 @@ export default {
 .CityPlan {
   margin: 20px 20px 0px 20px;
   width: 97%;
-  height: 310px;
+  height: calc(100% - 280px);
   background-color: #f0fbff;
   border-radius: 20px;
   box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
@@ -1956,7 +1957,7 @@ export default {
 }
 .BottomBar {
   width: 100%;
-  height: 344px;
+  height: 35%;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -1104,6 +1104,9 @@ export default {
             this.customerArr = res.data
           }
         })
+      if (this.filterObj.channelCode == 'EC') {
+        this.isGainLe = 1
+      }
     },
     getRegionList() {
       selectAPI.getRegionList({}).then((res) => {

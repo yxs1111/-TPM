@@ -56,7 +56,7 @@
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)" v-show='this.filterObj.channelCode !== "EC"'>
         <span class="tipStar">*</span>
         注意事项：请筛选活动月和渠道办理，若未获取到MTD人数，则无法办理
       </div>
@@ -1056,6 +1056,9 @@ export default {
             this.customerArr = res.data
           }
         })
+      if (this.filterObj.channelCode == 'EC') {
+        this.isGainLe = 1
+      }
     },
     getRegionList() {
       selectAPI.getRegionList({}).then((res) => {
