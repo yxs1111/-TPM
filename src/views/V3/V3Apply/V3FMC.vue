@@ -1294,7 +1294,6 @@ export default {
           } else {
             this.$message.info(this.messageMap.checkError)
           }
-          this.saveBtn = 1
         })
       } else {
         API.exceptionCheckEC({
@@ -1316,7 +1315,6 @@ export default {
           } else {
             this.$message.info(this.messageMap.checkError)
           }
-          this.saveBtn = 1
         })
       }
     },
