@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-11-18 16:34:02
+ * @LastEditTime: 2022-11-28 13:44:31
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -228,7 +228,7 @@ export default function () {
               name: 'V1Transport',
               component: () => import('@/views/V1/V1Apply/V1Transport.vue'),
               meta: {
-                title: 'DM',
+                title: 'Transport',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -449,7 +449,7 @@ export default function () {
               name: 'V1TransportApproval',
               component: () => import('@/views/V1/V1Apply/V1Transport.vue'),
               meta: {
-                title: 'DM',
+                title: 'Transport',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },

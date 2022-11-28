@@ -1016,4 +1016,8 @@ input::-webkit-inner-spin-button {
 .el-icon-loading ,.el-loading-text {
   display: none;
 }
+//vxe-table 展示 tooltip
+.vxe-table--tooltip-wrapper {
+  z-index: 10000 !important;
+}
 

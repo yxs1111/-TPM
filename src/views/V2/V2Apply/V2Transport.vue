@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-23 15:41:17
+ * @LastEditTime: 2022-11-28 13:37:12
 -->
 <template>
   <div class="MainContent">
@@ -345,24 +345,24 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="270" align="left" fixed="left" field="systemJudgmentContent" title="验证信息">
+            <vxe-table-column width="400" show-overflow align="left" fixed="left" field="systemJudgmentContent" title="验证信息">
               <template v-slot:header>
                 <div>验证信息<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.systemJudgmentContent }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
-            <vxe-table-column align="center" width="330" field="cpId" title="CPID">
+            <vxe-table-column align="center" show-overflow width="400" field="cpId" title="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.cpId }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
 
@@ -445,9 +445,8 @@
                   {{ scope.row.supplierName }}
                 </div>
               </template>
-              <!-- 数据未对接 -->
             </vxe-table-column>
-            <vxe-table-column width="300" align="right" field="transportItem" title="Transport item">
+            <vxe-table-column width="300" align="center" field="transportItem" title="Transport item">
               <template v-slot:header>
                 <div>Transport item<br><span class="subTitle">-</span></div>
               </template>
@@ -518,14 +517,14 @@
               </template>
             </vxe-table-column>
 
-            <vxe-table-column width="120" align="center" field="applicantRemark" title="申请人备注">
+            <vxe-table-column width="200" show-overflow align="center" field="applicantRemark" title="申请人备注">
               <template v-slot:header>
                 <div>申请人备注<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.applicantRemark }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
             <vxe-table-column width="220" align="center" field="poApprovalComments" title="Package Owner审批意见">

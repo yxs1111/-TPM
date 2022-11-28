@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-11-18 17:21:43
+ * @LastEditTime: 2022-11-28 13:43:21
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -224,7 +224,7 @@ export default function () {
               name: 'V3DM',
               component: () => import('@/views/V3/V3Apply/V3DM.vue'),
               meta: {
-                title: 'Free Goods-Win2',
+                title: 'DM',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Apply',
               },
@@ -450,7 +450,7 @@ export default function () {
               name: 'V3DMApproval',
               component: () => import('@/views/V3/V3Approval/V3DMApproval.vue'),
               meta: {
-                title: 'Premium',
+                title: 'DM',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },
