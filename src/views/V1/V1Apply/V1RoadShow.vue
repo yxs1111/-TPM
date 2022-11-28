@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-24 14:37:33
+ * @LastEditTime: 2022-11-28 14:27:37
 -->
 <template>
   <div class="MainContent">
@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
+            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
         <div class="Selectli">
