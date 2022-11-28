@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-09-14 16:36:02
+ * @LastEditTime: 2022-11-28 15:03:30
 -->
 <template>
   <section class="app-main">
@@ -95,7 +95,7 @@ export default {
 <style lang="scss" scoped>
 .app-main {
   /* 50= navbar  50  */
-  height: calc(100vh - 117px);
+  height: 100%;
   width: 100%;
   position: relative;
   // overflow-y: auto;
