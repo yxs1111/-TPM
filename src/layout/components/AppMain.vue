@@ -22,46 +22,45 @@ export default {
     },
     key() {
       return this.$route.path
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-  .app-main {
-    /* 50= navbar  50  */
-    //height: calc(100vh - 50px);
-    width: 100%;
-    // height: 100vh;
-    position: relative;
-    // overflow: auto;
-    padding: 21px 20px;
-    box-sizing: border-box;
-    // padding-bottom: 50px;
-    background-color: #EBEFF5;
-  }
+.app-main {
+  /* 50= navbar  50  */
+  height: calc(100vh - 117px);
+  width: 100%;
+  position: relative;
+  // overflow-y: auto;
+  padding: 21px 20px;
+  box-sizing: border-box;
+  // padding-bottom: 50px;
+  background-color: #ebeff5;
+}
 
-  .fixed-header+.app-main {
-    padding-top: 50px;
-  }
+.fixed-header + .app-main {
+  padding-top: 50px;
+}
 
-  .hasTagsView {
-    .app-main {
-      /* 84 = navbar + tags-view = 50 + 34 */
-      // min-height: calc(100vh - 134px);
-    }
+.hasTagsView {
+  // .app-main {
+  /* 84 = navbar + tags-view = 50 + 34 */
+  // min-height: calc(100vh - 134px);
+  // }
 
-    .fixed-header+.app-main {
-      padding-top: 104px;
-    }
+  .fixed-header + .app-main {
+    padding-top: 104px;
   }
+}
 </style>
 
 <style lang="scss">
-  // fix css style bug in open el-dialog
-  .el-popup-parent--hidden {
-    .fixed-header {
-      padding-right: 15px;
-    }
+// fix css style bug in open el-dialog
+.el-popup-parent--hidden {
+  .fixed-header {
+    padding-right: 15px;
   }
+}
 </style>

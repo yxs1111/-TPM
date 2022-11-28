@@ -9,13 +9,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
-    Source Han Sans CN Light, Arial, sans-serif;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Source Han Sans CN Light, Arial, sans-serif;
 }
 el-table {
   .el-table__fixed {
-    height:auto !important;
-    bottom:17px !important;
+    height: auto !important;
+    bottom: 17px !important;
   }
 }
 el-table__fixed-body-wrapper {
@@ -79,7 +78,7 @@ div:focus {
   // overflow-y: auto;
 }
 .MainContent {
-  height: 90%;
+  // height: 90%;
   background-color: #fff;
   padding: 20px;
   overflow-y: auto;
@@ -492,7 +491,7 @@ div:focus {
   .el-dialog {
     // margin-top: 8vh !important;
     top: 50% !important;
-    margin-top: 0px!important;
+    margin-top: 0px !important;
     transform: translateY(-50%);
   }
   .el-dialog__header {
@@ -943,7 +942,6 @@ div:focus {
     font-weight: 400;
     color: #666666;
   }
-
 }
 .tabViewsWrap {
   height: calc(100vh - 161px);
@@ -987,7 +985,7 @@ div:focus {
 //input  输入框 type Number 样式修改--删除上调减少
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none !important;
+  -webkit-appearance: none !important;
 }
 //备注、描述填写
 .my-textArea {
@@ -996,13 +994,13 @@ input::-webkit-inner-spin-button {
   }
 }
 //loading 效果
-.el-loading-spinner .circular{
+.el-loading-spinner .circular {
   width: 202px;
   height: 202px;
   animation: loading-rotate 2s linear infinite;
   display: none;
 }
-.el-loading-spinner{
+.el-loading-spinner {
   /* 图片替换为你自定义的即可 */
   background: url('../assets/loading.gif') no-repeat;
   background-size: 300px 148px;
@@ -1011,9 +1009,17 @@ input::-webkit-inner-spin-button {
   position: relative;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
-.el-icon-loading ,.el-loading-text {
+.el-icon-loading,
+.el-loading-text {
   display: none;
 }
 
+.sidebar-container {
+  > .el-menu {
+    border: none;
+    height: calc(100vh - 60px) !important;
+    width: 100% !important;
+  }
+}

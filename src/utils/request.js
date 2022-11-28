@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox, Message,Loading } from 'element-ui'
+import { MessageBox, Message, Loading } from 'element-ui'
 import store from '@/store'
 import auth from '@/utils/auth'
 import router from '@/router'
@@ -17,39 +17,38 @@ const messageDuration = 10 * 1000
 // 请求超时时间
 const requestTimeout = 3600 * 1000
 //全局 loading
-let loading;
+let loading
 //内存中正在请求的数量
-let loadingNum=0;
-function startLoading() {    
-	if(loadingNum==0){
-		loading = Loading.service({
-		  lock: true,
-		  text: '请稍候',
-		  background:'rgba(255,255,255,0.5)',
-		})
-	}
-	//请求数量加1
-	loadingNum++;
+let loadingNum = 0
+function startLoading() {
+  if (loadingNum == 0) {
+    loading = Loading.service({
+      lock: true,
+      text: '请稍候',
+      background: 'rgba(255,255,255,0.5)',
+    })
+  }
+  //请求数量加1
+  loadingNum++
 }
 function endLoading() {
-    //请求数量减1
-	loadingNum--
-	if(loadingNum<=0){
-		loading.close()
-	}
+  //请求数量减1
+  loadingNum--
+  if (loadingNum <= 0) {
+    loading.close()
+  }
 }
-
 
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: requestTimeout // request timeout
+  timeout: requestTimeout, // request timeout
 })
 
 // request interceptor
 service.interceptors.request.use(
-  config => {
+  (config) => {
     startLoading()
     // do something before request is sent
     // 处理是否携带token请求
@@ -86,7 +85,7 @@ service.interceptors.request.use(
     // config.headers['Authorization'] = token
     return config
   },
-  error => {
+  (error) => {
     // do something with request error
     console.log(error) // for debug
     return Promise.reject(error)
@@ -105,7 +104,7 @@ service.interceptors.response.use(
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
-  response => {
+  (response) => {
     endLoading()
     const res = response.data
     if (response.config.responseType === 'arraybuffer' || response.config.responseType === 'blob') {
@@ -114,15 +113,14 @@ service.interceptors.response.use(
       if (res.code !== 1000) {
         Message.info({
           message: res.message,
-          duration: messageDuration
+          duration: messageDuration,
         })
         return res
-      } 
+      }
     }
     return res
-    
   },
-  error => {
+  (error) => {
     endLoading()
     console.log('err' + error) // for debug
     const errorCode = error.request.status
@@ -130,7 +128,7 @@ service.interceptors.response.use(
     if (errorCode === 400) {
       Message.error({
         message: error.response.data.message || error.response.data.data,
-        duration: messageDuration
+        duration: messageDuration,
       })
     } else if (errorCode === 401) {
       if (unauthorized_state) {
@@ -138,12 +136,13 @@ service.interceptors.response.use(
         MessageBox.confirm('你已经登出, 你可以点击取消以继续留在此页面, 或重新登陆', '已登出', {
           confirmButtonText: '重新登陆',
           cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
+          type: 'warning',
         })
+          .then(() => {
+            store.dispatch('user/resetToken').then(() => {
+              location.reload()
+            })
+          })
           .catch((error) => {
             console.error(error)
             unauthorized_state = true
@@ -153,13 +152,13 @@ service.interceptors.response.use(
       if (router.currentRoute.fullPath.indexOf('/login') < 0) {
         Message.error({
           message: '你没有权限进行此项操作',
-          duration: messageDuration
+          duration: messageDuration,
         })
       }
     } else {
       Message.error({
         message: errorMessage,
-        duration: messageDuration
+        duration: messageDuration,
       })
     }
   }

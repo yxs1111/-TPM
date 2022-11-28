@@ -32,7 +32,7 @@ export function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay()
+    a: date.getDay(),
   }
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
@@ -122,7 +122,7 @@ export function getPickerOptions() {
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近一个月',
@@ -131,7 +131,7 @@ export function getPickerOptions() {
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近三个月',
@@ -140,9 +140,9 @@ export function getPickerOptions() {
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
           picker.$emit('pick', [start, end])
-        }
-      }
-    ]
+        },
+      },
+    ],
   }
 }
 
@@ -161,7 +161,7 @@ export function getFormatPickerOptions() {
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
           setStartAndEnd(start, end)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近一个月',
@@ -171,7 +171,7 @@ export function getFormatPickerOptions() {
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
           setStartAndEnd(start, end)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近三个月',
@@ -181,9 +181,9 @@ export function getFormatPickerOptions() {
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
           setStartAndEnd(start, end)
           picker.$emit('pick', [start, end])
-        }
-      }
-    ]
+        },
+      },
+    ],
   }
 }
 
@@ -208,7 +208,7 @@ export function getTextMap() {
   return {
     update: '编辑',
     create: '新增',
-    info: '查看'
+    info: '查看',
   }
 }
 
@@ -223,7 +223,7 @@ export function getDefaultPermissions() {
     getCPT: 6,
     submit: 7,
     rejected: 8,
-    SAP: 9
+    SAP: 9,
   }
 }
 
@@ -234,19 +234,18 @@ export function getGrantTypeOptions() {
   return [
     {
       key: 'password',
-      label: 'password'
+      label: 'password',
     },
     {
       key: 'refresh',
-      label: 'refresh'
-    }
+      label: 'refresh',
+    },
   ]
 }
 
 export function randomNum(len, radix) {
-  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(
-    ''
-  )
+  const chars =
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
   const uuid = []
   radix = radix || chars.length
 
@@ -304,7 +303,7 @@ export const beautifierConf = {
     indent_inner_html: true,
     comma_first: false,
     e4x: true,
-    indent_empty_lines: true
+    indent_empty_lines: true,
   },
   js: {
     indent_size: '2',
@@ -323,8 +322,8 @@ export const beautifierConf = {
     indent_inner_html: true,
     comma_first: false,
     e4x: true,
-    indent_empty_lines: true
-  }
+    indent_empty_lines: true,
+  },
 }
 /**
  * 下划转驼峰
@@ -341,7 +340,7 @@ export function isNumberStr(str) {
  * @returns {*}
  */
 export function titleCase(str) {
-  return str.replace(/( |^)[a-z]/g, L => L.toUpperCase())
+  return str.replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
 }
 
 /**
@@ -476,7 +475,7 @@ export function ReportBgColorMap() {
   return {
     v1: 'background:#fdf0f1!important',
     v2: 'background:#ebfbf8!important',
-    v3: 'background:#fff6e5!important'
+    v3: 'background:#fff6e5!important',
   }
 }
 //message map
@@ -494,12 +493,12 @@ export function messageMap() {
     exportErrorError: '导出错误信息失败',
     saveSuccess: '保存成功',
     saveError: '保存失败',
-    requireChannel: '渠道不能为空，请选择渠道'
+    requireChannel: '渠道不能为空，请选择渠道',
   }
 }
 export const messageObj = {
   requireChannel: '渠道不能为空，请选择渠道',
-  requireMonth: '活动月不能为空，请选择活动月'
+  requireMonth: '活动月不能为空，请选择活动月',
 }
 //报表动态列
 export function ReportCheckList() {
@@ -511,7 +510,7 @@ export function ReportCheckList() {
     'passRange',
     'exceptionOneRange',
     'exceptionTwoRange',
-    'exceptionThreeRange'
+    'exceptionThreeRange',
   ]
 }
 export function ReportCheckListCost() {
@@ -523,7 +522,7 @@ export function ReportCheckListCost() {
     'passRange',
     'exceptionOneRange',
     'exceptionTwoRange',
-    'exceptionThreeRange'
+    'exceptionThreeRange',
   ]
 }
 //报表动态列
@@ -536,7 +535,7 @@ export function dynamicColumn() {
     { title: 'Pass占比', value: 'passRange' },
     { title: 'Exception1占比', value: 'exceptionOneRange' },
     { title: 'Exception2占比', value: 'exceptionTwoRange' },
-    { title: 'Exception3占比', value: 'exceptionThreeRange' }
+    { title: 'Exception3占比', value: 'exceptionThreeRange' },
   ]
 }
 export const dynamicColumnCost = [
@@ -547,7 +546,7 @@ export const dynamicColumnCost = [
   { title: 'Pass占比', value: 'passRange' },
   { title: 'Exception1占比', value: 'exceptionOneRange' },
   { title: 'Exception2占比', value: 'exceptionTwoRange' },
-  { title: 'Exception3占比', value: 'exceptionThreeRange' }
+  { title: 'Exception3占比', value: 'exceptionThreeRange' },
 ]
 
 export function formatThousandNum(num) {
@@ -557,7 +556,7 @@ export function formatThousandNum(num) {
     const money = num * 1
     return money.toLocaleString('zh', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })
   }
 }
@@ -707,15 +706,15 @@ export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止
 export let CustomerDeductionsAndPayType = [
   {
     CustomerDeduction: 6,
-    payTypeList: [{ label: 'PO', value: 1 }]
+    payTypeList: [{ label: 'PO', value: 1 }],
   },
   {
     CustomerDeduction: 13,
     payTypeList: [
       { label: '红票', value: 2 },
-      { label: '票扣', value: 3 }
-    ]
-  }
+      { label: '票扣', value: 3 },
+    ],
+  },
 ]
 /**
  * 合同--获取合同期间（同一年）
@@ -733,20 +732,20 @@ export function getCurrentYearRange() {
  */
 export let pickerOptions = {
   // 限制年月
-  disabledDate: time => {
+  disabledDate: (time) => {
     const date = new Date()
     const year = date.getFullYear()
     return (
       //日期限制（同一年）
       time.getFullYear() == year ? false : true
     )
-  }
+  },
 }
 
 export function pickerOptionsSystemDate(row) {
   return {
     // 限制年月
-    disabledDate: time => {
+    disabledDate: (time) => {
       //未选择初始日期时，不做限制
       if (!row.contractDate) {
         return false
@@ -759,7 +758,7 @@ export function pickerOptionsSystemDate(row) {
           ? false
           : true
       )
-    }
+    },
   }
 }
 export let sortList = [
@@ -778,6 +777,7 @@ export let sortList = [
   'ECM',
   'Premium',
   'Collection',
+  'MMC',
 ]
 //文件格式正则
 //根据文件名获取文件类型
@@ -804,8 +804,8 @@ export function getFileType(fileName) {
     // 音频格式
     audioReg: /\.(mp3|MP3)$/,
     // 其他格式
-    otherReg: /\.(jpg|jpeg|png|gif|bmp|JPG|PNG|xls|xlsx|XLS|XLSX|doc|docx|DOC|DOCX|pdf|PDF|ppt|pptx|PPT|PPTX|txt|TXT|rar|RAR|zip|ZIP|mp4|MP4|mp3|MP3)$/,
-
+    otherReg:
+      /\.(jpg|jpeg|png|gif|bmp|JPG|PNG|xls|xlsx|XLS|XLSX|doc|docx|DOC|DOCX|pdf|PDF|ppt|pptx|PPT|PPTX|txt|TXT|rar|RAR|zip|ZIP|mp4|MP4|mp3|MP3)$/,
   }
   if (fileReg.imgReg.test(fileName)) {
     return 'img'

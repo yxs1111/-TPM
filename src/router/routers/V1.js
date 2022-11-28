@@ -173,7 +173,6 @@ export default function () {
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Apply/V1Premium',
               code: 'price_nka_v1_apply',
               name: 'V1Premium',
@@ -206,6 +205,18 @@ export default function () {
               component: () => import('@/views/V1/V1Apply/V1FreeGoodsWin2.vue'),
               meta: {
                 title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1MMC',
+              code: 'price_nka_v1_apply',
+              name: 'V1MMC',
+              component: () => import('@/views/V1/V1Apply/V1MMC.vue'),
+              meta: {
+                title: 'MMC',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -404,6 +415,19 @@ export default function () {
               component: () => import('@/views/V1/V1Apply/V1FreeGoodsWin2.vue'),
               meta: {
                 title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalMMC',
+              code: 'price_nka_v1_approve',
+              name: 'V1ApplyrovalMMC',
+              component: () =>
+                import('@/views/V1/V1Approval/V1ApplyrovalMMC.vue'),
+              meta: {
+                title: 'MMC',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },

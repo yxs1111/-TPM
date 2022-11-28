@@ -185,6 +185,18 @@ export default function () {
             },
             {
               hidden: true,
+              path: '/costManagement/V2/V2Apply/V2MMC',
+              code: 'price_nka_v2_apply',
+              name: 'V2MMC',
+              component: () => import('@/views/V2/V2Apply/V2MMC.vue'),
+              meta: {
+                title: 'MMC',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
               path: '/costManagement/V2/V2Apply/V2Premium',
               code: 'price_nka_v2_apply',
               name: 'V2Premium',
@@ -378,6 +390,19 @@ export default function () {
                 import('@/views/V2/V2Approval/V2ApplyrovalDisplay.vue'),
               meta: {
                 title: 'Display',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2ApplyrovalMMC',
+              code: 'price_nka_v2_approve',
+              name: 'V2ApplyrovalMMC',
+              component: () =>
+                import('@/views/V2/V2Approval/V2ApplyrovalMMC.vue'),
+              meta: {
+                title: 'MMC',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },

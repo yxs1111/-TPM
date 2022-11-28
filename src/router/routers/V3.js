@@ -147,6 +147,18 @@ export default function () {
             },
             {
               hidden: true,
+              path: '/costManagement/V3/V3Apply/V3MMC',
+              code: 'price_nka_v3_apply',
+              name: 'V3MMC',
+              component: () => import('@/views/V3/V3Apply/V3MMC.vue'),
+              meta: {
+                title: 'MMC',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
+            {
+              hidden: true,
               path: '/costManagement/V3/V3Apply/V3ECM',
               code: 'price_nka_v3_apply',
               name: 'ECM',
@@ -352,6 +364,19 @@ export default function () {
                 import('@/views/V3/V3Approval/V3POSMCustomizeApproval.vue'),
               meta: {
                 title: 'POSM-定制',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3ApplyrovalMMC',
+              code: 'price_nka_v3_approve',
+              name: 'V3ApplyrovalMMC',
+              component: () =>
+                import('@/views/V3/V3Approval/V3ApplyrovalMMC.vue'),
+              meta: {
+                title: 'MMC',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },

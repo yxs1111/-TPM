@@ -50,6 +50,13 @@ export default {
       params
     )
   },
+  // 获取MMC妈妈班 数据
+  getMMCData(data) {
+    return requestApi.request_post(
+      '/cityplan/investCpMamaclassVOneDetail/createByCPT',
+      data
+    )
+  },
   //获取ListingFee数据
   getListingFee(params) {
     return requestApi.request_post(

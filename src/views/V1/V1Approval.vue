@@ -15,7 +15,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: calc(100vh - 0px)">
+    <div>
       <router-view />
     </div>
   </div>
@@ -150,12 +150,15 @@ export default {
               path: '/costManagement/V1/V1Approval/V1FreeGoodsWin2Approval',
               minePackageName: 'Free Goods-Win2',
             },
+            {
+              name: 'MMC',
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalMMC',
+              minePackageName: 'MMC',
+            },
           ]
           let TabList = []
           sortList.forEach((item) => {
-            let findIndex = this.routerList.findIndex(
-              (routerItem) => routerItem.minePackageName == item
-            )
+            let findIndex = this.routerList.findIndex((routerItem) => routerItem.minePackageName == item)
             if (findIndex != -1) {
               TabList.push(this.routerList[findIndex])
             }
@@ -169,10 +172,7 @@ export default {
           if (!this.$route.query.minePackageName) {
           } else {
             // 我的待办跳转
-            this.currentIndex = this.routerList.findIndex(
-              (item) =>
-                item.minePackageName == this.$route.query.minePackageName
-            )
+            this.currentIndex = this.routerList.findIndex((item) => item.minePackageName == this.$route.query.minePackageName)
             sessionStorage.setItem('currentIndex', this.currentIndex)
           }
           this.tabInit()

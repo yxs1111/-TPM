@@ -6,19 +6,18 @@
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link v-for="(item, index) in routerList" :key="index" :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''"
-        @click.native="changeTab(index)">
+      <router-link v-for="(item, index) in routerList" :key="index" :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" @click.native="changeTab(index)">
         {{ item.name }}
       </router-link>
     </div>
-    <div style="height: calc(100vh - 0px);">
+    <div>
       <router-view />
     </div>
   </div>
 </template>
 
 <script>
-import { getDefaultPermissions, parseTime, getTextMap,sortList } from '@/utils'
+import { getDefaultPermissions, parseTime, getTextMap, sortList } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -27,8 +26,7 @@ export default {
   directives: { elDragDialog, permission },
   data() {
     return {
-      routerList: [
-      ],
+      routerList: [],
       currentIndex: 0,
     }
   },

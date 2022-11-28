@@ -6,23 +6,13 @@
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews">
-      <router-link v-for="(item, index) in routerList"
-                   :key="index"
-                   :to="item.path"
-                   tag="div"
-                   class="tabli"
-                   :class="index === currentIndex ? 'currentTabli' : ''"
-                   @click.native="changeTab(index)">
-        <img v-if="index != currentIndex"
-             :src="item.img.light"
-             alt="">
-        <img v-if="index == currentIndex"
-             :src="item.img.dark"
-             alt="">
+      <router-link v-for="(item, index) in routerList" :key="index" :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" @click.native="changeTab(index)">
+        <img v-if="index != currentIndex" :src="item.img.light" alt="" />
+        <img v-if="index == currentIndex" :src="item.img.dark" alt="" />
         {{ item.name }}
       </router-link>
     </div>
-    <div style="height: calc(100vh - 0px);">
+    <div>
       <router-view />
     </div>
   </div>
@@ -70,14 +60,7 @@ export default {
         // }
       ],
       currentIndex: 0,
-      imgSrcList: [
-        require('@/assets/images/tab/tab1_l.png'),
-        require('@/assets/images/tab/tab2_l.png'),
-        require('@/assets/images/tab/tab3_l.png'),
-        require('@/assets/images/tab/tab1.png'),
-        require('@/assets/images/tab/tab2.png'),
-        require('@/assets/images/tab/tab3.png'),
-      ],
+      imgSrcList: [require('@/assets/images/tab/tab1_l.png'), require('@/assets/images/tab/tab2_l.png'), require('@/assets/images/tab/tab3_l.png'), require('@/assets/images/tab/tab1.png'), require('@/assets/images/tab/tab2.png'), require('@/assets/images/tab/tab3.png')],
     }
   },
   computed: {},

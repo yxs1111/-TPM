@@ -4,24 +4,14 @@
  * @LastEditTime: 2021-12-06 20:18:55
 -->
 <template>
-  <div :class="{'has-logo':showLogo}">
+  <div :class="{ 'has-logo': showLogo }" class="siderList">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <!-- <search v-if="leftMenuToggle" id="header-search" class="right-menu-item" /> -->
     <!-- <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" /> -->
     <!-- <el-scrollbar wrap-class="scrollbar-wrapper"> -->
-      <el-menu
-        :default-active="activeMenu"
-        :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :unique-opened="true"
-        :active-text-color="variables.menuActiveText"
-        :collapse-transition="false"
-         @select="handleSelect"
-        mode="vertical"
-      >
-        <sidebar-item v-for="route in permission_routes"  :key="route.path" :item="route" :base-path="route.path" />
-      </el-menu>
+    <el-menu :default-active="activeMenu" :collapse="isCollapse" :background-color="variables.menuBg" :text-color="variables.menuText" :unique-opened="true" :active-text-color="variables.menuActiveText" :collapse-transition="false" @select="handleSelect" mode="vertical">
+      <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+    </el-menu>
     <!-- </el-scrollbar> -->
     <!-- <div class="leftMenu"></div> -->
   </div>
@@ -35,12 +25,9 @@ import variables from '@/styles/variables.scss'
 import Hamburger from '@/components/Hamburger'
 import Search from '@/components/HeaderSearch'
 export default {
-  components: { SidebarItem, Logo,Hamburger,Search },
+  components: { SidebarItem, Logo, Hamburger, Search },
   computed: {
-    ...mapGetters([
-      'permission_routes',
-      'sidebar'
-    ]),
+    ...mapGetters(['permission_routes', 'sidebar']),
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
@@ -58,20 +45,20 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
-    }
+    },
   },
-  data(){
+  data() {
     return {
-      leftMenuToggle:true,
+      leftMenuToggle: true,
     }
   },
   mounted() {
-    this.$on('changeSideBar', data => {
-      console.log("hh");
+    this.$on('changeSideBar', (data) => {
+      console.log('hh')
       //this.toggleSideBar();
     })
   },
-  methods:{
+  methods: {
     toggleSideBar() {
       this.leftMenuToggle = !this.leftMenuToggle
       this.$store.dispatch('app/toggleSideBar')
@@ -80,19 +67,19 @@ export default {
       sessionStorage.removeItem('currentIndex')
       this.$store.dispatch('app/openBreadCrumb')
     },
-  }
+  },
 }
 </script>
 <style scoped>
-  .leftMenu{
-    width:80%;
-    margin-left:10%;
-    position: absolute;
-    bottom: 0;
-    height: 200px;
-    /* background-image: url('../../../assets/images/background/car.png'); */
-    background-size: 90% 90%;
-    background-repeat: no-repeat;
-    pointer-events: none;
-  }
+.leftMenu {
+  width: 80%;
+  margin-left: 10%;
+  position: absolute;
+  bottom: 0;
+  height: 200px;
+  /* background-image: url('../../../assets/images/background/car.png'); */
+  background-size: 90% 90%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
 </style>

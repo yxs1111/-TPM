@@ -15,7 +15,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: calc(100vh - 0px)">
+    <div>
       <router-view />
     </div>
   </div>
@@ -23,7 +23,7 @@
 
 <script>
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import {sortList} from '@/utils/index'
+import { sortList } from '@/utils/index'
 export default {
   data() {
     return {
@@ -188,6 +188,15 @@ export default {
               minePackageName: 'Display',
             },
             {
+              name: 'MMC',
+              path: '/costManagement/V2/V2Approval/V2ApplyrovalMMC',
+              img: {
+                dark: require('@/assets/images/tab/UnStraightGiving.png'),
+                light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+              },
+              minePackageName: 'MMC',
+            },
+            {
               name: 'Premium',
               path: '/costManagement/V2/V2Approval/V2PremiumApproval',
               img: {
@@ -215,14 +224,14 @@ export default {
               minePackageName: 'Free Goods-Win2',
             },
           ]
-          let TabList=[]
-          sortList.forEach(item=>{
-            let findIndex=this.routerList.findIndex(routerItem=>routerItem.minePackageName==item)
-            if(findIndex!=-1) {
+          let TabList = []
+          sortList.forEach((item) => {
+            let findIndex = this.routerList.findIndex((routerItem) => routerItem.minePackageName == item)
+            if (findIndex != -1) {
               TabList.push(this.routerList[findIndex])
             }
           })
-          this.routerList=TabList
+          this.routerList = TabList
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
           } else {
@@ -231,10 +240,7 @@ export default {
           if (!this.$route.query.minePackageName) {
           } else {
             // 我的待办跳转
-            this.currentIndex = this.routerList.findIndex(
-              (item) =>
-                item.minePackageName == this.$route.query.minePackageName
-            )
+            this.currentIndex = this.routerList.findIndex((item) => item.minePackageName == this.$route.query.minePackageName)
             sessionStorage.setItem('currentIndex', this.currentIndex)
           }
           this.tabInit()
