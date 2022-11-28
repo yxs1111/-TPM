@@ -69,19 +69,21 @@
                   <!-- PP -->
                   <div v-if="item.isPrice" class="PPBar">
                     <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{ item.TaskName }}</div>
-                    <div v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
-                      <div v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))" class="passIcon" />
-                      <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
-                        <div slot="content" v-html="getTip(item)" />
-                        <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" class="currentPoint" />
-                      </el-tooltip>
-                      <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
-                        <div slot="content" v-html="getTip(item)" />
-                        <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" class="delayPoint" />
-                      </el-tooltip>
-                      <div v-if="TaskIndex>item.taskNumber" class="noStart" />
-                      <div v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'" class="line" />
-                      <div v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'" class="lineDark" />
+                    <div class='NuPoint'>
+                      <div v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
+                        <div v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))" class="passIcon" />
+                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                          <div slot="content" v-html="getTip(item)" />
+                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" class="currentPoint" />
+                        </el-tooltip>
+                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                          <div slot="content" v-html="getTip(item)" />
+                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" class="delayPoint" />
+                        </el-tooltip>
+                        <div v-if="TaskIndex>item.taskNumber" class="noStart" />
+                        <div v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'" class="line" />
+                        <div v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'" class="lineDark" />
+                      </div>
                     </div>
                   </div>
                   <div v-if="!item.isPrice" class="NU">
@@ -128,9 +130,9 @@
             <el-table-column width='75' align="left" prop="yearAndMonth" label="年月" />
             <el-table-column width='120' prop="costTypeName" label="Cost Type" />
             <el-table-column width='120' prop="minePackageName" label="Mine Package" />
-            <el-table-column width='170' prop="costItemName" label="Cost Item" />
+            <el-table-column width='280' prop="costItemName" label="Cost Item" />
             <el-table-column width='60' prop="channelName" label="渠道" />
-            <el-table-column width='160' prop="version" label="版本号" />
+            <el-table-column width='80' prop="num" label="版本号" />
             <el-table-column width='160' align="left" prop="" label="查看">
               <template slot-scope="{row}">
                 <div class="transact" @click="openFlowDiagram(row)">
@@ -256,6 +258,11 @@ export default {
       chart: {
         progress: {
           bar: false,
+        },
+        grid: {
+          horizontal: {
+            gap: 12 //*
+          }
         },
         expander: {
           display: true,
@@ -1088,9 +1095,9 @@ export default {
         pageSize: 999, // 每页条数
       }).then((response) => {
         this.TodoList = response.data.records
-        // response.data.records.forEach((item) => {
-        //   item.num = item.version.substring(item.version.length - 2, item.version.length)
-        // })
+        response.data.records.forEach((item) => {
+          item.num = item.version.substring(item.version.length - 2, item.version.length)
+        })
       })
     },
     // 获取合同管理数据
@@ -1470,6 +1477,7 @@ export default {
   border-bottom-right-radius: 6px;
 }
 .date {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
   background-color: rgb(198, 235, 254);
   padding: 6px 16px;
   border-radius: 6px;
@@ -1543,7 +1551,7 @@ export default {
     .PointTip {
       margin-right: 40px;
       font-size: 14px;
-      font-family: Source Han Sans CN;
+      font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
       font-weight: 400;
       color: #333333;
       display: flex;
@@ -1700,6 +1708,70 @@ export default {
           align-items: center;
           margin: 5px 0;
           // background-color: pink;
+          .NuPoint {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-left: 18px;
+            padding-right: 40px;
+            .V0 {
+              .line {
+                border-top-left-radius: 10px !important;
+                border-bottom-left-radius: 10px !important;
+                border-top-right-radius: 0px !important;
+                border-bottom-right-radius: 0px !important;
+                width: calc(100% - 0px) !important;
+                height: 26px !important;
+                background-color: #c6dcee;
+                box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31) !important;
+              }
+            }
+            .V1 {
+              .lineDark {
+                border-top-left-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                border-top-right-radius: 0px !important;
+                border-bottom-right-radius: 0px !important;
+                width: calc(100% - 0px) !important;
+                height: 26px !important;
+                background-color: #c6dcee;
+                box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31) !important;
+              }
+              .line {
+                border-top-left-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                border-top-right-radius: 0px !important;
+                border-bottom-right-radius: 0px !important;
+                width: calc(100% - 0px) !important;
+                height: 26px !important;
+                background-color: #c6dcee;
+                box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31) !important;
+              }
+            }
+            .V2 {
+              .lineDark {
+                border-top-left-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                border-top-right-radius: 0px !important;
+                border-bottom-right-radius: 0px !important;
+                width: calc(100% - 0px) !important;
+                height: 26px !important;
+                background-color: #c6dcee;
+                box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31) !important;
+              }
+              .line {
+                border-top-left-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                border-top-right-radius: 0px !important;
+                border-bottom-right-radius: 0px !important;
+                width: calc(100% - 0px) !important;
+                height: 26px !important;
+                background-color: #c6dcee;
+                box-shadow: 0px 2px 6px 0px rgba(85, 186, 158, 0.31) !important;
+              }
+            }
+          }
         }
         .NU {
           width: 100%;
@@ -1740,9 +1812,13 @@ export default {
           white-space: nowrap;
         }
         .V0 {
-          width: 33%;
+          width: 32.5%;
           display: flex;
           align-items: center;
+          .lineDark {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+          }
           img {
             width: 28px;
             height: 28px;
@@ -2097,6 +2173,7 @@ export default {
           margin-right: 10px;
         }
         .MessageContent {
+          font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
           width: 100%;
           white-space: nowrap;
           overflow: hidden;
@@ -2107,7 +2184,7 @@ export default {
   }
   .BarTitleWrap {
     //padding-left: 10px;
-    font-family: SourceHanSansCN-Medium;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
     font-size: 17px;
     color: #333333;
     font-weight: 600;
@@ -2134,7 +2211,7 @@ export default {
         text-align: center;
         font-size: 14px;
         cursor: pointer;
-        font-family: SourceHanSansCN-Medium;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
       }
       .currentTabli {
         background-color: #4192d3;
