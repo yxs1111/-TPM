@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-21 17:04:40
+ * @LastEditTime: 2022-11-25 16:13:26
 -->
 <template>
   <div class="V0Content">
@@ -136,18 +136,7 @@
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">
               <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in ['Price Promotion',
-                  'New User',
-                  'KA Contract',
-                  'ListingFee',
-                  'ECM',
-                  'DM',
-                  'POSM',
-                  'Transport',
-                  'Premium',
-                  'Free Goods',
-                  'FMC',
-                  'RoadShow']" :key="index" :label="item" :value="item" />
+                <el-option v-for="item,index in minePackageList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
@@ -360,6 +349,20 @@ export default {
       usernameLocal: '',
       mainId: '',
       messageMap: messageMap(),
+      minePackageList: [
+        'Price Promotion',
+        'New User',
+        'KA Contract',
+        'ListingFee',
+        'ECM',
+        'DM',
+        'POSM',
+        'Transport Costs',
+        'Premium',
+        'Free Goods',
+        'FMC',
+        'RoadShow',
+      ],
     }
   },
   directives: { elDragDialog, permission },
@@ -678,7 +681,7 @@ export default {
             case 'DM':
               url = API.getDMcreate
               break
-            case 'Transport':
+            case 'Transport Costs':
               url = API.getTransportCreate
               break
             case 'Free Goods':
@@ -698,7 +701,10 @@ export default {
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
           }
-          if (this.ruleForm.Minepackage === 'POSM'||this.ruleForm.Minepackage === 'Transport') {
+          if (
+            this.ruleForm.Minepackage === 'POSM' ||
+            this.ruleForm.Minepackage === 'Transport'
+          ) {
             obj = {
               yearAndMonth: this.filterObj.month,
               channelName: this.ruleForm.channelCode,
