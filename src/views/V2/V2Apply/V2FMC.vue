@@ -56,7 +56,7 @@
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)" v-show='this.filterObj.channelCode !== "EC"'>
         <span class="tipStar">*</span>
         注意事项：请筛选活动月和渠道办理，若未获取到MTD人数，则无法办理
       </div>
@@ -595,7 +595,7 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
+          <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
@@ -616,7 +616,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />
             <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />
@@ -657,39 +657,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2DefaultEstimatePrice" label="V2预估单价-默认(RMB/人)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimatePrice" label="V2预估单价(RMB/人)">
               <template v-slot:header>
-                <div>V2预估单价-默认(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ formatNum(scope.row.v2DefaultEstimatePrice) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="v2DefaultEstimatePeopleNum" label="V2预估人数-默认(人)">
-              <template v-slot:header>
-                <div>V2预估人数-默认(人)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.v2DefaultEstimatePeopleNum }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
-              <template v-slot:header>
-                <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ formatNum(scope.row.v2DefaultEstimateCost) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="240" align="right" prop="v2AdjustEstimatePrice" label="V2预估单价-调整后(RMB/人)">
-              <template v-slot:header>
-                <div>V2预估单价-调整后(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V2预估单价(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -697,9 +667,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2AdjustEstimatePeopleNum" label="V2预估人数-调整后(人)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimatePeopleNum" label="V2预估人数(人)">
               <template v-slot:header>
-                <div>V2预估人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V2预估人数(人)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -707,13 +677,73 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
+            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用(RMB)">
               <template v-slot:header>
-                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+                <div>V2预估费用(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ formatNum(scope.row.v2AdjustEstimateCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityPrice" label="V3实际单价-默认(RMB/人)">
+              <template v-slot:header>
+                <div>V3实际单价-默认(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3DefaultRealityPrice) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityPeopleNum" label="V3实际人数-默认(人)">
+              <template v-slot:header>
+                <div>V3实际人数-默认(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.v3DefaultRealityPeopleNum }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v3DefaultRealityCost" label="V3实际费用-默认(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-默认(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3DefaultRealityCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityPrice" label="V3实际单价-调整后(RMB/人)">
+              <template v-slot:header>
+                <div>V3实际单价-调整后(RMB/人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3AdjustRealityPrice) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityPeopleNum" label="V3实际人数-调整后(人)">
+              <template v-slot:header>
+                <div>V3实际人数-调整后(人)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.v3AdjustRealityPeopleNum }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="260" align="right" prop="v3AdjustRealityCost" label="V3实际费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v3AdjustRealityCost) }}
                 </div>
               </template>
             </el-table-column>
@@ -742,6 +772,82 @@
             <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
               <template v-slot:header>
                 <div>费用差值(RMB)<br><span class="subTitle">KA+供应商+Region</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.costDifference) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注" />
+            <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
+            <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
+          </el-table>
+          <el-table v-if='this.filterObj.channelCode == "EC"' border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
+              background: '#fff',
+              color: '#333',
+              fontSize: '16px',
+              textAlign: 'center',
+              fontWeight: 400,
+              fontFamily: 'Source Han Sans CN'
+            }" :row-class-name="tableRowClassName" stripe>
+            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+              <template slot-scope="{row}">
+                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                  <div slot="content" v-html="getTip(row)" />
+                  <div class="statusWrap">
+                    <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                  </div>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column align="center" fixed width="460" prop="cpId" label="CPID"  />
+            <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
+            <el-table-column width="120" align="center" prop="costType" label="费用类型" />
+            <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
+            <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
+            <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+            <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
+            <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
+            <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
+              <template v-slot:header>
+                <div>V1计划费用(RMB)<br><span class="subTitle">KA</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v1PlanCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v2DefaultEstimateCost" label="V2预估费用-默认(RMB)">
+              <template v-slot:header>
+                <div>V2预估费用-默认(RMB)<br><span class="subTitle">KA</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v2DefaultEstimateCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="right" prop="v2AdjustEstimateCost" label="V2预估费用-调整后(RMB)">
+              <template v-slot:header>
+                <div>V2预估费用-调整后(RMB)<br><span class="subTitle">KA+供应商</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ formatNum(scope.row.v2AdjustEstimateCost) }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门"></el-table-column>
+            <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式"></el-table-column>
+            <el-table-column width="220" align="right" prop="costDifference" label="费用差值">
+              <template v-slot:header>
+                <div>费用差值(RMB)<br><span class="subTitle">KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -862,24 +968,46 @@ export default {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
-        API.getPage({
-          pageNum: this.pageNum, // 当前页
-          pageSize: this.pageSize, // 每页条数
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-          this.isSubmit = this.tableData[0].isSubmit == 1 ? 1 : 0
-          this.isGainLe = this.tableData[0].isGet
-          this.mainId = this.tableData[0].mainId
-          this.infoByMainId()
-        })
+        if (this.filterObj.channelCode == 'NKA') {
+          API.getPage({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+            this.isSubmit = this.tableData[0].isSubmit == 1 ? 1 : 0
+            this.isGainLe = this.tableData[0].isGet
+            this.mainId = this.tableData[0].mainId
+            this.infoByMainId()
+          })
+        } else {
+          API.getECPage({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.isGainLe = 1
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+            this.isSubmit = this.tableData[0].isSubmit == 1 ? 1 : 0
+            // this.isGainLe = this.tableData[0].isGet
+            this.mainId = this.tableData[0].mainId
+            this.infoByMainId()
+          })
+        }
       }
     },
     // 通过与审批按钮控制
@@ -928,6 +1056,9 @@ export default {
             this.customerArr = res.data
           }
         })
+      if (this.filterObj.channelCode == 'EC') {
+        this.isGainLe = 1
+      }
     },
     getRegionList() {
       selectAPI.getRegionList({}).then((res) => {
@@ -964,22 +1095,42 @@ export default {
     },
     // 导出
     downExcel() {
-      if (this.tableData.length) {
-        API.exportV2({
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2_查询.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success('导出成功!')
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          API.exportV2({
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       } else {
-        this.$message.info('数据为空')
+        if (this.tableData.length) {
+          API.exportVTwo({
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       }
     },
     importData() {
@@ -998,32 +1149,61 @@ export default {
     },
     // 导入
     parsingExcel(event) {
-      this.isCheck = false
-      this.uploadFileName = event.target.files[0].name
-      this.uploadFile = event.target.files[0]
-      const formData = new FormData()
-      formData.append('file', this.uploadFile)
-      formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelCode', this.filterObj.channelCode)
-      formData.append('importType', 1)
-      API.import(formData).then((response) => {
-        //清除input的value ,上传一样的
-        event.srcElement.value = '' // 置空
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)||response.data.length===0) {
-            this.$message.info('导入数据为空，请检查模板')
+      if (this.filterObj.channelCode == 'NKA') {
+        this.isCheck = false
+        this.uploadFileName = event.target.files[0].name
+        this.uploadFile = event.target.files[0]
+        const formData = new FormData()
+        formData.append('file', this.uploadFile)
+        formData.append('yearAndMonth', this.filterObj.month)
+        formData.append('channelCode', this.filterObj.channelCode)
+        formData.append('importType', 1)
+        API.import(formData).then((response) => {
+          //清除input的value ,上传一样的
+          event.srcElement.value = '' // 置空
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)||response.data.length===0) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.importSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.isCheck = isError == -1 ? 1 : 0
+            }
           } else {
-            this.$message.success(this.messageMap.importSuccess)
-            this.ImportData = response.data
-            let isError = this.ImportData.findIndex((item) => {
-              return item.systemJudgment == 'Error'
-            })
-            this.isCheck = isError == -1 ? 1 : 0
+            this.$message.info(this.messageMap.importError)
           }
-        } else {
-          this.$message.info(this.messageMap.importError)
-        }
-      })
+        })
+      } else {
+        this.isCheck = false
+        this.uploadFileName = event.target.files[0].name
+        this.uploadFile = event.target.files[0]
+        const formData = new FormData()
+        formData.append('file', this.uploadFile)
+        formData.append('yearAndMonth', this.filterObj.month)
+        formData.append('channelName', this.filterObj.channelCode)
+        formData.append('importType', 1)
+        API.importEC(formData).then((response) => {
+          //清除input的value ,上传一样的
+          event.srcElement.value = '' // 置空
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)||response.data.length===0) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.importSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.isCheck = isError == -1 ? 1 : 0
+            }
+          } else {
+            this.$message.info(this.messageMap.importError)
+          }
+        })
+      }
     },
     // 关闭导入
     closeImportDialog() {
@@ -1036,113 +1216,224 @@ export default {
     },
     // 校验数据
     checkImport() {
-      API.exceptionCheck({
-        channelCode: this.filterObj.channelCode,
-        yearAndMonth: this.filterObj.month,
-      }).then((response) => {
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
-            this.$message.info('导入数据为空，请检查模板')
+      if (this.filterObj.channelCode == 'NKA') {
+        API.exceptionCheck({
+          channelCode: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((response) => {
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.checkSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.saveBtn = isError == -1 ? 1 : 0
+              console.log(this.saveBtn)
+            }
           } else {
-            this.$message.success(this.messageMap.checkSuccess)
-            this.ImportData = response.data
-            let isError = this.ImportData.findIndex((item) => {
-              return item.systemJudgment == 'Error'
-            })
-            this.saveBtn = isError == -1 ? 1 : 0
-            console.log(this.saveBtn)
+            this.$message.info(this.messageMap.checkError)
           }
-        } else {
-          this.$message.info(this.messageMap.checkError)
-        }
-        this.saveBtn=1
-      })
+        })
+      } else {
+        API.exceptionCheckEC({
+          channelName: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((response) => {
+          if (response.code == 1000) {
+            if (!Array.isArray(response.data)) {
+              this.$message.info('导入数据为空，请检查模板')
+            } else {
+              this.$message.success(this.messageMap.checkSuccess)
+              this.ImportData = response.data
+              let isError = this.ImportData.findIndex((item) => {
+                return item.systemJudgment == 'Error'
+              })
+              this.saveBtn = isError == -1 ? 1 : 0
+              console.log(this.saveBtn)
+            }
+          } else {
+            this.$message.info(this.messageMap.checkError)
+          }
+        })
+      }
     },
     // 确认导入
     confirmImport() {
-      API.saveV2Data({
-        channelCode: this.filterObj.channelCode,
-        yearAndMonth: this.filterObj.month,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      if (this.filterObj.channelCode == 'NKA') {
+        API.saveV2Data({
+          channelCode: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((res) => {
+          if (res.code == 1000) {
+            this.$message.success(this.messageMap.saveSuccess)
+            this.getTableData()
+            this.closeImportDialog()
+          } else {
+            this.$message.info(this.messageMap.saveError)
+          }
+        })
+      } else {
+        API.saveV2DataEC({
+          channelName: this.filterObj.channelCode,
+          yearAndMonth: this.filterObj.month,
+        }).then((res) => {
+          if (res.code == 1000) {
+            this.$message.success(this.messageMap.saveSuccess)
+            this.getTableData()
+            this.closeImportDialog()
+          } else {
+            this.$message.info(this.messageMap.saveError)
+          }
+        })
+      }
     },
     // 导出异常信息
     exportErrorList() {
-      if (this.ImportData.length) {
-        API.exportV2Error({
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success('导出成功!')
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.ImportData.length) {
+          API.exportV2Error({
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('异常数据为空!')
+        }
       } else {
-        this.$message.info('异常数据为空!')
+        if (this.ImportData.length) {
+          API.exportV2ErrorEC({
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((res) => {
+            const timestamp = Date.parse(new Date())
+            downloadFile(
+              res,
+              'V2_FMC异常信息 -' + timestamp + '.xlsx'
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('异常数据为空!')
+        }
       }
     },
     // 下载模板
     downloadTemplate() {
-      if (this.tableData.length) {
-        // 导出数据筛选
-        API.downloadTemplate({
-          yearAndMonth: this.filterObj.month,
-          channelCode: this.filterObj.channelCode,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2申请.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success(this.messageMap.exportSuccess)
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          // 导出数据筛选
+          API.downloadTemplate({
+            yearAndMonth: this.filterObj.month,
+            channelCode: this.filterObj.channelCode,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2申请.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success(this.messageMap.exportSuccess)
+          })
+        } else {
+          this.$message.info('数据不能为空')
+        }
       } else {
-        this.$message.info('数据不能为空')
+        if (this.tableData.length) {
+          // 导出数据筛选
+          API.downloadTemplateEC({
+            yearAndMonth: this.filterObj.month,
+            channelName: this.filterObj.channelCode,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2申请.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success(this.messageMap.exportSuccess)
+          })
+        } else {
+          this.$message.info('数据不能为空')
+        }
       }
     },
     approve() {
-      if (this.tableData.length) {
-        const judgmentType = this.tableData[0].systemJudgment
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          })
-            .then(() => {
-              const mainId = this.tableData[0].mainId
-              API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('提交成功')
-                  this.getTableData()
-                }
-              })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          const judgmentType = this.tableData[0].systemJudgment
+          if (judgmentType != null) {
+            this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
             })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
+              .then(() => {
+                const mainId = this.tableData[0].mainId
+                API.approve({
+                  mainId: mainId, // 主表id
+                  opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message.success('提交成功')
+                    this.getTableData()
+                  }
+                })
               })
-            })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          } else {
+            this.$message.info('数据未校验，请先进行导入验证')
+          }
         } else {
-          this.$message.info('数据未校验，请先进行导入验证')
+          this.$message.warning('数据不能为空')
         }
       } else {
-        this.$message.warning('数据不能为空')
+        if (this.tableData.length) {
+          const judgmentType = this.tableData[0].systemJudgment
+          if (judgmentType != null) {
+            this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(() => {
+                const mainId = this.tableData[0].mainId
+                API.approveEC({
+                  mainId: mainId, // 主表id
+                  opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                }).then((response) => {
+                  if (response.code === 1000) {
+                    this.$message.success('提交成功')
+                    this.getTableData()
+                  }
+                })
+              })
+              .catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消提交',
+                })
+              })
+          } else {
+            this.$message.info('数据未校验，请先进行导入验证')
+          }
+        } else {
+          this.$message.warning('数据不能为空')
+        }
       }
     },
     // 每页显示页面数变更

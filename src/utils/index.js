@@ -74,17 +74,7 @@ export function formatTime(time, option) {
   if (option) {
     return parseTime(time, option)
   } else {
-    return (
-      d.getMonth() +
-      1 +
-      '月' +
-      d.getDate() +
-      '日' +
-      d.getHours() +
-      '时' +
-      d.getMinutes() +
-      '分'
-    )
+    return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
   }
 }
 
@@ -97,15 +87,7 @@ export function param2Obj(url) {
   if (!search) {
     return {}
   }
-  return JSON.parse(
-    '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"')
-        .replace(/\+/g, ' ') +
-      '"}'
-  )
+  return JSON.parse('{"' + decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"').replace(/\+/g, ' ') + '"}')
 }
 
 /**
@@ -244,8 +226,7 @@ export function getGrantTypeOptions() {
 }
 
 export function randomNum(len, radix) {
-  const chars =
-    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
   const uuid = []
   radix = radix || chars.length
 
@@ -382,11 +363,7 @@ export function deepClone(obj) {
     return new RegExp(obj.source, flags.join(''))
   }
 
-  const result = Array.isArray(obj)
-    ? []
-    : obj.constructor
-    ? new obj.constructor()
-    : {}
+  const result = Array.isArray(obj) ? [] : obj.constructor ? new obj.constructor() : {}
 
   for (const key in obj) {
     result[key] = deepClone(obj[key])
@@ -502,28 +479,10 @@ export const messageObj = {
 }
 //报表动态列
 export function ReportCheckList() {
-  return [
-    'passNum',
-    'exceptionOneNum',
-    'exceptionTwoNum',
-    'exceptionThreeNum',
-    'passRange',
-    'exceptionOneRange',
-    'exceptionTwoRange',
-    'exceptionThreeRange',
-  ]
+  return ['passNum', 'exceptionOneNum', 'exceptionTwoNum', 'exceptionThreeNum', 'passRange', 'exceptionOneRange', 'exceptionTwoRange', 'exceptionThreeRange']
 }
 export function ReportCheckListCost() {
-  return [
-    'passNum',
-    'exceptionOneNum',
-    'exceptionTwoNum',
-    'exceptionThreeNum',
-    'passRange',
-    'exceptionOneRange',
-    'exceptionTwoRange',
-    'exceptionThreeRange',
-  ]
+  return ['passNum', 'exceptionOneNum', 'exceptionTwoNum', 'exceptionThreeNum', 'passRange', 'exceptionOneRange', 'exceptionTwoRange', 'exceptionThreeRange']
 }
 //报表动态列
 export function dynamicColumn() {
@@ -754,33 +713,14 @@ export function pickerOptionsSystemDate(row) {
       const year = date.getFullYear()
       return (
         //日期限制（同一年）
-        time.getFullYear() == year || time.getFullYear() == year + 1
-          ? false
-          : true
+        time.getFullYear() == year || time.getFullYear() == year + 1 ? false : true
       )
     },
   }
 }
-export let sortList = [
-  'Price Promotion',
-  'Free Goods-Tin',
-  'New User',
-  'Free Goods-Win2',
-  'FMC',
-  'Roadshow',
-  'Listing fee',
-  'KA Rebate',
-  'HIH Rebate',
-  'Display',
-  'POSM - Standard',
-  'POSM - Customized',
-  'ECM',
-  'Premium',
-  'Collection',
-  'MMC',
-]
-//文件格式正则
-//根据文件名获取文件类型
+export let sortList = ['Price Promotion', 'Free Goods-Tin', 'New User', 'Free Goods-Win2', 'FMC', 'Roadshow', 'Listing fee', 'KA Rebate', 'HIH Rebate', 'Display', 'POSM - Standard', 'POSM - Customized', 'ECM', 'Premium', 'Collection', 'MMC', 'DM', 'Transport']
+// 文件格式正则
+// 根据文件名获取文件类型
 export function getFileType(fileName) {
   const fileReg = {
     // 图片格式
@@ -804,8 +744,7 @@ export function getFileType(fileName) {
     // 音频格式
     audioReg: /\.(mp3|MP3)$/,
     // 其他格式
-    otherReg:
-      /\.(jpg|jpeg|png|gif|bmp|JPG|PNG|xls|xlsx|XLS|XLSX|doc|docx|DOC|DOCX|pdf|PDF|ppt|pptx|PPT|PPTX|txt|TXT|rar|RAR|zip|ZIP|mp4|MP4|mp3|MP3)$/,
+    otherReg: /\.(jpg|jpeg|png|gif|bmp|JPG|PNG|xls|xlsx|XLS|XLSX|doc|docx|DOC|DOCX|pdf|PDF|ppt|pptx|PPT|PPTX|txt|TXT|rar|RAR|zip|ZIP|mp4|MP4|mp3|MP3)$/,
   }
   if (fileReg.imgReg.test(fileName)) {
     return 'img'

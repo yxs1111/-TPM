@@ -16,9 +16,25 @@ export default {
   getPage(params) {
     return requestApi.request_get('/cityplan/investFmcVOne/getVOnePage', params)
   },
+  // 清除数据
+  clearData(params) {
+    return requestApi.request_post('/cityplan/investCpVOneEFmc/deleteData', params)
+  },
+  //申请 分页查询
+  getPageEC(params) {
+    return requestApi.request_get('/cityplan/investCpVOneEFmc/getVOnePage', params)
+  },
   exportV1(params) {
     return request({
       url: '/cityplan/investFmcVOne/exportV1',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  exportVOne(params) {
+    return request({
+      url: '/cityplan/investCpVOneEFmc/exportVOne',
       method: 'get',
       params: params,
       responseType: 'blob'

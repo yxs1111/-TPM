@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-09-14 16:26:01
+ * @LastEditTime: 2022-11-28 13:43:21
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -229,6 +229,30 @@ export default function () {
                 activeMenu: '/costManagement/V3/V3Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3DM',
+              code: 'price_nka_v3_apply',
+              name: 'V3DM',
+              component: () => import('@/views/V3/V3Apply/V3DM.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Apply/V3Transport',
+              code: 'price_nka_v3_apply',
+              name: 'V3Transport',
+              component: () => import('@/views/V3/V3Apply/V3Transport.vue'),
+              meta: {
+                title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Apply',
+              },
+            },
           ],
         },
         {
@@ -440,6 +464,30 @@ export default function () {
               component: () => import('@/views/V3/V3Apply/V3FreeGoodsWin2.vue'),
               meta: {
                 title: 'Premium',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3DMApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3DMApproval',
+              component: () => import('@/views/V3/V3Approval/V3DMApproval.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V3/V3Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V3/V3Approval/V3TransportApproval',
+              code: 'price_nka_v3_approve',
+              name: 'V3TransportApproval',
+              component: () => import('@/views/V3/V3Approval/V3TransportApproval.vue'),
+              meta: {
+                title: 'Transport',
                 icon: 'form',
                 activeMenu: '/costManagement/V3/V3Approval',
               },

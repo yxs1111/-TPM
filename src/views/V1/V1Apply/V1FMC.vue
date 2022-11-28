@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="OpertionBar">
-        <div class="TpmButtonBG" @click="getSmartPlan" v-permission="permissions['getCPT']">
+        <div class="TpmButtonBG" v-show='this.filterObj.channelCode !== "EC"' @click="getSmartPlan" v-permission="permissions['getCPT']">
           <img src="@/assets/images/huoqu.png" alt="">
           <span class="text">获取Smart Plan数据</span>
         </div>
@@ -49,6 +49,7 @@
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
+        <el-button v-show='this.filterObj.channelCode == "EC"' type="primary" class="TpmButtonBG" @click="clear">清除数据</el-button>
       </div>
     </div>
     <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -406,32 +407,74 @@ export default {
     this.getSupplierList()
   },
   methods: {
+    // 清除数据
+    clear() {
+      this.pageNum = 1
+      this.clearData()
+    },
+    // 清除数据
+    clearData() {
+      API.clearData({
+        yearAndMonth: this.filterObj.month,
+        channelName: this.filterObj.channelCode,
+      }).then(() => {
+        alert('清除数据成功')
+      })
+    },
     // 获取表格数据
     getTableData() {
-      this.tableData = []
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
+      if (this.filterObj.channelCode == 'NKA') {
+        this.tableData = []
+        if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+          if (this.filterObj.month == '') {
+            this.$message.info(messageObj.requireMonth)
+            return
+          }
+          if (this.filterObj.channelCode == '') {
+            this.$message.info(messageObj.requireChannel)
+          }
+        } else {
+          API.getPage({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
         }
       } else {
-        API.getPage({
-          pageNum: this.pageNum, // 当前页
-          pageSize: this.pageSize, // 每页条数
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
+        this.tableData = []
+        if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+          if (this.filterObj.month == '') {
+            this.$message.info(messageObj.requireMonth)
+            return
+          }
+          if (this.filterObj.channelCode == '') {
+            this.$message.info(messageObj.requireChannel)
+          }
+        } else {
+          API.getPageEC({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+        }
       }
     },
     getAllMonth() {
@@ -518,22 +561,42 @@ export default {
     },
     // 导出
     downExcel() {
-      if (this.tableData.length) {
-        API.exportV1({
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          regionName: this.filterObj.regionName,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success('导出成功!')
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          API.exportV1({
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       } else {
-        this.$message.info('数据为空')
+        if (this.tableData.length) {
+          API.exportVOne({
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       }
     },
     // 每页显示页面数变更

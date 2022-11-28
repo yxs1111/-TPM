@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-10-14 17:50:12
+ * @LastEditTime: 2022-11-23 14:46:31
 -->
 <template>
   <div class="MainContent">
@@ -1460,7 +1460,7 @@ export default {
       }
       //避免同时出现多个el-popover
       for (const key in this.$refs) {
-        if (key.indexOf('popover-') !== -1) {
+        if (key.indexOf('popover-') !== -1&&this.$refs[key]) {
             this.$refs[key].doClose();
         }
       }

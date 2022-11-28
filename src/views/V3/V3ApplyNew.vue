@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:18:39
+ * @LastEditTime: 2022-11-18 17:22:24
 -->
 <template>
   <div class="tabViewsWrap">
@@ -231,6 +231,24 @@ export default {
                 light: require('@/assets/images/tab/tab_collection_l.png'),
               },
               minePackageName: 'Collection',
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V3/V3Apply/V3DM',
+              img: {
+                dark: require('@/assets/images/tab/tab_collection.png'),
+                light: require('@/assets/images/tab/tab_collection_l.png'),
+              },
+              minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/costManagement/V3/V3Apply/V3Transport',
+              img: {
+                dark: require('@/assets/images/tab/tab_collection.png'),
+                light: require('@/assets/images/tab/tab_collection_l.png'),
+              },
+              minePackageName: 'Transport',
             },
           ]
           let TabList = []

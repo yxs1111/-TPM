@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-21 12:00:36
+ * @LastEditTime: 2022-11-18 17:22:35
 -->
 <template>
   <div class="tabViewsWrap">
@@ -222,6 +222,24 @@ export default {
                 light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
               },
               minePackageName: 'Free Goods-Win2',
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V3/V3Approval/V3DMApproval',
+              img: {
+                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
+                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
+              },
+              minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/costManagement/V3/V3Approval/V3TransportApproval',
+              img: {
+                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
+                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
+              },
+              minePackageName: 'Transport',
             },
           ]
           let TabList = []

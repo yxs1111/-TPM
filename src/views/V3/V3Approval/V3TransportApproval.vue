@@ -1,7 +1,7 @@
 <!--
- * @Description: V3POSMApproval
+ * @Description: V3TransportApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-18 17:11:44
+ * @LastEditTime: 2022-11-28 13:39:26
 -->
 <template>
   <div class="MainContent">
@@ -22,7 +22,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.customerCode"  @change="changeCustomer" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
@@ -33,22 +33,14 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.zoneName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in zoneArr" :key="index" :label="item.name" :value="item.name" />
+          <span class="SelectliTitle">经销商:</span>
+          <el-select v-model="filterObj.distributorName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName"  />
           </el-select>
         </div>
-
         <div class="Selectli">
-          <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in regionArr" :key="index" :label="item.name" :value="item.name" />
-          </el-select>
-        </div>
-
-        <div class="Selectli">
-          <span class="SelectliTitle">POSM item:</span>
-          <el-select v-model="filterObj.posmItem" clearable filterable placeholder="请选择">
+          <span class="SelectliTitle">Transport item:</span>
+          <el-select v-model="filterObj.transportItem" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in BrandList" :key="index" :label="item.item" :value="item.item" />
           </el-select>
           <!-- 下拉数据接口未对接 -->
@@ -159,22 +151,9 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
+      <el-table-column width="220" align="center" prop="supplierName" label="供应商/经销商">
         <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
-      <el-table-column width="220" align="center" prop="supplierName" label="供应商">
-        <template v-slot:header>
-          <div>供应商<br><span class="subTitle">-</span></div>
+          <div>供应商/经销商<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -183,53 +162,19 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-      <!-- <el-table-column width="220"
-                       align="center"
-                       prop="zoneName"
-                       label="经销商">
+      <el-table-column width="220" align="right" prop="transportItem" label="Transport item">
         <template v-slot:header>
-          <div>经销商<br><span class="subTitle">-</span></div>
+          <div>Transport item<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.zoneName }}
-          </div>
-        </template>
-      </el-table-column> -->
-      <el-table-column width="220" align="center" prop="zoneName" label="大区">
-        <template v-slot:header>
-          <div>大区<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.zoneName }}
-          </div>
-        </template>
-        <!-- 数据未对接 -->
-      </el-table-column>
-      <el-table-column width="220" align="center" prop="regionName" label="区域">
-        <template v-slot:header>
-          <div>区域<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.regionName }}
+            {{  scope.row.transportItem }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="posmItem" label="POSM item">
+      <el-table-column width="300" align="right" prop="voneCost" label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{  scope.row.posmItem }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="220" align="right" prop="voneCost" label="V1计划费用(RMB)">
-        <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle">KA + Brand + Transport Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -238,9 +183,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="220" align="right" prop="vtwoCostAdjust" label="V2预估费用(RMB)">
+      <el-table-column width="380" align="right" prop="vtwoCostAdjust" label="V2预估费用(RMB)">
         <template v-slot:header>
-          <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+          <div>V2预估费用(RMB)<br><span class="subTitle">KA + Brand+Dist./Region + Transport Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -248,9 +193,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="vthreeCostDefault" label="V3实际费用-默认（RMB）">
+      <el-table-column width="380" align="right" prop="vthreeCostDefault" label="V3实际费用-默认（RMB）">
         <template v-slot:header>
-          <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+          <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand+Dist./Region + Transport Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -258,9 +203,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="vthreeCostAdjust" label="V3实际费用-调整后(RMB)">
+      <el-table-column width="380" align="right" prop="vthreeCostAdjust" label="V3实际费用-调整后(RMB)">
         <template v-slot:header>
-          <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+          <div>V3实际费用-调整后(RMB)<br><span class="subTitle">KA + Brand+Dist./Region + Transport Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -288,9 +233,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
+      <el-table-column width="320" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
-          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+          <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Transport Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -383,16 +328,6 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <!--          <div class="seeData"-->
-          <!--               style="width: auto;">-->
-          <!--            <div class="exportError"-->
-          <!--                 @click="exportErrorList">-->
-          <!--              <img src="@/assets/exportError_icon.png"-->
-          <!--                   alt=""-->
-          <!--                   class="exportError_icon">-->
-          <!--              <span>导出错误信息</span>-->
-          <!--            </div>-->
-          <!--          </div>-->
         </div>
 
         <div class="tableWrap">
@@ -421,26 +356,24 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <!--            验证信息-->
-            <vxe-table-column width="400" align="left" field="systemJudgmentContent" title="验证信息" fixed="left">
+            <vxe-table-column width="400" show-overflow align="left" fixed="left" field="systemJudgmentContent" title="验证信息">
               <template v-slot:header>
                 <div>验证信息<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.systemJudgmentContent }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
-            <!--            CPID-->
-            <vxe-table-column align="center" width="460" field="cpId" title="CPID" fixed="left">
+            <vxe-table-column align="center" show-overflow width="400" field="cpId" title="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.cpId }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
             <!--            活动月-->
@@ -451,33 +384,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.yearAndMonth }}
-                </div>
-              </template>
-            </vxe-table-column>
-            <!--            系统判定-->
-            <vxe-table-column width="180" align="center" field="systemJudgment" title="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="400" align="left" field="systemJudgmentContent" title="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </vxe-table-column>
@@ -541,9 +447,9 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220" align="center" field="supplierName" title="供应商">
+            <vxe-table-column width="220" align="center" field="supplierName" title="供应商/经销商">
               <template v-slot:header>
-                <div>供应商<br><span class="subTitle">-</span></div>
+                <div>供应商/经销商<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -552,40 +458,19 @@
               </template>
               <!-- 数据未对接 -->
             </vxe-table-column>
-            <vxe-table-column width="220" align="center" field="zoneName" title="大区">
+            <vxe-table-column width="220" align="center" field="transportItem" title="Transport item">
               <template v-slot:header>
-                <div>大区<br><span class="subTitle">-</span></div>
+                <div>Transport item<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.zoneName }}
-                </div>
-              </template>
-              <!-- 数据未对接 -->
-            </vxe-table-column>
-            <vxe-table-column width="220" align="center" field="regionName" title="区域">
-              <template v-slot:header>
-                <div>区域<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.regionName }}
+                  {{  scope.row.transportItem }}
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220" align="right" field="posmItem" title="POSM item">
+            <vxe-table-column width="320" align="right" field="voneCost" title="V1计划费用(RMB)">
               <template v-slot:header>
-                <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{  scope.row.posmItem }}
-                </div>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="220" align="right" field="voneCost" title="V1计划费用(RMB)">
-              <template v-slot:header>
-                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Transport Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -594,9 +479,9 @@
               </template>
             </vxe-table-column>
 
-            <vxe-table-column width="220" align="right" field="vtwoCostAdjust" title="V2预估费用(RMB)">
+            <vxe-table-column width="320" align="right" field="vtwoCostAdjust" title="V2预估费用(RMB)">
               <template v-slot:header>
-                <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+                <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand+Dist./Region + Transport Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -604,9 +489,9 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220" align="right" field="vthreeCostDefault" title="V3实际费用-默认（RMB）">
+            <vxe-table-column width="320" align="right" field="vthreeCostDefault" title="V3实际费用-默认（RMB）">
               <template v-slot:header>
-                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand+Dist./Region + Transport Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -614,9 +499,9 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220" align="right" field="vthreeCostAdjust" title="V3实际费用-调整后(RMB)">
+            <vxe-table-column width="320" align="right" field="vthreeCostAdjust" title="V3实际费用-调整后(RMB)">
               <template v-slot:header>
-                <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
+                <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand+Dist./Region + Transport Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -644,9 +529,9 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220" align="right" field="costDifference" title="费用差值(RMB)">
+            <vxe-table-column width="320" align="right" field="costDifference" title="费用差值(RMB)">
               <template v-slot:header>
-                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
+                <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Transport Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -654,14 +539,14 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="120" align="center" field="applicantRemark" title="申请人备注">
+            <vxe-table-column width="200" show-overflow  align="center" field="applicantRemark" title="申请人备注">
               <template v-slot:header>
                 <div>申请人备注<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.applicantRemark }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
             <vxe-table-column width="220" align="center" field="poApprovalComments" title="Package Owner审批意见">
@@ -703,9 +588,9 @@ import {
   formatThousandNum,
 } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import API from '@/api/V3/POSM'
+import API from '@/api/V3/Transport'
 export default {
-  name: 'V3POSMApproval',
+  name: 'V3TransportApproval',
   directives: { elDragDialog, permission },
 
   data() {
@@ -714,19 +599,17 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        zoneName: '', //大区
-        regionName: '', //区域
         supplierName: '', //供应商
         channelCode: '', //渠道
+        customerMdmCode: '', //客户MDM code
         customerCode: '', //客户系统名称
+        distributorName: '', //经销商
         month: '', //活动月
-        posmItem: '',
+        transportItem: '',
       },
       permissions: getDefaultPermissions(),
       supplierArr: [], //供应商下拉
-      zoneArr: [], //大区下拉
-      regionArr: [], //区域下拉
-
+      distributorArr: [],
       monthList: [],
       customerArr: [],
       tableData: [],
@@ -762,15 +645,12 @@ export default {
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
-    // this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
-    this.getzoneArr()
-    // this.getDistributorList()
-    this.getRegionList()
+    this.getTransportItemList()
     this.getPageMdSupplier()
     this.getCustomerList()
     this.getChannel()
+    this.getDistributorList()
   },
   methods: {
     // 获取表格数据
@@ -789,13 +669,11 @@ export default {
         API.getVThreePageApprove({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
           supplierName: this.filterObj.supplierName, //供应商
           channelName: this.filterObj.channelCode, //渠道
           customerName: this.filterObj.customerCode, //客户系统名称
-
-          posmItem: this.filterObj.posmItem, //
+          distributorName: this.filterObj.distributorName, //经销商
+          transportItem: this.filterObj.transportItem, //
           yearAndMonth: this.filterObj.month,
           isSubmit: 1,
         }).then((response) => {
@@ -817,7 +695,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'POSM-V3' &&
+              res.data.version === 'Transport-V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {
@@ -834,6 +712,27 @@ export default {
       selectAPI.getAllMonth().then((res) => {
         this.monthList = res.data
       })
+    },
+    // 经销商
+    getDistributorList() {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode: this.filterObj.customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+        .catch()
+    },
+    //更改客户
+    changeCustomer() {
+      const customerObj= this.customerArr.find(item=>{
+        return item.customerCode==this.filterObj.customerCode
+      })
+      this.filterObj.customerMdmCode=customerObj.customerMdmCode
+      this.getDistributorList()
     },
     // 客户
     getCustomerList() {
@@ -855,28 +754,8 @@ export default {
         }
       })
     },
-    //获取区域下拉
-    getRegionList() {
-      if (this.filterObj.distributorCode != '') {
-        selectAPI
-          .getRegionList({
-            zoneName: this.filterObj.distributorCode,
-          })
-          .then((res) => {
-            if (res.code === 1000) {
-              this.regionArr = res.data
-            }
-          })
-      } else {
-        selectAPI.getRegionList().then((res) => {
-          if (res.code === 1000) {
-            this.regionArr = res.data
-          }
-        })
-      }
-    },
-    getBrandList() {
-      selectAPI.getPosmItemList({}).then((res) => {
+    getTransportItemList() {
+      selectAPI.getTransportItemList({minePackage:'Transport Costs'}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
@@ -891,14 +770,6 @@ export default {
         }
       })
     },
-    //获取大区下拉
-    getzoneArr() {
-      selectAPI.getLargeAreaList({}).then((res) => {
-        if (res.code === 1000) {
-          this.zoneArr = res.data
-        }
-      })
-    },
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
@@ -908,7 +779,7 @@ export default {
           isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V3_POSM-标准_异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V3_Transport_异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -928,19 +799,17 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.exportV3({
-          zoneName: this.filterObj.zoneName, //大区
-          regionName: this.filterObj.regionName, //区域
           supplierName: this.filterObj.supplierName, //供应商
           channelName: this.filterObj.channelCode, //渠道
           customerName: this.filterObj.customerCode, //客户系统名称
-
-          posmItem: this.filterObj.posmItem, //
+          distributorName: this.filterObj.distributorName, //经销商
+          transportItem: this.filterObj.transportItem, //
           yearAndMonth: this.filterObj.month,
           isSubmit: 1,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_POSM-标准_${this.filterObj.channelCode}_V3_查询.xlsx`
+            `${this.filterObj.month}_Transport_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1043,7 +912,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_POSM-标准_${this.filterObj.channelCode}_V3审批.xlsx`
+            `${this.filterObj.month}_Transport_${this.filterObj.channelCode}_V3审批.xlsx`
           ) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
@@ -1138,7 +1007,7 @@ export default {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
     getTip(row) {
-      return `<div class="Tip">${row.judgmentContent}</div>`
+      return `<div class="Tip">${row.systemJudgmentContent}</div>`
     },
   },
 }

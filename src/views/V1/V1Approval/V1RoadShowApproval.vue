@@ -28,26 +28,26 @@
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
+          <el-select v-model="filterObj.zoneCode" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in largeAreaDialogList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.code" />
+            <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">活动类型:</span>
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
+          <el-select v-model="filterObj.item" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in regionArr" :key="index" :label="item.supplierName" :value="item.item" />
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">Sub_item:</span>
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierBiCode" />
+          <el-select v-model="filterObj.subItem" filterable clearable placeholder="请选择">
+            <el-option v-for="item,index in ['场地费', '执行费', 'POSM费用']" :key="index" :label="item.item" :value="item" />
           </el-select>
         </div>
         <!-- <div class="Selectli">
@@ -166,13 +166,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="280" align="center" prop="supplierName" label="Sub_item">
+      <el-table-column width="280" align="center" prop="subItem" label="Sub_item">
         <template v-slot:header>
           <div>Sub_item<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.supplierName }}
+            {{ scope.row.subItem }}
           </div>
         </template>
       </el-table-column>
@@ -402,6 +402,9 @@ export default {
         regionCode: '',
         zoneCode: '',
         activityType: '',
+        item: '',
+        subItem: '',
+        subCode: ''
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -409,6 +412,8 @@ export default {
       customerArr: [],
       tableData: [],
       RegionList: [],
+      regionArr: [],
+      largeAreaDialogList: [],
       supplierList: [],
       activityList: [],
       maxheight: getHeightHaveTab(),
@@ -431,6 +436,8 @@ export default {
     this.getAllMonth()
     this.getSupplierList()
     this.getRegionList()
+    this.getBrandList()
+    this.getAreaList()
   },
   methods: {
     // 获取表格数据
@@ -454,7 +461,8 @@ export default {
           supplierCode: this.filterObj.supplierCode,
           zoneCode: this.filterObj.zoneCode,
           regionCode: this.filterObj.regionCode,
-          activityType: this.filterObj.activityType,
+          activityType: this.filterObj.item,
+          subItem: this.filterObj.subItem
         }).then((response) => {
           this.tableData = response.data.records
           this.pageNum = response.data.pageNum
@@ -489,6 +497,22 @@ export default {
           }
         })
     },
+    // 获取大区数据
+    getAreaList() {
+      selectAPI.getLargeAreaList({ parentCode: '' }).then((res) => {
+        if (res.code === 1000) {
+          this.largeAreaDialogList = res.data
+        }
+      })
+    },
+    // 活动类型
+    getBrandList() {
+      selectAPI.getECMItemList({ minePackage: 'Roadshow' }).then((res) => {
+        if (res.code === 1000) {
+          this.regionArr = res.data
+        }
+      })
+    },
     getRegionList() {
       selectAPI.getRegionList({}).then((res) => {
         if (res.code === 1000) {
@@ -515,9 +539,16 @@ export default {
     downExcel() {
       if (this.tableData.length) {
         API.downExcel({
+          pageNum: this.pageNum, // 当前页
+          pageSize: this.pageSize, // 每页条数
           yearAndMonth: this.filterObj.month,
           channelCode: this.filterObj.channelCode,
           customerCode: this.filterObj.customerCode,
+          supplierCode: this.filterObj.supplierCode,
+          zoneCode: this.filterObj.zoneCode,
+          regionCode: this.filterObj.regionCode,
+          activityType: this.filterObj.item,
+          subItem: this.filterObj.subItem,
           menu: 'export', //导出常量 固定传这个
         }).then((res) => {
           downloadFile(

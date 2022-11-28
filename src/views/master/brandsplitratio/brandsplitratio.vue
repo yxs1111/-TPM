@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-09-19 15:36:40
+ * @LastEditTime: 2022-11-24 15:21:18
 -->
 <template>
   <div class="app-container">
@@ -288,6 +288,7 @@ export default {
     }
     this.getTableData()
     this.getAllMonth()
+    this.getMinePackageList()
   },
   computed: {},
   watch: {},
@@ -318,6 +319,19 @@ export default {
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
+      })
+    },
+    getMinePackageList() {
+      selectAPI.queryMinePackageSelect({
+      }).then((res) => {
+        if (res.code === 1000) {
+          let list=res.data
+          list.forEach((item) => {
+            item.name = item.costType
+            item.code = item.costTypeNumber
+          })
+          this.minePackageList=list
+        }
       })
     },
     //获取活动月数据

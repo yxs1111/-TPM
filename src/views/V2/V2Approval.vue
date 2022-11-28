@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-06-24 13:33:26
+ * @LastEditTime: 2022-11-18 14:24:37
 -->
 <template>
   <div class="tabViewsWrap">
@@ -195,6 +195,14 @@ export default {
             {
               name: 'Premium',
               path: '/costManagement/V2/V2Approval/V2PremiumApproval',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V2/V2Approval/V2DMApproval',
               img: {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
                 light: require('@/assets/images/tab/StraightGiving_l.png'),
