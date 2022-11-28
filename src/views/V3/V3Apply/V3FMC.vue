@@ -1380,7 +1380,7 @@ export default {
             const timestamp = Date.parse(new Date())
             downloadFile(
               res,
-              'V2_FMC异常信息 -' + timestamp + '.xlsx'
+              'V3_FMC异常信息 -' + timestamp + '.xlsx'
             ) //自定义Excel文件名
             this.$message.success('导出成功!')
           })

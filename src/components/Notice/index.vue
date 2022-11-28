@@ -812,6 +812,7 @@ export default {
   //font-size: 12px;
   //color: #586aba;
   //float: left;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
   line-height: 45px;
   font-size: 17px;
   color: #4192d3;
