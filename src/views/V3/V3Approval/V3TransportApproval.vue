@@ -1,7 +1,7 @@
 <!--
  * @Description: V3TransportApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-23 15:34:55
+ * @LastEditTime: 2022-11-28 13:39:26
 -->
 <template>
   <div class="MainContent">
@@ -356,26 +356,24 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <!--            验证信息-->
-            <vxe-table-column width="400" align="left" field="systemJudgmentContent" title="验证信息" fixed="left">
+            <vxe-table-column width="400" show-overflow align="left" fixed="left" field="systemJudgmentContent" title="验证信息">
               <template v-slot:header>
                 <div>验证信息<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.systemJudgmentContent }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
-            <!--            CPID-->
-            <vxe-table-column align="center" width="460" field="cpId" title="CPID">
+            <vxe-table-column align="center" show-overflow width="400" field="cpId" title="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.cpId }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
             <!--            活动月-->
@@ -386,33 +384,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.yearAndMonth }}
-                </div>
-              </template>
-            </vxe-table-column>
-            <!--            系统判定-->
-            <vxe-table-column width="180" align="center" field="systemJudgment" title="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="400" align="left" field="systemJudgmentContent" title="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </vxe-table-column>
@@ -487,7 +458,7 @@
               </template>
               <!-- 数据未对接 -->
             </vxe-table-column>
-            <vxe-table-column width="220" align="right" field="transportItem" title="Transport item">
+            <vxe-table-column width="220" align="center" field="transportItem" title="Transport item">
               <template v-slot:header>
                 <div>Transport item<br><span class="subTitle">-</span></div>
               </template>
@@ -568,14 +539,14 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="120" align="center" field="applicantRemark" title="申请人备注">
+            <vxe-table-column width="200" show-overflow  align="center" field="applicantRemark" title="申请人备注">
               <template v-slot:header>
                 <div>申请人备注<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
+                <span>
                   {{ scope.row.applicantRemark }}
-                </div>
+                </span>
               </template>
             </vxe-table-column>
             <vxe-table-column width="220" align="center" field="poApprovalComments" title="Package Owner审批意见">
