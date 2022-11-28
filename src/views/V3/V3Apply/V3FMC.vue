@@ -56,7 +56,7 @@
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)" v-show='this.filterObj.channelCode !== "NKA"'>
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe) && this.filterObj.channelCode !== 'EC' " >
         <span class="tipStar">*</span>
         注意事项：未获取到实际人数，无法办理
       </div>
