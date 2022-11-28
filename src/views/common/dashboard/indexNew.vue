@@ -187,41 +187,6 @@
           </div>
         </div>
       </div>
-      <!--      左下角问号-->
-      <el-popover class='el-popoverTwo' placement="left" width="500" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
-        <div class="documentation">用户文档中心</div>
-        <el-table :data="gridData">
-          <el-table-column width="50" property="" label="">
-            <template slot-scope="scope">
-              <img src='../../../assets/images/EXCEL.png' v-if='scope.row.format == "excel"'>
-              <img src='../../../assets/images/word.png' v-if='scope.row.format == "word"'>
-              <img src='../../../assets/images/yasuowenjian.png' v-if='scope.row.format == "zip"'>
-              <img src='../../../assets/images/PPT.png' v-if='scope.row.format == "ppt"'>
-              <img src='../../../assets/images/tupian.png' v-if='scope.row.format == "pdf"'>
-              <img src='../../../assets/images/shipin.png' v-if='scope.row.format == "video"'>
-
-<!--              <img v-if="scope.row.format == &quot;excel&quot;" src="../../../assets/images/EXCEL.png">-->
-<!--              <img v-if="scope.row.format == &quot;word&quot;" src="../../../assets/images/word.png">-->
-<!--              <img v-if="scope.row.format == &quot;zip&quot;" src="../../../assets/images/yasuowenjian.png">-->
-<!--              <img v-if="scope.row.format == &quot;ppt&quot;" src="../../../assets/images/PPT.png">-->
-<!--              <img v-if="scope.row.format == &quot;pdf&quot;" src="../../../assets/images/tupian.png">-->
-<!--              <img v-if="scope.row.format == &quot;video&quot;" src="../../../assets/images/shipin.png">-->
-            </template>
-          </el-table-column>
-          <el-table-column width="250" property="name" label="文件名称" />
-          <el-table-column width="100" property="size" label="文件大小" />
-          <el-table-column width="60" label="">
-            <template slot-scope="scope">
-              <el-link :href="scope.row.fileUrl">
-                <img src="../../../assets/images/dwonload.png">
-              </el-link>
-            </template>
-          </el-table-column>
-        </el-table>
-<!--        <el-button slot="reference" class="needHelp">-->
-<!--          <div class="needHelpTxt">?</div>-->
-<!--        </el-button>-->
-      </el-popover>
     </div>
     <div v-if="flowDiagram.visible">
       <flow-diagram svg-type="instance" :business-id="flowDiagram.businessId" :process-id="flowDiagram.processId" :visible.sync="flowDiagram.visible" title="流程图" width="90%" />
@@ -276,7 +241,7 @@ export default {
         html: false,
       },
       row: {
-        height: 34,
+        height: 26,
       },
       times: {
         timeScale: 60 * 1000,
@@ -1315,6 +1280,11 @@ export default {
 //.main-container {
 //  overflow-y: auto;
 //}
+.indexTable {
+  .el-tooltip  {
+    text-align: left;
+  }
+}
 .el-popoverTwo {
   height: 410px !important;
   overflow: auto !important;
@@ -1335,6 +1305,7 @@ export default {
   overflow-x: hidden;
 }
 .index_container {
+  height: 60%;
   border-radius: 25px;
   background-color: #fff;
   padding-bottom: 20px;
@@ -1512,7 +1483,7 @@ export default {
 .CityPlan {
   margin: 20px 20px 0px 20px;
   width: 97%;
-  height: 310px;
+  height: calc(100% - 280px);
   background-color: #f0fbff;
   border-radius: 20px;
   box-shadow: 0px 0px 20px 0px rgba(65, 146, 211, 0.04);
@@ -1986,7 +1957,7 @@ export default {
 }
 .BottomBar {
   width: 100%;
-  height: 344px;
+  height: 35%;
   display: flex;
   justify-content: space-between;
   align-items: center;

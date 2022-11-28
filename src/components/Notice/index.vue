@@ -16,7 +16,7 @@
         </div>
         <el-button type="primary" style='display: inline-block' class="TpmButtonBG" @click="search">查询</el-button>
       </div>
-      <el-table ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" border fit stripe height="400"
+      <el-table class='indexTable' ref="noticeListTable" v-loading="noticePage.searchLoading" :data="noticePage.noticePageProps.record" border fit stripe height="400"
         highlight-current-row @row-click="handleCurrentRowClick" @row-dblclick="handleCurrentRowDblClick" @selection-change="handleSelectionChange">
         <el-table-column align="center" width='70' prop="id" label="序号" />
         <el-table-column align="center" label="操作" width="180">

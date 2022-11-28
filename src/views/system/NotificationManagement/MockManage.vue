@@ -87,6 +87,7 @@
         width="180"
       />
       <el-table-column
+        show-overflow-tooltip
         align="left"
         prop="triggerCondition"
         label="触发条件"
@@ -559,8 +560,8 @@ export default {
 .ejectInput3 .el-input--suffix {
   width: 100% !important;
 }
-.ejectInput2 .el-input--suffix {
-  width: 100% !important;
+。el-table_12_column_138 .is-left {
+  white-space: nowrap;
 }
 .el-cascader .el-cascader__tags span {
   width: 120px;

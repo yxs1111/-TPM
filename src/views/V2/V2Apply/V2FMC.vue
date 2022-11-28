@@ -56,7 +56,7 @@
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
+      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)" v-show='this.filterObj.channelCode !== "EC"'>
         <span class="tipStar">*</span>
         注意事项：请筛选活动月和渠道办理，若未获取到MTD人数，则无法办理
       </div>
@@ -1056,6 +1056,9 @@ export default {
             this.customerArr = res.data
           }
         })
+      if (this.filterObj.channelCode == 'EC') {
+        this.isGainLe = 1
+      }
     },
     getRegionList() {
       selectAPI.getRegionList({}).then((res) => {
@@ -1233,7 +1236,6 @@ export default {
           } else {
             this.$message.info(this.messageMap.checkError)
           }
-          this.saveBtn=1
         })
       } else {
         API.exceptionCheckEC({
@@ -1255,7 +1257,6 @@ export default {
           } else {
             this.$message.info(this.messageMap.checkError)
           }
-          this.saveBtn=1
         })
       }
     },
@@ -1300,10 +1301,9 @@ export default {
             supplierName: this.filterObj.supplierName,
             regionName: this.filterObj.regionName,
           }).then((res) => {
-            const timestamp = Date.parse(new Date())
             downloadFile(
               res,
-              'V2_FMC异常信息 -' + timestamp + '.xlsx'
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
             ) //自定义Excel文件名
             this.$message.success('导出成功!')
           })
@@ -1319,9 +1319,10 @@ export default {
             supplierName: this.filterObj.supplierName,
             regionName: this.filterObj.regionName,
           }).then((res) => {
+            const timestamp = Date.parse(new Date())
             downloadFile(
               res,
-              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V2异常信息.xlsx`
+              'V2_FMC异常信息 -' + timestamp + '.xlsx'
             ) //自定义Excel文件名
             this.$message.success('导出成功!')
           })
