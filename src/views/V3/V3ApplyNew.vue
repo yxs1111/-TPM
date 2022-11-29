@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-18 17:22:24
+ * @LastEditTime: 2022-11-29 09:13:52
 -->
 <template>
   <div class="tabViewsWrap">
@@ -194,7 +194,7 @@ export default {
                 dark: require('@/assets/images/tab/UnStraightGiving.png'),
                 light: require('@/assets/images/tab/UnStraightGiving_l.png'),
               },
-              minePackageName: 'MMC',
+              minePackageName: 'Mama class',
             },
             {
               name: 'Premium',
@@ -248,7 +248,7 @@ export default {
                 dark: require('@/assets/images/tab/tab_collection.png'),
                 light: require('@/assets/images/tab/tab_collection_l.png'),
               },
-              minePackageName: 'Transport',
+              minePackageName: 'Transport Costs',
             },
           ]
           let TabList = []

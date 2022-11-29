@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-28 13:39:16
+ * @LastEditTime: 2022-11-29 10:13:42
 -->
 <template>
   <div class="MainContent">
@@ -341,9 +341,9 @@
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
             <!--            是否通过-->
-            <vxe-table-column width="180" align="center" field="systemJudgment" title="是否通过" fixed="left">
+            <vxe-table-column width="180" align="center" field="systemJudgment" title="系统判定" fixed="left">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -357,9 +357,9 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="400" show-overflow align="left" fixed="left" field="systemJudgmentContent" title="验证信息">
+            <vxe-table-column width="400" show-overflow align="center" fixed="left" field="systemJudgmentContent" title="系统判定内容">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <span>

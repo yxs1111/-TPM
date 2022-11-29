@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-18 16:34:40
+ * @LastEditTime: 2022-11-29 09:12:54
 -->
 <template>
   <div class="tabViewsWrap">
@@ -153,7 +153,7 @@ export default {
             {
               name: 'MMC',
               path: '/costManagement/V1/V1Approval/V1ApplyrovalMMC',
-              minePackageName: 'MMC',
+              minePackageName: 'Mama class',
             },
             {
               name: 'DM',
@@ -163,7 +163,7 @@ export default {
             {
               name: 'Transport',
               path: '/costManagement/V1/V1Approval/V1Transport',
-              minePackageName: 'Transport',
+              minePackageName: 'Transport Costs',
             },
           ]
           let TabList = []
