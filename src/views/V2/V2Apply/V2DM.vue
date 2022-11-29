@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-24 15:16:22
+ * @LastEditTime: 2022-11-29 10:22:07
 -->
 <template>
   <div class="MainContent">
@@ -341,7 +341,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="350" align="left" fixed="left" prop="judgmentContent" label="系统判定内容">
+            <el-table-column width="350" align="center" fixed="left" prop="judgmentContent" label="系统判定内容">
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
@@ -351,7 +351,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" width="230" prop="cpId" label="CPID" fixed="left">
+            <el-table-column align="center" width="400" prop="cpId" label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -510,32 +510,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ formatNum(scope.row.differenceCost) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="800" align="left" prop="judgmentContent" label="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.judgmentContent }}
                 </div>
               </template>
             </el-table-column>

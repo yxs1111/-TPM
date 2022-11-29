@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-24 15:16:44
+ * @LastEditTime: 2022-11-29 10:22:12
 -->
 <template>
   <div class="MainContent">
@@ -324,9 +324,9 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column width="180" align="center" fixed="left" prop="judgmentType  " label="是否通过">
+            <el-table-column width="180" align="center" fixed="left" prop="judgmentType  " label="系统判定">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -340,9 +340,9 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="350" align="left" fixed="left" prop="judgmentContent" label="验证信息">
+            <el-table-column width="350" align="center" fixed="left" prop="judgmentContent" label="系统判定内容">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -350,7 +350,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column align="center" width="230" prop="cpId" label="CPID" fixed="left">
+            <el-table-column align="center" width="400" prop="cpId" label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
