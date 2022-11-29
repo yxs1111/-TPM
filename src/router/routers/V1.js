@@ -1,13 +1,13 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-11-28 14:52:42
+ * @LastEditTime: 2022-11-28 17:39:57
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
 import { showRouter } from '@/utils'
 
-export default function() {
+export default function () {
   const V1 = [
     {
       path: '/costManagement/V1',
@@ -34,20 +34,21 @@ export default function() {
               meta: {
                 title: '折扣项-汇总',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
               path: '/costManagement/V1/V1Apply/V1discountDiscount',
               code: 'price_nka_v1_apply',
               name: 'V1discountDiscount',
-              component: () => import('@/views/V1/V1Apply/V1discountDiscount.vue'),
+              component: () =>
+                import('@/views/V1/V1Apply/V1discountDiscount.vue'),
               meta: {
                 title: '折扣项-价促',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -58,8 +59,8 @@ export default function() {
               meta: {
                 title: '折扣项-新客',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -70,8 +71,8 @@ export default function() {
               meta: {
                 title: '折扣项-HIH Rebate',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -82,8 +83,8 @@ export default function() {
               meta: {
                 title: '折扣项-KA Rebate',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -94,8 +95,8 @@ export default function() {
               meta: {
                 title: 'FMC',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -106,8 +107,8 @@ export default function() {
               meta: {
                 title: 'Roadshow',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -118,8 +119,8 @@ export default function() {
               meta: {
                 title: 'Listing Fee',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -130,8 +131,8 @@ export default function() {
               meta: {
                 title: 'POSM-标准',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -142,8 +143,8 @@ export default function() {
               meta: {
                 title: 'POSM-定制',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -155,8 +156,8 @@ export default function() {
               meta: {
                 title: 'ECM',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -167,11 +168,12 @@ export default function() {
               meta: {
                 title: 'Display',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
+
               path: '/costManagement/V1/V1Apply/V1Premium',
               code: 'price_nka_v1_apply',
               name: 'V1Premium',
@@ -179,8 +181,8 @@ export default function() {
               meta: {
                 title: 'Premium',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -192,8 +194,8 @@ export default function() {
               meta: {
                 title: 'Free Goods-Tin',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -204,22 +206,11 @@ export default function() {
               meta: {
                 title: 'Free Goods-Win2',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
-              path: '/costManagement/V1/V1Apply/V1MMC',
-              code: 'price_nka_v1_apply',
-              name: 'V1MMC',
-              component: () => import('@/views/V1/V1Apply/V1MMC.vue'),
-              meta: {
-                title: 'MMC',
-                icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
-            },
-            {
               path: '/costManagement/V1/V1Apply/V1DM',
               code: 'price_nka_v1_apply',
               name: 'V1DM',
@@ -227,8 +218,8 @@ export default function() {
               meta: {
                 title: 'DM',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
             },
             {
               hidden: true,
@@ -239,10 +230,22 @@ export default function() {
               meta: {
                 title: 'Transport',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Apply'
-              }
-            }
-          ]
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1MMC',
+              code: 'price_nka_v1_apply',
+              name: 'V1MMC',
+              component: () => import('@/views/V1/V1Apply/V1MMC.vue'),
+              meta: {
+                title: 'MMC',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+          ],
         },
         {
           path: '/costManagement/V1/V1Approval',
@@ -257,36 +260,39 @@ export default function() {
               path: '/costManagement/V1/V1Approval/V1discountAllApproval',
               code: 'price_nka_v1_approve',
               name: 'V1discountAllApproval',
-              component: () => import('@/views/V1/V1Approval/V1discountAllApproval.vue'),
+              component: () =>
+                import('@/views/V1/V1Approval/V1discountAllApproval.vue'),
               meta: {
                 title: '折扣项-汇总',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
               path: '/costManagement/V1/V1Approval/V1discountDiscountApproval',
               code: 'price_nka_v1_approve',
               name: 'V1discountDiscountApproval',
-              component: () => import('@/views/V1/V1Approval/V1discountDiscountApproval.vue'),
+              component: () =>
+                import('@/views/V1/V1Approval/V1discountDiscountApproval.vue'),
               meta: {
                 title: '折扣项-价促',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
               path: '/costManagement/V1/V1Approval/V1discountNUApproval',
               code: 'price_nka_v1_approve',
               name: 'V1discountNUApproval',
-              component: () => import('@/views/V1/V1Approval/V1discountNUApproval.vue'),
+              component: () =>
+                import('@/views/V1/V1Approval/V1discountNUApproval.vue'),
               meta: {
                 title: '折扣项-新客',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -297,8 +303,8 @@ export default function() {
               meta: {
                 title: '折扣项-HIH Rebate',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -309,32 +315,34 @@ export default function() {
               meta: {
                 title: '折扣项-KA Rebate',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
               path: '/costManagement/V1/V1Approval/V1FMCApproval',
               code: 'price_nka_v1_approve',
               name: 'V1FMCApprove',
-              component: () => import('@/views/V1/V1Approval/V1FMCApproval.vue'),
+              component: () =>
+                import('@/views/V1/V1Approval/V1FMCApproval.vue'),
               meta: {
                 title: 'FMC',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
               path: '/costManagement/V1/V1Approval/V1RoadShowApproval',
               code: 'price_nka_v1_approve',
               name: 'V1RoadShowApproval',
-              component: () => import('@/views/V1/V1Approval/V1RoadShowApproval.vue'),
+              component: () =>
+                import('@/views/V1/V1Approval/V1RoadShowApproval.vue'),
               meta: {
                 title: 'Roadshow',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -345,8 +353,8 @@ export default function() {
               meta: {
                 title: 'Listing Fee',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -357,8 +365,8 @@ export default function() {
               meta: {
                 title: 'POSM-标准',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -369,8 +377,8 @@ export default function() {
               meta: {
                 title: 'POSM-定制',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -381,20 +389,21 @@ export default function() {
               meta: {
                 title: 'ECM',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
               path: '/costManagement/V1/V1Approval/V1ApplyrovalDisplay',
               code: 'price_nka_v1_approve',
               name: 'V1ApplyrovalDisplay',
-              component: () => import('@/views/V1/V1Approval/V1ApplyrovalDisplay.vue'),
+              component: () =>
+                import('@/views/V1/V1Approval/V1ApplyrovalDisplay.vue'),
               meta: {
                 title: 'Display',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -405,8 +414,8 @@ export default function() {
               meta: {
                 title: 'Premium',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -418,8 +427,8 @@ export default function() {
               meta: {
                 title: 'Free Goods-Tin',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -430,22 +439,11 @@ export default function() {
               meta: {
                 title: 'Free Goods-Win2',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
-              path: '/costManagement/V1/V1Approval/V1ApplyrovalMMC',
-              code: 'price_nka_v1_approve',
-              name: 'V1ApplyrovalMMC',
-              component: () => import('@/views/V1/V1Approval/V1ApplyrovalMMC.vue'),
-              meta: {
-                title: 'MMC',
-                icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
-            },
-            {
               path: '/costManagement/V1/V1Approval/V1DM',
               code: 'price_nka_v1_approve',
               name: 'V1DMApproval',
@@ -453,8 +451,8 @@ export default function() {
               meta: {
                 title: 'DM',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
             },
             {
               hidden: true,
@@ -465,13 +463,27 @@ export default function() {
               meta: {
                 title: 'Transport',
                 icon: 'form',
-                activeMenu: '/costManagement/V1/V1Approval'
-              }
-            }
-          ]
-        }
-      ]
-    }
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+              
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalMMC',
+              code: 'price_nka_v1_approve',
+              name: 'V1ApplyrovalMMC',
+              component: () =>
+                import('@/views/V1/V1Approval/V1ApplyrovalMMC.vue'),
+              meta: {
+                title: 'MMC',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+          ],
+        },
+      ],
+    },
   ]
 
   if (showRouter([settings.stageKey])) {
