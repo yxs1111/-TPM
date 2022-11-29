@@ -41,14 +41,14 @@
         <div class="OpertionBar">
           <el-button type="primary" class="TpmButtonBG" @click="getTableData">查询</el-button>
           <div class="TpmButtonBG" @click="exportExcelInfo()">
-            <img src="../../../assets/images/export.png" alt="" />
+            <img src="../../../assets/images/export.png" />
             <span class="text">导出</span>
           </div>
         </div>
       </div>
       <div class="TpmButtonBGWrap" style="align-items: center">
         <div class="TpmButtonBG" :class="isSubmit ? '' : 'noClick'" @click="importData">
-          <img src="@/assets/images/import.png" alt="" />
+          <img src="@/assets/images/import.png" />
           <span class="text">导入</span>
         </div>
         <div class="TpmButtonBG" :class="isSubmit ? '' : 'noClick'" @click="approve()">
@@ -183,23 +183,18 @@
             :row-class-name="tableRowClassName"
             stripe
           >
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column width="150" align="center" prop="judgmentType" label="系统判定" fixed>
               <template slot-scope="{ row }">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType == 'Pass'" src="@/assets/images/success.png" alt="" />
-                    <img v-if="row.judgmentType != null && row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="" />
-                    <img v-if="row.judgmentType == 'Error'" src="@/assets/images/selectError.png" alt="" />
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
+                <div class="statusWrap">
+                  <img v-if="row.judgmentType == 'Pass'" src="@/assets/images/success.png" />
+                  <img v-if="row.judgmentType != null && row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" />
+                  <img v-if="row.judgmentType == 'Error'" src="@/assets/images/selectError.png" />
+                  <span class="judgmentText">{{ row.judgmentType }}</span>
+                </div>
               </template>
             </el-table-column>
-            <el-table-column width="150" align="center" prop="judgmentType" label="系统判定" />
-            <el-table-column width="300" align="center" prop="judgmentContent" label="系统判定内容" />
-            <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
-            <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
+            <el-table-column width="300" align="center" prop="judgmentContent" label="系统判定内容" fixed />
+            <el-table-column width="420" align="center" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
