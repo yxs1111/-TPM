@@ -1,7 +1,7 @@
 <!--
  * @Description: V1DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-18 13:36:54
+ * @LastEditTime: 2022-11-29 17:39:03
 -->
 <template>
   <div class="MainContent">
@@ -21,21 +21,27 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户系统名称:</span>
+          <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" @change="changeCustomer" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">品牌:</span>
+          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
-          <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
+          <el-select v-model="filterObj.distributorMdmCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">DM item:</span>
           <el-select v-model="filterObj.dmItem" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.item" :value="item.item" />
+            <el-option v-for="(item, index) in DMItemList" :key="index" :label="item.item" :value="item.item" />
           </el-select>
         </div>
 
@@ -221,10 +227,9 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        zoneName: '', //大区
-        regionName: '', //区域
-
+        distributorMdmCode: '', //经销商
         channelCode: '', //渠道
+        brandCode: '', //品牌
         customerCode: '', //客户系统名称
         month: '', //活动月
         dmItem: '',
@@ -238,6 +243,7 @@ export default {
       zoneArr: [],
       regionArr: [],
       BrandList: [],
+      DMItemList: [],
       maxheight: getHeightHaveTab(),
     }
   },
@@ -258,6 +264,7 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getBrandList()
+    this.getDMItemList()
     this.getDistributorList()
   },
   methods: {
@@ -284,9 +291,9 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode, //客户系统名称
+          brandCode: this.filterObj.brandCode, //品牌
           channelCode: this.filterObj.channelCode, //渠道
-          //   zoneName: this.filterObj.zoneName, //大区
-          //   regionName: this.filterObj.regionName, //区域
+          distributorMdmCode: this.filterObj.distributorMdmCode, //经销商
           yearAndMonth: this.filterObj.month, //活动月
           dmItem: this.filterObj.dmItem, //活动月
         }).then((response) => {
@@ -350,8 +357,15 @@ export default {
           }
         })
     },
-    getBrandList() {
+    getDMItemList() {
       selectAPI.getDMItemList({ minePackage: 'DM' }).then((res) => {
+        if (res.code === 1000) {
+          this.DMItemList = res.data
+        }
+      })
+    },
+    getBrandList() {
+      selectAPI.getBrand({}).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
@@ -372,7 +386,7 @@ export default {
         API.exportExcel({
           customerCode: this.filterObj.customerCode, //客户系统名称
           channelCode: this.filterObj.channelCode, //渠道
-
+          distributorMdmCode: this.filterObj.distributorMdmCode, //经销商
           yearAndMonth: this.filterObj.month, //活动月
           dmItem: this.filterObj.dmItem, //dmItem
         }).then((res) => {
