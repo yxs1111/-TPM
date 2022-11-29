@@ -6,7 +6,7 @@
 <template>
   <section class="app-main">
     <!--      左下角问号-->
-    <el-popover class="el-popoverTwo" placement="left" width="500" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
+    <el-popover class="el-popoverTwo" placement="left" width="100%" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
       <div class="documentation">用户文档中心</div>
       <el-table :data="gridData" max-height="380">
         <el-table-column width="70" property="" label="">
@@ -18,13 +18,6 @@
             <img src="../../assets/images/PPT.png" v-if="scope.row.format == 'ppt'" />
             <img src="../../assets/images/tupian.png" v-if="scope.row.format == 'pdf'" />
             <img src="../../assets/images/shipin.png" v-if="scope.row.format == 'video'" />
-
-            <!--            <img v-if=‘scope.row.format == "excel"’ src="../../../assets/images/EXCEL.png">-->
-            <!--            <img v-if="scope.row.format == &quot;word&quot;" src="../../../assets/images/word.png">-->
-            <!--            <img v-if="scope.row.format == &quot;zip&quot;" src="../../../assets/images/yasuowenjian.png">-->
-            <!--            <img v-if="scope.row.format == &quot;ppt&quot;" src="../../../assets/images/PPT.png">-->
-            <!--            <img v-if="scope.row.format == &quot;pdf&quot;" src="../../../assets/images/tupian.png">-->
-            <!--            <img v-if="scope.row.format == &quot;video&quot;" src="../../../assets/images/shipin.png">-->
           </template>
         </el-table-column>
         <el-table-column width="250" property="name" label="文件名称" />
@@ -37,7 +30,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button slot="reference" class="needHelp">
+      <el-button slot="reference" class='needHelp' :class="changeScreen">
         <div class="needHelpTxt">?</div>
       </el-button>
     </el-popover>
@@ -56,6 +49,8 @@ export default {
   name: 'AppMain',
   data() {
     return {
+      changeScreen: 'needHelp2',
+      gao: document.body.clientHeight,
       gridData: [
         {
           format: '2016-05-02',
@@ -66,6 +61,11 @@ export default {
       ],
     }
   },
+  watch: {
+    gao() {
+      this.changeScreen2()
+    }
+  },
   computed: {
     cachedViews() {
       return this.$store.state.tagsView.cachedViews
@@ -74,11 +74,34 @@ export default {
       return this.$route.path
     },
   },
-
   mounted() {
+    this.changeScreen2()
+    window.addEventListener('resize',this.changeScreen2)
     this.needHelp()
   },
   methods: {
+    changeScreen2() {
+      console.log('分辨率调整')
+      const width = document.body.clientWidth
+      const height = document.body.clientHeight
+      if (height <= 929) {
+        this.changeScreen = 'needHelp2'
+      } else if (height <= 1032) {
+        this.changeScreen = 'needHelp3'
+      } else if (height <= 1162) {
+        this.changeScreen = 'needHelp4'
+      } else if (height <= 1239) {
+        this.changeScreen = 'needHelp5'
+      } else if (height <= 1394) {
+        this.changeScreen = 'needHelp6'
+      } else if (height <= 1859) {
+        this.changeScreen = 'needHelp7'
+      } else if (height <= 2788) {
+        this.changeScreen = 'needHelp8'
+      } else if (height <= 3717) {
+        this.changeScreen = 'needHelp9'
+      }
+    },
     needHelp() {
       this.gridData = []
       TaskAPI.getNeedHelp().then((res) => {
@@ -124,20 +147,53 @@ export default {
 
 <style lang="scss">
 // fix css style bug in open el-dialog
+.needHelp2 {
+  width: 70px !important;
+  height: 70px !important;
+}
+.needHelp3 {
+  width: 82px !important;
+  height: 82px !important;
+}
+.needHelp4 {
+  width: 97px !important;
+  height: 97px !important;
+}
+.needHelp5 {
+  width: 105px !important;
+  height: 105px !important;
+}
+.needHelp6 {
+  width: 123.5px !important;
+  height: 123.5px !important;
+}
+.needHelp7 {
+  width: 176px !important;
+  height: 176px !important;
+}
+.needHelp8 {
+  width: 256px !important;
+  height: 256px !important;
+}
+.needHelp9 {
+  width: 345px !important;
+  height: 345px !important;
+}
 .needHelp {
   z-index: 45;
   box-shadow: 0px 0px 13px 0px rgba(127, 127, 127, 0.1);
   position: absolute;
   //background-color: rgba(65, 146, 211, 1);
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
   display: inline-block;
   color: rgba(65, 146, 211, 1);
   font-size: 20px;
   //margin: 0px 0px 0px -90px;
   top: 80%;
   right: 1.5%;
+  span {
+    text-align: center;
+  }
   .needHelpTxt {
     font-weight: 600;
     border-radius: 50%;
