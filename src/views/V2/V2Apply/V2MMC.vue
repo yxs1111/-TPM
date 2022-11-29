@@ -199,7 +199,6 @@
             <el-table-column width="150" align="center" prop="judgmentType" label="系统判定" />
             <el-table-column width="300" align="center" prop="judgmentContent" label="系统判定内容" />
             <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
-            <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="150" align="center" prop="minePackageName" label="Mine Package" />
