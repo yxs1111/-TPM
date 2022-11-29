@@ -17,14 +17,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择" @change="getDistributorList">
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -322,6 +322,7 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
+    this.getDistributorList()
   },
   methods: {
     // 格式化--千位分隔符、两位小数
@@ -356,19 +357,13 @@ export default {
           })
       }
     },
-    // 经销商
+    // 供应商
     getDistributorList() {
-      if (this.filterObj.customerCode) {
-        selectAPI
-          .queryDistributorList({
-            customerMdmCode: this.filterObj.customerCode,
-          })
-          .then((res) => {
-            if (res.code === 1000) {
-              this.distributorArr = res.data
-            }
-          })
-      }
+      selectAPI.getPageMdSupplier().then((res) => {
+        if (res.code === 1000) {
+          this.distributorArr = res.data.records
+        }
+      })
     },
     // 导出excel
     exportExcelInfo() {
