@@ -805,7 +805,7 @@
               </template>
             </el-table-column>
             <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="验证信息" />
-            <el-table-column align="center" fixed width="460" prop="cpId" label="CPID"  />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID"  />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />

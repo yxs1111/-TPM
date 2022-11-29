@@ -38,7 +38,7 @@
         </el-table-column>
       </el-table>
       <el-button slot="reference" class="needHelp">
-        <div class="needHelpTxt" :width='maxHeight'>?</div>
+        <div class="needHelpTxt">?</div>
       </el-button>
     </el-popover>
     <transition name="fade-transform" mode="out-in">
@@ -56,7 +56,6 @@ export default {
   name: 'AppMain',
   data() {
     return {
-      maxHeight: '',
       gridData: [
         {
           format: '2016-05-02',
@@ -77,60 +76,9 @@ export default {
   },
 
   mounted() {
-    //浏览器放大缩小 监听
-    window.addEventListener('resize',this.changeScreen)
-    const width = document.body.clientWidth
-    window.onresize = () => {
-      return (() => {
-        this.screenWidth = width
-      })()
-    }
     this.needHelp()
   },
   methods: {
-    changeScreen() {
-      const width = document.body.clientWidth
-      //是否放大
-      let isAmplification=this.tempScreen<width
-      console.log(isAmplification)
-      if (this.$store.state.app.sidebar.opened) {
-        //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
-        if (width <= 1366) {
-          this.maxHeight = 70
-        } else if (width <= 1400) {
-          this.maxHeight = 90
-        } else if (width <= 1440) {
-          this.maxHeight = 120
-        } else if (width <= 1540) {
-          this.maxHeight = 145
-        } else if (width <= 1700) {
-          this.maxHeight = 178
-        } else if (width <= 1920) {
-          this.maxHeight = 200
-        }else {
-          if(!isAmplification) {
-            this.options.times.timeZoom+=0.8
-          } else {
-            this.options.times.timeZoom-=0.8
-          }
-        }
-      } else {
-        if (width <= 1366) {
-          this.options.times.timeZoom = 22.6
-        } else if (width <= 1440) {
-          this.options.times.timeZoom = 22.5
-        } else if (width <= 1920) {
-          this.options.times.timeZoom = 21.9
-        } else {
-          if(!isAmplification) {
-            this.options.times.timeZoom+=0.8
-          } else {
-            this.options.times.timeZoom-=0.8
-          }
-        }
-      }
-      this.tempScreen = width
-    },
     needHelp() {
       this.gridData = []
       TaskAPI.getNeedHelp().then((res) => {

@@ -679,7 +679,7 @@
               </template>
             </el-table-column>
             <el-table-column width="400" fixed align="center" prop="judgmentContent" label="判定内容" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
+            <el-table-column align="center" width="460" prop="cpId" label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -1011,7 +1011,7 @@
               </template>
             </el-table-column>
             <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />

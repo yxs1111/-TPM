@@ -334,7 +334,7 @@ export default {
        }*/
     }
     return {
-      maxheight: '',
+      maxheight: 234,
       gridData: [
         {
           format: '2016-05-02',
@@ -576,25 +576,61 @@ export default {
       //是否放大
       let isAmplification=this.tempScreen<width
       console.log(isAmplification)
+      if (isAmplification) {
+        if (width <= 929) {
+          this.maxheight = 234
+        } else if (width <= 1200) {
+          this.maxheight = 254
+        } else if (width <= 1300) {
+          this.maxheight = 273
+        } else if (width <= 1400) {
+          this.maxheight = 300
+        } else if (width <= 1440) {
+          this.maxheight = 310
+        } else if (width <= 1540) {
+          this.maxheight = 380
+        } else if (width <= 1700) {
+          this.maxheight = 440
+        } else if (width <= 1920) {
+          this.maxheight = 300
+        } else if (width <= 2560) {
+          this.maxheight = 300
+        } else if (width <= 3840) {
+          this.maxheight = 300
+        }
+      } else {
+        if (width <= 929) {
+          this.maxheight = 234
+        } else if (width <= 1200) {
+          this.maxheight = 254
+        } else if (width <= 1300) {
+          this.maxheight = 273
+        } else if (width <= 1400) {
+          this.maxheight = 300
+          console.log(this.maxheight, '1400')
+        } else if (width <= 1440) {
+          this.maxheight = 310
+        } else if (width <= 1540) {
+          this.maxheight = 380
+        } else if (width <= 1700) {
+          this.maxheight = 440
+        } else if (width <= 1920) {
+          this.maxheight = 300
+        } else if (width <= 2560) {
+          this.maxheight = 300
+        } else if (width <= 3840) {
+          this.maxheight = 300
+        }
+      }
       if (this.$store.state.app.sidebar.opened) {
         //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
         if (width <= 1366) {
           this.options.times.timeZoom = 22.9
-          this.maxheight = 234
-        } else if (width <= 1400) {
-          this.maxheight = 300
         } else if (width <= 1440) {
           this.options.times.timeZoom = 22.9
-          this.maxheight = 380
-        } else if (width <= 1540) {
-          this.maxheight = 500
-        } else if (width <= 1700) {
-          this.options.times.timeZoom = 22.9
-          this.maxheight = 550
         } else if (width <= 1920) {
           this.options.times.timeZoom = 22.2
-          this.maxheight = 700
-        }else {
+        } else {
           if(!isAmplification) {
             this.options.times.timeZoom+=0.8
           } else {
