@@ -126,7 +126,7 @@
         </div>
         <!--        费用管理-->
         <div v-show="currentIndex == 0" class="TimeLineWrap">
-          <el-table :header-cell-style="{'color':'#000000'}" max-height="190" :data="TodoList" stripe style="width: 100%">
+          <el-table :header-cell-style="{'color':'#000000'}" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
             <el-table-column width='75' align="left" prop="yearAndMonth" label="年月" />
             <el-table-column width='120' prop="costTypeName" label="Cost Type" />
             <el-table-column width='120' prop="minePackageName" label="Mine Package" />
@@ -334,6 +334,7 @@ export default {
        }*/
     }
     return {
+      maxheight: '',
       gridData: [
         {
           format: '2016-05-02',
@@ -480,6 +481,10 @@ export default {
     }
   },
   watch: {
+    activeMoon() {
+      this.getHomePageData()
+    },
+
     '$store.state.app.sidebar.opened'() {
       const width = document.body.clientWidth
       if (this.$store.state.app.sidebar.opened) {
@@ -575,10 +580,20 @@ export default {
         //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
         if (width <= 1366) {
           this.options.times.timeZoom = 22.9
+          this.maxheight = 234
+        } else if (width <= 1400) {
+          this.maxheight = 300
         } else if (width <= 1440) {
           this.options.times.timeZoom = 22.9
+          this.maxheight = 380
+        } else if (width <= 1540) {
+          this.maxheight = 500
+        } else if (width <= 1700) {
+          this.options.times.timeZoom = 22.9
+          this.maxheight = 550
         } else if (width <= 1920) {
           this.options.times.timeZoom = 22.2
+          this.maxheight = 700
         }else {
           if(!isAmplification) {
             this.options.times.timeZoom+=0.8
@@ -875,7 +890,6 @@ export default {
           // console.log(item)
           obj.time = item.createDate.substring(0, 10)
           obj.msg = item.theme
-          console.log(obj.msg)
           if (this.MessageList.length < 5) {
             this.MessageList.push({
               ...obj,
@@ -2033,7 +2047,7 @@ export default {
 }
 .BottomBar {
   width: 100%;
-  height: 35%;
+  height: 38%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2057,9 +2071,9 @@ export default {
     //  max-height: 260px !important;
     //}
     .TimeLineWrap {
-      .el-table--enable-row-transition {
-        max-height: 260px !important;
-      }
+      //.el-table--enable-row-transition {
+      //  max-height: 234px !important;
+      //}
       .is-scrolling-left {
         max-height: 210px !important;
       }
@@ -2069,13 +2083,13 @@ export default {
       .is-scrolling-middle {
         max-height: 210px !important;
       }
-      .is-scrolling-none {
-        max-height: 210px !important;
-      }
-      .el-table__fixed-body-wrapper {
-        top: 48px !important;
-        max-height: 210px !important;
-      }
+      //.is-scrolling-none {
+      //  max-height: 210px !important;
+      //}
+      //.el-table__fixed-body-wrapper {
+      //  top: 48px !important;
+      //  max-height: 210px !important;
+      //}
       width: 100%;
       margin-top: 10px;
       height: calc(100% - 40px);

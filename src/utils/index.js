@@ -736,7 +736,7 @@ export function getFileType(fileName) {
     // txt格式
     txtReg: /\.(txt|TXT)$/,
     // rar格式
-    rarReg: /\.(rar|RAR)$/,
+    rarReg: /\.(rar|RAR|tar|TAR)$/,
     // zip格式
     zipReg: /\.(zip|ZIP)$/,
     // 视频格式
