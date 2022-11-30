@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-29 10:22:07
+ * @LastEditTime: 2022-11-30 10:23:07
 -->
 <template>
   <div class="MainContent">
@@ -21,14 +21,20 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+          <span class="SelectliTitle">客户:</span>
+          <el-select v-model="filterObj.customerCode" @change="changeCustomer" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">经销商:</span>
+          <el-select v-model="filterObj.distributorMdmCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierName" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.supplierCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in supplierArr" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
@@ -36,7 +42,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">DM item:</span>
           <el-select v-model="filterObj.dmItem" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.item" :value="item.item" />
+            <el-option v-for="(item, index) in DMItemList" :key="index" :label="item.item" :value="item.item" />
           </el-select>
           <!-- 下拉数据接口未对接 -->
         </div>
@@ -573,9 +579,8 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
-        zoneName: '', //大区
-        regionName: '', //区域
-        supplierName: '', //供应商
+        distributorMdmCode: '', //供应商
+        supplierCode: '', //供应商
         channelCode: '', //渠道
         customerCode: '', //客户系统名称
         month: '', //活动月
@@ -583,14 +588,14 @@ export default {
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
+      distributorArr: [], //经销商
       supplierArr: [], //供应商下拉
 
       monthList: [],
       customerArr: [],
       tableData: [],
 
-      BrandList: [],
-
+      DMItemList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
@@ -621,10 +626,9 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
-    // this.getDistributorList()
+    this.getDMItemList()
+    this.getDistributorList()
     this.getPageMdSupplier()
-    // this.getQuerySkuSelect()
   },
   methods: {
     // 获取表格数据
@@ -643,11 +647,10 @@ export default {
         API.getPage({
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
-
-          supplierCode: this.filterObj.supplierName, //供应商
+          distributorMdmCode: this.filterObj.distributorMdmCode, //供应商
+          supplierCode: this.filterObj.supplierCode, //供应商
           channelCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
-
           dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
@@ -695,7 +698,7 @@ export default {
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
-          this.channelArr = res.data
+          this.channelArr = res.data.filter(item=>item.channelCode == 'EC')
           this.getCustomerList()
         }
       })
@@ -712,6 +715,25 @@ export default {
           }
         })
     },
+    //更改客户--》获取经销商
+    changeCustomer() {
+      let findIndex = this.customerArr.findIndex(
+        (item) => item.customerCode == this.filterObj.customerCode
+      )
+      this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+    },
+    // 经销商
+    getDistributorList(customerMdmCode) {
+      selectAPI
+        .queryDistributorList({
+          customerMdmCode,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.distributorArr = res.data
+          }
+        })
+    },
     // 供应商
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
@@ -720,14 +742,13 @@ export default {
         }
       })
     },
-    getBrandList() {
+    getDMItemList() {
       selectAPI.getDMItemList({ minePackage: 'DM' }).then((res) => {
         if (res.code === 1000) {
-          this.BrandList = res.data
+          this.DMItemList = res.data
         }
       })
     },
-
     //千分位分隔符+两位小数
     formatNum(num) {
       return formatThousandNum(num)
@@ -742,10 +763,10 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          supplierCode: this.filterObj.supplierName, //供应商
+          distributorMdmCode: this.filterObj.distributorMdmCode, //供应商
+          supplierCode: this.filterObj.supplierCode, //供应商
           channelCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
-
           dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
@@ -881,13 +902,12 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportCheckData({
-          supplierCode: this.filterObj.supplierName, //供应商
+          distributorMdmCode: this.filterObj.distributorMdmCode, //供应商
+          supplierCode: this.filterObj.supplierCode, //供应商
           channelCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
-
           dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
-          //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V2_DM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
@@ -902,13 +922,8 @@ export default {
       if (this.tableData.length) {
         // 导出数据筛选
         API.exportTemplateExcel({
-          supplierCode: this.filterObj.supplierName, //供应商
           channelCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
-
-          dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
-          //   isSubmit: 0,
         }).then((res) => {
           downloadFile(
             res,

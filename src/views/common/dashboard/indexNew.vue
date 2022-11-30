@@ -334,7 +334,7 @@ export default {
        }*/
     }
     return {
-      maxheight: 234,
+      maxheight: this.changeScreen(),
       gridData: [
         {
           format: '2016-05-02',
@@ -509,6 +509,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.changeScreen()
     //浏览器放大缩小 监听
     window.addEventListener('resize',this.changeScreen)
     const width = document.body.clientWidth
@@ -573,55 +574,27 @@ export default {
     },
     changeScreen() {
       const width = document.body.clientWidth
+      const height = document.body.clientHeight
       //是否放大
-      let isAmplification=this.tempScreen<width
+      let isAmplification = this.tempScreen < width
       console.log(isAmplification)
-      if (isAmplification) {
-        if (width <= 929) {
-          this.maxheight = 234
-        } else if (width <= 1200) {
-          this.maxheight = 254
-        } else if (width <= 1300) {
-          this.maxheight = 273
-        } else if (width <= 1400) {
-          this.maxheight = 300
-        } else if (width <= 1440) {
-          this.maxheight = 310
-        } else if (width <= 1540) {
-          this.maxheight = 380
-        } else if (width <= 1700) {
-          this.maxheight = 440
-        } else if (width <= 1920) {
-          this.maxheight = 300
-        } else if (width <= 2560) {
-          this.maxheight = 300
-        } else if (width <= 3840) {
-          this.maxheight = 300
-        }
-      } else {
-        if (width <= 929) {
-          this.maxheight = 234
-        } else if (width <= 1200) {
-          this.maxheight = 254
-        } else if (width <= 1300) {
-          this.maxheight = 273
-        } else if (width <= 1400) {
-          this.maxheight = 300
-          console.log(this.maxheight, '1400')
-        } else if (width <= 1440) {
-          this.maxheight = 310
-        } else if (width <= 1540) {
-          this.maxheight = 380
-        } else if (width <= 1700) {
-          this.maxheight = 440
-        } else if (width <= 1920) {
-          this.maxheight = 300
-        } else if (width <= 2560) {
-          this.maxheight = 300
-        } else if (width <= 3840) {
-          this.maxheight = 300
-        }
-      }
+      if (height <= 929) {
+        this.maxheight = 234
+      } else if (height <= 1032) {
+        this.maxheight = 275
+      } else if (height <= 1162) {
+        this.maxheight = 324
+      } else if (height <= 1239) {
+        this.maxheight = 352
+      } else if (height <= 1394) {
+        this.maxheight = 413
+      } else if (height <= 1859) {
+        this.maxheight = 588
+      } else if (height <= 2788) {
+        this.maxheight = 945
+      } else if (height <= 3717) {
+        this.maxheight = 1286
+      } return (this.maxheight)
       if (this.$store.state.app.sidebar.opened) {
         //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
         if (width <= 1366) {
@@ -2087,7 +2060,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 17px 0;
+  margin-top: 17px;
   .new {
     margin-left: 15px;
     padding-right: 20px !important;
@@ -2110,22 +2083,22 @@ export default {
       //.el-table--enable-row-transition {
       //  max-height: 234px !important;
       //}
-      .is-scrolling-left {
-        max-height: 210px !important;
-      }
-      .is-scrolling-right {
-        max-height: 210px !important;
-      }
-      .is-scrolling-middle {
-        max-height: 210px !important;
-      }
-      //.is-scrolling-none {
+      //.is-scrolling-left {
       //  max-height: 210px !important;
       //}
-      //.el-table__fixed-body-wrapper {
-      //  top: 48px !important;
+      //.is-scrolling-right {
       //  max-height: 210px !important;
       //}
+      //.is-scrolling-middle {
+      //  max-height: 210px !important;
+      //}
+      .is-scrolling-none {
+        max-height: 1900px !important;
+      }
+      .el-table__fixed-body-wrapper {
+        top: 48px !important;
+        max-height: 1900px !important;
+      }
       width: 100%;
       margin-top: 10px;
       height: calc(100% - 40px);
