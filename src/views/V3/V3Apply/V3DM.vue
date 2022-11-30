@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-29 17:50:45
+ * @LastEditTime: 2022-11-30 09:40:40
 -->
 <template>
   <div class="MainContent">
@@ -24,12 +24,6 @@
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" @change="changeCustomer" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">品牌:</span>
-          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -611,7 +605,6 @@ export default {
         channelCode: '', //渠道
         customerCode: '', //客户系统名称
         month: '', //活动月
-        brandCode: '', //品牌
         dmItem: '',
       },
       permissions: getDefaultPermissions(),
@@ -623,7 +616,6 @@ export default {
       customerArr: [],
       tableData: [],
 
-      BrandList: [],
       DMItemList: [],
       maxheight: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
@@ -655,7 +647,6 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
     this.getDMItemList()
     this.getPageMdSupplier()
   },
@@ -681,7 +672,6 @@ export default {
           supplierCode: this.filterObj.supplierCode, //供应商
           channelCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
-          brandCode: this.filterObj.brandCode, //品牌
           dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
@@ -780,13 +770,6 @@ export default {
         }
       })
     },
-    getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
-        if (res.code === 1000) {
-          this.BrandList = res.data
-        }
-      })
-    },
     //千分位分隔符+两位小数
     formatNum(num) {
       return formatThousandNum(num)
@@ -808,7 +791,6 @@ export default {
           customerCode: this.filterObj.customerCode, //客户系统名称
           dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
-          brandCode: this.filterObj.brandCode, //品牌
           //   isSubmit: 0,
         }).then((res) => {
           downloadFile(
@@ -945,7 +927,6 @@ export default {
           customerCode: this.filterObj.customerCode, //客户系统名称
           dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
-          brandCode: this.filterObj.brandCode, //品牌
           //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
@@ -967,7 +948,6 @@ export default {
           customerCode: this.filterObj.customerCode, //客户系统名称
           dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
-          brandCode: this.filterObj.brandCode, //品牌
           //   isSubmit: 0,
         }).then((res) => {
           downloadFile(

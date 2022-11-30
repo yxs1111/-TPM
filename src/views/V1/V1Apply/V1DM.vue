@@ -1,7 +1,7 @@
 <!--
  * @Description: V1DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-29 17:39:03
+ * @LastEditTime: 2022-11-30 09:42:58
 -->
 <template>
   <div class="MainContent">
@@ -24,12 +24,6 @@
           <span class="SelectliTitle">客户:</span>
           <el-select v-model="filterObj.customerCode" @change="changeCustomer" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">品牌:</span>
-          <el-select v-model="filterObj.brandCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.brandName" :value="item.brandCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -229,7 +223,6 @@ export default {
       filterObj: {
         distributorMdmCode: '', //经销商
         channelCode: '', //渠道
-        brandCode: '', //品牌
         customerCode: '', //客户系统名称
         month: '', //活动月
         dmItem: '',
@@ -263,7 +256,6 @@ export default {
     }
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
     this.getDMItemList()
     this.getDistributorList()
   },
@@ -291,7 +283,6 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
           customerCode: this.filterObj.customerCode, //客户系统名称
-          brandCode: this.filterObj.brandCode, //品牌
           channelCode: this.filterObj.channelCode, //渠道
           distributorMdmCode: this.filterObj.distributorMdmCode, //经销商
           yearAndMonth: this.filterObj.month, //活动月
@@ -361,13 +352,6 @@ export default {
       selectAPI.getDMItemList({ minePackage: 'DM' }).then((res) => {
         if (res.code === 1000) {
           this.DMItemList = res.data
-        }
-      })
-    },
-    getBrandList() {
-      selectAPI.getBrand({}).then((res) => {
-        if (res.code === 1000) {
-          this.BrandList = res.data
         }
       })
     },
