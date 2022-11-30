@@ -364,7 +364,7 @@ export default {
     },
     // 供应商
     getDistributorList() {
-      selectAPI.getPageMdSupplier().then((res) => {
+      selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
           this.distributorArr = res.data.records
         }
