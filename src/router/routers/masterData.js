@@ -85,16 +85,14 @@ export default function () {
               path: '/organization/Channel',
               code: 'mdm_channel',
               name: 'Channel',
-              component: () =>
-                import('@/views/master/organization/Channel.vue'),
+              component: () => import('@/views/master/organization/Channel.vue'),
               meta: { title: '渠道', icon: 'approve' },
             },
             {
               path: '/organization/Customer',
               code: 'mdm_customer',
               name: 'Customer',
-              component: () =>
-                import('@/views/master/organization/Customer.vue'),
+              component: () => import('@/views/master/organization/Customer.vue'),
               meta: { title: '客户', icon: 'approve' },
             },
             // {
@@ -116,16 +114,14 @@ export default function () {
               path: '/organization/Dealers',
               code: 'mdm_Dealer',
               name: 'Dealers',
-              component: () =>
-                import('@/views/master/organization/Dealers.vue'),
+              component: () => import('@/views/master/organization/Dealers.vue'),
               meta: { title: '经销商', icon: 'approve' },
             },
             {
               path: '/organization/Supplier',
               code: 'mdm_supplier',
               name: 'Supplier',
-              component: () =>
-                import('@/views/master/organization/Supplier.vue'),
+              component: () => import('@/views/master/organization/Supplier.vue'),
               meta: { title: '供应商', icon: 'approve' },
             },
             {
@@ -186,8 +182,7 @@ export default function () {
               path: '/priceSale/priceMasterData',
               name: 'PriceMasterData',
               code: 'mdm_Prices_mdm',
-              component: () =>
-                import('@/views/master/priceSale/priceMasterData.vue'),
+              component: () => import('@/views/master/priceSale/priceMasterData.vue'),
               meta: {
                 title: '价格主数据',
                 icon: 'approve',
@@ -198,8 +193,7 @@ export default function () {
               path: '/priceSale/priceLevelKeep',
               name: 'PriceLevelKeep',
               code: 'mdm_Price stall_maintenance',
-              component: () =>
-                import('@/views/master/priceSale/priceLevelKeep.vue'),
+              component: () => import('@/views/master/priceSale/priceLevelKeep.vue'),
               meta: {
                 title: '价格档位维护',
                 icon: 'approve',
@@ -210,8 +204,7 @@ export default function () {
               path: '/priceSale/saleComputeKeep',
               name: 'SaleComputeKeep',
               code: 'mdm_ calculation_maintenance',
-              component: () =>
-                import('@/views/master/priceSale/saleComputeKeep.vue'),
+              component: () => import('@/views/master/priceSale/saleComputeKeep.vue'),
               meta: {
                 title: '价促计算维护',
                 icon: 'approve',
@@ -228,8 +221,7 @@ export default function () {
               path: '/priceSale/systemPool',
               code: 'mdm_Mechanism_pool',
               name: 'SystemPool',
-              component: () =>
-                import('@/views/master/priceSale/model/sysPool.vue'),
+              component: () => import('@/views/master/priceSale/model/sysPool.vue'),
               meta: { title: '机制池', icon: 'approve' },
               redirect: '/master/priceSale/systemPool',
               children: [
@@ -238,8 +230,7 @@ export default function () {
                   path: '/master/priceSale/systemPool',
                   code: 'mdm_Mechanism_pool',
                   name: 'systemPool1',
-                  component: () =>
-                    import('@/views/master/priceSale/systemPool.vue'),
+                  component: () => import('@/views/master/priceSale/systemPool.vue'),
                   meta: {
                     title: 'Price Promotion',
                     icon: 'apply',
@@ -251,8 +242,7 @@ export default function () {
                   path: '/master/priceSale/systemPoolNew',
                   code: 'mdm_Mechanism_pool',
                   name: 'SystemPoolNew',
-                  component: () =>
-                    import('@/views/master/priceSale/systemPoolNew.vue'),
+                  component: () => import('@/views/master/priceSale/systemPoolNew.vue'),
                   meta: {
                     title: 'New User',
                     icon: 'apply',
@@ -278,16 +268,14 @@ export default function () {
               path: '/RoleCostSubjectControl',
               code: 'mdm_Expense_Account',
               name: 'RoleCostSubjectControl',
-              component: () =>
-                import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
+              component: () => import('@/views/master/financeInfo/RoleCostSubjectControl.vue'),
               meta: { title: '费用科目', icon: 'approve' },
             },
             {
               path: '/WBSCodeEntity',
               code: 'mdm_wbsCode_Entity',
               name: 'WBSCodeEntity',
-              component: () =>
-                import('@/views/master/financeInfo/WBSCodeEntity.vue'),
+              component: () => import('@/views/master/financeInfo/WBSCodeEntity.vue'),
               meta: { title: 'WBS Code - Entity', icon: 'approve' },
             },
             // {
@@ -302,32 +290,28 @@ export default function () {
               path: '/WBSCodeBrand',
               code: 'mdm_wbsCode_Brand',
               name: 'WBSCodeBrand',
-              component: () =>
-                import('@/views/master/financeInfo/WBSCodeBrand.vue'),
+              component: () => import('@/views/master/financeInfo/WBSCodeBrand.vue'),
               meta: { title: 'WBS Code - Brand', icon: 'approve' },
             },
             {
               path: '/WBSCodeDepartment',
               code: 'mdm_wbsCode_Department',
               name: 'WBSCodeDepartment',
-              component: () =>
-                import('@/views/master/financeInfo/WBSCodeDepartment.vue'),
+              component: () => import('@/views/master/financeInfo/WBSCodeDepartment.vue'),
               meta: { title: 'WBS Code - Department', icon: 'approve' },
             },
             {
               path: '/WbsMaintenance',
               code: 'mdm_WbsMaintenance',
               name: 'WbsMaintenance',
-              component: () =>
-                import('@/views/master/financeInfo/WbsMaintenance.vue'),
+              component: () => import('@/views/master/financeInfo/WbsMaintenance.vue'),
               meta: { title: 'WBS Code - Customer', icon: 'approve' },
             },
             {
               path: '/IoMaintenance',
               code: 'mdm_IoMaintenance',
               name: 'IoMaintenance',
-              component: () =>
-                import('@/views/master/financeInfo/IoMaintenance.vue'),
+              component: () => import('@/views/master/financeInfo/IoMaintenance.vue'),
               meta: { title: 'IO维护', icon: 'approve' },
             },
           ],
@@ -347,8 +331,7 @@ export default function () {
               path: '/ruleCtrl/splitRules',
               name: 'SplitRules',
               code: 'mdm_Split_rules',
-              component: () =>
-                import('@/views/master/ruleCtrl/model/splitRulesM.vue'),
+              component: () => import('@/views/master/ruleCtrl/model/splitRulesM.vue'),
               meta: {
                 title: '拆分规则',
                 icon: 'approve',
@@ -360,8 +343,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRules',
                   code: 'mdm_Split_rules',
                   name: 'splitRules',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRules.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRules.vue'),
                   meta: {
                     title: 'Price Promotion',
                     icon: 'form',
@@ -373,8 +355,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesNew',
                   code: 'mdm_Split_rules',
                   name: 'splitRulesNew',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesNew.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesNew.vue'),
                   meta: {
                     title: 'New User',
                     icon: 'form',
@@ -388,8 +369,7 @@ export default function () {
               path: '/ruleCtrl/testRules',
               code: 'mdm_testing_regulations',
               name: 'TestRules',
-              component: () =>
-                import('@/views/master/ruleCtrl/model/testRulesM.vue'),
+              component: () => import('@/views/master/ruleCtrl/model/testRulesM.vue'),
               meta: {
                 title: '检验规则',
                 icon: 'approve',
@@ -401,8 +381,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/testRules',
                   code: 'mdm_testing_regulations',
                   name: 'TestRules1',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/testRules.vue'),
+                  component: () => import('@/views/master/ruleCtrl/testRules.vue'),
                   meta: {
                     title: 'Price Promotion',
                     icon: 'form',
@@ -414,8 +393,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/testRulesNew',
                   code: 'mdm_testing_regulations',
                   name: 'TestRulesNew',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/testRulesNew.vue'),
+                  component: () => import('@/views/master/ruleCtrl/testRulesNew.vue'),
                   meta: {
                     title: 'New User',
                     icon: 'form',
@@ -427,8 +405,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesHIH',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesHIH',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesHIH.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesHIH.vue'),
                   meta: {
                     title: 'HIH',
                     icon: 'form',
@@ -440,8 +417,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesKA',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesKA',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesKA.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesKA.vue'),
                   meta: {
                     title: 'KA',
                     icon: 'form',
@@ -453,8 +429,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesFMC',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesFMC',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesFMC.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesFMC.vue'),
                   meta: {
                     title: 'FMC',
                     icon: 'form',
@@ -466,8 +441,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesRoadShow',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesRoadShow',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesRoadShow.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesRoadShow.vue'),
                   meta: {
                     title: 'RoadShow',
                     icon: 'form',
@@ -479,8 +453,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesListingFee',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesListingFee',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesListingFee.vue'),
                   meta: {
                     title: 'Listing Fee',
                     icon: 'form',
@@ -492,8 +465,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesPOSMStandard',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesPOSMStandard',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesPOSMStandard.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesPOSMStandard.vue'),
                   meta: {
                     title: 'POSM-标准',
                     icon: 'form',
@@ -505,8 +477,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesPOSMCustomized',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesPOSMCustomized',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesPOSMCustomized.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesPOSMCustomized.vue'),
                   meta: {
                     title: 'POSM-定制',
                     icon: 'form',
@@ -518,8 +489,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesECM',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesECM',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesECM.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesECM.vue'),
                   meta: {
                     title: 'ECM',
                     icon: 'form',
@@ -531,8 +501,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesDisplay',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesDisplay',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesDisplay.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesDisplay.vue'),
                   meta: {
                     title: 'Display',
                     icon: 'form',
@@ -544,8 +513,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesPremium',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesPremium',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesPremium.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesPremium.vue'),
                   meta: {
                     title: 'Premium',
                     icon: 'form',
@@ -557,8 +525,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesFreeGoods-Tin',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesFreeGoods-Tin',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesFreeGoods-Tin.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesFreeGoods-Tin.vue'),
                   meta: {
                     title: 'Free Goods-Tin',
                     icon: 'form',
@@ -570,8 +537,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesFreeGoods-Win2',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesFreeGoods-Win2',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesFreeGoods-Win2.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesFreeGoods-Win2.vue'),
                   meta: {
                     title: 'Free Goods-Win2',
                     icon: 'form',
@@ -583,10 +549,21 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesDM',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesDM',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesDM.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesDM.vue'),
                   meta: {
                     title: 'DM',
+                    icon: 'form',
+                    activeMenu: '/ruleCtrl/testRules',
+                  },
+                },
+                {
+                  hidden: true,
+                  path: '/master/ruleCtrl/model/splitRulesMMC',
+                  code: 'mdm_testing_regulations',
+                  name: 'splitRulesMMC',
+                  component: () => import('@/views/master/ruleCtrl/splitRulesMMC.vue'),
+                  meta: {
+                    title: 'MMC',
                     icon: 'form',
                     activeMenu: '/ruleCtrl/testRules',
                   },
@@ -596,8 +573,7 @@ export default function () {
                   path: '/master/ruleCtrl/model/splitRulesTransport',
                   code: 'mdm_testing_regulations',
                   name: 'splitRulesTransport',
-                  component: () =>
-                    import('@/views/master/ruleCtrl/splitRulesTransport.vue'),
+                  component: () => import('@/views/master/ruleCtrl/splitRulesTransport.vue'),
                   meta: {
                     title: 'Transport',
                     icon: 'form',
@@ -625,8 +601,7 @@ export default function () {
           path: '/contractItem',
           name: 'contractItem',
           code: 'ContractItem',
-          component: () =>
-            import('@/views/master/contractItem/contractItem.vue'),
+          component: () => import('@/views/master/contractItem/contractItem.vue'),
           meta: { title: 'Contract Item', icon: 'apply' },
         },
         // 品牌拆分比例
@@ -634,8 +609,7 @@ export default function () {
           path: '/brandsplitratio',
           name: 'brandsplitratio',
           code: 'BrandSplitRatio',
-          component: () =>
-            import('@/views/master/brandsplitratio/brandsplitratio.vue'),
+          component: () => import('@/views/master/brandsplitratio/brandsplitratio.vue'),
           meta: { title: '品牌拆分比例', icon: 'apply' },
         },
         // displayItem

@@ -160,6 +160,11 @@ export default {
               minePackageName: 'DM',
             },
             {
+              name: 'MMC',
+              path: '/master/ruleCtrl/model/splitRulesMMC',
+              minePackageName: 'MMC',
+            },
+            {
               name: 'Transport',
               path: '/master/ruleCtrl/model/splitRulesTransport',
               minePackageName: 'Transport',
