@@ -334,7 +334,7 @@ export default {
        }*/
     }
     return {
-      maxheight: this.changeScreen(),
+      maxheight: this.changeScreen2(),
       gridData: [
         {
           format: '2016-05-02',
@@ -509,7 +509,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.changeScreen()
+    this.changeScreen2()
     //浏览器放大缩小 监听
     window.addEventListener('resize',this.changeScreen)
     const width = document.body.clientWidth
@@ -540,13 +540,12 @@ export default {
       })
     })
     this.$bus.$on('taskMouseEnter', (content) => {
-      console.log(content)
       const { event, data } = content
       this.popUpShow = true
       const x = event.pageX + 5 + 'px'
       const y = event.pageY + 10 + 'px'
       this.content.label = data.label
-      this.content.startTime = data.startTime
+      this.content.startTime = data.startTime2
       this.content.endTime = data.endTime
       this.positionStyle = { top: y, left: x }
     })
@@ -578,23 +577,6 @@ export default {
       //是否放大
       let isAmplification = this.tempScreen < width
       console.log(isAmplification)
-      if (height <= 929) {
-        this.maxheight = 234
-      } else if (height <= 1032) {
-        this.maxheight = 275
-      } else if (height <= 1162) {
-        this.maxheight = 324
-      } else if (height <= 1239) {
-        this.maxheight = 352
-      } else if (height <= 1394) {
-        this.maxheight = 413
-      } else if (height <= 1859) {
-        this.maxheight = 588
-      } else if (height <= 2788) {
-        this.maxheight = 945
-      } else if (height <= 3717) {
-        this.maxheight = 1286
-      } return (this.maxheight)
       if (this.$store.state.app.sidebar.opened) {
         //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
         if (width <= 1366) {
@@ -626,6 +608,30 @@ export default {
         }
       }
       this.tempScreen = width
+    },
+    changeScreen2() {
+      const width = document.body.clientWidth
+      const height = document.body.clientHeight
+      //是否放大
+      let isAmplification = this.tempScreen < width
+      console.log(isAmplification)
+      if (height <= 929) {
+        this.maxheight = 234
+      } else if (height <= 1032) {
+        this.maxheight = 275
+      } else if (height <= 1162) {
+        this.maxheight = 324
+      } else if (height <= 1239) {
+        this.maxheight = 352
+      } else if (height <= 1394) {
+        this.maxheight = 413
+      } else if (height <= 1859) {
+        this.maxheight = 588
+      } else if (height <= 2788) {
+        this.maxheight = 945
+      } else if (height <= 3717) {
+        this.maxheight = 1286
+      } return (this.maxheight)
     },
     getActivitycycle() {
       this.tasks = []
@@ -719,6 +725,7 @@ export default {
               id: item.id + 'v0',
               label: 'V0',
               start: dayjs(currentdate1).valueOf(),
+              startTime2: dayjs(item.startVZero).valueOf(),
               end: dayjs(item.EndVZero).valueOf(),
               percent: 50,
               type: 'task',
@@ -1439,6 +1446,9 @@ export default {
 .gantt-elastic__chart-graph-container {
   margin-top: 10px !important;
   height: 146px !important;
+  //.gantt-elastic__chart-row-text-content {
+  //  display: none;
+  //}
   div {
     height: 146px !important;
   }
