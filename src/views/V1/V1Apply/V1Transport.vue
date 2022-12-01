@@ -1,7 +1,7 @@
 <!--
  * @Description: V1Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-22 16:33:51
+ * @LastEditTime: 2022-12-01 17:22:30
 -->
 <template>
   <div class="MainContent">
@@ -35,6 +35,7 @@
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <el-button type="danger" class="TpmButtonBG" @click="deleteData">清除数据</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
@@ -181,13 +182,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import {
-  getDefaultPermissions,
-  getHeightHaveTab,
-  messageObj,
-  downloadFile,
-  formatThousandNum,
-} from '@/utils'
+import { getDefaultPermissions, getHeightHaveTab, messageObj, downloadFile, formatThousandNum } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/Transport'
 export default {
@@ -235,6 +230,17 @@ export default {
     this.getTransportItemList()
   },
   methods: {
+    deleteData() {
+      API.clearData({
+        channelCode: this.filterObj.channelCode, //渠道
+        yearAndMonth: this.filterObj.month, //活动月
+      }).then((response) => {
+        this.tableData = response.data.records
+        this.pageNum = response.data.pageNum
+        this.pageSize = response.data.pageSize
+        this.total = response.data.total
+      })
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -289,7 +295,7 @@ export default {
         })
     },
     getTransportItemList() {
-      selectAPI.getTransportItemList({minePackage:'Transport Costs'}).then((res) => {
+      selectAPI.getTransportItemList({ minePackage: 'Transport Costs' }).then((res) => {
         if (res.code === 1000) {
           this.BrandList = res.data
         }
@@ -312,10 +318,7 @@ export default {
           channelName: this.filterObj.channelCode, //渠道
           yearAndMonth: this.filterObj.month, //活动月
         }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_Transport_${this.filterObj.channelCode}_V1_查询.xlsx`
-          ) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.month}_Transport_${this.filterObj.channelCode}_V1_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
