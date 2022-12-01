@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-30 10:23:07
+ * @LastEditTime: 2022-12-01 17:11:28
 -->
 <template>
   <div class="MainContent">
@@ -902,11 +902,7 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportCheckData({
-          distributorMdmCode: this.filterObj.distributorMdmCode, //供应商
-          supplierCode: this.filterObj.supplierCode, //供应商
           channelCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
-          dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           const timestamp = Date.parse(new Date())

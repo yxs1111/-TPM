@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-30 10:23:13
+ * @LastEditTime: 2022-12-01 17:11:51
 -->
 <template>
   <div class="MainContent">
@@ -921,11 +921,7 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportV3Error({
-          distributorMdmCode: this.filterObj.distributorMdmCode, //经销商
-          supplierCode: this.filterObj.supplierCode, //供应商
           channelCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
-          dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((res) => {
