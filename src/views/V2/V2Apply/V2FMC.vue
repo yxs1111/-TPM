@@ -958,6 +958,7 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
+      console.log(window.innerHeight, this.maxheight)
       this.tableData = []
       if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         if (this.filterObj.month == '') {

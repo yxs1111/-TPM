@@ -512,6 +512,7 @@ export default {
     this.changeScreen2()
     //浏览器放大缩小 监听
     window.addEventListener('resize',this.changeScreen)
+    window.addEventListener('resize',this.changeScreen2)
     const width = document.body.clientWidth
     if (this.$store.state.app.sidebar.opened) {
       //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
@@ -610,15 +611,13 @@ export default {
       this.tempScreen = width
     },
     changeScreen2() {
-      const width = document.body.clientWidth
       const height = document.body.clientHeight
-      //是否放大
-      let isAmplification = this.tempScreen < width
-      console.log(isAmplification)
       if (height <= 929) {
         this.maxheight = 234
       } else if (height <= 1032) {
         this.maxheight = 275
+      } else if (height <= 1080) {
+        this.maxheight = 292
       } else if (height <= 1162) {
         this.maxheight = 324
       } else if (height <= 1239) {
@@ -1899,6 +1898,9 @@ export default {
           .currentPoint {
             margin-left: -20px;
           }
+          .delayPoint {
+            margin-left: -20px;
+          }
           img {
             width: 28px;
             height: 28px;
@@ -2110,7 +2112,7 @@ export default {
       }
       .el-table__fixed-body-wrapper {
         top: 48px !important;
-        max-height: 1900px !important;
+        //max-height: 1900px !important;
       }
       width: 100%;
       margin-top: 10px;
