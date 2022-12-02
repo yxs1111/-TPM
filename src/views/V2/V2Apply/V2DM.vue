@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-02 11:52:14
+ * @LastEditTime: 2022-12-02 12:05:56
 -->
 <template>
   <div class="MainContent">
@@ -22,7 +22,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerCode" @change="changeCustomer" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
