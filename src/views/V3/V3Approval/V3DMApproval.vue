@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-02 09:17:53
+ * @LastEditTime: 2022-12-02 10:39:51
 -->
 <template>
   <div class="MainContent">
@@ -349,6 +349,7 @@
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
                     <img src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                     <!-- <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
               <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
               <span class="judgmentText">{{ row.judgmentType }}</span> -->
@@ -362,7 +363,7 @@
               </template>
               <template>
                 <div>
-                  主数据校验通过
+                  校验通过
                   <!-- {{ scope.row.judgmentContent }} -->
                 </div>
               </template>
