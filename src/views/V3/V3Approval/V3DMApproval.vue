@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-02 10:39:51
+ * @LastEditTime: 2022-12-02 11:54:08
 -->
 <template>
   <div class="MainContent">
@@ -709,13 +709,15 @@ export default {
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
-          this.channelArr = res.data.filter((item) => item.channelCode == 'EC')
+          this.channelArr = res.data.filter(item=>item.channelCode == 'EC')
           this.getCustomerList()
         }
       })
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode = ''
+      this.filterObj.distributorMdmCode=''
       selectAPI
         .queryCustomerList({
           channelCode: this.filterObj.channelCode,
@@ -723,19 +725,28 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
+            this.getDistributorList()
           }
         })
     },
     //更改客户--》获取经销商
-    changeCustomer() {
-      let findIndex = this.customerArr.findIndex((item) => item.customerCode == this.filterObj.customerCode)
-      this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+    changeCustomer(value) {
+      this.filterObj.distributorMdmCode = ''
+      this.distributorArr = []
+      if (value == '') {
+        this.getDistributorList()
+      } else {
+        let findIndex = this.customerArr.findIndex(
+        (item) => item.customerCode == this.filterObj.customerCode
+        )
+        this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+      }
     },
     // 经销商
     getDistributorList(customerMdmCode) {
       selectAPI
         .queryDistributorList({
-          customerMdmCode,
+          customerMdmCode:customerMdmCode,
         })
         .then((res) => {
           if (res.code === 1000) {

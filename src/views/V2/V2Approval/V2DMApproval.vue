@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-02 10:44:46
+ * @LastEditTime: 2022-12-02 11:53:40
 -->
 <template>
   <div class="MainContent">
@@ -700,7 +700,7 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取渠道下拉框
+    // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
@@ -711,6 +711,8 @@ export default {
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode = ''
+      this.filterObj.distributorMdmCode=''
       selectAPI
         .queryCustomerList({
           channelCode: this.filterObj.channelCode,
@@ -718,21 +720,28 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
+            this.getDistributorList()
           }
         })
     },
     //更改客户--》获取经销商
-    changeCustomer() {
-      let findIndex = this.customerArr.findIndex(
+    changeCustomer(value) {
+      this.filterObj.distributorMdmCode = ''
+      this.distributorArr = []
+      if (value == '') {
+        this.getDistributorList()
+      } else {
+        let findIndex = this.customerArr.findIndex(
         (item) => item.customerCode == this.filterObj.customerCode
-      )
-      this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+        )
+        this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+      }
     },
     // 经销商
     getDistributorList(customerMdmCode) {
       selectAPI
         .queryDistributorList({
-          customerMdmCode,
+          customerMdmCode:customerMdmCode,
         })
         .then((res) => {
           if (res.code === 1000) {
