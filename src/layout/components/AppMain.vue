@@ -88,6 +88,8 @@ export default {
         this.changeScreen = 'needHelp2'
       } else if (height <= 1032) {
         this.changeScreen = 'needHelp3'
+      } else if (height == 1080) {
+        this.changeScreen = 'needHelp2'
       } else if (height <= 1162) {
         this.changeScreen = 'needHelp4'
       } else if (height <= 1239) {
