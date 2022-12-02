@@ -1,7 +1,7 @@
 <!--
  * @Description: V3TransportApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-02 13:05:57
+ * @LastEditTime: 2022-12-02 14:50:16
 -->
 <template>
   <div class="MainContent">
@@ -762,7 +762,7 @@ export default {
     },
     // 供应商
     getPageMdSupplier() {
-      selectAPI.getPageMdSupplier({}).then((res) => {
+      selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
           this.supplierArr = res.data.records
         }
