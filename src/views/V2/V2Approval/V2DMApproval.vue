@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-30 10:23:10
+ * @LastEditTime: 2022-12-02 09:17:23
 -->
 <template>
   <div class="MainContent">
@@ -41,7 +41,7 @@
 
         <div class="Selectli">
           <span class="SelectliTitle">DM item:</span>
-          <el-select v-model="filterObj.DMItem" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.dmItem" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in DMItemList" :key="index" :label="item.item" :value="item.item" />
           </el-select>
           <!-- 下拉数据接口未对接 -->
@@ -243,10 +243,10 @@
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img  src="@/assets/images/success.png" alt="">
+              <!-- <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
               <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-              <span class="judgmentText">{{ row.judgmentType }}</span>
+              <span class="judgmentText">{{ row.judgmentType }}</span> -->
             </div>
           </el-tooltip>
         </template>
@@ -255,9 +255,10 @@
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">-</span></div>
         </template>
-        <template slot-scope="scope">
+        <template>
           <div>
-            {{ scope.row.judgmentContent }}
+            主数据校验通过
+            <!-- {{ scope.row.judgmentContent }} -->
           </div>
         </template>
       </el-table-column>

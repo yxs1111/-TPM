@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-01 17:12:13
+ * @LastEditTime: 2022-12-02 09:17:53
 -->
 <template>
   <div class="MainContent">
@@ -176,7 +176,7 @@
       </el-table-column>
       <el-table-column width="300" align="right" prop="planCost" label="V1计划费用(RMB)">
         <template v-slot:header>
-          <div>V1计划费用(RMB)<br><span class="subTitle">  KA + Brand +Dist.+DM Item </span></div>
+          <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand +Dist.+DM Item </span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -340,7 +340,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column width="180" align="center" fixed="left" prop="judgmentType" label="系统判定">
+            <el-table-column width="180" align="center" prop="judgmentType" label="系统判定">
               <template v-slot:header>
                 <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
@@ -348,21 +348,22 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                    <img src="@/assets/images/success.png" alt="">
+                    <!-- <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
+              <span class="judgmentText">{{ row.judgmentType }}</span> -->
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" fixed="left" prop="judgmentContent" label="系统判定内容">
+            <el-table-column width="800" align="left" prop="judgmentContent" label="系统判定内容">
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
-              <template slot-scope="scope">
+              <template>
                 <div>
-                  {{ scope.row.judgmentContent }}
+                  主数据校验通过
+                  <!-- {{ scope.row.judgmentContent }} -->
                 </div>
               </template>
             </el-table-column>
@@ -578,14 +579,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import {
-  getDefaultPermissions,
-  getHeightHaveTab,
-  messageObj,
-  downloadFile,
-  messageMap,
-  formatThousandNum,
-} from '@/utils'
+import { getDefaultPermissions, getHeightHaveTab, messageObj, downloadFile, messageMap, formatThousandNum } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V3/DM'
 export default {
@@ -695,11 +689,7 @@ export default {
         })
         .then((res) => {
           if (res.code === 1000) {
-            if (
-              res.data.version === 'DM-V3' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.tableData[0].isSubmit
-            ) {
+            if (res.data.version === 'DM-V3' && res.data.assignee.indexOf(this.usernameLocal) != -1 && this.tableData[0].isSubmit) {
               //本人可以提交
               this.isSubmit = false
             } else {
@@ -718,7 +708,7 @@ export default {
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
-          this.channelArr = res.data.filter(item=>item.channelCode == 'EC')
+          this.channelArr = res.data.filter((item) => item.channelCode == 'EC')
           this.getCustomerList()
         }
       })
@@ -737,9 +727,7 @@ export default {
     },
     //更改客户--》获取经销商
     changeCustomer() {
-      let findIndex = this.customerArr.findIndex(
-        (item) => item.customerCode == this.filterObj.customerCode
-      )
+      let findIndex = this.customerArr.findIndex((item) => item.customerCode == this.filterObj.customerCode)
       this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
     },
     // 经销商
@@ -805,10 +793,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 1,
         }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_DM_${this.filterObj.channelCode}_V3_查询.xlsx`
-          ) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.month}_DM_${this.filterObj.channelCode}_V3_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
@@ -907,10 +892,7 @@ export default {
           channelCode: this.filterObj.channelCode, //渠道
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_DM_${this.filterObj.channelCode}_V3审批.xlsx`
-          ) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.month}_DM_${this.filterObj.channelCode}_V3审批.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
