@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-11-22 11:17:47
+ * @LastEditTime: 2022-12-05 17:11:04
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -61,7 +61,7 @@ export default {
   },
   // 供应商信息
   getPageMdSupplier(params) {
-    return requestApi.request_get('/mdm/mdSupplier/getPage', params)
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
   },
   //getCostTypeList
   getCostTypeList(params) {

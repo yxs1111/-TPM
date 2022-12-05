@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-02 12:06:21
+ * @LastEditTime: 2022-12-05 17:15:31
 -->
 <template>
   <div class="MainContent">
@@ -758,7 +758,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },

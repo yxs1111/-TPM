@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-10-14 15:20:16
+ * @LastEditTime: 2022-12-05 17:14:49
 -->
 <template>
   <div class="MainContent">
@@ -751,7 +751,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({pageSize: 9999}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
           console.log(res.data)
         }
       })
