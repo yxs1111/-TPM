@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-11-24 13:05:11
 -->
 <template>
-  <div class='indexNew'>
+  <div class="indexNew">
     <div class="index_container">
       <GanttElastic ref="ganttGroup" style="padding-top: 10px; padding-left: 10px; padding-right: 10px" :tasks="tasks" :options="options">
         <!-- <GanttElasticHeader slot="header"></GanttElasticHeader> -->
@@ -12,7 +12,7 @@
       <div v-show="popUpShow" class="hover_con" :style="positionStyle">
         <div class="triangle" />
         <!--        {{ content.label }}<br />-->
-        {{ dayjs(content.startTime) }} - {{ dayjs(content.endTime) }} <br>
+        {{ dayjs(content.startTime) }} - {{ dayjs(content.endTime) }} <br />
       </div>
       <div class="CityPlan">
         <div class="CityPlanTop">
@@ -31,19 +31,19 @@
           </div>
           <div class="PointTipWrap2">
             <div class="PointTip">
-              <img src="@/assets/images/index/point_right2.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_right2.png" alt="" class="pointTipImg" />
               <span>已完成</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point_circle2.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_circle2.png" alt="" class="pointTipImg" />
               <span>待办</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point_amaze2.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point_amaze2.png" alt="" class="pointTipImg" />
               <span>延误</span>
             </div>
             <div class="PointTip">
-              <img src="@/assets/images/index/point5.png" alt="" class="pointTipImg">
+              <img src="@/assets/images/index/point5.png" alt="" class="pointTipImg" />
               <span>未开始</span>
             </div>
           </div>
@@ -57,51 +57,51 @@
         <!-- 活动月 -->
         <div class="monthBarWrap">
           <!-- 流程 -->
-          <div v-for="(MonthItem,MonthIndex) in ActivityList" :key="MonthIndex" class="monthBar">
+          <div v-for="(MonthItem, MonthIndex) in ActivityList" :key="MonthIndex" class="monthBar">
             <!--          <div class="monthBg">-->
             <!--            &lt;!&ndash; <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> &ndash;&gt;-->
             <!--            <div class="monthName">{{MonthItem.month}}</div>-->
             <!--          </div>-->
             <div class="monthPoint">
               <!-- 渠道 -->
-              <div v-for="(value,ckey) in MonthItem.channelList" :key="ckey">
-                <div v-for="item,index in value" :key="index">
+              <div v-for="(value, ckey) in MonthItem.channelList" :key="ckey">
+                <div v-for="(item, index) in value" :key="index">
                   <!-- PP -->
                   <div v-if="item.isPrice" class="PPBar">
-                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{ item.TaskName }}</div>
-                    <div class='NuPoint'>
-                      <div v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
-                        <div v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))" class="passIcon" />
-                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                    <div class="PointTitle" :class="item.isPrice ? 'PointTitle' : 'NoPriceTaskIndexList'">{{ item.TaskName }}</div>
+                    <div class="NuPoint">
+                      <div v-for="(TaskLi, TaskIndex) in item.isPrice ? PriceTaskIndexList : NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
+                        <div v-if="item.taskNumber > TaskIndex || (item.taskNumber == TaskIndex && item.processStatus == 2)" class="passIcon" />
+                        <el-tooltip v-if="item.taskNumber == TaskIndex && item.workDateFlag === '0' && item.processStatus == 1" effect="light" placement="bottom" popper-class="tooltip">
                           <div slot="content" v-html="getTip(item)" />
-                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" class="currentPoint" />
+                          <div v-if="item.taskNumber == TaskIndex && item.workDateFlag === '0' && item.processStatus == 1" class="currentPoint" />
                         </el-tooltip>
-                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                        <el-tooltip v-if="item.taskNumber == TaskIndex && item.workDateFlag !== '0' && item.processStatus == 1" effect="light" placement="bottom" popper-class="tooltip">
                           <div slot="content" v-html="getTip(item)" />
-                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" class="delayPoint" />
+                          <div v-if="item.taskNumber == TaskIndex && item.workDateFlag !== '0' && item.processStatus == 1" class="delayPoint" />
                         </el-tooltip>
-                        <div v-if="TaskIndex>item.taskNumber" class="noStart" />
-                        <div v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'" class="line" />
-                        <div v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'" class="lineDark" />
+                        <div v-if="TaskIndex > item.taskNumber" class="noStart" />
+                        <div v-if="item.taskNumber > TaskIndex && TaskLi != 'V3'" class="line" />
+                        <div v-if="TaskIndex >= item.taskNumber && TaskLi != 'V3'" class="lineDark" />
                       </div>
                     </div>
                   </div>
                   <div v-if="!item.isPrice" class="NU">
-                    <div class="PointTitle" :class="item.isPrice?'PointTitle':'NoPriceTaskIndexList'">{{ item.TaskName }}</div>
+                    <div class="PointTitle" :class="item.isPrice ? 'PointTitle' : 'NoPriceTaskIndexList'">{{ item.TaskName }}</div>
                     <div class="NuPoint">
-                      <div v-for="(TaskLi,TaskIndex) in item.isPrice?PriceTaskIndexList:NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
-                        <div v-if="item.taskNumber>TaskIndex||(item.taskNumber==TaskIndex&&(item.processStatus==2))" class="passIcon" />
-                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                      <div v-for="(TaskLi, TaskIndex) in item.isPrice ? PriceTaskIndexList : NoPriceTaskIndexList" :key="TaskLi" :class="TaskLi">
+                        <div v-if="item.taskNumber > TaskIndex || (item.taskNumber == TaskIndex && item.processStatus == 2)" class="passIcon" />
+                        <el-tooltip v-if="item.taskNumber == TaskIndex && item.workDateFlag === '0' && item.processStatus == 1" effect="light" placement="bottom" popper-class="tooltip">
                           <div slot="content" v-html="getTip(item)" />
-                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag==='0'&&(item.processStatus==1)" class="currentPoint" />
+                          <div v-if="item.taskNumber == TaskIndex && item.workDateFlag === '0' && item.processStatus == 1" class="currentPoint" />
                         </el-tooltip>
-                        <el-tooltip v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" effect="light" placement="bottom" popper-class="tooltip">
+                        <el-tooltip v-if="item.taskNumber == TaskIndex && item.workDateFlag !== '0' && item.processStatus == 1" effect="light" placement="bottom" popper-class="tooltip">
                           <div slot="content" v-html="getTip(item)" />
-                          <div v-if="item.taskNumber==TaskIndex&&item.workDateFlag!=='0'&&(item.processStatus==1)" class="delayPoint" />
+                          <div v-if="item.taskNumber == TaskIndex && item.workDateFlag !== '0' && item.processStatus == 1" class="delayPoint" />
                         </el-tooltip>
-                        <div v-if="TaskIndex>item.taskNumber" class="noStart" />
-                        <div v-if="item.taskNumber>TaskIndex&&TaskLi!='V3'" class="line" />
-                        <div v-if="TaskIndex>=item.taskNumber&&TaskLi!='V3'" class="lineDark" />
+                        <div v-if="TaskIndex > item.taskNumber" class="noStart" />
+                        <div v-if="item.taskNumber > TaskIndex && TaskLi != 'V3'" class="line" />
+                        <div v-if="TaskIndex >= item.taskNumber && TaskLi != 'V3'" class="lineDark" />
                       </div>
                     </div>
                   </div>
@@ -118,7 +118,7 @@
         <div class="BarTitleWrap">
           <span>我的待办</span>
           <div class="TabBar">
-            <div v-for="(item, index) in TabList" :key="item.id" class="Tabli " :class="currentIndex == index ? 'currentTabli' : ''" @click="changeCurrent(index)">
+            <div v-for="(item, index) in TabList" :key="item.id" class="Tabli" :class="currentIndex == index ? 'currentTabli' : ''" @click="changeCurrent(index)">
               {{ item.title }}
             </div>
             <!-- <div class="Tabli ">已完成</div> -->
@@ -126,23 +126,21 @@
         </div>
         <!--        费用管理-->
         <div v-show="currentIndex == 0" class="TimeLineWrap">
-          <el-table :header-cell-style="{'color':'#000000'}" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
-            <el-table-column width='75' align="left" prop="yearAndMonth" label="年月" />
-            <el-table-column width='120' prop="costTypeName" label="Cost Type" />
-            <el-table-column width='120' prop="minePackageName" label="Mine Package" />
-            <el-table-column width='280' prop="costItemName" label="Cost Item" />
-            <el-table-column width='60' prop="channelName" label="渠道" />
-            <el-table-column width='80' prop="num" label="版本号" />
-            <el-table-column width='160' align="left" prop="" label="查看">
-              <template slot-scope="{row}">
-                <div class="transact" @click="openFlowDiagram(row)">
-                  查看流程
-                </div>
+          <el-table :header-cell-style="{ color: '#000000' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
+            <el-table-column width="75" align="left" prop="yearAndMonth" label="年月" />
+            <el-table-column width="120" prop="costTypeName" label="Cost Type" />
+            <el-table-column width="120" prop="minePackageName" label="Mine Package" />
+            <el-table-column width="280" prop="costItemName" label="Cost Item" />
+            <el-table-column width="60" prop="channelName" label="渠道" />
+            <el-table-column width="80" prop="num" label="版本号" />
+            <el-table-column width="160" align="left" prop="" label="查看">
+              <template slot-scope="{ row }">
+                <div class="transact" @click="openFlowDiagram(row)">查看流程</div>
               </template>
             </el-table-column>
             <el-table-column align="center" prop="" fixed="right" label="操作">
               <template slot-scope="scope">
-                <div class="operation" @click="goAssignee(scope.row.version,scope.row.activityName,scope.row.channelCode,scope.row.minePackageName,scope.row)">
+                <div class="operation" @click="goAssignee(scope.row.version, scope.row.activityName, scope.row.channelCode, scope.row.minePackageName, scope.row)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
                   办理
                 </div>
@@ -152,22 +150,22 @@
         </div>
         <!--        合同管理-->
         <div v-show="currentIndex == 1" class="TimeLineWrap">
-          <el-table :header-cell-style="{'color':'#000000'}" max-height="190" :data="contractList" stripe style="width: 100%">
+          <el-table :header-cell-style="{ color: '#000000' }" max-height="190" :data="contractList" stripe style="width: 100%">
             <el-table-column prop="item" label="合同类型" width="140" />
             <el-table-column prop="contractCode" label="合同ID" width="280" />
             <el-table-column prop="customerName" label="客户名称" />
             <el-table-column prop="distributorName" label="经销商名称" />
             <el-table-column prop="activityName" label="当前节点" />
             <el-table-column prop="" label="查看" width="120">
-              <template slot-scope="{row}">
+              <template slot-scope="{ row }">
                 <div class="transact" @click="openFlowDiagram(row)">
                   <div class="transctTxt">查看流程</div>
                 </div>
               </template>
             </el-table-column>
             <el-table-column prop="" fixed="right" label="操作">
-              <template slot-scope="{row}">
-                <div class="operation" @click="operateProcess(row.minePackageCode,row.name)">
+              <template slot-scope="{ row }">
+                <div class="operation" @click="operateProcess(row.minePackageCode, row.name)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
                   办理
                 </div>
@@ -183,7 +181,7 @@
           <notice />
         </div>
         <div class="MessgaeWrap">
-          <div v-for="item,index in MessageList" :key="index" class="Messgaeli">
+          <div v-for="(item, index) in MessageList" :key="index" class="Messgaeli">
             <span class="MessageDate">[{{ item.time }}]</span>
             <span class="MessageContent">{{ item.msg }}</span>
           </div>
@@ -225,14 +223,7 @@ export default {
       const currentYear = currentDate.getFullYear()
       const currentMonth = currentDate.getMonth()
       const currentDay = currentDate.getDate()
-      const timeStamp = new Date(
-        currentYear,
-        currentMonth,
-        currentDay,
-        0,
-        0,
-        0
-      ).getTime()
+      const timeStamp = new Date(currentYear, currentMonth, currentDay, 0, 0, 0).getTime()
       return new Date(timeStamp + hours * 60 * 60 * 1000).getTime()
     }
     const options = {
@@ -261,8 +252,8 @@ export default {
         },
         grid: {
           horizontal: {
-            gap: 12 //*
-          }
+            gap: 12, //*
+          },
         },
         expander: {
           display: true,
@@ -293,20 +284,7 @@ export default {
       },
       locale: {
         weekdays: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-        months: [
-          '01',
-          '02',
-          '03',
-          '04',
-          '05',
-          '06',
-          '07',
-          '08',
-          '09',
-          '10',
-          '11',
-          '12',
-        ],
+        months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
       },
       /* locale:{
           name: 'pl', // name String
@@ -511,7 +489,7 @@ export default {
   mounted() {
     this.changeScreen()
     //浏览器放大缩小 监听
-    window.addEventListener('resize',this.changeScreen)
+    window.addEventListener('resize', this.changeScreen)
     const width = document.body.clientWidth
     if (this.$store.state.app.sidebar.opened) {
       //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
@@ -594,7 +572,8 @@ export default {
         this.maxheight = 945
       } else if (height <= 3717) {
         this.maxheight = 1286
-      } return (this.maxheight)
+      }
+      return this.maxheight
       if (this.$store.state.app.sidebar.opened) {
         //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
         if (width <= 1366) {
@@ -604,10 +583,10 @@ export default {
         } else if (width <= 1920) {
           this.options.times.timeZoom = 22.2
         } else {
-          if(!isAmplification) {
-            this.options.times.timeZoom+=0.8
+          if (!isAmplification) {
+            this.options.times.timeZoom += 0.8
           } else {
-            this.options.times.timeZoom-=0.8
+            this.options.times.timeZoom -= 0.8
           }
         }
       } else {
@@ -618,10 +597,10 @@ export default {
         } else if (width <= 1920) {
           this.options.times.timeZoom = 21.9
         } else {
-          if(!isAmplification) {
-            this.options.times.timeZoom+=0.8
+          if (!isAmplification) {
+            this.options.times.timeZoom += 0.8
           } else {
-            this.options.times.timeZoom-=0.8
+            this.options.times.timeZoom -= 0.8
           }
         }
       }
@@ -641,35 +620,14 @@ export default {
           this.startTimeArr = []
           item.label = item.activityMonth
           item.startVZero = item.startAndEndVZero.substring(0, 10)
-          item.EndVZero = item.startAndEndVZero.substring(
-            item.startAndEndVZero.length - 10,
-            item.startAndEndVZero.length
-          )
+          item.EndVZero = item.startAndEndVZero.substring(item.startAndEndVZero.length - 10, item.startAndEndVZero.length)
           item.startVOne = item.startAndEndVOne.substring(0, 10)
-          item.EndVOne = item.startAndEndVOne.substring(
-            item.startAndEndVOne.length - 10,
-            item.startAndEndVOne.length
-          )
+          item.EndVOne = item.startAndEndVOne.substring(item.startAndEndVOne.length - 10, item.startAndEndVOne.length)
           item.startVTwo = item.startAndEndVTwo.substring(0, 10)
-          item.EndVTwo = item.startAndEndVTwo.substring(
-            item.startAndEndVTwo.length - 10,
-            item.startAndEndVTwo.length
-          )
+          item.EndVTwo = item.startAndEndVTwo.substring(item.startAndEndVTwo.length - 10, item.startAndEndVTwo.length)
           item.startVThree = item.startAndEndVThree.substring(0, 10)
-          item.EndVThree = item.startAndEndVThree.substring(
-            item.startAndEndVThree.length - 10,
-            item.startAndEndVThree.length
-          )
-          this.startTimeArr.push(
-            new Date(item.startVZero),
-            new Date(item.EndVZero),
-            new Date(item.startVOne),
-            new Date(item.EndVOne),
-            new Date(item.startVTwo),
-            new Date(item.EndVTwo),
-            new Date(item.startVThree),
-            new Date(item.EndVThree)
-          )
+          item.EndVThree = item.startAndEndVThree.substring(item.startAndEndVThree.length - 10, item.startAndEndVThree.length)
+          this.startTimeArr.push(new Date(item.startVZero), new Date(item.EndVZero), new Date(item.startVOne), new Date(item.EndVOne), new Date(item.startVTwo), new Date(item.EndVTwo), new Date(item.startVThree), new Date(item.EndVThree))
           let maxDate = new Date(Math.max.apply(null, this.startTimeArr))
           let minDate = new Date(Math.min.apply(null, this.startTimeArr))
           const formatDateTime = function (date) {
@@ -704,11 +662,9 @@ export default {
           // }
           // const currentdate1 = '2022-9-01'
           // const currentdate3 = '2022-12-31'
-          const currentdate1 =
-            date.getFullYear() + seperator1 + month1 + seperator1 + strDate1
+          const currentdate1 = date.getFullYear() + seperator1 + month1 + seperator1 + strDate1
           // const currentdate2 = date.getFullYear() + seperator1 + month2 + seperator1 + strDate
-          const currentdate3 =
-            date.getFullYear() + seperator1 + month3 + seperator1 + strDate2
+          const currentdate3 = date.getFullYear() + seperator1 + month3 + seperator1 + strDate2
           item.start = dayjs(currentdate1).valueOf()
           item.end = dayjs(currentdate3).valueOf()
           item.type = 'group'
@@ -874,38 +830,32 @@ export default {
         assigneeStr += `<span>${item}</span></br>`
       })
       return `<div class="Tip">
-                <span style='font-weight: bold'>${
-                  value.createDate
-                    ? value.createDate.substring(0, 19).replaceAll('T', ' ')
-                    : ''
-                }</span>-
-                <span style='font-weight: bold'>${
-                  value.updateDate
-                    ? value.updateDate.substring(0, 19).replaceAll('T', ' ')
-                    : ''
-                }</span>
+                <span style='font-weight: bold'>${value.createDate ? value.createDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>-
+                <span style='font-weight: bold'>${value.updateDate ? value.updateDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>
               </div>`
     },
     // 获取信息列表
     getMesList() {
-      requestApi.request_get('/mdm/mdEmailRecordRule/getPage', {
-        receiverCode: localStorage.usernameLocal,
-      }).then((res) => {
-        const obj = {
-          time: '',
-          msg: '',
-        }
-        res.data.records.forEach((item) => {
-          // console.log(item)
-          obj.time = item.createDate.substring(0, 10)
-          obj.msg = item.theme
-          if (this.MessageList.length < 5) {
-            this.MessageList.push({
-              ...obj,
-            })
-          }
+      requestApi
+        .request_get('/mdm/mdEmailRecordRule/getPage', {
+          receiverCode: localStorage.usernameLocal,
         })
-      })
+        .then((res) => {
+          const obj = {
+            time: '',
+            msg: '',
+          }
+          res.data.records.forEach((item) => {
+            // console.log(item)
+            obj.time = item.createDate.substring(0, 10)
+            obj.msg = item.theme
+            if (this.MessageList.length < 5) {
+              this.MessageList.push({
+                ...obj,
+              })
+            }
+          })
+        })
     },
     // 查看更多信息
     MoreMsg() {
@@ -961,54 +911,32 @@ export default {
               if (!cdata[array[index].channelName]) {
                 var arr = []
                 arr.push(array[index])
-                array[index].isPrice =
-                  array[index].minePackageName == 'Price Promotion' ? 1 : 0
-                if (
-                  array[index].isPrice &&
-                  array[index].costItemName == 'Free Goods - Tin'
-                ) {
+                array[index].isPrice = array[index].minePackageName == 'Price Promotion' ? 1 : 0
+                if (array[index].isPrice && array[index].costItemName == 'Free Goods - Tin') {
                   array[index].isPrice = 0
                 }
                 if (array[index].isPrice) {
                   // 节点序列号
-                  array[index].taskNumber = this.PriceTaskIndexList.findIndex(
-                    (item) => array[index].version.includes(item)
-                  )
+                  array[index].taskNumber = this.PriceTaskIndexList.findIndex((item) => array[index].version.includes(item))
                 } else {
                   // 节点序列号
-                  array[index].taskNumber = this.NoPriceTaskIndexList.findIndex(
-                    (item) => array[index].version.includes(item)
-                  )
+                  array[index].taskNumber = this.NoPriceTaskIndexList.findIndex((item) => array[index].version.includes(item))
                 }
-                array[index].TaskName = this.setTaskName(
-                  array[index].minePackageName,
-                  array[index].costItemName
-                )
+                array[index].TaskName = this.setTaskName(array[index].minePackageName, array[index].costItemName)
                 cdata[array[index].channelName] = arr
               } else {
-                array[index].isPrice =
-                  array[index].minePackageName == 'Price Promotion' ? 1 : 0
-                if (
-                  array[index].isPrice &&
-                  array[index].costItemName == 'Free Goods - Tin'
-                ) {
+                array[index].isPrice = array[index].minePackageName == 'Price Promotion' ? 1 : 0
+                if (array[index].isPrice && array[index].costItemName == 'Free Goods - Tin') {
                   array[index].isPrice = 0
                 }
                 if (array[index].isPrice) {
                   // 节点序列号
-                  array[index].taskNumber = this.PriceTaskIndexList.findIndex(
-                    (item) => array[index].version.includes(item)
-                  )
+                  array[index].taskNumber = this.PriceTaskIndexList.findIndex((item) => array[index].version.includes(item))
                 } else {
                   // 节点序列号
-                  array[index].taskNumber = this.NoPriceTaskIndexList.findIndex(
-                    (item) => array[index].version.includes(item)
-                  )
+                  array[index].taskNumber = this.NoPriceTaskIndexList.findIndex((item) => array[index].version.includes(item))
                 }
-                array[index].TaskName = this.setTaskName(
-                  array[index].minePackageName,
-                  array[index].costItemName
-                )
+                array[index].TaskName = this.setTaskName(array[index].minePackageName, array[index].costItemName)
                 cdata[array[index].channelName].push(array[index])
                 // PP、NU 排序
                 cdata[array[index].channelName].sort(function (a, b) {
@@ -1152,13 +1080,9 @@ export default {
         }
       } else if (version == 'CUSTOMER-CONTRACT') {
         if (name.indexOf('审批') != -1) {
-          this.$router.push(
-            '/contractManagement/ContractEntry/CustomerContractApproval'
-          )
+          this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
         } else {
-          this.$router.push(
-            '/contractManagement/ContractEntry/CustomerContractEntry'
-          )
+          this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
         }
       }
     },
@@ -1311,7 +1235,7 @@ export default {
 //  overflow-y: auto;
 //}
 .indexTable {
-  .el-tooltip  {
+  .el-tooltip {
     text-align: left;
   }
 }
@@ -1453,8 +1377,7 @@ export default {
   background-color: #c5ebfe !important;
   color: #4192d3 !important;
 }
-.gantt-elastic__task-list-item_active
-  .gantt-elastic__task-list-item-value-wrapper {
+.gantt-elastic__task-list-item_active .gantt-elastic__task-list-item-value-wrapper {
   color: #4192d3 !important;
   background-color: transparent;
 }
@@ -1500,7 +1423,7 @@ export default {
   border-bottom-right-radius: 6px;
 }
 .date {
-  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN Light', Arial, sans-serif;
   background-color: rgb(198, 235, 254);
   padding: 6px 16px;
   border-radius: 6px;
@@ -1574,7 +1497,7 @@ export default {
     .PointTip {
       margin-right: 40px;
       font-size: 14px;
-      font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
+      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN Light', Arial, sans-serif;
       font-weight: 400;
       color: #333333;
       display: flex;
@@ -2196,7 +2119,7 @@ export default {
           margin-right: 10px;
         }
         .MessageContent {
-          font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
+          font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN Light', Arial, sans-serif;
           width: 100%;
           white-space: nowrap;
           overflow: hidden;
@@ -2207,7 +2130,7 @@ export default {
   }
   .BarTitleWrap {
     //padding-left: 10px;
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN Light', Arial, sans-serif;
     font-size: 17px;
     color: #333333;
     font-weight: 600;
@@ -2234,7 +2157,7 @@ export default {
         text-align: center;
         font-size: 14px;
         cursor: pointer;
-        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN Light", Arial, sans-serif;
+        font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN Light', Arial, sans-serif;
       }
       .currentTabli {
         background-color: #4192d3;
@@ -2322,20 +2245,20 @@ export default {
 }
 /*滚动条的宽度*/
 ::-webkit-scrollbar {
-   width: 0px !important;
-   height: 2px;
+  width: 0px !important;
+  height: 2px;
 }
 /* //滚动条的滑块 */
 ::-webkit-scrollbar-thumb {
-   background-color: #d1d1d1;
-   border-radius: 3px;
+  background-color: #d1d1d1;
+  border-radius: 3px;
 }
 .gantt-elastic ::-webkit-scrollbar {
-   width: 0px !important;
-   height: 6px!important;
+  width: 0px !important;
+  height: 6px !important;
 }
 .gantt-elastic ::-webkit-scrollbar-thumb {
-   background-color: #d1d1d1;
-   border-radius: 3px;
+  background-color: #d1d1d1;
+  border-radius: 3px;
 }
 </style>
