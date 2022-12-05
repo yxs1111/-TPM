@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-11-24 13:05:11
+ * @LastEditTime: 2022-12-05 15:02:10
 -->
 <template>
   <div class="indexNew">
@@ -1257,9 +1257,6 @@ export default {
 }
 </style>
 <style lang="scss">
-//.main-container {
-//  overflow-y: auto;
-//}
 .indexTable {
   .el-tooltip {
     text-align: left;
@@ -1951,6 +1948,16 @@ export default {
 //  }
 //}
 .TimeLineWrap {
+  /*滚动条的宽度*/
+  ::-webkit-scrollbar {
+    width: 0px !important;
+    height: 2px;
+  }
+  /* //滚动条的滑块 */
+  ::-webkit-scrollbar-thumb {
+    background-color: #d1d1d1;
+    border-radius: 3px;
+  }
   .el-table {
     border: 1px solid #ebeff5;
     .cell {
@@ -2274,16 +2281,6 @@ export default {
   .submit_icon {
     font-size: 26px;
   }
-}
-/*滚动条的宽度*/
-::-webkit-scrollbar {
-  width: 0px !important;
-  height: 2px;
-}
-/* //滚动条的滑块 */
-::-webkit-scrollbar-thumb {
-  background-color: #d1d1d1;
-  border-radius: 3px;
 }
 .gantt-elastic ::-webkit-scrollbar {
   width: 0px !important;
