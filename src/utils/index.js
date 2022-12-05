@@ -718,7 +718,7 @@ export function pickerOptionsSystemDate(row) {
     },
   }
 }
-export let sortList = ['Price Promotion', 'Free Goods-Tin', 'New User', 'Free Goods-Win2', 'FMC', 'Roadshow', 'Listing fee', 'KA Rebate', 'HIH Rebate', 'Display', 'POSM - Standard', 'POSM - Customized', 'ECM', 'Premium', 'Collection', 'Mama class', 'DM', 'Transport Costs', 'MMC']
+export let sortList = ['Price Promotion', 'Free Goods-Tin', 'New User', 'Free Goods-Win2', 'FMC', 'Roadshow', 'Listing fee', 'KA Rebate', 'HIH Rebate', 'Display', 'POSM - Standard', 'POSM - Customized', 'ECM', 'Premium', 'Mama class', 'MMC', 'DM', 'Transport Costs', 'Collection']
 // 文件格式正则
 // 根据文件名获取文件类型
 export function getFileType(fileName) {

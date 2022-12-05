@@ -155,14 +155,14 @@ export default {
               minePackageName: 'Free Goods-Win2',
             },
             {
-              name: 'DM',
-              path: '/master/ruleCtrl/model/splitRulesDM',
-              minePackageName: 'DM',
-            },
-            {
               name: 'MMC',
               path: '/master/ruleCtrl/model/splitRulesMMC',
               minePackageName: 'MMC',
+            },
+            {
+              name: 'DM',
+              path: '/master/ruleCtrl/model/splitRulesDM',
+              minePackageName: 'DM',
             },
             {
               name: 'Transport',

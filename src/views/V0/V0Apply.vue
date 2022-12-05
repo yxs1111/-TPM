@@ -676,7 +676,9 @@ export default {
           url(obj).then((response) => {
             if (response.code == 1000) {
               this.$message.success('成功获取数据!')
-              this.getList()
+              if (this.ruleForm.Minepackage !== 'Mama class') {
+                this.getList()
+              }
               this.resetForm(formName)
             }
           })
