@@ -1,7 +1,7 @@
 <!--
  * @Description: V3TransportApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-29 10:17:23
+ * @LastEditTime: 2022-12-02 14:50:16
 -->
 <template>
   <div class="MainContent">
@@ -340,7 +340,7 @@
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
             <!--            是否通过-->
-            <vxe-table-column width="180" align="center" field="systemJudgment" title="系统判定" fixed="left">
+            <vxe-table-column field="date" align="center" title="系统判定" width="180" fixed="left">
               <template v-slot:header>
                 <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
@@ -348,10 +348,11 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
+                    <!-- <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
                     <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                    <span class="judgmentText">{{ row.systemJudgment }}</span> -->
                   </div>
                 </el-tooltip>
               </template>
@@ -360,9 +361,10 @@
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
-              <template slot-scope="scope">
+              <template>
                 <span>
-                  {{ scope.row.systemJudgmentContent }}
+                  <!-- {{ scope.row.systemJudgmentContent }} -->
+                  校验通过
                 </span>
               </template>
             </vxe-table-column>
@@ -727,15 +729,26 @@ export default {
         .catch()
     },
     //更改客户
-    changeCustomer() {
+    changeCustomer(value) {
+      if(value=='') {
+        this.filterObj.customerMdmCode = ''
+        this.filterObj.customerCode = ''
+        this.filterObj.distributorName=''
+        this.getDistributorList()
+        return
+      }
       const customerObj= this.customerArr.find(item=>{
-        return item.customerCode==this.filterObj.customerCode
+        return item.customerCsName==this.filterObj.customerCode
       })
       this.filterObj.customerMdmCode=customerObj.customerMdmCode
+      this.filterObj.distributorName=''
       this.getDistributorList()
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode=''
+      this.filterObj.customerMdmCode=''
+      this.filterObj.distributorName=''
       selectAPI
         .queryCustomerList({
           channelCode: this.filterObj.channelCode,
@@ -745,10 +758,11 @@ export default {
             this.customerArr = res.data
           }
         })
+      this.getDistributorList()
     },
     // 供应商
     getPageMdSupplier() {
-      selectAPI.getPageMdSupplier({}).then((res) => {
+      selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
           this.supplierArr = res.data.records
         }

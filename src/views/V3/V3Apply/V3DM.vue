@@ -1,7 +1,7 @@
 <!--
  * @Description: V3DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-30 10:23:13
+ * @LastEditTime: 2022-12-02 12:06:13
 -->
 <template>
   <div class="MainContent">
@@ -22,7 +22,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerCode" @change="changeCustomer" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
@@ -726,6 +726,8 @@ export default {
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode = ''
+      this.filterObj.distributorMdmCode=''
       selectAPI
         .queryCustomerList({
           channelCode: this.filterObj.channelCode,
@@ -733,21 +735,28 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
+            this.getDistributorList()
           }
         })
     },
     //更改客户--》获取经销商
-    changeCustomer() {
-      let findIndex = this.customerArr.findIndex(
+    changeCustomer(value) {
+      this.filterObj.distributorMdmCode = ''
+      this.distributorArr = []
+      if (value == '') {
+        this.getDistributorList()
+      } else {
+        let findIndex = this.customerArr.findIndex(
         (item) => item.customerCode == this.filterObj.customerCode
-      )
-      this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+        )
+        this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+      }
     },
     // 经销商
     getDistributorList(customerMdmCode) {
       selectAPI
         .queryDistributorList({
-          customerMdmCode,
+          customerMdmCode:customerMdmCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -921,11 +930,7 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportV3Error({
-          distributorMdmCode: this.filterObj.distributorMdmCode, //经销商
-          supplierCode: this.filterObj.supplierCode, //供应商
           channelCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
-          dmItem: this.filterObj.dmItem, //
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((res) => {

@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-30 10:23:10
+ * @LastEditTime: 2022-12-02 12:06:06
 -->
 <template>
   <div class="MainContent">
@@ -22,7 +22,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户:</span>
-          <el-select v-model="filterObj.customerCode" @change="changeCustomer" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
@@ -41,7 +41,7 @@
 
         <div class="Selectli">
           <span class="SelectliTitle">DM item:</span>
-          <el-select v-model="filterObj.DMItem" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.dmItem" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in DMItemList" :key="index" :label="item.item" :value="item.item" />
           </el-select>
           <!-- 下拉数据接口未对接 -->
@@ -243,10 +243,11 @@
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img  src="@/assets/images/success.png" alt="">
+              <span class="judgmentText">Pass</span>
+              <!-- <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
               <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-              <span class="judgmentText">{{ row.judgmentType }}</span>
+              <span class="judgmentText">{{ row.judgmentType }}</span> -->
             </div>
           </el-tooltip>
         </template>
@@ -255,9 +256,10 @@
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">-</span></div>
         </template>
-        <template slot-scope="scope">
+        <template>
           <div>
-            {{ scope.row.judgmentContent }}
+            校验通过
+            <!-- {{ scope.row.judgmentContent }} -->
           </div>
         </template>
       </el-table-column>
@@ -698,7 +700,7 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取渠道下拉框
+    // 获取下拉框
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
@@ -709,6 +711,8 @@ export default {
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode = ''
+      this.filterObj.distributorMdmCode=''
       selectAPI
         .queryCustomerList({
           channelCode: this.filterObj.channelCode,
@@ -716,21 +720,28 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
+            this.getDistributorList()
           }
         })
     },
     //更改客户--》获取经销商
-    changeCustomer() {
-      let findIndex = this.customerArr.findIndex(
+    changeCustomer(value) {
+      this.filterObj.distributorMdmCode = ''
+      this.distributorArr = []
+      if (value == '') {
+        this.getDistributorList()
+      } else {
+        let findIndex = this.customerArr.findIndex(
         (item) => item.customerCode == this.filterObj.customerCode
-      )
-      this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+        )
+        this.getDistributorList(this.customerArr[findIndex].customerMdmCode)
+      }
     },
     // 经销商
     getDistributorList(customerMdmCode) {
       selectAPI
         .queryDistributorList({
-          customerMdmCode,
+          customerMdmCode:customerMdmCode,
         })
         .then((res) => {
           if (res.code === 1000) {

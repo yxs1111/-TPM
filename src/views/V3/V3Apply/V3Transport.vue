@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-29 10:13:42
+ * @LastEditTime: 2022-12-02 13:05:45
 -->
 <template>
   <div class="MainContent">
@@ -726,15 +726,26 @@ export default {
         .catch()
     },
     //更改客户
-    changeCustomer() {
+    changeCustomer(value) {
+      if(value=='') {
+        this.filterObj.customerMdmCode = ''
+        this.filterObj.customerCode = ''
+        this.filterObj.distributorName=''
+        this.getDistributorList()
+        return
+      }
       const customerObj= this.customerArr.find(item=>{
-        return item.customerCode==this.filterObj.customerCode
+        return item.customerCsName==this.filterObj.customerCode
       })
       this.filterObj.customerMdmCode=customerObj.customerMdmCode
+      this.filterObj.distributorName=''
       this.getDistributorList()
     },
     // 客户
     getCustomerList() {
+      this.filterObj.customerCode=''
+      this.filterObj.customerMdmCode=''
+      this.filterObj.distributorName=''
       selectAPI
         .queryCustomerList({
           channelCode: this.filterObj.channelCode,
@@ -744,6 +755,7 @@ export default {
             this.customerArr = res.data
           }
         })
+      this.getDistributorList()
     },
     // 供应商
     getPageMdSupplier() {

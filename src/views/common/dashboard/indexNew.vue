@@ -312,7 +312,7 @@ export default {
        }*/
     }
     return {
-      maxheight: this.changeScreen(),
+      maxheight: this.changeScreen2(),
       gridData: [
         {
           format: '2016-05-02',
@@ -487,9 +487,10 @@ export default {
   },
   created() {},
   mounted() {
-    this.changeScreen()
+    this.changeScreen2()
     //浏览器放大缩小 监听
     window.addEventListener('resize', this.changeScreen)
+    window.addEventListener('resize', this.changeScreen2)
     const width = document.body.clientWidth
     if (this.$store.state.app.sidebar.opened) {
       //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
@@ -518,13 +519,12 @@ export default {
       })
     })
     this.$bus.$on('taskMouseEnter', (content) => {
-      console.log(content)
       const { event, data } = content
       this.popUpShow = true
       const x = event.pageX + 5 + 'px'
       const y = event.pageY + 10 + 'px'
       this.content.label = data.label
-      this.content.startTime = data.startTime
+      this.content.startTime = data.startTime2
       this.content.endTime = data.endTime
       this.positionStyle = { top: y, left: x }
     })
@@ -555,7 +555,6 @@ export default {
       const height = document.body.clientHeight
       //是否放大
       let isAmplification = this.tempScreen < width
-      console.log(isAmplification)
       if (height <= 929) {
         this.maxheight = 234
       } else if (height <= 1032) {
@@ -605,6 +604,29 @@ export default {
         }
       }
       this.tempScreen = width
+    },
+    changeScreen2() {
+      const height = document.body.clientHeight
+      if (height <= 929) {
+        this.maxheight = 234
+      } else if (height <= 1032) {
+        this.maxheight = 275
+      } else if (height <= 1080) {
+        this.maxheight = 292
+      } else if (height <= 1162) {
+        this.maxheight = 324
+      } else if (height <= 1239) {
+        this.maxheight = 352
+      } else if (height <= 1394) {
+        this.maxheight = 413
+      } else if (height <= 1859) {
+        this.maxheight = 588
+      } else if (height <= 2788) {
+        this.maxheight = 945
+      } else if (height <= 3717) {
+        this.maxheight = 1286
+      }
+      return this.maxheight
     },
     getActivitycycle() {
       this.tasks = []
@@ -675,6 +697,7 @@ export default {
               id: item.id + 'v0',
               label: 'V0',
               start: dayjs(currentdate1).valueOf(),
+              startTime2: dayjs(item.startVZero).valueOf(),
               end: dayjs(item.EndVZero).valueOf(),
               percent: 50,
               type: 'task',
@@ -691,6 +714,7 @@ export default {
               id: item.id + 'v1',
               label: 'V1',
               start: dayjs(item.startVOne).valueOf(),
+              startTime2: dayjs(item.startVOne).valueOf(),
               end: dayjs(item.EndVOne).valueOf(),
               percent: 50,
               type: 'task',
@@ -707,6 +731,7 @@ export default {
               id: item.id + 'v2',
               label: 'V2',
               start: dayjs(item.startVTwo).valueOf(),
+              startTime2: dayjs(item.startVTwo).valueOf(),
               end: dayjs(item.EndVTwo).valueOf(),
               percent: 50,
               type: 'task',
@@ -723,6 +748,7 @@ export default {
               id: item.id + 'v3',
               label: 'V3',
               start: dayjs(item.startVThree).valueOf(),
+              startTime2: dayjs(item.startVThree).valueOf(),
               end: dayjs(item.EndVThree).valueOf(),
               percent: 50,
               type: 'task',
@@ -1363,6 +1389,9 @@ export default {
 .gantt-elastic__chart-graph-container {
   margin-top: 10px !important;
   height: 146px !important;
+  //.gantt-elastic__chart-row-text-content {
+  //  display: none;
+  //}
   div {
     height: 146px !important;
   }
@@ -1809,6 +1838,9 @@ export default {
           .currentPoint {
             margin-left: -20px;
           }
+          .delayPoint {
+            margin-left: -20px;
+          }
           img {
             width: 28px;
             height: 28px;
@@ -2020,7 +2052,7 @@ export default {
       }
       .el-table__fixed-body-wrapper {
         top: 48px !important;
-        max-height: 1900px !important;
+        //max-height: 1900px !important;
       }
       width: 100%;
       margin-top: 10px;
