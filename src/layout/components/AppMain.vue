@@ -152,34 +152,88 @@ export default {
 .needHelp2 {
   width: 70px !important;
   height: 70px !important;
+  .needHelpTxt {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 20px !important;
+  }
 }
 .needHelp3 {
   width: 82px !important;
   height: 82px !important;
+  .needHelpTxt {
+    width: 37px !important;
+    height: 36px !important;
+    font-size: 22px !important;
+    margin-left: 2px !important;
+    padding-top: 6px !important;
+  }
 }
 .needHelp4 {
   width: 97px !important;
   height: 97px !important;
+  .needHelpTxt {
+    width: 45px !important;
+    height: 44px !important;
+    font-size: 26px !important;
+    margin-left: 5px !important;
+    padding-top: 8px !important;
+  }
 }
 .needHelp5 {
   width: 105px !important;
   height: 105px !important;
+  .needHelpTxt {
+    width: 50px !important;
+    height: 49px !important;
+    font-size: 28px !important;
+    margin-left: 7px !important;
+    padding-top: 10px !important;
+  }
 }
 .needHelp6 {
   width: 123.5px !important;
   height: 123.5px !important;
+  .needHelpTxt {
+    width: 58px !important;
+    height: 56px !important;
+    font-size: 36px !important;
+    margin-left: 13px !important;
+    padding-top: 7px !important;
+  }
 }
 .needHelp7 {
   width: 176px !important;
   height: 176px !important;
+  .needHelpTxt {
+    width: 72px !important;
+    height: 68px !important;
+    font-size: 40px !important;
+    margin-left: 29px !important;
+    padding-top: 9px !important;
+  }
 }
 .needHelp8 {
   width: 256px !important;
   height: 256px !important;
+  .needHelpTxt {
+    width: 112px !important;
+    height: 111px !important;
+    font-size: 62px !important;
+    margin-left: 48px !important;
+    padding-top: 19px !important;
+  }
 }
 .needHelp9 {
   width: 345px !important;
   height: 345px !important;
+  .needHelpTxt {
+    width: 157px !important;
+    height: 159px !important;
+    font-size: 87px !important;
+    margin-left: 72px !important;
+    padding-top: 29px !important;
+  }
 }
 .needHelp {
   z-index: 45;
