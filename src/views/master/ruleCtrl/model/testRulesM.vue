@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-23 09:48:07
+ * @LastEditTime: 2022-12-03 10:44:37
 -->
 <template>
   <div class="tabViewsWrap">
@@ -167,7 +167,7 @@ export default {
             {
               name: 'Transport',
               path: '/master/ruleCtrl/model/splitRulesTransport',
-              minePackageName: 'Transport',
+              minePackageName: 'Transport Costs',
             },
           ]
           let TabList = []
