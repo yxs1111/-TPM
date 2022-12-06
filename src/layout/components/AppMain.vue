@@ -76,13 +76,11 @@ export default {
   },
   mounted() {
     this.changeScreen2()
-    window.addEventListener('resize',this.changeScreen2)
+    window.addEventListener('resize', this.changeScreen2)
     this.needHelp()
   },
   methods: {
     changeScreen2() {
-      console.log('分辨率调整')
-      const width = document.body.clientWidth
       const height = document.body.clientHeight
       if (height <= 929) {
         this.changeScreen = 'needHelp2'

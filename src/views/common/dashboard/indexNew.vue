@@ -25,9 +25,6 @@
               <el-radio-button label="EC">EC</el-radio-button>
               <el-radio-button label="RKA">RKA</el-radio-button>
             </el-radio-group>
-            <!--            <el-button-group>-->
-            <!--              <el-button type="primary" size='small' v-for="item in ['NKA', 'EC', 'RKA']" :key='item' autofocus @click="getHomePageData(item)"><span>{{item}}</span></el-button>-->
-            <!--            </el-button-group>-->
           </div>
           <div class="PointTipWrap2">
             <div class="PointTip">
@@ -973,30 +970,6 @@ export default {
             data[key] = cdata
           }
         }
-        // for (const key in data) {
-        //   if (Object.hasOwnProperty.call(data, key)) {
-        //     //渠道
-        //     const channelObj = data[key]
-        //     for (const ckey in channelObj) {
-        //       if (Object.hasOwnProperty.call(channelObj, ckey)) {
-        //         //MinePackage
-        //         const MinePackageList = channelObj[ckey]
-        //         let MinePackageObj={}
-        //         for (let m = 0; m < MinePackageList.length; m++) {
-        //           //根据MinePackage进行分组
-        //           if (!MinePackageObj[MinePackageList[m].minePackageName]) {
-        //             var arr = []
-        //             arr.push(MinePackageList[m])
-        //             MinePackageObj[MinePackageList[m].minePackageName] = arr
-        //           } else {
-        //             MinePackageObj[MinePackageList[m].minePackageName].push(MinePackageList[m])
-        //           }
-        //         }
-        //         channelObj[ckey]=MinePackageObj
-        //       }
-        //     }
-        //   }
-        // }
         const list = []
         for (const key in data) {
           if (Object.hasOwnProperty.call(data, key)) {
