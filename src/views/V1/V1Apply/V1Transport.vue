@@ -1,7 +1,7 @@
 <!--
  * @Description: V1Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-01 17:22:30
+ * @LastEditTime: 2022-12-06 17:15:44
 -->
 <template>
   <div class="MainContent">
@@ -277,7 +277,9 @@ export default {
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
-          this.channelArr = res.data
+          this.channelArr = res.data.filter((item) => {
+            return item.channelCode != 'RKA'
+          })
           this.getCustomerList()
         }
       })
