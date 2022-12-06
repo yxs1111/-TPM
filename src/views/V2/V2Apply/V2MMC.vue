@@ -366,7 +366,7 @@ export default {
     getDistributorList() {
       selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
-          this.distributorArr = res.data.records
+          this.distributorArr = res.data
         }
       })
     },

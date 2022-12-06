@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-25 16:13:26
+ * @LastEditTime: 2022-12-05 17:02:11
 -->
 <template>
   <div class="V0Content">
@@ -676,7 +676,7 @@ export default {
           url(obj).then((response) => {
             if (response.code == 1000) {
               this.$message.success('成功获取数据!')
-              if (this.ruleForm.Minepackage !== 'Mama class') {
+              if (this.ruleForm.Minepackage == 'Price Promotion'||this.ruleForm.Minepackage == 'New User') {
                 this.getList()
               }
               this.resetForm(formName)
