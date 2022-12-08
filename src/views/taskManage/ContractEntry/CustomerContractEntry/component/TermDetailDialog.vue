@@ -1,7 +1,7 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2022-12-08 13:11:25
+ * @LastEditTime: 2022-12-08 14:31:57
 -->
 
 <template>
@@ -373,7 +373,7 @@ export default {
       })
     },
     //获取客户合同明细数据
-    getContractTermData(index) {
+    getContractTermData(isEditor) {
       // API.findOneSaveDetail({
       //   id: this.customerId,
       //   isMain: 1,
@@ -389,8 +389,6 @@ export default {
       let variableListOrigin = this.termInfo.variable
       let variableList = []
       //获取total +variable total
-      // let isEditor = this.isEditor && index == this.editorIndex
-      let isEditor = 1
       variableListOrigin.forEach((item) => {
         let obj = {
           id: item.id,
@@ -522,8 +520,14 @@ export default {
         isNewData: 0, //是否未新添数据
         isTotal: 2, //是否total 行    2：新增一行
       }
-      //所有data汇总
-      this.termData = [...this.termTotalData, ...this.termVariableData, insertRow, ...this.termVariableTotalData, ...this.termFixData, insertRow, ...this.termFixTotalData]
+      if(isEditor) {
+        //有新增按钮
+        this.termData = [...this.termTotalData, ...this.termVariableData, insertRow, ...this.termVariableTotalData, ...this.termFixData, insertRow, ...this.termFixTotalData]
+      } else {
+        //无新增按钮
+        this.termData = [...this.termTotalData, ...this.termVariableData, ...this.termVariableTotalData, ...this.termFixData, ...this.termFixTotalData]
+      }
+    
       console.log(this.termData)
       // }
       // })
@@ -566,6 +570,9 @@ export default {
     confirmTermsDetail() {
       let isCheck = 1 //费比校验
       let Repeat = 0 //contract Item  是否重复
+      this.closeTermsDetail()
+      return
+
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -662,7 +669,6 @@ export default {
       this.VariableTotalData.totalCost = 0
       this.TotalData.totalPoint = 0
       this.TotalData.totalCost = 0
-      this.customerId = 0
       this.isTermsDetailVisible = false
       // this.isEditor=0 //编辑弹窗
     },

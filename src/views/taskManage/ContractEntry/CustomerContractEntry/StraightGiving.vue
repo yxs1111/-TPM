@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-08 12:08:44
+ * @LastEditTime: 2022-12-08 15:48:02
 -->
 <template>
   <div class="MainContent">
@@ -1071,6 +1071,7 @@ export default {
     //条款明细--弹窗展示
     showTermsDetail(index) {
       this.customerId = this.tableData[index].id
+      let isEditor = this.isEditor && index == this.editorIndex
       if (this.tableData[index].isNewData) {
         this.$message.info('请先进行保存,再进行操作')
       } else {
@@ -1086,11 +1087,11 @@ export default {
             .catch(() => {
               this.$refs.termDialog.$el.firstChild.style.height = '98%'
               // this.getContractTermData(index)
-              this.$refs.TermDetailDialog.getContractTermData()
+              this.$refs.TermDetailDialog.getContractTermData(isEditor)
             })
         } else {
           // this.getContractTermData(index)
-          this.$refs.TermDetailDialog.getContractTermData()
+          this.$refs.TermDetailDialog.getContractTermData(isEditor)
         }
       }
     },
