@@ -55,10 +55,6 @@
         <div class="monthBarWrap">
           <!-- 流程 -->
           <div v-for="(MonthItem, MonthIndex) in ActivityList" :key="MonthIndex" class="monthBar">
-            <!--          <div class="monthBg">-->
-            <!--            &lt;!&ndash; <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> &ndash;&gt;-->
-            <!--            <div class="monthName">{{MonthItem.month}}</div>-->
-            <!--          </div>-->
             <div class="monthPoint">
               <!-- 渠道 -->
               <div v-for="(value, ckey) in MonthItem.channelList" :key="ckey">
@@ -552,24 +548,6 @@ export default {
       const height = document.body.clientHeight
       //是否放大
       let isAmplification = this.tempScreen < width
-      if (height <= 929) {
-        this.maxheight = 234
-      } else if (height <= 1032) {
-        this.maxheight = 275
-      } else if (height <= 1162) {
-        this.maxheight = 324
-      } else if (height <= 1239) {
-        this.maxheight = 352
-      } else if (height <= 1394) {
-        this.maxheight = 413
-      } else if (height <= 1859) {
-        this.maxheight = 588
-      } else if (height <= 2788) {
-        this.maxheight = 945
-      } else if (height <= 3717) {
-        this.maxheight = 1286
-      }
-      return this.maxheight
       if (this.$store.state.app.sidebar.opened) {
         //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
         if (width <= 1366) {
@@ -601,6 +579,24 @@ export default {
         }
       }
       this.tempScreen = width
+      if (height <= 929) {
+        this.maxheight = 234
+      } else if (height <= 1032) {
+        this.maxheight = 275
+      } else if (height <= 1162) {
+        this.maxheight = 324
+      } else if (height <= 1239) {
+        this.maxheight = 352
+      } else if (height <= 1394) {
+        this.maxheight = 413
+      } else if (height <= 1859) {
+        this.maxheight = 588
+      } else if (height <= 2788) {
+        this.maxheight = 945
+      } else if (height <= 3717) {
+        this.maxheight = 1286
+      }
+      return this.maxheight
     },
     changeScreen2() {
       const height = document.body.clientHeight
@@ -758,80 +754,6 @@ export default {
               },
               parentId: item.id,
             }
-            // {
-            //   id: item.id,
-            //   label: item.activityMonth,
-            //   start: dayjs(item.start).valueOf(),
-            //   end: dayjs(item.end).valueOf(),
-            //   percent: 50,
-            //   type: 'group',
-            //   tasks: [
-            //     {
-            //       id: item.id + 'v0',
-            //       label: 'V0',
-            //       start: dayjs(item.startVZero).valueOf(),
-            //       end: dayjs(item.EndVZero).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     },
-            //     {
-            //       id: item.id + 'v1',
-            //       label: 'V1',
-            //       start: dayjs(item.startVOne).valueOf(),
-            //       end: dayjs(item.EndVOne).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     },
-            //     {
-            //       id: item.id + 'v2',
-            //       label: 'V2',
-            //       start: dayjs(item.startVTwo).valueOf(),
-            //       end: dayjs(item.EndVTwo).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     },
-            //     {
-            //       id: item.id + 'v3',
-            //       label: 'V3',
-            //       start: dayjs(item.startVThree).valueOf(),
-            //       end: dayjs(item.EndVThree).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     }
-            //   ]
-            // },
           )
           this.tasks.push(item)
         })
