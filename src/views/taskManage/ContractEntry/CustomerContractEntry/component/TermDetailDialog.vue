@@ -1,14 +1,14 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2022-12-08 10:25:51
+ * @LastEditTime: 2022-12-08 13:11:25
 -->
 
 <template>
   <el-dialog width="98%" ref="termDialog" class="termDialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
     <div class="dialogContent">
       <div class="termTableWrap">
-        <el-table :data="termData" style="width: 100%" :span-method="mergeColumnMethod" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+        <el-table :data="termData" ref="termDialog" style="width: 100%" :span-method="mergeColumnMethod" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
           <el-table-column align="center" width="760" fixed="left">
             <template v-slot:header>
               <div class="topInfoWrap">
@@ -32,7 +32,7 @@
                       </div>
                       <div v-show="(scope.row.isTotal==2)">
                         <div class="addNewRowWrap">
-                          <div class="addNewRow" @click="addNewRowToVariable">
+                          <div class="addNewRow" @click="addNewRowToVariable(scope.$index)">
                             <i class="el-icon-plus"></i>
                             <span class="addNewRowText">新增一行</span>
                           </div>
@@ -218,7 +218,7 @@
                       <div v-show="scope.row.isNewData" class="TermDetail">
                         <el-input v-model="scope.row.remark" clearable class="my-el-detail" placeholder="请输入描述">
                         </el-input>
-                        <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(0,scope.$index)">
+                        <img v-if="scope.row.isNewData" src="@/assets/images/closeIcon.png" alt="" class="closeIcon" @click="deleteTerm(scope.$index)">
                       </div>
                       <div v-show="!scope.row.isNewData" class="detailText">
                         {{ scope.row.remark }}
@@ -293,10 +293,85 @@ export default {
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
     }
   },
-
-  mounted() {},
+  props: {
+    customerId: {
+      type: String,
+      default: '0',
+    },
+  },
+  mounted() {
+    this.getContractItemList()
+  },
 
   methods: {
+    // 获取ContractItem
+    getContractItemList() {
+      API.getContractItemList().then((res) => {
+        if (res.code === 1000) {
+          this.contractItemFixList = []
+          this.contractItemVariableList = []
+          let list = res.data
+          //区分variable 和 fixed
+          list.forEach((item) => {
+            if (item.conditionType && item.variablePoint) {
+              item.name = item.contractItem
+              item.code = item.contractItemCode
+              item.conditionType = item.conditionType
+              if (item.conditionType.indexOf(',') != -1) {
+                item.conditionalIsTwo = 2
+              } else {
+                item.conditionalIsTwo = 1
+              }
+              if (item.variablePoint.indexOf('variable') != -1) {
+                item.isVariableOrFix = 0
+              }
+              if (item.variablePoint.indexOf('fix') != -1) {
+                item.isVariableOrFix = 1
+              }
+              if (item.variablePoint.indexOf('fix') != -1 && item.variablePoint.indexOf('variable') != -1) {
+                item.isVariableOrFix = 2
+              }
+            }
+          })
+          list.forEach((item) => {
+            if (item.isVariableOrFix === 0) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+            if (item.isVariableOrFix === 1) {
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+            if (item.isVariableOrFix === 2) {
+              this.contractItemVariableList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+              this.contractItemFixList.push({
+                code: item.code,
+                name: item.name,
+                conditionalIsTwo: item.conditionalIsTwo,
+                isVariableOrFix: item.isVariableOrFix,
+                conditionType: item.conditionType,
+              })
+            }
+          })
+        }
+      })
+    },
     //获取客户合同明细数据
     getContractTermData(index) {
       // API.findOneSaveDetail({
@@ -310,7 +385,7 @@ export default {
       // let data = res.data
       this.termInfo = termData.data
       //目标销售额（未税）
-      this.termInfo.saleAmountNoTax=63931760
+      this.termInfo.saleAmountNoTax = 63931760
       let variableListOrigin = this.termInfo.variable
       let variableList = []
       //获取total +variable total
@@ -372,7 +447,7 @@ export default {
           frieslandPayType: null, //菲仕兰承担--支付方式
           remark: item.remark,
           isNewData: isEditor, //是否未新添数据
-          isFixed: 1, //是否variable 行
+          isVariable: 0, //是否variable 行
           isTotal: 0, //是否total 行
         }
         fixList.push(obj)
@@ -452,74 +527,6 @@ export default {
       console.log(this.termData)
       // }
       // })
-    },
-    // 获取ContractItem
-    getContractItemList() {
-      API.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.contractItemFixList = []
-          this.contractItemVariableList = []
-          let list = res.data
-          //区分variable 和 fixed
-          list.forEach((item) => {
-            if (item.conditionType && item.variablePoint) {
-              item.name = item.contractItem
-              item.code = item.contractItemCode
-              item.conditionType = item.conditionType
-              if (item.conditionType.indexOf(',') != -1) {
-                item.conditionalIsTwo = 2
-              } else {
-                item.conditionalIsTwo = 1
-              }
-              if (item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 0
-              }
-              if (item.variablePoint.indexOf('fix') != -1) {
-                item.isVariableOrFix = 1
-              }
-              if (item.variablePoint.indexOf('fix') != -1 && item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 2
-              }
-            }
-          })
-          list.forEach((item) => {
-            if (item.isVariableOrFix === 0) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 1) {
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 2) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-          })
-        }
-      })
     },
     //更改ContractItem --》改变条件类型
     changeContractItem(flag, row, value) {
@@ -660,49 +667,72 @@ export default {
       // this.isEditor=0 //编辑弹窗
     },
     //新增条款--variable
-    addNewRowToVariable() {
-      //新添元素更改位置
-      this.termVariableData.push({
-        type: 'Variable',
-        contractItem: 0,
-        conditions: '',
-        costRatio: 0,
-        taxCost: 0,
-        remark: '',
-        isNewData: 1, //是否未新添数据
-      })
-      //滚动条随着新增滚动到底部
-      let scrollHeight = this.$refs.termVariableTable.bodyWrapper.scrollHeight
-      this.$nextTick(function () {
-        this.$refs.termVariableTable.bodyWrapper.scrollTop = scrollHeight
-      })
+    addNewRowToVariable(index) {
+      //获取variable Total 、Fixed Total 索引
+      let VariableTotalIndex = this.termData.findIndex((item) => item.type == 'Variable total')
+      let FixedTotalIndex = this.termData.findIndex((item) => item.type == 'Fixed total')
+      if (index == VariableTotalIndex - 1) {
+        //新添元素更改位置
+        let insertObj = {
+          type: 'Variable',
+          contractItem: 0,
+          conditions: '',
+          costRatio: 0,
+          taxCost: 0,
+          frieslandCostRatio: 0, //菲仕兰承担含税费比
+          frieslandTaxCost: 0, //菲仕兰承担含税金额
+          frieslandCostRatioNoTax: 0, //菲仕兰承担未税费比
+          frieslandTaxCostNoTax: 0, //菲仕兰承担未税金额
+          distCostRatio: 0, //经销商承担含税费比
+          distTaxCost: 0, //经销商承担含税金额
+          frieslandCustomerTaxPoint: null, //菲仕兰承担--客户扣款税点
+          frieslandPayType: null, //菲仕兰承担--支付方式
+          remark: '',
+          isVariable: 1,
+          isTotal: 0,
+          isNewData: 1, //是否未新添数据
+        }
+        this.termData.splice(index, 0, insertObj)
+        //滚动条随着新增滚动到底部
+        let scrollHeight = this.$refs.termDialog.bodyWrapper.scrollHeight
+        this.$nextTick(function () {
+          this.$refs.termDialog.bodyWrapper.scrollTop = scrollHeight
+        })
+      }
+      if (index == FixedTotalIndex - 1) {
+        //新添元素更改位置
+        let insertObj = {
+          type: 'Fixed',
+          contractItem: 0,
+          conditions: this.contractItemFixList[0].conditionalIsTwo == 2 ? '' : this.contractItemFixList[0].conditionType,
+          costRatio: 0,
+          taxCost: 0,
+          frieslandCostRatio: 0, //菲仕兰承担含税费比
+          frieslandTaxCost: 0, //菲仕兰承担含税金额
+          frieslandCostRatioNoTax: 0, //菲仕兰承担未税费比
+          frieslandTaxCostNoTax: 0, //菲仕兰承担未税金额
+          distCostRatio: 0, //经销商承担含税费比
+          distTaxCost: 0, //经销商承担含税金额
+          frieslandCustomerTaxPoint: null, //菲仕兰承担--客户扣款税点
+          frieslandPayType: null, //菲仕兰承担--支付方式
+          remark: '',
+          isVariable: 0,
+          isTotal: 0,
+          isNewData: 1, //是否未新添数据
+        }
+        this.termData.splice(index, 0, insertObj)
+        //滚动条随着新增滚动到底部
+        let scrollHeight = this.$refs.termDialog.bodyWrapper.scrollHeight
+        this.$nextTick(function () {
+          this.$refs.termDialog.bodyWrapper.scrollTop = scrollHeight
+        })
+      }
+
       //scrollTop
     },
-    //新增条款--fix
-    addNewRowToFix() {
-      this.termFixData.push({
-        type: 'Fixed',
-        contractItem: 0,
-        conditions: this.contractItemFixList[0].conditionalIsTwo == 2 ? '' : this.contractItemFixList[0].conditionType,
-        costRatio: 0,
-        taxCost: 0,
-        remark: '',
-        isNewData: 1, //是否未新添数据
-      })
-      //滚动条随着新增滚动到底部
-      let scrollHeight = this.$refs.termFixTable.bodyWrapper.scrollHeight
-      this.$nextTick(function () {
-        this.$refs.termFixTable.bodyWrapper.scrollTop = scrollHeight
-      })
-    },
-    deleteTerm(flag, index) {
-      //variable 明细删除
-      if (flag == 0) {
-        this.termVariableData.splice(index, 1)
-      } else {
-        //fixed 明细删除
-        this.termFixData.splice(index, 1)
-      }
+    //删除条款明细
+    deleteTerm(index) {
+      this.termData.splice(index, 1)
       this.getNewTotalData()
     },
     //费比更改
@@ -721,20 +751,20 @@ export default {
     //菲仕兰承担含税费比更改
     changeFrieslandCostRate(index, row) {
       this.termData[index].frieslandTaxCost = mul(this.termInfo.saleAmount, div(row.frieslandCostRatio, 100))
-      this.termData[index].distCostRatio=sub(row.costRatio,row.frieslandCostRatio)
-      this.termData[index].distTaxCost=mul(this.termInfo.saleAmount,div(this.termData[index].distCostRatio,100))
+      this.termData[index].distCostRatio = sub(row.costRatio, row.frieslandCostRatio)
+      this.termData[index].distTaxCost = mul(this.termInfo.saleAmount, div(this.termData[index].distCostRatio, 100))
       this.getNewTotalData()
     },
     //菲仕兰承担含税金额更改
     changeFrieslandCost(index, row) {
       this.termData[index].frieslandCostRatio = mul(div(row.frieslandTaxCost, this.termInfo.saleAmount), 100)
-      this.termData[index].distTaxCost=sub(row.taxCost,row.frieslandTaxCost)
-      this.termData[index].distCostRatio=mul(div(this.termData[index].distTaxCost,this.termInfo.saleAmount,),100)
+      this.termData[index].distTaxCost = sub(row.taxCost, row.frieslandTaxCost)
+      this.termData[index].distCostRatio = mul(div(this.termData[index].distTaxCost, this.termInfo.saleAmount), 100)
       this.getNewTotalData()
     },
     //更改客户扣款税点--》未税费比、未税费用
     changeCustomerTaxPoint(row, index, taxPointIndex, type) {
-      let CustomerDeduction=CustomerDeductionsAndPayType[row.frieslandCustomerTaxPoint].CustomerDeduction
+      let CustomerDeduction = CustomerDeductionsAndPayType[row.frieslandCustomerTaxPoint].CustomerDeduction
       let CustomerDeductionNum = div(CustomerDeduction, 100)
       if (type.includes('Variable')) {
         this.termData[index].frieslandCostRatioNoTax = mul(row.frieslandCostRatio, div(1.13, add(1, CustomerDeductionNum)))
@@ -742,7 +772,7 @@ export default {
       }
       if (type.includes('Fixed')) {
         this.termData[index].frieslandTaxCostNoTax = div(row.frieslandTaxCost, add(1, CustomerDeductionNum))
-        this.termData[index].frieslandCostRatioNoTax = mul(div(this.termData[index].frieslandTaxCostNoTax,this.termInfo.saleAmountNoTax), 100)
+        this.termData[index].frieslandCostRatioNoTax = mul(div(this.termData[index].frieslandTaxCostNoTax, this.termInfo.saleAmountNoTax), 100)
       }
       this.getNewTotalData()
     },
@@ -778,34 +808,35 @@ export default {
         distTaxCost: 0, //经销商承担含税金额
       }
       //获取VariableData Total
-      this.termVariableData.forEach((item) => {
-        this.VariableTotalData.totalPoint = add(this.VariableTotalData.totalPoint, item.costRatio)
-        this.VariableTotalData.totalCost = add(this.VariableTotalData.totalCost, item.taxCost)
-        this.VariableTotalData.frieslandCostRatio = add(this.VariableTotalData.frieslandCostRatio, item.frieslandCostRatio)
-        this.VariableTotalData.frieslandTaxCost = add(this.VariableTotalData.frieslandTaxCost, item.frieslandTaxCost)
-        this.VariableTotalData.frieslandCostRatioNoTax = add(this.VariableTotalData.frieslandCostRatioNoTax, item.frieslandCostRatioNoTax)
-        this.VariableTotalData.frieslandTaxCostNoTax = add(this.VariableTotalData.frieslandTaxCostNoTax, item.frieslandTaxCostNoTax)
-        this.VariableTotalData.distCostRatio = add(this.VariableTotalData.distCostRatio, item.distCostRatio)
-        this.VariableTotalData.distTaxCost = add(this.VariableTotalData.distTaxCost, item.distTaxCost)
-      })
-      //获取FixData Total
-      this.termFixData.forEach((item) => {
-        this.FixTotalData.totalPoint = add(this.FixTotalData.totalPoint, item.costRatio)
-        this.FixTotalData.totalCost = add(this.FixTotalData.totalCost, item.taxCost)
-        this.FixTotalData.frieslandCostRatio = add(this.FixTotalData.frieslandCostRatio, item.frieslandCostRatio)
-        this.FixTotalData.frieslandTaxCost = add(this.FixTotalData.frieslandTaxCost, item.frieslandTaxCost)
-        this.FixTotalData.frieslandCostRatioNoTax = add(this.FixTotalData.frieslandCostRatioNoTax, item.frieslandCostRatioNoTax)
-        this.FixTotalData.frieslandTaxCostNoTax = add(this.FixTotalData.frieslandTaxCostNoTax, item.frieslandTaxCostNoTax)
-        this.FixTotalData.distCostRatio = add(this.FixTotalData.distCostRatio, item.distCostRatio)
-        this.FixTotalData.distTaxCost = add(this.FixTotalData.distTaxCost, item.distTaxCost)
+      this.termData.forEach((item) => {
+        if (item.type == 'Variable') {
+          this.VariableTotalData.totalPoint = add(this.VariableTotalData.totalPoint, item.costRatio)
+          this.VariableTotalData.totalCost = add(this.VariableTotalData.totalCost, item.taxCost)
+          this.VariableTotalData.frieslandCostRatio = add(this.VariableTotalData.frieslandCostRatio, item.frieslandCostRatio)
+          this.VariableTotalData.frieslandTaxCost = add(this.VariableTotalData.frieslandTaxCost, item.frieslandTaxCost)
+          this.VariableTotalData.frieslandCostRatioNoTax = add(this.VariableTotalData.frieslandCostRatioNoTax, item.frieslandCostRatioNoTax)
+          this.VariableTotalData.frieslandTaxCostNoTax = add(this.VariableTotalData.frieslandTaxCostNoTax, item.frieslandTaxCostNoTax)
+          this.VariableTotalData.distCostRatio = add(this.VariableTotalData.distCostRatio, item.distCostRatio)
+          this.VariableTotalData.distTaxCost = add(this.VariableTotalData.distTaxCost, item.distTaxCost)
+        }
+        if (item.type == 'Fixed') {
+          this.FixTotalData.totalPoint = add(this.FixTotalData.totalPoint, item.costRatio)
+          this.FixTotalData.totalCost = add(this.FixTotalData.totalCost, item.taxCost)
+          this.FixTotalData.frieslandCostRatio = add(this.FixTotalData.frieslandCostRatio, item.frieslandCostRatio)
+          this.FixTotalData.frieslandTaxCost = add(this.FixTotalData.frieslandTaxCost, item.frieslandTaxCost)
+          this.FixTotalData.frieslandCostRatioNoTax = add(this.FixTotalData.frieslandCostRatioNoTax, item.frieslandCostRatioNoTax)
+          this.FixTotalData.frieslandTaxCostNoTax = add(this.FixTotalData.frieslandTaxCostNoTax, item.frieslandTaxCostNoTax)
+          this.FixTotalData.distCostRatio = add(this.FixTotalData.distCostRatio, item.distCostRatio)
+          this.FixTotalData.distTaxCost = add(this.FixTotalData.distTaxCost, item.distTaxCost)
+        }
       })
       //设置 variable total 到table
       if (VariableTotalIndex != -1) {
-        Object.assign(this.termData[VariableTotalIndex], this.VariableTotalData)
+        ;(this.termData[VariableTotalIndex].costRatio = this.VariableTotalData.totalPoint), (this.termData[VariableTotalIndex].taxCost = this.VariableTotalData.totalCost), Object.assign(this.termData[VariableTotalIndex], this.VariableTotalData)
       }
       //设置 fixed total 到table
       if (FixedTotalIndex != -1) {
-        Object.assign(this.termData[FixedTotalIndex], this.FixTotalData)
+        ;(this.termData[FixedTotalIndex].costRatio = this.FixTotalData.totalPoint), (this.termData[FixedTotalIndex].taxCost = this.FixTotalData.totalCost), Object.assign(this.termData[FixedTotalIndex], this.FixTotalData)
       }
       //获取所有VariableData Total+FixData Total
       this.TotalData.totalCost = add(this.VariableTotalData.totalCost, this.FixTotalData.totalCost)
@@ -819,11 +850,401 @@ export default {
       this.setAllTotalData()
     },
     setAllTotalData() {
-      Object.assign(this.termData[0], this.TotalData)
+      ;(this.termData[0].costRatio = this.TotalData.totalPoint), (this.termData[0].taxCost = this.TotalData.totalCost), Object.assign(this.termData[0], this.TotalData)
+    },
+    //弹窗表格样式
+    tableRowClassNameDialog({ row, rowIndex }) {
+      if (row.type.indexOf('Total') === 0) {
+        return 'contract_firstRow'
+      }
+      if (row.type.indexOf('total') != -1) {
+        return 'first-row'
+      }
+    },
+    HeadTable() {
+      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
+    },
+    handleSelectionChange(val) {
+      this.checkArr = val
+    },
+    //格式化--千位分隔符、两位小数
+    FormateNum(num) {
+      return formatThousandNum(num)
+    },
+    pickerOptionsSystemDate(row) {
+      return pickerOptionsSystemDate(row)
+    },
+    // 合并列
+    mergeColumnMethod({ row, column, rowIndex, columnIndex }) {
+      if (row.type == '新增一行') {
+        return {
+          rowspan: 1,
+          colspan: 5,
+        }
+      }
     },
   },
 }
 </script>
-
 <style lang="scss" scoped>
+.detailText {
+  text-align: left;
+}
+.seeActivity {
+  height: 32px;
+  background: #d7e8f2;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #4192d3;
+  font-weight: 600;
+  line-height: 32px;
+  cursor: pointer;
+}
+.operation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4192d3;
+  font-size: 16px;
+  cursor: pointer;
+  .submit_icon {
+    font-size: 26px;
+  }
+}
+.svgIcon {
+  width: 20px;
+  height: 20px;
+}
+.contractStatusWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.timeOutWrap {
+  margin-left: 10px;
+  cursor: pointer;
+}
+//自定义el-input
+.my-el-input {
+  width: 180px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 180px !important;
+  }
+  .el-input--suffix {
+    width: 180px !important;
+  }
+}
+.my-el-input_dialog {
+  width: 150px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 150px !important;
+  }
+  .el-input--suffix {
+    width: 150px !important;
+  }
+}
+
+.PopoverContent {
+  .PopoverContentTop {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    justify-content: space-between;
+  }
+  .PopoverContentOption {
+    .PopoverContentOptionItem {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      .PopoverContentOptionItemText {
+        font-size: 14px;
+        color: #666;
+        margin-right: 10px;
+      }
+    }
+  }
+  .PopoverContentFoot {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    .TpmButtonBG {
+      min-width: 66px;
+      width: 66px;
+      height: 38px;
+      line-height: 38px;
+      text-align: center;
+      background: #4192d3;
+      border: 1px solid #e7e7e7;
+      border-radius: 5px;
+      padding: 0 10px;
+      cursor: pointer;
+      background-color: #4192d3 !important;
+      color: #fff;
+    }
+    .cancelButton {
+      width: 66px;
+      background-color: #fff !important;
+      color: #4192d3;
+      border: 1px solid #4192d3;
+      text-align: center;
+    }
+  }
+}
+.dialogContent {
+  .termInfo {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    .termItem {
+      font-size: 14px;
+      color: #666;
+      margin-right: 20px;
+    }
+  }
+  .termTableWrap {
+    width: 100%;
+    border: 1px solid #e7e7e7;
+    .addNewRowWrap {
+      width: 100%;
+      height: 50px;
+      padding: 10px;
+      box-sizing: border-box;
+      background-color: #fff;
+      .addNewRow {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #f4f9ff;
+        color: #666;
+        cursor: pointer;
+        .addNewRowText {
+          margin-left: 10px;
+          color: #333;
+        }
+      }
+    }
+  }
+}
+.my-el-inputNumber {
+  width: 120px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 120px;
+  }
+  .el-input--suffix {
+    width: 120px !important;
+  }
+}
+.my-el-detail {
+  width: 280px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 280px;
+  }
+  .el-input--suffix {
+    width: 280px !important;
+  }
+}
+.TermDetail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .my-el-detail {
+    width: 400px !important;
+    margin: 0 auto;
+  }
+}
+.tooltip {
+  border-radius: 10px;
+}
+.Tip {
+  text-align: center;
+  font-size: 14px;
+  font-family: Source Han Sans CN;
+  font-weight: 400;
+  margin: 3px 0;
+}
+.tip {
+  color: #4192d3;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.tipStar {
+  font-size: 12px;
+  color: #4192d3;
+}
+.topInfoWrap {
+  letter-spacing: 2px;
+  .topTarget {
+    margin-left: 20px;
+  }
+}
+</style>
+<style lang="less">
+.termDialog {
+  .el-dialog {
+    margin-top: 1vh !important;
+    top: 50%;
+    transform: translateY(-50%);
+    .el-dialog__body {
+      padding: 20px 20px !important;
+    }
+  }
+  .el-dialog__header {
+    height: 50px;
+    padding: 0 0 0 20px;
+    background-color: #4192d3;
+  }
+  .el-dialog__title {
+    font-size: 16px;
+    font-family: Source Han Sans CN Light;
+    font-weight: bold;
+    color: #fff;
+    line-height: 50px;
+  }
+  .el-dialog__headerbtn {
+    top: 16px;
+    .el-dialog__close {
+      color: #fff;
+    }
+  }
+
+  .dialog-footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    .el-button--default {
+      width: 122px;
+      height: 37px;
+      background: #ffffff;
+      border: 1px solid #4192d3;
+      border-radius: 5px;
+      color: #4192d3;
+    }
+    .el-button--primary {
+      width: 120px;
+      height: 37px;
+      background: #4192d3;
+      border-radius: 5px;
+      border: 1px solid #4192d3;
+      background-color: #4192d3;
+    }
+    .el-button + .el-button {
+      margin-left: 15px;
+    }
+  }
+  .el-downloadFileBar {
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .el-button--primary {
+      width: 122px;
+      height: 41px;
+      line-height: 41px;
+      border-radius: 8px;
+      margin-bottom: 0;
+      padding: 0;
+    }
+    .el-button--primary.is-plain:active {
+      background: #fff;
+      border-color: #4192d3;
+      color: #4192d3;
+    }
+    .el-button--primary.is-plain {
+      width: 122px;
+      background: #fff;
+      border-color: #4192d3;
+      color: #4192d3;
+    }
+  }
+  .tableWrap {
+    width: 100%;
+    max-height: 400px;
+    margin-top: 20px;
+    font-size: 14px;
+    font-family: Source Han Sans CN Light;
+    font-weight: 400;
+    color: #333333;
+  }
+}
+.termDialog .el-dialog__body {
+  padding: 10px 20px;
+}
+.contract_firstRow {
+  background-color: #4192d3 !important;
+  color: #fff;
+  font-size: 14px;
+}
+.hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+}
+.hover-row .filstColumn {
+  color: #666;
+}
+.termTableWrap .hover-row {
+  color: #666 !important;
+  background-color: #f3f7f8;
+}
+.termTableWrap .hover-row .filstColumn {
+  color: #666;
+}
+
+.my-el-select_dialog {
+  width: 120px !important;
+  border-radius: 5px;
+  .el-input__inner {
+    height: 37px;
+    width: 120px;
+  }
+  .el-input--suffix {
+    width: 120px !important;
+  }
+}
+.MainContent .select_date {
+  width: 240px !important;
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 240px !important;
+  }
+}
+.termTableWrap {
+  width: 100%;
+  border: 1px solid #e7e7e7;
+  .el-table {
+    td {
+      padding: 4px 0 !important;
+      min-width: 0;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: center;
+    }
+    th {
+      padding: 4px 0 !important;
+      min-width: 0;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: center;
+    }
+  }
+}
 </style>
