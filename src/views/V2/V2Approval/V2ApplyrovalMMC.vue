@@ -180,17 +180,17 @@
             :row-class-name="tableRowClassName"
             stripe
           >
-            <el-table-column width="150" align="center" prop="judgmentType" label="系统判定" fixed>
+            <el-table-column width="150" align="center" prop="judgmentType" label="系统检验" fixed>
               <template slot-scope="{ row }">
                 <div class="statusWrap">
-                  <img v-if="row.judgmentType == 'Pass'" src="@/assets/images/success.png" />
-                  <img v-if="row.judgmentType != null && row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" />
-                  <img v-if="row.judgmentType == 'Error'" src="@/assets/images/selectError.png" />
-                  <span class="judgmentText">{{ row.judgmentType }}</span>
+                  <img  src="@/assets/images/success.png" alt="">
+                  <span class="judgmentText">Pass</span>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="300" align="center" prop="judgmentContent" label="系统判定内容" fixed />
+            <el-table-column width="300" align="center" prop="judgmentContent" label="系统检验" fixed >
+              <span>校验通过</span>
+            </el-table-column>
             <el-table-column width="420" align="center" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />

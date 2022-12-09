@@ -332,29 +332,27 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column width="180" align="center" fixed="left" prop="judgmentType  " label="系统判定">
+            <el-table-column width="180" align="center" fixed="left" prop="judgmentType  " label="系统检验">
               <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType  =='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType  !=null&&row.judgmentType  .indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType  =='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType   }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="350" align="center" fixed="left" prop="judgmentContent" label="系统判定内容">
+            <el-table-column width="350" align="center" fixed="left" prop="judgmentContent" label="系统检验">
               <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.judgmentContent }}
+                  <span>校验通过</span>
                 </div>
               </template>
             </el-table-column>

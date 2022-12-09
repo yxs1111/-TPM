@@ -15,11 +15,11 @@
         {{ dayjs(content.startTime) }} - {{ dayjs(content.endTime) }} <br />
       </div>
       <div class="CityPlan">
-        <div class="CityPlanTop">
-          <span class="date">{{ this.activeMoon }}</span>
-        </div>
+<!--        <div class="CityPlanTop">-->
+<!--        </div>-->
         <div class="PointTipWrap">
           <div class="PointTipWrap3">
+            <span class="date">{{ this.activeMoon }}</span>
             <el-radio-group v-model="tabPosition" @change="getHomePageData">
               <el-radio-button label="NKA">NKA</el-radio-button>
               <el-radio-button label="EC">EC</el-radio-button>
@@ -120,10 +120,10 @@
         <!--        费用管理-->
         <div v-show="currentIndex == 0" class="TimeLineWrap">
           <el-table :header-cell-style="{ color: '#000000' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
-            <el-table-column width="75" align="left" prop="yearAndMonth" label="年月" />
+            <el-table-column width="80" align="left" prop="yearAndMonth" label="活动周期" />
             <el-table-column width="120" prop="costTypeName" label="Cost Type" />
             <el-table-column width="120" prop="minePackageName" label="Mine Package" />
-            <el-table-column width="280" prop="costItemName" label="Cost Item" />
+            <el-table-column width="270" prop="costItemName" label="Cost Item" />
             <el-table-column width="60" prop="channelName" label="渠道" />
             <el-table-column width="80" prop="num" label="版本号" />
             <el-table-column width="160" align="left" prop="" label="查看">
@@ -143,7 +143,7 @@
         </div>
         <!--        合同管理-->
         <div v-show="currentIndex == 1" class="TimeLineWrap">
-          <el-table :header-cell-style="{ color: '#000000' }" max-height="190" :data="contractList" stripe style="width: 100%">
+          <el-table :header-cell-style="{ color: '#000000' }" max-height="170" :data="contractList" stripe style="width: 100%">
             <el-table-column prop="item" label="合同类型" width="140" />
             <el-table-column prop="contractCode" label="合同ID" width="280" />
             <el-table-column prop="customerName" label="客户名称" />
@@ -1346,7 +1346,7 @@ export default {
 .date {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN Light', Arial, sans-serif;
   background-color: rgb(198, 235, 254);
-  padding: 6px 16px;
+  padding: 7px 16px;
   border-radius: 6px;
   font-size: 16px;
 }
@@ -1456,7 +1456,7 @@ export default {
   }
   .PointTipWrap3 {
     border-radius: 10px;
-    width: 40%;
+    width: 24%;
     margin: 17px 0px 5px 20px;
     box-sizing: border-box;
     display: flex;
@@ -1522,7 +1522,7 @@ export default {
   .monthBarWrap {
     width: 100%;
     padding: 0 20px;
-    height: calc(100% - 140px);
+    height: calc(100% - 90px);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -1855,6 +1855,9 @@ export default {
   }
   .el-table {
     border: 1px solid #ebeff5;
+    td {
+      padding: 6px 0px !important;
+    }
     .cell {
       padding: 0 10px;
     }
