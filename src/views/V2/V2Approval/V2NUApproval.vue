@@ -35,7 +35,7 @@
           <span class="text">导出</span>
         </div>
       </div>
-     
+
     </div>
     <div class="TpmButtonBGWrap">
       <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
@@ -141,14 +141,15 @@
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
           }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="100">
+            <el-table-column prop="date" fixed align="center" label="系统检验" width="100">
               <template slot-scope="scope">
-                <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
-                <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+                <img  src="@/assets/images/success.png" alt="">
+                <span class="judgmentText">Pass</span>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+            <el-table-column width="400" align="center" prop="judgmentContent" label="系统检验">
+              <span>检验通过</span>
+            </el-table-column>
             <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
@@ -290,7 +291,7 @@ export default {
         }
         if (this.filterObj.channelCode == '') {
           this.$message.info(messageObj.requireChannel)
-        } 
+        }
       } else {
         API.getPageNU({
           pageNum: this.pageNum, // 当前页

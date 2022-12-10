@@ -185,23 +185,20 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统检验" width="200">
               <template slot-scope="{ row }">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.systemJudgment == 'Pass'" src="@/assets/images/success.png" alt="" />
-                    <img v-if="
-                        row.systemJudgment != null &&
-                          row.systemJudgment.indexOf('Exception') > -1
-                      " src="@/assets/images/warning.png" alt="" />
-                    <img v-if="row.systemJudgment == 'Error'" src="@/assets/images/selectError.png" alt="" />
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="验证信息" />
+            <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="系统检验">
+              <span>检验通过</span>
+            </el-table-column>
             <el-table-column align="center" width="460" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />

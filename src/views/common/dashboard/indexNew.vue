@@ -15,11 +15,11 @@
         {{ dayjs(content.startTime) }} - {{ dayjs(content.endTime) }} <br />
       </div>
       <div class="CityPlan">
-        <div class="CityPlanTop">
-          <span class="date">{{ this.activeMoon }}</span>
-        </div>
+<!--        <div class="CityPlanTop">-->
+<!--        </div>-->
         <div class="PointTipWrap">
           <div class="PointTipWrap3">
+            <span class="date">{{ this.activeMoon }}</span>
             <el-radio-group v-model="tabPosition" @change="getHomePageData">
               <el-radio-button label="NKA">NKA</el-radio-button>
               <el-radio-button label="EC">EC</el-radio-button>
@@ -55,10 +55,6 @@
         <div class="monthBarWrap">
           <!-- 流程 -->
           <div v-for="(MonthItem, MonthIndex) in ActivityList" :key="MonthIndex" class="monthBar">
-            <!--          <div class="monthBg">-->
-            <!--            &lt;!&ndash; <div class="monthName">{{(getCPTMonth(MonthItem.month))}}</div> &ndash;&gt;-->
-            <!--            <div class="monthName">{{MonthItem.month}}</div>-->
-            <!--          </div>-->
             <div class="monthPoint">
               <!-- 渠道 -->
               <div v-for="(value, ckey) in MonthItem.channelList" :key="ckey">
@@ -124,10 +120,10 @@
         <!--        费用管理-->
         <div v-show="currentIndex == 0" class="TimeLineWrap">
           <el-table :header-cell-style="{ color: '#000000' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
-            <el-table-column width="75" align="left" prop="yearAndMonth" label="年月" />
+            <el-table-column width="80" align="left" prop="yearAndMonth" label="活动周期" />
             <el-table-column width="120" prop="costTypeName" label="Cost Type" />
             <el-table-column width="120" prop="minePackageName" label="Mine Package" />
-            <el-table-column width="280" prop="costItemName" label="Cost Item" />
+            <el-table-column width="270" prop="costItemName" label="Cost Item" />
             <el-table-column width="60" prop="channelName" label="渠道" />
             <el-table-column width="80" prop="num" label="版本号" />
             <el-table-column width="160" align="left" prop="" label="查看">
@@ -147,7 +143,7 @@
         </div>
         <!--        合同管理-->
         <div v-show="currentIndex == 1" class="TimeLineWrap">
-          <el-table :header-cell-style="{ color: '#000000' }" max-height="190" :data="contractList" stripe style="width: 100%">
+          <el-table :header-cell-style="{ color: '#000000' }" max-height="170" :data="contractList" stripe style="width: 100%">
             <el-table-column prop="item" label="合同类型" width="140" />
             <el-table-column prop="contractCode" label="合同ID" width="280" />
             <el-table-column prop="customerName" label="客户名称" />
@@ -552,24 +548,6 @@ export default {
       const height = document.body.clientHeight
       //是否放大
       let isAmplification = this.tempScreen < width
-      if (height <= 929) {
-        this.maxheight = 234
-      } else if (height <= 1032) {
-        this.maxheight = 275
-      } else if (height <= 1162) {
-        this.maxheight = 324
-      } else if (height <= 1239) {
-        this.maxheight = 352
-      } else if (height <= 1394) {
-        this.maxheight = 413
-      } else if (height <= 1859) {
-        this.maxheight = 588
-      } else if (height <= 2788) {
-        this.maxheight = 945
-      } else if (height <= 3717) {
-        this.maxheight = 1286
-      }
-      return this.maxheight
       if (this.$store.state.app.sidebar.opened) {
         //获取常见屏幕分辨率，根据宽度动态匹配甘特图的宽度
         if (width <= 1366) {
@@ -601,6 +579,24 @@ export default {
         }
       }
       this.tempScreen = width
+      if (height <= 929) {
+        this.maxheight = 234
+      } else if (height <= 1032) {
+        this.maxheight = 275
+      } else if (height <= 1162) {
+        this.maxheight = 324
+      } else if (height <= 1239) {
+        this.maxheight = 352
+      } else if (height <= 1394) {
+        this.maxheight = 413
+      } else if (height <= 1859) {
+        this.maxheight = 588
+      } else if (height <= 2788) {
+        this.maxheight = 945
+      } else if (height <= 3717) {
+        this.maxheight = 1286
+      }
+      return this.maxheight
     },
     changeScreen2() {
       const height = document.body.clientHeight
@@ -758,80 +754,6 @@ export default {
               },
               parentId: item.id,
             }
-            // {
-            //   id: item.id,
-            //   label: item.activityMonth,
-            //   start: dayjs(item.start).valueOf(),
-            //   end: dayjs(item.end).valueOf(),
-            //   percent: 50,
-            //   type: 'group',
-            //   tasks: [
-            //     {
-            //       id: item.id + 'v0',
-            //       label: 'V0',
-            //       start: dayjs(item.startVZero).valueOf(),
-            //       end: dayjs(item.EndVZero).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     },
-            //     {
-            //       id: item.id + 'v1',
-            //       label: 'V1',
-            //       start: dayjs(item.startVOne).valueOf(),
-            //       end: dayjs(item.EndVOne).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     },
-            //     {
-            //       id: item.id + 'v2',
-            //       label: 'V2',
-            //       start: dayjs(item.startVTwo).valueOf(),
-            //       end: dayjs(item.EndVTwo).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     },
-            //     {
-            //       id: item.id + 'v3',
-            //       label: 'V3',
-            //       start: dayjs(item.startVThree).valueOf(),
-            //       end: dayjs(item.EndVThree).valueOf(),
-            //       percent: 50,
-            //       type: 'task',
-            //       style: {
-            //         base: {
-            //           fill: '#C6EBFE',
-            //           stroke: '#C0E2D9',
-            //           textColor: '#4795D4'
-            //         }
-            //       },
-            //       parentId: item.id
-            //     }
-            //   ]
-            // },
           )
           this.tasks.push(item)
         })
@@ -1424,7 +1346,7 @@ export default {
 .date {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN Light', Arial, sans-serif;
   background-color: rgb(198, 235, 254);
-  padding: 6px 16px;
+  padding: 7px 16px;
   border-radius: 6px;
   font-size: 16px;
 }
@@ -1534,7 +1456,7 @@ export default {
   }
   .PointTipWrap3 {
     border-radius: 10px;
-    width: 40%;
+    width: 24%;
     margin: 17px 0px 5px 20px;
     box-sizing: border-box;
     display: flex;
@@ -1600,7 +1522,7 @@ export default {
   .monthBarWrap {
     width: 100%;
     padding: 0 20px;
-    height: calc(100% - 140px);
+    height: calc(100% - 90px);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -1933,6 +1855,9 @@ export default {
   }
   .el-table {
     border: 1px solid #ebeff5;
+    td {
+      padding: 6px 0px !important;
+    }
     .cell {
       padding: 0 10px;
     }
