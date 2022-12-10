@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-09 15:59:28
+ * @LastEditTime: 2022-12-10 09:36:35
 -->
 <template>
   <div class="ContentDetail">
@@ -302,7 +302,7 @@
 import API from '@/api/ContractEntry/dealer'
 import { contractView, formatThousandNum, CustomerDeductionsAndPayType } from '@/utils'
 import dealerTermData from './dealerTermData.js'
-import { add, sub, mul, div } from '@/utils/Big.js'
+import { add, sub, mul, div, BigToFixed } from '@/utils/Big.js'
 export default {
   name: 'dealerTermDetail',
 
@@ -345,8 +345,9 @@ export default {
       // this.isEditor=Number(sessionStorage.getItem("isEditor"))
     }
     this.getContractItemList()
+    console.log(add(0.1222, 0.222225))
+    console.log(BigToFixed(add(0.12444, 0.2055555)))
   },
-
   methods: {
     //获取条款明细信息
     getTermInfo() {
@@ -867,39 +868,39 @@ export default {
       }
       //计算variable 汇总行数据--客户维度
       VariableTableData.forEach((item) => {
-        VariableTotalTableData[0].customerInfo.pointCount = add(VariableTotalTableData[0].customerInfo.pointCount, item.customerInfo.pointCount)
-        VariableTotalTableData[0].customerInfo.taxPrice = add(VariableTotalTableData[0].customerInfo.taxPrice, item.customerInfo.taxPrice)
-        VariableTotalTableData[0].customerInfo.frieslandCostRatio = add(VariableTotalTableData[0].customerInfo.frieslandCostRatio, item.customerInfo.frieslandCostRatio)
-        VariableTotalTableData[0].customerInfo.frieslandTaxCost = add(VariableTotalTableData[0].customerInfo.frieslandTaxCost, item.customerInfo.frieslandTaxCost)
-        VariableTotalTableData[0].customerInfo.frieslandCostRatioNoTax = add(VariableTotalTableData[0].customerInfo.frieslandCostRatioNoTax, item.customerInfo.frieslandCostRatioNoTax)
-        VariableTotalTableData[0].customerInfo.frieslandTaxCostNoTax = add(VariableTotalTableData[0].customerInfo.frieslandTaxCostNoTax, item.customerInfo.frieslandTaxCostNoTax)
-        VariableTotalTableData[0].customerInfo.distCostRatio = add(VariableTotalTableData[0].customerInfo.distCostRatio, item.customerInfo.distCostRatio)
-        VariableTotalTableData[0].customerInfo.distTaxCost = add(VariableTotalTableData[0].customerInfo.distTaxCost, item.customerInfo.distTaxCost)
+        VariableTotalTableData[0].customerInfo.pointCount = BigToFixed(add(VariableTotalTableData[0].customerInfo.pointCount, item.customerInfo.pointCount))
+        VariableTotalTableData[0].customerInfo.taxPrice = BigToFixed(add(VariableTotalTableData[0].customerInfo.taxPrice, item.customerInfo.taxPrice))
+        VariableTotalTableData[0].customerInfo.frieslandCostRatio = BigToFixed(add(VariableTotalTableData[0].customerInfo.frieslandCostRatio, item.customerInfo.frieslandCostRatio))
+        VariableTotalTableData[0].customerInfo.frieslandTaxCost = BigToFixed(add(VariableTotalTableData[0].customerInfo.frieslandTaxCost, item.customerInfo.frieslandTaxCost))
+        VariableTotalTableData[0].customerInfo.frieslandCostRatioNoTax = BigToFixed(add(VariableTotalTableData[0].customerInfo.frieslandCostRatioNoTax, item.customerInfo.frieslandCostRatioNoTax))
+        VariableTotalTableData[0].customerInfo.frieslandTaxCostNoTax = BigToFixed(add(VariableTotalTableData[0].customerInfo.frieslandTaxCostNoTax, item.customerInfo.frieslandTaxCostNoTax))
+        VariableTotalTableData[0].customerInfo.distCostRatio = BigToFixed(add(VariableTotalTableData[0].customerInfo.distCostRatio, item.customerInfo.distCostRatio))
+        VariableTotalTableData[0].customerInfo.distTaxCost = BigToFixed(add(VariableTotalTableData[0].customerInfo.distTaxCost, item.customerInfo.distTaxCost))
       })
       console.log(VariableTableData)
       //计算Fixed 汇总行数据--客户维度
       FixedTableData.forEach((item) => {
-        FixedTotalTableData[0].customerInfo.pointCount = add(FixedTotalTableData[0].customerInfo.pointCount, item.customerInfo.pointCount)
-        FixedTotalTableData[0].customerInfo.taxPrice = add(FixedTotalTableData[0].customerInfo.taxPrice, item.customerInfo.taxPrice)
-        FixedTotalTableData[0].customerInfo.frieslandCostRatio = add(FixedTotalTableData[0].customerInfo.frieslandCostRatio, item.customerInfo.frieslandCostRatio)
-        FixedTotalTableData[0].customerInfo.frieslandTaxCost = add(FixedTotalTableData[0].customerInfo.frieslandTaxCost, item.customerInfo.frieslandTaxCost)
-        FixedTotalTableData[0].customerInfo.frieslandCostRatioNoTax = add(FixedTotalTableData[0].customerInfo.frieslandCostRatioNoTax, item.customerInfo.frieslandCostRatioNoTax)
-        FixedTotalTableData[0].customerInfo.frieslandTaxCostNoTax = add(FixedTotalTableData[0].customerInfo.frieslandTaxCostNoTax, item.customerInfo.frieslandTaxCostNoTax)
-        FixedTotalTableData[0].customerInfo.distCostRatio = add(FixedTotalTableData[0].customerInfo.distCostRatio, item.customerInfo.distCostRatio)
-        FixedTotalTableData[0].customerInfo.distTaxCost = add(FixedTotalTableData[0].customerInfo.distTaxCost, item.customerInfo.distTaxCost)
+        FixedTotalTableData[0].customerInfo.pointCount = BigToFixed(add(FixedTotalTableData[0].customerInfo.pointCount, item.customerInfo.pointCount))
+        FixedTotalTableData[0].customerInfo.taxPrice = BigToFixed(add(FixedTotalTableData[0].customerInfo.taxPrice, item.customerInfo.taxPrice))
+        FixedTotalTableData[0].customerInfo.frieslandCostRatio = BigToFixed(add(FixedTotalTableData[0].customerInfo.frieslandCostRatio, item.customerInfo.frieslandCostRatio))
+        FixedTotalTableData[0].customerInfo.frieslandTaxCost = BigToFixed(add(FixedTotalTableData[0].customerInfo.frieslandTaxCost, item.customerInfo.frieslandTaxCost))
+        FixedTotalTableData[0].customerInfo.frieslandCostRatioNoTax = BigToFixed(add(FixedTotalTableData[0].customerInfo.frieslandCostRatioNoTax, item.customerInfo.frieslandCostRatioNoTax))
+        FixedTotalTableData[0].customerInfo.frieslandTaxCostNoTax = BigToFixed(add(FixedTotalTableData[0].customerInfo.frieslandTaxCostNoTax, item.customerInfo.frieslandTaxCostNoTax))
+        FixedTotalTableData[0].customerInfo.distCostRatio = BigToFixed(add(FixedTotalTableData[0].customerInfo.distCostRatio, item.customerInfo.distCostRatio))
+        FixedTotalTableData[0].customerInfo.distTaxCost = BigToFixed(add(FixedTotalTableData[0].customerInfo.distTaxCost, item.customerInfo.distTaxCost))
       })
       console.log(AllTotalTableData)
       //variable + fix 汇总行
       if (VariableTotalTableData.length || FixedTotalTableData.length) {
         if (VariableTotalTableData.length) {
-          AllTotalTableData[0].customerInfo.pointCount = add(AllTotalTableData[0].customerInfo.pointCount, VariableTotalTableData[0].customerInfo.pointCount)
-          AllTotalTableData[0].customerInfo.taxPrice = add(AllTotalTableData[0].customerInfo.taxPrice, VariableTotalTableData[0].customerInfo.taxPrice)
-          AllTotalTableData[0].customerInfo.frieslandCostRatio = add(AllTotalTableData[0].customerInfo.frieslandCostRatio, VariableTotalTableData[0].customerInfo.frieslandCostRatio)
-          AllTotalTableData[0].customerInfo.frieslandTaxCost = add(AllTotalTableData[0].customerInfo.frieslandTaxCost, VariableTotalTableData[0].customerInfo.frieslandTaxCost)
-          AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax = add(AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax, VariableTotalTableData[0].customerInfo.frieslandCostRatioNoTax)
-          AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax = add(AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax, VariableTotalTableData[0].customerInfo.frieslandTaxCostNoTax)
-          AllTotalTableData[0].customerInfo.distCostRatio = add(AllTotalTableData[0].customerInfo.distCostRatio, VariableTotalTableData[0].customerInfo.distCostRatio)
-          AllTotalTableData[0].customerInfo.distTaxCost = add(AllTotalTableData[0].customerInfo.distTaxCost, VariableTotalTableData[0].customerInfo.distTaxCost)
+          AllTotalTableData[0].customerInfo.pointCount = BigToFixed(add(AllTotalTableData[0].customerInfo.pointCount, VariableTotalTableData[0].customerInfo.pointCount))
+          AllTotalTableData[0].customerInfo.taxPrice = BigToFixed(add(AllTotalTableData[0].customerInfo.taxPrice, VariableTotalTableData[0].customerInfo.taxPrice))
+          AllTotalTableData[0].customerInfo.frieslandCostRatio = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandCostRatio, VariableTotalTableData[0].customerInfo.frieslandCostRatio))
+          AllTotalTableData[0].customerInfo.frieslandTaxCost = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandTaxCost, VariableTotalTableData[0].customerInfo.frieslandTaxCost))
+          AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax, VariableTotalTableData[0].customerInfo.frieslandCostRatioNoTax))
+          AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax, VariableTotalTableData[0].customerInfo.frieslandTaxCostNoTax))
+          AllTotalTableData[0].customerInfo.distCostRatio = BigToFixed(add(AllTotalTableData[0].customerInfo.distCostRatio, VariableTotalTableData[0].customerInfo.distCostRatio))
+          AllTotalTableData[0].customerInfo.distTaxCost = BigToFixed(add(AllTotalTableData[0].customerInfo.distTaxCost, VariableTotalTableData[0].customerInfo.distTaxCost))
         } else {
           AllTotalTableData[0].customerInfo.pointCount += 0
           AllTotalTableData[0].customerInfo.taxPrice += 0
@@ -911,14 +912,14 @@ export default {
           AllTotalTableData[0].customerInfo.distTaxCost += 0
         }
         if (FixedTotalTableData.length) {
-          AllTotalTableData[0].customerInfo.pointCount = add(AllTotalTableData[0].customerInfo.pointCount, FixedTotalTableData[0].customerInfo.pointCount)
-          AllTotalTableData[0].customerInfo.taxPrice = add(AllTotalTableData[0].customerInfo.taxPrice, FixedTotalTableData[0].customerInfo.taxPrice)
-          AllTotalTableData[0].customerInfo.frieslandCostRatio = add(AllTotalTableData[0].customerInfo.frieslandCostRatio, FixedTotalTableData[0].customerInfo.frieslandCostRatio)
-          AllTotalTableData[0].customerInfo.frieslandTaxCost = add(AllTotalTableData[0].customerInfo.frieslandTaxCost, FixedTotalTableData[0].customerInfo.frieslandTaxCost)
-          AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax = add(AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax, FixedTotalTableData[0].customerInfo.frieslandCostRatioNoTax)
-          AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax = add(AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax, FixedTotalTableData[0].customerInfo.frieslandTaxCostNoTax)
-          AllTotalTableData[0].customerInfo.distCostRatio = add(AllTotalTableData[0].customerInfo.distCostRatio, FixedTotalTableData[0].customerInfo.distCostRatio)
-          AllTotalTableData[0].customerInfo.distTaxCost = add(AllTotalTableData[0].customerInfo.distTaxCost, FixedTotalTableData[0].customerInfo.distTaxCost)
+          AllTotalTableData[0].customerInfo.pointCount = BigToFixed(add(AllTotalTableData[0].customerInfo.pointCount, FixedTotalTableData[0].customerInfo.pointCount))
+          AllTotalTableData[0].customerInfo.taxPrice = BigToFixed(add(AllTotalTableData[0].customerInfo.taxPrice, FixedTotalTableData[0].customerInfo.taxPrice))
+          AllTotalTableData[0].customerInfo.frieslandCostRatio = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandCostRatio, FixedTotalTableData[0].customerInfo.frieslandCostRatio))
+          AllTotalTableData[0].customerInfo.frieslandTaxCost = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandTaxCost, FixedTotalTableData[0].customerInfo.frieslandTaxCost))
+          AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandCostRatioNoTax, FixedTotalTableData[0].customerInfo.frieslandCostRatioNoTax))
+          AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax = BigToFixed(add(AllTotalTableData[0].customerInfo.frieslandTaxCostNoTax, FixedTotalTableData[0].customerInfo.frieslandTaxCostNoTax))
+          AllTotalTableData[0].customerInfo.distCostRatio = BigToFixed(add(AllTotalTableData[0].customerInfo.distCostRatio, FixedTotalTableData[0].customerInfo.distCostRatio))
+          AllTotalTableData[0].customerInfo.distTaxCost = BigToFixed(add(AllTotalTableData[0].customerInfo.distTaxCost, FixedTotalTableData[0].customerInfo.distTaxCost))
         } else {
           AllTotalTableData[0].customerInfo.pointCount += 0
           AllTotalTableData[0].customerInfo.taxPrice += 0
@@ -1330,20 +1331,17 @@ export default {
     //更改费比 --》 含税金额
     changePointCount(Obj, index, dealerIndex) {
       let { pointCount, targetSale } = Obj.dealerList[dealerIndex]
-      this.AllTableData[index].dealerList[dealerIndex].taxPrice = (pointCount * targetSale) / 100
+      this.AllTableData[index].dealerList[dealerIndex].taxPrice = div(mul(pointCount, targetSale), 100)
       this.setVariableTotal()
       this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = pointCount
       this.changeFrieslandPointCount(Obj, index, dealerIndex)
-      // this.AllTableData[index].dealerList[dealerIndex].dealerPointCount=0
     },
     // 更改含税金额 --》 费比
     changeTaxPrice(Obj, index, dealerIndex) {
       let { taxPrice, targetSale } = Obj.dealerList[dealerIndex]
-      this.AllTableData[index].dealerList[dealerIndex].pointCount = (100 * taxPrice) / targetSale
+      this.AllTableData[index].dealerList[dealerIndex].pointCount = div(mul(taxPrice, 100), targetSale)
       this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = taxPrice
       this.changeFrieslandTaxPrice(Obj, index, dealerIndex)
-      // this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice=0
-      // this.setVariableTotal()
     },
     //设置Variable、Fixed   Total
     setVariableTotal() {
@@ -1510,44 +1508,56 @@ export default {
     },
     //更改菲仕兰承担费比--》菲仕兰承担含税金额
     changeFrieslandPointCount(Obj, index, dealerIndex) {
-      // debugger
-      let { frieslandPointCount, targetSale, pointCount } = Obj.dealerList[dealerIndex]
+      // TODO:需要获取targetSaleNoTax
+      let targetSaleNoTax = 10000
+      let { frieslandPointCount, targetSale, pointCount, customerTaxPoint } = Obj.dealerList[dealerIndex]
       if (0 <= frieslandPointCount && frieslandPointCount <= pointCount) {
-        this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = Number(Number(pointCount) - Number(frieslandPointCount)).toFixed(2)
-        // Number(pointCount).toFixed(2) - Number(frieslandPointCount).toFixed(2)
-        this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = (Number(frieslandPointCount) * targetSale) / 100
+        this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = BigToFixed(sub(pointCount, frieslandPointCount))
+        this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = BigToFixed(mul(frieslandPointCount, div(targetSale, 100)))
         this.changeDealerPointCount(Obj, index, dealerIndex)
+        //菲仕兰承担 未税费比更改
+        //客户扣款税点
+        //TODO://客户扣款税点 为空的情况
+        if (customerTaxPoint != null && customerTaxPoint != '') {
+          let CustomerDeduction = BigToFixed(div(CustomerDeductionsAndPayType[Number(customerTaxPoint)].CustomerDeduction, 100))
+          this.AllTableData[index].dealerList[dealerIndex].frieslandCostRatioNoTax = BigToFixed(mul(div(Obj.dealerList[dealerIndex].frieslandPointCount, 100), div(1.13, add(1, CustomerDeduction))) * 100)
+          this.AllTableData[index].dealerList[dealerIndex].frieslandTaxCostNoTax = BigToFixed(mul(targetSaleNoTax, div(this.AllTableData[index].dealerList[dealerIndex].frieslandCostRatioNoTax, 100)))
+        }
       } else {
         this.$message.info(`第${index}行 ${this.AllTableData[index].name} ${this.AllTableData[index].dealerList[dealerIndex].dealerName}  菲仕兰承担费比+经销商承担费比应该等于客户费比`)
         this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = pointCount
         this.changeDealerPointCount(Obj, index, dealerIndex)
-
-        // this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = 0
-        // this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = 0
       }
     },
     //更改菲仕兰承担含税金额==》 菲仕兰承担费比
     changeFrieslandTaxPrice(Obj, index, dealerIndex) {
-      let { frieslandTaxPrice, targetSale, taxPrice } = Obj.dealerList[dealerIndex]
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = (Number(frieslandTaxPrice) / targetSale) * 100
-      this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice = Number(taxPrice) - Number(frieslandTaxPrice)
+      // TODO:需要获取targetSaleNoTax
+      let targetSaleNoTax = 37503547
+      let { frieslandTaxPrice, targetSale, taxPrice, customerTaxPoint } = Obj.dealerList[dealerIndex]
+      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = BigToFixed(mul(div(frieslandTaxPrice, targetSale), 100))
+      this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice = BigToFixed(sub(taxPrice, frieslandTaxPrice))
+      //未税修改
+      //客户扣款税点
+      if (customerTaxPoint != null && customerTaxPoint != '') {
+        let CustomerDeduction = BigToFixed(div(CustomerDeductionsAndPayType[Number(customerTaxPoint)].CustomerDeduction, 100))
+        this.AllTableData[index].dealerList[dealerIndex].frieslandTaxCostNoTax = BigToFixed(div(frieslandTaxPrice, add(1, CustomerDeduction)))
+        this.AllTableData[index].dealerList[dealerIndex].frieslandCostRatioNoTax = BigToFixed(mul(div(this.AllTableData[index].dealerList[dealerIndex].frieslandTaxCostNoTax, targetSaleNoTax), 100))
+      }
       this.changeDealerTaxPrice(Obj, index, dealerIndex)
       this.setVariableTotal()
     },
     //更改经销商承担费比--》经销商承担含税金额
     changeDealerPointCount(Obj, index, dealerIndex) {
       let { dealerPointCount, targetSale, pointCount } = Obj.dealerList[dealerIndex]
-      this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice = (dealerPointCount * targetSale) / 100
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = Number(Number(pointCount) - Number(dealerPointCount)).toFixed(2)
-      // Number(pointCount) - Number(dealerPointCount)
+      this.AllTableData[index].dealerList[dealerIndex].dealerTaxPrice = BigToFixed(mul(dealerPointCount, div(targetSale, 100)))
+      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = BigToFixed(sub(pointCount, dealerPointCount))
       this.setVariableTotal()
     },
     //更改经销商含税金额--》经销商承担承担费比
     changeDealerTaxPrice(Obj, index, dealerIndex) {
       let { dealerTaxPrice, targetSale, taxPrice } = Obj.dealerList[dealerIndex]
-      this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = (Number(dealerTaxPrice) / targetSale) * 100
-      this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = Number(taxPrice) - Number(dealerTaxPrice)
-      this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = (Number(this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice) / targetSale) * 100
+      this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = BigToFixed(mul(div(dealerTaxPrice, targetSale), 100))
+      this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = BigToFixed(sub(taxPrice, dealerTaxPrice))
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
