@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-10 09:36:35
+ * @LastEditTime: 2022-12-10 10:17:10
 -->
 <template>
   <div class="ContentDetail">
@@ -1355,6 +1355,9 @@ export default {
         item.frieslandTaxPrice = 0
         item.dealerPointCount = 0
         item.dealerTaxPrice = 0
+        // 未税 
+        item.frieslandCostRatioNoTax=0
+        item.frieslandTaxCostNoTax=0
       })
       //对行进行遍历
       for (let index = 0; index < this.AllTableData.length; index++) {
@@ -1362,7 +1365,7 @@ export default {
           const dealerList = this.AllTableData[index].dealerList
           //对variable经销商进行遍历
           for (let dealerIndex = 0; dealerIndex < dealerList.length; dealerIndex++) {
-            const { pointCount, taxPrice, dcId, dealerName, frieslandPointCount, frieslandTaxPrice, dealerTaxPrice, dealerPointCount } = dealerList[dealerIndex]
+            const { pointCount, taxPrice, dcId, dealerName, frieslandPointCount, frieslandTaxPrice, dealerTaxPrice, dealerPointCount,frieslandCostRatioNoTax,frieslandTaxCostNoTax } = dealerList[dealerIndex]
             if (!AllVariableDealer[dcId]) {
               AllVariableDealer[dcId] = [
                 {
@@ -1374,6 +1377,8 @@ export default {
                   frieslandTaxPrice,
                   dealerTaxPrice,
                   dealerPointCount,
+                  frieslandCostRatioNoTax,  //未税
+                  frieslandTaxCostNoTax, //未税
                 },
               ]
             } else {
@@ -1386,6 +1391,8 @@ export default {
                 frieslandTaxPrice,
                 dealerTaxPrice,
                 dealerPointCount,
+                frieslandCostRatioNoTax,  //未税
+                frieslandTaxCostNoTax, //未税
               })
             }
           }
@@ -1395,7 +1402,7 @@ export default {
           const dealerList = this.AllTableData[index].dealerList
           //对Fixed 经销商进行遍历
           for (let dealerIndex = 0; dealerIndex < dealerList.length; dealerIndex++) {
-            const { pointCount, taxPrice, dcId, dealerName, frieslandPointCount, frieslandTaxPrice, dealerTaxPrice, dealerPointCount } = dealerList[dealerIndex]
+            const { pointCount, taxPrice, dcId, dealerName, frieslandPointCount, frieslandTaxPrice, dealerTaxPrice, dealerPointCount,frieslandCostRatioNoTax,frieslandTaxCostNoTax } = dealerList[dealerIndex]
             if (!AllFixedDealer[dcId]) {
               AllFixedDealer[dcId] = [
                 {
@@ -1407,6 +1414,8 @@ export default {
                   frieslandTaxPrice,
                   dealerTaxPrice,
                   dealerPointCount,
+                  frieslandCostRatioNoTax,  //未税
+                  frieslandTaxCostNoTax, //未税
                 },
               ]
             } else {
@@ -1419,6 +1428,8 @@ export default {
                 frieslandTaxPrice,
                 dealerTaxPrice,
                 dealerPointCount,
+                frieslandCostRatioNoTax,  //未税
+                frieslandTaxCostNoTax, //未税
               })
             }
           }
@@ -1428,8 +1439,6 @@ export default {
       let VariableIndex = this.AllTableData.findIndex((item) => item.name == 'Variable total')
       // 获取 Variable 索引
       let FixedIndex = this.AllTableData.findIndex((item) => item.name == 'Fixed total')
-      // console.log(AllVariableDealer);
-      // console.log(AllFixedDealer);
       //遍历variable 经销商
       // debugger
       for (const key in AllVariableDealer) {
@@ -1441,15 +1450,19 @@ export default {
           let variableTotalFrieslandPointCount = 0 //菲仕兰承担费比
           let variableTotalDealerTaxPrice = 0 //经销商承担含税金额
           let variableTotalDealerPointCount = 0 //经销商承担费比
+          let variableTotalFrieslandCostRatioNoTax = 0 //菲仕兰承担未税费比
+          let variableTotalFrieslandTaxCostNoTax = 0 //菲仕兰承担未税含税金额
           let index = 0
           //记录每个经销商的合 并取得经销商的索引
           dealerList.forEach((dealerItem) => {
-            variableTotalPointCount += Number(dealerItem.pointCount)
-            variableTotalTaxPrice += Number(dealerItem.taxPrice)
-            variableTotalFrieslandTaxPrice += Number(dealerItem.frieslandTaxPrice)
-            variableTotalFrieslandPointCount += Number(dealerItem.frieslandPointCount)
-            variableTotalDealerTaxPrice += Number(dealerItem.dealerTaxPrice)
-            variableTotalDealerPointCount += Number(dealerItem.dealerPointCount)
+            variableTotalPointCount = BigToFixed(add(variableTotalPointCount, dealerItem.pointCount))
+            variableTotalTaxPrice = BigToFixed(add(variableTotalTaxPrice, dealerItem.taxPrice))
+            variableTotalFrieslandTaxPrice = BigToFixed(add(variableTotalFrieslandTaxPrice, dealerItem.frieslandTaxPrice))
+            variableTotalFrieslandPointCount = BigToFixed(add(variableTotalFrieslandPointCount, dealerItem.frieslandPointCount))
+            variableTotalDealerTaxPrice = BigToFixed(add(variableTotalDealerTaxPrice, dealerItem.dealerTaxPrice))
+            variableTotalDealerPointCount = BigToFixed(add(variableTotalDealerPointCount, dealerItem.dealerPointCount))
+            variableTotalFrieslandCostRatioNoTax = BigToFixed(add(variableTotalFrieslandCostRatioNoTax, dealerItem.frieslandCostRatioNoTax))
+            variableTotalFrieslandTaxCostNoTax = BigToFixed(add(variableTotalFrieslandTaxCostNoTax, dealerItem.frieslandTaxCostNoTax))
             index = dealerItem.dealerIndex
           })
           //将当前的经销商的和赋值给当前经销商的VariableTotal
@@ -1459,13 +1472,17 @@ export default {
           this.AllTableData[VariableIndex].dealerList[index].frieslandPointCount = variableTotalFrieslandPointCount
           this.AllTableData[VariableIndex].dealerList[index].dealerTaxPrice = variableTotalDealerTaxPrice
           this.AllTableData[VariableIndex].dealerList[index].dealerPointCount = variableTotalDealerPointCount
+          this.AllTableData[VariableIndex].dealerList[index].frieslandCostRatioNoTax = variableTotalFrieslandCostRatioNoTax
+          this.AllTableData[VariableIndex].dealerList[index].frieslandTaxCostNoTax = variableTotalFrieslandTaxCostNoTax
           //汇总variable Total行--》Total
-          this.AllTableData[0].dealerList[index].taxPrice += variableTotalTaxPrice
-          this.AllTableData[0].dealerList[index].pointCount += variableTotalPointCount
-          this.AllTableData[0].dealerList[index].frieslandTaxPrice += variableTotalFrieslandTaxPrice
-          this.AllTableData[0].dealerList[index].frieslandPointCount += variableTotalFrieslandPointCount
-          this.AllTableData[0].dealerList[index].dealerTaxPrice += variableTotalDealerTaxPrice
-          this.AllTableData[0].dealerList[index].dealerPointCount += variableTotalDealerPointCount
+          this.AllTableData[0].dealerList[index].taxPrice = BigToFixed(add(this.AllTableData[0].dealerList[index].taxPrice, variableTotalTaxPrice))
+          this.AllTableData[0].dealerList[index].pointCount = BigToFixed(add(this.AllTableData[0].dealerList[index].pointCount, variableTotalPointCount))
+          this.AllTableData[0].dealerList[index].frieslandTaxPrice = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandTaxPrice, variableTotalFrieslandTaxPrice))
+          this.AllTableData[0].dealerList[index].frieslandPointCount = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandPointCount, variableTotalFrieslandPointCount))
+          this.AllTableData[0].dealerList[index].dealerTaxPrice = BigToFixed(add(this.AllTableData[0].dealerList[index].dealerTaxPrice, variableTotalDealerTaxPrice))
+          this.AllTableData[0].dealerList[index].dealerPointCount = BigToFixed(add(this.AllTableData[0].dealerList[index].dealerPointCount, variableTotalDealerPointCount))
+          this.AllTableData[0].dealerList[index].frieslandCostRatioNoTax = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandCostRatioNoTax, variableTotalFrieslandCostRatioNoTax))
+          this.AllTableData[0].dealerList[index].frieslandTaxCostNoTax = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandTaxCostNoTax, variableTotalFrieslandTaxCostNoTax))
         }
       }
       //遍历Fixed 经销商
@@ -1478,15 +1495,19 @@ export default {
           let FixedTotalFrieslandPointCount = 0 //菲仕兰承担费比
           let FixedTotalDealerTaxPrice = 0 //经销商承担含税金额
           let FixedTotalDealerPointCount = 0 //经销商承担费比
+          let FixedTotalFrieslandCostRatioNoTax = 0 //菲仕兰承担费比不含税
+          let FixedTotalFrieslandTaxCostNoTax = 0 //菲仕兰承担含税金额不含税
           let index = 0
           //记录每个经销商的合 并取得经销商的索引
           dealerList.forEach((dealerItem) => {
-            FixedTotalPointCount += Number(dealerItem.pointCount)
-            FixedTotalTaxPrice += Number(dealerItem.taxPrice)
-            FixedTotalFrieslandTaxPrice += Number(dealerItem.frieslandTaxPrice)
-            FixedTotalFrieslandPointCount += Number(dealerItem.frieslandPointCount)
-            FixedTotalDealerTaxPrice += Number(dealerItem.dealerTaxPrice)
-            FixedTotalDealerPointCount += Number(dealerItem.dealerPointCount)
+            FixedTotalPointCount = BigToFixed(add(FixedTotalPointCount, dealerItem.pointCount))
+            FixedTotalTaxPrice = BigToFixed(add(FixedTotalTaxPrice, dealerItem.taxPrice))
+            FixedTotalFrieslandTaxPrice = BigToFixed(add(FixedTotalFrieslandTaxPrice, dealerItem.frieslandTaxPrice))
+            FixedTotalFrieslandPointCount = BigToFixed(add(FixedTotalFrieslandPointCount, dealerItem.frieslandPointCount))
+            FixedTotalDealerTaxPrice = BigToFixed(add(FixedTotalDealerTaxPrice, dealerItem.dealerTaxPrice))
+            FixedTotalDealerPointCount = BigToFixed(add(FixedTotalDealerPointCount, dealerItem.dealerPointCount))
+            FixedTotalFrieslandCostRatioNoTax = BigToFixed(add(FixedTotalFrieslandCostRatioNoTax, dealerItem.frieslandCostRatioNoTax))
+            FixedTotalFrieslandTaxCostNoTax = BigToFixed(add(FixedTotalFrieslandTaxCostNoTax, dealerItem.frieslandTaxCostNoTax))
             index = dealerItem.dealerIndex
           })
           //将当前的经销商的和赋值给当前经销商的VariableTotal
@@ -1496,13 +1517,17 @@ export default {
           this.AllTableData[FixedIndex].dealerList[index].frieslandPointCount = FixedTotalFrieslandPointCount
           this.AllTableData[FixedIndex].dealerList[index].dealerTaxPrice = FixedTotalDealerTaxPrice
           this.AllTableData[FixedIndex].dealerList[index].dealerPointCount = FixedTotalDealerPointCount
+          this.AllTableData[FixedIndex].dealerList[index].frieslandCostRatioNoTax = FixedTotalFrieslandCostRatioNoTax
+          this.AllTableData[FixedIndex].dealerList[index].frieslandTaxCostNoTax = FixedTotalFrieslandTaxCostNoTax
           //汇总variable Total行--》Total
-          this.AllTableData[0].dealerList[index].taxPrice += FixedTotalTaxPrice
-          this.AllTableData[0].dealerList[index].pointCount += FixedTotalPointCount
-          this.AllTableData[0].dealerList[index].frieslandTaxPrice += FixedTotalFrieslandTaxPrice
-          this.AllTableData[0].dealerList[index].frieslandPointCount += FixedTotalFrieslandPointCount
-          this.AllTableData[0].dealerList[index].dealerTaxPrice += FixedTotalDealerTaxPrice
-          this.AllTableData[0].dealerList[index].dealerPointCount += FixedTotalDealerPointCount
+          this.AllTableData[0].dealerList[index].taxPrice = BigToFixed(add(this.AllTableData[0].dealerList[index].taxPrice, FixedTotalTaxPrice))
+          this.AllTableData[0].dealerList[index].pointCount = BigToFixed(add(this.AllTableData[0].dealerList[index].pointCount, FixedTotalPointCount))
+          this.AllTableData[0].dealerList[index].frieslandTaxPrice = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandTaxPrice, FixedTotalFrieslandTaxPrice))
+          this.AllTableData[0].dealerList[index].frieslandPointCount = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandPointCount, FixedTotalFrieslandPointCount))
+          this.AllTableData[0].dealerList[index].dealerTaxPrice = BigToFixed(add(this.AllTableData[0].dealerList[index].dealerTaxPrice, FixedTotalDealerTaxPrice))
+          this.AllTableData[0].dealerList[index].dealerPointCount = BigToFixed(add(this.AllTableData[0].dealerList[index].dealerPointCount, FixedTotalDealerPointCount))
+          this.AllTableData[0].dealerList[index].frieslandCostRatioNoTax = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandCostRatioNoTax, FixedTotalFrieslandCostRatioNoTax))
+          this.AllTableData[0].dealerList[index].frieslandTaxCostNoTax = BigToFixed(add(this.AllTableData[0].dealerList[index].frieslandTaxCostNoTax, FixedTotalFrieslandTaxCostNoTax))
         }
       }
     },
@@ -1528,6 +1553,7 @@ export default {
         this.AllTableData[index].dealerList[dealerIndex].frieslandPointCount = pointCount
         this.changeDealerPointCount(Obj, index, dealerIndex)
       }
+      this.setVariableTotal()
     },
     //更改菲仕兰承担含税金额==》 菲仕兰承担费比
     changeFrieslandTaxPrice(Obj, index, dealerIndex) {
