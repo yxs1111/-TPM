@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-08 14:31:10
+ * @LastEditTime: 2022-12-10 17:25:54
 -->
 <template>
   <div class="MainContent">
@@ -148,9 +148,11 @@
               range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
             </el-date-picker>
           </div>
-          <div v-show="!scope.row.isEditor">
-            {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
+          <div v-show="!scope.row.isEditor" class="systemDateWrap">
+            <span> {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}</span>
+            <svg-icon icon-class="contractListIcon" class="contractListIcon" @click="showSystemValidityTimeRecords" />
           </div>
+          
         </template>
       </el-table-column>
       <el-table-column align="center" width="160" label="合同状态">
@@ -213,6 +215,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <TermDetailDialog ref="TermDetailDialog" :customerId="customerId"/>
+    <systemValidityTimeRecordsDialog title="系统生效时间变更记录"  :dialogVisible.sync="systemValidityTimeRecordsDialogVisible"></systemValidityTimeRecordsDialog>
   </div>
 </template>
 
@@ -223,6 +226,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import TermDetailDialog from './component/TermDetailDialog.vue'
+import systemValidityTimeRecordsDialog from './component/systemValidityTimeRecordsDialog.vue'
 export default {
   name: 'UnStraightGiving',
   data() {
@@ -284,10 +288,11 @@ export default {
         },
       },
       permissions: getDefaultPermissions(),
+      systemValidityTimeRecordsDialogVisible:false,
     }
   },
   components: {
-    TermDetailDialog,
+    TermDetailDialog,systemValidityTimeRecordsDialog
   },
   mounted() {
     window.onresize = () => {
@@ -299,6 +304,11 @@ export default {
     this.getCustomerList()
     this.getContractItemList()
     this.getLargeAreaList()
+    //接受emit 事件
+    // this.$bus.$on('cancel', (value) => {
+    //   console.log(value)
+    //   this.systemValidityTimeRecordsDialogVisible = value
+    // })
   },
   computed: {},
   watch: {
@@ -1031,6 +1041,10 @@ export default {
         }
       }
     },
+    //系统生效时间变更记录弹窗
+    showSystemValidityTimeRecords(index) {
+      this.systemValidityTimeRecordsDialogVisible = true
+    },
     //处于草稿状态可提交
     checkSelectable(row) {
       return row.contractState === '0' || row.contractState === '2'
@@ -1429,6 +1443,14 @@ export default {
       position: relative;
       text-align: center;
     }
+  }
+}
+.systemDateWrap {
+  display: flex;
+  align-items: center;
+  .contractListIcon {
+    font-size: 18px;
+    margin-left: 10px;
   }
 }
 </style>
