@@ -94,12 +94,12 @@
             </el-input>
           </el-form-item>
           <el-form-item label="区域" prop="regionCode">
-            <el-select v-model="ruleForm.regionCode" class="my-el-input" clearable filterable placeholder="请选择" @change="changeRegion">
+            <el-select v-model="ruleForm.regionCode" :disabled="isEditor ? true : false" class="my-el-input" clearable filterable placeholder="请选择" @change="changeRegion">
               <el-option v-for="(item) in RegionList" :key="item.code" :label="item.name" :value="item.code" />
             </el-select>
           </el-form-item>
           <el-form-item label="大区" prop="largeAreaCode">
-            <el-select v-model="ruleForm.largeAreaCode" class="my-el-input" clearable filterable placeholder="请选择" @change="changeLargeArea">
+            <el-select v-model="ruleForm.largeAreaCode" :disabled="isEditor ? true : false" class="my-el-input" clearable filterable placeholder="请选择" @change="changeLargeArea">
               <el-option v-for="(item, index) in largeAreaDialogList" :key="index" :label="item.name" :value="item.code" />
             </el-select>
           </el-form-item>
