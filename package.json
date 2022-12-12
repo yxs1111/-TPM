@@ -29,7 +29,7 @@
     "fuse.js": "3.4.4",
     "gantt-elastic": "^1.0.0",
     "gantt-elastic-header": "^0.1.11",
-    "gantt-group": "^2.0.12",
+    "gantt-group": "^2.0.13",
     "gm-crypt": "0.0.2",
     "js-cookie": "2.2.0",
     "js-md5": "^0.7.3",
