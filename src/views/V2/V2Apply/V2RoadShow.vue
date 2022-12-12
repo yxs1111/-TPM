@@ -1605,7 +1605,7 @@ export default {
 <style lang="scss">
 .tableWrap {
   .el-table__body-wrapper {
-    max-height: 304px !important;
+    max-height: 336px !important;
   }
 }
 

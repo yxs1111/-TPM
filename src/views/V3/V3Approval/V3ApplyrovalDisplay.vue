@@ -206,7 +206,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN',
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统检验" width="200">
               <template slot-scope="{ row }">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
@@ -222,7 +222,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="150" align="center" prop="judgmentType" label="系统判定" />
+            <el-table-column width="150" align="center" prop="judgmentType" label="系统检验" />
             <el-table-column width="300" align="center" prop="judgmentContent" label="系统判定内容" />
             <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />

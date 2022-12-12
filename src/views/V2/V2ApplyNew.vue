@@ -188,6 +188,21 @@ export default {
               path: '/costManagement/V2/V2Apply/V2Transport',
               minePackageName: 'Transport Costs',
             },
+            {
+              name: 'All-RKA/RTM',
+              path: '/costManagement/V2/V2Apply/V2Allrkartm',
+              minePackageName: 'Allrkartm',
+            },
+            {
+              name: 'Others-NKA/EC',
+              path: '/costManagement/V2/V2Apply/V2Others',
+              minePackageName: 'Others',
+            },
+            {
+              name: 'Others-FG',
+              path: '/costManagement/V2/V2Apply/V2OthersFG',
+              minePackageName: 'OthersFG',
+            },
           ]
           let TabList = []
           sortList.forEach((item) => {

@@ -340,9 +340,9 @@
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
             <!--            是否通过-->
-            <vxe-table-column field="date" align="center" title="系统判定" width="180" fixed="left">
+            <vxe-table-column field="date" align="center" title="系统检验" width="180" fixed="left">
               <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -357,9 +357,9 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="400" show-overflow align="center" fixed="left" field="systemJudgmentContent" title="系统判定内容">
+            <vxe-table-column width="400" show-overflow align="center" fixed="left" field="systemJudgmentContent" title="系统检验">
               <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template>
                 <span>

@@ -722,7 +722,7 @@
         </div>
         <div class="tableWrap">
           <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="ImportData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统检验" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
@@ -735,7 +735,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" fixed align="center" prop="judgmentContent" label="判定内容" />
+            <el-table-column width="400" fixed align="center" prop="judgmentContent" label="系统检验" />
             <el-table-column align="center" width="460" prop="cpId" label="CPID" >
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>

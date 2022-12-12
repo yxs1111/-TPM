@@ -255,6 +255,42 @@ export default function () {
                 activeMenu: '/costManagement/V2/V2Apply',
               },
             },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Allrkartm',
+              code: 'price_nka_v2_apply',
+              name: 'V2Allrkartm',
+              component: () => import('@/views/V2/V2Apply/V2Allrkartm.vue'),
+              meta: {
+                title: 'Allrkartm',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Others',
+              code: 'price_nka_v2_apply',
+              name: 'V2Others',
+              component: () => import('@/views/V2/V2Apply/V2Others.vue'),
+              meta: {
+                title: 'Others',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2OthersFG',
+              code: 'price_nka_v2_apply',
+              name: 'V2OthersFG',
+              component: () => import('@/views/V2/V2Apply/V2OthersFG.vue'),
+              meta: {
+                title: 'OthersFG',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
           ],
         },
         {
@@ -492,6 +528,45 @@ export default function () {
                 import('@/views/V2/V2Approval/V2TransportApproval.vue'),
               meta: {
                 title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2AllrkartmApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2AllrkartmApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2AllrkartmApproval.vue'),
+              meta: {
+                title: 'Allrkartm',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2OthersApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2OthersApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2OthersApproval.vue'),
+              meta: {
+                title: 'Others',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2OthersFGApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2OthersFGApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2OthersFGApproval.vue'),
+              meta: {
+                title: 'OthersFG',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },
