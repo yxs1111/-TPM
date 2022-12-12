@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-08 15:48:02
+ * @LastEditTime: 2022-12-12 20:15:46
 -->
 <template>
   <div class="MainContent">
@@ -183,7 +183,7 @@
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
-          <div class="seeActivity" @click="showTermsDetail(scope.$index)">
+          <div class="seeActivity" @click="showTermsDetail(scope.$index,scope.row)">
             条款明细
           </div>
         </template>
@@ -211,7 +211,7 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <TermDetailDialog ref="TermDetailDialog" :customerId="customerId"/>
+    <TermDetailDialog ref="TermDetailDialog"/>
   </div>
 </template>
 
@@ -231,6 +231,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import TermDetailDialog from './component/TermDetailDialog.vue'
+import {div,BigToFixedTwo} from '@/utils/Big.js'
 export default {
   name: 'StraightGiving',
   data() {
@@ -561,6 +562,7 @@ export default {
         customerMdmCode: '', //客户编号
         regionCode: '', //客户编号
         saleAmount: '', //目标销售额
+        exclTaxSaleAmount: '', //不含税销售额
         contractBeginDate: '', //合同区间-开始
         contractEndDate: '', //合同区间-结束
         effectiveBeginDate: '', //系统生效-开始时间
@@ -570,6 +572,7 @@ export default {
       obj.customerMdmCode = row.customerMdmCode
       obj.regionCode = row.regionCode
       obj.saleAmount = row.saleAmount
+      obj.exclTaxSaleAmount = BigToFixedTwo(div(row.saleAmount,1.13))
       obj.contractBeginDate = row.contractDate[0]
       obj.contractEndDate = row.contractDate[1]
       obj.effectiveBeginDate = row.systemDate[0]
@@ -835,6 +838,7 @@ export default {
             customerMdmCode: row.customerMdmCode,
             regionCode: row.regionCode,
             saleAmount: row.saleAmount,
+            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount,1.13)),
             contractBeginDate: row.contractDate[0],
             contractEndDate: row.contractDate[1],
             effectiveBeginDate: row.systemDate[0],
@@ -912,6 +916,7 @@ export default {
         customerMdmCode: row.customerMdmCode,
         regionCode: row.regionCode,
         saleAmount: row.saleAmount,
+        exclTaxSaleAmount:BigToFixedTwo(div(row.saleAmount,1.13)),
         contractBeginDate: row.contractDate[0],
         contractEndDate: row.contractDate[1],
         effectiveBeginDate: row.systemDate[0],
@@ -1069,8 +1074,8 @@ export default {
       this.tableData[index].isPopoverShow=false
     },
     //条款明细--弹窗展示
-    showTermsDetail(index) {
-      this.customerId = this.tableData[index].id
+    showTermsDetail(index,row) {
+      this.customerId = row.id
       let isEditor = this.isEditor && index == this.editorIndex
       if (this.tableData[index].isNewData) {
         this.$message.info('请先进行保存,再进行操作')
@@ -1085,13 +1090,12 @@ export default {
           })
             .then(() => {})
             .catch(() => {
-              this.$refs.termDialog.$el.firstChild.style.height = '98%'
-              // this.getContractTermData(index)
-              this.$refs.TermDetailDialog.getContractTermData(isEditor)
+              this.$refs.TermDetailDialog.$el.firstChild.style.height = '98%'
+              this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
             })
         } else {
-          // this.getContractTermData(index)
-          this.$refs.TermDetailDialog.getContractTermData(isEditor)
+          this.$refs.TermDetailDialog.$el.firstChild.style.height = ''
+          this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
         }
       }
     },
