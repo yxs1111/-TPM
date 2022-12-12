@@ -20,7 +20,7 @@
         <div class="PointTipWrap">
           <div class="PointTipWrap3">
             <span class="date">{{ this.activeMoon }}</span>
-            <el-radio-group v-model="tabPosition" @change="getHomePageData">
+            <el-radio-group class='btnGroup' v-model="tabPosition" @change="getHomePageData">
               <el-radio-button label="NKA">NKA</el-radio-button>
               <el-radio-button label="EC">EC</el-radio-button>
               <el-radio-button label="RKA">RKA</el-radio-button>
@@ -119,14 +119,14 @@
         </div>
         <!--        费用管理-->
         <div v-show="currentIndex == 0" class="TimeLineWrap">
-          <el-table :header-cell-style="{ color: '#000000' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
-            <el-table-column width="80" align="left" prop="yearAndMonth" label="活动周期" />
-            <el-table-column width="120" prop="costTypeName" label="Cost Type" />
-            <el-table-column width="120" prop="minePackageName" label="Mine Package" />
-            <el-table-column width="270" prop="costItemName" label="Cost Item" />
-            <el-table-column width="60" prop="channelName" label="渠道" />
-            <el-table-column width="80" prop="num" label="版本号" />
-            <el-table-column width="160" align="left" prop="" label="查看">
+          <el-table :header-cell-style="{ color: '#000000', height: '53px' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
+            <el-table-column align="left" prop="yearAndMonth" label="活动周期" />
+            <el-table-column prop="costTypeName" label="Cost Type" />
+            <el-table-column width='125' prop="minePackageName" label="Mine Package" />
+            <el-table-column width='265' prop="costItemName" label="Cost Item" />
+            <el-table-column prop="channelName" label="渠道" />
+            <el-table-column prop="num" label="版本号" />
+            <el-table-column width='170' align="left" prop="" label="查看">
               <template slot-scope="{ row }">
                 <div class="transact" @click="openFlowDiagram(row)">查看流程</div>
               </template>
@@ -781,6 +781,7 @@ export default {
     },
     // 获取信息列表
     getMesList() {
+      const height = document.body.clientHeight
       requestApi
         .request_get('/mdm/mdEmailRecordRule/getPage', {
           receiverCode: localStorage.usernameLocal,
@@ -794,11 +795,33 @@ export default {
             // console.log(item)
             obj.time = item.createDate.substring(0, 10)
             obj.msg = item.theme
-            if (this.MessageList.length < 5) {
-              this.MessageList.push({
-                ...obj,
-              })
-            }
+            this.MessageList.push({
+              ...obj,
+            })
+            // if (height <= 929 || this.MessageList.length < 5) {
+            //   this.MessageList.push({
+            //     ...obj,
+            //   })
+            // } else if (height <= 1032 || this.MessageList.length < 6) {
+            //   this.MessageList.push({
+            //     ...obj,
+            //   })
+            // } else if (height <= 1080) {
+            //   this.maxheight = 292
+            // } else if (height <= 1162) {
+            //   this.maxheight = 324
+            // } else if (height <= 1239) {
+            //   this.maxheight = 352
+            // } else if (height <= 1394) {
+            //   this.maxheight = 413
+            // } else if (height <= 1859) {
+            //   this.maxheight = 588
+            // } else if (height <= 2788) {
+            //   this.maxheight = 945
+            // } else if (height <= 3717) {
+            //   this.maxheight = 1286
+            // }
+            // return this.maxheight
           })
         })
     },
@@ -1461,7 +1484,10 @@ export default {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    //justify-content: space-between;
+    .btnGroup {
+      margin-left: 15px;
+    }
     .el-button {
       font-size: 16px;
       color: #333333;
@@ -1477,9 +1503,9 @@ export default {
     .el-radio-button__inner {
       border: 0px;
       background-color: #c5ebfe;
-      font-size: 16px;
+      font-size: 13px;
       font-weight: bold;
-      padding: 15px 30px !important;
+      padding: 15px 15px !important;
     }
     .el-button--primary {
       background-color: #c5ebfe;
@@ -2039,6 +2065,7 @@ export default {
     cursor: pointer;
   }
   .Message {
+    overflow: hidden;
     width: 34%;
     .MessgaeWrap {
       width: 100%;
