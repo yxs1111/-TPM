@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-12 20:12:46
+ * @LastEditTime: 2022-12-13 10:59:00
 -->
 <template>
   <div class="MainContent">
@@ -150,9 +150,8 @@
           </div>
           <div v-show="!scope.row.isEditor" class="systemDateWrap">
             <span> {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}</span>
-            <svg-icon icon-class="contractListIcon" class="contractListIcon" @click="showSystemValidityTimeRecords" />
+            <svg-icon v-if="scope.row.changeCounts!=0" icon-class="contractListIcon" class="contractListIcon" @click="showSystemValidityTimeRecords(scope.row)" />
           </div>
-          
         </template>
       </el-table-column>
       <el-table-column align="center" width="160" label="合同状态">
@@ -215,7 +214,7 @@
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <TermDetailDialog ref="TermDetailDialog"/>
-    <systemValidityTimeRecordsDialog title="系统生效时间变更记录"  :dialogVisible.sync="systemValidityTimeRecordsDialogVisible"></systemValidityTimeRecordsDialog>
+    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录"  :dialogVisible.sync="systemValidityTimeRecordsDialogVisible"></systemValidityTimeRecordsDialog>
   </div>
 </template>
 
@@ -225,8 +224,8 @@ import { getDefaultPermissions, getContractEntry, formatThousandNum, contractLis
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import TermDetailDialog from './component/TermDetailDialog.vue'
-import systemValidityTimeRecordsDialog from './component/systemValidityTimeRecordsDialog.vue'
+import TermDetailDialog from '@/components/contract/TermDetailDialog.vue'
+import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
 import {div,BigToFixedTwo} from '@/utils/Big.js'
 export default {
   name: 'UnStraightGiving',
@@ -305,11 +304,6 @@ export default {
     this.getCustomerList()
     this.getContractItemList()
     this.getLargeAreaList()
-    //接受emit 事件
-    // this.$bus.$on('cancel', (value) => {
-    //   console.log(value)
-    //   this.systemValidityTimeRecordsDialogVisible = value
-    // })
   },
   computed: {},
   watch: {
@@ -643,8 +637,8 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '间供客户合同录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('客户合同录入 - list导出成功!')
+        downloadFile(res, '间供客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('客户合同录入导出成功!')
       })
       await API.exportCustomerContractDetail({
         customerType: 3,
@@ -669,8 +663,8 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '间供客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('客户合同录入导出成功!')
+        downloadFile(res, '间供客户合同录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('客户合同录入 - list导出成功!')
       })
     },
     //编辑行数据
@@ -1046,8 +1040,12 @@ export default {
       }
     },
     //系统生效时间变更记录弹窗
-    showSystemValidityTimeRecords(index) {
+    showSystemValidityTimeRecords(row) {
       this.systemValidityTimeRecordsDialogVisible = true
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id)
+    },
+    cancelDialog() {
+      this.systemValidityTimeRecordsDialogVisible = false
     },
     //处于草稿状态可提交
     checkSelectable(row) {
@@ -1452,6 +1450,7 @@ export default {
 .systemDateWrap {
   display: flex;
   align-items: center;
+  justify-content: center;
   .contractListIcon {
     font-size: 18px;
     margin-left: 10px;

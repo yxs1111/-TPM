@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-12-10 16:26:53
- * @LastEditTime: 2022-12-10 17:14:33
+ * @LastEditTime: 2022-12-13 10:49:50
 -->
 <template>
   <div>
@@ -78,10 +78,10 @@ export default {
 
   methods: {
     cancelDialog() {
-      this.$bus.$emit('cancel', false)
+      this.$emit('cancel', false)
     },
     confirmDialog() {
-      this.$bus.$emit('cancel', false)
+      this.$emit('cancel', false)
     },
     // 行样式
     tableRowClassName({ row, rowIndex }) {
