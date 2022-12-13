@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-07-19 14:08:37
+ * @LastEditTime: 2022-12-13 11:46:51
  */
 /*
  * @Description: 客户合同录入
@@ -20,6 +20,23 @@ export default {
   },
   getApprovePageCustomer(params) {
     return requestApi.request_get(this.url+'/getApprovePage', params)
+  },
+  //客户合同审批变更审批 获取 列表
+  getChangeApproveList(params) {
+    return requestApi.request_get('/cityplan/contractPeriodChange/getCustomerPageList', params)
+  },
+  //客户合同审批变更审批--导出
+  exportCustomerContract(params) {
+    return request({
+      url: '/cityplan/contractPeriodChange/exportCustomerContract',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //客户合同审批变更审批--审批
+  approveCustomerContractChange(params) {
+    return requestApi.request_post('/cityplan/contractPeriodChange/approve', params)
   },
   getApprovePageDealer(params) {
     return requestApi.request_get(this.distUrl+'/getApprovePage', params)

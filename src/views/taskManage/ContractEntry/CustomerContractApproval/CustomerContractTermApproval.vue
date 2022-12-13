@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-13 10:32:41
+ * @LastEditTime: 2022-12-13 11:53:19
 -->
 <template>
   <div class="MainContent">
@@ -433,10 +433,11 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '客户合同明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '客户合同审批 -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
+        
       })
-      await API.exportApprovePage({
+      await API.exportCustomerContract({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -445,7 +446,7 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '客户合同审批 -' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '客户合同明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
