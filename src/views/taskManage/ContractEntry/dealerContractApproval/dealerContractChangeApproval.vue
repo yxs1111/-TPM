@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-08-23 15:25:11
+ * @LastEditTime: 2022-12-13 19:34:41
 -->
 <template>
   <div class="MainContent">
@@ -260,7 +260,7 @@ export default {
     //获取表格数据
     getTableData() {
       this.mainIdList=[]
-      API.getApprovePageDealer({
+      API.getDistChangeApproveList({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -365,20 +365,23 @@ export default {
         })
     },
     handleFunction(flag) {
-      let obj = {
-        opinion: flag ? 'agree' : 'reject',
-        approveDetail: {},
-      }
-      //判断当前数据 所属角色审批
-      this.checkArr.forEach((item) => {
-        if (item.name.indexOf('Package Owner') != -1) {
-          obj.approveDetail[item.id] = item.poApprovalComments
-        } else if (item.name.indexOf('Finance') != -1) {
-          obj.approveDetail[item.id] = item.finApprovalComments
-        }
-      })
-      console.log(obj)
-      API.approveDistContract(obj).then((res) => {
+      let list = []
+        //判断当前数据 所属角色审批
+        this.checkArr.forEach((item) => {
+          let obj = {
+            id: item.id,
+            opinion: flag ? 'agree' : 'reject',
+            comments: '',
+          }
+          if (item.name.indexOf('Package Owner') != -1) {
+            obj.comments = item.poApprovalComments
+            list.push(obj)
+          } else if (item.name.indexOf('Finance') != -1) {
+            obj.comments = item.finApprovalComments
+            list.push(obj)
+          }
+        })
+      API.approveCustomerContractChange(list).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
           if (flag) {
@@ -434,8 +437,8 @@ export default {
       this.getTableData()
     },
     //导出数据
-    async exportData() {
-     await API.exportApproveDistributorContractDetail({
+    exportData() {
+      API.exportDistributorContract({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -444,31 +447,7 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议明细-by KA-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-     await API.exportApproveDistributorContractInfo({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-     await API.exportDistApprovePage({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议审批 -' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '经销商分摊协议明细审批-list-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },

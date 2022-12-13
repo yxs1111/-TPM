@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-13 12:07:53
+ * @LastEditTime: 2022-12-13 19:34:49
 -->
 <template>
   <div class="MainContent">
@@ -98,7 +98,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column  align="center" prop="approveStateName" width="240" label="合同状态">
+      <el-table-column align="center" prop="approveStateName" width="240" label="合同状态">
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
@@ -243,8 +243,8 @@ export default {
           item.isCanSubmit = 0
           item.name = ''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
-          item.effectiveBeginDate=item.newEffectiveBeginDate
-          item.effectiveEndDate=item.newEffectiveEndDate
+          item.effectiveBeginDate = item.newEffectiveBeginDate
+          item.effectiveEndDate = item.newEffectiveEndDate
           this.mainIdList.push(item.mainId)
         })
 
@@ -264,7 +264,7 @@ export default {
         if (res.code === 1000) {
           this.tableData.forEach((item) => {
             activityList.forEach((mItem) => {
-              if (mItem.id == item.mainId&&mItem.assignee) {
+              if (mItem.id == item.mainId && mItem.assignee) {
                 item.name = mItem.activityName
                 let isFlag = mItem.assignee.indexOf(this.usernameLocal) != -1 ? 1 : 0
                 item.isCanSubmit = isFlag
@@ -387,19 +387,23 @@ export default {
     handleFunction(flag) {
       if (this.checkArr.length === 0) return this.$message.info('请选择数据')
       else {
-        let obj = {
-          opinion: flag ? 'agree' : 'reject',
-          approveDetail: {},
-        }
+        let list = []
         //判断当前数据 所属角色审批
         this.checkArr.forEach((item) => {
+          let obj = {
+            id: item.id,
+            opinion: flag ? 'agree' : 'reject',
+            comments: '',
+          }
           if (item.name.indexOf('Package Owner') != -1) {
-            obj.approveDetail[item.id] = item.poApprovalComments
+            obj.comments = item.poApprovalComments
+            list.push(obj)
           } else if (item.name.indexOf('Finance') != -1) {
-            obj.approveDetail[item.id] = item.finApprovalComments
+            obj.comments = item.finApprovalComments
+            list.push(obj)
           }
         })
-        API.approveCustomerContractChange(obj).then((res) => {
+        API.approveCustomerContractChange(list).then((res) => {
           if (res.code === 1000) {
             this.getTableData()
             if (flag) {
@@ -411,8 +415,8 @@ export default {
         })
       }
     },
-    async exportData() {
-      await API.exportApproveCustomerContractDetail({
+     exportData() {
+       API.exportCustomerContract({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -421,31 +425,7 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '.客户合同明细-by KA-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-      await API.exportApproveCustomerContractInfo({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '客户合同审批 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-      await API.exportApprovePage({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '客户合同明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '客户合同明细审批-list-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
@@ -484,7 +464,7 @@ export default {
       } else if (row.name.indexOf('Finance') != -1) {
         obj[row.id] = row.finApprovalComments
       }
-      API.saveApproveComments(obj).then((res) => {
+      API.saveChangeApproveComments(obj).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
           if (res.data) {
@@ -496,7 +476,7 @@ export default {
       })
     },
     //条款明细--弹窗展示
-    showTermsDetail(index,row) {
+    showTermsDetail(index, row) {
       this.customerId = row.contractId
       // 设置屏幕高度90%
       // this.$refs.termDialog.$el.firstChild.style.height = '98%'
@@ -522,7 +502,7 @@ export default {
     },
     //处于草稿状态可提交
     checkSelectable(row) {
-      if(row.approveStateName === '审批中' && row.isCanSubmit === 1) {
+      if (row.approveStateName === '审批中' && row.isCanSubmit === 1) {
         return true
       } else {
         return false
