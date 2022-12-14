@@ -99,7 +99,8 @@ export default {
     },
     // 查询方法
     getUser() {
-      requestApi.request_get('/auth/user/getByUsername', { username: this.loginName }).then(response => {
+      let username = this.loginName.toLowerCase()
+      requestApi.request_get('/auth/user/getByUsername', { username }).then(response => {
         const data = response.data
         this.data = data
         if (data.passState === '1') {
