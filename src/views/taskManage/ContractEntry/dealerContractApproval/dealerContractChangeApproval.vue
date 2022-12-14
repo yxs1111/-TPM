@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-13 19:34:41
+ * @LastEditTime: 2022-12-14 10:54:00
 -->
 <template>
   <div class="MainContent">
@@ -90,10 +90,10 @@
       </el-table-column>
       <el-table-column prop="customerRegionName" fixed align="center" width="120" label="大区">
       </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额">
+      <el-table-column prop="saleAmount" align="center" width="160" label="客户目标销售额">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.customerContractSaleAmount)}}
+            {{FormateNum(scope.row.saleAmount)}}
           </div>
         </template>
       </el-table-column>
@@ -107,7 +107,7 @@
       <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(RMB)">
         <template slot-scope="scope">
           <div>
-            {{FormateNum(scope.row.saleAmount)}}
+            {{FormateNum(scope.row.distributorSaleAmount)}}
           </div>
         </template>
       </el-table-column>
@@ -277,7 +277,8 @@ export default {
           item.isCanSubmit = 0
           item.name=''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
-          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
+          item.effectiveBeginDate = item.newEffectiveBeginDate
+          item.effectiveEndDate = item.newEffectiveEndDate
           this.mainIdList.push(item.mainId)
         })
         this.tableData = [...list]
@@ -447,7 +448,7 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议明细审批-list-' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '经销商分摊协议变更审批list-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },

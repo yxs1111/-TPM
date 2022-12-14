@@ -302,7 +302,6 @@
 <script>
 import API from '@/api/ContractEntry/dealer'
 import { contractView, formatThousandNum, CustomerDeductionsAndPayType } from '@/utils'
-import dealerTermData from './dealerTermData.js'
 import { add, sub, mul, div, BigToFixed, BigToFixedTwo } from '@/utils/Big.js'
 export default {
   name: 'dealerTermDetail',

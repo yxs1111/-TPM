@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-13 10:59:00
+ * @LastEditTime: 2022-12-14 10:25:38
 -->
 <template>
   <div class="MainContent">
@@ -170,6 +170,15 @@
                     <div class="PopoverContentOptionItem">
                       <el-date-picker v-model="scope.row.expireDate" value-format="yyyyMM" format="yyyyMM" type="month" placeholder="选择日期">
                       </el-date-picker>
+                    </div>
+                  </div>
+                  <div class="PopoverContentTop">
+                    <span>申请人备注</span>
+                  </div>
+                  <div class="PopoverContentOption">
+                    <div class="PopoverContentOptionItem">
+                      <el-input v-model="scope.row.applyRemark"  placeholder="请输入" clearable>
+                      </el-input>
                     </div>
                   </div>
                   <div class="PopoverContentFoot">
@@ -979,6 +988,7 @@ export default {
         API.termination({
           id: row.id,
           date: row.expireDate,
+          remark: row.applyRemark,
         }).then((res) => {
           if (res.code === 1000) {
             this.$message.success('调整成功')
@@ -1454,6 +1464,7 @@ export default {
   .contractListIcon {
     font-size: 18px;
     margin-left: 10px;
+    cursor: pointer;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-13 19:34:49
+ * @LastEditTime: 2022-12-14 08:59:31
 -->
 <template>
   <div class="MainContent">
@@ -425,7 +425,7 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '客户合同明细审批-list-' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '变更审批-list-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
