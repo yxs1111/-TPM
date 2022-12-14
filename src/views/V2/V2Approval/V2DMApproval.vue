@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-05 17:14:39
+ * @LastEditTime: 2022-12-14 11:28:42
 -->
 <template>
   <div class="MainContent">
@@ -243,11 +243,10 @@
           <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
             <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img  src="@/assets/images/success.png" alt="">
-              <span class="judgmentText">Pass</span>
-              <!-- <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
               <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-              <span class="judgmentText">{{ row.judgmentType }}</span> -->
+              <span class="judgmentText">{{ row.judgmentType }}</span>
             </div>
           </el-tooltip>
         </template>
@@ -256,10 +255,9 @@
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">-</span></div>
         </template>
-        <template>
+        <template slot-scope="scope">
           <div>
-            校验通过
-            <!-- {{ scope.row.judgmentContent }} -->
+            {{ scope.row.judgmentContent }}
           </div>
         </template>
       </el-table-column>
@@ -350,7 +348,7 @@
               <template v-slot:header>
                 <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
-              <template slot-scope="scope">
+              <template>
                 <div>
                   <span>校验通过</span>
                 </div>
