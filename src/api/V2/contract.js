@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-30 10:06:27
+ * @LastEditTime: 2022-12-14 14:20:41
  */
 /*
  * @Description: V1 合同
@@ -88,6 +88,10 @@ export default {
   fileImport(params) {
     return requestApi.request_post(this.importUrl+'/fileImport', params)
   },
+  //KA V2申请、审批导入
+  fileKaRebateImport(params) {
+    return requestApi.request_post(this.importUrl+'/fileKaRebateImport', params)
+  },
   // V2申请、审批导入 
   formatCheck(params) {
     return requestApi.request_post(this.importUrl+'/formatCheck', params)
@@ -108,5 +112,14 @@ export default {
       params: params,
       responseType: 'blob'
     })
-  }
+  },
+  //KA 导出校验数据
+  downKaRebateCheckData(params){
+    return request({
+      url: this.importUrl+'/downKaRebateCheckData',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
 }
