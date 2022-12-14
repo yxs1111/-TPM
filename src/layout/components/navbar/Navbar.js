@@ -99,7 +99,6 @@ export default {
     },
     // 查询方法
     getUser() {
-      //username 大写字符串转小写
       let username = this.loginName.toLowerCase()
       requestApi.request_get('/auth/user/getByUsername', { username }).then(response => {
         const data = response.data
