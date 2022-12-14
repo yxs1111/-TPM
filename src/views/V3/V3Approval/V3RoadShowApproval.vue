@@ -727,15 +727,15 @@
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" fixed align="center" prop="judgmentContent" label="系统检验" />
+            <el-table-column width="400" fixed align="center" prop="judgmentContent" label="系统检验">
+              <span>检验通过</span>
+            </el-table-column>
             <el-table-column align="center" width="460" prop="cpId" label="CPID" >
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
@@ -1731,6 +1731,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ .tableWrap {
+   max-height: 490px !important;
+ }
 .tooltip {
   border-radius: 10px;
 }

@@ -1681,6 +1681,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tableWrap {
+  max-height: 490px !important;
+}
 .tooltip {
   border-radius: 10px;
 }

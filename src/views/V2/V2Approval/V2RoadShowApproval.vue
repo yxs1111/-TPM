@@ -85,7 +85,7 @@
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight2" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
@@ -403,7 +403,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-table v-if='this.filterObj.channelCode == "EC"' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-if='this.filterObj.channelCode == "EC"' :data="tableData" :max-height="maxheight2" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
@@ -651,7 +651,7 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="ImportData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+          <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="ImportData" :max-height="maxheight2" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
             <el-table-column prop="date" fixed align="center" label="系统检验" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -1146,7 +1146,7 @@ export default {
       supplierList: [],
       distributorArr: [],
       contractItemList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight2: getHeightHaveTab(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       mainId: '',
       usernameLocal: '',
@@ -1169,7 +1169,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight2 = getHeightHaveTab()
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
@@ -1536,6 +1536,12 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.tableWrap {
+  max-height: 490px !important;
+}
+</style>
 
 <style lang="scss">
 .el-table {
