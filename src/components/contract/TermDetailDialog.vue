@@ -1,7 +1,7 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2022-12-13 09:45:04
+ * @LastEditTime: 2022-12-15 13:35:24
 -->
 
 <template>
@@ -150,10 +150,10 @@
                   菲仕兰承担
                 </template>
                 <template>
-                  <el-table-column prop="frieslandCustomerTaxPoint" align="center" width="150" label="客户扣缴税点">
+                  <el-table-column prop="frieslandCustomerTaxPoint" align="center" width="150" label="客户扣款税点">
                     <template slot-scope="scope">
                       <div v-if="scope.row.isTotal == 0">
-                        <el-select v-if="scope.row.isNewData" v-model="scope.row.frieslandCustomerTaxPoint" @change="changeCustomerTaxPoint( scope.$index,scope.row, scope.row.type)" class="my-el-select_dialog" filterable clearable placeholder="请选择">
+                        <el-select v-if="scope.row.isNewData" @clear="clearFrieslandCustomerTaxPoint( scope.$index,scope.row, scope.row.type)" v-model="scope.row.frieslandCustomerTaxPoint" @change="changeCustomerTaxPoint( scope.$index,scope.row, scope.row.type)"  class="my-el-select_dialog" filterable clearable placeholder="请选择">
                           <el-option v-for="(item, index) in CustomerDeductionsAndPayType" :key="index" :label="item.CustomerDeduction + '%'" :value="index" />
                         </el-select>
                         <div v-if="!scope.row.isNewData && scope.row.frieslandCustomerTaxPoint != null">{{ CustomerDeductionsAndPayType[scope.row.frieslandCustomerTaxPoint].CustomerDeduction }}%</div>
@@ -543,7 +543,7 @@ export default {
         }
       })
     },
-    //根据客户扣缴税点 查index
+    //根据客户扣款税点 查index
     getCustomerTaxPoint(rate) {
       let num = this.CustomerDeductionsAndPayType.findIndex(item => item.CustomerDeduction == rate)
       if (num != -1) {
@@ -802,7 +802,7 @@ export default {
     },
     //费比更改
     changeCostRate(index, row) {
-      this.termData[index].taxCost = mul(this.termInfo.saleAmount, div(row.costRatio, 100))
+      this.termData[index].taxCost = BigToFixed(mul(this.termInfo.saleAmount, div(row.costRatio, 100)))
       //菲仕兰承担更改
       this.termData[index].frieslandCostRatio = row.costRatio
       this.changeFrieslandCostRate(index,row)
@@ -810,24 +810,29 @@ export default {
     },
     //含税费用更改
     changeCost(index, row) {
-      this.termData[index].costRatio = mul(div(row.taxCost, this.termInfo.saleAmount), 100)
+      this.termData[index].costRatio = BigToFixed(mul(div(row.taxCost, this.termInfo.saleAmount), 100))
       this.termData[index].frieslandTaxCost=row.taxCost
       this.changeFrieslandCost(index,row)
       this.getNewTotalData()
     },
     //菲仕兰承担含税费比更改
     changeFrieslandCostRate(index, row) {
-      this.termData[index].frieslandTaxCost = mul(this.termInfo.saleAmount, div(row.frieslandCostRatio, 100))
-      this.termData[index].distCostRatio = sub(row.costRatio, row.frieslandCostRatio)
-      this.termData[index].distTaxCost = mul(this.termInfo.saleAmount, div(this.termData[index].distCostRatio, 100))
+      this.termData[index].frieslandTaxCost = BigToFixed(mul(this.termInfo.saleAmount, div(row.frieslandCostRatio, 100)))
+      this.termData[index].distCostRatio = BigToFixed(sub(row.costRatio, row.frieslandCostRatio))
+      this.termData[index].distTaxCost = BigToFixed(mul(this.termInfo.saleAmount, div(this.termData[index].distCostRatio, 100)))
       this.changeCustomerTaxPoint(index,row,row.type)
       this.getNewTotalData()
     },
+    clearFrieslandCustomerTaxPoint(index, row) {
+      this.termData[index].frieslandCostRatioNoTax=0
+      this.termData[index].frieslandTaxCostNoTax=0
+    },
     //菲仕兰承担含税金额更改
     changeFrieslandCost(index, row) {
-      this.termData[index].frieslandCostRatio = mul(div(row.frieslandTaxCost, this.termInfo.saleAmount), 100)
-      this.termData[index].distTaxCost = sub(row.taxCost, row.frieslandTaxCost)
-      this.termData[index].distCostRatio = mul(div(this.termData[index].distTaxCost, this.termInfo.saleAmount), 100)
+      this.termData[index].frieslandCostRatio = BigToFixed(mul(div(row.frieslandTaxCost, this.termInfo.saleAmount), 100))
+      this.termData[index].distTaxCost = BigToFixed(sub(row.taxCost, row.frieslandTaxCost))
+      this.termData[index].distCostRatio = BigToFixed(mul(div(this.termData[index].distTaxCost, this.termInfo.saleAmount), 100))
+      this.changeCustomerTaxPoint(index,row,row.type)
       this.getNewTotalData()
     },
     //更改客户扣款税点--》未税费比、未税费用
@@ -835,12 +840,12 @@ export default {
       let CustomerDeduction = CustomerDeductionsAndPayType[row.frieslandCustomerTaxPoint].CustomerDeduction
       let CustomerDeductionNum = div(CustomerDeduction, 100)
       if (type.includes('Variable')) {
-        this.termData[index].frieslandCostRatioNoTax = mul(row.frieslandCostRatio, div(1.13, add(1, CustomerDeductionNum)))
-        this.termData[index].frieslandTaxCostNoTax = mul(div(this.termData[index].frieslandCostRatioNoTax, 100), this.termInfo.saleAmountNoTax)
+        this.termData[index].frieslandCostRatioNoTax = BigToFixed(mul(row.frieslandCostRatio, div(1.13, add(1, CustomerDeductionNum))))
+        this.termData[index].frieslandTaxCostNoTax = BigToFixed(mul(div(this.termData[index].frieslandCostRatioNoTax, 100), this.termInfo.saleAmountNoTax))
       }
       if (type.includes('Fixed')) {
-        this.termData[index].frieslandTaxCostNoTax = div(row.frieslandTaxCost, add(1, CustomerDeductionNum))
-        this.termData[index].frieslandCostRatioNoTax = mul(div(this.termData[index].frieslandTaxCostNoTax, this.termInfo.saleAmountNoTax), 100)
+        this.termData[index].frieslandTaxCostNoTax = BigToFixed(div(row.frieslandTaxCost, add(1, CustomerDeductionNum)))
+        this.termData[index].frieslandCostRatioNoTax = BigToFixed(mul(div(this.termData[index].frieslandTaxCostNoTax, this.termInfo.saleAmountNoTax), 100))
       }
       this.termData[index].frieslandPayType = ''
       this.getNewTotalData()
@@ -950,7 +955,7 @@ export default {
       if (row.type == '新增一行') {
         return {
           rowspan: 1,
-          colspan: 5
+          colspan: 1
         }
       }
     }
