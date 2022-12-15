@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-15 15:27:50
+ * @LastEditTime: 2022-12-15 16:28:13
 -->
 <template>
   <div class="MainContent">
@@ -760,7 +760,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
-          isSubmit: 1,
+          isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
           this.isSubmit = this.tableData[0].isSubmit
@@ -841,7 +841,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
-          isSubmit: 1,
+          isSubmit: 0,
         }).then((res) => {
           downloadFile(res, `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
@@ -876,7 +876,7 @@ export default {
       formData.append('channelCode', this.filterObj.channelCode)
       formData.append('isSubmit', 0)
       formData.append('costItemCode', 'KA rebate')
-      API.fileImport(formData).then((response) => {
+      API.fileKaRebateImport(formData).then((response) => {
         //清除input的value ,上传一样的
         event.srcElement.value = '' // 置空
         if (response.code == 1000) {
