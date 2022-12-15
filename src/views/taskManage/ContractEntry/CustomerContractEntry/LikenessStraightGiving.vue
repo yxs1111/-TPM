@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 10:31:17
+ * @LastEditTime: 2022-12-15 20:07:47
 -->
 <template>
   <div class="MainContent">
@@ -991,9 +991,32 @@ export default {
       })
       //往后调
       if(Number(row.expireDate)>Number(row.systemDate[1])) {
-        this.$message.info(
-        '此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！'
-        )
+        this.$confirm('此操作需要进行审批，请点击"确定"进入一级审批 <br/>此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true,
+        })
+          .then(() => {
+            API.termination({
+              id: row.id,
+              date: row.expireDate,
+              remark: row.applyRemark,
+            }).then((res) => {
+              if (res.code === 1000) {
+                this.$message.success('调整成功')
+                this.popoverCancel(row.id, index)
+                sessionStorage.setItem('currentIndex', 1)
+                this.$router.push("/contractManagement/ContractEntry/CustomerContractApproval/CustomerContractChangeApproval")
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改',
+            })
+          })
       }else {
         isCheck=1
         //系统生效时间前调
@@ -1042,17 +1065,17 @@ export default {
           });          
         });
       } else {
-        API.termination({
-          id: row.id,
-          date: row.expireDate,
-          remark: row.applyRemark,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.$message.success('调整成功')
-            this.popoverCancel(row.id,index)
-            this.getTableData()
-          }
-        })
+        // API.termination({
+        //   id: row.id,
+        //   date: row.expireDate,
+        //   remark: row.applyRemark,
+        // }).then((res) => {
+        //   if (res.code === 1000) {
+        //     this.$message.success('调整成功')
+        //     this.popoverCancel(row.id,index)
+        //     this.getTableData()
+        //   }
+        // })
       }
     },
     dateCompare(expireDate,contractEndDate) {

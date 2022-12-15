@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 10:25:38
+ * @LastEditTime: 2022-12-15 19:41:08
 -->
 <template>
   <div class="MainContent">
@@ -177,7 +177,7 @@
                   </div>
                   <div class="PopoverContentOption">
                     <div class="PopoverContentOptionItem">
-                      <el-input v-model="scope.row.applyRemark"  placeholder="请输入" clearable>
+                      <el-input v-model="scope.row.applyRemark" placeholder="请输入" clearable>
                       </el-input>
                     </div>
                   </div>
@@ -222,8 +222,9 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <TermDetailDialog ref="TermDetailDialog"/>
-    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录"  :dialogVisible.sync="systemValidityTimeRecordsDialogVisible"></systemValidityTimeRecordsDialog>
+    <TermDetailDialog ref="TermDetailDialog" />
+    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录" :dialogVisible.sync="systemValidityTimeRecordsDialogVisible">
+    </systemValidityTimeRecordsDialog>
   </div>
 </template>
 
@@ -235,7 +236,7 @@ import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import TermDetailDialog from '@/components/contract/TermDetailDialog.vue'
 import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
-import {div,BigToFixedTwo} from '@/utils/Big.js'
+import { div, BigToFixedTwo } from '@/utils/Big.js'
 export default {
   name: 'UnStraightGiving',
   data() {
@@ -297,11 +298,12 @@ export default {
         },
       },
       permissions: getDefaultPermissions(),
-      systemValidityTimeRecordsDialogVisible:false,
+      systemValidityTimeRecordsDialogVisible: false,
     }
   },
   components: {
-    TermDetailDialog,systemValidityTimeRecordsDialog
+    TermDetailDialog,
+    systemValidityTimeRecordsDialog,
   },
   mounted() {
     window.onresize = () => {
@@ -568,7 +570,7 @@ export default {
       obj.customerMdmCode = row.customerMdmCode
       obj.regionCode = row.regionCode
       obj.saleAmount = row.saleAmount
-      obj.exclTaxSaleAmount = BigToFixedTwo(div(row.saleAmount,1.13))
+      obj.exclTaxSaleAmount = BigToFixedTwo(div(row.saleAmount, 1.13))
       obj.contractBeginDate = row.contractDate[0]
       obj.contractEndDate = row.contractDate[1]
       obj.effectiveBeginDate = row.systemDate[0]
@@ -818,7 +820,7 @@ export default {
             customerMdmCode: row.customerMdmCode,
             regionCode: row.regionCode,
             saleAmount: row.saleAmount,
-            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount,1.13)),
+            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
             contractBeginDate: row.contractDate[0],
             contractEndDate: row.contractDate[1],
             effectiveBeginDate: row.systemDate[0],
@@ -887,7 +889,7 @@ export default {
           customerMdmCode: row.customerMdmCode,
           regionCode: row.regionCode,
           saleAmount: row.saleAmount,
-          exclTaxSaleAmount:BigToFixedTwo(div(row.saleAmount,1.13)),
+          exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
           contractBeginDate: row.contractDate[0],
           contractEndDate: row.contractDate[1],
           effectiveBeginDate: row.systemDate[0],
@@ -934,7 +936,32 @@ export default {
       })
       //往后调
       if (Number(row.expireDate) > Number(row.systemDate[1])) {
-        this.$message.info('此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！')
+        this.$confirm('此操作需要进行审批，请点击"确定"进入一级审批 <br/>此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true,
+        })
+          .then(() => {
+            API.termination({
+              id: row.id,
+              date: row.expireDate,
+              remark: row.applyRemark,
+            }).then((res) => {
+              if (res.code === 1000) {
+                this.$message.success('调整成功')
+                this.popoverCancel(row.id, index)
+                sessionStorage.setItem('currentIndex', 1)
+                this.$router.push("/contractManagement/ContractEntry/CustomerContractApproval/CustomerContractChangeApproval")
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改',
+            })
+          })
       } else {
         isCheck = 1
         //系统生效时间前调
@@ -955,6 +982,7 @@ export default {
           }
         })
       }
+      // return
       if (isCheck) {
         let str = ''
         distributorContract.forEach((item) => {
@@ -985,17 +1013,17 @@ export default {
             })
           })
       } else {
-        API.termination({
-          id: row.id,
-          date: row.expireDate,
-          remark: row.applyRemark,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.$message.success('调整成功')
-            this.popoverCancel(row.id, index)
-            this.getTableData()
-          }
-        })
+        // API.termination({
+        //   id: row.id,
+        //   date: row.expireDate,
+        //   remark: row.applyRemark,
+        // }).then((res) => {
+        //   if (res.code === 1000) {
+        //     this.$message.success('调整成功')
+        //     this.popoverCancel(row.id, index)
+        //     this.getTableData()
+        //   }
+        // })
       }
     },
     dateCompare(expireDate, contractEndDate) {
@@ -1024,7 +1052,7 @@ export default {
       this.tableData[index].isPopoverShow = false
     },
     //条款明细--弹窗展示
-    showTermsDetail(index,row) {
+    showTermsDetail(index, row) {
       this.customerId = row.id
       let isEditor = this.isEditor && index == this.editorIndex
       if (this.tableData[index].isNewData) {
@@ -1041,11 +1069,11 @@ export default {
             .then(() => {})
             .catch(() => {
               this.$refs.TermDetailDialog.$el.firstChild.style.height = '98%'
-              this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
+              this.$refs.TermDetailDialog.getContractTermData(isEditor, this.customerId)
             })
         } else {
           this.$refs.TermDetailDialog.$el.firstChild.style.height = ''
-          this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
+          this.$refs.TermDetailDialog.getContractTermData(isEditor, this.customerId)
         }
       }
     },
