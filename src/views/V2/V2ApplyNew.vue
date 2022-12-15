@@ -109,12 +109,12 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIH rebate',
+              name: 'HIHrebate',
               path: '/costManagement/V2/V2Apply/V2HIHRebate',
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KA rebate',
+              name: 'KArebate',
               path: '/costManagement/V2/V2Apply/V2KARebate',
               minePackageName: 'KA Rebate',
             },
@@ -164,12 +164,12 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FG tin',
+              name: '价促-FGtin',
               path: '/costManagement/V2/V2Apply/V2FreeGoodsTin',
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FG win2',
+              name: 'NU-FGwin2',
               path: '/costManagement/V2/V2Apply/V2FreeGoodsWin2',
               minePackageName: 'Free Goods-Win2',
             },
@@ -194,12 +194,12 @@ export default {
               minePackageName: 'Allrkartm',
             },
             {
-              name: 'Others-NKA/EC',
+              name: 'Others-EC/NA',
               path: '/costManagement/V2/V2Apply/V2Others',
               minePackageName: 'Others',
             },
             {
-              name: 'Others-FG',
+              name: 'FG-RKA/RTM',
               path: '/costManagement/V2/V2Apply/V2OthersFG',
               minePackageName: 'OthersFG',
             },

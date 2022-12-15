@@ -121,7 +121,7 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: '折扣项-HIH Rebate',
+              name: '折扣项-HIHRebate',
               path: '/costManagement/V3/V3Approval/V3HIHRebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
@@ -129,7 +129,7 @@ export default {
               },
             },
             {
-              name: '折扣项-KA Rebate',
+              name: '折扣项-KARebate',
               path: '/costManagement/V3/V3Approval/V3KARebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
@@ -153,7 +153,7 @@ export default {
               },
             },
             {
-              name: 'Listing Fee',
+              name: 'ListingFee',
               path: '/costManagement/V3/V3Approval/V3ListingFeeApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_ListingFee.png'),

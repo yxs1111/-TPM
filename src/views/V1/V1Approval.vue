@@ -91,12 +91,12 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIH rebate',
+              name: 'HIHrebate',
               path: '/costManagement/V1/V1Approval/V1HIHRebate',
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KA rebate',
+              name: 'KArebate',
               path: '/costManagement/V1/V1Approval/V1KARebate',
               minePackageName: 'KA Rebate',
             },
@@ -141,12 +141,12 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FG tin',
+              name: '价促-FGtin',
               path: '/costManagement/V1/V1Approval/V1FreeGoodsTinApproval',
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FG win2',
+              name: 'NU-FGwin2',
               path: '/costManagement/V1/V1Approval/V1FreeGoodsWin2Approval',
               minePackageName: 'Free Goods-Win2',
             },
