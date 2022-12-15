@@ -20,7 +20,7 @@
             <img src="../../assets/images/shipin.png" v-if="scope.row.format == 'video'" />
           </template>
         </el-table-column>
-        <el-table-column width="250" property="name" label="文件名称" />
+        <el-table-column width="250" show-overflow-tooltip property="name" label="文件名称" />
         <el-table-column width="100" property="size" label="文件大小" />
         <el-table-column width="60" label="">
           <template slot-scope="scope">

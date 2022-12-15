@@ -107,7 +107,7 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIH rebate',
+              name: 'HIHrebate',
               path: '/costManagement/V3/V3Apply/V3HIHRebate',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
@@ -116,7 +116,7 @@ export default {
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KA rebate',
+              name: 'KArebate',
               path: '/costManagement/V3/V3Apply/V3KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
@@ -206,7 +206,7 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FG tin',
+              name: '价促-FGtin',
               path: '/costManagement/V3/V3Apply/V3FreeGoodsTin',
               img: {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),
@@ -215,7 +215,7 @@ export default {
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FG win2',
+              name: 'NU-FGwin2',
               path: '/costManagement/V3/V3Apply/V3FreeGoodsWin2',
               img: {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),

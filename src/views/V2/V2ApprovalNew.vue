@@ -107,7 +107,7 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIH rebate',
+              name: 'HIHrebate',
               path: '/costManagement/V2/V2Approval/V2HIHRebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
@@ -116,7 +116,7 @@ export default {
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KA rebate',
+              name: 'KArebate',
               path: '/costManagement/V2/V2Approval/V2KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
@@ -206,7 +206,7 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FG tin',
+              name: '价促-FGtin',
               path: '/costManagement/V2/V2Approval/V2FreeGoodsTinApproval',
               img: {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),
@@ -215,7 +215,7 @@ export default {
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FG win2',
+              name: 'NU-FGwin2',
               path: '/costManagement/V2/V2Approval/V2FreeGoodsWin2Approval',
               img: {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),
@@ -251,7 +251,7 @@ export default {
               minePackageName: 'Allrkartm',
             },
             {
-              name: 'Others-NKA/EC',
+              name: 'Others-EC/NA',
               path: '/costManagement/V2/V2Approval/V2OthersApproval',
               img: {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
@@ -260,7 +260,7 @@ export default {
               minePackageName: 'Others',
             },
             {
-              name: 'Others-FG',
+              name: 'FG-RKA/RTM',
               path: '/costManagement/V2/V2Approval/V2OthersFGApproval',
               img: {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
