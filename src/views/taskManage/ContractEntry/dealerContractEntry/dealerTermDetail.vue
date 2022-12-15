@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-13 16:26:54
+ * @LastEditTime: 2022-12-15 10:17:50
 -->
 <template>
   <div class="ContentDetail">
@@ -326,6 +326,12 @@ export default {
       isEditor: 0,
       customerContract: '', //客户合同
       contractList: ['草稿', '被拒绝', '待审批', '通过', '过期', '终止'],
+      frieslandErrorMessage:[
+        '菲仕兰承担费比不符合“Weighted avg.点数≤已录的KA Contract item的点数”',
+        '菲仕兰承担含税金额不符合“经销商by item加总≤KA合同”',
+        '经销商承担费比不符合“Weighted avg.点数≥已录的KA Contract item的点数”',
+        '经销商承担含税金额不符合“经销商by item加总≥ KA合同”'
+      ]
     }
   },
 
@@ -1063,6 +1069,7 @@ export default {
         let isPointCountEmpty = false
         let exceptionList = []
         let errorList = []
+        let frieslandErrorList = []
         let pointCountEmpty = [] //经销商费比为空
         let taxPriceEmpty = [] //经销商费比为空
         let taxPriceErrorList = [] //经销商含税金额 汇总 校验（应等于该经销商目标销售额）
@@ -1072,6 +1079,9 @@ export default {
           if (!item.isTotal && item.isVariable) {
             let customerPointCount = item.customerInfo.pointCount
             let dealerList = item.dealerList
+            let frieslandTaxCostTotal=0
+            let distTaxCostTotal=0
+            let distTotalTargetSales=0
             dealerList.forEach((dealerItem, dealerIndex) => {
               if (dealerItem.pointCount > customerPointCount) {
                 exceptionList.push({
@@ -1090,12 +1100,33 @@ export default {
                   ...dealerItem,
                 })
               }
+              frieslandTaxCostTotal=add(frieslandTaxCostTotal,mul(dealerItem.targetSale,div(dealerItem.frieslandPointCount,100)))
+              distTaxCostTotal=add(distTaxCostTotal,mul(dealerItem.targetSale,div(dealerItem.dealerPointCount,100)))
+              distTotalTargetSales=add(distTotalTargetSales,dealerItem.targetSale)
             })
+            //error 菲仕兰承担含税费比校验：经销商汇总菲仕兰承担含税费比/经销商汇总目标销售额<=客户菲仕兰承担含税费比
+            if(div(frieslandTaxCostTotal,distTotalTargetSales)>div(item.customerInfo.frieslandCostRatio,100)){
+              frieslandErrorList.push({
+                rowIndex: index,
+                ...item,
+                type:0
+              })
+            }
+            //error 经销商承担含税费比校验：经销商汇总经销商承担含税费比/经销商汇总目标销售额>=客户经销商承担含税费比
+            if(div(distTaxCostTotal,distTotalTargetSales)<div(item.customerInfo.distCostRatio,100)){
+              frieslandErrorList.push({
+                rowIndex: index,
+                ...item,
+                type:2
+              })
+            }
           }
           //error 错误  经销商含税总金额若不等于客户含税金额 报error
           if (!item.isTotal && !item.isVariable) {
             let customerTaxPrice = item.customerInfo.taxPrice
             let dealerList = item.dealerList
+            let frieslandTaxCostTotalFixed=0
+            let distTaxCostTotalFixed=0
             dealerList.forEach((dealerItem, dealerIndex) => {
               if (dealerItem.taxPrice === '' || dealerItem.taxPrice === null) {
                 console.log('含税金额为空')
@@ -1106,7 +1137,10 @@ export default {
                   ...dealerItem,
                 })
               }
+              frieslandTaxCostTotalFixed=add(frieslandTaxCostTotalFixed,dealerItem.frieslandTaxPrice)
+              distTaxCostTotalFixed=add(distTaxCostTotalFixed,dealerItem.dealerTaxPrice)
             })
+
             // error 对草稿、待审批、被拒绝的进行校验
             let dealerTaxPrice = dealerList.reduce((total, current) => {
               if (current.contractStateName == '草稿' || current.contractStateName == '待审批' || current.contractStateName == '被拒绝') {
@@ -1118,6 +1152,22 @@ export default {
             if (dealerTaxPrice != customerTaxPrice) {
               errorList.push({
                 rowIndex: index,
+              })
+            }
+            //error 菲仕兰承担含税金额校验：经销商菲仕兰承担含税金额汇总<=客户菲仕兰承担含税金额
+            if(frieslandTaxCostTotalFixed>item.customerInfo.frieslandTaxCost){
+              frieslandErrorList.push({
+                rowIndex: index,
+                ...item,
+                type:1
+              })
+            }
+            //error 经销商承担含税金额校验：经销商 经销商承担含税金额汇总>=客户 经销商承担含税金额
+            if(distTaxCostTotalFixed<item.customerInfo.distTaxCost){
+              frieslandErrorList.push({
+                rowIndex: index,
+                ...item,
+                type:3
               })
             }
           }
@@ -1134,7 +1184,6 @@ export default {
           }
         })
         console.log(exceptionList)
-        console.log(errorList)
         console.log(pointCountEmpty)
         if (isPointCountEmpty) {
           pointCountEmpty.forEach((item) => {
@@ -1177,20 +1226,29 @@ export default {
         }
         console.log(pointCountEmpty)
         console.log(taxPriceEmpty)
-        //补录跳过校验
-        if (!this.isMakeUp) {
-          if (errorList.length) {
-            errorList.forEach((item) => {
-              setTimeout(() => {
-                this.$notify.error({
-                  title: '错误',
-                  message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  经销商含税金额total 不等于客户含税金额`,
-                  duration: 5000,
-                })
-              }, 50)
-            })
-            return
-          }
+        //Error校验 KA含税金额=所有经销商含税金额之和
+        // if (errorList.length) {
+        //   errorList.forEach((item) => {
+        //     setTimeout(() => {
+        //       this.$notify.error({
+        //         title: '错误',
+        //         message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  经销商含税金额total 不等于客户含税金额`,
+        //         duration: 5000,
+        //       })
+        //     }, 50)
+        //   })
+        //   return
+        // }
+        if(frieslandErrorList.length) {
+          frieslandErrorList.forEach((item) => {
+            setTimeout(() => {
+              this.$notify.error({
+                title: '错误',
+                message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  ${this.frieslandErrorMessage[item.type]}`,
+                duration: 5000,
+              })
+            }, 50)
+          })
         }
         // if (exceptionList.length) {
         //   exceptionList.forEach((item) => {
