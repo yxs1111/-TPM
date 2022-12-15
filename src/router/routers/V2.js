@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-11-28 13:43:09
+ * @LastEditTime: 2022-12-15 16:03:39
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -353,10 +353,10 @@ export default function () {
             },
             {
               hidden: true,
-              path: '/costManagement/V2/V2Approval/V2KARebate',
+              path: '/costManagement/V2/V2Approval/V2KARebateApproval',
               code: 'price_nka_v2_approve',
-              name: 'V2KARebateApprove',
-              component: () => import('@/views/V2/V2Apply/V2KARebate.vue'),
+              name: 'V2KARebateApproval',
+              component: () => import('@/views/V2/V2Approval/V2KARebateApproval.vue'),
               meta: {
                 title: '折扣项-KA Rebate',
                 icon: 'form',
