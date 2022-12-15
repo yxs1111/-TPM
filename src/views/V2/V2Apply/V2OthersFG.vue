@@ -825,6 +825,7 @@ export default {
         MinePackageName: '',
         channelCode: '', //渠道
         month: '', //活动月
+        FG: 'FG'
       },
       permissions: getDefaultPermissions(),
       channelArr: [],
@@ -911,7 +912,8 @@ export default {
           minePackage: this.filterObj.MinePackage,
 
           costAccount: this.filterObj.costAccount,
-          yearAndMonth: this.filterObj.month,
+          costItemFlag: this.filterObj.FG,
+          yearAndMonth: this.filterObj.month
           //   isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
@@ -1047,10 +1049,11 @@ export default {
 
           costAccount: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
+          costItemFlag: this.filterObj.FG,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Others-FG_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1081,6 +1084,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('costItemFlag', this.filterObj.FG)
       formData.append('importType', 1) // 1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1128,6 +1132,7 @@ export default {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
+        costItemFlag: this.filterObj.FG
         // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
@@ -1165,6 +1170,7 @@ export default {
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
+        costItemFlag: this.filterObj.FG
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1185,10 +1191,11 @@ export default {
 
           costAccount: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
+          costItemFlag: this.filterObj.FG
           //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_Others-FG异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_FG-RKA/RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -1206,6 +1213,7 @@ export default {
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
+          costItemFlag: this.filterObj.FG
           //   isSubmit: 0,
         }).then((res) => {
           downloadFile(

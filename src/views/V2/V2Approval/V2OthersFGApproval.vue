@@ -845,6 +845,7 @@ export default {
         channelCode: '', //渠道
         customerCode: '', //客户系统名称
         month: '', //活动月
+        costItemFlag: 'FG',
         ecmItem: '',
       },
       permissions: getDefaultPermissions(),
@@ -920,6 +921,7 @@ export default {
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
+          costItemFlag: this.filterObj.FG
           //   isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
@@ -1046,6 +1048,7 @@ export default {
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
+          costItemFlag: this.filterObj.FG
         }).then((res) => {
           downloadFile(
             res,
@@ -1080,6 +1083,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('costItemFlag', this.filterObj.FG)
       formData.append('importType', 0) //1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1127,6 +1131,7 @@ export default {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
+        costItemFlag: this.filterObj.FG
         // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
@@ -1164,6 +1169,7 @@ export default {
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
         channelName: this.filterObj.channelCode,
+        costItemFlag: this.filterObj.FG
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1206,6 +1212,7 @@ export default {
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
+          costItemFlag: this.filterObj.FG
           //   isSubmit: 0,
         }).then((res) => {
           downloadFile(
