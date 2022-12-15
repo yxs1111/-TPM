@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-12-05 15:02:10
+ * @LastEditTime: 2022-12-15 15:43:56
 -->
 <template>
   <div class="indexNew">
@@ -201,6 +201,7 @@ import { logger } from 'runjs/lib/common'
 import item from '@/layout/components/Sidebar/Item'
 import { getFileType } from '@/utils'
 import requestApi from '@/api/request-api'
+import { mapMutations } from 'vuex'
 export default {
   name: 'Dashboard',
   components: {
@@ -354,90 +355,6 @@ export default {
         'In Store POSM - Customized': 'POSM-定',
       },
       tasks: [
-        {
-          id: 'task-3',
-          label: '202206',
-          start: dayjs('2022-06-02').valueOf(),
-          end: dayjs('2022-09-15').valueOf(),
-          percent: 25,
-          type: 'group',
-          tasks: [
-            {
-              id: 12,
-              label: 'V0',
-              start: dayjs('2022-06-01').valueOf(),
-              end: dayjs('2022-07-16').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-3',
-            },
-            {
-              id: 13,
-              label: 'V1',
-              start: dayjs('2022-07-18').valueOf(),
-              end: dayjs('2022-08-28').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-3',
-            },
-          ],
-        },
-        {
-          id: 'task-4',
-          label: '202205',
-          start: dayjs('2022-06-02').valueOf(),
-          end: dayjs('2022-09-15').valueOf(),
-          percent: 25,
-          type: 'group',
-          tasks: [
-            {
-              id: 12,
-              label: 'V0',
-              start: dayjs('2022-06-01').valueOf(),
-              end: dayjs('2022-07-16').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-4',
-            },
-            {
-              id: 13,
-              label: 'V1',
-              start: dayjs('2022-07-18').valueOf(),
-              end: dayjs('2022-08-28').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-4',
-            },
-          ],
-        },
       ],
       options: options,
       content: {
@@ -532,6 +449,8 @@ export default {
     this.needHelp()
   },
   methods: {
+    //app OPEN_BREADCRUMB 映射成openBreadcrumb方法
+    ...mapMutations('app', ['OPEN_BREADCRUMB']),
     needHelp() {
       this.gridData = []
       TaskAPI.getNeedHelp().then((res) => {
@@ -1016,6 +935,8 @@ export default {
         })
     },
     operateProcess(version, name) {
+      console.log(this);
+      this.OPEN_BREADCRUMB()
       if (version == 'DISTRIBUTOR-CONTRACT') {
         if (name.indexOf('审批') != -1) {
           this.$router.push('/contractManagement/dealer/dealerContractApproval')
