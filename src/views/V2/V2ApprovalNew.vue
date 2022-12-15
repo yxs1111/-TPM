@@ -107,7 +107,7 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIHrebate',
+              name: 'HI Hrebate',
               path: '/costManagement/V2/V2Approval/V2HIHRebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
@@ -116,7 +116,7 @@ export default {
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KArebate',
+              name: 'KA rebate',
               path: '/costManagement/V2/V2Approval/V2KARebate',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
@@ -206,7 +206,7 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FGtin',
+              name: '价促-FG tin',
               path: '/costManagement/V2/V2Approval/V2FreeGoodsTinApproval',
               img: {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),
@@ -215,7 +215,7 @@ export default {
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FGwin2',
+              name: 'NU-FG win2',
               path: '/costManagement/V2/V2Approval/V2FreeGoodsWin2Approval',
               img: {
                 dark: require('@/assets/images/tab/FreeGoodsTin.png'),
@@ -251,7 +251,7 @@ export default {
               minePackageName: 'Allrkartm',
             },
             {
-              name: 'Others-EC/NA',
+              name: 'Others-EC/NKA',
               path: '/costManagement/V2/V2Approval/V2OthersApproval',
               img: {
                 dark: require('@/assets/images/tab/StraightGiving.png'),
@@ -342,7 +342,7 @@ export default {
   height: 38px;
   background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 10px;
+  margin-right: 0px;
   border: 1px solid #e8e8ea;
   font-size: 14px;
   color: #999;

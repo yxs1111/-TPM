@@ -109,12 +109,12 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIHrebate',
+              name: 'HI Hrebate',
               path: '/costManagement/V2/V2Apply/V2HIHRebate',
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KArebate',
+              name: 'KA rebate',
               path: '/costManagement/V2/V2Apply/V2KARebate',
               minePackageName: 'KA Rebate',
             },
@@ -164,12 +164,12 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FGtin',
+              name: '价促-FG tin',
               path: '/costManagement/V2/V2Apply/V2FreeGoodsTin',
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FGwin2',
+              name: 'NU-FG win2',
               path: '/costManagement/V2/V2Apply/V2FreeGoodsWin2',
               minePackageName: 'Free Goods-Win2',
             },
@@ -194,7 +194,7 @@ export default {
               minePackageName: 'Allrkartm',
             },
             {
-              name: 'Others-EC/NA',
+              name: 'Others-EC/NKA',
               path: '/costManagement/V2/V2Apply/V2Others',
               minePackageName: 'Others',
             },
@@ -272,7 +272,7 @@ export default {
   height: 38px;
   background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 10px;
+  margin-right: 0px;
   border: 1px solid #e8e8ea;
   font-size: 14px;
   color: #999;

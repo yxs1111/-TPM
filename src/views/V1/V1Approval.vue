@@ -234,7 +234,7 @@ export default {
   height: 38px;
   background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 10px;
+  margin-right: 0px;
   border: 1px solid #e8e8ea;
   font-size: 14px;
   color: #999;
