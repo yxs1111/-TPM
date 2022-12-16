@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 13:41:16
+ * @LastEditTime: 2022-12-16 14:00:41
 -->
 <template>
   <div class="MainContent">
@@ -26,7 +26,7 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">合同状态:</span>
+          <span class="SelectliTitle">变更状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
             <el-option v-for="item,index in contractList" :key="index" :label="item.label" :value="item.value" />
           </el-select>
@@ -98,7 +98,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" prop="approveStateName" width="240" label="合同状态">
+      <el-table-column v-slot="{row}" align="center" prop="approveStateName" width="240" label="变更状态">
         {{row.approveStateName=='审批中'&&row.activityName&&row.activityName.includes('审批')?'延期审批中'+'-'+row.activityName:row.approveStateName}}
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
@@ -182,14 +182,6 @@ export default {
         {
           value: 2,
           label: '被拒绝',
-        },
-        {
-          value: 4,
-          label: '终止',
-        },
-        {
-          value: 5,
-          label: '过期',
         },
       ],
       isAddCount: 0,
