@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-12-10 16:26:53
- * @LastEditTime: 2022-12-16 11:43:41
+ * @LastEditTime: 2022-12-16 16:05:57
 -->
 <template>
   <div>
@@ -13,11 +13,11 @@
           <el-table-column align="center" width="180" prop="oldEffectiveDate" label="变更前"></el-table-column>
           <el-table-column align="center" width="180" prop="newEffectiveDate" label="变更后"></el-table-column>
           <el-table-column align="center" width="180" prop="createDate" label="变更时间"></el-table-column>
-          <el-table-column align="center" width="180" prop="createDate" label="变更状态"></el-table-column>
+          <el-table-column align="center" width="180" prop="approveStateName" label="变更状态"></el-table-column>
           <el-table-column align="center" width="180" :show-overflow-tooltip="true" prop="createBy" label="变更人"></el-table-column>
           <el-table-column align="center" width="150" :show-overflow-tooltip="true" prop="remark" label="申请人备注"></el-table-column>
           <el-table-column align="center" width="180" :show-overflow-tooltip="true" prop="poApprovalComments" label="Package Owner意见"></el-table-column>
-          <el-table-column align="center" width="150" :show-overflow-tooltip="true" prop="finApprovalComments" label="Finance 意见"></el-table-column>
+          <el-table-column align="center" width="150" :show-overflow-tooltip="true" prop="finApprovalComments" label="HQ PPM审批意见"></el-table-column>
         </el-table>
       </div>
     </el-dialog>

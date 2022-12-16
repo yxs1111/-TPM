@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 09:12:26
+ * @LastEditTime: 2022-12-16 16:29:21
 -->
 <template>
   <div class="MainContent">
@@ -369,6 +369,7 @@ export default {
           // item.regionName = ''
           // item.earlyExpireDate =item.earlyExpireDate!=''
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
+          item.applyRemark = ''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -1007,6 +1008,8 @@ export default {
       return new Date((expireDate).slice(0, 4),Number((expireDate).slice(4)),0).getTime()>new Date(contractEndDate).getTime()
     },
     popoverShow(id,index) {
+      this.tableData[index].expireDate=''
+      this.tableData[index].applyRemark=''
       if (
         this.tableData[index].contractStateName == '草稿' ||
         this.tableData[index].contractStateName == '待审批' ||

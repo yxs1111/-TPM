@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 10:42:48
+ * @LastEditTime: 2022-12-16 16:29:33
 -->
 <template>
   <div class="MainContent">
@@ -503,6 +503,7 @@ export default {
           item.isPopoverShow = false
           item.isEditor = 0
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
+          item.applyRemark = ''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -1002,6 +1003,8 @@ export default {
       })
     },
     popoverShow(id,index) {
+      this.tableData[index].expireDate=''
+      this.tableData[index].applyRemark=''
       if (
         this.tableData[index].contractStateName == '草稿' ||
         this.tableData[index].contractStateName == '待审批' ||
