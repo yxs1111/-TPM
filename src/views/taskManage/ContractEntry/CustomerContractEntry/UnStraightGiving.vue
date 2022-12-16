@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 14:58:14
+ * @LastEditTime: 2022-12-16 17:13:48
 -->
 <template>
   <div class="MainContent">
@@ -158,7 +158,7 @@
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
-              {{ contractList[scope.row.contractState] }}
+              {{ scope.row.contractStateName }}
             </div>
             <div class="timeOutWrap">
               <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual" v-model="scope.row.isPopoverShow">

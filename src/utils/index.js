@@ -659,7 +659,7 @@ export function setSplitAssignee(value) {
   }
   return formatString
 }
-export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止', '过期']
+export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止', '过期','延期审批中']
 
 //contract 合同 客户扣款点数与支付方式对应关系
 export let CustomerDeductionsAndPayType = [
