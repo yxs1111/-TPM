@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 09:29:20
+ * @LastEditTime: 2022-12-16 10:00:46
 -->
 <template>
   <div class="MainContent">
@@ -28,7 +28,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">合同状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in ['待审批', '被拒绝', '通过', '终止', '过期']" :key="index" :label="item" :value="index+1" />
+            <el-option v-for="item,index in ['待审批', '被拒绝', '通过', '终止', '过期','延期审批中']" :key="index" :label="item" :value="index+1" />
           </el-select>
         </div>
       </div>
@@ -99,7 +99,7 @@
         </template>
       </el-table-column>
       <el-table-column v-slot={row} align="center" prop="contractStateName" width="240" label="合同状态">
-        {{row.contractStateName=='待审批'&&row.activityName&&row.activityName.indexOf('审批')!=-1?row.contractStateName+'-'+row.activityName:row.contractStateName}}
+        {{getContractStateName(row)}}
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
@@ -144,7 +144,7 @@
 
 <script>
 import API from '@/api/ContractEntry/customerApproval'
-import { getDefaultPermissions, getContractEntry, formatThousandNum, contractList, downloadFile } from '@/utils'
+import { getDefaultPermissions, getContractEntry, formatThousandNum, downloadFile } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -170,9 +170,6 @@ export default {
       checkArr: [], //选中的数据
       tableData: [],
       customerArr: [],
-      contractList: contractList,
-      contractItemVariableList: [],
-      contractItemFixList: [],
       isAddCount: 0,
       tableKey: 0,
       customerId: 0,
@@ -199,7 +196,6 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getTableData()
     this.getCustomerList()
-    this.getContractItemList()
   },
   computed: {},
   watch: {
@@ -279,74 +275,6 @@ export default {
       selectAPI.queryCustomerList({}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
-        }
-      })
-    },
-    // 获取ContractItem
-    getContractItemList() {
-      API.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.contractItemFixList = []
-          this.contractItemVariableList = []
-          let list = res.data
-          //区分variable 和 fixed
-          list.forEach((item) => {
-            if (item.conditionType && item.variablePoint) {
-              item.name = item.contractItem
-              item.code = item.contractItemCode
-              item.conditionType = item.conditionType
-              if (item.conditionType.indexOf(',') != -1) {
-                item.conditionalIsTwo = 2
-              } else {
-                item.conditionalIsTwo = 1
-              }
-              if (item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 0
-              }
-              if (item.variablePoint.indexOf('fix') != -1) {
-                item.isVariableOrFix = 1
-              }
-              if (item.variablePoint.indexOf('fix') != -1 && item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 2
-              }
-            }
-          })
-          list.forEach((item) => {
-            if (item.isVariableOrFix === 0) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 1) {
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 2) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-          })
         }
       })
     },
@@ -503,30 +431,19 @@ export default {
       // this.$refs.termDialog.$el.firstChild.style.height = '98%'
       this.$refs.TermDetailDialog.getContractTermData(false, this.customerId)
     },
-    //通过code 获取ContractItem索引展示
-    getContractItemByCode(flag, code) {
-      if (!flag) {
-        if (!code) {
-          return 0
-        }
-        let index = this.contractItemVariableList.findIndex((item) => item.code == code)
-        //variable
-        return index != -1 ? index : 0
-      } else {
-        if (!code) {
-          return 0
-        }
-        let index = this.contractItemFixList.findIndex((item) => item.code == code)
-        //fix
-        return index != -1 ? index : 0
-      }
-    },
     //处于草稿状态可提交
     checkSelectable(row) {
       if(row.contractState === '1' && row.isCanSubmit === 1) {
         return true
       } else {
         return false
+      }
+    },
+    getContractStateName(row) {
+      if(row.changeRunCounts) {
+        return '延期审批中'
+      } else {
+        return row.contractStateName=='待审批'&&row.activityName&&row.activityName.includes('审批')?row.contractStateName+'-'+row.activityName:row.contractStateName
       }
     },
     // 每页显示页面数变更

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-15 20:07:47
+ * @LastEditTime: 2022-12-16 09:12:26
 -->
 <template>
   <div class="MainContent">
@@ -267,8 +267,6 @@ export default {
       customerArr: [],
       largeAreaList: [],
       contractList: contractList,
-      contractItemVariableList: [],
-      contractItemFixList: [],
       isAddCount: 0,
       tableKey: 0,
       customerId: '0',
@@ -317,9 +315,7 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
-    // this.getTableData()
     this.getCustomerList()
-    this.getContractItemList()
     this.getLargeAreaList()
   },
   computed: {},
@@ -394,77 +390,6 @@ export default {
             this.customerArr = res.data
           }
         })
-    },
-    // 获取ContractItem
-    getContractItemList() {
-      API.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.contractItemFixList = []
-          this.contractItemVariableList = []
-          let list = res.data
-          //区分variable 和 fixed
-          list.forEach((item) => {
-            if (item.conditionType && item.variablePoint) {
-              item.name = item.contractItem
-              item.code = item.contractItemCode
-              item.conditionType = item.conditionType
-              if (item.conditionType.indexOf(',') != -1) {
-                item.conditionalIsTwo = 2
-              } else {
-                item.conditionalIsTwo = 1
-              }
-              if (item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 0
-              }
-              if (item.variablePoint.indexOf('fix') != -1) {
-                item.isVariableOrFix = 1
-              }
-              if (
-                item.variablePoint.indexOf('fix') != -1 &&
-                item.variablePoint.indexOf('variable') != -1
-              ) {
-                item.isVariableOrFix = 2
-              }
-            }
-          })
-          list.forEach((item) => {
-            if (item.isVariableOrFix === 0) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 1) {
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 2) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-          })
-        }
-      })
     },
     getLargeAreaList() {
       selectAPI

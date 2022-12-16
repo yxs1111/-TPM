@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 10:54:00
+ * @LastEditTime: 2022-12-16 10:16:17
 -->
 <template>
   <div class="MainContent">
@@ -125,8 +125,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} align="center" prop="contractStateName" width="240" label="合同状态">
-         {{row.contractStateName=='待审批'&&row.activityName&&row.activityName.indexOf('审批')!=-1?row.contractStateName+'-'+row.activityName:row.contractStateName}}
+      <el-table-column v-slot="{row}" align="center" prop="approveStateName" width="240" label="合同状态">
+        {{row.approveStateName=='审批中'&&row.activityName&&row.activityName.includes('审批')?'延期审批中'+'-'+row.activityName:row.approveStateName}}
       </el-table-column>
       <el-table-column v-slot="{row}" prop="isSupplement" align="center" width="100" label="是否补录">
         {{row.isSupplement?'是':'否'}}
@@ -206,7 +206,7 @@ export default {
       tableData: [],
       customerArr: [],
       distributorArr: [],
-      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
+      contractList: ['延期审批中', '被拒绝', '通过', '终止', '过期'],
       checkArr: [], //选中的数据
       tableKey: 0,
       //取消编辑 --》数据重置（不保存）
@@ -463,7 +463,7 @@ export default {
       })
     },
     checkSelectable(row) {
-      return row.contractState === '1'&&row.isCanSubmit === 1
+      return row.approveStateName === '审批中'&&row.isCanSubmit === 1
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
