@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 10:00:46
+ * @LastEditTime: 2022-12-16 11:33:40
 -->
 <template>
   <div class="MainContent">
@@ -365,7 +365,7 @@ export default {
         this.$message.success('导出成功!')
         
       })
-      await API.exportCustomerContract({
+      await API.exportApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,

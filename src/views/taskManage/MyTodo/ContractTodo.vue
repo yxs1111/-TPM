@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-07-22 10:41:45
+ * @LastEditTime: 2022-12-16 11:49:25
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -9,9 +9,9 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-          <span class="SelectliTitle">合同类型:</span>
+          <span class="SelectliTitle">审批流类型:</span>
           <el-select v-model="filterObj.item" clearable placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in ['客户合同','经销商分摊协议']" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in ['客户合同','经销商分摊协议','客户合同-变更','经销商分摊协议-变更']" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">

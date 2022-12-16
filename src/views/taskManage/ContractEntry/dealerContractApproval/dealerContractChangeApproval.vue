@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 10:16:17
+ * @LastEditTime: 2022-12-16 13:41:09
 -->
 <template>
   <div class="MainContent">
@@ -34,7 +34,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">合同状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
+            <el-option v-for="item,index in contractList" :key="index" :label="item.label" :value="item.value" />
           </el-select>
         </div>
       </div>
@@ -149,9 +149,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
+      <el-table-column prop="HQ PPM" align="center" width="220" label="HQ PPM 意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('HQ PPM') != -1">
             <el-input v-model="scope.row.finApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -206,7 +206,28 @@ export default {
       tableData: [],
       customerArr: [],
       distributorArr: [],
-      contractList: ['延期审批中', '被拒绝', '通过', '终止', '过期'],
+      contractList: [
+        {
+          value: 0,
+          label: '延期审批中',
+        },
+        {
+          value: 1,
+          label: '通过',
+        },
+        {
+          value: 2,
+          label: '被拒绝',
+        },
+        {
+          value: 4,
+          label: '终止',
+        },
+        {
+          value: 5,
+          label: '过期',
+        },
+      ],
       checkArr: [], //选中的数据
       tableKey: 0,
       //取消编辑 --》数据重置（不保存）
@@ -377,7 +398,7 @@ export default {
           if (item.name.indexOf('Package Owner') != -1) {
             obj.comments = item.poApprovalComments
             list.push(obj)
-          } else if (item.name.indexOf('Finance') != -1) {
+          } else if (item.name.indexOf('HQ PPM') != -1) {
             obj.comments = item.finApprovalComments
             list.push(obj)
           }
@@ -419,7 +440,7 @@ export default {
       let obj = {}
       if (row.name.indexOf('Package Owner') != -1) {
         obj[row.id] = row.poApprovalComments
-      } else if (row.name.indexOf('Finance') != -1) {
+      } else if (row.name.indexOf('HQ PPM') != -1) {
         obj[row.id] = row.finApprovalComments
       }
       API.saveDistApproveComments(obj).then((res) => {
