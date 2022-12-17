@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-17 20:07:19
+ * @LastEditTime: 2022-12-17 20:45:38
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
         <template slot-scope="{row}">
-          <div class="operation" @click="operateProcess(row.minePackageCode,row.name)">
+          <div class="operation" @click="operateProcess(row.minePackageCode,row.name,row.item)">
             <svg-icon icon-class="submit_l" class="submit_icon" />
             办理
           </div>
@@ -97,6 +97,7 @@ import FlowDiagram from '@/components/FlowDiagram'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
+  name:'ContractTodo',
   data() {
     return {
       total: 0,
@@ -188,15 +189,19 @@ export default {
     setSplitAssignee(value) {
       return setSplitAssignee(value)
     },
-    operateProcess(version, name) {
-      if(version=='DISTRIBUTOR-CONTRACT') {
+    operateProcess(version, name,item) {
+      if(item.includes('生效时间调整')) {
+        sessionStorage.setItem('currentIndex', 1)
+      } else{
+        sessionStorage.setItem('currentIndex', 0)
+      }
+      if(item.includes('经销商')) {
         if(name.indexOf('审批') != -1) {
-          // sessionStorage.setItem('currentIndex', 1)
           this.$router.push('/contractManagement/dealer/dealerContractApproval')
         } else {
           this.$router.push('/contractManagement/dealer/dealerContractEntry')
         }
-      } else if(version=='CUSTOMER-CONTRACT') {
+      } else if(item.includes('客户')) {
         if(name.indexOf('审批') != -1) {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
         } else {

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-17 10:27:47
+ * @LastEditTime: 2022-12-17 20:59:29
 -->
 <template>
   <div class="MainContent">
@@ -145,8 +145,9 @@
               range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" @blur="changeSystemTime(scope.row)">
             </el-date-picker>
           </div>
-          <div v-show="!scope.row.isEditor">
-            {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
+          <div v-show="!scope.row.isEditor" class="systemDateWrap">
+            <span> {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}</span>
+            <svg-icon v-if="scope.row.changeCounts!=0" icon-class="contractListIcon" class="contractListIcon" @click="showSystemValidityTimeRecords(scope.row)" />
           </div>
         </template>
       </el-table-column>
@@ -157,7 +158,7 @@
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
-              {{ contractList[Number(scope.row.contractState)] }}
+              {{ scope.row.contractStateName }}
             </div>
             <div class="timeOutWrap">
               <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual"  v-model="scope.row.isPopoverShow">
@@ -341,10 +342,12 @@
         <el-button @click="closeAddDialog">取 消</el-button>
       </span>
     </el-dialog>
+    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录" :dialogVisible.sync="systemValidityTimeRecordsDialogVisible"></systemValidityTimeRecordsDialog>
   </div>
 </template>
 
 <script>
+import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
 import API from '@/api/ContractEntry/dealer'
 import {
   getDefaultPermissions,
@@ -433,7 +436,11 @@ export default {
         },
       },
       permissions: getDefaultPermissions(),
+      systemValidityTimeRecordsDialogVisible: false,
     }
+  },
+  components: {
+    systemValidityTimeRecordsDialog,
   },
   mounted() {
     window.onresize = () => {
@@ -1035,6 +1042,14 @@ export default {
     //定时任务取消
     popoverCancel(id,index) {
       this.tableData[index].isPopoverShow=false
+    },
+    //系统生效时间变更记录弹窗
+    showSystemValidityTimeRecords(row) {
+      this.systemValidityTimeRecordsDialogVisible = true
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id)
+    },
+    cancelDialog() {
+      this.systemValidityTimeRecordsDialogVisible = false
     },
     //导出数据
     async exportData() {

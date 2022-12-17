@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-17 20:05:34
+ * @LastEditTime: 2022-12-17 20:32:54
 -->
 <template>
   <div class="MainContent">
@@ -437,7 +437,7 @@ export default {
       } else if (row.name.includes('HQ PPM')) {
         obj[row.id] = row.finApprovalComments
       }
-      API.saveDistApproveComments(obj).then((res) => {
+      API.saveChangeApproveComments(obj).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
           if (res.data) {

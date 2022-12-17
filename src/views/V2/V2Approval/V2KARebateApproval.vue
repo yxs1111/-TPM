@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-17 19:23:42
+ * @LastEditTime: 2022-12-17 20:29:57
 -->
 <template>
   <div class="MainContent">
@@ -732,6 +732,7 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
+      this.isSubmit = true
       this.tableData = []
       if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         if (this.filterObj.month == '') {
