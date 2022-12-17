@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-15 10:17:50
+ * @LastEditTime: 2022-12-17 10:45:43
 -->
 <template>
   <div class="ContentDetail">
@@ -1249,6 +1249,7 @@ export default {
               })
             }, 50)
           })
+          return
         }
         // if (exceptionList.length) {
         //   exceptionList.forEach((item) => {
