@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 17:25:39
+ * @LastEditTime: 2022-12-17 10:27:47
 -->
 <template>
   <div class="MainContent">
@@ -157,7 +157,7 @@
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
-              {{ scope.row.contractStateName }}
+              {{ contractList[Number(scope.row.contractState)] }}
             </div>
             <div class="timeOutWrap">
               <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual"  v-model="scope.row.isPopoverShow">
@@ -1016,7 +1016,7 @@ export default {
         )
         return
       }
-      if(row.isReject==0&&row.changeRunCounts) {
+      if(this.tableData[index].isReject==0&&this.tableData[index].changeRunCounts) {
         return this.$message.info('该合同正在调整系统生效时间，不允许再次调整')
       }
       //避免同时出现多个el-popover

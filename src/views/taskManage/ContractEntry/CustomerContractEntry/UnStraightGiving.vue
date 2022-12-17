@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 17:24:55
+ * @LastEditTime: 2022-12-17 10:30:15
 -->
 <template>
   <div class="MainContent">
@@ -965,7 +965,7 @@ export default {
         this.$message.info('只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！')
         return
       }
-      if(row.isReject==0&&row.changeRunCounts) {
+      if(this.tableData[index].isReject==0&&this.tableData[index].changeRunCounts) {
         return this.$message.info('该合同正在调整系统生效时间，不允许再次调整')
       }
       //避免同时出现多个el-popover
