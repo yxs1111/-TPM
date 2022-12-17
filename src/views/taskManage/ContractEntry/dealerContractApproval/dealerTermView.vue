@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-17 14:40:13
+ * @LastEditTime: 2022-12-17 14:47:19
 -->
 <template>
   <div class="ContentDetail">
@@ -16,7 +16,7 @@
       <!-- 客户 -->
       <el-table-column align="left" width="890" fixed="left">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap customerInfo">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
             <span class="topInfo" v-if="customerContract.channelCode==='RKA'"> 大区: {{customerContract.regionName}}</span>
             <br>
@@ -152,8 +152,9 @@
       <!-- 经销商 -->
       <el-table-column align="left" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap distInfo">
             <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
+            <br/>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
             <span class="topTarget"> 目标销售额(未税,¥): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSaleNoTax)}} </span>
           </div>
@@ -1182,6 +1183,12 @@ export default {
     .topTarget {
       margin-left: 20px;
     }
+  }
+  .customerInfo .topInfo {
+    margin-left: 20px;
+  }
+  .distInfo .topInfo {
+    margin-left: 20px;
   }
 }
 .contract_firstRow {

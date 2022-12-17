@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-17 14:39:57
+ * @LastEditTime: 2022-12-17 14:45:59
 -->
 <template>
   <div class="ContentDetail">
@@ -159,8 +159,9 @@
       <!-- 经销商 -->
       <el-table-column align="left" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap distInfo">
             <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
+            <br>
             <span class="topTarget"> 目标销售额(含税,¥): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
             <span class="topTarget"> 目标销售额(未税,¥): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSaleNoTax)}} </span>
           </div>
@@ -1674,6 +1675,9 @@ export default {
     }
   }
   .customerInfo .topInfo {
+    margin-left: 20px;
+  }
+  .distInfo .topInfo {
     margin-left: 20px;
   }
 }
