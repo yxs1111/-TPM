@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-17 11:11:39
+ * @LastEditTime: 2022-12-17 14:40:13
 -->
 <template>
   <div class="ContentDetail">
@@ -173,7 +173,7 @@
               <el-table-column v-slot={row} prop="contractItem" align="center" width="150" label="Contract item">
                 {{row.dealerList[dealerIndex].contractItem}}
               </el-table-column>
-              <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="pointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   {{FormateNum(scope.row.dealerList[dealerIndex].pointCount)}}%
                 </template>
@@ -190,7 +190,7 @@
               菲仕兰承担
             </template>
             <template>
-              <el-table-column prop="frieslandPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="frieslandPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.dealerList[dealerIndex].frieslandPointCount)}}%
@@ -211,7 +211,7 @@
               经销商承担
             </template>
             <template>
-              <el-table-column prop="dealerPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="dealerPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.dealerList[dealerIndex].dealerPointCount)}}%

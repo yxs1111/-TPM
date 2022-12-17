@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-17 11:13:14
+ * @LastEditTime: 2022-12-17 14:39:57
 -->
 <template>
   <div class="ContentDetail">
@@ -180,7 +180,7 @@
               <el-table-column v-slot={row} prop="contractItem" align="center" width="150" label="Contract item">
                 {{row.dealerList[dealerIndex].contractItem}}
               </el-table-column>
-              <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="pointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable&&!scope.row.isTotal">
                     <el-input type="number" v-model="scope.row.dealerList[dealerIndex].pointCount" clearable class="my-el-inputNumber" placeholder="请输入"
@@ -209,7 +209,7 @@
               菲仕兰承担
             </template>
             <template>
-              <el-table-column prop="frieslandPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="frieslandPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable">
@@ -244,7 +244,7 @@
               经销商承担
             </template>
             <template>
-              <el-table-column prop="dealerPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="dealerPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.dealerList[dealerIndex].dealerPointCount)}}%
@@ -1191,7 +1191,7 @@ export default {
               this.$notify.warning({
                 title: '警告',
                 message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem} ${item.dealerName} 费比不能为空,请进行填写`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
@@ -1204,7 +1204,7 @@ export default {
               this.$notify.warning({
                 title: '警告',
                 message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem} ${item.dealerName} 含税金额不能为空,请进行填写`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
@@ -1218,7 +1218,7 @@ export default {
               this.$notify.warning({
                 title: '警告',
                 message: `${item.dealerName}经销商费比total不能超过100%`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
@@ -1233,7 +1233,7 @@ export default {
         //       this.$notify.error({
         //         title: '错误',
         //         message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  经销商含税金额total 不等于客户含税金额`,
-        //         duration: 5000,
+        //         duration: 0,
         //       })
         //     }, 50)
         //   })
@@ -1245,7 +1245,7 @@ export default {
               this.$notify.error({
                 title: '错误',
                 message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  ${this.frieslandErrorMessage[item.type]}`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
