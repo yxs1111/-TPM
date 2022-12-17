@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-17 10:45:43
+ * @LastEditTime: 2022-12-17 11:13:14
 -->
 <template>
   <div class="ContentDetail">
@@ -21,9 +21,9 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="720" fixed="left">
+      <el-table-column align="left" width="720" fixed="left">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap customerInfo">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
             <span class="topInfo" v-if="customerContract.channelCode==='RKA'"> 大区: {{customerContract.regionName}}</span>
             <br>
@@ -157,7 +157,7 @@
         </template>
       </el-table-column>
       <!-- 经销商 -->
-      <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
+      <el-table-column align="left" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
@@ -1672,6 +1672,9 @@ export default {
     .topTarget {
       margin-left: 20px;
     }
+  }
+  .customerInfo .topInfo {
+    margin-left: 20px;
   }
 }
 .contract_firstRow {

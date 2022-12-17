@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 11:33:40
+ * @LastEditTime: 2022-12-17 11:52:21
 -->
 <template>
   <div class="MainContent">
@@ -112,7 +112,7 @@
       </el-table-column>
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.includes('Package Owner')">
             <el-input v-model="scope.row.poApprovalComments" type="textarea" autosize clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -123,7 +123,7 @@
       </el-table-column>
       <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.includes('Finance')">
             <el-input v-model="scope.row.finApprovalComments" type="textarea" autosize clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -321,10 +321,12 @@ export default {
         }
         //判断当前数据 所属角色审批
         this.checkArr.forEach((item) => {
-          if (item.name.indexOf('Package Owner') != -1) {
+          if (item.name.includes('Package Owner')) {
             obj.approveDetail[item.mainId] = item.poApprovalComments
-          } else if (item.name.indexOf('Finance') != -1) {
+          } else if (item.name.includes('Finance')) {
             obj.approveDetail[item.mainId] = item.finApprovalComments
+          } else {
+            obj.approveDetail[item.mainId]=''
           }
         })
         API.approveCustomerContract(obj).then((res) => {
@@ -408,9 +410,9 @@ export default {
     //保存 该行
     saveRow(row) {
       let obj = {}
-      if (row.name.indexOf('Package Owner') != -1) {
+      if (row.name.includes('Package Owner')) {
         obj[row.mainId] = row.poApprovalComments
-      } else if (row.name.indexOf('Finance') != -1) {
+      } else if (row.name.includes('Finance')) {
         obj[row.mainId] = row.finApprovalComments
       }
       API.saveApproveComments(obj).then((res) => {

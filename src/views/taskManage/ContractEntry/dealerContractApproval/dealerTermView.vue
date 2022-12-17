@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-13 18:12:06
+ * @LastEditTime: 2022-12-17 11:11:39
 -->
 <template>
   <div class="ContentDetail">
@@ -14,7 +14,7 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="890" fixed="left">
+      <el-table-column align="left" width="890" fixed="left">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
@@ -150,7 +150,7 @@
         </template>
       </el-table-column>
       <!-- 经销商 -->
-      <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
+      <el-table-column align="left" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
           <div class="topInfoWrap">
             <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>

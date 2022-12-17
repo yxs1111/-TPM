@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 14:00:41
+ * @LastEditTime: 2022-12-17 11:42:56
 -->
 <template>
   <div class="MainContent">
@@ -342,6 +342,8 @@ export default {
             list.push(obj)
           } else if (item.name.indexOf('HQ PPM') != -1) {
             obj.comments = item.finApprovalComments
+            list.push(obj)
+          } else {
             list.push(obj)
           }
         })

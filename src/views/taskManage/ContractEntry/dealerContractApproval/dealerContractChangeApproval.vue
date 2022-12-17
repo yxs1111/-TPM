@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 14:00:31
+ * @LastEditTime: 2022-12-17 11:51:00
 -->
 <template>
   <div class="MainContent">
@@ -140,7 +140,7 @@
       </el-table-column>
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.includes('Package Owner')">
             <el-input v-model="scope.row.poApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -151,7 +151,7 @@
       </el-table-column>
       <el-table-column prop="HQ PPM" align="center" width="220" label="HQ PPM 意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('HQ PPM') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.includes('HQ PPM')">
             <el-input v-model="scope.row.finApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -387,11 +387,13 @@ export default {
             opinion: flag ? 'agree' : 'reject',
             comments: '',
           }
-          if (item.name.indexOf('Package Owner') != -1) {
+          if (item.name.includes('Package Owner')) {
             obj.comments = item.poApprovalComments
             list.push(obj)
-          } else if (item.name.indexOf('HQ PPM') != -1) {
+          } else if (item.name.includes('HQ PPM')) {
             obj.comments = item.finApprovalComments
+            list.push(obj)
+          } else {
             list.push(obj)
           }
         })
@@ -430,9 +432,9 @@ export default {
     //保存 该行
     saveRow(row) {
       let obj = {}
-      if (row.name.indexOf('Package Owner') != -1) {
+      if (row.name.includes('Package Owner')) {
         obj[row.id] = row.poApprovalComments
-      } else if (row.name.indexOf('HQ PPM') != -1) {
+      } else if (row.name.includes('HQ PPM')) {
         obj[row.id] = row.finApprovalComments
       }
       API.saveDistApproveComments(obj).then((res) => {
