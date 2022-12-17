@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-17 14:45:59
+ * @LastEditTime: 2022-12-17 17:27:46
 -->
 <template>
   <div class="ContentDetail">
@@ -327,12 +327,7 @@ export default {
       isEditor: 0,
       customerContract: '', //客户合同
       contractList: ['草稿', '被拒绝', '待审批', '通过', '过期', '终止'],
-      frieslandErrorMessage:[
-        '菲仕兰承担费比不符合“Weighted avg.点数≤已录的KA Contract item的点数”',
-        '菲仕兰承担含税金额不符合“经销商by item加总≤KA合同”',
-        '经销商承担费比不符合“Weighted avg.点数≥已录的KA Contract item的点数”',
-        '经销商承担含税金额不符合“经销商by item加总≥ KA合同”'
-      ]
+      frieslandErrorMessage: ['菲仕兰承担费比不符合“Weighted avg.点数≤已录的KA Contract item的点数”', '菲仕兰承担含税金额不符合“经销商by item加总≤KA合同”', '经销商承担费比不符合“Weighted avg.点数≥已录的KA Contract item的点数”', '经销商承担含税金额不符合“经销商by item加总≥ KA合同”'],
     }
   },
 
@@ -1080,45 +1075,47 @@ export default {
           if (!item.isTotal && item.isVariable) {
             let customerPointCount = item.customerInfo.pointCount
             let dealerList = item.dealerList
-            let frieslandTaxCostTotal=0
-            let distTaxCostTotal=0
-            let distTotalTargetSales=0
+            let frieslandTaxCostTotal = 0
+            let distTaxCostTotal = 0
+            let distTotalTargetSales = 0
             dealerList.forEach((dealerItem, dealerIndex) => {
-              if (dealerItem.pointCount > customerPointCount) {
-                exceptionList.push({
-                  rowIndex: index,
-                  dealerIndex,
-                  ...dealerItem,
-                })
+              if (dealerItem.contractStateName != '终止') {
+                if (dealerItem.pointCount > customerPointCount) {
+                  exceptionList.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
+                // debugger
+                if (dealerItem.pointCount === '' || dealerItem.pointCount === null) {
+                  console.log('费比为空')
+                  isPointCountEmpty = true
+                  pointCountEmpty.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
+                frieslandTaxCostTotal = add(frieslandTaxCostTotal, mul(dealerItem.targetSale, div(dealerItem.frieslandPointCount, 100)))
+                distTaxCostTotal = add(distTaxCostTotal, mul(dealerItem.targetSale, div(dealerItem.dealerPointCount, 100)))
+                distTotalTargetSales = add(distTotalTargetSales, dealerItem.targetSale)
               }
-              // debugger
-              if (dealerItem.pointCount === '' || dealerItem.pointCount === null) {
-                console.log('费比为空')
-                isPointCountEmpty = true
-                pointCountEmpty.push({
-                  rowIndex: index,
-                  dealerIndex,
-                  ...dealerItem,
-                })
-              }
-              frieslandTaxCostTotal=add(frieslandTaxCostTotal,mul(dealerItem.targetSale,div(dealerItem.frieslandPointCount,100)))
-              distTaxCostTotal=add(distTaxCostTotal,mul(dealerItem.targetSale,div(dealerItem.dealerPointCount,100)))
-              distTotalTargetSales=add(distTotalTargetSales,dealerItem.targetSale)
             })
             //error 菲仕兰承担含税费比校验：经销商汇总菲仕兰承担含税费比/经销商汇总目标销售额<=客户菲仕兰承担含税费比
-            if(div(frieslandTaxCostTotal,distTotalTargetSales)>div(item.customerInfo.frieslandCostRatio,100)){
+            if (div(frieslandTaxCostTotal, distTotalTargetSales) > div(item.customerInfo.frieslandCostRatio, 100)) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:0
+                type: 0,
               })
             }
             //error 经销商承担含税费比校验：经销商汇总经销商承担含税费比/经销商汇总目标销售额>=客户经销商承担含税费比
-            if(div(distTaxCostTotal,distTotalTargetSales)<div(item.customerInfo.distCostRatio,100)){
+            if (div(distTaxCostTotal, distTotalTargetSales) < div(item.customerInfo.distCostRatio, 100)) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:2
+                type: 2,
               })
             }
           }
@@ -1126,20 +1123,22 @@ export default {
           if (!item.isTotal && !item.isVariable) {
             let customerTaxPrice = item.customerInfo.taxPrice
             let dealerList = item.dealerList
-            let frieslandTaxCostTotalFixed=0
-            let distTaxCostTotalFixed=0
+            let frieslandTaxCostTotalFixed = 0
+            let distTaxCostTotalFixed = 0
             dealerList.forEach((dealerItem, dealerIndex) => {
-              if (dealerItem.taxPrice === '' || dealerItem.taxPrice === null) {
-                console.log('含税金额为空')
-                isTaxPriceEmpty = true
-                taxPriceEmpty.push({
-                  rowIndex: index,
-                  dealerIndex,
-                  ...dealerItem,
-                })
+              if (dealerItem.contractStateName != '终止') {
+                if (dealerItem.taxPrice === '' || dealerItem.taxPrice === null) {
+                  console.log('含税金额为空')
+                  isTaxPriceEmpty = true
+                  taxPriceEmpty.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
+                frieslandTaxCostTotalFixed = add(frieslandTaxCostTotalFixed, dealerItem.frieslandTaxPrice)
+                distTaxCostTotalFixed = add(distTaxCostTotalFixed, dealerItem.dealerTaxPrice)
               }
-              frieslandTaxCostTotalFixed=add(frieslandTaxCostTotalFixed,dealerItem.frieslandTaxPrice)
-              distTaxCostTotalFixed=add(distTaxCostTotalFixed,dealerItem.dealerTaxPrice)
             })
 
             // error 对草稿、待审批、被拒绝的进行校验
@@ -1156,19 +1155,19 @@ export default {
               })
             }
             //error 菲仕兰承担含税金额校验：经销商菲仕兰承担含税金额汇总<=客户菲仕兰承担含税金额
-            if(frieslandTaxCostTotalFixed>item.customerInfo.frieslandTaxCost){
+            if (frieslandTaxCostTotalFixed > item.customerInfo.frieslandTaxCost) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:1
+                type: 1,
               })
             }
             //error 经销商承担含税金额校验：经销商 经销商承担含税金额汇总>=客户 经销商承担含税金额
-            if(distTaxCostTotalFixed<item.customerInfo.distTaxCost){
+            if (distTaxCostTotalFixed < item.customerInfo.distTaxCost) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:3
+                type: 3,
               })
             }
           }
@@ -1240,7 +1239,7 @@ export default {
         //   })
         //   return
         // }
-        if(frieslandErrorList.length) {
+        if (frieslandErrorList.length) {
           frieslandErrorList.forEach((item) => {
             setTimeout(() => {
               this.$notify.error({
@@ -1648,7 +1647,7 @@ export default {
       if (row.name.indexOf('Total') !== -1) {
         return 'background-color: #4192d3 !important;color: #fff!important;'
       }
-      if (columnIndex>=14&&(columnIndex - 14) % 13 == 0) {
+      if (columnIndex >= 14 && (columnIndex - 14) % 13 == 0) {
         return 'background-color: #4192d3 !important;'
       }
     },
