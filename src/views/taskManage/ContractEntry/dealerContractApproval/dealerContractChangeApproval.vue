@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-17 11:51:00
+ * @LastEditTime: 2022-12-17 20:05:34
 -->
 <template>
   <div class="MainContent">
@@ -410,7 +410,7 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState !== '1' || !row.isCanSubmit) {
+      if (!row.approveStateName.includes('审批') || !row.isCanSubmit) {
         this.$message.info('该经销商不能进行编辑')
         return
       }

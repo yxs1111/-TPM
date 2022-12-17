@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-16 11:49:25
+ * @LastEditTime: 2022-12-17 20:07:19
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -191,6 +191,7 @@ export default {
     operateProcess(version, name) {
       if(version=='DISTRIBUTOR-CONTRACT') {
         if(name.indexOf('审批') != -1) {
+          // sessionStorage.setItem('currentIndex', 1)
           this.$router.push('/contractManagement/dealer/dealerContractApproval')
         } else {
           this.$router.push('/contractManagement/dealer/dealerContractEntry')

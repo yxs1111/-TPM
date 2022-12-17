@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-10-14 15:16:40
+ * @LastEditTime: 2022-12-17 19:06:51
 -->
 <template>
   <div class="MainContent">
@@ -529,7 +529,7 @@ import {
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
 export default {
-  name: 'V1HIHRebate',
+  name: 'V2HIHRebateApproval',
   directives: { elDragDialog, permission },
 
   data() {
