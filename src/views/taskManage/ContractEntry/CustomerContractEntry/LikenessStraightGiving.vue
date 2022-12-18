@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-18 15:26:53
+ * @LastEditTime: 2022-12-18 17:37:59
 -->
 <template>
   <div class="MainContent">
@@ -933,8 +933,7 @@ export default {
               if (res.code === 1000) {
                 this.$message.success('调整成功')
                 this.popoverCancel(row.id, index)
-                sessionStorage.setItem('currentIndex', 1)
-                this.$router.push("/contractManagement/ContractEntry/CustomerContractApproval/CustomerContractChangeApproval")
+                this.getTableData()
               }
             })
           })
