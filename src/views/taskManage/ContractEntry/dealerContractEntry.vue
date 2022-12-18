@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-17 20:59:29
+ * @LastEditTime: 2022-12-18 16:02:05
 -->
 <template>
   <div class="MainContent">
@@ -364,7 +364,7 @@ import {
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
+import dayjs from 'dayjs'
 export default {
   name: 'dealerContractEntry',
   data() {
@@ -997,6 +997,14 @@ export default {
         )
         return
       }
+      //是否是往前调整系统生效时间
+      if(Number(row.expireDate) <= Number(row.systemDate[1])) {
+        //经销商缩短最早的结束时间可以到物理月-1月
+        if(dayjs(expireDate).format('YYYYMM') < dayjs().subtract(1, 'month').format('YYYYMM')){
+          this.$message.info('经销商缩短最早的结束时间可以到物理月-1月')
+          return
+        }
+      } 
       API.termination({
         id: row.id,
         date: row.expireDate,
@@ -1046,7 +1054,7 @@ export default {
     //系统生效时间变更记录弹窗
     showSystemValidityTimeRecords(row) {
       this.systemValidityTimeRecordsDialogVisible = true
-      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id)
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id,false)
     },
     cancelDialog() {
       this.systemValidityTimeRecordsDialogVisible = false
@@ -1063,8 +1071,8 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('经销商分摊协议录入 - list导出成功!')
+        downloadFile(res, '经销商分摊协议录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('经销商分摊协议明细导出成功!')
       })
       await API.exportDistributorContractDetail({
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -1089,8 +1097,8 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('经销商分摊协议明细导出成功!')
+        downloadFile(res, '经销商分摊协议录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('经销商分摊协议录入 - list导出成功!')
       })
     },
     //新增数据 --弹窗展示

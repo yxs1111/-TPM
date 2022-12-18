@@ -1,7 +1,7 @@
 /*
  * @Description: 客户合同录入
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-12-13 11:23:26
+ * @LastEditTime: 2022-12-18 15:22:36
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -97,6 +97,10 @@ export default {
   //合同系统有效期间调整记录查询
   getRecords(params) {
     return requestApi.request_get('/cityplan/customerContract/findContractPeriodChangeRecord', params)
+  },
+  //合同系统有效期间调整记录查询--经销商
+  getDistRecords(params) {
+    return requestApi.request_get('/cityplan/distributorContract/findContractPeriodChangeRecord', params)
   }
 }
 

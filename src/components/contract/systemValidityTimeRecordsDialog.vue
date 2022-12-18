@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-12-10 16:26:53
- * @LastEditTime: 2022-12-16 16:05:57
+ * @LastEditTime: 2022-12-18 15:25:30
 -->
 <template>
   <div>
@@ -34,8 +34,7 @@ export default {
   data() {
     return {
       isVisible: false,
-      tableData: [
-      ],
+      tableData: [],
     }
   },
   computed: {},
@@ -56,12 +55,13 @@ export default {
   mounted() {},
 
   methods: {
-    getTableData(id) {
-      API.getRecords({id}).then((res) => {
+    getTableData(id, isCustomer) {
+      let url =isCustomer ? API.getRecords : API.getDistRecords
+      url({ id }).then((res) => {
         this.tableData = res.data
         this.tableData.forEach((item) => {
-          item.oldEffectiveDate = item.oldEffectiveBeginDate+'-'+item.oldEffectiveEndDate
-          item.newEffectiveDate = item.newEffectiveBeginDate+'-'+item.newEffectiveEndDate
+          item.oldEffectiveDate = item.oldEffectiveBeginDate + '-' + item.oldEffectiveEndDate
+          item.newEffectiveDate = item.newEffectiveBeginDate + '-' + item.newEffectiveEndDate
         })
       })
     },

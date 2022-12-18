@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-17 10:30:42
+ * @LastEditTime: 2022-12-18 15:26:53
 -->
 <template>
   <div class="MainContent">
@@ -244,6 +244,7 @@ import selectAPI from '@/api/selectCommon/selectCommon.js'
 import TermDetailDialog from '@/components/contract/TermDetailDialog.vue'
 import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
 import {div,BigToFixedTwo} from '@/utils/Big.js'
+import dayjs from 'dayjs'
 export default {
   name: 'LikenessStraightGiving',
   data() {
@@ -592,7 +593,7 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '准直供客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '准直供客户合同录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('准直供客户合同录入导出成功!')
       })
       await API.exportCustomerContractDetail({
@@ -945,6 +946,10 @@ export default {
           })
       }else {
         isCheck=1
+        if(dayjs(expireDate).format('YYYYMM') < dayjs().add(1, 'month').format('YYYYMM')){
+          this.$message.info('系统生效时间若需调整，最早为物理月n+1')
+          return
+        }
         //系统生效时间前调
         distributorContract.forEach((item,index)=>{
           //若“调整后的客户合同系统生效时间结束时间”早于“经销商分摊协议系统生效时间开始时间”
@@ -1070,7 +1075,7 @@ export default {
     //系统生效时间变更记录弹窗
     showSystemValidityTimeRecords(row) {
       this.systemValidityTimeRecordsDialogVisible = true
-      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id)
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id,true)
     },
     cancelDialog() {
       this.systemValidityTimeRecordsDialogVisible = false
