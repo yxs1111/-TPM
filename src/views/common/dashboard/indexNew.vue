@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-12-16 11:55:26
+ * @LastEditTime: 2022-12-18 19:34:11
 -->
 <template>
   <div class="indexNew">
@@ -935,16 +935,20 @@ export default {
         })
     },
     operateProcess(version, name) {
-      console.log(this);
       this.OPEN_BREADCRUMB()
-      if (version == 'DISTRIBUTOR-CONTRACT') {
-        if (name.indexOf('审批') != -1) {
+      if(item.includes('生效时间调整')) {
+        sessionStorage.setItem('currentIndex', 1)
+      } else{
+        sessionStorage.setItem('currentIndex', 0)
+      }
+      if(item.includes('经销商')) {
+        if(name.indexOf('审批') != -1) {
           this.$router.push('/contractManagement/dealer/dealerContractApproval')
         } else {
           this.$router.push('/contractManagement/dealer/dealerContractEntry')
         }
-      } else if (version == 'CUSTOMER-CONTRACT') {
-        if (name.indexOf('审批') != -1) {
+      } else if(item.includes('客户')) {
+        if(name.indexOf('审批') != -1) {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
         } else {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
