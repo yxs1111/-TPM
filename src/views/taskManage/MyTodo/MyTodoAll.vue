@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-09-16 12:45:12
+ * @LastEditTime: 2022-12-19 16:50:17
 -->
 <template>
   <div class="MainContent">
@@ -21,7 +21,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择">
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择"  @change="getCostItemList">
             <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
           </el-select>
         </div>
@@ -249,7 +249,9 @@ export default {
     },
     // 获取下拉框
     getCostItemList() {
-      selectAPI.getCostItemList().then((res) => {
+      selectAPI.getCostItemList({
+        minePackageCode: this.filterObj.MinePackage,
+      }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
