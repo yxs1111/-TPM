@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM定制
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-10-14 15:19:04
+ * @LastEditTime: 2022-12-19 15:57:33
 -->
 <template>
   <div class="MainContent">
@@ -533,7 +533,6 @@ export default {
         } else {
           this.$message.info(this.messageMap.checkError)
         }
-        this.saveBtn = 1
       })
     },
     // 确认导入
