@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-21 08:53:49
+ * @LastEditTime: 2022-12-21 09:44:51
 -->
 <template>
   <div class="MainContent">
@@ -70,7 +70,7 @@
               <svg-icon icon-class="delete" class="svgIcon" />
               <span>删除</span>
             </div>
-            <div class="haveText_editor" v-permission="permissions['update']"  @click="copyRow(scope.row, scope.$index)">
+            <div class="haveText_editor" v-permission="permissions['update']" @click="copyRow(scope.row, scope.$index)">
               <svg-icon icon-class="copy" class="svgIcon" />
               <span>复制</span>
             </div>
@@ -95,7 +95,8 @@
       <el-table-column prop="customerMdmCode" fixed align="center" width="220" label="客户名称">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-select v-model="scope.row.customerMdmCode" :disabled="scope.row.isRefused==1?true:false" class="my-el-input" @change="changeCustomer(scope.row)" filterable clearable placeholder="请选择">
+            <el-select v-model="scope.row.customerMdmCode" :disabled="scope.row.isRefused==1?true:false" class="my-el-input" @change="changeCustomer(scope.row)" filterable
+              clearable placeholder="请选择">
               <el-option v-for="item,index in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
             </el-select>
           </div>
@@ -104,7 +105,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="regionCode"  align="center" width="220" label="大区">
+      <el-table-column prop="regionCode" align="center" width="220" label="大区">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
             <el-select v-model="scope.row.regionCode" :disabled="scope.row.isRequireRegion==1?false:true" class="my-el-input" filterable clearable placeholder="请选择">
@@ -131,8 +132,8 @@
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
-              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+            <el-date-picker v-model="scope.row.contractDate" :disabled="scope.row.isRefused==1?true:false" :picker-options="pickerOptions" class="select_date" type="daterange"
+              value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -143,8 +144,8 @@
       <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-date-picker v-model="scope.row.systemDate" :picker-options="pickerOptionsSystemDate(scope.row)" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
-              end-placeholder="结束月份">
+            <el-date-picker v-model="scope.row.systemDate" :picker-options="pickerOptionsSystemDate(scope.row)" type="monthrange" value-format="yyyyMM" format="yyyyMM"
+              range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份">
             </el-date-picker>
           </div>
           <div v-show="!scope.row.isEditor" class="systemDateWrap">
@@ -160,7 +161,7 @@
               {{ scope.row.contractStateName }}
             </div>
             <div class="timeOutWrap">
-              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual"  v-model="scope.row.isPopoverShow">
+              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual" v-model="scope.row.isPopoverShow">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
                     <span>调整系统生效时间</span>
@@ -176,7 +177,7 @@
                   </div>
                   <div class="PopoverContentOption">
                     <div class="PopoverContentOptionItem">
-                      <el-input v-model="scope.row.applyRemark"  placeholder="请输入" clearable>
+                      <el-input v-model="scope.row.applyRemark" placeholder="请输入" clearable>
                       </el-input>
                     </div>
                   </div>
@@ -201,7 +202,7 @@
       <el-table-column align="center" width="220" label="申请人备注">
         <template slot-scope="scope">
           <div v-show="scope.row.isEditor">
-            <el-input v-model="scope.row.remark"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
+            <el-input v-model="scope.row.remark" type="textarea" autosize clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
           <div v-show="!scope.row.isEditor">
@@ -221,29 +222,21 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <TermDetailDialog ref="TermDetailDialog"/>
-    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录"  :dialogVisible.sync="systemValidityTimeRecordsDialogVisible"></systemValidityTimeRecordsDialog>
+    <TermDetailDialog ref="TermDetailDialog" />
+    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录" :dialogVisible.sync="systemValidityTimeRecordsDialogVisible">
+    </systemValidityTimeRecordsDialog>
   </div>
 </template>
 
 <script>
 import API from '@/api/ContractEntry/customer'
-import {
-  getDefaultPermissions,
-  getContractEntry,
-  formatThousandNum,
-  contractList,
-  downloadFile,
-  getCurrentYearRange,
-  pickerOptions,
-  pickerOptionsSystemDate
-} from '@/utils'
+import { getDefaultPermissions, getContractEntry, formatThousandNum, contractList, downloadFile, getCurrentYearRange, pickerOptions, pickerOptionsSystemDate } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import TermDetailDialog from '@/components/contract/TermDetailDialog.vue'
 import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
-import {div,BigToFixedTwo} from '@/utils/Big.js'
+import { div, BigToFixedTwo } from '@/utils/Big.js'
 import dayjs from 'dayjs'
 export default {
   name: 'LikenessStraightGiving',
@@ -303,12 +296,12 @@ export default {
         },
       },
       permissions: getDefaultPermissions(),
-      systemValidityTimeRecordsDialogVisible:false,
-
+      systemValidityTimeRecordsDialogVisible: false,
     }
   },
   components: {
-    TermDetailDialog,systemValidityTimeRecordsDialog
+    TermDetailDialog,
+    systemValidityTimeRecordsDialog,
   },
   mounted() {
     window.onresize = () => {
@@ -344,7 +337,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.isEditor=0 //编辑弹窗
+      this.isEditor = 0 //编辑弹窗
       API.getPage({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -361,10 +354,10 @@ export default {
           item.isEditor = 0
           item.isNewData = 0
           item.isPopoverShow = false
-          if(item.contractState==='2') {
-            item.isRefused=1
+          if (item.contractState === '2') {
+            item.isRefused = 1
           } else {
-            item.isRefused=0
+            item.isRefused = 0
           }
           // item.regionCode = ''
           // item.regionName = ''
@@ -428,7 +421,7 @@ export default {
         createDate: '',
         updateBy: '',
         updateDate: '',
-        isPopoverShow: false,  //定时任务弹窗显示
+        isPopoverShow: false, //定时任务弹窗显示
         isEditor: 1, //是否 处于编辑状态
         isNewData: 1, //是否 是新增的数据
         isTimeout: '',
@@ -478,14 +471,7 @@ export default {
       })
     },
     saveSingle(row) {
-      let isRequireRegion =
-        this.customerArr.findIndex(
-          (item) =>
-            item.channelCode == 'RKA' &&
-            item.customerMdmCode == row.customerMdmCode
-        ) != -1
-          ? true
-          : false
+      let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
       console.log(isRequireRegion)
       if (isRequireRegion) {
         if (row.regionCode == '') {
@@ -512,7 +498,7 @@ export default {
       obj.customerMdmCode = row.customerMdmCode
       obj.regionCode = row.regionCode
       obj.saleAmount = row.saleAmount
-      obj.exclTaxSaleAmount = BigToFixedTwo(div(row.saleAmount,1.13))
+      obj.exclTaxSaleAmount = BigToFixedTwo(div(row.saleAmount, 1.13))
       obj.contractBeginDate = row.contractDate[0]
       obj.contractEndDate = row.contractDate[1]
       obj.effectiveBeginDate = row.systemDate[0]
@@ -521,7 +507,7 @@ export default {
       API.addCustomerContract([obj]).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
-          this.$message.success("新增成功")
+          this.$message.success('新增成功')
         }
       })
     },
@@ -545,10 +531,7 @@ export default {
                 isMain: 1,
                 isDetail: 1,
               }).then((res) => {
-                if (
-                  res.data.fixed.length === 0 &&
-                  res.data.variable.length === 0
-                ) {
+                if (res.data.fixed.length === 0 && res.data.variable.length === 0) {
                   isSubmit = 0
                 }
               })
@@ -626,16 +609,16 @@ export default {
     //编辑行数据
     editorRow(index, row) {
       //编辑状态：草稿、被拒绝
-      if(row.contractState !== '0'&&row.contractState !== '2') {
-        this.isEditor=0
-        if(row.contractState==1) {
+      if (row.contractState !== '0' && row.contractState !== '2') {
+        this.isEditor = 0
+        if (row.contractState == 1) {
           this.$message.info('审批中的合同不允许编辑')
-        } else if(row.contractState==3) {
+        } else if (row.contractState == 3) {
           this.$message.info('该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间')
-        } else if(row.contractState==4||row.contractState==5) {
+        } else if (row.contractState == 4 || row.contractState == 5) {
           this.$message.info('该合同不允许编辑')
         }
-        return 
+        return
       }
       if (this.tempObj.tempInfo && !row.isNewData) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
@@ -654,12 +637,12 @@ export default {
       })
       this.changeCustomer(row)
       this.tableData[index].isEditor = 1
-      this.isEditor=1 //可以编辑弹窗
-      this.editorIndex=index
+      this.isEditor = 1 //可以编辑弹窗
+      this.editorIndex = index
       this.$forceUpdate()
     },
     CancelEditorRow(index) {
-      this.isEditor=0 //编辑弹窗
+      this.isEditor = 0 //编辑弹窗
       // this.tableData.forEach((item) => (item.isEditor = 0))
       if (this.tableData[index].isNewData) {
         //新增的不能取消编辑，只有删除
@@ -670,10 +653,7 @@ export default {
     },
     compareDate(date) {
       let currentDate = new Date()
-      let month =
-        currentDate.getMonth() < 10
-          ? '0' + (currentDate.getMonth() + 1)
-          : currentDate.getMonth() + 1
+      let month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1
       let year = currentDate.getFullYear()
       let currentMonth = year + month
       return Number(currentMonth) < Number(date)
@@ -681,12 +661,12 @@ export default {
     //删除该行数据
     deleteRow(row, index) {
       //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不受状态影响
-      let isDeleteFlag = row.entryDate==null?1:0
+      let isDeleteFlag = row.entryDate == null ? 1 : 0
       //允许删除：草稿、被拒绝、通过（未汇算）
-      if (row.contractState === '1' ||(row.contractState == '3'&&!isDeleteFlag)||row.contractState === '4'||row.contractState === '5') {
-        if(row.contractState === '1') {
+      if (row.contractState === '1' || (row.contractState == '3' && !isDeleteFlag) || row.contractState === '4' || row.contractState === '5') {
+        if (row.contractState === '1') {
           this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
-        } else if(row.contractState == '3'&&!isDeleteFlag||row.contractState === '4'||row.contractState === '5') {
+        } else if ((row.contractState == '3' && !isDeleteFlag) || row.contractState === '4' || row.contractState === '5') {
           this.$message.info('该合同不允许删除')
         }
         return
@@ -716,18 +696,16 @@ export default {
         })
           .then(() => {
             console.log([this.tableData[index].id])
-            API.deleteCustomerContract([this.tableData[index].id]).then(
-              (res) => {
-                if (res.code === 1000) {
-                  this.getTableData()
-                  if (res.data) {
-                    this.$message.success('删除成功')
-                  } else {
-                    this.$message.info(`${res.message}`)
-                  }
+            API.deleteCustomerContract([this.tableData[index].id]).then((res) => {
+              if (res.code === 1000) {
+                this.getTableData()
+                if (res.data) {
+                  this.$message.success('删除成功')
+                } else {
+                  this.$message.info(`${res.message}`)
                 }
               }
-            )
+            })
           })
           .catch(() => {
             this.$message({
@@ -743,22 +721,14 @@ export default {
         this.$message.info('超出最大数值')
       } else {
         if (row.isNewData) {
-          if(row.isNewData===1) {
+          if (row.isNewData === 1) {
             //新增数据保存
             this.saveSingle(row)
-          }else if(row.isNewData===2) {
+          } else if (row.isNewData === 2) {
             this.saveCopy(row)
           }
-          
         } else if (row.isEditor) {
-          let isRequireRegion =
-            this.customerArr.findIndex(
-              (item) =>
-                item.channelCode == 'RKA' &&
-                item.customerMdmCode == row.customerMdmCode
-            ) != -1
-              ? true
-              : false
+          let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
           console.log(isRequireRegion)
           //客户属于RKA ，大区必填项
           if (isRequireRegion) {
@@ -778,7 +748,7 @@ export default {
             customerMdmCode: row.customerMdmCode,
             regionCode: row.regionCode,
             saleAmount: row.saleAmount,
-            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount,1.13)),
+            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
             contractBeginDate: row.contractDate[0],
             contractEndDate: row.contractDate[1],
             effectiveBeginDate: row.systemDate[0],
@@ -799,31 +769,21 @@ export default {
     },
     //判断当前选中的客户类型--》大区是否可选择
     changeCustomer(row) {
-      let isRequireRegion = this.customerArr.findIndex((item) =>
-                item.channelCode == 'RKA' &&
-                item.customerMdmCode == row.customerMdmCode
-            ) != -1
-              ? true
-              : false
-      row.isRequireRegion=isRequireRegion
-      console.log(isRequireRegion);
+      let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
+      row.isRequireRegion = isRequireRegion
+      console.log(isRequireRegion)
     },
     //复制
     copyRow(row, index) {
-      console.log(row);
-      let isRequireRegion = this.customerArr.findIndex((item) =>
-                item.channelCode == 'RKA' &&
-                item.customerMdmCode == row.customerMdmCode
-            ) != -1
-              ? true
-              : false
+      console.log(row)
+      let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
       this.tableData.unshift({
-        id:row.id,
+        id: row.id,
         customerName: row.customerName,
         customerMdmCode: row.customerMdmCode,
         saleAmount: row.saleAmount,
         Tax: row.Tax,
-        contractDate: [row.contractBeginDate,row.contractEndDate],
+        contractDate: [row.contractBeginDate, row.contractEndDate],
         contractBeginDate: row.contractBeginDate,
         contractEndDate: row.contractEndDate,
         systemDate: row.systemDate,
@@ -834,13 +794,13 @@ export default {
         remark: row.remark,
         regionCode: row.regionCode,
         regionName: row.regionName,
-        poApprovalComments:row.poApprovalComments,
+        poApprovalComments: row.poApprovalComments,
         finApprovalComments: row.finApprovalComments,
         createBy: row.createBy,
         createDate: row.createDate,
         updateBy: row.updateBy,
         updateDate: row.updateDate,
-        isPopoverShow: false,  //定时任务弹窗显示
+        isPopoverShow: false, //定时任务弹窗显示
         isEditor: 1, //是否 处于编辑状态
         isNewData: 2, //是否 是新增的数据 0否，1新增，2 copy
         isTimeout: '',
@@ -851,18 +811,20 @@ export default {
       this.isAddCount++
     },
     saveCopy(row) {
-      API.copyCustomerContract([{
-        id: row.id,
-        customerMdmCode: row.customerMdmCode,
-        regionCode: row.regionCode,
-        saleAmount: row.saleAmount,
-        exclTaxSaleAmount:BigToFixedTwo(div(row.saleAmount,1.13)),
-        contractBeginDate: row.contractDate[0],
-        contractEndDate: row.contractDate[1],
-        effectiveBeginDate: row.systemDate[0],
-        effectiveEndDate: row.systemDate[1],
-        remark: row.remark,
-      }]).then((res) => {
+      API.copyCustomerContract([
+        {
+          id: row.id,
+          customerMdmCode: row.customerMdmCode,
+          regionCode: row.regionCode,
+          saleAmount: row.saleAmount,
+          exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
+          contractBeginDate: row.contractDate[0],
+          contractEndDate: row.contractDate[1],
+          effectiveBeginDate: row.systemDate[0],
+          effectiveEndDate: row.systemDate[1],
+          remark: row.remark,
+        },
+      ]).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
           if (res.data) {
@@ -875,49 +837,33 @@ export default {
     },
     //定时任务确定--终止合同
     async popoverSubmit(index, row) {
-      let newStr =
-        row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
+      let newStr = row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
       let expireDate = new Date(newStr)
-      let contractDate = new Date(
-        row.contractDate[1].substring(0, 4) +
-          '-' +
-          row.contractDate[1].substring(5, 7)
-      )
-      if (
-        expireDate.getTime() < contractDate.getTime() &&
-        row.contractStateName == '通过'
-      ) {
+      let contractDate = new Date(row.contractDate[1].substring(0, 4) + '-' + row.contractDate[1].substring(5, 7))
+      if (expireDate.getTime() < contractDate.getTime() && row.contractStateName == '通过') {
         this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
         return
-      } else if (
-        row.contractStateName == '过期' ||
-        row.contractStateName == '终止'
-      ) {
-        this.$message.info(
-          '只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！'
-        )
+      } else if (row.contractStateName == '过期' || row.contractStateName == '终止') {
+        this.$message.info('只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！')
         return
       }
-      let distributorContract=[]
-      let isCheck=0
+      let distributorContract = []
+      let isCheck = 0
       await API.findOne({
         id: row.id,
         isCustomerContract: 1, //是否查询客户合同（1是0否）
         isCustomerContractDetail: 0, //是否查询客户合同条款（1是0否）
         isDistributorContractDetail: 0, //是否查询经销商合同详情（1是0否）
       }).then((res) => {
-        distributorContract=res.data.distributorContract
-        console.log(distributorContract);
-        if(distributorContract.findIndex(item=>item.contractStateName=='待审批')!=-1) {
-          this.$message.info(
-          '该客户合同下存在待审批状态的经销商分摊协议不允许修改系统生效时间结束时间'
-          )
+        distributorContract = res.data.distributorContract
+        console.log(distributorContract)
+        if (distributorContract.findIndex((item) => item.contractStateName == '待审批') != -1) {
+          this.$message.info('该客户合同下存在待审批状态的经销商分摊协议不允许修改系统生效时间结束时间')
           return
-        }  
-        
+        }
       })
       //往后调
-      if(Number(row.expireDate)>Number(row.systemDate[1])) {
+      if (Number(row.expireDate) > Number(row.systemDate[1])) {
         this.$confirm('此操作需要进行审批，请点击"确定"进入一级审批 <br/>此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -943,113 +889,106 @@ export default {
               message: '已取消修改',
             })
           })
-      }else {
-        isCheck=1
-        if(dayjs(expireDate).format('YYYYMM') < dayjs().add(1, 'month').format('YYYYMM')){
+      } else {
+        isCheck = 1
+        if (dayjs(expireDate).format('YYYYMM') < dayjs().add(1, 'month').format('YYYYMM')) {
           this.$message.info('系统生效时间若需调整，最早为物理月n+1')
           return
         }
         //系统生效时间前调
-        distributorContract.forEach((item,index)=>{
+        distributorContract.forEach((item, index) => {
           //若“调整后的客户合同系统生效时间结束时间”早于“经销商分摊协议系统生效时间开始时间”
-          if(Number(row.expireDate)<Number(item.effectiveBeginDate)) {
-            item.checkInfo=`${index+1} 若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`
-            console.log(`若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`);
-          } 
+          if (Number(row.expireDate) < Number(item.effectiveBeginDate)) {
+            item.checkInfo = `${index + 1} 若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`
+            console.log(`若进行此调整，则${item.distributorName}经销商分摊协议（${item.contractCode}）会被标记为终止，请确认`)
+          }
           //若“调整后的客户合同系统生效时间结束时间”处于“经销商分摊协议系统生效时间”之内，且晚于“经销商分摊协议合同期间结束时间”
-          if(Number(item.effectiveBeginDate)<=Number(row.expireDate)&&Number(row.expireDate)<=Number(item.effectiveEndDate)&&this.dateCompare(row.expireDate,item.contractEndDate)){
-            item.checkInfo=`${index+1} 此操作会使得${item.distributorName}经销商分摊协议（${item.contractCode}）系统生效时间结束时间随之变动，调整为“${row.expireDate}”`
+          if (Number(item.effectiveBeginDate) <= Number(row.expireDate) && Number(row.expireDate) <= Number(item.effectiveEndDate) && this.dateCompare(row.expireDate, item.contractEndDate)) {
+            item.checkInfo = `${index + 1} 此操作会使得${item.distributorName}经销商分摊协议（${item.contractCode}）系统生效时间结束时间随之变动，调整为“${row.expireDate}”`
           }
           //若“调整后的客户合同系统生效时间结束时间”晚于“经销商分摊协议系统生效时间结束时间”，
-          if(Number(row.expireDate)>Number(item.effectiveEndDate)) {
-            item.checkInfo=`${index+1} 此修改只修改客户合同，${item.distributorName}分摊协议（${item.contractCode}）的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢`
+          if (Number(row.expireDate) > Number(item.effectiveEndDate)) {
+            item.checkInfo = `${index + 1} 此修改只修改客户合同，${item.distributorName}分摊协议（${item.contractCode}）的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢`
             console.log(`此修改只修改客户合同，${item.distributorName}分摊协议（${item.contractCode}）的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢`)
           }
         })
       }
-      if(isCheck) {
-        let str=''
-        distributorContract.forEach(item=>{
-          str+=item.checkInfo+'<br/>'
+      if (isCheck) {
+        let str = ''
+        distributorContract.forEach((item) => {
+          str += item.checkInfo + '<br/>'
         })
-        if(str==''){
-          str='确定修改吗？'
-        }
-        this.$confirm(str, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          dangerouslyUseHTMLString: true
-        }).then(() => {
+        if (str == '') {
           API.termination({
-          id: row.id,
-          date: row.expireDate,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.$message.success('调整成功')
-            this.popoverCancel(row.id,index)
-            this.getTableData()
-          }
-        })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消修改'
-          });          
-        });
-      } else {
-        // API.termination({
-        //   id: row.id,
-        //   date: row.expireDate,
-        //   remark: row.applyRemark,
-        // }).then((res) => {
-        //   if (res.code === 1000) {
-        //     this.$message.success('调整成功')
-        //     this.popoverCancel(row.id,index)
-        //     this.getTableData()
-        //   }
-        // })
+            id: row.id,
+            date: row.expireDate,
+          }).then((res) => {
+            if (res.code === 1000) {
+              this.$message.success('调整成功')
+              this.popoverCancel(row.id, index)
+              this.getTableData()
+            }
+          })
+        } else {
+          this.$confirm(str, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            dangerouslyUseHTMLString: true,
+          })
+            .then(() => {
+              API.termination({
+                id: row.id,
+                date: row.expireDate,
+              }).then((res) => {
+                if (res.code === 1000) {
+                  this.$message.success('调整成功')
+                  this.popoverCancel(row.id, index)
+                  this.getTableData()
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消修改',
+              })
+            })
+        }
       }
     },
-    dateCompare(expireDate,contractEndDate) {
-      return new Date((expireDate).slice(0, 4),Number((expireDate).slice(4)),0).getTime()>new Date(contractEndDate).getTime()
+    dateCompare(expireDate, contractEndDate) {
+      return new Date(expireDate.slice(0, 4), Number(expireDate.slice(4)), 0).getTime() > new Date(contractEndDate).getTime()
     },
-    popoverShow(id,index) {
-      this.tableData[index].expireDate=''
-      this.tableData[index].applyRemark=''
-      if (
-        this.tableData[index].contractStateName == '草稿' ||
-        this.tableData[index].contractStateName == '待审批' ||
-        this.tableData[index].contractStateName == '过期' ||
-        this.tableData[index].contractStateName == '终止'
-      ) {
-        this.$message.info(
-          '只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！'
-        )
+    popoverShow(id, index) {
+      this.tableData[index].expireDate = ''
+      this.tableData[index].applyRemark = ''
+      if (this.tableData[index].contractStateName == '草稿' || this.tableData[index].contractStateName == '待审批' || this.tableData[index].contractStateName == '过期' || this.tableData[index].contractStateName == '终止') {
+        this.$message.info('只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！')
         return
       }
-      if(this.tableData[index].isReject==0&&this.tableData[index].changeRunCounts) {
+      if (this.tableData[index].isReject == 0 && this.tableData[index].changeRunCounts) {
         return this.$message.info('该合同正在调整系统生效时间，不允许再次调整')
       }
       //避免同时出现多个el-popover
       for (const key in this.$refs) {
-        if (key.indexOf('popover-') !== -1&&this.$refs[key]) {
-            this.$refs[key].doClose();
+        if (key.indexOf('popover-') !== -1 && this.$refs[key]) {
+          this.$refs[key].doClose()
         }
       }
-      this.tableData[index].isPopoverShow=true
+      this.tableData[index].isPopoverShow = true
       //解决fixed 固定列之后 el-popover多个问题
-      let key='popover-'+id
-      this.$nextTick(() => { 
-        document.getElementById(this.$refs[key].$refs.popper.id).style.display = 'none' }
-      )
+      let key = 'popover-' + id
+      this.$nextTick(() => {
+        document.getElementById(this.$refs[key].$refs.popper.id).style.display = 'none'
+      })
     },
     //定时任务取消
-    popoverCancel(id,index) {
-      this.tableData[index].isPopoverShow=false
+    popoverCancel(id, index) {
+      this.tableData[index].isPopoverShow = false
     },
     //条款明细--弹窗展示
-    showTermsDetail(index,row) {
+    showTermsDetail(index, row) {
       this.customerId = row.id
       let isEditor = this.isEditor && index == this.editorIndex
       if (this.tableData[index].isNewData) {
@@ -1061,23 +1000,23 @@ export default {
             confirmButtonText: '是',
             cancelButtonText: '否',
             type: 'warning',
-            dangerouslyUseHTMLString: true
+            dangerouslyUseHTMLString: true,
           })
             .then(() => {})
             .catch(() => {
               this.$refs.TermDetailDialog.$el.firstChild.style.height = '98%'
-              this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
+              this.$refs.TermDetailDialog.getContractTermData(isEditor, this.customerId)
             })
         } else {
           this.$refs.TermDetailDialog.$el.firstChild.style.height = ''
-          this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
+          this.$refs.TermDetailDialog.getContractTermData(isEditor, this.customerId)
         }
       }
     },
     //系统生效时间变更记录弹窗
     showSystemValidityTimeRecords(row) {
       this.systemValidityTimeRecordsDialogVisible = true
-      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id,true)
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id, true)
     },
     cancelDialog() {
       this.systemValidityTimeRecordsDialogVisible = false
@@ -1125,7 +1064,7 @@ export default {
     },
     pickerOptionsSystemDate(row) {
       return pickerOptionsSystemDate(row)
-    }
+    },
   },
 }
 </script>

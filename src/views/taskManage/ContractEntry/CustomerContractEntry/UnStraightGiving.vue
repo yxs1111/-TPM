@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-18 17:37:17
+ * @LastEditTime: 2022-12-21 09:43:27
 -->
 <template>
   <div class="MainContent">
@@ -897,7 +897,7 @@ export default {
         //最早为物理月n+1
         console.log(dayjs(expireDate).format('YYYYMM'))
         console.log(dayjs().add(1, 'month').format('YYYYMM'))
-        if(dayjs(expireDate).format('YYYYMM') < dayjs().add(1, 'month').format('YYYYMM')){
+        if (dayjs(expireDate).format('YYYYMM') < dayjs().add(1, 'month').format('YYYYMM')) {
           this.$message.info('系统生效时间若需调整，最早为物理月n+1')
           return
         }
@@ -925,33 +925,43 @@ export default {
         distributorContract.forEach((item) => {
           str += item.checkInfo + '<br/>'
         })
-        if(str==''){
-          str='确定修改吗？'
+        if (str == '') {
+          API.termination({
+            id: row.id,
+            date: row.expireDate,
+          }).then((res) => {
+            if (res.code === 1000) {
+              this.$message.success('调整成功')
+              this.popoverCancel(row.id, index)
+              this.getTableData()
+            }
+          })
+        } else {
+          this.$confirm(str, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            dangerouslyUseHTMLString: true,
+          })
+            .then(() => {
+              API.termination({
+                id: row.id,
+                date: row.expireDate,
+              }).then((res) => {
+                if (res.code === 1000) {
+                  this.$message.success('调整成功')
+                  this.popoverCancel(row.id, index)
+                  this.getTableData()
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消修改',
+              })
+            })
         }
-        this.$confirm(str, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          dangerouslyUseHTMLString: true,
-        })
-          .then(() => {
-            API.termination({
-              id: row.id,
-              date: row.expireDate,
-            }).then((res) => {
-              if (res.code === 1000) {
-                this.$message.success('调整成功')
-                this.popoverCancel(row.id, index)
-                this.getTableData()
-              }
-            })
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消修改',
-            })
-          })
       } else {
         // API.termination({
         //   id: row.id,
@@ -970,13 +980,13 @@ export default {
       return new Date(expireDate.slice(0, 4), Number(expireDate.slice(4)), 0).getTime() > new Date(contractEndDate).getTime()
     },
     popoverShow(id, index) {
-      this.tableData[index].expireDate=''
-      this.tableData[index].applyRemark=''
+      this.tableData[index].expireDate = ''
+      this.tableData[index].applyRemark = ''
       if (this.tableData[index].contractStateName == '草稿' || this.tableData[index].contractStateName == '待审批' || this.tableData[index].contractStateName == '过期' || this.tableData[index].contractStateName == '终止') {
         this.$message.info('只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！')
         return
       }
-      if(this.tableData[index].isReject==0&&this.tableData[index].changeRunCounts) {
+      if (this.tableData[index].isReject == 0 && this.tableData[index].changeRunCounts) {
         return this.$message.info('该合同正在调整系统生效时间，不允许再次调整')
       }
       //避免同时出现多个el-popover
@@ -1025,7 +1035,7 @@ export default {
     //系统生效时间变更记录弹窗
     showSystemValidityTimeRecords(row) {
       this.systemValidityTimeRecordsDialogVisible = true
-      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id,true)
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id, true)
     },
     cancelDialog() {
       this.systemValidityTimeRecordsDialogVisible = false
