@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-18 18:40:10
+ * @LastEditTime: 2022-12-20 17:26:08
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -11,7 +11,8 @@
         <div class="Selectli">
           <span class="SelectliTitle">审批流类型:</span>
           <el-select v-model="filterObj.item" clearable placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in contractType" :key="index" :label="item.label" :value="item.value" />          </el-select>
+            <el-option v-for="item,index in contractType" :key="index" :label="item.label" :value="item.value" />
+          </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">合同ID:</span>
@@ -35,14 +36,14 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" label="序号" width="100" >
+      <el-table-column align="center" label="序号" width="100">
         <template slot-scope="scope">
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="item" label="合同类型"  width="150" > </el-table-column>
-      <el-table-column align="center" prop="contractCode" label="合同ID" width="320" > </el-table-column>
-      <el-table-column align="center" prop="customerName" label="客户名称"  width="120"> </el-table-column>
+      <el-table-column align="center" prop="item" label="合同类型" width="150"> </el-table-column>
+      <el-table-column align="center" prop="contractCode" label="合同ID" width="320"> </el-table-column>
+      <el-table-column align="center" prop="customerName" label="客户名称" width="120"> </el-table-column>
       <el-table-column align="center" prop="distributorName" label="经销商名称" min-width="220"> </el-table-column>
       <el-table-column align="center" width="180" prop="name" label="当前节点"> </el-table-column>
       <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人">
@@ -81,14 +82,7 @@
 
 <script>
 import API from '@/api/taskManage/taskManage.js'
-import {
-  getDefaultPermissions,
-  getTextMap,
-  parseTime,
-  getHeightHaveTab,
-  setSplitAssignee,
-  downloadFile
-} from '@/utils'
+import { getDefaultPermissions, getTextMap, parseTime, getHeightHaveTab, setSplitAssignee, downloadFile } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import ApproveFlow from '@/components/ApproveFlow'
@@ -96,7 +90,7 @@ import FlowDiagram from '@/components/FlowDiagram'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
-  name:'ContractTodo',
+  name: 'ContractTodo',
   data() {
     return {
       total: 0,
@@ -112,8 +106,7 @@ export default {
       permissions: getDefaultPermissions(),
       tableData: [],
       customerArr: [],
-      MinePackageList: [
-      ],
+      MinePackageList: [],
       distributorArr: [],
       flowDiagram: {
         visible: false,
@@ -122,19 +115,24 @@ export default {
         processId: null,
       },
       maxheight: getHeightHaveTab(),
-      contractType:[{
-        value: '客户合同',
-        label: '客户合同',
-      }, {
-        value: '经销商分摊协议',
-        label: '经销商分摊协议',
-      }, {
-        value: '客户合同系统生效时间调整',
-        label: '客户合同-变更',
-      }, {
-        value: '经销商合同系统生效时间调整',
-        label: '经销商分摊协议-变更',
-      }],
+      contractType: [
+        {
+          value: '客户合同',
+          label: '客户合同',
+        },
+        {
+          value: '经销商分摊协议',
+          label: '经销商分摊协议',
+        },
+        {
+          value: '客户合同系统生效时间调整',
+          label: '客户合同-变更',
+        },
+        {
+          value: '经销商合同系统生效时间调整',
+          label: '经销商分摊协议-变更',
+        },
+      ],
     }
   },
   watch: {
@@ -160,7 +158,7 @@ export default {
   methods: {
     //获取表格数据
     getTableData() {
-      this.tableData=[]
+      this.tableData = []
       API.getContractListTodo({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
@@ -201,20 +199,25 @@ export default {
     setSplitAssignee(value) {
       return setSplitAssignee(value)
     },
-    operateProcess(version, name,item) {
-      if(item.includes('生效时间调整')) {
-        sessionStorage.setItem('currentIndex', 1)
-      } else{
-        sessionStorage.setItem('currentIndex', 0)
-      }
-      if(item.includes('经销商')) {
-        if(name.indexOf('审批') != -1) {
+    operateProcess(version, name, item) {
+      if (item.includes('经销商')) {
+        if (name.indexOf('审批') != -1) {
+          if (item.includes('生效时间调整')) {
+            sessionStorage.setItem('currentIndex', 1)
+          } else {
+            sessionStorage.setItem('currentIndex', 0)
+          }
           this.$router.push('/contractManagement/dealer/dealerContractApproval')
         } else {
           this.$router.push('/contractManagement/dealer/dealerContractEntry')
         }
-      } else if(item.includes('客户')) {
-        if(name.indexOf('审批') != -1) {
+      } else if (item.includes('客户')) {
+        if (name.indexOf('审批') != -1) {
+          if (item.includes('生效时间调整')) {
+            sessionStorage.setItem('currentIndex', 1)
+          } else {
+            sessionStorage.setItem('currentIndex', 0)
+          }
           this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
         } else {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')

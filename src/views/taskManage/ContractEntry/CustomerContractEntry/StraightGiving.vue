@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-18 17:37:43
+ * @LastEditTime: 2022-12-21 08:53:31
 -->
 <template>
   <div class="MainContent">
@@ -973,6 +973,9 @@ export default {
         distributorContract.forEach(item=>{
           str+=item.checkInfo+'<br/>'
         })
+        if(str==''){
+          str='确定修改吗？'
+        }
         this.$confirm(str, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
