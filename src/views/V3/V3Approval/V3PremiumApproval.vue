@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Premium
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-10-14 15:24:55
+ * @LastEditTime: 2022-12-22 16:46:00
 -->
 <template>
   <div class="MainContent">
@@ -833,7 +833,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Premium-V3' &&
+              res.data.version === 'V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {
