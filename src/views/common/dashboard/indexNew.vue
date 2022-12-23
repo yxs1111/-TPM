@@ -608,6 +608,8 @@ export default {
         this.maxheight = 292
       } else if (height <= 1162) {
         this.maxheight = 324
+      } else if (height <= 1200) {
+        this.maxheight = 334
       } else if (height <= 1239) {
         this.maxheight = 352
       } else if (height <= 1394) {
@@ -1881,6 +1883,9 @@ export default {
   }
   .el-table {
     border: 1px solid #ebeff5;
+    .el-table__fixed-right {
+      margin-top: 5px;
+    }
     td {
       padding: 6px 0px !important;
     }
@@ -1984,6 +1989,15 @@ export default {
       .el-table__fixed-body-wrapper {
         top: 48px !important;
         //max-height: 1900px !important;
+        table {
+          thody {
+            tr {
+              td:last-child {
+                height: 99px !important;
+              }
+            }
+          }
+        }
       }
       width: 100%;
       margin-top: 10px;
