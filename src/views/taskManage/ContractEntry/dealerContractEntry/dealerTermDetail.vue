@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-15 10:17:50
+ * @LastEditTime: 2022-12-17 17:27:46
 -->
 <template>
   <div class="ContentDetail">
@@ -21,9 +21,9 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="720" fixed="left">
+      <el-table-column align="left" width="720" fixed="left">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap customerInfo">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
             <span class="topInfo" v-if="customerContract.channelCode==='RKA'"> 大区: {{customerContract.regionName}}</span>
             <br>
@@ -157,10 +157,11 @@
         </template>
       </el-table-column>
       <!-- 经销商 -->
-      <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
+      <el-table-column align="left" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap distInfo">
             <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
+            <br>
             <span class="topTarget"> 目标销售额(含税,¥): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
             <span class="topTarget"> 目标销售额(未税,¥): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSaleNoTax)}} </span>
           </div>
@@ -180,7 +181,7 @@
               <el-table-column v-slot={row} prop="contractItem" align="center" width="150" label="Contract item">
                 {{row.dealerList[dealerIndex].contractItem}}
               </el-table-column>
-              <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="pointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable&&!scope.row.isTotal">
                     <el-input type="number" v-model="scope.row.dealerList[dealerIndex].pointCount" clearable class="my-el-inputNumber" placeholder="请输入"
@@ -209,7 +210,7 @@
               菲仕兰承担
             </template>
             <template>
-              <el-table-column prop="frieslandPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="frieslandPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     <div v-if="scope.row.dealerList[dealerIndex].isEditor&&scope.row.isVariable">
@@ -244,7 +245,7 @@
               经销商承担
             </template>
             <template>
-              <el-table-column prop="dealerPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="dealerPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.dealerList[dealerIndex].dealerPointCount)}}%
@@ -326,12 +327,7 @@ export default {
       isEditor: 0,
       customerContract: '', //客户合同
       contractList: ['草稿', '被拒绝', '待审批', '通过', '过期', '终止'],
-      frieslandErrorMessage:[
-        '菲仕兰承担费比不符合“Weighted avg.点数≤已录的KA Contract item的点数”',
-        '菲仕兰承担含税金额不符合“经销商by item加总≤KA合同”',
-        '经销商承担费比不符合“Weighted avg.点数≥已录的KA Contract item的点数”',
-        '经销商承担含税金额不符合“经销商by item加总≥ KA合同”'
-      ]
+      frieslandErrorMessage: ['菲仕兰承担费比不符合“Weighted avg.点数≤已录的KA Contract item的点数”', '菲仕兰承担含税金额不符合“经销商by item加总≤KA合同”', '经销商承担费比不符合“Weighted avg.点数≥已录的KA Contract item的点数”', '经销商承担含税金额不符合“经销商by item加总≥ KA合同”'],
     }
   },
 
@@ -1079,45 +1075,47 @@ export default {
           if (!item.isTotal && item.isVariable) {
             let customerPointCount = item.customerInfo.pointCount
             let dealerList = item.dealerList
-            let frieslandTaxCostTotal=0
-            let distTaxCostTotal=0
-            let distTotalTargetSales=0
+            let frieslandTaxCostTotal = 0
+            let distTaxCostTotal = 0
+            let distTotalTargetSales = 0
             dealerList.forEach((dealerItem, dealerIndex) => {
-              if (dealerItem.pointCount > customerPointCount) {
-                exceptionList.push({
-                  rowIndex: index,
-                  dealerIndex,
-                  ...dealerItem,
-                })
+              if (dealerItem.contractStateName != '终止') {
+                if (dealerItem.pointCount > customerPointCount) {
+                  exceptionList.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
+                // debugger
+                if (dealerItem.pointCount === '' || dealerItem.pointCount === null) {
+                  console.log('费比为空')
+                  isPointCountEmpty = true
+                  pointCountEmpty.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
+                frieslandTaxCostTotal = add(frieslandTaxCostTotal, mul(dealerItem.targetSale, div(dealerItem.frieslandPointCount, 100)))
+                distTaxCostTotal = add(distTaxCostTotal, mul(dealerItem.targetSale, div(dealerItem.dealerPointCount, 100)))
+                distTotalTargetSales = add(distTotalTargetSales, dealerItem.targetSale)
               }
-              // debugger
-              if (dealerItem.pointCount === '' || dealerItem.pointCount === null) {
-                console.log('费比为空')
-                isPointCountEmpty = true
-                pointCountEmpty.push({
-                  rowIndex: index,
-                  dealerIndex,
-                  ...dealerItem,
-                })
-              }
-              frieslandTaxCostTotal=add(frieslandTaxCostTotal,mul(dealerItem.targetSale,div(dealerItem.frieslandPointCount,100)))
-              distTaxCostTotal=add(distTaxCostTotal,mul(dealerItem.targetSale,div(dealerItem.dealerPointCount,100)))
-              distTotalTargetSales=add(distTotalTargetSales,dealerItem.targetSale)
             })
             //error 菲仕兰承担含税费比校验：经销商汇总菲仕兰承担含税费比/经销商汇总目标销售额<=客户菲仕兰承担含税费比
-            if(div(frieslandTaxCostTotal,distTotalTargetSales)>div(item.customerInfo.frieslandCostRatio,100)){
+            if (div(frieslandTaxCostTotal, distTotalTargetSales) > div(item.customerInfo.frieslandCostRatio, 100)) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:0
+                type: 0,
               })
             }
             //error 经销商承担含税费比校验：经销商汇总经销商承担含税费比/经销商汇总目标销售额>=客户经销商承担含税费比
-            if(div(distTaxCostTotal,distTotalTargetSales)<div(item.customerInfo.distCostRatio,100)){
+            if (div(distTaxCostTotal, distTotalTargetSales) < div(item.customerInfo.distCostRatio, 100)) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:2
+                type: 2,
               })
             }
           }
@@ -1125,20 +1123,22 @@ export default {
           if (!item.isTotal && !item.isVariable) {
             let customerTaxPrice = item.customerInfo.taxPrice
             let dealerList = item.dealerList
-            let frieslandTaxCostTotalFixed=0
-            let distTaxCostTotalFixed=0
+            let frieslandTaxCostTotalFixed = 0
+            let distTaxCostTotalFixed = 0
             dealerList.forEach((dealerItem, dealerIndex) => {
-              if (dealerItem.taxPrice === '' || dealerItem.taxPrice === null) {
-                console.log('含税金额为空')
-                isTaxPriceEmpty = true
-                taxPriceEmpty.push({
-                  rowIndex: index,
-                  dealerIndex,
-                  ...dealerItem,
-                })
+              if (dealerItem.contractStateName != '终止') {
+                if (dealerItem.taxPrice === '' || dealerItem.taxPrice === null) {
+                  console.log('含税金额为空')
+                  isTaxPriceEmpty = true
+                  taxPriceEmpty.push({
+                    rowIndex: index,
+                    dealerIndex,
+                    ...dealerItem,
+                  })
+                }
+                frieslandTaxCostTotalFixed = add(frieslandTaxCostTotalFixed, dealerItem.frieslandTaxPrice)
+                distTaxCostTotalFixed = add(distTaxCostTotalFixed, dealerItem.dealerTaxPrice)
               }
-              frieslandTaxCostTotalFixed=add(frieslandTaxCostTotalFixed,dealerItem.frieslandTaxPrice)
-              distTaxCostTotalFixed=add(distTaxCostTotalFixed,dealerItem.dealerTaxPrice)
             })
 
             // error 对草稿、待审批、被拒绝的进行校验
@@ -1155,19 +1155,19 @@ export default {
               })
             }
             //error 菲仕兰承担含税金额校验：经销商菲仕兰承担含税金额汇总<=客户菲仕兰承担含税金额
-            if(frieslandTaxCostTotalFixed>item.customerInfo.frieslandTaxCost){
+            if (frieslandTaxCostTotalFixed > item.customerInfo.frieslandTaxCost) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:1
+                type: 1,
               })
             }
             //error 经销商承担含税金额校验：经销商 经销商承担含税金额汇总>=客户 经销商承担含税金额
-            if(distTaxCostTotalFixed<item.customerInfo.distTaxCost){
+            if (distTaxCostTotalFixed < item.customerInfo.distTaxCost) {
               frieslandErrorList.push({
                 rowIndex: index,
                 ...item,
-                type:3
+                type: 3,
               })
             }
           }
@@ -1191,7 +1191,7 @@ export default {
               this.$notify.warning({
                 title: '警告',
                 message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem} ${item.dealerName} 费比不能为空,请进行填写`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
@@ -1204,7 +1204,7 @@ export default {
               this.$notify.warning({
                 title: '警告',
                 message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem} ${item.dealerName} 含税金额不能为空,请进行填写`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
@@ -1218,7 +1218,7 @@ export default {
               this.$notify.warning({
                 title: '警告',
                 message: `${item.dealerName}经销商费比total不能超过100%`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
@@ -1233,22 +1233,23 @@ export default {
         //       this.$notify.error({
         //         title: '错误',
         //         message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  经销商含税金额total 不等于客户含税金额`,
-        //         duration: 5000,
+        //         duration: 0,
         //       })
         //     }, 50)
         //   })
         //   return
         // }
-        if(frieslandErrorList.length) {
+        if (frieslandErrorList.length) {
           frieslandErrorList.forEach((item) => {
             setTimeout(() => {
               this.$notify.error({
                 title: '错误',
                 message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  ${this.frieslandErrorMessage[item.type]}`,
-                duration: 5000,
+                duration: 0,
               })
             }, 50)
           })
+          return
         }
         // if (exceptionList.length) {
         //   exceptionList.forEach((item) => {
@@ -1646,7 +1647,7 @@ export default {
       if (row.name.indexOf('Total') !== -1) {
         return 'background-color: #4192d3 !important;color: #fff!important;'
       }
-      if (columnIndex>=14&&(columnIndex - 14) % 13 == 0) {
+      if (columnIndex >= 14 && (columnIndex - 14) % 13 == 0) {
         return 'background-color: #4192d3 !important;'
       }
     },
@@ -1671,6 +1672,12 @@ export default {
     .topTarget {
       margin-left: 20px;
     }
+  }
+  .customerInfo .topInfo {
+    margin-left: 20px;
+  }
+  .distInfo .topInfo {
+    margin-left: 20px;
   }
 }
 .contract_firstRow {

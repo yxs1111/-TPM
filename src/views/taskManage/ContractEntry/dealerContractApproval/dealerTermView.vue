@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-13 18:12:06
+ * @LastEditTime: 2022-12-17 14:47:19
 -->
 <template>
   <div class="ContentDetail">
@@ -14,9 +14,9 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="center" width="890" fixed="left">
+      <el-table-column align="left" width="890" fixed="left">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap customerInfo">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
             <span class="topInfo" v-if="customerContract.channelCode==='RKA'"> 大区: {{customerContract.regionName}}</span>
             <br>
@@ -150,10 +150,11 @@
         </template>
       </el-table-column>
       <!-- 经销商 -->
-      <el-table-column align="center" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
+      <el-table-column align="left" v-for="(dealerItem,dealerIndex) in AllTableData[0].dealerList" :key="dealerIndex">
         <template v-slot:header>
-          <div class="topInfoWrap">
+          <div class="topInfoWrap distInfo">
             <span class="topInfo"> 经销商名称: {{AllTableData[0].dealerList[dealerIndex].dealerName}}({{AllTableData[0].dealerList[dealerIndex].contractStateName}})</span>
+            <br/>
             <span class="topTarget"> 目标销售额(含税,RMB): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSale)}} </span>
             <span class="topTarget"> 目标销售额(未税,¥): {{FormateNum(AllTableData[0].dealerList[dealerIndex].targetSaleNoTax)}} </span>
           </div>
@@ -173,7 +174,7 @@
               <el-table-column v-slot={row} prop="contractItem" align="center" width="150" label="Contract item">
                 {{row.dealerList[dealerIndex].contractItem}}
               </el-table-column>
-              <el-table-column prop="pointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="pointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   {{FormateNum(scope.row.dealerList[dealerIndex].pointCount)}}%
                 </template>
@@ -190,7 +191,7 @@
               菲仕兰承担
             </template>
             <template>
-              <el-table-column prop="frieslandPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="frieslandPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.dealerList[dealerIndex].frieslandPointCount)}}%
@@ -211,7 +212,7 @@
               经销商承担
             </template>
             <template>
-              <el-table-column prop="dealerPointCount" align="center" width="150" label="费比（%）">
+              <el-table-column prop="dealerPointCount" align="center" width="150" label="含税费比（%）">
                 <template slot-scope="scope">
                   <div>
                     {{FormateNum(scope.row.dealerList[dealerIndex].dealerPointCount)}}%
@@ -1182,6 +1183,12 @@ export default {
     .topTarget {
       margin-left: 20px;
     }
+  }
+  .customerInfo .topInfo {
+    margin-left: 20px;
+  }
+  .distInfo .topInfo {
+    margin-left: 20px;
   }
 }
 .contract_firstRow {

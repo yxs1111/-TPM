@@ -103,7 +103,26 @@ const actions = {
             // location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/dashboard?loginInfo=' + JSON.stringify(userInfo)
             let encryptStr=encrypt(JSON.stringify(userInfo))
             //encodeURIComponent 对@等特殊字符转义处理 https://uat-cpt.rfc-friso.com/
-            location.href = 'https://uat-cpt.rfc-friso.com/#/dashboard?loginInfo=' + encodeURIComponent(encryptStr)
+            location.href = 'https://uat-cpt.rfc-friso.com/SalesCPT/#/dashboard?loginInfo=' + encodeURIComponent(encryptStr)
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(error)
+        })
+    })
+  },
+  loginMarketingCPT({ commit, dispatch }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      user
+        .login({ username, password, model:'noCaptcha' })
+        .then((response) => {
+          if (response.code == 1000) {
+            // location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/dashboard?loginInfo=' + JSON.stringify(userInfo)
+            let encryptStr=encrypt(JSON.stringify(userInfo))
+            //encodeURIComponent 对@等特殊字符转义处理 https://uat-cpt.rfc-friso.com/
+            location.href = 'https://uat-cpt.rfc-friso.com/MarketingCPT/#/dashboard?loginInfo=' + encodeURIComponent(encryptStr)
           }
         })
         .catch((error) => {

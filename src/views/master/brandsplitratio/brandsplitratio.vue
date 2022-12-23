@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-11-24 15:21:18
+ * @LastEditTime: 2022-12-16 17:06:59
 -->
 <template>
   <div class="app-container">
@@ -153,7 +153,6 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
   getHeight,
-  contractList,
   downloadFile,
   CustomerDeductionsAndPayType,
 } from '@/utils'
@@ -265,7 +264,6 @@ export default {
       ConditionsTypeList: ['conditional', 'unconditional'],
       FixOrPointList: ['variable', 'fixed'],
       maxheight: getHeight(),
-      contractList: contractList,
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       //取消编辑 --》数据重置（不保存）
       tempObj: {

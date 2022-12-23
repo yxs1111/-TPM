@@ -1,7 +1,7 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2022-12-15 13:35:24
+ * @LastEditTime: 2022-12-15 17:22:54
 -->
 
 <template>
@@ -609,6 +609,7 @@ export default {
     confirmTermsDetail() {
       let isCheck = 1 //费比校验
       let Repeat = 0 //contract Item  是否重复
+      let payTypeIsEmpty = 0 //付款方式是否为空
       if (!this.isEditor) {
         //已经通过不能进行编辑，仅能查看
         this.closeTermsDetail()
@@ -636,6 +637,9 @@ export default {
           })
           if (RepeatList.length > 1) {
             Repeat = 1
+          }
+          if(item.frieslandPayType==''||item.frieslandPayType==null){
+            payTypeIsEmpty = 1
           }
           let detailObj = {
             id: item.id,
@@ -668,6 +672,9 @@ export default {
           })
           if (RepeatList.length > 1) {
             Repeat = 1
+          }
+          if(item.frieslandPayType==''||item.frieslandPayType==null){
+            payTypeIsEmpty = 1
           }
           let detailObj = {
             id: item.id,
@@ -703,6 +710,10 @@ export default {
       }
       if (Repeat) {
         this.$message.info('contract Item加条件类型不能重复')
+        return
+      }
+      if(payTypeIsEmpty) {
+        this.$message.info('支付方式不能为空')
         return
       }
       console.log(obj)

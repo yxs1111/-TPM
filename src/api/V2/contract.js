@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-12-14 14:20:41
+ * @LastEditTime: 2022-12-17 19:00:35
  */
 /*
  * @Description: V1 合同
@@ -31,6 +31,15 @@ export default {
   downApplyExcelTemplate(params) {
     return request({
       url: this.url+'/downApplyExcelTemplate',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //v2 KA 申请下载模板
+  downKARebateExcelTemplate(params) {
+    return request({
+      url: this.url+'/downKARebateExcelTemplate',
       method: 'get',
       params: params,
       responseType: 'blob'

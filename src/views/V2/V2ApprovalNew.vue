@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-29 09:13:34
+ * @LastEditTime: 2022-12-15 16:05:33
 -->
 <template>
   <div class="tabViewsWrap">
@@ -117,7 +117,7 @@ export default {
             },
             {
               name: 'KA rebate',
-              path: '/costManagement/V2/V2Approval/V2KARebate',
+              path: '/costManagement/V2/V2Approval/V2KARebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
                 light: require('@/assets/images/tab/tab_KA_l.png'),

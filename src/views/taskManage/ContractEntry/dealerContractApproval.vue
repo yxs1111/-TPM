@@ -1,7 +1,7 @@
 <!--
  * @Description: 经销商合同审批 Tab
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-12-12 09:40:13
+ * @LastEditTime: 2022-12-17 17:57:31
 -->
 <template>
   <div class="tabViewsWrap">
@@ -58,6 +58,7 @@ export default {
   mounted() {
     if (sessionStorage.getItem('currentIndex')) {
       this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+      this.$router.push(this.routerList[this.currentIndex].path)
     } else {
       this.currentIndex = 0
     }

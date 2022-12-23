@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 10:54:00
+ * @LastEditTime: 2022-12-18 18:05:41
 -->
 <template>
   <div class="MainContent">
@@ -32,9 +32,9 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">合同状态:</span>
+          <span class="SelectliTitle">变更状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
+            <el-option v-for="item,index in contractList" :key="index" :label="item.label" :value="item.value" />
           </el-select>
         </div>
       </div>
@@ -79,7 +79,7 @@
       </el-table-column>
       <el-table-column prop="contractCode" fixed align="center" width="320" label="经销商分摊协议ID">
       </el-table-column>
-      <el-table-column prop="customerChannelCode" fixed align="center" width="120" label="渠道">
+      <el-table-column prop="channelCode" fixed align="center" width="120" label="渠道">
       </el-table-column>
       <el-table-column prop="customerName" fixed align="center" width="180" label="客户名称">
         <template slot-scope="scope">
@@ -125,8 +125,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} align="center" prop="contractStateName" width="240" label="合同状态">
-         {{row.contractStateName=='待审批'&&row.activityName&&row.activityName.indexOf('审批')!=-1?row.contractStateName+'-'+row.activityName:row.contractStateName}}
+      <el-table-column v-slot="{row}" align="center" prop="approveStateName" width="240" label="变更状态">
+        {{row.approveStateName=='审批中'&&row.activityName&&row.activityName.includes('审批')?'延期审批中'+'-'+row.activityName:row.approveStateName}}
       </el-table-column>
       <el-table-column v-slot="{row}" prop="isSupplement" align="center" width="100" label="是否补录">
         {{row.isSupplement?'是':'否'}}
@@ -140,7 +140,7 @@
       </el-table-column>
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.includes('Package Owner')">
             <el-input v-model="scope.row.poApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -149,9 +149,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
+      <el-table-column prop="HQ PPM" align="center" width="220" label="HQ PPM 意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.includes('HQ PPM')">
             <el-input v-model="scope.row.finApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -206,7 +206,20 @@ export default {
       tableData: [],
       customerArr: [],
       distributorArr: [],
-      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
+      contractList: [
+        {
+          value: 0,
+          label: '延期审批中',
+        },
+        {
+          value: 1,
+          label: '通过',
+        },
+        {
+          value: 2,
+          label: '被拒绝',
+        },
+      ],
       checkArr: [], //选中的数据
       tableKey: 0,
       //取消编辑 --》数据重置（不保存）
@@ -374,11 +387,13 @@ export default {
             opinion: flag ? 'agree' : 'reject',
             comments: '',
           }
-          if (item.name.indexOf('Package Owner') != -1) {
+          if (item.name.includes('Package Owner')) {
             obj.comments = item.poApprovalComments
             list.push(obj)
-          } else if (item.name.indexOf('Finance') != -1) {
+          } else if (item.name.includes('HQ PPM')) {
             obj.comments = item.finApprovalComments
+            list.push(obj)
+          } else {
             list.push(obj)
           }
         })
@@ -395,7 +410,7 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.contractState !== '1' || !row.isCanSubmit) {
+      if (!row.approveStateName.includes('审批') || !row.isCanSubmit) {
         this.$message.info('该经销商不能进行编辑')
         return
       }
@@ -417,12 +432,12 @@ export default {
     //保存 该行
     saveRow(row) {
       let obj = {}
-      if (row.name.indexOf('Package Owner') != -1) {
+      if (row.name.includes('Package Owner')) {
         obj[row.id] = row.poApprovalComments
-      } else if (row.name.indexOf('Finance') != -1) {
+      } else if (row.name.includes('HQ PPM')) {
         obj[row.id] = row.finApprovalComments
       }
-      API.saveDistApproveComments(obj).then((res) => {
+      API.saveChangeApproveComments(obj).then((res) => {
         if (res.code === 1000) {
           this.getTableData()
           if (res.data) {
@@ -463,7 +478,7 @@ export default {
       })
     },
     checkSelectable(row) {
-      return row.contractState === '1'&&row.isCanSubmit === 1
+      return row.approveStateName === '审批中'&&row.isCanSubmit === 1
     },
     // 每页显示页面数变更
     handleSizeChange(size) {

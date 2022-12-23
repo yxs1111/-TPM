@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 10:25:38
+ * @LastEditTime: 2022-12-21 09:43:27
 -->
 <template>
   <div class="MainContent">
@@ -158,7 +158,7 @@
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
-              {{ contractList[scope.row.contractState] }}
+              {{ scope.row.contractStateName }}
             </div>
             <div class="timeOutWrap">
               <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual" v-model="scope.row.isPopoverShow">
@@ -177,7 +177,7 @@
                   </div>
                   <div class="PopoverContentOption">
                     <div class="PopoverContentOptionItem">
-                      <el-input v-model="scope.row.applyRemark"  placeholder="请输入" clearable>
+                      <el-input v-model="scope.row.applyRemark" placeholder="请输入" clearable>
                       </el-input>
                     </div>
                   </div>
@@ -222,8 +222,9 @@
       <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
-    <TermDetailDialog ref="TermDetailDialog"/>
-    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录"  :dialogVisible.sync="systemValidityTimeRecordsDialogVisible"></systemValidityTimeRecordsDialog>
+    <TermDetailDialog ref="TermDetailDialog" />
+    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录" :dialogVisible.sync="systemValidityTimeRecordsDialogVisible">
+    </systemValidityTimeRecordsDialog>
   </div>
 </template>
 
@@ -235,7 +236,8 @@ import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import TermDetailDialog from '@/components/contract/TermDetailDialog.vue'
 import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
-import {div,BigToFixedTwo} from '@/utils/Big.js'
+import { div, BigToFixedTwo } from '@/utils/Big.js'
+import dayjs from 'dayjs'
 export default {
   name: 'UnStraightGiving',
   data() {
@@ -259,8 +261,6 @@ export default {
       customerArr: [],
       largeAreaList: [],
       contractList: contractList,
-      contractItemVariableList: [],
-      contractItemFixList: [],
       isAddCount: 0,
       tableKey: 0,
       customerId: '0',
@@ -297,11 +297,12 @@ export default {
         },
       },
       permissions: getDefaultPermissions(),
-      systemValidityTimeRecordsDialogVisible:false,
+      systemValidityTimeRecordsDialogVisible: false,
     }
   },
   components: {
-    TermDetailDialog,systemValidityTimeRecordsDialog
+    TermDetailDialog,
+    systemValidityTimeRecordsDialog,
   },
   mounted() {
     window.onresize = () => {
@@ -309,9 +310,7 @@ export default {
         this.maxheight = getContractEntry()
       })()
     }
-    // this.getTableData()
     this.getCustomerList()
-    this.getContractItemList()
     this.getLargeAreaList()
   },
   computed: {},
@@ -366,6 +365,7 @@ export default {
           // item.regionName = ''
           // item.earlyExpireDate =item.earlyExpireDate!=''
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
+          item.applyRemark = ''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -387,74 +387,6 @@ export default {
             this.customerArr = res.data
           }
         })
-    },
-    // 获取ContractItem
-    getContractItemList() {
-      API.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.contractItemFixList = []
-          this.contractItemVariableList = []
-          let list = res.data
-          //区分variable 和 fixed
-          list.forEach((item) => {
-            if (item.conditionType && item.variablePoint) {
-              item.name = item.contractItem
-              item.code = item.contractItemCode
-              item.conditionType = item.conditionType
-              if (item.conditionType.indexOf(',') != -1) {
-                item.conditionalIsTwo = 2
-              } else {
-                item.conditionalIsTwo = 1
-              }
-              if (item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 0
-              }
-              if (item.variablePoint.indexOf('fix') != -1) {
-                item.isVariableOrFix = 1
-              }
-              if (item.variablePoint.indexOf('fix') != -1 && item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 2
-              }
-            }
-          })
-          list.forEach((item) => {
-            if (item.isVariableOrFix === 0) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 1) {
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 2) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-          })
-        }
-      })
     },
     getLargeAreaList() {
       selectAPI
@@ -568,7 +500,7 @@ export default {
       obj.customerMdmCode = row.customerMdmCode
       obj.regionCode = row.regionCode
       obj.saleAmount = row.saleAmount
-      obj.exclTaxSaleAmount = BigToFixedTwo(div(row.saleAmount,1.13))
+      obj.exclTaxSaleAmount = BigToFixedTwo(div(row.saleAmount, 1.13))
       obj.contractBeginDate = row.contractDate[0]
       obj.contractEndDate = row.contractDate[1]
       obj.effectiveBeginDate = row.systemDate[0]
@@ -646,8 +578,8 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '间供客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('客户合同录入导出成功!')
+        downloadFile(res, '间供客户合同录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('客户合同录入明细导出成功!')
       })
       await API.exportCustomerContractDetail({
         customerType: 3,
@@ -818,7 +750,7 @@ export default {
             customerMdmCode: row.customerMdmCode,
             regionCode: row.regionCode,
             saleAmount: row.saleAmount,
-            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount,1.13)),
+            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
             contractBeginDate: row.contractDate[0],
             contractEndDate: row.contractDate[1],
             effectiveBeginDate: row.systemDate[0],
@@ -887,7 +819,7 @@ export default {
           customerMdmCode: row.customerMdmCode,
           regionCode: row.regionCode,
           saleAmount: row.saleAmount,
-          exclTaxSaleAmount:BigToFixedTwo(div(row.saleAmount,1.13)),
+          exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
           contractBeginDate: row.contractDate[0],
           contractEndDate: row.contractDate[1],
           effectiveBeginDate: row.systemDate[0],
@@ -934,9 +866,41 @@ export default {
       })
       //往后调
       if (Number(row.expireDate) > Number(row.systemDate[1])) {
-        this.$message.info('此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！')
+        this.$confirm('此操作需要进行审批，请点击"确定"进入一级审批 <br/>此修改只修改客户合同，分摊协议的系统生效时间不会调整，如需要请自行到经销商分摊协议页面修改，谢谢！', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true,
+        })
+          .then(() => {
+            API.termination({
+              id: row.id,
+              date: row.expireDate,
+              remark: row.applyRemark,
+            }).then((res) => {
+              if (res.code === 1000) {
+                this.$message.success('调整成功')
+                this.popoverCancel(row.id, index)
+                this.getTableData()
+              }
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改',
+            })
+          })
       } else {
         isCheck = 1
+        //往前调 （应大于等于当前月+1）
+        //最早为物理月n+1
+        console.log(dayjs(expireDate).format('YYYYMM'))
+        console.log(dayjs().add(1, 'month').format('YYYYMM'))
+        if (dayjs(expireDate).format('YYYYMM') < dayjs().add(1, 'month').format('YYYYMM')) {
+          this.$message.info('系统生效时间若需调整，最早为物理月n+1')
+          return
+        }
         //系统生效时间前调
         distributorContract.forEach((item, index) => {
           //若“调整后的客户合同系统生效时间结束时间”早于“经销商分摊协议系统生效时间开始时间”
@@ -955,56 +919,75 @@ export default {
           }
         })
       }
+      // return
       if (isCheck) {
         let str = ''
         distributorContract.forEach((item) => {
           str += item.checkInfo + '<br/>'
         })
-        this.$confirm(str, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          dangerouslyUseHTMLString: true,
-        })
-          .then(() => {
-            API.termination({
-              id: row.id,
-              date: row.expireDate,
-            }).then((res) => {
-              if (res.code === 1000) {
-                this.$message.success('调整成功')
-                this.popoverCancel(row.id, index)
-                this.getTableData()
-              }
-            })
+        if (str == '') {
+          API.termination({
+            id: row.id,
+            date: row.expireDate,
+          }).then((res) => {
+            if (res.code === 1000) {
+              this.$message.success('调整成功')
+              this.popoverCancel(row.id, index)
+              this.getTableData()
+            }
           })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消修改',
-            })
+        } else {
+          this.$confirm(str, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+            dangerouslyUseHTMLString: true,
           })
+            .then(() => {
+              API.termination({
+                id: row.id,
+                date: row.expireDate,
+              }).then((res) => {
+                if (res.code === 1000) {
+                  this.$message.success('调整成功')
+                  this.popoverCancel(row.id, index)
+                  this.getTableData()
+                }
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消修改',
+              })
+            })
+        }
       } else {
-        API.termination({
-          id: row.id,
-          date: row.expireDate,
-          remark: row.applyRemark,
-        }).then((res) => {
-          if (res.code === 1000) {
-            this.$message.success('调整成功')
-            this.popoverCancel(row.id, index)
-            this.getTableData()
-          }
-        })
+        // API.termination({
+        //   id: row.id,
+        //   date: row.expireDate,
+        //   remark: row.applyRemark,
+        // }).then((res) => {
+        //   if (res.code === 1000) {
+        //     this.$message.success('调整成功')
+        //     this.popoverCancel(row.id, index)
+        //     this.getTableData()
+        //   }
+        // })
       }
     },
     dateCompare(expireDate, contractEndDate) {
       return new Date(expireDate.slice(0, 4), Number(expireDate.slice(4)), 0).getTime() > new Date(contractEndDate).getTime()
     },
     popoverShow(id, index) {
+      this.tableData[index].expireDate = ''
+      this.tableData[index].applyRemark = ''
       if (this.tableData[index].contractStateName == '草稿' || this.tableData[index].contractStateName == '待审批' || this.tableData[index].contractStateName == '过期' || this.tableData[index].contractStateName == '终止') {
         this.$message.info('只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！')
         return
+      }
+      if (this.tableData[index].isReject == 0 && this.tableData[index].changeRunCounts) {
+        return this.$message.info('该合同正在调整系统生效时间，不允许再次调整')
       }
       //避免同时出现多个el-popover
       for (const key in this.$refs) {
@@ -1024,7 +1007,7 @@ export default {
       this.tableData[index].isPopoverShow = false
     },
     //条款明细--弹窗展示
-    showTermsDetail(index,row) {
+    showTermsDetail(index, row) {
       this.customerId = row.id
       let isEditor = this.isEditor && index == this.editorIndex
       if (this.tableData[index].isNewData) {
@@ -1041,18 +1024,18 @@ export default {
             .then(() => {})
             .catch(() => {
               this.$refs.TermDetailDialog.$el.firstChild.style.height = '98%'
-              this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
+              this.$refs.TermDetailDialog.getContractTermData(isEditor, this.customerId)
             })
         } else {
           this.$refs.TermDetailDialog.$el.firstChild.style.height = ''
-          this.$refs.TermDetailDialog.getContractTermData(isEditor,this.customerId)
+          this.$refs.TermDetailDialog.getContractTermData(isEditor, this.customerId)
         }
       }
     },
     //系统生效时间变更记录弹窗
     showSystemValidityTimeRecords(row) {
       this.systemValidityTimeRecordsDialogVisible = true
-      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id)
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id, true)
     },
     cancelDialog() {
       this.systemValidityTimeRecordsDialogVisible = false

@@ -23,7 +23,7 @@
     "camunda-bpmn-moddle": "^5.1.2",
     "clipboard": "^2.0.6",
     "core-js": "^3.6.5",
-    "dayjs": "^1.8.14",
+    "dayjs": "^1.11.7",
     "diagram-js-minimap": "^1.2.1",
     "element-ui": "2.13.2",
     "file-saver": "^2.0.5",

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 08:59:31
+ * @LastEditTime: 2022-12-17 11:42:56
 -->
 <template>
   <div class="MainContent">
@@ -26,9 +26,9 @@
           </el-date-picker>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">合同状态:</span>
+          <span class="SelectliTitle">变更状态:</span>
           <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in ['待审批', '被拒绝', '通过', '终止', '过期']" :key="index" :label="item" :value="index+1" />
+            <el-option v-for="item,index in contractList" :key="index" :label="item.label" :value="item.value" />
           </el-select>
         </div>
       </div>
@@ -98,7 +98,8 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="approveStateName" width="240" label="合同状态">
+      <el-table-column v-slot="{row}" align="center" prop="approveStateName" width="240" label="变更状态">
+        {{row.approveStateName=='审批中'&&row.activityName&&row.activityName.includes('审批')?'延期审批中'+'-'+row.activityName:row.approveStateName}}
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
         <template slot-scope="scope">
@@ -120,9 +121,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="finApprovalComments" align="center" width="220" label="Finance 意见">
+      <el-table-column prop="finApprovalComments" align="center" width="220" label="HQ PPM 意见">
         <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
+          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('HQ PPM') != -1">
             <el-input v-model="scope.row.finApprovalComments" type="textarea" autosize clearable class="my-el-input my-textArea" placeholder="请输入">
             </el-input>
           </div>
@@ -143,7 +144,7 @@
 
 <script>
 import API from '@/api/ContractEntry/customerApproval'
-import { getDefaultPermissions, getContractEntry, formatThousandNum, contractList, downloadFile } from '@/utils'
+import { getDefaultPermissions, getContractEntry, formatThousandNum, downloadFile } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -169,9 +170,20 @@ export default {
       checkArr: [], //选中的数据
       tableData: [],
       customerArr: [],
-      contractList: contractList,
-      contractItemVariableList: [],
-      contractItemFixList: [],
+      contractList: [
+        {
+          value: 0,
+          label: '延期审批中',
+        },
+        {
+          value: 1,
+          label: '通过',
+        },
+        {
+          value: 2,
+          label: '被拒绝',
+        },
+      ],
       isAddCount: 0,
       tableKey: 0,
       customerId: 0,
@@ -196,9 +208,7 @@ export default {
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
-    // this.getTableData()
     this.getCustomerList()
-    this.getContractItemList()
   },
   computed: {},
   watch: {
@@ -282,74 +292,6 @@ export default {
         }
       })
     },
-    // 获取ContractItem
-    getContractItemList() {
-      API.getContractItemList().then((res) => {
-        if (res.code === 1000) {
-          this.contractItemFixList = []
-          this.contractItemVariableList = []
-          let list = res.data
-          //区分variable 和 fixed
-          list.forEach((item) => {
-            if (item.conditionType && item.variablePoint) {
-              item.name = item.contractItem
-              item.code = item.contractItemCode
-              item.conditionType = item.conditionType
-              if (item.conditionType.indexOf(',') != -1) {
-                item.conditionalIsTwo = 2
-              } else {
-                item.conditionalIsTwo = 1
-              }
-              if (item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 0
-              }
-              if (item.variablePoint.indexOf('fix') != -1) {
-                item.isVariableOrFix = 1
-              }
-              if (item.variablePoint.indexOf('fix') != -1 && item.variablePoint.indexOf('variable') != -1) {
-                item.isVariableOrFix = 2
-              }
-            }
-          })
-          list.forEach((item) => {
-            if (item.isVariableOrFix === 0) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 1) {
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-            if (item.isVariableOrFix === 2) {
-              this.contractItemVariableList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-              this.contractItemFixList.push({
-                code: item.code,
-                name: item.name,
-                conditionalIsTwo: item.conditionalIsTwo,
-                isVariableOrFix: item.isVariableOrFix,
-                conditionType: item.conditionType,
-              })
-            }
-          })
-        }
-      })
-    },
     //审批提交
     submit() {
       this.$confirm('此操作将审批通过, 是否继续?', '提示', {
@@ -398,8 +340,10 @@ export default {
           if (item.name.indexOf('Package Owner') != -1) {
             obj.comments = item.poApprovalComments
             list.push(obj)
-          } else if (item.name.indexOf('Finance') != -1) {
+          } else if (item.name.indexOf('HQ PPM') != -1) {
             obj.comments = item.finApprovalComments
+            list.push(obj)
+          } else {
             list.push(obj)
           }
         })
@@ -435,7 +379,7 @@ export default {
     },
     //编辑行数据
     editorRow(index, row) {
-      if (row.approveStateName != '审批中' || !row.isCanSubmit) {
+      if (!row.approveStateName.includes('审批') || !row.isCanSubmit) {
         this.$message.info('该合同不能进行编辑操作')
         return
       }
@@ -461,7 +405,7 @@ export default {
       let obj = {}
       if (row.name.indexOf('Package Owner') != -1) {
         obj[row.id] = row.poApprovalComments
-      } else if (row.name.indexOf('Finance') != -1) {
+      } else if (row.name.indexOf('HQ PPM') != -1) {
         obj[row.id] = row.finApprovalComments
       }
       API.saveChangeApproveComments(obj).then((res) => {
@@ -482,27 +426,9 @@ export default {
       // this.$refs.termDialog.$el.firstChild.style.height = '98%'
       this.$refs.TermDetailDialog.getContractTermData(false, this.customerId)
     },
-    //通过code 获取ContractItem索引展示
-    getContractItemByCode(flag, code) {
-      if (!flag) {
-        if (!code) {
-          return 0
-        }
-        let index = this.contractItemVariableList.findIndex((item) => item.code == code)
-        //variable
-        return index != -1 ? index : 0
-      } else {
-        if (!code) {
-          return 0
-        }
-        let index = this.contractItemFixList.findIndex((item) => item.code == code)
-        //fix
-        return index != -1 ? index : 0
-      }
-    },
     //处于草稿状态可提交
     checkSelectable(row) {
-      if (row.approveStateName === '审批中' && row.isCanSubmit === 1) {
+      if (row.approveStateName.includes('审批') && row.isCanSubmit === 1) {
         return true
       } else {
         return false

@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-12-05 15:02:10
+ * @LastEditTime: 2022-12-21 08:56:45
 -->
 <template>
   <div class="indexNew">
@@ -144,7 +144,7 @@
         <!--        合同管理-->
         <div v-show="currentIndex == 1" class="TimeLineWrap">
           <el-table :header-cell-style="{ color: '#000000' }" max-height="170" :data="contractList" stripe style="width: 100%">
-            <el-table-column prop="item" label="合同类型" width="140" />
+            <el-table-column prop="item" label="审批流类型" width="140" />
             <el-table-column prop="contractCode" label="合同ID" width="280" />
             <el-table-column prop="customerName" label="客户名称" />
             <el-table-column prop="distributorName" label="经销商名称" />
@@ -201,6 +201,7 @@ import { logger } from 'runjs/lib/common'
 import item from '@/layout/components/Sidebar/Item'
 import { getFileType } from '@/utils'
 import requestApi from '@/api/request-api'
+import { mapMutations } from 'vuex'
 export default {
   name: 'Dashboard',
   components: {
@@ -354,90 +355,6 @@ export default {
         'In Store POSM - Customized': 'POSM-定',
       },
       tasks: [
-        {
-          id: 'task-3',
-          label: '202206',
-          start: dayjs('2022-06-02').valueOf(),
-          end: dayjs('2022-09-15').valueOf(),
-          percent: 25,
-          type: 'group',
-          tasks: [
-            {
-              id: 12,
-              label: 'V0',
-              start: dayjs('2022-06-01').valueOf(),
-              end: dayjs('2022-07-16').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-3',
-            },
-            {
-              id: 13,
-              label: 'V1',
-              start: dayjs('2022-07-18').valueOf(),
-              end: dayjs('2022-08-28').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-3',
-            },
-          ],
-        },
-        {
-          id: 'task-4',
-          label: '202205',
-          start: dayjs('2022-06-02').valueOf(),
-          end: dayjs('2022-09-15').valueOf(),
-          percent: 25,
-          type: 'group',
-          tasks: [
-            {
-              id: 12,
-              label: 'V0',
-              start: dayjs('2022-06-01').valueOf(),
-              end: dayjs('2022-07-16').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-4',
-            },
-            {
-              id: 13,
-              label: 'V1',
-              start: dayjs('2022-07-18').valueOf(),
-              end: dayjs('2022-08-28').valueOf(),
-              percent: 50,
-              type: 'task',
-              style: {
-                base: {
-                  fill: '#C6EBFE',
-                  stroke: '#E7E7E7',
-                  textColor: '#4795D4',
-                },
-              },
-              parentId: 'task-4',
-            },
-          ],
-        },
       ],
       options: options,
       content: {
@@ -532,6 +449,8 @@ export default {
     this.needHelp()
   },
   methods: {
+    //app OPEN_BREADCRUMB 映射成openBreadcrumb方法
+    ...mapMutations('app', ['OPEN_BREADCRUMB']),
     needHelp() {
       this.gridData = []
       TaskAPI.getNeedHelp().then((res) => {
@@ -1018,14 +937,25 @@ export default {
         })
     },
     operateProcess(version, name) {
-      if (version == 'DISTRIBUTOR-CONTRACT') {
-        if (name.indexOf('审批') != -1) {
+      this.OPEN_BREADCRUMB()
+      if(item.includes('经销商')) {
+        if(name.indexOf('审批') != -1) {
+          if(item.includes('生效时间调整')) {
+            sessionStorage.setItem('currentIndex', 1)
+          } else{
+            sessionStorage.setItem('currentIndex', 0)
+          }
           this.$router.push('/contractManagement/dealer/dealerContractApproval')
         } else {
           this.$router.push('/contractManagement/dealer/dealerContractEntry')
         }
-      } else if (version == 'CUSTOMER-CONTRACT') {
-        if (name.indexOf('审批') != -1) {
+      } else if(item.includes('客户')) {
+        if(name.indexOf('审批') != -1) {
+          if(item.includes('生效时间调整')) {
+            sessionStorage.setItem('currentIndex', 1)
+          } else{
+            sessionStorage.setItem('currentIndex', 0)
+          }
           this.$router.push('/contractManagement/ContractEntry/CustomerContractApproval')
         } else {
           this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')

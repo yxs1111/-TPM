@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-14 10:42:48
+ * @LastEditTime: 2022-12-21 09:08:10
 -->
 <template>
   <div class="MainContent">
@@ -145,8 +145,9 @@
               range-separator="至" start-placeholder="开始月份" end-placeholder="结束月份" @blur="changeSystemTime(scope.row)">
             </el-date-picker>
           </div>
-          <div v-show="!scope.row.isEditor">
-            {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
+          <div v-show="!scope.row.isEditor" class="systemDateWrap">
+            <span> {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}</span>
+            <svg-icon v-if="scope.row.changeCounts!=0" icon-class="contractListIcon" class="contractListIcon" @click="showSystemValidityTimeRecords(scope.row)" />
           </div>
         </template>
       </el-table-column>
@@ -157,10 +158,10 @@
         <template slot-scope="scope">
           <div class="contractStatusWrap">
             <div>
-              {{ contractList[scope.row.contractState] }}
+              {{ scope.row.contractStateName }}
             </div>
             <div class="timeOutWrap">
-              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual"  v-model="scope.row.isPopoverShow">
+              <el-popover :ref="'popover-' + scope.row.id" placement="right" width="300" trigger="manual" v-model="scope.row.isPopoverShow">
                 <div class="PopoverContent">
                   <div class="PopoverContentTop">
                     <span>调整系统生效时间</span>
@@ -176,7 +177,7 @@
                   </div>
                   <div class="PopoverContentOption">
                     <div class="PopoverContentOptionItem">
-                      <el-input v-model="scope.row.applyRemark"  placeholder="请输入" clearable>
+                      <el-input v-model="scope.row.applyRemark" placeholder="请输入" clearable>
                       </el-input>
                     </div>
                   </div>
@@ -341,27 +342,19 @@
         <el-button @click="closeAddDialog">取 消</el-button>
       </span>
     </el-dialog>
+    <systemValidityTimeRecordsDialog ref="SystemValidityTimeRecordsDialog" @cancel="cancelDialog" title="系统生效时间变更记录" :dialogVisible.sync="systemValidityTimeRecordsDialogVisible">
+    </systemValidityTimeRecordsDialog>
   </div>
 </template>
 
 <script>
+import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
 import API from '@/api/ContractEntry/dealer'
-import {
-  getDefaultPermissions,
-  getTextMap,
-  parseTime,
-  getContractEntry,
-  contractList,
-  formatThousandNum,
-  downloadFile,
-  pickerOptions,
-  pickerOptionsSystemDate,
-  deepClone,
-} from '@/utils'
+import { getDefaultPermissions, getTextMap, parseTime, getContractEntry, contractList, formatThousandNum, downloadFile, pickerOptions, pickerOptionsSystemDate, deepClone } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-
+import dayjs from 'dayjs'
 export default {
   name: 'dealerContractEntry',
   data() {
@@ -433,7 +426,11 @@ export default {
         },
       },
       permissions: getDefaultPermissions(),
+      systemValidityTimeRecordsDialogVisible: false,
     }
+  },
+  components: {
+    systemValidityTimeRecordsDialog,
   },
   mounted() {
     window.onresize = () => {
@@ -503,6 +500,7 @@ export default {
           item.isPopoverShow = false
           item.isEditor = 0
           item.expireDate = item.earlyExpireDate //定时任务--终止日期字段
+          item.applyRemark = ''
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
@@ -519,10 +517,7 @@ export default {
         if (res.code === 1000) {
           let list = res.data
           list.forEach((item) => {
-            item.contractDate =
-              item.contractBeginDate.replaceAll('-', '/') +
-              ' - ' +
-              item.contractEndDate.replaceAll('-', '/')
+            item.contractDate = item.contractBeginDate.replaceAll('-', '/') + ' - ' + item.contractEndDate.replaceAll('-', '/')
             if (item.channelCode == 'RKA' && item.regionName) {
               item.label = `${item.customerName}-${item.regionName}(${item.contractDate})`
             } else {
@@ -558,9 +553,7 @@ export default {
         if (row.contractState == 1) {
           this.$message.info('审批中的合同不允许编辑')
         } else if (row.contractState == 3) {
-          this.$message.info(
-            '该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间'
-          )
+          this.$message.info('该合同不能被编辑，仅能通过“调整”按钮修改系统生效时间结束时间')
         } else if (row.contractState == 4 || row.contractState == 5) {
           this.$message.info('该合同不允许编辑')
         }
@@ -578,12 +571,12 @@ export default {
       this.$forceUpdate()
       sessionStorage.setItem('isEditor', `1-${index}`)
     },
-    CancelEditorRow(index,row) {
+    CancelEditorRow(index, row) {
       //复制出来的 取消编辑
-      if(row.isEditor==2) {
+      if (row.isEditor == 2) {
         // this.tableData.splice(index,1)
         //找到源数据 进行重置操作
-        let findIndex= this.tableData.findIndex(item => item.id == row.id&&item.isEditor==0)
+        let findIndex = this.tableData.findIndex((item) => item.id == row.id && item.isEditor == 0)
         let originData = this.tableData[findIndex]
         let newObj = {
           id: originData.id,
@@ -617,13 +610,13 @@ export default {
           fixed: originData.fixed,
           customerMdmCode: originData.customerMdmCode,
           isEditor: 2,
-          isPopoverShow: false,  //定时任务弹窗显示
+          isPopoverShow: false, //定时任务弹窗显示
           expireDate: originData.expireDate,
           contractDate: originData.contractDate,
           systemDate: originData.systemDate,
-          originId:originData.id
-          }
-        this.$set(this.tableData,index,newObj)
+          originId: originData.id,
+        }
+        this.$set(this.tableData, index, newObj)
         this.$forceUpdate()
         return
       }
@@ -634,10 +627,7 @@ export default {
     },
     compareDate(date) {
       let currentDate = new Date()
-      let month =
-        currentDate.getMonth() < 10
-          ? '0' + (currentDate.getMonth() + 1)
-          : currentDate.getMonth() + 1
+      let month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1) : currentDate.getMonth() + 1
       let year = currentDate.getFullYear()
       let currentMonth = year + month
       return Number(currentMonth) < Number(date)
@@ -661,21 +651,12 @@ export default {
           })
       } else {
         //判断当前月份是否处于系统生效开始时间，若处于则可以删除,若不处于系统生效开始时间随便删，不收状态影响
-        let isDeleteFlag = row.entryDate==null?1:0
+        let isDeleteFlag = row.entryDate == null ? 1 : 0
         //允许删除：草稿、被拒绝、通过（未汇算） 不允许删除：待审批、通过（已汇算）、终止、过期
-        if (
-          row.contractState === '1' ||
-          (row.contractState == '3' && !isDeleteFlag) ||
-          row.contractState === '4' ||
-          row.contractState === '5'
-        ) {
+        if (row.contractState === '1' || (row.contractState == '3' && !isDeleteFlag) || row.contractState === '4' || row.contractState === '5') {
           if (row.contractState === '1') {
             this.$message.info('审批中的合同不能删除，请联系审批人驳回后删除')
-          } else if (
-            (row.contractState == '3' && !isDeleteFlag) ||
-            row.contractState === '4' ||
-            row.contractState === '5'
-          ) {
+          } else if ((row.contractState == '3' && !isDeleteFlag) || row.contractState === '4' || row.contractState === '5') {
             this.$message.info('该合同不允许删除')
           }
           return
@@ -748,18 +729,12 @@ export default {
         //除去该经销商 其他经销商的目标销售额之和
         let otherDist = 0
         distList.forEach((item) => {
-          if (
-            item.id != row.id &&
-            item.contractState != '3' &&
-            item.contractState != '4' &&
-            item.contractState != '5'
-          ) {
+          if (item.id != row.id && item.contractState != '3' && item.contractState != '4' && item.contractState != '5') {
             otherDist += item.saleAmount
           }
         })
         //计算目前可填值 （经销商目标销售额之和等于客户目标销售额）
-        this.editMaxTargetSale =
-          Number(row.customerContractSaleAmount) - otherDist
+        this.editMaxTargetSale = Number(row.customerContractSaleAmount) - otherDist
         let flag = distList.findIndex((item) => {
           return item.contractState == '3' || item.contractState == '4'
         })
@@ -816,74 +791,35 @@ export default {
         fixed: row.fixed,
         customerMdmCode: row.customerMdmCode,
         isEditor: 2,
-        isPopoverShow: false,  //定时任务弹窗显示
+        isPopoverShow: false, //定时任务弹窗显示
         expireDate: row.expireDate,
         contractDate: row.contractDate,
         systemDate: row.systemDate,
-        originId:row.id
+        originId: row.id,
       })
     },
     //更改合同日期--匹配对应的客户合同
-    changeContractDate(row) {
-
-    },
+    changeContractDate(row) {},
     //更改系统生效时间
     changeSystemTime(row) {
       if (row.isEditor == 2) {
-        let {
-          contractDate,
-          systemDate
-        } = row
-        let contractBeginDate=contractDate[0]
-        let contractEndDate=contractDate[1]
-        let effectiveBeginDate=systemDate[0]
-        let effectiveEndDate=systemDate[1]
+        let { contractDate, systemDate } = row
+        let contractBeginDate = contractDate[0]
+        let contractEndDate = contractDate[1]
+        let effectiveBeginDate = systemDate[0]
+        let effectiveEndDate = systemDate[1]
         //在合同区间里的经销商
-        let index= this.customerArr.findIndex((item) => {
+        let index = this.customerArr.findIndex((item) => {
           return (
             item.customerName == row.customerName &&
             item.regionCode == row.customerRegionCode &&
-            this.betweenDate(
-              item.contractBeginDate,
-              item.contractEndDate,
-              contractBeginDate
-            ) &&
-            this.betweenDate(
-              item.contractBeginDate,
-              item.contractEndDate,
-              contractEndDate
-            ) &&
-            this.betweenDate(
-              item.effectiveBeginDate.slice(0, 4) +
-                '-' +
-                item.effectiveBeginDate.slice(4) +
-                '-01',
-              item.effectiveEndDate.slice(0, 4) +
-                '-' +
-                item.effectiveEndDate.slice(4) +
-                '-01',
-              effectiveBeginDate.slice(0, 4) +
-                '-' +
-                effectiveBeginDate.slice(4) +
-                '-01',
-            ) &&
-            this.betweenDate(
-              item.effectiveBeginDate.slice(0, 4) +
-                '-' +
-                item.effectiveBeginDate.slice(4) +
-                '-01',
-              item.effectiveEndDate.slice(0, 4) +
-                '-' +
-                item.effectiveEndDate.slice(4) +
-                '-01',
-              effectiveEndDate.slice(0, 4) +
-                '-' +
-                effectiveEndDate.slice(4) +
-                '-01',
-            )
+            this.betweenDate(item.contractBeginDate, item.contractEndDate, contractBeginDate) &&
+            this.betweenDate(item.contractBeginDate, item.contractEndDate, contractEndDate) &&
+            this.betweenDate(item.effectiveBeginDate.slice(0, 4) + '-' + item.effectiveBeginDate.slice(4) + '-01', item.effectiveEndDate.slice(0, 4) + '-' + item.effectiveEndDate.slice(4) + '-01', effectiveBeginDate.slice(0, 4) + '-' + effectiveBeginDate.slice(4) + '-01') &&
+            this.betweenDate(item.effectiveBeginDate.slice(0, 4) + '-' + item.effectiveBeginDate.slice(4) + '-01', item.effectiveEndDate.slice(0, 4) + '-' + item.effectiveEndDate.slice(4) + '-01', effectiveEndDate.slice(0, 4) + '-' + effectiveEndDate.slice(4) + '-01')
           )
         })
-        console.log(index);
+        console.log(index)
         if (index == -1) {
           this.$message.warning('此协议匹配不到客户合同，请先录入客户合同')
         } else {
@@ -906,7 +842,7 @@ export default {
      * 日期区间比较，是否在区间里
      */
     betweenDate(start, end, compare) {
-      console.log(start,end,compare);
+      console.log(start, end, compare)
       let beginDate = new Date(start).getTime()
       let endDate = new Date(end).getTime()
       let compareDate = new Date(compare).getTime()
@@ -966,69 +902,90 @@ export default {
     },
     //定时任务确定--终止合同
     popoverSubmit(index, row) {
-      let newStr =
-        row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
+      let newStr = row.expireDate.substring(0, 4) + '-' + row.expireDate.substring(4)
       let expireDate = new Date(newStr)
-      let contractDate = new Date(
-        row.contractDate[1].substring(0, 4) +
-          '-' +
-          row.contractDate[1].substring(5, 7)
-      )
-      if (
-        expireDate.getTime() < contractDate.getTime() &&
-        row.contractStateName == '通过'
-      ) {
+      let contractDate = new Date(row.contractDate[1].substring(0, 4) + '-' + row.contractDate[1].substring(5, 7))
+      if (expireDate.getTime() < contractDate.getTime() && row.contractStateName == '通过') {
         this.$message.info('系统生效时间结束时间不能早于合同期间结束时间')
         return
-      } else if (
-        row.contractStateName == '过期' ||
-        row.contractStateName == '终止'
-      ) {
-        this.$message.info(
-          '只有状态为“通过”的经销商分摊协议，允许调整生效时间，其他都不允许，请知悉，谢谢！'
-        )
+      } else if (row.contractStateName == '过期' || row.contractStateName == '终止') {
+        this.$message.info('只有状态为“通过”的经销商分摊协议，允许调整生效时间，其他都不允许，请知悉，谢谢！')
         return
       }
-      API.termination({
-        id: row.id,
-        date: row.expireDate,
-        remark: row.applyRemark,
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.$message.success('调整成功')
-          this.popoverCancel(row.id,index)
-          this.getTableData()
+      //是否是往前调整系统生效时间
+      if (Number(row.expireDate) <= Number(row.systemDate[1])) {
+        //经销商缩短最早的结束时间可以到物理月-1月
+        if (dayjs(expireDate).format('YYYYMM') < dayjs().subtract(1, 'month').format('YYYYMM')) {
+          this.$message.info('经销商缩短最早的结束时间可以到物理月-1月')
+          return
         }
-      })
+        API.termination({
+          id: row.id,
+          date: row.expireDate,
+          remark: row.applyRemark,
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.$message.success('调整成功')
+            this.popoverCancel(row.id, index)
+            this.getTableData()
+          }
+        })
+      } else {
+        //往后调整系统生效时间
+        this.$confirm('此操作需要进行审批，请点击"确定"进入一级审批 ', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true,
+        }).then(() => {
+          API.termination({
+            id: row.id,
+            date: row.expireDate,
+            remark: row.applyRemark,
+          }).then((res) => {
+            if (res.code === 1000) {
+              this.$message.success('调整成功')
+              this.popoverCancel(row.id, index)
+              this.getTableData()
+            }
+          })
+        })
+      }
     },
-    popoverShow(id,index) {
-      if (
-        this.tableData[index].contractStateName == '草稿' ||
-        this.tableData[index].contractStateName == '待审批' ||
-        this.tableData[index].contractStateName == '过期' ||
-        this.tableData[index].contractStateName == '终止'
-      ) {
-        this.$message.info(
-          '只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！'
-        )
+    popoverShow(id, index) {
+      this.tableData[index].expireDate = ''
+      this.tableData[index].applyRemark = ''
+      if (this.tableData[index].contractStateName == '草稿' || this.tableData[index].contractStateName == '待审批' || this.tableData[index].contractStateName == '过期' || this.tableData[index].contractStateName == '终止') {
+        this.$message.info('只有状态为“通过”的合同，允许调整生效时间，其他都不允许，请知悉，谢谢！')
         return
+      }
+      if (this.tableData[index].isReject == 0 && this.tableData[index].changeRunCounts) {
+        return this.$message.info('该合同正在调整系统生效时间，不允许再次调整')
       }
       //避免同时出现多个el-popover
       for (const key in this.$refs) {
-        if (key.indexOf('popover-') !== -1&&this.$refs[key]) {
-            this.$refs[key].doClose();
+        if (key.indexOf('popover-') !== -1 && this.$refs[key]) {
+          this.$refs[key].doClose()
         }
       }
-      this.tableData[index].isPopoverShow=true
+      this.tableData[index].isPopoverShow = true
       //解决fixed 固定列之后 el-popover多个问题
-      let key='popover-'+id
-      this.$nextTick(() => { 
-        document.getElementById(this.$refs[key].$refs.popper.id).style.display = 'none' }
-      )
+      let key = 'popover-' + id
+      this.$nextTick(() => {
+        document.getElementById(this.$refs[key].$refs.popper.id).style.display = 'none'
+      })
     },
     //定时任务取消
-    popoverCancel(id,index) {
-      this.tableData[index].isPopoverShow=false
+    popoverCancel(id, index) {
+      this.tableData[index].isPopoverShow = false
+    },
+    //系统生效时间变更记录弹窗
+    showSystemValidityTimeRecords(row) {
+      this.systemValidityTimeRecordsDialogVisible = true
+      this.$refs.SystemValidityTimeRecordsDialog.getTableData(row.id, false)
+    },
+    cancelDialog() {
+      this.systemValidityTimeRecordsDialogVisible = false
     },
     //导出数据
     async exportData() {
@@ -1042,8 +999,8 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('经销商分摊协议录入 - list导出成功!')
+        downloadFile(res, '经销商分摊协议录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('经销商分摊协议明细导出成功!')
       })
       await API.exportDistributorContractDetail({
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -1068,8 +1025,8 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('经销商分摊协议明细导出成功!')
+        downloadFile(res, '经销商分摊协议录入明细 - list-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('经销商分摊协议录入明细 - list导出成功!')
       })
     },
     //新增数据 --弹窗展示
@@ -1088,10 +1045,7 @@ export default {
         if (res.code === 1000) {
           this.addDialogCustomer = []
           this.addDialogDealerList = []
-          let {
-            customerContract: customerContractOrigin,
-            distributorContract: distList,
-          } = res.data
+          let { customerContract: customerContractOrigin, distributorContract: distList } = res.data
           let obj = {
             customerName: customerContractOrigin.customerName,
             saleAmount: customerContractOrigin.saleAmount,
@@ -1106,11 +1060,7 @@ export default {
           //查该现阶段客户下所有经销商的和，新增经销商之和应等于客户目标销售额
           this.addDialog.nowTargetSale = 0
           distList.forEach((item) => {
-            if (
-              item.contractState != '3' &&
-              item.contractState != '4' &&
-              item.contractState != '5'
-            ) {
+            if (item.contractState != '3' && item.contractState != '4' && item.contractState != '5') {
               this.addDialog.nowTargetSale += item.saleAmount
             }
           })
@@ -1125,8 +1075,7 @@ export default {
     getDistributorListByCustomer() {
       selectAPI
         .queryDistributorList({
-          customerMdmCode:
-            this.customerArr[this.addDialog.index].customerMdmCode,
+          customerMdmCode: this.customerArr[this.addDialog.index].customerMdmCode,
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -1203,11 +1152,7 @@ export default {
           }
         })
       } else {
-        if (
-          (
-            Number(targetSaleLimit) + Number(this.addDialog.nowTargetSale)
-          ).toFixed(2) != this.addDialogCustomer[0].saleAmount
-        ) {
+        if ((Number(targetSaleLimit) + Number(this.addDialog.nowTargetSale)).toFixed(2) != this.addDialogCustomer[0].saleAmount) {
           this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
           return
         } else {

@@ -9,9 +9,9 @@
     <div class="SelectBarWrap">
       <div class="SelectBar">
         <div class="Selectli">
-          <span class="SelectliTitle">合同类型:</span>
+          <span class="SelectliTitle">审批流类型:</span>
           <el-select v-model="filterObj.item" clearable placeholder="请选择" class="my-el-select">
-            <el-option v-for="item,index in ['客户合同','经销商分摊协议']" :key="index" :label="item" :value="item" />
+            <el-option v-for="item,index in contractType" :key="index" :label="item.label" :value="item.value" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -119,7 +119,20 @@ export default {
         activate: false,
         businessId: null,
         processId: null,
-      },
+      }, 
+      contractType:[{
+        value: '客户合同',
+        label: '客户合同',
+      }, {
+        value: '经销商分摊协议',
+        label: '经销商分摊协议',
+      }, {
+        value: '客户合同系统生效时间调整',
+        label: '客户合同-变更',
+      }, {
+        value: '经销商合同系统生效时间调整',
+        label: '经销商分摊协议-变更',
+      }],
     }
   },
   mounted() {
