@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-17 20:29:57
+ * @LastEditTime: 2022-12-26 11:38:42
 -->
 <template>
   <div class="MainContent">
@@ -252,7 +252,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.payType }}
+            {{ scope.row.payTypeName }}
           </div>
         </template>
       </el-table-column>
@@ -595,7 +595,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.payType }}
+                  {{ scope.row.payTypeName }}
                 </div>
               </template>
             </el-table-column>
