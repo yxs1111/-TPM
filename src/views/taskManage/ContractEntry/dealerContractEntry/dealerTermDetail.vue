@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-17 17:27:46
+ * @LastEditTime: 2022-12-26 10:37:40
 -->
 <template>
   <div class="ContentDetail">
@@ -125,15 +125,16 @@
             <template>
               <el-table-column v-slot="{row}" prop="customerTaxPoint" align="center" width="150" label="客户扣款税点">
                 <template>
-                  <span v-if="!row.isTotal">
+                  <span v-if="!row.isTotal&&row.customerInfo.customerTaxPoint!==''">
                     {{CustomerDeductionsAndPayType[Number(row.customerInfo.customerTaxPoint)].CustomerDeduction}}%
                   </span>
                 </template>
               </el-table-column>
               <el-table-column v-slot="{row}" prop="payType" align="center" width="150" label="支付方式">
                 <template>
-                  <span v-if="!row.isTotal">
-                    {{CustomerDeductionsAndPayType[Number(row.customerInfo.customerTaxPoint)].payTypeList[Number(row.customerInfo.payType)].label}}
+                  <span v-if="!row.isTotal&&row.customerInfo.payType!==''&&row.customerInfo.customerTaxPoint!==''">
+                    {{ getPayTypeName(row.customerInfo.payType) }}
+                    <!-- {{CustomerDeductionsAndPayType[Number(row.customerInfo.customerTaxPoint)].payTypeList[Number(row.customerInfo.payType)].label}} -->
                   </span>
                 </template>
               </el-table-column>
@@ -266,13 +267,15 @@
             </template>
             <template>
               <el-table-column v-slot={row} prop="customerTaxPoint" align="center" width="150" label="客户扣款税点">
-                <div v-if="!row.isTotal">
+                <div v-if="!row.isTotal&&row.dealerList[dealerIndex].customerTaxPoint!==''">
                   {{CustomerDeductionsAndPayType[Number(row.dealerList[dealerIndex].customerTaxPoint)].CustomerDeduction}}%
                 </div>
               </el-table-column>
               <el-table-column v-slot={row} prop="payType" align="center" width="120" label="支付方式">
-                <div v-if="!row.isTotal">
-                  {{CustomerDeductionsAndPayType[Number(row.dealerList[dealerIndex].customerTaxPoint)].payTypeList[Number(row.dealerList[dealerIndex].payType)].label}}
+                <div v-if="!row.isTotal&&row.dealerList[dealerIndex].payType!==''&&row.dealerList[dealerIndex].customerTaxPoint!==''">
+                  {{ getPayTypeName(row.dealerList[dealerIndex].payType) }}
+                  <!-- {{getDealerPayType(row.dealerList[dealerIndex].customerTaxPoint,row.dealerList[dealerIndex].payType)}} -->
+                  <!-- {{CustomerDeductionsAndPayType[Number(row.dealerList[dealerIndex].customerTaxPoint)].payTypeList[Number(row.dealerList[dealerIndex].payType)].label}} -->
                 </div>
               </el-table-column>
               <el-table-column v-slot={row} prop="frieslandCostRatioNoTax" align="center" label="未税费比(%)" width="150">
@@ -1042,10 +1045,25 @@ export default {
     //根据1/2/3 查名字
     getPaymentMethodText(rate, MethodValue) {
       let index = this.CustomerDeductionsAndPayType.findIndex((item) => item.CustomerDeduction == rate)
-      let num = this.CustomerDeductionsAndPayType[index].payTypeList.findIndex((item) => item.value == Number(MethodValue))
-      if (num != -1) {
-        return num
+      if(index!=-1) {
+        let num = this.CustomerDeductionsAndPayType[index].payTypeList.findIndex((item) => item.value == Number(MethodValue))
+        if (num != -1) {
+          return this.CustomerDeductionsAndPayType[index].payTypeList[num].value
+        }
+      } else {
+        return ''
       }
+    },
+    getPayTypeName(value) {
+      let getPayTypeName = ''
+      this.CustomerDeductionsAndPayType.forEach(item => {
+        item.payTypeList.forEach(payItem => {
+          if (payItem.value == value) {
+            getPayTypeName = payItem.label
+          }
+        })
+      })
+      return getPayTypeName
     },
     //更改客户扣缴税点--》支付方式 置空
     changeCustomerTaxPoint(row, dealerIndex) {
