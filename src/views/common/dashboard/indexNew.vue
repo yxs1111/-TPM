@@ -143,7 +143,7 @@
         </div>
         <!--        合同管理-->
         <div v-show="currentIndex == 1" class="TimeLineWrap">
-          <el-table :header-cell-style="{ color: '#000000' }" max-height="170" :data="contractList" stripe style="width: 100%">
+          <el-table :header-cell-style="{ color: '#000000' }" :max-height="maxheight" :data="contractList" stripe style="width: 100%">
             <el-table-column prop="item" label="审批流类型" width="140" />
             <el-table-column prop="contractCode" label="合同ID" width="280" />
             <el-table-column prop="customerName" label="客户名称" />

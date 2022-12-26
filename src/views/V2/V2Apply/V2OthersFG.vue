@@ -120,7 +120,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costType }}
+            {{ scope.row.costTypeSpName }}
           </div>
         </template>
       </el-table-column>
@@ -133,7 +133,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.minePackage }}
+            {{ scope.row.minePackageSpName }}
           </div>
         </template>
       </el-table-column>
@@ -146,7 +146,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costItem }}
+            {{ scope.row.costItemSpName }}
           </div>
         </template>
       </el-table-column>
@@ -159,7 +159,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelName }}
+            {{ scope.row.channelSpName }}
           </div>
         </template>
       </el-table-column>
@@ -185,7 +185,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.customerName }}
+            {{ scope.row.customerSpName }}
           </div>
         </template>
       </el-table-column>
@@ -198,7 +198,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.brandName }}
+            {{ scope.row.brandSpName }}
           </div>
         </template>
       </el-table-column>
@@ -211,7 +211,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.skuName }}
+            {{ scope.row.skuSpName }}
           </div>
         </template>
       </el-table-column>
@@ -224,7 +224,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.distributorName }}
+            {{  scope.row.distributorSpName }}
           </div>
         </template>
       </el-table-column>
@@ -237,7 +237,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.regionName }}
+            {{  scope.row.regionSpName }}
           </div>
         </template>
       </el-table-column>
@@ -250,7 +250,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.zoneName }}
+            {{  scope.row.zoneSpName }}
           </div>
         </template>
       </el-table-column>
@@ -537,7 +537,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costType }}
+                  {{ scope.row.costTypeSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -550,7 +550,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.minePackage }}
+                  {{ scope.row.minePackageSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -563,7 +563,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costItem }}
+                  {{ scope.row.costItemSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -576,7 +576,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.channelName }}
+                  {{ scope.row.channelSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -602,7 +602,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.customerName }}
+                  {{ scope.row.customerSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -615,7 +615,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.brandName }}
+                  {{ scope.row.brandSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -628,7 +628,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.skuName }}
+                  {{ scope.row.skuSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -641,7 +641,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.distributorName }}
+                  {{  scope.row.distributorSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -654,7 +654,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.regionName }}
+                  {{  scope.row.regionSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -667,7 +667,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.zoneName }}
+                  {{  scope.row.zoneSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -707,47 +707,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.costAscriptionDept }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="180"
-                             align="center"
-                             prop="systemJudgment"
-                             label="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="800"
-                             align="left"
-                             prop="systemJudgmentContent"
-                             label="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </el-table-column>
@@ -908,12 +867,11 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          channelCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode, //渠道
           minePackage: this.filterObj.MinePackage,
 
           costAccount: this.filterObj.costAccount,
-          costItemFlag: this.filterObj.FG,
-          yearAndMonth: this.filterObj.month
+          yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
@@ -1044,16 +1002,15 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          channelCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode, //渠道
           minePackage: this.filterObj.MinePackage,
 
           costAccount: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
-          costItemFlag: this.filterObj.FG,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1083,8 +1040,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelCode', this.filterObj.channelCode)
-      formData.append('costItemFlag', this.filterObj.FG)
+      formData.append('channelMdmCode', this.filterObj.channelCode)
       formData.append('importType', 1) // 1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1132,7 +1088,6 @@ export default {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode,
-        costItemFlag: this.filterObj.FG
         // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
@@ -1169,8 +1124,7 @@ export default {
       API.importSave({
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
-        costItemFlag: this.filterObj.FG
+        channelMdmCode: this.filterObj.channelCode,
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1186,16 +1140,15 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportCheckData({
-          channelCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode, //渠道
           minePackage: this.filterObj.MinePackage,
 
           costAccount: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
-          costItemFlag: this.filterObj.FG
           //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_FG-RKA/RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_ALL-RKA/RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -1208,12 +1161,11 @@ export default {
         // 导出数据筛选
         API.exportTemplateExcel({
           supplierCode: this.filterObj.supplierName, //供应商
-          channelCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
 
           ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
-          costItemFlag: this.filterObj.FG
           //   isSubmit: 0,
         }).then((res) => {
           downloadFile(
