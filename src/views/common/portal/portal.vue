@@ -1,7 +1,7 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2022-12-21 08:45:20
+ * @LastEditTime: 2022-12-21 11:06:50
 -->
 <template>
   <div class="portalWrap">
@@ -101,7 +101,7 @@ export default {
         password,
       }
       //验证TPM账号
-      await this.$store.dispatch('user/loginCPT', { ...loginObj })
+      await this.$store.dispatch('user/loginMarketingCPT', { ...loginObj })
     },
     showCPTSelect() {
       this.isCptVisible = true
