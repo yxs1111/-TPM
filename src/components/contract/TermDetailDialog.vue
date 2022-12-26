@@ -1,7 +1,7 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2022-12-15 17:22:54
+ * @LastEditTime: 2022-12-26 10:13:35
 -->
 
 <template>
@@ -156,7 +156,7 @@
                         <el-select v-if="scope.row.isNewData" @clear="clearFrieslandCustomerTaxPoint( scope.$index,scope.row, scope.row.type)" v-model="scope.row.frieslandCustomerTaxPoint" @change="changeCustomerTaxPoint( scope.$index,scope.row, scope.row.type)"  class="my-el-select_dialog" filterable clearable placeholder="请选择">
                           <el-option v-for="(item, index) in CustomerDeductionsAndPayType" :key="index" :label="item.CustomerDeduction + '%'" :value="index" />
                         </el-select>
-                        <div v-if="!scope.row.isNewData && scope.row.frieslandCustomerTaxPoint != null">{{ CustomerDeductionsAndPayType[scope.row.frieslandCustomerTaxPoint].CustomerDeduction }}%</div>
+                        <div v-if="!scope.row.isNewData && scope.row.frieslandCustomerTaxPoint !== null&& scope.row.frieslandCustomerTaxPoint !== ''">{{ CustomerDeductionsAndPayType[scope.row.frieslandCustomerTaxPoint].CustomerDeduction }}%</div>
                       </div>
                     </template>
                   </el-table-column>
@@ -837,6 +837,7 @@ export default {
     clearFrieslandCustomerTaxPoint(index, row) {
       this.termData[index].frieslandCostRatioNoTax=0
       this.termData[index].frieslandTaxCostNoTax=0
+      this.termData[index].frieslandPayType = ''
     },
     //菲仕兰承担含税金额更改
     changeFrieslandCost(index, row) {
