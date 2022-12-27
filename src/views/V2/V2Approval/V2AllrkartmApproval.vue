@@ -14,10 +14,7 @@
                      filterable
                      clearable
                      placeholder="请选择">
-            <el-option v-for="item in monthList"
-                       :key="item.id"
-                       :label="item.activityMonth"
-                       :value="item.activityMonth" />
+            <el-option v-for="(item) in ['RKA', 'RTM']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli"

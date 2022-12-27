@@ -11,7 +11,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in ['RKA', 'RTM']" :key="item" :label="item" :value="item" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
