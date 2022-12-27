@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-17 19:22:50
+ * @LastEditTime: 2022-12-26 11:38:14
 -->
 <template>
   <div class="MainContent">
@@ -252,7 +252,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.payType }}
+            {{ scope.row.payTypeName }}
           </div>
         </template>
       </el-table-column>
@@ -495,7 +495,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
+            <el-table-column width="260" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
               <template v-slot:header>
                 <div>V1计划合同点数(%)<br><span class="subTitle">kA+Brand+Contract Item</span></div>
               </template>
@@ -515,7 +515,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="V1计划合同费用(RMB)">
+            <el-table-column width="260" align="right" prop="planCost" label="V1计划合同费用(RMB)">
               <template v-slot:header>
                 <div>V1计划合同费用(RMB)<br><span class="subTitle">kA+Brand+Contract Item</span></div>
               </template>
@@ -525,7 +525,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="V2预估合同点数-默认(%)">
+            <el-table-column width="260" align="right" prop="planCost" label="V2预估合同点数-默认(%)">
               <template v-slot:header>
                 <div>V2预估合同点数-默认(%)<br><span class="subTitle">kA+Brand+Contract Item</span></div>
               </template>
@@ -545,7 +545,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="right" prop="planCost" label="V2预估合同费用-默认(RMB)">
+            <el-table-column width="260" align="right" prop="planCost" label="V2预估合同费用-默认(RMB)">
               <template v-slot:header>
                 <div>V2预估合同费用-默认(RMB)<br><span class="subTitle">kA+Brand+Contract Item</span></div>
               </template>
@@ -601,7 +601,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.payType }}
+                  {{ scope.row.payTypeName }}
                 </div>
               </template>
             </el-table-column>
@@ -843,7 +843,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           isSubmit: 0,
         }).then((res) => {
-          downloadFile(res, `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V2_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {

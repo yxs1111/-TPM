@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:11:57
+ * @LastEditTime: 2022-12-27 09:13:56
 -->
 <template>
   <div class="MainContent">
@@ -42,7 +42,7 @@
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed >
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
         </template>
@@ -52,7 +52,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" >
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
         <template v-slot:header>
           <div>活动月<br><span class="subTitle">-</span></div>
         </template>
@@ -62,7 +62,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" >
+      <el-table-column width="120" align="center" prop="costTypeName" label="费用类型">
         <template v-slot:header>
           <div>费用类型<br><span class="subTitle">-</span></div>
         </template>
@@ -72,7 +72,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" >
+      <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package">
         <template v-slot:header>
           <div>Mine Package<br><span class="subTitle">-</span></div>
         </template>
@@ -82,7 +82,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="180" align="center" prop="costItemName" label="费用科目" >
+      <el-table-column width="180" align="center" prop="costItemName" label="费用科目">
         <template v-slot:header>
           <div>费用科目<br><span class="subTitle">-</span></div>
         </template>
@@ -92,7 +92,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道" >
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
@@ -102,7 +102,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" >
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称">
         <template v-slot:header>
           <div>客户系统名称<br><span class="subTitle">-</span></div>
         </template>
@@ -112,7 +112,17 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" >
+      <el-table-column width="220" align="center" prop="brandName" label="品牌">
+        <template v-slot:header>
+          <div>品牌<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.brandName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item">
         <template v-slot:header>
           <div>Contract Item<br><span class="subTitle">-</span></div>
         </template>
@@ -122,12 +132,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
+      <el-table-column width="260" align="right" prop="planRatio" label="V1计划合同点数(%)">
         <template v-slot:header>
           <div>
             V1计划合同点数(%)
             <br>
-            <span class="subTitle">kA+Contract Item</span>
+            <span class="subTitle">kA+Brand+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -136,12 +146,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column  width="240" align="right" prop="planSalesAmount" label="V1计划销售额GSV(RMB)">
+      <el-table-column width="240" align="right" prop="planSalesAmount" label="V1计划销售额GSV(RMB)">
         <template v-slot:header>
           <div>
             V1计划销售额GSV(RMB)
             <br>
-            <span class="subTitle">kA</span>
+            <span class="subTitle">kA+Brand</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -150,12 +160,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column  width="220" align="right" prop="planCost" label="V1计划合同费用(RMB)">
+      <el-table-column width="260" align="right" prop="planCost" label="V1计划合同费用(RMB)">
         <template v-slot:header>
           <div>
             V1计划合同费用(RMB)
             <br>
-            <span class="subTitle">kA+Contract Item</span>
+            <span class="subTitle">kA+Brand+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -174,6 +184,16 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="120" align="center" prop="payType" label="费用核销方式">
+        <template v-slot:header>
+          <div>费用核销方式<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.payTypeName }}
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
@@ -186,13 +206,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import {
-  getDefaultPermissions,
-  getHeightHaveTab,
-  messageObj,
-  downloadFile,
-  formatThousandNum
-} from '@/utils'
+import { getDefaultPermissions, getHeightHaveTab, messageObj, downloadFile, formatThousandNum } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/contract'
 export default {
@@ -277,7 +291,7 @@ export default {
     getContractItemList() {
       selectAPI.getContractItemList().then((res) => {
         if (res.code === 1000) {
-          this.ContractItemList=res.data
+          this.ContractItemList = res.data
         }
       })
     },
@@ -309,10 +323,10 @@ export default {
         }
       })
     },
-    
+
     //千分位分隔符+两位小数
     getPlanCost(num) {
-       return formatThousandNum(num)
+      return formatThousandNum(num)
     },
     search() {
       this.pageNum = 1
@@ -327,10 +341,7 @@ export default {
           contractItemCode: this.filterObj.contractItemCode,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`
-          ) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V1_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-17 20:29:57
+ * @LastEditTime: 2022-12-27 11:06:22
 -->
 <template>
   <div class="MainContent">
@@ -252,7 +252,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.payType }}
+            {{ scope.row.payTypeName }}
           </div>
         </template>
       </el-table-column>
@@ -595,7 +595,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.payType }}
+                  {{ scope.row.payTypeName }}
                 </div>
               </template>
             </el-table-column>
@@ -825,7 +825,7 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIHApproveExcel({
+        API.exportKAApproveExcel({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           contractItemCode: this.filterObj.contractItemCode,
