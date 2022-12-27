@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-26 11:38:42
+ * @LastEditTime: 2022-12-27 11:06:22
 -->
 <template>
   <div class="MainContent">
@@ -825,7 +825,7 @@ export default {
     // 导出
     downExcel() {
       if (this.tableData.length) {
-        API.exportHIHApproveExcel({
+        API.exportKAApproveExcel({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
           contractItemCode: this.filterObj.contractItemCode,

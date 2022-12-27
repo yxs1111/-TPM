@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-26 13:44:55
+ * @LastEditTime: 2022-12-27 09:13:56
 -->
 <template>
   <div class="MainContent">
@@ -181,6 +181,16 @@
         <template slot-scope="scope">
           <div>
             {{ scope.row.costBelongDept }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="payType" label="费用核销方式">
+        <template v-slot:header>
+          <div>费用核销方式<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.payTypeName }}
           </div>
         </template>
       </el-table-column>
