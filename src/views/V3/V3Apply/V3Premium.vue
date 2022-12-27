@@ -513,10 +513,10 @@
             <vxe-table-column width="180"
                              align="center"
                              field="systemJudgment"
-                             title="是否通过"
+                             title="系统判定"
                               fixed="left">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -539,49 +539,30 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <vxe-table-column align="center"
-                             width="330"
-                             field="cpId"
-                             title="CPID"
-                              fixed="left">
-              <template v-slot:header>
-                <div>CPID<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.cpId }}
-                </div>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="180"
-                             align="center"
-                             field="systemJudgment"
-                             title="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </vxe-table-column>
             <vxe-table-column width="270"
-                             align="center"
-                             field="systemJudgmentContent"
-                             title="系统判定内容">
+                              align="center"
+                              field="systemJudgmentContent"
+                              title="系统判定内容"
+                              fixed="left">
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.judgmentContent }}
+                </div>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column align="center"
+                             width="330"
+                             field="cpId"
+                             title="CPID">
+              <template v-slot:header>
+                <div>CPID<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.cpId }}
                 </div>
               </template>
             </vxe-table-column>

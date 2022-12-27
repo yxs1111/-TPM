@@ -358,7 +358,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" fixed="left" prop="judgmentContent" label="系统判定内容">
+            <el-table-column width="260" align="center" fixed="left" prop="judgmentContent" label="系统判定内容">
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
@@ -609,7 +609,7 @@ export default {
       },
       permissions: getDefaultPermissions(),
       channelArr: [], //渠道
-      distributorArr: [], 
+      distributorArr: [],
       supplierArr: [], //供应商下拉
 
       monthList: [],

@@ -74,14 +74,15 @@ module.exports = {
         //target: `http://192.168.30.35:7777`,  //泽圣
         //target: `http://192.168.40.69:7777`,  //宋佳
         //target: `http://192.168.40.155:7777`,  //宗桂
-        //target: `http://10.176.80.242:7777`, // 测试服务器
+        // target: `http://10.176.80.242:7777`, // 测试服务器
         //target: `http://192.168.50.172:7788`, // 张淼
         // target: `http://192.168.50.85:7777`, // 王宝兴
         // target: `http://192.168.40.164:7777`, // 王宝兴
         //target: `http://192.168.40.170:7777`, // 樊鹏伟
         //target: `http://192.168.40.205:7777`, // 孙修为
         // target: `http://192.168.30.116:7777`, // 王文建
-        target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`, //测试服务器
+        target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`, // 测试服务器
+        // target: `https://saledata.rfc-friso.com/prod-api`, // Others测试
         // target: `https://iInvest.rfc-friso.com/prod-api`,  //正式服务器
         changeOrigin: true,
         pathRewrite: {

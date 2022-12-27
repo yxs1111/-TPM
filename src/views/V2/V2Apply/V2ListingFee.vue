@@ -331,7 +331,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统判定" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
@@ -344,7 +344,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
+            <el-table-column width="400" align="center" fixed prop="judgmentContent" label="系统判定内容" />
             <el-table-column align="center" width="460" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -705,7 +705,7 @@ export default {
           if (!Array.isArray(response.data)) {
             this.$message.info('导入数据为空，请检查模板')
           } else {
-            this.$message.success(this.messageMap.checkSuccess)    
+            this.$message.success(this.messageMap.checkSuccess)
             let checkList=response.data
             checkList.forEach(item=>{
               if (item.judgmentType=="Error") {

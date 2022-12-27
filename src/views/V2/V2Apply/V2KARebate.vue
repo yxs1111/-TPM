@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2022-04-28 14:44:18
  * @LastEditTime: 2022-12-17 19:22:50
 -->
@@ -391,7 +391,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统判定" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
@@ -404,8 +404,8 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
+            <el-table-column width="400" align="center" prop="judgmentContent" fixed label="系统判定内容" />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
