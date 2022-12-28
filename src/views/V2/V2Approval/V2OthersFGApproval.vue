@@ -14,10 +14,10 @@
                      filterable
                      clearable
                      placeholder="请选择">
-            <el-option v-for="(item) in ['RKA', 'RTM']"
-                       :key="item"
-                       :label="item"
-                       :value="item" />
+            <el-option v-for="item in monthList"
+                       :key="item.id"
+                       :label="item.activityMonth"
+                       :value="item.activityMonth" />
           </el-select>
         </div>
         <div class="Selectli"
@@ -28,10 +28,7 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in channelArr"
-                       :key="item.channelCsName"
-                       :label="item.channelCsName"
-                       :value="item.channelCode" />
+            <el-option v-for="(item) in ['RKA', 'RTM']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
