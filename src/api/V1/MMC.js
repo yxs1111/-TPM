@@ -117,6 +117,14 @@ export default {
       headers: { 'Content-Type': 'application/json' },
     })
   },
+  // 清除数据
+  clearDataMMC(params) {
+    return request({
+      url: '/cityplan/investCpMamaclassVOneDetail/deleteMMC',
+      method: 'get',
+      params,
+    })
+  },
   // 导出
   excdisplayData(params) {
     return request({

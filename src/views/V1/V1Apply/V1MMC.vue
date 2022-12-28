@@ -38,6 +38,7 @@
             <img src="../../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
+          <el-button type="primary" class="TpmButtonBG" @click="clearData()">清除数据</el-button>
         </div>
       </div>
     </div>
@@ -123,6 +124,38 @@ export default {
     this.getAllMonth()
   },
   methods: {
+    // 清除数据
+    clearData() {
+      API.clearDataMMC({
+        yearAndMonth: this.filterObj.yearAndMonth,
+        channelName: this.filterObj.channelName
+      }).then((res) => {})
+    },
+    // 获取表格数据
+    getTableData() {
+      if (!this.filterObj.yearAndMonth || !this.filterObj.channelName) {
+        return this.$message({
+          message: '必选选择年月和渠道！',
+          type: 'warning',
+        })
+      }
+      API.displayList({
+        pageNum: this.pageNum,
+        pageSize: this.pageSize, // 每页条数
+        ...this.filterObj,
+      }).then((response) => {
+        if (response.data.records.length > 0) {
+          this.tableData = response.data.records
+          this.mainIdLocal = response.data.records[0].mainId
+          this.isCalculation = response.data.records[0].isCalculation
+          this.infoByMainId()
+        } else {
+          this.tableData = []
+          this.mainIdLocal = null
+        }
+        this.total = response.data.total
+      })
+    },
     // 格式化--千位分隔符、两位小数
     formatNum(num) {
       return formatThousandNum(num)
@@ -197,31 +230,6 @@ export default {
         URL.revokeObjectURL(elink.href)
         document.body.removeChild(elink)
       }
-    },
-    // 获取表格数据
-    getTableData() {
-      if (!this.filterObj.yearAndMonth || !this.filterObj.channelName) {
-        return this.$message({
-          message: '必选选择年月和渠道！',
-          type: 'warning',
-        })
-      }
-      API.displayList({
-        pageNum: this.pageNum,
-        pageSize: this.pageSize, // 每页条数
-        ...this.filterObj,
-      }).then((response) => {
-        if (response.data.records.length > 0) {
-          this.tableData = response.data.records
-          this.mainIdLocal = response.data.records[0].mainId
-          this.isCalculation = response.data.records[0].isCalculation
-          this.infoByMainId()
-        } else {
-          this.tableData = []
-          this.mainIdLocal = null
-        }
-        this.total = response.data.total
-      })
     },
     // 通过与审批按钮控制
     infoByMainId() {
