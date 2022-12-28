@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-26 10:37:40
+ * @LastEditTime: 2022-12-28 16:10:50
 -->
 <template>
   <div class="ContentDetail">
@@ -300,6 +300,22 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="Error" :visible="isVisible" width="80%" class="my-el-dialog" :before-close="cancelDialog">
+      <div class="dialogContent">
+        <el-table :data="frieslandErrorList" border style="width: 100%" :header-cell-style="HeadTable" :row-class-name="tableRowClassName">
+          <!-- 序号 -->
+          <el-table-column align="center" type="index" label="序号" width="100"></el-table-column>
+          <el-table-column v-slot="{row}" align="center" width="180"  label="contract Item">
+            {{ row.customerInfo.contractItem }}
+          </el-table-column>
+          <el-table-column v-slot="{row}" align="center"  prop="newEffectiveDate" label="详情">
+            <div style="text-align: left;">
+               {{ frieslandErrorMessage[row.type] }}
+            </div>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -331,6 +347,8 @@ export default {
       customerContract: '', //客户合同
       contractList: ['草稿', '被拒绝', '待审批', '通过', '过期', '终止'],
       frieslandErrorMessage: ['菲仕兰承担费比不符合“Weighted avg.点数≤已录的KA Contract item的点数”', '菲仕兰承担含税金额不符合“经销商by item加总≤KA合同”', '经销商承担费比不符合“Weighted avg.点数≥已录的KA Contract item的点数”', '经销商承担含税金额不符合“经销商by item加总≥ KA合同”'],
+      isVisible: false,
+      frieslandErrorList: [],
     }
   },
 
@@ -1258,15 +1276,17 @@ export default {
         //   return
         // }
         if (frieslandErrorList.length) {
-          frieslandErrorList.forEach((item) => {
-            setTimeout(() => {
-              this.$notify.error({
-                title: '错误',
-                message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  ${this.frieslandErrorMessage[item.type]}`,
-                duration: 0,
-              })
-            }, 50)
-          })
+          this.isVisible=true
+          this.frieslandErrorList=frieslandErrorList
+          // frieslandErrorList.forEach((item) => {
+          //   setTimeout(() => {
+          //     this.$notify.error({
+          //       title: '错误',
+          //       message: `第${item.rowIndex + 1}行${this.AllTableData[item.rowIndex].customerInfo.contractItem}  ${this.frieslandErrorMessage[item.type]}`,
+          //       duration: 0,
+          //     })
+          //   }, 50)
+          // })
           return
         }
         // if (exceptionList.length) {
@@ -1636,6 +1656,9 @@ export default {
       let { dealerTaxPrice, targetSale, taxPrice } = Obj.dealerList[dealerIndex]
       this.AllTableData[index].dealerList[dealerIndex].dealerPointCount = BigToFixedTwo(mul(div(dealerTaxPrice, targetSale), 100))
       this.AllTableData[index].dealerList[dealerIndex].frieslandTaxPrice = BigToFixedTwo(sub(taxPrice, dealerTaxPrice))
+    },
+    cancelDialog() {
+      this.isVisible = false
     },
     // 每页显示页面数变更
     handleSizeChange(size) {
