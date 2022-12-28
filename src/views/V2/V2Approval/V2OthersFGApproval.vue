@@ -1142,26 +1142,22 @@ export default {
     },
     // 下载模板
     downloadTemplate() {
-      if (this.tableData.length) {
-        // 导出数据筛选
-        API.exportTemplateExcel({
-          supplierCode: this.filterObj.supplierName, //供应商
-          channelCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+      // 导出数据筛选
+      API.exportTemplateExcel({
+        supplierCode: this.filterObj.supplierName, //供应商
+        channelCode: this.filterObj.channelCode, //渠道
+        customerCode: this.filterObj.customerCode, //客户系统名称
 
-          ecmItem: this.filterObj.ecmItem, //
-          yearAndMonth: this.filterObj.month,
-          //   isSubmit: 0,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2申请.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success(this.messageMap.exportSuccess)
-        })
-      } else {
-        this.$message.info('数据不能为空')
-      }
+        ecmItem: this.filterObj.ecmItem, //
+        yearAndMonth: this.filterObj.month,
+        //   isSubmit: 0,
+      }).then((res) => {
+        downloadFile(
+          res,
+          `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2申请.xlsx`
+        ) //自定义Excel文件名
+        this.$message.success(this.messageMap.exportSuccess)
+      })
     },
     approve(value) {
       if (this.tableData.length) {
