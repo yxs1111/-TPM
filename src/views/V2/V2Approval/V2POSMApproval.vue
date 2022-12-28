@@ -560,7 +560,6 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
-            <!--            是否通过-->
             <vxe-table-column field="date"
                              align="center"
                              title="系统检验"
@@ -582,7 +581,6 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <!--            验证信息-->
             <vxe-table-column width="400"
                              align="center"
                              field="judgmentContent"
@@ -597,12 +595,10 @@
                 </div>
               </template>
             </vxe-table-column>
-            <!--            CPID-->
             <vxe-table-column align="center"
                              width="460"
                              field="cpId"
-                             title="CPID"
-                              fixed="left">
+                             title="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -627,47 +623,6 @@
               </template>
             </vxe-table-column>
             <!--            系统判定-->
-            <vxe-table-column width="180"
-                             align="center"
-                             field="systemJudgment"
-                             title="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="400"
-                             align="left"
-                             field="systemJudgmentContent"
-                             title="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
-                </div>
-              </template>
-            </vxe-table-column>
             <vxe-table-column width="120"
                              align="center"
                              field="costType"

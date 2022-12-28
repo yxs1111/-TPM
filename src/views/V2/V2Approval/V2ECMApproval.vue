@@ -534,8 +534,7 @@
             <el-table-column align="center"
                              width="230"
                              prop="cpId"
-                             label="CPID"
-                             fixed="left">
+                             label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>

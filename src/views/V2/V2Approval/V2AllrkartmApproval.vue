@@ -478,9 +478,9 @@
                              align="center"
                              fixed="left"
                              prop="systemJudgment"
-                             label="系统判定">
+                             label="系统检验">
               <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -489,16 +489,8 @@
                   <div slot="content"
                        v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
@@ -507,21 +499,18 @@
                              align="left"
                              fixed="left"
                              prop="systemJudgmentContent"
-                             label="系统判定内容">
+                             label="系统检验">
               <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
-                </div>
+                <span>检验通过</span>
               </template>
             </el-table-column>
             <el-table-column align="center"
                              width="230"
                              prop="cpId"
-                             label="CPID"
-                             fixed="left">
+                             label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -723,47 +712,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.costAscriptionDept }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="180"
-                             align="center"
-                             prop="systemJudgment"
-                             label="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="800"
-                             align="left"
-                             prop="systemJudgmentContent"
-                             label="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </el-table-column>

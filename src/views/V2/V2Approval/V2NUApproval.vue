@@ -147,10 +147,10 @@
                 <span class="judgmentText">Pass</span>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="系统检验">
+            <el-table-column width="250" align="center" prop="judgmentContent" label="系统检验" fixed >
               <span>检验通过</span>
             </el-table-column>
-            <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
+            <el-table-column width="420" align="center" prop="cpId" label="CPID"/>
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />

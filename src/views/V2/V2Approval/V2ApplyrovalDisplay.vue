@@ -203,7 +203,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="150" align="center" fixed  prop="judgmentType" label="系统检验">
+            <el-table-column width="250" align="center" fixed  prop="judgmentType" label="系统检验">
               <span>检验通过</span>
             </el-table-column>
             <el-table-column width="420" align="center" prop="cpId" label="CPID"/>
