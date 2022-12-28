@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-06 17:14:48
+ * @LastEditTime: 2022-12-28 17:11:28
 -->
 <template>
   <div class="MainContent">
@@ -158,7 +158,7 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-      <el-table-column width="300" align="right" prop="transportItem" label="Transport item">
+      <el-table-column width="300" align="center" prop="transportItem" label="Transport item">
         <template v-slot:header>
           <div>Transport item<br><span class="subTitle">-</span></div>
         </template>
