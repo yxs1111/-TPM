@@ -344,7 +344,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="350" align="center" fixed="left" prop="judgmentContent" label="系统检验">
+            <el-table-column width="230" align="center" fixed="left" prop="judgmentContent" label="系统检验">
               <template v-slot:header>
                 <div>系统检验<br><span class="subTitle">-</span></div>
               </template>

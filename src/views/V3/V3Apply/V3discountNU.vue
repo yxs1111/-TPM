@@ -164,7 +164,10 @@
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
           }" :row-class-name="tableRowClassName" stripe>
-          <vxe-table-column fixed align="center" title="是否通过" width="100">
+          <vxe-table-column fixed="left" align="center" title="系统判定" width="100">
+            <template v-slot:header>
+              <div>系统判定</div>
+            </template>
             <template slot-scope="scope">
               <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
               <img v-else-if="scope.row.judgmentType===null? false:(scope.row.judgmentType.indexOf('Exception') > -1)" :src="excepImg" style="width:25px;height:25px;">
@@ -173,7 +176,16 @@
               <img v-else :src="errorImg" style="width:25px;height:25px;">
             </template>
           </vxe-table-column>
-          <vxe-table-column width="400" align="center" field="judgmentContent" title="验证信息" />
+          <vxe-table-column width="400" align="center" fixed="left" field="judgmentContent" title="系统判定内容">
+            <template v-slot:header>
+              <div>系统判定</div>
+            </template>
+            <template slot-scope="scope">
+              <div>
+                {{ scope.row.judgmentContent }}
+              </div>
+            </template>
+          </vxe-table-column>
           <vxe-table-column align="center" width="400" field="cpId" title="CPID" />
           <vxe-table-column width="120" align="center" field="yearAndMonth" title="活动月" />
           <vxe-table-column width="160" align="center" field="costTypeName" title="费用类型" />
@@ -221,8 +233,6 @@
           <vxe-table-column v-slot="{row}" width="150" align="right" field="costDifference" title="费用差值(RMB)">
             {{ FormateNum(row.costDifference) }}
           </vxe-table-column>
-          <vxe-table-column width="120" align="center" field="judgmentType" title="系统判定" />
-          <vxe-table-column width="280" align="center" field="judgmentContent" title="系统判定内容" />
           <vxe-table-column width="120" align="center" field="applyRemarks" title="申请人备注" />
           <vxe-table-column width="220" align="center" field="poApprovalComments" title="Package Owner审批意见" />
           <vxe-table-column width="220" align="center" field="finApprovalComments" title="Finance审批意见" />

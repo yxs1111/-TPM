@@ -608,7 +608,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="系统检验">
+            <el-table-column width="250" align="center" prop="systemJudgmentContent" label="系统检验" fixed>
               <span>检验通过</span>
             </el-table-column>
             <el-table-column align="center" width="460" prop="cpId" label="CPID"  />

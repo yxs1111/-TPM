@@ -28,10 +28,10 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in channelArr"
-                       :key="item.channelCsName"
-                       :label="item.channelCsName"
-                       :value="item.channelCode" />
+            <el-option v-for="(item) in ['RKA', 'RTM']"
+                       :key="item"
+                       :label="item"
+                       :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -64,14 +64,12 @@
          style="align-items: center;">
       <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="importData">
         <img src="@/assets/images/import.png"
              alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -1156,26 +1154,22 @@ export default {
     },
     // 下载模板
     downloadTemplate() {
-      if (this.tableData.length) {
-        // 导出数据筛选
-        API.exportTemplateExcel({
-          supplierCode: this.filterObj.supplierName, //供应商
-          channelMdmCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+      // 导出数据筛选
+      API.exportTemplateExcel({
+        supplierCode: this.filterObj.supplierName, //供应商
+        channelMdmCode: this.filterObj.channelCode, //渠道
+        customerCode: this.filterObj.customerCode, //客户系统名称
 
-          ecmItem: this.filterObj.ecmItem, //
-          yearAndMonth: this.filterObj.month,
-          //   isSubmit: 0,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2申请.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success(this.messageMap.exportSuccess)
-        })
-      } else {
-        this.$message.info('数据不能为空')
-      }
+        ecmItem: this.filterObj.ecmItem, //
+        yearAndMonth: this.filterObj.month,
+        //   isSubmit: 0,
+      }).then((res) => {
+        downloadFile(
+          res,
+          `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2申请.xlsx`
+        ) //自定义Excel文件名
+        this.$message.success(this.messageMap.exportSuccess)
+      })
     },
     approve() {
       if (this.tableData.length) {

@@ -418,16 +418,7 @@
               </template>
             </vxe-table-column>
             <!--            CPID-->
-            <vxe-table-column align="center" width="460" field="cpId" title="CPID" fixed="left">
-              <template v-slot:header>
-                <div>CPID<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.cpId }}
-                </div>
-              </template>
-            </vxe-table-column>
+            <vxe-table-column align="center" width="460" field="cpId" title="CPID"/>
             <!--            活动月-->
             <vxe-table-column width="120" align="center" field="yearAndMonth" title="活动月">
               <template v-slot:header>

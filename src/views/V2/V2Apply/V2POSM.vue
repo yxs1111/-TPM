@@ -574,10 +574,10 @@
             <vxe-table-column width="180"
                               align="center"
                               field="systemJudgment"
-                              title="是否通过"
+                              title="系统判定"
                               fixed="left">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -604,9 +604,9 @@
                               align="left"
                               fixed="left"
                               field="systemJudgmentContent"
-                              title="验证信息">
+                              title="系统判定内容">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -617,8 +617,7 @@
             <vxe-table-column align="center"
                               width="330"
                               field="cpId"
-                              title="CPID"
-                              fixed="left">
+                              title="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>

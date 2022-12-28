@@ -262,7 +262,7 @@ export default function () {
               name: 'V2Allrkartm',
               component: () => import('@/views/V2/V2Apply/V2Allrkartm.vue'),
               meta: {
-                title: 'Allrkartm',
+                title: 'All-RKA/RTM',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Apply',
               },
@@ -274,7 +274,7 @@ export default function () {
               name: 'V2Others',
               component: () => import('@/views/V2/V2Apply/V2Others.vue'),
               meta: {
-                title: 'Others',
+                title: 'Others-EC/NKA',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Apply',
               },
@@ -286,7 +286,7 @@ export default function () {
               name: 'V2OthersFG',
               component: () => import('@/views/V2/V2Apply/V2OthersFG.vue'),
               meta: {
-                title: 'OthersFG',
+                title: 'FG-RKA/RTM',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Apply',
               },
@@ -540,7 +540,7 @@ export default function () {
               component: () =>
                 import('@/views/V2/V2Approval/V2AllrkartmApproval.vue'),
               meta: {
-                title: 'Allrkartm',
+                title: 'All-RKA/RTM',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },
@@ -553,7 +553,7 @@ export default function () {
               component: () =>
                 import('@/views/V2/V2Approval/V2OthersApproval.vue'),
               meta: {
-                title: 'Others',
+                title: 'Others-EC/NKA',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },
@@ -566,7 +566,7 @@ export default function () {
               component: () =>
                 import('@/views/V2/V2Approval/V2OthersFGApproval.vue'),
               meta: {
-                title: 'OthersFG',
+                title: 'FG-RKA/RTM',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },

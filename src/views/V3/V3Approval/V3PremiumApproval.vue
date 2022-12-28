@@ -519,8 +519,9 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="350"
                              align="center"
+                             fixed='left'
                              prop="judgmentContent"
                              label="系统检验">
               <template v-slot:header>

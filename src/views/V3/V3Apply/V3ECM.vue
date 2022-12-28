@@ -518,9 +518,9 @@
                              fixed="left"
                              align="center"
                              prop="judgmentType"
-                             label="是否通过">
+                             label="系统判定">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -543,13 +543,13 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="400"
                              align="left"
                              fixed="left"
                              prop="judgmentContent"
-                             label="验证信息">
+                             label="系统判定内容">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>

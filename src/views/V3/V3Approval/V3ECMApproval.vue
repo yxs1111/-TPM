@@ -537,7 +537,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="250"
                              align="left"
                              fixed="left"
                              prop="judgmentContent"
@@ -552,7 +552,6 @@
             <el-table-column align="center"
                              width="460"
                              prop="cpId"
-                             fixed="left"
                              label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>

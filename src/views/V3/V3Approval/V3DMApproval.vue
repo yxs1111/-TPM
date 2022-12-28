@@ -340,7 +340,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column width="180" align="center" prop="judgmentType" label="系统检验">
+            <el-table-column width="180" align="center" fixed='left' prop="judgmentType" label="系统检验">
               <template v-slot:header>
                 <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
@@ -357,7 +357,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800" align="left" prop="judgmentContent" label="系统检验">
+            <el-table-column width="350" align="left" fixed='left' prop="judgmentContent" label="系统检验">
               <template v-slot:header>
                 <div>系统检验<br><span class="subTitle">-</span></div>
               </template>

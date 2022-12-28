@@ -28,10 +28,10 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in channelArr"
-                       :key="item.channelCsName"
-                       :label="item.channelCsName"
-                       :value="item.channelCode" />
+            <el-option v-for="(item) in ['EC', 'NKA']"
+                       :key="item"
+                       :label="item"
+                       :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -481,9 +481,9 @@
                              align="center"
                              fixed="left"
                              prop="systemJudgment"
-                             label="系统判定">
+                             label="系统检验">
               <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -492,16 +492,8 @@
                   <div slot="content"
                        v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
@@ -510,21 +502,18 @@
                              align="left"
                              fixed="left"
                              prop="systemJudgmentContent"
-                             label="系统判定内容">
+                             label="系统检验">
               <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
-                </div>
+                <span>检验通过</span>
               </template>
             </el-table-column>
             <el-table-column align="center"
                              width="230"
                              prop="cpId"
-                             label="CPID"
-                             fixed="left">
+                             label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -726,47 +715,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.costAscriptionDept }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="180"
-                             align="center"
-                             prop="systemJudgment"
-                             label="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="800"
-                             align="left"
-                             prop="systemJudgmentContent"
-                             label="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
                 </div>
               </template>
             </el-table-column>
@@ -1197,26 +1145,22 @@ export default {
     },
     // 下载模板
     downloadTemplate() {
-      if (this.tableData.length) {
-        // 导出数据筛选
-        API.exportTemplateExcel({
-          supplierCode: this.filterObj.supplierName, //供应商
-          channelCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+      // 导出数据筛选
+      API.exportTemplateExcel({
+        supplierCode: this.filterObj.supplierName, //供应商
+        channelCode: this.filterObj.channelCode, //渠道
+        customerCode: this.filterObj.customerCode, //客户系统名称
 
-          ecmItem: this.filterObj.ecmItem, //
-          yearAndMonth: this.filterObj.month,
-          //   isSubmit: 0,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2申请.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success(this.messageMap.exportSuccess)
-        })
-      } else {
-        this.$message.info('数据不能为空')
-      }
+        ecmItem: this.filterObj.ecmItem, //
+        yearAndMonth: this.filterObj.month,
+        //   isSubmit: 0,
+      }).then((res) => {
+        downloadFile(
+          res,
+          `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2申请.xlsx`
+        ) //自定义Excel文件名
+        this.$message.success(this.messageMap.exportSuccess)
+      })
     },
     approve(value) {
       if (this.tableData.length) {

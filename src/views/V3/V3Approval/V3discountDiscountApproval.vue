@@ -173,14 +173,29 @@
             fontWeight: 400,
             fontFamily: 'Source Han Sans CN'
           }" :row-class-name="tableRowClassName" stripe>
-          <vxe-table-column fixed align="center" label="系统检验" width="100">
-            <template slot-scope="scope">
-              <img  src="@/assets/images/success.png" alt="">
-              <span class="judgmentText">Pass</span>
+          <vxe-table-column field="date" align="center" title="系统检验" width="180" fixed="left">
+            <template v-slot:header>
+              <div>系统检验</div>
+            </template>
+            <template slot-scope="{row}">
+              <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                <div slot="content" v-html="getTip(row)" />
+                <div class="statusWrap">
+                  <img  src="@/assets/images/success.png" alt="">
+                  <span class="judgmentText">Pass</span>
+                </div>
+              </el-tooltip>
             </template>
           </vxe-table-column>
-          <vxe-table-column width="400" align="center" field="judgmentContent" title="系统检验">
-            <span>检验通过</span>
+          <vxe-table-column width="400" align="center" field="judgmentContent" title="系统检验" fixed="left">
+            <template v-slot:header>
+              <div>系统检验</div>
+            </template>
+            <template slot-scope="scope">
+              <div>
+                <span>检验通过</span>
+              </div>
+            </template>
           </vxe-table-column>
           <vxe-table-column align="center" width="400" field="cpId" title="CPID" />
           <vxe-table-column width="120" align="center" field="yearAndMonth" title="活动月" />
