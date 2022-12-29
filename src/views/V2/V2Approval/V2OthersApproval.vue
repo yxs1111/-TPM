@@ -36,14 +36,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
-            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择" class="my-el-select">
+            <el-option v-for="(item, index) in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">费用科目:</span>
           <el-select v-model="filterObj.costAccount" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
       </div>
@@ -788,7 +788,8 @@ export default {
       supplierArr: [], //供应商下拉
       zoneArr: [], //大区下拉
       regionArr: [], //区域下拉
-
+      MinePackageList: [],
+      CostItemList: [],
       monthList: [],
       customerArr: [],
       tableData: [],
@@ -815,7 +816,19 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.MinePackageIndex'(value) {
+      console.log(this.MinePackageList)
+      if(value!=='') {
+        this.filterObj.MinePackageName=this.MinePackageList[this.filterObj.MinePackageIndex].costType
+        this.filterObj.MinePackage=this.MinePackageList[this.filterObj.MinePackageIndex].costTypeNumber
+      } else {
+        this.filterObj.MinePackage = ''
+      }
+      this.filterObj.costItem = ''
+      this.getCostItemList(this.filterObj.MinePackage)
+    },
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -830,6 +843,8 @@ export default {
     // this.getDistributorList()
     this.getRegionList()
     this.getPageMdSupplier()
+    this.getMinePackage()
+    this.getCostItemList()
     // this.getQuerySkuSelect()
   },
   methods: {
@@ -879,7 +894,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-EC/NKA' &&
+              res.data.version === 'Others-V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -945,6 +960,28 @@ export default {
         })
       }
     },
+    // minepackage
+    getMinePackage() {
+      selectAPI
+        .queryMinePackageSelect({
+          parentId: '',
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.MinePackageList = res.data
+          }
+        })
+    },
+    // 获取下拉框
+    getCostItemList(code) {
+      API.getCostItemList({
+        minePackage: code,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.CostItemList = res.data
+        }
+      })
+    },
     getBrandList() {
       selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
         if (res.code === 1000) {
@@ -975,11 +1012,10 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          supplierCode: this.filterObj.supplierName, //供应商
           channelMdmCode: this.filterObj.channelCode.code, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          ecmItem: this.filterObj.ecmItem, //
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
@@ -1140,7 +1176,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_ECM_${this.filterObj.channelCode.value}_V2申请.xlsx`
+          `${this.filterObj.month}_Other-EC-NKA_${this.filterObj.channelCode.value}_V2申请.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

@@ -36,7 +36,7 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择" class="my-el-select">
             <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
@@ -891,7 +891,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'ECM-V2' &&
+              res.data.version === 'Others-V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -998,9 +998,9 @@ export default {
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
           channelMdmCode: this.filterObj.channelCode.code, //渠道
-          minePackage: this.filterObj.MinePackage,
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          costAccount: this.filterObj.costAccount,
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
