@@ -1,7 +1,7 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2022-12-21 11:06:50
+ * @LastEditTime: 2022-12-29 14:53:23
 -->
 <template>
   <div class="portalWrap">
@@ -48,16 +48,9 @@
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
         </div>
       </div>
-      <div class="systemLi" v-wave="{color: '#999',initialOpacity: 0.5,easing: 'ease-in'}">
-        <img src="@/assets/images/portal/soon.png" alt="" class="systemImg" />
-        <div class="systemName">
-          <div>Coming soon....</div>
-          <div class="subTitle">
-            <span>更多精彩内容</span>
-            <br />
-            <span>敬请期待</span>
-          </div>
-        </div>
+      <div class="systemLi" @click="goTPMContract" v-wave="{color: '#999',initialOpacity: 0.5,easing: 'ease-in'}">
+        <img src="@/assets/images/portal/contract.png" alt="" class="systemImg" />
+        <div class="systemName">合同管理</div>
         <div class="cycle">
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
         </div>
@@ -82,6 +75,9 @@ export default {
   methods: {
     goTPM() {
       this.$router.push('/dashboard')
+    },
+    goTPMContract() {
+      this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
     },
     async goSalesCpt() {
       let username = sessionStorage.getItem('username')
@@ -196,7 +192,7 @@ export default {
         background-color: #999999;
       }
       &:nth-child(4) .cycle {
-        background-color: #999999;
+        background-color: #4192d3;
       }
     }
     .systemLi:hover {
