@@ -42,7 +42,7 @@
             {value: 'RKA Expansion', code: '101713'},]"
                        :key="item"
                        :label="item.value"
-                       :value="item.code" />
+                       :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -874,7 +874,7 @@ export default {
           pageSize: this.pageSize, // 每页条数
 
           supplierCode: this.filterObj.supplierName, //供应商
-          channelCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode.code, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
 
           ecmItem: this.filterObj.ecmItem, //
@@ -1000,15 +1000,15 @@ export default {
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
           supplierCode: this.filterObj.supplierName, //供应商
-          channelCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode.code, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
 
-          ecmItem: this.filterObj.ecmItem, //
+          // ecmItem: this.filterObj.ecmItem, //
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode.value}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1038,7 +1038,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('channelMdmCode', this.filterObj.channelCode.code)
       formData.append('importType', 0) //1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1085,7 +1085,7 @@ export default {
     checkImport() {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
+        channelMdmCode: this.filterObj.channelCode,
         // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
@@ -1122,7 +1122,7 @@ export default {
       API.importSave({
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
-        channelName: this.filterObj.channelCode,
+        channelMdmCode: this.filterObj.channelCode.code,
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1139,7 +1139,7 @@ export default {
       if (this.ImportData.length) {
         API.exportCheckData({
           supplierCode: this.filterObj.supplierName, //供应商
-          channelCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode, //渠道
           customerCode: this.filterObj.customerCode, //客户系统名称
 
           ecmItem: this.filterObj.ecmItem, //
@@ -1159,7 +1159,7 @@ export default {
       // 导出数据筛选
       API.exportTemplateExcel({
         supplierCode: this.filterObj.supplierName, //供应商
-        channelCode: this.filterObj.channelCode, //渠道
+        channelMdmCode: this.filterObj.channelCode.code, //渠道
         customerCode: this.filterObj.customerCode, //客户系统名称
 
         ecmItem: this.filterObj.ecmItem, //
@@ -1168,7 +1168,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2申请.xlsx`
+          `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode.value}_V2审批.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
@@ -1183,8 +1183,11 @@ export default {
           })
             .then(() => {
               API.approve({
-                mainId: this.tableData[0].mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                // mainId: this.tableData[0].mainId, // 主表id
+                yearAndMonth: this.filterObj.month,
+                channelCode: this.filterObj.channelCode.value,
+                // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                paramMap: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {

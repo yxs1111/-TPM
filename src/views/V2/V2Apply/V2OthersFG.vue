@@ -1018,7 +1018,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode.value}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1095,7 +1095,7 @@ export default {
     checkImport() {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
+        channelMdmCode: this.filterObj.channelCode,
         // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
@@ -1184,35 +1184,32 @@ export default {
     },
     approve() {
       if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
+        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            const mainId = this.tableData[0].mainId
+            API.approve({
+              yearAndMonth: this.filterObj.month,
+              channelCode: this.filterObj.channelCode.value,
+              // mainId: mainId, // 主表id
+              // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+              // isSubmit: 0, //申请0,审批1
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success('提交成功')
+                this.getTableData()
+              }
+            })
           })
-            .then(() => {
-              const mainId = this.tableData[0].mainId
-              API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                // isSubmit: 0, //申请0,审批1
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('提交成功')
-                  this.getTableData()
-                }
-              })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消提交',
             })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
-              })
-            })
-        } else {
-          this.$message.info('数据未校验，请先进行导入验证')
-        }
+          })
       } else {
         this.$message.warning('数据不能为空')
       }
