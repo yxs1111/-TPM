@@ -27,9 +27,14 @@ export default {
       params
     )
   },
-  //导出  investCpEcmVTwoDetail/downExcel
+  // 导出  investCpEcmVTwoDetail/downExcel
   exportPageExcel(params) {
-    return requestApi.request_get(this.url + '/exportOthers', params)
+    return request({
+      url: this.url+'/exportOthers',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
   // exportPageExcel(params) {
   //   return request({
@@ -39,9 +44,14 @@ export default {
   //     responseType: 'blob',
   //   })
   // },
-  //下载模板  investCpEcmVTwoDetail/downExcelTemplate
+  // 下载模板  investCpEcmVTwoDetail/downExcelTemplate
   exportTemplateExcel(params) {
-    return requestApi.request_get(this.url + '/exportOthers', params)
+    return request({
+      url: this.url+'/exportOthers',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
   // exportTemplateExcel(params) {
   //   return request({
