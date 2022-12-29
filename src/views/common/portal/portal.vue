@@ -1,7 +1,7 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2022-12-29 14:53:23
+ * @LastEditTime: 2022-12-29 15:15:01
 -->
 <template>
   <div class="portalWrap">
@@ -253,8 +253,9 @@ export default {
           display: flex;
           justify-content: center;
           align-items: center;
+          margin-top: 20px;
           .CPTSelectContentItemTitle {
-            margin-top: 20px;
+            margin-right: 10px;
           }
         }
       }
