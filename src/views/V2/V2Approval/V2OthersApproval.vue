@@ -28,10 +28,10 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in ['EC', 'NKA']"
+            <el-option v-for="(item) in [{value: 'EC', code: '44442'}, {value: 'NKA', code: '101705'}]"
                        :key="item"
-                       :label="item"
-                       :value="item" />
+                       :label="item.value"
+                       :value="item.code" />
           </el-select>
         </div>
         <div class="Selectli">

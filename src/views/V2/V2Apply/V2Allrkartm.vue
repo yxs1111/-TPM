@@ -28,10 +28,21 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in ['RKA', 'RTM']"
+            <el-option v-for="(item) in
+            [{value: 'JBP', code: '101701'},
+            {value: 'Others', code: '101702'},
+            {value: 'B2C', code: '101703'},
+            {value: 'LKA', code: '101704'},
+            {value: 'JD Group', code: '101706'},
+            {value: 'Ali Group', code: '101707'},
+            {value: 'EC Potential', code: '101709'},
+            {value: '2B', code: '101710'},
+            {value: 'FrisoGo', code: '101711'},
+            {value: 'RKA', code: '101712'},
+            {value: 'RKA Expansion', code: '101713'},]"
                        :key="item"
-                       :label="item"
-                       :value="item" />
+                       :label="item.value"
+                       :value="item.code" />
           </el-select>
         </div>
         <div class="Selectli">
