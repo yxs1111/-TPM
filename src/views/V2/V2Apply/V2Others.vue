@@ -31,7 +31,7 @@
             <el-option v-for="(item) in [{value: 'EC', code: '44442'}, {value: 'NKA', code: '101705'}]"
                        :key="item"
                        :label="item.value"
-                       :value="item.code" />
+                       :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -863,7 +863,7 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          channelMdmCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode.code, //渠道
           minePackage: this.filterObj.MinePackage,
 
           costAccount: this.filterObj.costAccount,
@@ -998,7 +998,7 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          channelMdmCode: this.filterObj.channelCode, //渠道
+          channelMdmCode: this.filterObj.channelCode.code, //渠道
           minePackage: this.filterObj.MinePackage,
 
           costAccount: this.filterObj.costAccount,
@@ -1006,7 +1006,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_Others-EC/NKA_${this.filterObj.channelCode.value}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1036,7 +1036,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelMdmCode', this.filterObj.channelCode)
+      formData.append('channelMdmCode', this.filterObj.channelCode.code)
       formData.append('importType', 1) // 1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1083,7 +1083,7 @@ export default {
     checkImport() {
       API.formatCheck({
         yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode,
+        channelMdmCode: this.filterObj.channelCode,
         // isSubmit: 0,
       }).then((response) => {
         if (response.code == 1000) {
@@ -1120,7 +1120,7 @@ export default {
       API.importSave({
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
-        channelMdmCode: this.filterObj.channelCode,
+        channelMdmCode: this.filterObj.channelCode.code,
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1156,7 +1156,7 @@ export default {
       // 导出数据筛选
       API.exportTemplateExcel({
         supplierCode: this.filterObj.supplierName, //供应商
-        channelMdmCode: this.filterObj.channelCode, //渠道
+        channelMdmCode: this.filterObj.channelCode.code, //渠道
         customerCode: this.filterObj.customerCode, //客户系统名称
 
         ecmItem: this.filterObj.ecmItem, //
@@ -1172,35 +1172,32 @@ export default {
     },
     approve() {
       if (this.tableData.length) {
-        const judgmentType = this.tableData[0].judgmentType
-        if (judgmentType != null) {
-          this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
+        this.$confirm('此操作将进行提交操作, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            const mainId = this.tableData[0].mainId
+            API.approve({
+              yearAndMonth: this.filterObj.month,
+              channelCode: this.filterObj.channelCode.value,
+              // mainId: mainId, // 主表id
+              // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+              // isSubmit: 0, //申请0,审批1
+            }).then((response) => {
+              if (response.code === 1000) {
+                this.$message.success('提交成功')
+                this.getTableData()
+              }
+            })
           })
-            .then(() => {
-              const mainId = this.tableData[0].mainId
-              API.approve({
-                mainId: mainId, // 主表id
-                opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                // isSubmit: 0, //申请0,审批1
-              }).then((response) => {
-                if (response.code === 1000) {
-                  this.$message.success('提交成功')
-                  this.getTableData()
-                }
-              })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消提交',
             })
-            .catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消提交',
-              })
-            })
-        } else {
-          this.$message.info('数据未校验，请先进行导入验证')
-        }
+          })
       } else {
         this.$message.warning('数据不能为空')
       }

@@ -79,6 +79,6 @@ export default {
 
   //提交 investCpEcmVTwoDetail/approve
   approve(params) {
-    return requestApi.request_post(this.url + '/approve', params)
+    return requestApi.request_post(this.url + '/approveOthers', params)
   },
 }
