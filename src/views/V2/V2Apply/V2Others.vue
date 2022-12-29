@@ -37,18 +37,17 @@
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
           <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
-            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="index" />
+            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">费用科目:</span>
           <el-select v-model="filterObj.costAccount" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
       </div>
       <div class="OpertionBar">
-
         <el-button type="primary"
                    class="TpmButtonBG"
                    @click="search">查询</el-button>
@@ -864,9 +863,9 @@ export default {
           pageSize: this.pageSize, // 每页条数
 
           channelMdmCode: this.filterObj.channelCode.code, //渠道
-          minePackage: this.filterObj.MinePackage,
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          costAccount: this.filterObj.costAccount,
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((response) => {
@@ -878,7 +877,7 @@ export default {
           if (this.tableData.length > 0) {
             this.isSubmit = this.tableData[0].isSubmit
             this.mainId = this.tableData[0].mainId
-            this.infoByMainId()
+            // this.infoByMainId()
           }
         })
       }
@@ -1155,18 +1154,14 @@ export default {
     downloadTemplate() {
       // 导出数据筛选
       API.exportTemplateExcel({
-        supplierCode: this.filterObj.supplierName, //供应商
         channelMdmCode: this.filterObj.channelCode.code, //渠道
-        customerCode: this.filterObj.customerCode, //客户系统名称
-
-        ecmItem: this.filterObj.ecmItem, //
         yearAndMonth: this.filterObj.month,
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2申请.xlsx`
-        ) //自定义Excel文件名
+          `${this.filterObj.month}_All-RKA-RTM_${this.filterObj.channelCode.value}_V2申请.xlsx`
+        ) // 自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
     },
@@ -1183,7 +1178,7 @@ export default {
               yearAndMonth: this.filterObj.month,
               channelCode: this.filterObj.channelCode.value,
               // mainId: mainId, // 主表id
-              // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+              paramMap: { opinion: 'agree'}, // 审批标识(agree：审批通过，reject：审批驳回)
               // isSubmit: 0, //申请0,审批1
             }).then((response) => {
               if (response.code === 1000) {

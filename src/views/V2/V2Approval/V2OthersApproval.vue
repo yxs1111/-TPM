@@ -35,27 +35,15 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.customerCode"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr"
-                       :key="index"
-                       :label="item.customerCsName"
-                       :value="item.customerCode" />
+          <span class="SelectliTitle">MinePackage:</span>
+          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
+            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">费用科目:</span>
-          <el-select v-model="filterObj.supplierName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in supplierArr"
-                       :key="index"
-                       :label="item.supplierName"
-                       :value="item.supplierCode" />
+          <el-select v-model="filterObj.costAccount" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
       </div>
@@ -862,11 +850,10 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          supplierCode: this.filterObj.supplierName, //供应商
           channelMdmCode: this.filterObj.channelCode.code, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          ecmItem: this.filterObj.ecmItem, //
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((response) => {
@@ -892,7 +879,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'ECM-V2' &&
+              res.data.version === 'Others-EC/NKA' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -997,7 +984,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Others-NKA/EC_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_Others-NKA/EC_${this.filterObj.channelCode.value}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1147,17 +1134,13 @@ export default {
     downloadTemplate() {
       // 导出数据筛选
       API.exportTemplateExcel({
-        supplierCode: this.filterObj.supplierName, //供应商
         channelMdmCode: this.filterObj.channelCode.code, //渠道
-        customerCode: this.filterObj.customerCode, //客户系统名称
-
-        ecmItem: this.filterObj.ecmItem, //
         yearAndMonth: this.filterObj.month,
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2申请.xlsx`
+          `${this.filterObj.month}_ECM_${this.filterObj.channelCode.value}_V2申请.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

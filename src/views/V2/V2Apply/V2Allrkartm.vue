@@ -42,7 +42,7 @@
             {value: 'RKA Expansion', code: '101713'},]"
                        :key="item"
                        :label="item.value"
-                       :value="item.code" />
+                       :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -848,11 +848,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
-    this.getzoneArr()
     // this.getDistributorList()
-    this.getRegionList()
-    this.getPageMdSupplier()
     this.getMinePackage()
     this.getCostItemList()
   },
@@ -874,10 +870,10 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          channelMdmCode: this.filterObj.channelCode, //渠道
-          minePackage: this.filterObj.MinePackage,
+          channelMdmCode: this.filterObj.channelCode.code, //渠道
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          costAccount: this.filterObj.costAccount,
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((response) => {
@@ -929,7 +925,7 @@ export default {
         }
       })
     },
-    // 获取下拉框
+    // 费用科目获取下拉框
     getCostItemList(code) {
       API.getCostItemList({
         minePackage: code,
@@ -951,49 +947,6 @@ export default {
           }
         })
     },
-    // 供应商
-    getPageMdSupplier() {
-      selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
-        if (res.code === 1000) {
-          this.supplierArr = res.data
-        }
-      })
-    },
-    //获取区域下拉
-    getRegionList() {
-      if (this.filterObj.distributorCode != '') {
-        selectAPI
-          .getRegionList({
-            zoneName: this.filterObj.distributorCode,
-          })
-          .then((res) => {
-            if (res.code === 1000) {
-              this.regionArr = res.data
-            }
-          })
-      } else {
-        selectAPI.getRegionList().then((res) => {
-          if (res.code === 1000) {
-            this.regionArr = res.data
-          }
-        })
-      }
-    },
-    getBrandList() {
-      selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
-        if (res.code === 1000) {
-          this.BrandList = res.data
-        }
-      })
-    },
-    //获取大区下拉
-    getzoneArr() {
-      selectAPI.getLargeAreaList({}).then((res) => {
-        if (res.code === 1000) {
-          this.zoneArr = res.data
-        }
-      })
-    },
 
     //千分位分隔符+两位小数
     formatNum(num) {
@@ -1009,10 +962,10 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          channelMdmCode: this.filterObj.channelCode, //渠道
-          minePackage: this.filterObj.MinePackage,
+          channelMdmCode: this.filterObj.channelCode.code, //渠道
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          costAccount: this.filterObj.costAccount,
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
@@ -1047,7 +1000,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelMdmCode', this.filterObj.channelCode)
+      formData.append('channelMdmCode', this.filterObj.channelCode.code)
       formData.append('importType', 1) // 1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1131,7 +1084,7 @@ export default {
       API.importSave({
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
-        channelMdmCode: this.filterObj.channelCode,
+        channelMdmCode: this.filterObj.channelCode.code,
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1147,10 +1100,10 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportCheckData({
-          channelMdmCode: this.filterObj.channelCode, //渠道
-          minePackage: this.filterObj.MinePackage,
+          channelMdmCode: this.filterObj.channelCode.code, //渠道
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          costAccount: this.filterObj.costAccount,
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((res) => {
@@ -1166,17 +1119,14 @@ export default {
     downloadTemplate() {
       // 导出数据筛选
       API.exportTemplateExcel({
-        supplierCode: this.filterObj.supplierName, //供应商
-        channelMdmCode: this.filterObj.channelCode, //渠道
-        customerCode: this.filterObj.customerCode, //客户系统名称
+        channelMdmCode: this.filterObj.channelCode.code, //渠道
 
-        ecmItem: this.filterObj.ecmItem, //
         yearAndMonth: this.filterObj.month,
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2申请.xlsx`
+          `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode.value}_V2申请.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
@@ -1194,7 +1144,7 @@ export default {
               yearAndMonth: this.filterObj.month,
               channelCode: this.filterObj.channelCode.value,
               // mainId: mainId, // 主表id
-              // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+              paramMap: { opinion: 'agree'}, // 审批标识(agree：审批通过，reject：审批驳回)
               // isSubmit: 0, //申请0,审批1
             }).then((response) => {
               if (response.code === 1000) {
