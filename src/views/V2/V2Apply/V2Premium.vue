@@ -651,6 +651,20 @@
               <!-- 数据未对接 -->
             </vxe-table-column>
             <vxe-table-column width="220"
+                              align="center"
+                              field="item"
+                              title="活动类型">
+              <template v-slot:header>
+                <div>活动类型<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.item }}
+                </div>
+              </template>
+              <!-- 数据未对接 -->
+            </vxe-table-column>
+            <vxe-table-column width="220"
                              align="center"
                              field="planCost"
                              title="V1计划费用(RMB)">
