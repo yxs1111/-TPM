@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-20 14:40:04
+ * @LastEditTime: 2022-12-30 10:36:41
 -->
 <template>
   <div class="MainContent">
@@ -213,6 +213,7 @@ export default {
         this.filterObj.CostTypeName = ''
       }
       this.filterObj.MinePackage = ''
+      this.filterObj.costItem = ''
       this.getMinePackage()
     },
   },
@@ -238,7 +239,7 @@ export default {
         costItemName: this.filterObj.costItem,
         version: this.filterObj.version,
         channelCode: this.filterObj.channelCode,
-        minePackageCode: this.filterObj.MinePackage,
+        minePackageCode: this.filterObj.MinePackage=='P'?'KA Contract':this.filterObj.MinePackage,
       }).then((response) => {
         this.tableData = response.data.records
         this.pageNum = response.data.pageNum
@@ -248,8 +249,9 @@ export default {
     },
     // 获取下拉框
     getCostItemList() {
+      this.filterObj.costItem = ''
       selectAPI.getCostItemList({
-        minePackageCode: this.filterObj.MinePackage
+        minePackage: this.filterObj.MinePackage
       }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data

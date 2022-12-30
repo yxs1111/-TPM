@@ -1,7 +1,7 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2022-12-26 10:13:35
+ * @LastEditTime: 2022-12-30 11:09:00
 -->
 
 <template>
@@ -48,7 +48,7 @@
                           </el-select>
                         </div>
                         <div v-if="!scope.row.isNewData">
-                          {{ contractItemVariableList[scope.row.contractItem].name }}
+                          {{ scope.row.isVariable?contractItemVariableList[scope.row.contractItem].name:contractItemFixList[scope.row.contractItem].name }}
                         </div>
                       </div>
                     </template>
@@ -631,9 +631,9 @@ export default {
           if (item.costRatio == '' || item.costRatio == 0) {
             isCheck = 0
           }
-          //行（contract Item  条件类型 ）不能重复
+          //行（contract Item  条件类型 支付方式 ）不能重复
           let RepeatList = this.termVariableData.filter(vItem => {
-            return vItem.contractItem == item.contractItem && vItem.conditions == item.conditions
+            return vItem.contractItem == item.contractItem && vItem.conditions == item.conditions && vItem.frieslandPayType == item.frieslandPayType
           })
           if (RepeatList.length > 1) {
             Repeat = 1
@@ -709,7 +709,7 @@ export default {
         return
       }
       if (Repeat) {
-        this.$message.info('contract Item加条件类型不能重复')
+        this.$message.info('数据重复：Contract Item+条件类型+支付方式')
         return
       }
       if(payTypeIsEmpty) {
@@ -762,7 +762,7 @@ export default {
           distCostRatio: 0, //经销商承担含税费比
           distTaxCost: 0, //经销商承担含税金额
           frieslandCustomerTaxPoint: 0, //菲仕兰承担--客户扣款税点
-          frieslandPayType: 0, //菲仕兰承担--支付方式
+          frieslandPayType: '', //菲仕兰承担--支付方式
           remark: '',
           isVariable: 1,
           isTotal: 0,
@@ -790,7 +790,7 @@ export default {
           distCostRatio: 0, //经销商承担含税费比
           distTaxCost: 0, //经销商承担含税金额
           frieslandCustomerTaxPoint: 0, //菲仕兰承担--客户扣款税点
-          frieslandPayType: 0, //菲仕兰承担--支付方式
+          frieslandPayType: '', //菲仕兰承担--支付方式
           remark: '',
           isVariable: 0,
           isTotal: 0,
