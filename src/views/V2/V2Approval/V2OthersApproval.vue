@@ -35,27 +35,15 @@
           </el-select>
         </div>
         <div class="Selectli">
-          <span class="SelectliTitle">Mine Package:</span>
-          <el-select v-model="filterObj.customerCode"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr"
-                       :key="index"
-                       :label="item.customerCsName"
-                       :value="item.customerCode" />
+          <span class="SelectliTitle">MinePackage:</span>
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择" class="my-el-select">
+            <el-option v-for="(item, index) in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">费用科目:</span>
-          <el-select v-model="filterObj.supplierName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in supplierArr"
-                       :key="index"
-                       :label="item.supplierName"
-                       :value="item.supplierCode" />
+          <el-select v-model="filterObj.costAccount" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
       </div>
@@ -83,14 +71,14 @@
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve(1)">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve(0)">
         <svg-icon icon-class="rejectApprove"
                   style="font-size: 24px;" />
@@ -800,7 +788,8 @@ export default {
       supplierArr: [], //供应商下拉
       zoneArr: [], //大区下拉
       regionArr: [], //区域下拉
-
+      MinePackageList: [],
+      CostItemList: [],
       monthList: [],
       customerArr: [],
       tableData: [],
@@ -827,7 +816,19 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.MinePackageIndex'(value) {
+      console.log(this.MinePackageList)
+      if(value!=='') {
+        this.filterObj.MinePackageName=this.MinePackageList[this.filterObj.MinePackageIndex].costType
+        this.filterObj.MinePackage=this.MinePackageList[this.filterObj.MinePackageIndex].costTypeNumber
+      } else {
+        this.filterObj.MinePackage = ''
+      }
+      this.filterObj.costItem = ''
+      this.getCostItemList(this.filterObj.MinePackage)
+    },
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -842,6 +843,8 @@ export default {
     // this.getDistributorList()
     this.getRegionList()
     this.getPageMdSupplier()
+    this.getMinePackage()
+    this.getCostItemList()
     // this.getQuerySkuSelect()
   },
   methods: {
@@ -862,11 +865,10 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          supplierCode: this.filterObj.supplierName, //供应商
           channelMdmCode: this.filterObj.channelCode.code, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          ecmItem: this.filterObj.ecmItem, //
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((response) => {
@@ -892,7 +894,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'ECM-V2' &&
+              res.data.version === 'Others-V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -958,6 +960,28 @@ export default {
         })
       }
     },
+    // minepackage
+    getMinePackage() {
+      selectAPI
+        .queryMinePackageSelect({
+          parentId: '',
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.MinePackageList = res.data
+          }
+        })
+    },
+    // 获取下拉框
+    getCostItemList(code) {
+      API.getCostItemList({
+        minePackage: code,
+      }).then((res) => {
+        if (res.code === 1000) {
+          this.CostItemList = res.data
+        }
+      })
+    },
     getBrandList() {
       selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
         if (res.code === 1000) {
@@ -988,16 +1012,15 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          supplierCode: this.filterObj.supplierName, //供应商
           channelMdmCode: this.filterObj.channelCode.code, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          ecmItem: this.filterObj.ecmItem, //
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_Others-NKA/EC_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_Others-NKA/EC_${this.filterObj.channelCode.value}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1147,17 +1170,13 @@ export default {
     downloadTemplate() {
       // 导出数据筛选
       API.exportTemplateExcel({
-        supplierCode: this.filterObj.supplierName, //供应商
         channelMdmCode: this.filterObj.channelCode.code, //渠道
-        customerCode: this.filterObj.customerCode, //客户系统名称
-
-        ecmItem: this.filterObj.ecmItem, //
         yearAndMonth: this.filterObj.month,
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_ECM_${this.filterObj.channelCode}_V2申请.xlsx`
+          `${this.filterObj.month}_Other-EC-NKA_${this.filterObj.channelCode.value}_V2申请.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
@@ -1171,12 +1190,12 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              API.approveApprove({
                 // mainId: this.tableData[0].mainId, // 主表id
                 yearAndMonth: this.filterObj.month,
                 channelCode: this.filterObj.channelCode.value,
                 // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                paramMap: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                paramMap: { opinion: 'agree', mainId: this.tableData[0].mainId}, // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
@@ -1206,9 +1225,8 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
-                mainId: this.tableData[0].mainId,
-                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+              API.approveApprove({
+                paramMap: { opinion: 'reject', mainId: this.tableData[0].mainId}, // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {

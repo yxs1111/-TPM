@@ -873,11 +873,10 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          supplierCode: this.filterObj.supplierName, //供应商
           channelMdmCode: this.filterObj.channelCode.code, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
+          minePackageMdmCode: this.filterObj.MinePackage,
 
-          ecmItem: this.filterObj.ecmItem, //
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((response) => {

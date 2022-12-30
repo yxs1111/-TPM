@@ -18,7 +18,7 @@ export default {
   },
   // 费用科目下拉
   getCostItemList(params) {
-    return requestApi.request_get('/cityplan/investSrVThree/getCostItemList', params)
+    return requestApi.request_get('/cityplan/investSrVThree/getCostItemList2', params)
   },
   //审批分页查询 investCpPosmPipVTwo/getPosmPipVTwoPageApproval
   getPosmPipVTwoPageApproval(params) {
@@ -27,9 +27,14 @@ export default {
       params
     )
   },
-  //导出  investCpEcmVTwoDetail/downExcel
+  // 导出  investCpEcmVTwoDetail/downExcel
   exportPageExcel(params) {
-    return requestApi.request_get(this.url + '/exportOthers', params)
+    return request({
+      url: this.url+'/exportOthers',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
   // exportPageExcel(params) {
   //   return request({
@@ -39,9 +44,14 @@ export default {
   //     responseType: 'blob',
   //   })
   // },
-  //下载模板  investCpEcmVTwoDetail/downExcelTemplate
+  // 下载模板  investCpEcmVTwoDetail/downExcelTemplate
   exportTemplateExcel(params) {
-    return requestApi.request_get(this.url + '/exportOthers', params)
+    return request({
+      url: this.url+'/exportOthers',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
   },
   // exportTemplateExcel(params) {
   //   return request({
@@ -80,5 +90,9 @@ export default {
   //提交 investCpEcmVTwoDetail/approve
   approve(params) {
     return requestApi.request_post(this.url + '/approveOthers', params)
+  },
+  // 审批提交 investCpEcmVTwoDetail/approve
+  approveApprove(params) {
+    return requestApi.request_post(this.url + '/approveOthersTwo', params)
   },
 }
