@@ -357,9 +357,9 @@
       <el-table-column width="220"
                        align="center"
                        prop="hqPpmIdea"
-                       label="HQ PPM">
+                       label="HQ PPM审批意见">
         <template v-slot:header>
-          <div>HQ PPM<br><span class="subTitle">-</span></div>
+          <div>HQ PPM审批意见<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -722,9 +722,9 @@
             <el-table-column width="220"
                              align="center"
                              prop="hqPpmIdea"
-                             label="HQ PPM">
+                             label="HQ PPM审批意见">
               <template v-slot:header>
-                <div>HQ PPM<br><span class="subTitle">-</span></div>
+                <div>HQ PPM审批意见<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>

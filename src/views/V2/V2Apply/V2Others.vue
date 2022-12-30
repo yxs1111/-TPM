@@ -347,9 +347,9 @@
       <el-table-column width="220"
                        align="center"
                        prop="hqPpmIdea"
-                       label="HQ PPM">
+                       label="HQ PPM审批意见">
         <template v-slot:header>
-          <div>HQ PPM<br><span class="subTitle">-</span></div>
+          <div>HQ PPM审批意见<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -722,9 +722,9 @@
             <el-table-column width="220"
                              align="center"
                              prop="hqPpmIdea"
-                             label="HQ PPM">
+                             label="HQ PPM审批意见">
               <template v-slot:header>
-                <div>HQ PPM<br><span class="subTitle">-</span></div>
+                <div>HQ PPM审批意见<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -1160,7 +1160,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_All-RKA-RTM_${this.filterObj.channelCode.value}_V2申请.xlsx`
+          `${this.filterObj.month}_Others-EC/NKA_${this.filterObj.channelCode.value}_V2申请.xlsx`
         ) // 自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

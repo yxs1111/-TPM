@@ -47,14 +47,14 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
-            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="index" />
+          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择" class="my-el-select">
+            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">费用科目:</span>
           <el-select v-model="filterObj.costAccount" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item" :value="item" />
+            <el-option v-for="(item, index) in CostItemList" :key="index" :label="item.costType" :value="item.costTypeCode" />
           </el-select>
         </div>
       </div>
@@ -359,9 +359,9 @@
       <el-table-column width="220"
                        align="center"
                        prop="hqPpmIdea"
-                       label="HQ PPM">
+                       label="HQ PPM审批意见">
         <template v-slot:header>
-          <div>HQ PPM<br><span class="subTitle">-</span></div>
+          <div>HQ PPM审批意见<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -734,9 +734,9 @@
             <el-table-column width="220"
                              align="center"
                              prop="hqPpmIdea"
-                             label="HQ PPM">
+                             label="HQ PPM审批意见">
               <template v-slot:header>
-                <div>HQ PPM<br><span class="subTitle">-</span></div>
+                <div>HQ PPM审批意见<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -851,6 +851,8 @@ export default {
     // this.getDistributorList()
     this.getMinePackage()
     this.getCostItemList()
+    this.getMinePackage()
+    this.getCostItemList()
   },
   methods: {
     // 获取表格数据
@@ -885,7 +887,7 @@ export default {
           if (this.tableData.length > 0) {
             this.isSubmit = this.tableData[0].isSubmit
             this.mainId = this.tableData[0].mainId
-            this.infoByMainId()
+            // this.infoByMainId()
           }
         })
       }
@@ -899,7 +901,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'ECM-V2' &&
+              res.data.version === 'Others-V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -1120,14 +1122,13 @@ export default {
       // 导出数据筛选
       API.exportTemplateExcel({
         channelMdmCode: this.filterObj.channelCode.code, //渠道
-
         yearAndMonth: this.filterObj.month,
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
           res,
           `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode.value}_V2申请.xlsx`
-        ) //自定义Excel文件名
+        ) // 自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
     },
