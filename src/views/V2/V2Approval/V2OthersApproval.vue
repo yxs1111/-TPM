@@ -71,14 +71,14 @@
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve(1)">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
       <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve(0)">
         <svg-icon icon-class="rejectApprove"
                   style="font-size: 24px;" />
@@ -1190,12 +1190,12 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              API.approveApprove({
                 // mainId: this.tableData[0].mainId, // 主表id
                 yearAndMonth: this.filterObj.month,
                 channelCode: this.filterObj.channelCode.value,
                 // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
-                paramMap: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
+                paramMap: { opinion: 'agree', mainId: this.tableData[0].mainId}, // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {
@@ -1225,9 +1225,8 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
-                mainId: this.tableData[0].mainId,
-                opinion: 'reject', // 审批标识(agree：审批通过，reject：审批驳回)
+              API.approveApprove({
+                paramMap: { opinion: 'reject', mainId: this.tableData[0].mainId}, // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1
               }).then((response) => {
                 if (response.code === 1000) {

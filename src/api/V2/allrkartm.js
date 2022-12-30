@@ -91,4 +91,8 @@ export default {
   approve(params) {
     return requestApi.request_post(this.url + '/approveOthers', params)
   },
+  // 审批提交 investCpEcmVTwoDetail/approve
+  approveApprove(params) {
+    return requestApi.request_post(this.url + '/approveOthersTwo', params)
+  },
 }
