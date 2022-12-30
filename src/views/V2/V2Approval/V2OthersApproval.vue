@@ -1176,7 +1176,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_Other-EC-NKA_${this.filterObj.channelCode.value}_V2申请.xlsx`
+          `${this.filterObj.month}_Other-EC-NKA_${this.filterObj.channelCode.value}_V2审批.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
