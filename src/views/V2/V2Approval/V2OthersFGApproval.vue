@@ -140,7 +140,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.minePackage }}
+            {{ scope.row.minePackageSpName }}
           </div>
         </template>
       </el-table-column>
@@ -153,7 +153,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costItem }}
+            {{ scope.row.costItemSpName }}
           </div>
         </template>
       </el-table-column>
@@ -166,7 +166,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelName }}
+            {{ scope.row.channelSpName }}
           </div>
         </template>
       </el-table-column>
@@ -185,27 +185,27 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="customerName"
+                       prop="customerSpName"
                        label="客户">
         <template v-slot:header>
           <div>客户<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.customerName }}
+            {{ scope.row.customerSpName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="brandName"
+                       prop="brandSpName"
                        label="品牌">
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.brandName }}
+            {{ scope.row.brandSpName }}
           </div>
         </template>
       </el-table-column>
@@ -218,7 +218,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.skuName }}
+            {{ scope.row.skuSpName }}
           </div>
         </template>
       </el-table-column>
@@ -231,7 +231,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.distributorName }}
+            {{  scope.row.distributorSpName }}
           </div>
         </template>
       </el-table-column>
@@ -539,27 +539,27 @@
             </el-table-column>
             <el-table-column width="190"
                              align="center"
-                             prop="minePackage"
+                             prop="minePackageSpName"
                              label="Mine Package">
               <template v-slot:header>
                 <div>Mine Package<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.minePackage }}
+                  {{ scope.row.minePackageSpName }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column width="180"
                              align="center"
-                             prop="costItem"
+                             prop="costItemSpName"
                              label="费用科目">
               <template v-slot:header>
                 <div>费用科目<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costItem }}
+                  {{ scope.row.costItemSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -888,7 +888,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' &&
+              res.data.version === 'Others-V2' && res.data.activityName.includes('审批') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -907,13 +907,10 @@ export default {
     },
     // 渠道获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then((res) => {
+      selectAPI.othersChannelSelect().then((res) => {
         if (res.code === 1000) {
           res.data.forEach((item) => {
-            if (item.channelEsName != 'NKA') {
-              this.channelArr.push(item)
-            }
-            if (item.channelEsName != 'EC') {
+            if (item.channelEsName !== 'NKA' && item.channelEsName !== 'EC') {
               this.channelArr.push(item)
             }
           })
@@ -964,7 +961,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode.value}_V2_查询.xlsx`
+            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1064,7 +1061,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode.value}_V2审批.xlsx`
+          `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2审批.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

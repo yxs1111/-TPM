@@ -382,15 +382,302 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum"
-                     :page-sizes="[5, 10, 50, 100]"
-                     :page-size="pageSize"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="total"
-                     @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange" />
-    </div>
+    <el-table :data="tableData"
+              :max-height="maxheight"
+              border
+              :header-cell-style="HeadTable"
+              :row-class-name="tableRowClassName"
+              style="width: 100%">
+      <el-table-column align="center"
+                       width="460"
+                       prop="cpId"
+                       label="CPID"
+                       fixed>
+        <template v-slot:header>
+          <div>CPID<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.cpId }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120"
+                       align="center"
+                       prop="yearAndMonth"
+                       label="活动月">
+        <template v-slot:header>
+          <div>活动月<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.yearAndMonth }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="150"
+                       align="center"
+                       prop="costType"
+                       label="费用类型">
+        <template v-slot:header>
+          <div>费用类型<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costType }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="190"
+                       align="center"
+                       prop="minePackage"
+                       label="Mine Package">
+        <template v-slot:header>
+          <div>Mine Package<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.minePackageSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="190"
+                       align="center"
+                       prop="costItem"
+                       label="费用科目">
+        <template v-slot:header>
+          <div>费用科目<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costItemSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120"
+                       align="center"
+                       prop="channelCode"
+                       label="渠道">
+        <template v-slot:header>
+          <div>渠道<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.channelSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="pnlCustomerCode"
+                       label="pnl客户">
+        <template v-slot:header>
+          <div>pnl客户<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.pnlCustomerName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="customerSpName"
+                       label="客户">
+        <template v-slot:header>
+          <div>客户<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.customerSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="brandSpName"
+                       label="品牌">
+        <template v-slot:header>
+          <div>品牌<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.brandSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="skuCode"
+                       label="SKU(Only for FG)">
+        <template v-slot:header>
+          <div>SKU(Only for FG)<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.skuSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="right"
+                       prop="distributorCode"
+                       label="经销商">
+        <template v-slot:header>
+          <div>经销商<br><span class="subTitle"> -</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{  scope.row.distributorSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="zoneSpName"
+                       label="大区">
+        <template v-slot:header>
+          <div>大区<br><span class="subTitle"> -</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{  scope.row.zoneSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="regionSpName"
+                       label="区域">
+        <template v-slot:header>
+          <div>区域<br><span class="subTitle"> -</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{  scope.row.regionSpName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="pickingQuantity"
+                       label="领用量(tin,Only for FG)">
+        <template v-slot:header>
+          <div>领用量(tin,Only for FG)<br><span class="subTitle"> - </span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.pickingQuantity }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="costAmount"
+                       label="费用金额(RMB)">
+        <template v-slot:header>
+          <div>费用金额(RMB)<br><span class="subTitle"> -</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costAmount }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="costAscriptionDeptCode"
+                       label="费用归属部门">
+        <template v-slot:header>
+          <div>费用归属部门<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costAscriptionDept }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="180"
+                       align="center"
+                       prop="systemJudgment"
+                       label="系统判定">
+        <template v-slot:header>
+          <div>系统判定<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="{row}">
+          <el-tooltip effect="dark"
+                      placement="bottom"
+                      popper-class="tooltip">
+            <div slot="content"
+                 v-html="getTip(row)" />
+            <div class="statusWrap">
+              <img v-if="row.systemJudgment=='Pass'"
+                   src="@/assets/images/success.png"
+                   alt="">
+              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
+                   src="@/assets/images/warning.png"
+                   alt="">
+              <img v-if="row.systemJudgment=='Error'"
+                   src="@/assets/images/selectError.png"
+                   alt="">
+              <span class="judgmentText">{{ row.systemJudgment }}</span>
+            </div>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column width="800"
+                       align="left"
+                       prop="systemJudgmentContent"
+                       label="系统判定内容">
+        <template v-slot:header>
+          <div>系统判定内容<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.systemJudgmentContent }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120"
+                       align="center"
+                       prop="applicantRemark"
+                       label="申请人备注">
+        <template v-slot:header>
+          <div>申请人备注<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.applicantRemark }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="hqPpmIdea"
+                       label="HQ PPM审批意见">
+        <template v-slot:header>
+          <div>HQ PPM审批意见<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.hqPpmIdea }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220"
+                       align="center"
+                       prop="finIdea"
+                       label="Fin审批意见">
+        <template v-slot:header>
+          <div>Fin审批意见<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.finIdea }}
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 导入 -->
     <el-dialog width="66%"
                class="my-el-dialog"
@@ -539,27 +826,27 @@
             </el-table-column>
             <el-table-column width="190"
                              align="center"
-                             prop="minePackage"
+                             prop="minePackageSpName"
                              label="Mine Package">
               <template v-slot:header>
                 <div>Mine Package<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.minePackage }}
+                  {{ scope.row.minePackageSpName }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column width="180"
                              align="center"
-                             prop="costItem"
+                             prop="costItemSpName"
                              label="费用科目">
               <template v-slot:header>
                 <div>费用科目<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costItem }}
+                  {{ scope.row.costItemSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -888,7 +1175,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' &&
+              res.data.version === 'Others-V2' && res.data.activityName.includes('审批') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -907,13 +1194,10 @@ export default {
     },
     // 渠道获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then((res) => {
+      selectAPI.othersChannelSelect().then((res) => {
         if (res.code === 1000) {
           res.data.forEach((item) => {
-            if (item.channelEsName != 'NKA') {
-              this.channelArr.push(item)
-            }
-            if (item.channelEsName != 'EC') {
+            if (item.channelEsName !== 'NKA' && item.channelEsName !== 'EC') {
               this.channelArr.push(item)
             }
           })

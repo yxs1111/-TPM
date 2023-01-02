@@ -64,12 +64,14 @@
          style="align-items: center;">
       <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
       <div class="TpmButtonBG"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="importData">
         <img src="@/assets/images/import.png"
              alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -873,7 +875,14 @@ export default {
           if (this.tableData.length > 0) {
             this.isSubmit = this.tableData[0].isSubmit
             this.mainId = this.tableData[0].mainId
-            // this.infoByMainId()
+          }
+          if (this.total === 0 || response.data.records[0].isFirstSubmit === '1') {
+            // 第一次提交没有审批流
+            this.isSelf = true
+            this.isSubmit = 0
+          } else if (this.total != 0 ||response.data.records[0].isFirstSubmit === '0') {
+            // 驳回之后，是否当前审批人
+            this.infoByMainId()
           }
         })
       }
@@ -887,7 +896,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' &&
+              res.data.version === 'Others-V2' && res.data.activityName.includes('调整') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -906,13 +915,10 @@ export default {
     },
     // 渠道获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then((res) => {
+      selectAPI.othersChannelSelect().then((res) => {
         if (res.code === 1000) {
           res.data.forEach((item) => {
-            if (item.channelEsName != 'NKA') {
-              this.channelArr.push(item)
-            }
-            if (item.channelEsName != 'EC') {
+            if (item.channelEsName !== 'NKA' && item.channelEsName !== 'EC') {
               this.channelArr.push(item)
             }
           })
@@ -964,7 +970,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode.value}_V2_查询.xlsx`
+            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1064,7 +1070,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode.value}_V2申请.xlsx`
+          `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2申请.xlsx`
         ) // 自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

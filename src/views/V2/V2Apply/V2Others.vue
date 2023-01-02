@@ -870,18 +870,19 @@ export default {
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
-          if (this.total === 0 || response.data.records[0].isFirstSubmit === '1') {
-            // 第一次提交没有审批流
-            this.isSelf = true
-            this.isSubmit = 0
-          } else {
-            // 驳回之后，是否当前审批人
-            this.infoByMainId()
-          }
           if (this.tableData.length > 0) {
             this.isSubmit = this.tableData[0].isSubmit
             this.mainId = this.tableData[0].mainId
           }
+          if (this.total === 0 || response.data.records[0].isFirstSubmit === '1') {
+            // 第一次提交没有审批流
+            this.isSelf = true
+            this.isSubmit = 0
+          } else if (this.total != 0 ||response.data.records[0].isFirstSubmit === '0') {
+            // 驳回之后，是否当前审批人
+            this.infoByMainId()
+          }
+
         })
       }
     },
@@ -894,7 +895,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version == 'Others-V2' &&
+              res.data.version == 'Others-V2' && res.data.activityName.includes('调整') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
