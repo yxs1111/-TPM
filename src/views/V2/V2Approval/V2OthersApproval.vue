@@ -26,8 +26,7 @@
           <el-select v-model="filterObj.channelCode"
                      clearable
                      filterable
-                     placeholder="请选择"
-                     @change="getCustomerList">
+                     placeholder="请选择">
             <el-option v-for="(item) in channelArr"
                        :key="item"
                        :label="item.channelEsName"
@@ -179,7 +178,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.pnlCustomerName }}
+            {{ scope.row.customerPnlName }}
           </div>
         </template>
       </el-table-column>
@@ -575,7 +574,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.pnlCustomerName }}
+                  {{ scope.row.customerPnlName }}
                 </div>
               </template>
             </el-table-column>
@@ -907,7 +906,6 @@ export default {
               this.channelArr.push(item)
             }
           })
-          this.getCustomerList()
         }
       })
     },

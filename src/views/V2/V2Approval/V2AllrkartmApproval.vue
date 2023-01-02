@@ -26,8 +26,7 @@
           <el-select v-model="filterObj.channelCode"
                      clearable
                      filterable
-                     placeholder="请选择"
-                     @change="getCustomerList">
+                     placeholder="请选择">
             <el-option v-for="(item) in channelArr"
                        :key="item"
                        :label="item.channelEsName"
@@ -1201,7 +1200,6 @@ export default {
               this.channelArr.push(item)
             }
           })
-          this.getCustomerList()
         }
       })
     },
