@@ -69,7 +69,7 @@ module.exports = {
       //   }
       // },
       [process.env.VUE_APP_BASE_API]: {
-        // target: `http://192.168.40.227:7777`,  //梁刚
+        // target: `http://192.168.40.109:7788`,  //梁刚
         //target: `http://192.168.30.32:7777`,  //现云
         //target: `http://192.168.30.35:7777`,  //泽圣
         //target: `http://192.168.40.69:7777`,  //宋佳
@@ -81,8 +81,8 @@ module.exports = {
         //target: `http://192.168.40.170:7777`, // 樊鹏伟
         //target: `http://192.168.40.205:7777`, // 孙修为
         // target: `http://192.168.30.116:7777`, // 王文建
-        target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`, // 测试服务器
-        // target: `https://saledata.rfc-friso.com/prod-api`, // Others测试
+        // target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`, // 测试服务器
+        target: `https://saledata.rfc-friso.com/prod-api`, // Others测试
         // target: `https://iInvest.rfc-friso.com/prod-api`,  //正式服务器
         changeOrigin: true,
         pathRewrite: {

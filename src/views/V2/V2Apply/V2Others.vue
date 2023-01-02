@@ -28,16 +28,16 @@
                      filterable
                      placeholder="请选择"
                      @change="getCustomerList">
-            <el-option v-for="(item) in [{value: 'EC', code: '101708'}, {value: 'NKA', code: '101705'}]"
+            <el-option v-for="(item) in channelArr"
                        :key="item"
-                       :label="item.value"
-                       :value="item" />
+                       :label="item.channelEsName"
+                       :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择" class="my-el-select">
-            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
+          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
+            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -63,12 +63,14 @@
          style="align-items: center;">
       <!-- :class="!isSubmit&&isSelf?'':'noClick'" -->
       <div class="TpmButtonBG"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="importData">
         <img src="@/assets/images/import.png"
              alt="">
         <span class="text">导入</span>
       </div>
       <div class="TpmButtonBG"
+           :class="!isSubmit&&isSelf?'':'noClick'"
            @click="approve()">
         <svg-icon icon-class="passApprove"
                   style="font-size: 24px;" />
@@ -227,27 +229,27 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="regionCode"
+                       prop="zoneSpName"
                        label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle"> -</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.regionSpName }}
+            {{  scope.row.zoneSpName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="zoneCode"
+                       prop="regionSpName"
                        label="区域">
         <template v-slot:header>
           <div>区域<br><span class="subTitle"> -</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.zoneSpName }}
+            {{  scope.row.regionSpName }}
           </div>
         </template>
       </el-table-column>
@@ -643,27 +645,27 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="regionCode"
+                             prop="zoneSpName"
                              label="大区">
               <template v-slot:header>
                 <div>大区<br><span class="subTitle"> -</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.regionSpName }}
+                  {{  scope.row.zoneSpName }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="zoneCode"
+                             prop="regionSpName"
                              label="区域">
               <template v-slot:header>
                 <div>区域<br><span class="subTitle"> -</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.zoneSpName }}
+                  {{  scope.row.regionSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -836,13 +838,8 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
-    this.getzoneArr()
-    // this.getDistributorList()
-    this.getRegionList()
-    this.getPageMdSupplier()
     this.getMinePackage()
-    this.getCostItemList()
+    this.getCostItemList(this.filterObj.MinePackage)
   },
   methods: {
     // 获取表格数据
@@ -862,22 +859,28 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          channelMdmCode: this.filterObj.channelCode.code, //渠道
-          minePackageMdmCode: this.filterObj.MinePackage,
+          channelCode: this.filterObj.channelCode, //渠道
+          minePackageCode: this.filterObj.MinePackage,
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
-
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          if (this.total === 0 || response.data.records[0].isFirstSubmit === '1') {
+            // 第一次提交没有审批流
+            this.isSelf = true
+            this.isSubmit = 0
+          } else {
+            // 驳回之后，是否当前审批人
+            this.infoByMainId()
+          }
           if (this.tableData.length > 0) {
             this.isSubmit = this.tableData[0].isSubmit
             this.mainId = this.tableData[0].mainId
-            // this.infoByMainId()
           }
         })
       }
@@ -891,7 +894,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' &&
+              res.data.version == 'Others-V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -908,79 +911,42 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取下拉框
+    // 渠道获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then((res) => {
+      selectAPI.othersChannelSelect().then((res) => {
         if (res.code === 1000) {
-          this.channelArr = res.data
+          res.data.forEach((item) => {
+            if (item.channelEsName == 'NKA') {
+              this.channelArr.push(item)
+            }
+            if (item.channelEsName == 'EC') {
+              this.channelArr.push(item)
+            }
+          })
           this.getCustomerList()
         }
       })
     },
-    // 获取下拉框
+    // 费用科目获取下拉框
     getCostItemList(code) {
       API.getCostItemList({
-        minePackage: code,
+        minePackageCode: code,
       }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data
         }
       })
     },
-    // minepackage
+    // minepackage获取下拉
     getMinePackage() {
       selectAPI
         .queryMinePackageSelect({
           parentId: '',
         })
         .then((res) => {
-          if (res.code === 1000) {
-            this.MinePackageList = res.data
-          }
+          this.MinePackageList = res.data
+          // this.getCostItemList(this.filterObj.MinePackageCode)
         })
-    },
-    // 供应商
-    getPageMdSupplier() {
-      selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
-        if (res.code === 1000) {
-          this.supplierArr = res.data
-        }
-      })
-    },
-    //获取区域下拉
-    getRegionList() {
-      if (this.filterObj.distributorCode != '') {
-        selectAPI
-          .getRegionList({
-            zoneName: this.filterObj.distributorCode,
-          })
-          .then((res) => {
-            if (res.code === 1000) {
-              this.regionArr = res.data
-            }
-          })
-      } else {
-        selectAPI.getRegionList().then((res) => {
-          if (res.code === 1000) {
-            this.regionArr = res.data
-          }
-        })
-      }
-    },
-    getBrandList() {
-      selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
-        if (res.code === 1000) {
-          this.BrandList = res.data
-        }
-      })
-    },
-    //获取大区下拉
-    getzoneArr() {
-      selectAPI.getLargeAreaList({}).then((res) => {
-        if (res.code === 1000) {
-          this.zoneArr = res.data
-        }
-      })
     },
 
     //千分位分隔符+两位小数
@@ -997,8 +963,8 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          channelMdmCode: this.filterObj.channelCode.code, //渠道
-          minePackageMdmCode: this.filterObj.MinePackage,
+          channelCode: this.filterObj.channelCode, //渠道
+          minePackageCode: this.filterObj.MinePackage,
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
@@ -1035,7 +1001,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelMdmCode', this.filterObj.channelCode.code)
+      formData.append('channelCode', this.filterObj.channelCode)
       formData.append('importType', 1) // 1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1078,48 +1044,12 @@ export default {
       this.saveBtn = false
       this.isCheck = false
     },
-    // 校验数据
-    checkImport() {
-      API.formatCheck({
-        yearAndMonth: this.filterObj.month,
-        channelMdmCode: this.filterObj.channelCode,
-        // isSubmit: 0,
-      }).then((response) => {
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
-            this.$message.info('导入数据为空，请检查模板')
-          } else {
-            this.$message.success(this.messageMap.checkSuccess)
-            let checkList = response.data
-            checkList.forEach((item) => {
-              if (item.judgmentType == 'Error') {
-                item.sort = 1
-              } else if (item.judgmentType.indexOf('Exception') != -1) {
-                item.sort = 2
-              } else {
-                item.sort = 3
-              }
-            })
-            let isError = checkList.findIndex((item) => {
-              return item.judgmentType == 'Error'
-            })
-            console.log(isError, 'isError')
-            checkList.sort((item, nextItem) => item.sort - nextItem.sort)
-            this.ImportData = checkList
-            this.saveBtn = isError == -1 ? 1 : 0
-            console.log(this.saveBtn)
-          }
-        } else {
-          this.$message.info(this.messageMap.checkError)
-        }
-      })
-    },
     // 确认导入
     confirmImport() {
       API.importSave({
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
-        channelMdmCode: this.filterObj.channelCode.code,
+        channelCode: this.filterObj.channelCode,
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1135,15 +1065,15 @@ export default {
     exportErrorList() {
       if (this.ImportData.length) {
         API.exportCheckData({
-          channelMdmCode: this.filterObj.channelCode, //渠道
+          channelCode: this.filterObj.channelCode, //渠道
           minePackage: this.filterObj.MinePackage,
 
-          costAccount: this.filterObj.costAccount,
+          costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_ALL-RKA/RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_Others-EC/NKA异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -1154,7 +1084,7 @@ export default {
     downloadTemplate() {
       // 导出数据筛选
       API.exportTemplateExcel({
-        channelMdmCode: this.filterObj.channelCode.code, //渠道
+        channelCode: this.filterObj.channelCode, //渠道
         yearAndMonth: this.filterObj.month,
         //   isSubmit: 0,
       }).then((res) => {
@@ -1176,7 +1106,7 @@ export default {
             const mainId = this.tableData[0].mainId
             API.approve({
               yearAndMonth: this.filterObj.month,
-              channelCode: this.filterObj.channelCode.value,
+              channelCode: this.filterObj.channelCode,
               // mainId: mainId, // 主表id
               paramMap: { opinion: 'agree'}, // 审批标识(agree：审批通过，reject：审批驳回)
               // isSubmit: 0, //申请0,审批1
@@ -1184,6 +1114,7 @@ export default {
               if (response.code === 1000) {
                 this.$message.success('提交成功')
                 this.getTableData()
+                this.infoByMainId()
               }
             })
           })
