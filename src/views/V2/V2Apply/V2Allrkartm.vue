@@ -1032,6 +1032,25 @@ export default {
         }
       })
     },
+    // 导出异常信息
+    exportErrorList() {
+      if (this.ImportData.length) {
+        API.exportCheckData({
+          channelCode: this.filterObj.channelCode, //渠道
+          minePackage: this.filterObj.MinePackage,
+
+          costItemMdmCode: this.filterObj.costAccount,
+          yearAndMonth: this.filterObj.month,
+          //   isSubmit: 0,
+        }).then((res) => {
+          const timestamp = Date.parse(new Date())
+          downloadFile(res, 'V2_All-RKA/RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          this.$message.success(this.messageMap.exportErrorSuccess)
+        })
+      } else {
+        this.$message.info('异常数据为空!')
+      }
+    },
     // 关闭导入
     closeImportDialog() {
       this.importVisible = false
