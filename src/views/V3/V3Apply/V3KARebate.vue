@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-26 14:24:56
+ * @LastEditTime: 2023-01-03 09:33:54
 -->
 <template>
   <div class="MainContent">
@@ -142,7 +142,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="distributorName" label="经销商">
+      <el-table-column width="350" align="center" prop="distributorName" label="经销商">
         <template v-slot:header>
           <div>经销商<br><span class="subTitle">-</span></div>
         </template>
@@ -162,7 +162,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item">
+      <el-table-column width="360" align="center" prop="contractItemName" label="Contract Item">
         <template v-slot:header>
           <div>Contract Item<br><span class="subTitle">-</span></div>
         </template>
@@ -465,9 +465,9 @@
             <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="220" align="center" prop="brandName" label="品牌"></el-table-column>
-            <el-table-column width="220" align="center" prop="distributorName" label="经销商" />
+            <el-table-column width="350" align="center" prop="distributorName" label="经销商" />
             <el-table-column width="220" align="center" prop="regionName" label="区域" />
-            <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" />
+            <el-table-column width="360" align="center" prop="contractItemName" label="Contract Item" />
             <el-table-column width="320" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
               <template v-slot:header>
                 <div>V1计划合同点数(%)<br /><span class="subTitle">KA+Brand+Contract item</span></div>

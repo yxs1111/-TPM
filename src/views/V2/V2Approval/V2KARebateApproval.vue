@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-27 11:06:22
+ * @LastEditTime: 2023-01-03 09:32:31
 -->
 <template>
   <div class="MainContent">
@@ -236,7 +236,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门">
+      <el-table-column width="280" align="center" prop="costDeptName" label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
@@ -579,7 +579,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="costDeptName" label="费用归属部门">
+            <el-table-column width="280" align="center" prop="costDeptName" label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
@@ -673,7 +673,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, getHeightHaveTab, messageObj, downloadFile, messageMap, formatThousandNum } from '@/utils'
+import { getDefaultPermissions, getContractEntry, messageObj, downloadFile, messageMap, formatThousandNum } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V2/contract'
 export default {
@@ -697,7 +697,7 @@ export default {
       customerArr: [],
       tableData: [],
       ContractItemList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight: getContractEntry(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
       mainId: '',
@@ -721,7 +721,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getContractEntry()
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
