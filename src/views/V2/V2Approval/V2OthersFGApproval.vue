@@ -26,29 +26,17 @@
           <el-select v-model="filterObj.channelCode"
                      clearable
                      filterable
-                     placeholder="请选择"
-                     @change="getCustomerList">
-            <el-option v-for="(item) in
-            [{value: 'JBP', code: '101701'},
-            {value: 'Others', code: '101702'},
-            {value: 'B2C', code: '101703'},
-            {value: 'LKA', code: '101704'},
-            {value: 'JD Group', code: '101706'},
-            {value: 'Ali Group', code: '101707'},
-            {value: 'EC Potential', code: '101709'},
-            {value: '2B', code: '101710'},
-            {value: 'FrisoGo', code: '101711'},
-            {value: 'RKA', code: '101712'},
-            {value: 'RKA Expansion', code: '101713'},]"
+                     placeholder="请选择">
+            <el-option v-for="(item) in channelArr"
                        :key="item"
-                       :label="item.value"
-                       :value="item" />
+                       :label="item.channelEsName"
+                       :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.MinePackage" clearable filterable placeholder="请选择" class="my-el-select">
-            <el-option v-for="(item, index) in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeCode" />
+          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
+            <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="index" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -151,7 +139,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.minePackage }}
+            {{ scope.row.minePackageSpName }}
           </div>
         </template>
       </el-table-column>
@@ -164,7 +152,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costItem }}
+            {{ scope.row.costItemSpName }}
           </div>
         </template>
       </el-table-column>
@@ -177,7 +165,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelName }}
+            {{ scope.row.channelSpName }}
           </div>
         </template>
       </el-table-column>
@@ -190,33 +178,33 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.pnlCustomerName }}
+            {{ scope.row.customerPnlName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="customerName"
+                       prop="customerSpName"
                        label="客户">
         <template v-slot:header>
           <div>客户<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.customerName }}
+            {{ scope.row.customerSpName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="brandName"
+                       prop="brandSpName"
                        label="品牌">
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.brandName }}
+            {{ scope.row.brandSpName }}
           </div>
         </template>
       </el-table-column>
@@ -229,7 +217,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.skuName }}
+            {{ scope.row.skuSpName }}
           </div>
         </template>
       </el-table-column>
@@ -242,33 +230,33 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.distributorName }}
+            {{  scope.row.distributorSpName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="regionCode"
+                       prop="zoneSpName"
                        label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle"> -</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.regionName }}
+            {{  scope.row.zoneSpName }}
           </div>
         </template>
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="zoneCode"
+                       prop="regionSpName"
                        label="区域">
         <template v-slot:header>
           <div>区域<br><span class="subTitle"> -</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{  scope.row.zoneName }}
+            {{  scope.row.regionSpName }}
           </div>
         </template>
       </el-table-column>
@@ -550,27 +538,27 @@
             </el-table-column>
             <el-table-column width="190"
                              align="center"
-                             prop="minePackage"
+                             prop="minePackageSpName"
                              label="Mine Package">
               <template v-slot:header>
                 <div>Mine Package<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.minePackage }}
+                  {{ scope.row.minePackageSpName }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column width="180"
                              align="center"
-                             prop="costItem"
+                             prop="costItemSpName"
                              label="费用科目">
               <template v-slot:header>
                 <div>费用科目<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costItem }}
+                  {{ scope.row.costItemSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -596,7 +584,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.pnlCustomerName }}
+                  {{ scope.row.customerPnlName }}
                 </div>
               </template>
             </el-table-column>
@@ -654,27 +642,27 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="regionCode"
+                             prop="zoneSpName"
                              label="大区">
               <template v-slot:header>
                 <div>大区<br><span class="subTitle"> -</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.regionName }}
+                  {{  scope.row.zoneSpName }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="zoneCode"
+                             prop="regionSpName"
                              label="区域">
               <template v-slot:header>
                 <div>区域<br><span class="subTitle"> -</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.zoneName }}
+                  {{  scope.row.regionSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -849,14 +837,8 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getBrandList()
-    this.getzoneArr()
-    // this.getDistributorList()
-    this.getRegionList()
-    this.getPageMdSupplier()
     this.getMinePackage()
-    this.getCostItemList()
-    // this.getQuerySkuSelect()
+    this.getCostItemList(this.filterObj.MinePackage)
   },
   methods: {
     // 获取表格数据
@@ -876,8 +858,8 @@ export default {
           pageNum: this.pageNum, // 当前页
           pageSize: this.pageSize, // 每页条数
 
-          channelMdmCode: this.filterObj.channelCode.code, //渠道
-          minePackageMdmCode: this.filterObj.MinePackage,
+          channelCode: this.filterObj.channelCode, //渠道
+          minePackageCode: this.filterObj.MinePackage,
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
@@ -905,7 +887,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' &&
+              res.data.version === 'Others-V2' && res.data.activityName.includes('审批') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -922,54 +904,17 @@ export default {
         this.monthList = res.data
       })
     },
-    // 获取下拉框
+    // 渠道获取下拉框
     getChannel() {
-      selectAPI.queryChannelSelect().then((res) => {
+      selectAPI.othersChannelSelect().then((res) => {
         if (res.code === 1000) {
-          this.channelArr = res.data
-          this.getCustomerList()
-        }
-      })
-    },
-    // 客户
-    getCustomerList() {
-      selectAPI
-        .queryCustomerList({
-          channelCode: this.filterObj.channelCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.customerArr = res.data
-          }
-        })
-    },
-    // 供应商
-    getPageMdSupplier() {
-      selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
-        if (res.code === 1000) {
-          this.supplierArr = res.data
-        }
-      })
-    },
-    //获取区域下拉
-    getRegionList() {
-      if (this.filterObj.distributorCode != '') {
-        selectAPI
-          .getRegionList({
-            zoneName: this.filterObj.distributorCode,
-          })
-          .then((res) => {
-            if (res.code === 1000) {
-              this.regionArr = res.data
+          res.data.forEach((item) => {
+            if (item.channelEsName !== 'NKA' && item.channelEsName !== 'EC') {
+              this.channelArr.push(item)
             }
           })
-      } else {
-        selectAPI.getRegionList().then((res) => {
-          if (res.code === 1000) {
-            this.regionArr = res.data
-          }
-        })
-      }
+        }
+      })
     },
     // minepackage
     getMinePackage() {
@@ -978,12 +923,11 @@ export default {
           parentId: '',
         })
         .then((res) => {
-          if (res.code === 1000) {
-            this.MinePackageList = res.data
-          }
+          this.MinePackageList = res.data
+          // this.getCostItemList(this.filterObj.MinePackageCode)
         })
     },
-    // 获取下拉框
+    // 费用科目获取下拉框
     getCostItemList(code) {
       API.getCostItemList({
         minePackage: code,
@@ -993,22 +937,6 @@ export default {
         }
       })
     },
-    getBrandList() {
-      selectAPI.getECMItemList({ minePackage: 'ECM' }).then((res) => {
-        if (res.code === 1000) {
-          this.BrandList = res.data
-        }
-      })
-    },
-    //获取大区下拉
-    getzoneArr() {
-      selectAPI.getLargeAreaList({}).then((res) => {
-        if (res.code === 1000) {
-          this.zoneArr = res.data
-        }
-      })
-    },
-
     //千分位分隔符+两位小数
     formatNum(num) {
       return formatThousandNum(num)
@@ -1023,15 +951,15 @@ export default {
         API.exportPageExcel({
           //   pageNum: this.pageNum, // 当前页
           //   pageSize: this.pageSize, // 每页条数
-          channelMdmCode: this.filterObj.channelCode.code, //渠道
-          minePackageMdmCode: this.filterObj.MinePackage,
+          channelCode: this.filterObj.channelCode, // 渠道
+          minePackageCode: this.filterObj.MinePackage,
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode.value}_V2_查询.xlsx`
+            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1061,7 +989,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
-      formData.append('channelMdmCode', this.filterObj.channelCode.code)
+      formData.append('channelCode', this.filterObj.channelCode)
       formData.append('importType', 0) //1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1104,48 +1032,12 @@ export default {
       this.saveBtn = false
       this.isCheck = false
     },
-    // 校验数据
-    checkImport() {
-      API.formatCheck({
-        yearAndMonth: this.filterObj.month,
-        channelMdmCode: this.filterObj.channelCode,
-        // isSubmit: 0,
-      }).then((response) => {
-        if (response.code == 1000) {
-          if (!Array.isArray(response.data)) {
-            this.$message.info('导入数据为空，请检查模板')
-          } else {
-            this.$message.success(this.messageMap.checkSuccess)
-            let checkList = response.data
-            checkList.forEach((item) => {
-              if (item.judgmentType == 'Error') {
-                item.sort = 1
-              } else if (item.judgmentType.indexOf('Exception') != -1) {
-                item.sort = 2
-              } else {
-                item.sort = 3
-              }
-            })
-            let isError = checkList.findIndex((item) => {
-              return item.judgmentType == 'Error'
-            })
-            console.log(isError, 'isError')
-            checkList.sort((item, nextItem) => item.sort - nextItem.sort)
-            this.ImportData = checkList
-            this.saveBtn = isError == -1 ? 1 : 0
-            console.log(this.saveBtn)
-          }
-        } else {
-          this.$message.info(this.messageMap.checkError)
-        }
-      })
-    },
     // 确认导入
     confirmImport() {
       API.importSave({
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
-        channelMdmCode: this.filterObj.channelCode.code,
+        channelCode: this.filterObj.channelCode, // 渠道
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {
@@ -1157,37 +1049,17 @@ export default {
         }
       })
     },
-    // 导出异常信息
-    exportErrorList() {
-      if (this.ImportData.length) {
-        API.exportCheckData({
-          supplierCode: this.filterObj.supplierName, //供应商
-          channelMdmCode: this.filterObj.channelCode, //渠道
-          customerCode: this.filterObj.customerCode, //客户系统名称
-
-          ecmItem: this.filterObj.ecmItem, //
-          yearAndMonth: this.filterObj.month,
-          //   isSubmit: 0,
-        }).then((res) => {
-          const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_ECM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
-          this.$message.success(this.messageMap.exportErrorSuccess)
-        })
-      } else {
-        this.$message.info('异常数据为空!')
-      }
-    },
     // 下载模板
     downloadTemplate() {
       // 导出数据筛选
       API.exportTemplateExcel({
-        channelMdmCode: this.filterObj.channelCode.code, //渠道
+        channelCode: this.filterObj.channelCode, // 渠道
         yearAndMonth: this.filterObj.month,
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode.value}_V2审批.xlsx`
+          `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2审批.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
@@ -1204,7 +1076,7 @@ export default {
               API.approve({
                 // mainId: this.tableData[0].mainId, // 主表id
                 yearAndMonth: this.filterObj.month,
-                channelCode: this.filterObj.channelCode.value,
+                channelCode: this.filterObj.channelCode, // 渠道
                 // opinion: 'agree', // 审批标识(agree：审批通过，reject：审批驳回)
                 paramMap: { opinion: 'agree', mainId: this.tableData[0].mainId}, // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1

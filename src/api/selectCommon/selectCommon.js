@@ -11,6 +11,10 @@ export default {
   queryChannelSelect(params) {
     return requestApi.request_get('/mdm/common/queryChannelSelect', params)
   },
+  // Others渠道下拉框
+  othersChannelSelect(params) {
+    return requestApi.request_get('/cityplan/investCpOthers/getChannel', params)
+  },
   // SKU下拉框
   querySkuSelect(params) {
     return requestApi.request_get('/mdm/common/querySkuSelect', params)

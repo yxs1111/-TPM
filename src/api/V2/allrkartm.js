@@ -18,7 +18,7 @@ export default {
   },
   // 费用科目下拉
   getCostItemList(params) {
-    return requestApi.request_get('/cityplan/investSrVThree/getCostItemList2', params)
+    return requestApi.request_get('/cityplan/investCpOthers/getCostItem', params)
   },
   //审批分页查询 investCpPosmPipVTwo/getPosmPipVTwoPageApproval
   getPosmPipVTwoPageApproval(params) {
@@ -72,7 +72,13 @@ export default {
   },
   //异常信息导出  investCpEcmVTwoDetailEb/downExcel  investCpDisplayVTwoDetail/exceptionCheck
   exportCheckData(params) {
-    return requestApi.request_get(this.url + '/exportError', params)
+    return request({
+      url: this.url + '/exportError',
+      method: 'get',
+      params: params,
+      responseType: 'blob',
+    })
+    // return requestApi.request_get(this.url + '/exportError', params)
   },
   // exportCheckData(params) {
   //   return request({
