@@ -1,10 +1,10 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-11-28 15:03:30
+ * @LastEditTime: 2023-01-03 09:10:22
 -->
 <template>
-  <section class="app-main">
+  <section class="app-main" :class="isDashBoard?'appMainDashBoard':'app-main'">
     <!--      左下角问号-->
     <el-popover class="el-popoverTwo" placement="left" width="100%" :popper-options="{ boundariesElement: 'viewport', removeOnDestroy: true }" trigger="click">
       <div class="documentation">用户文档中心</div>
@@ -36,7 +36,7 @@
     </el-popover>
     <transition name="fade-transform" mode="out-in">
       <keep-alive :include="cachedViews">
-        <router-view :key="key" />
+        <router-view :key="key" class="routerContent"/>
       </keep-alive>
     </transition>
   </section>
@@ -72,6 +72,10 @@ export default {
     },
     key() {
       return this.$route.path
+    },
+    isDashBoard() {
+      //获取当前路径 是否包含 dashboard
+      return this.$route.path.includes('dashboard')
     },
   },
   mounted() {
@@ -118,9 +122,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.routerContent {
+  height: 100%;
+}
 .app-main {
   /* 50= navbar  50  */
-  height: 100%;
+  height: calc(100% - 60px);
   width: 100%;
   position: relative;
   // overflow-y: auto;
@@ -128,6 +135,9 @@ export default {
   box-sizing: border-box;
   // padding-bottom: 50px;
   background-color: #ebeff5;
+}
+.appMainDashBoard {
+  height: calc(100% - 0px);
 }
 .fixed-header + .app-main {
   padding-top: 50px;

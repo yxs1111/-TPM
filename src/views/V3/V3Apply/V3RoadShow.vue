@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-07-13 17:05:38
+ * @LastEditTime: 2023-01-03 09:08:35
 -->
 <template>
   <div class="MainContent">
@@ -697,7 +697,7 @@
           </div>
         </div>
         <div class="tableWrap">
-          <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="ImportData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+          <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="ImportData" height="400" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
             <el-table-column prop="date" fixed align="center" label="系统判定" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
@@ -1188,7 +1188,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeightHaveTab,
+  getHeightHaveTabThree,
   messageObj,
   downloadFile,
   messageMap,
@@ -1232,7 +1232,7 @@ export default {
       supplierList: [],
       distributorArr: [],
       contractItemList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTabThree(),
       isSubmit: 1, // 提交状态  1：已提交，0：未提交
       isSelf: 0, //是否是当前审批人
       isGainLe: 0, //是否已经从LE接过数据
@@ -1257,7 +1257,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightHaveTabThree()
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')

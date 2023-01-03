@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:11:53
+ * @LastEditTime: 2023-01-02 12:00:07
 -->
 <template>
   <div class="MainContent">
@@ -188,7 +188,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeightHaveTab,
+  getHeightSingle,
   messageObj,
   downloadFile,
   formatThousandNum
@@ -219,7 +219,7 @@ export default {
       customerArr: [],
       tableData: [],
       BrandList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightSingle(),
     }
   },
   computed: {},
@@ -232,7 +232,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightSingle()
       })()
     }
     this.getChannel()
