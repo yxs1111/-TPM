@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-30 11:56:50
+ * @LastEditTime: 2023-01-02 11:38:18
 -->
 <template>
   <div class="MainContent">
@@ -206,7 +206,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, getHeightHaveTab, messageObj, downloadFile, formatThousandNum } from '@/utils'
+import { getDefaultPermissions, getHeightSingle, messageObj, downloadFile, formatThousandNum } from '@/utils'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import API from '@/api/V1/contract'
 export default {
@@ -233,7 +233,7 @@ export default {
       customerArr: [],
       tableData: [],
       BrandList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightSingle(),
     }
   },
   computed: {},
@@ -246,7 +246,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightSingle()
       })()
     }
     this.getChannel()

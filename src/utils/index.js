@@ -559,11 +559,16 @@ export function getHeightHaveTab() {
 }
 // 单行筛选（1366 下筛选一行展示）
 export function getHeightSingle() {
+  console.log(window.innerHeight)
   return window.innerHeight - 340
 }
 // 合同同款明细
 export function contractView() {
   return window.innerHeight - 280
+}
+// 三行筛选 three
+export function getHeightHaveTabThree() {
+  return window.innerHeight - 500
 }
 /**
  * 合同录入表格最大高度
