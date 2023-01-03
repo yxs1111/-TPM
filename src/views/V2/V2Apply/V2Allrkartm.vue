@@ -827,13 +827,13 @@ export default {
     'filterObj.CostTypeIndex'(value) {
       console.log(this.CostTypeList)
       if(value!=='') {
-        this.filterObj.MinePackageName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
-        this.filterObj.MinePackage=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+        this.filterObj.costTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+        this.filterObj.costType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeSpName
       } else {
-        this.filterObj.MinePackage = ''
+        this.filterObj.costType = ''
       }
-      this.filterObj.costItem = ''
-      this.getCostType(this.filterObj.MinePackage)
+      this.filterObj.MinePackage = ''
+      this.getMinePackage(this.filterObj.costType)
     },
     'filterObj.MinePackageIndex'(value) {
       console.log(this.MinePackageList)
@@ -856,7 +856,7 @@ export default {
     this.usernameLocal = localStorage.getItem('usernameLocal')
     this.getChannel()
     this.getAllMonth()
-    this.getMinePackage()
+    this.getMinePackage(this.filterObj.costType)
     this.getCostType()
     this.getCostItemList(this.filterObj.MinePackage)
   },

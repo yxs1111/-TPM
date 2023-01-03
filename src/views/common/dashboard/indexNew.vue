@@ -131,7 +131,7 @@
                 <div class="transact" @click="openFlowDiagram(row)">查看流程</div>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="" fixed="right" label="操作">
+            <el-table-column align="center" prop="" label="操作">
               <template slot-scope="scope">
                 <div class="operation" @click="goAssignee(scope.row.version, scope.row.activityName, scope.row.channelCode, scope.row.minePackageName, scope.row)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
