@@ -34,8 +34,14 @@
           </el-select>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">Cost Type:</span>
+          <el-select v-model="filterObj.CostTypeIndex" clearable filterable placeholder="请选择" class="my-el-select"  @change='changeMinepackage2'>
+            <el-option v-for="(item, index)  in CostTypeList" :key="index" :label="item.costType" :value="index" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
+          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select"  @change='changeMinepackage'>
             <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="index" />
           </el-select>
         </div>
@@ -47,6 +53,9 @@
         </div>
       </div>
       <div class="OpertionBar">
+        <el-button type="primary"
+                   class="TpmButtonBG"
+                   @click="clear">清除数据</el-button>
         <el-button type="primary"
                    class="TpmButtonBG"
                    @click="search">查询</el-button>
@@ -280,14 +289,14 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDeptCode"
+                       prop="costAscriptionDeptSpName"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDept }}
+            {{ scope.row.costAscriptionDeptSpName }}
           </div>
         </template>
       </el-table-column>
@@ -696,14 +705,14 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="costAscriptionDeptCode"
+                             prop="costAscriptionDeptSpName"
                              label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costAscriptionDept }}
+                  {{ scope.row.costAscriptionDeptSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -791,6 +800,7 @@ export default {
       monthList: [],
       customerArr: [],
       MinePackageList: [],
+      CostTypeList: [],
       tableData: [],
 
       BrandList: [],
@@ -816,6 +826,17 @@ export default {
   },
   computed: {},
   watch: {
+    'filterObj.CostTypeIndex'(value) {
+      console.log(this.CostTypeList)
+      if(value!=='') {
+        this.filterObj.MinePackageName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+        this.filterObj.MinePackage=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+      } else {
+        this.filterObj.MinePackage = ''
+      }
+      this.filterObj.costItem = ''
+      this.getCostType(this.filterObj.MinePackage)
+    },
     'filterObj.MinePackageIndex'(value) {
       console.log(this.MinePackageList)
       if(value!=='') {
@@ -838,9 +859,40 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getMinePackage()
+    this.getCostType()
     this.getCostItemList(this.filterObj.MinePackage)
   },
   methods: {
+    changeMinepackage() {
+      this.filterObj.costAccount = ''
+    },
+    changeMinepackage2() {
+      this.filterObj.MinePackage = ''
+    },
+    // 清除数据
+    clear() {
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.getClear({
+          channelCode: this.filterObj.channelCode, //渠道
+          yearAndMonth: this.filterObj.month,
+          //   isSubmit: 0,
+        }).then((res) => {
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              this.$message.success('清除成功!')
+            })
+          }
+        })
+      }
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -926,6 +978,18 @@ export default {
         }
       })
     },
+    // cost type下拉
+    getCostType() {
+      API.getCostTypeList({
+        parentId: '',
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.CostTypeList = res.data
+          }
+          // this.getCostItemList(this.filterObj.MinePackageCode)
+        })
+    },
     // 费用科目获取下拉框
     getCostItemList(code) {
       API.getCostItemList({
@@ -937,11 +1001,10 @@ export default {
       })
     },
     // minepackage获取下拉
-    getMinePackage() {
-      selectAPI
-        .queryMinePackageSelect({
-          parentId: '',
-        })
+    getMinePackage(code) {
+      API.getMinePackageList({
+        costType: code,
+      })
         .then((res) => {
           this.MinePackageList = res.data
           // this.getCostItemList(this.filterObj.MinePackageCode)

@@ -34,8 +34,14 @@
           </el-select>
         </div>
         <div class="Selectli">
+          <span class="SelectliTitle">Cost Type:</span>
+          <el-select v-model="filterObj.CostTypeIndex" clearable filterable placeholder="请选择" class="my-el-select"  @change='changeMinepackage2'>
+            <el-option v-for="(item, index)  in CostTypeList" :key="index" :label="item.costType" :value="index" />
+          </el-select>
+        </div>
+        <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
-          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select">
+          <el-select v-model="filterObj.MinePackageIndex" clearable filterable placeholder="请选择" class="my-el-select"  @change='changeMinepackage'>
             <el-option v-for="(item, index)  in MinePackageList" :key="index" :label="item.costType" :value="index" />
           </el-select>
         </div>
@@ -126,7 +132,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costType }}
+            {{ scope.row.costTypeSpName }}
           </div>
         </template>
       </el-table-column>
@@ -184,7 +190,7 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="customerSpName"
+                       prop="customerName"
                        label="客户">
         <template v-slot:header>
           <div>客户<br><span class="subTitle">-</span></div>
@@ -197,7 +203,7 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="brandSpName"
+                       prop="brandName"
                        label="品牌">
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
@@ -288,14 +294,14 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDeptCode"
+                       prop="costAscriptionDeptSpName"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDept }}
+            {{ scope.row.costAscriptionDeptSpName }}
           </div>
         </template>
       </el-table-column>
@@ -468,9 +474,9 @@
                              align="center"
                              fixed="left"
                              prop="systemJudgment"
-                             label="系统检验">
+                             label="系统判定">
               <template v-slot:header>
-                <div>系统检验<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -479,8 +485,16 @@
                   <div slot="content"
                        v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img  src="@/assets/images/success.png" alt="">
-                    <span class="judgmentText">Pass</span>
+                    <img v-if="row.systemJudgment=='Pass'"
+                         src="@/assets/images/success.png"
+                         alt="">
+                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
+                         src="@/assets/images/warning.png"
+                         alt="">
+                    <img v-if="row.systemJudgment=='Error'"
+                         src="@/assets/images/selectError.png"
+                         alt="">
+                    <span class="judgmentText">{{ row.systemJudgment }}</span>
                   </div>
                 </el-tooltip>
               </template>
@@ -489,12 +503,14 @@
                              align="left"
                              fixed="left"
                              prop="systemJudgmentContent"
-                             label="系统检验">
+                             label="系统判定内容">
               <template v-slot:header>
-                <div>系统检验<br><span class="subTitle">-</span></div>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <span>检验通过</span>
+                <div>
+                  {{ scope.row.systemJudgmentContent }}
+                </div>
               </template>
             </el-table-column>
             <el-table-column align="center"
@@ -532,13 +548,13 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costType }}
+                  {{ scope.row.costTypeSpName }}
                 </div>
               </template>
             </el-table-column>
             <el-table-column width="190"
                              align="center"
-                             prop="minePackageSpName"
+                             prop="minePackage"
                              label="Mine Package">
               <template v-slot:header>
                 <div>Mine Package<br><span class="subTitle">-</span></div>
@@ -551,7 +567,7 @@
             </el-table-column>
             <el-table-column width="180"
                              align="center"
-                             prop="costItemSpName"
+                             prop="costItem"
                              label="费用科目">
               <template v-slot:header>
                 <div>费用科目<br><span class="subTitle">-</span></div>
@@ -571,7 +587,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.channelName }}
+                  {{ scope.row.channelSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -597,7 +613,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.customerName }}
+                  {{ scope.row.customerSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -610,7 +626,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.brandName }}
+                  {{ scope.row.brandSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -623,7 +639,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.skuName }}
+                  {{ scope.row.skuSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -636,7 +652,7 @@
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{  scope.row.distributorName }}
+                  {{  scope.row.distributorSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -694,14 +710,14 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="costAscriptionDeptCode"
+                             prop="costAscriptionDeptSpName"
                              label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costAscriptionDept }}
+                  {{ scope.row.costAscriptionDeptSpName }}
                 </div>
               </template>
             </el-table-column>
@@ -788,6 +804,7 @@ export default {
       zoneArr: [], //大区下拉
       regionArr: [], //区域下拉
       MinePackageList: [],
+      CostTypeList: [],
       CostItemList: [],
       monthList: [],
       customerArr: [],
@@ -816,6 +833,17 @@ export default {
   },
   computed: {},
   watch: {
+    'filterObj.CostTypeIndex'(value) {
+      console.log(this.CostTypeList)
+      if(value!=='') {
+        this.filterObj.MinePackageName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+        this.filterObj.MinePackage=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+      } else {
+        this.filterObj.MinePackage = ''
+      }
+      this.filterObj.costItem = ''
+      this.getCostType(this.filterObj.MinePackage)
+    },
     'filterObj.MinePackageIndex'(value) {
       console.log(this.MinePackageList)
       if(value!=='') {
@@ -838,9 +866,16 @@ export default {
     this.getChannel()
     this.getAllMonth()
     this.getMinePackage()
+    this.getCostType()
     this.getCostItemList(this.filterObj.MinePackage)
   },
   methods: {
+    changeMinepackage() {
+      this.filterObj.costAccount = ''
+    },
+    changeMinepackage2() {
+      this.filterObj.MinePackage = ''
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -863,6 +898,7 @@ export default {
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
+          costItemFlag: 'FG'
           //   isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
@@ -916,21 +952,39 @@ export default {
         }
       })
     },
+    // cost type下拉
+    getCostType() {
+      API.getCostTypeList({
+        parentId: '',
+      })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.CostTypeList = res.data
+          }
+          // this.getCostItemList(this.filterObj.MinePackageCode)
+        })
+    },
     // minepackage
-    getMinePackage() {
+    getMinePackage(code) {
       selectAPI
         .queryMinePackageSelect({
-          parentId: '',
+          costType: code,
         })
         .then((res) => {
-          this.MinePackageList = res.data
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              if (item.costType === 'Price Promotion' || item.costType === 'New User') {
+                this.MinePackageList.push(item)
+              }
+            })
+          }
           // this.getCostItemList(this.filterObj.MinePackageCode)
         })
     },
     // 费用科目获取下拉框
     getCostItemList(code) {
       API.getCostItemList({
-        minePackage: code,
+        minePackageCode: code,
       }).then((res) => {
         if (res.code === 1000) {
           this.CostItemList = res.data

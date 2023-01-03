@@ -12,13 +12,25 @@ export default {
   checkurl: '/cityplan/investCpDisplayVTwoDetail',
   saveurl: '/cityplan/investCpEcmVTwoDetailEb',
 
-  //分页查询  investCpEcmVTwoDetail/getPage
+  // 分页查询  investCpEcmVTwoDetail/getPage
   getPage(params) {
     return requestApi.request_get(this.url + '/getOthersPage', params)
+  },
+  // 清除数据按钮
+  getClear(params) {
+    return requestApi.request_get(this.url + '/deleteData', params)
   },
   // 费用科目下拉
   getCostItemList(params) {
     return requestApi.request_get('/cityplan/investCpOthers/getCostItem', params)
+  },
+  // minepackage下拉
+  getMinePackageList(params) {
+    return requestApi.request_get('/cityplan/investCpOthers/getMinePackage', params)
+  },
+  // Cost type下拉
+  getCostTypeList(params) {
+    return requestApi.request_get('/cityplan/investCpOthers/getCostType', params)
   },
   //审批分页查询 investCpPosmPipVTwo/getPosmPipVTwoPageApproval
   getPosmPipVTwoPageApproval(params) {
