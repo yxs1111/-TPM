@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2022-10-14 15:23:56
+ * @LastEditTime: 2023-01-03 09:43:50
 -->
 <!--
  * @Description:
@@ -34,7 +34,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">经销商:</span>
           <el-select v-model="filterObj.distributorCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorName" />
+            <el-option v-for="(item, index) in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorCode" />
           </el-select>
         </div>
         <div class="Selectli">
