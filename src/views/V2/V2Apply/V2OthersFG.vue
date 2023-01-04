@@ -922,7 +922,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' && res.data.activityName.includes('调整') &&
+              res.data.version === 'Others-V2-FG' && res.data.activityName.includes('调整') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -1008,6 +1008,7 @@ export default {
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
+          costItemFlag: 'FG',
         }).then((res) => {
           downloadFile(
             res,
@@ -1084,6 +1085,7 @@ export default {
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
+          costItemFlag: 'FG',
           //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
@@ -1126,6 +1128,7 @@ export default {
       API.exportTemplateExcel({
         channelCode: this.filterObj.channelCode, // 渠道
         yearAndMonth: this.filterObj.month,
+        costItemFlag: 'FG',
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
@@ -1148,6 +1151,7 @@ export default {
               yearAndMonth: this.filterObj.month,
               channelCode: this.filterObj.channelCode, // 渠道
               // mainId: mainId, // 主表id
+              costItemFlag: 'FG',
               paramMap: { opinion: 'agree'}, // 审批标识(agree：审批通过，reject：审批驳回)
               // isSubmit: 0, //申请0,审批1
             }).then((response) => {
