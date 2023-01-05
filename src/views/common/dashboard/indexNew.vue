@@ -1110,6 +1110,12 @@ export default {
 }
 </style>
 <style lang="scss">
+.gantt-elastic__calendar-wrapper {
+  width: 100% !important;
+  div {
+    width: 100% !important;
+  }
+}
 .indexTable {
   .el-tooltip {
     text-align: left;
