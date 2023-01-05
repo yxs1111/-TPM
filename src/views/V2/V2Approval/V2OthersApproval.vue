@@ -827,7 +827,7 @@ export default {
       console.log(this.CostTypeList)
       if(value!=='') {
         this.filterObj.costTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
-        this.filterObj.costType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeSpName
+        this.filterObj.costType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
       } else {
         this.filterObj.costType = ''
       }
@@ -886,6 +886,7 @@ export default {
           channelCode: this.filterObj.channelCode, //渠道
           minePackageCode: this.filterObj.MinePackage,
 
+          costTypeCode: this.filterObj.costType,
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           //   isSubmit: 0,
@@ -994,6 +995,7 @@ export default {
           channelCode: this.filterObj.channelCode, //渠道
           minePackageCode: this.filterObj.MinePackage,
 
+          costTypeCode: this.filterObj.costType,
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
         }).then((res) => {

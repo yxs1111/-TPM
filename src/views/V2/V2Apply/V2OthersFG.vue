@@ -53,7 +53,9 @@
         </div>
       </div>
       <div class="OpertionBar">
-
+        <el-button type="primary"
+                   class="TpmButtonBG"
+                   @click="clear">清除数据</el-button>
         <el-button type="primary"
                    class="TpmButtonBG"
                    @click="search">查询</el-button>
@@ -829,7 +831,7 @@ export default {
       console.log(this.CostTypeList)
       if(value!=='') {
         this.filterObj.costTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
-        this.filterObj.costType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeSpName
+        this.filterObj.costType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
       } else {
         this.filterObj.costType = ''
       }
@@ -868,6 +870,31 @@ export default {
     changeMinepackage2() {
       this.filterObj.MinePackage = ''
     },
+    // 清除数据
+    clear() {
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.getClear({
+          channelCode: this.filterObj.channelCode, //渠道
+          yearAndMonth: this.filterObj.month,
+          costItemFlag: 'FG'
+          //   isSubmit: 0,
+        }).then((res) => {
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              this.$message.success('清除成功!')
+            })
+          }
+        })
+      }
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -888,6 +915,7 @@ export default {
           channelCode: this.filterObj.channelCode, //渠道
           minePackageCode: this.filterObj.MinePackage,
 
+          costTypeCode: this.filterObj.costType,
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           costItemFlag: 'FG'
@@ -1006,6 +1034,7 @@ export default {
           channelCode: this.filterObj.channelCode, // 渠道
           minePackageCode: this.filterObj.MinePackage,
 
+          costTypeCode: this.filterObj.costType,
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           costItemFlag: 'FG',
@@ -1043,6 +1072,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('costItemFlag', 'FG')
       formData.append('importType', 1) // 1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1111,6 +1141,7 @@ export default {
         // mainId: this.tableData[0].mainId,
         yearAndMonth: this.filterObj.month,
         channelCode: this.filterObj.channelCode, // 渠道
+        costItemFlag: 'FG',
         // isSubmit: 0,
       }).then((res) => {
         if (res.code == 1000) {

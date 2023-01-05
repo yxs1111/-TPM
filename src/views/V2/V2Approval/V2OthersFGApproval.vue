@@ -837,7 +837,7 @@ export default {
       console.log(this.CostTypeList)
       if(value!=='') {
         this.filterObj.costTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
-        this.filterObj.costType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeSpName
+        this.filterObj.costType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
       } else {
         this.filterObj.costType = ''
       }
@@ -896,6 +896,7 @@ export default {
           channelCode: this.filterObj.channelCode, //渠道
           minePackageCode: this.filterObj.MinePackage,
 
+          costTypeCode: this.filterObj.costType,
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           costItemFlag: 'FG'
@@ -1007,6 +1008,7 @@ export default {
           channelCode: this.filterObj.channelCode, // 渠道
           minePackageCode: this.filterObj.MinePackage,
 
+          costTypeCode: this.filterObj.costType,
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
           costItemFlag: 'FG',
@@ -1044,6 +1046,7 @@ export default {
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.month)
       formData.append('channelCode', this.filterObj.channelCode)
+      formData.append('costItemFlag', 'FG')
       formData.append('importType', 0) //1申请0审批
       //   formData.append('isSubmit', 0)
       API.fileImport(formData).then((response) => {
@@ -1088,20 +1091,8 @@ export default {
     },
     // 确认导入
     confirmImport() {
-      API.importSave({
-        // mainId: this.tableData[0].mainId,
-        yearAndMonth: this.filterObj.month,
-        channelCode: this.filterObj.channelCode, // 渠道
-        // isSubmit: 0,
-      }).then((res) => {
-        if (res.code == 1000) {
-          this.$message.success(this.messageMap.saveSuccess)
-          this.getTableData()
-          this.closeImportDialog()
-        } else {
-          this.$message.info(this.messageMap.saveError)
-        }
-      })
+      this.closeImportDialog()
+      this.getTableData()
     },
     // 下载模板
     downloadTemplate() {
