@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-11 09:37:13
+ * @LastEditTime: 2023-01-05 10:06:55
 -->
 <template>
   <div class="MainContent">
@@ -34,6 +34,7 @@
         </div>
       </div>
       <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="getContractData">获取合同数据</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -590,6 +591,17 @@ export default {
     this.getContractItemList()
   },
   methods: {
+    //获取合同数据
+    getContractData() {
+      API.getContractData({
+        channelCode: this.filterObj.channelCode,
+        yearAndMonth: this.filterObj.month,
+      }).then(res => {
+        if (res.code == 1000) {
+          this.$message.success('获取合同数据成功')
+        }
+      })
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []

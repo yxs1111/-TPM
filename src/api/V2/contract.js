@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-12-17 19:00:35
+ * @LastEditTime: 2023-01-05 09:52:57
  */
 /*
  * @Description: V1 合同
@@ -131,4 +131,8 @@ export default {
       responseType: 'blob'
     })
   },
+  //获取合同数据
+  getContractData(params){
+    return requestApi.request_post('/cityplan/investCpContractVOneDetail/createCPT', params)
+  }
 }
