@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2022-12-21 08:56:45
+ * @LastEditTime: 2023-01-05 15:39:55
 -->
 <template>
   <div class="indexNew">
@@ -598,9 +598,12 @@ export default {
           // }
           // const currentdate1 = '2022-9-01'
           // const currentdate3 = '2022-12-31'
-          const currentdate1 = date.getFullYear() + seperator1 + month1 + seperator1 + strDate1
-          // const currentdate2 = date.getFullYear() + seperator1 + month2 + seperator1 + strDate
-          const currentdate3 = date.getFullYear() + seperator1 + month3 + seperator1 + strDate2
+          // const currentdate1 = date.getFullYear() + seperator1 + month1 + seperator1 + strDate1
+          // const currentdate3 = date.getFullYear() + seperator1 + month3 + seperator1 + strDate2
+          //获取当前月 上一月 月初
+          const currentdate1 = dayjs().subtract(1, 'month').startOf('month').add(1,'day').format('YYYY-MM-DD')
+          //获取当前月 下一月 月末
+          const currentdate3 = dayjs().add(1, 'month').endOf('month').subtract(1, 'day').format('YYYY-MM-DD')
           item.start = dayjs(currentdate1).valueOf()
           item.end = dayjs(currentdate3).valueOf()
           item.type = 'group'
