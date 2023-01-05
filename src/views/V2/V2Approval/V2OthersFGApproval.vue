@@ -923,7 +923,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' && res.data.activityName.includes('审批') &&
+              res.data.version === 'Others-V2-FG' && res.data.activityName.includes('审批') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -1009,6 +1009,7 @@ export default {
 
           costItemMdmCode: this.filterObj.costAccount,
           yearAndMonth: this.filterObj.month,
+          costItemFlag: 'FG',
         }).then((res) => {
           downloadFile(
             res,
@@ -1108,6 +1109,7 @@ export default {
       API.exportTemplateExcel({
         channelCode: this.filterObj.channelCode, // 渠道
         yearAndMonth: this.filterObj.month,
+        costItemFlag: 'FG',
         //   isSubmit: 0,
       }).then((res) => {
         downloadFile(
