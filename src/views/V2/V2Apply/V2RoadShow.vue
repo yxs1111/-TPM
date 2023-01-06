@@ -80,10 +80,10 @@
         <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">提交</span>
       </div>
-      <div v-if="!(!isSubmit&&isSelf&&isGainLe)" class="tip">
-        <span class="tipStar">*</span>
-        注意事项：若未获取到MTD场次日期，不能办理
-      </div>
+<!--      <div v-if="!(!isSubmit&&isSelf&&isGainLe)" class="tip">-->
+<!--        <span class="tipStar">*</span>-->
+<!--        注意事项：若未获取到MTD场次日期，不能办理-->
+<!--      </div>-->
     </div>
     <el-table v-if="this.filterObj.channelCode == 'NKA' || this.filterObj.channelCode == ''" :data="tableData" :max-height="maxheight2" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
