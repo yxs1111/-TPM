@@ -170,7 +170,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeightHaveTab,
+  getHeightHaveTab1,
   messageObj,
   downloadFile,
   formatThousandNum
@@ -199,7 +199,7 @@ export default {
       tableData: [],
       RegionList: [],
       BrandList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab1(),
     }
   },
   computed: {},
@@ -212,7 +212,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightHaveTab1()
       })()
     }
     this.getChannel()

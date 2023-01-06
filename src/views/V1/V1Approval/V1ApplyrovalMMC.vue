@@ -78,7 +78,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { formatThousandNum, getHeightHaveTab, getDefaultPermissions } from '@/utils'
+import { formatThousandNum, getHeightHaveTab1, getDefaultPermissions } from '@/utils'
 import API from '@/api/V1/MMC.js'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
@@ -106,7 +106,7 @@ export default {
       localDate: '',
       usernameLocal: '',
       isCalculation: false,
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab1(),
       permissions: getDefaultPermissions(),
     }
   },
@@ -115,7 +115,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightHaveTab1()
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
