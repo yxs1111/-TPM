@@ -549,9 +549,13 @@ export function getYearAndMonthRange(start, end) {
   }
   return result
 }
-//多行筛选
+// 多行筛选
 export function getHeight() {
   return window.innerHeight - 450
+}
+// V1中不含导入按钮的tab
+export function getHeightHaveTab1() {
+  return window.innerHeight - 300
 }
 // tab
 export function getHeightHaveTab() {

@@ -698,7 +698,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeightHaveTab,
+  getHeightHaveTab1,
   messageObj,
   downloadFile,
   messageMap,
@@ -738,7 +738,7 @@ export default {
 
       BrandList: [],
 
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab1(),
       isSelf: 0, //是否是当前审批人
       mainId: '',
       usernameLocal: '',
@@ -761,7 +761,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightHaveTab1()
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')

@@ -295,7 +295,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeightHaveTab,
+  getHeightHaveTab1,
   messageObj,
   downloadFile,
   formatThousandNum,
@@ -328,7 +328,7 @@ export default {
       zoneArr: [],
       regionArr: [],
       BrandList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab1(),
     }
   },
   computed: {},

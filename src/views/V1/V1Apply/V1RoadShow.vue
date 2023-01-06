@@ -250,7 +250,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-table v-if='this.filterObj.channelCode == "EC"' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-if='this.filterObj.channelCode == "EC"' :data="tableData" :max-height="maxheight1" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
@@ -390,6 +390,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
   getHeightHaveTab,
+  getHeightHaveTab1,
   messageObj,
   downloadFile,
   formatThousandNum,
@@ -428,6 +429,7 @@ export default {
       supplierList: [],
       activityList: [],
       maxheight: getHeightHaveTab(),
+      maxheight1: getHeightHaveTab1(),
     }
   },
   computed: {},
@@ -441,6 +443,7 @@ export default {
     window.onresize = () => {
       return (() => {
         this.maxheight = getHeightHaveTab()
+        this.maxheight1 = getHeightHaveTab1()
       })()
     }
     this.getChannel()
