@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-06 10:51:11
+ * @LastEditTime: 2023-01-06 16:51:46
 -->
 <template>
   <div class="MainContent">
@@ -833,6 +833,7 @@ export default {
           channelCode: this.filterObj.channelCode,
           distributorCode: this.filterObj.distributorCode,
           yearAndMonth: this.filterObj.month,
+          contractItemCode: this.filterObj.contractItemCode,
           costItemCode: 'KA rebate',
           isSubmit: 1,
         }).then((res) => {

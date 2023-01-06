@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-06 10:50:39
+ * @LastEditTime: 2023-01-06 16:04:15
 -->
 <template>
   <div class="MainContent">
@@ -883,6 +883,7 @@ export default {
         API.exportApplyExcel({
           customerCode: this.filterObj.customerCode,
           channelCode: this.filterObj.channelCode,
+          contractItemCode: this.filterObj.contractItemCode,
           distributorCode: this.filterObj.distributorCode,
           yearAndMonth: this.filterObj.month,
           costItemCode: 'HIH rebate',
