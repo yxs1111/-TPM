@@ -555,7 +555,7 @@ export function getHeight() {
 }
 // tab
 export function getHeightHaveTab() {
-  return window.innerHeight - 450
+  return window.innerHeight - 350
 }
 // 单行筛选（1366 下筛选一行展示）
 export function getHeightSingle() {
