@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:12:03
+ * @LastEditTime: 2023-01-08 16:49:30
 -->
 <template>
   <div class="MainContent">
@@ -188,7 +188,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>

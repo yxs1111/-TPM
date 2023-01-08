@@ -1,7 +1,7 @@
 <!--
  * @Description: V3POSMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-05 17:15:40
+ * @LastEditTime: 2023-01-08 16:50:19
 -->
 <template>
   <div class="MainContent">
@@ -129,13 +129,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -460,13 +460,13 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="120" align="center" field="channelCode" title="渠道">
+            <vxe-table-column width="120" align="center" field="channelName" title="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.channelCode }}
+                  {{ scope.row.channelName }}
                 </div>
               </template>
             </vxe-table-column>
