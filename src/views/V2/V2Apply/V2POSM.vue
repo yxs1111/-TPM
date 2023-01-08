@@ -30,7 +30,7 @@
                      @change="getCustomerList">
             <el-option v-for="(item, index) in channelArr"
                        :key="index"
-                       :label="item.channelEsName"
+                       :label="item.channelCsName"
                        :value="item.channelCode" />
           </el-select>
         </div>
