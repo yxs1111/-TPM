@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-12-05 17:02:11
+ * @LastEditTime: 2023-01-08 15:25:38
 -->
 <template>
   <div class="V0Content">
@@ -17,7 +17,7 @@
           <div class="Selectli">
             <span class="SelectliTitle">渠道:</span>
             <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-              <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+              <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelCsName" :value="item.channelCode" />
             </el-select>
           </div>
           <div class="Selectli">
@@ -276,6 +276,7 @@ export default {
         month: '',
         SKU: '',
         channelCode: '',
+        channelName: '',
       },
       monthList: [],
       skuOptons: [],
@@ -347,6 +348,12 @@ export default {
   watch: {
     'filterObj.channelCode'() {
       this.ruleForm.channelCode = this.filterObj.channelCode
+      //根据channelCode 取channelCsName
+      this.ChannelList.forEach((item) => {
+        if (item.channelCode == this.filterObj.channelCode) {
+          this.filterObj.channelName = item.channelCsName
+        }
+      })
     },
   },
   computed: {},
@@ -660,7 +667,7 @@ export default {
           let obj = {
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
-            channelName: this.ruleForm.channelCode,
+            channelName: this.filterObj.channelName,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
           }
