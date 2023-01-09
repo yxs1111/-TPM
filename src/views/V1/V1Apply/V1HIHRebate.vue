@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-02 12:00:07
+ * @LastEditTime: 2023-01-09 15:25:44
 -->
 <template>
   <div class="MainContent">
@@ -122,12 +122,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
+      <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(KA+Contract Item)">
         <template v-slot:header>
           <div>
             V1计划合同点数(%)
             <br>
-            <span class="subTitle">kA+Contract Item</span>
+            <span class="subTitle">KA+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -141,7 +141,7 @@
           <div>
             V1计划销售额GSV(RMB)
             <br>
-            <span class="subTitle">kA</span>
+            <span class="subTitle">KA</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -155,7 +155,7 @@
           <div>
             V1计划合同费用(RMB)
             <br>
-            <span class="subTitle">kA+Contract Item</span>
+            <span class="subTitle">KA+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">

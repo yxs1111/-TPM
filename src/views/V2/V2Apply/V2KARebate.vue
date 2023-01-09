@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-08 17:42:23
+ * @LastEditTime: 2023-01-09 15:12:56
 -->
 <template>
   <div class="MainContent">
@@ -127,14 +127,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
-        <template v-slot:header>
-          <div>大区<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-            {{ scope.row.regionName }}
-        </template>
-      </el-table-column>
       <el-table-column width="220" align="center" prop="brandName" label="品牌">
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
@@ -143,6 +135,14 @@
           <div>
             {{ scope.row.brandName }}
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
+        <template v-slot:header>
+          <div>大区<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+            {{ scope.row.regionName }}
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item">
@@ -484,14 +484,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
-              <template v-slot:header>
-                <div>大区<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                {{ scope.row.regionName }}
-              </template>
-            </el-table-column>
             <el-table-column width="220" align="center" prop="brandName" label="品牌">
               <template v-slot:header>
                 <div>品牌<br><span class="subTitle">-</span></div>
@@ -500,6 +492,14 @@
                 <div>
                   {{ scope.row.brandName }}
                 </div>
+              </template>
+            </el-table-column>
+            <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
+              <template v-slot:header>
+                <div>大区<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                {{ scope.row.regionName }}
               </template>
             </el-table-column>
             <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item">

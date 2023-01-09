@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2023-01-09 14:45:45
+ * @LastEditTime: 2023-01-09 15:24:03
 -->
 <!--
  * @Description:
@@ -175,9 +175,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
+      <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(KA+Contract Item)">
         <template v-slot:header>
-          <div>V1计划合同点数(%)<br /><span class="subTitle">kA+Contract Item</span></div>
+          <div>V1计划合同点数(%)<br /><span class="subTitle">KA+Contract Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -187,7 +187,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="planSalesAmount" label="V1计划销售额GSV(RMB)">
         <template v-slot:header>
-          <div>V1计划销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
+          <div>V1计划销售额GSV(RMB)<br /><span class="subTitle">KA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -197,7 +197,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="planCost" label="V1计划合同费用(RMB)">
         <template v-slot:header>
-          <div>V1计划合同费用(RMB)<br /><span class="subTitle">kA+Contract Item</span></div>
+          <div>V1计划合同费用(RMB)<br /><span class="subTitle">KA+Contract Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -207,7 +207,7 @@
       </el-table-column>
       <el-table-column width="220" align="right" prop="forecastRatio" label="V2预估合同点数(%)">
         <template v-slot:header>
-          <div>V2预估合同点数(%)<br /><span class="subTitle">kA+Contract Item</span></div>
+          <div>V2预估合同点数(%)<br /><span class="subTitle">KA+Contract Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -217,7 +217,7 @@
       </el-table-column>
       <el-table-column width="240" align="right" prop="forecastSalesAmount" label="V2预估销售额GSV(RMB)">
         <template v-slot:header>
-          <div>V2预估销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
+          <div>V2预估销售额GSV(RMB)<br /><span class="subTitle">KA</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -227,7 +227,7 @@
       </el-table-column>
       <el-table-column width="240" align="right" prop="forecastCost" label="V2预估合同费用(RMB)">
         <template v-slot:header>
-          <div>V2预估合同费用(RMB)<br /><span class="subTitle">kA+Contract Item</span></div>
+          <div>V2预估合同费用(RMB)<br /><span class="subTitle">KA+Contract Item</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -247,7 +247,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额GSV-默认(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
+          <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">KA+经销商+region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -277,7 +277,7 @@
       </el-table-column>
       <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额GSV-调整后(RMB)">
         <template v-slot:header>
-          <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
+          <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">KA+经销商+region</span></div>
         </template>
         <template slot-scope="scope">
           <div>
@@ -465,9 +465,9 @@
             <el-table-column width="100" align="center" prop="regionName" label="大区" />
             <el-table-column width="220" align="center" prop="regionName" label="区域" />
             <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" />
-            <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
+            <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(KA+Contract Item)">
               <template v-slot:header>
-                <div>V1计划合同点数(%)<br /><span class="subTitle">kA+Contract Item</span></div>
+                <div>V1计划合同点数(%)<br /><span class="subTitle">KA+Contract Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -477,7 +477,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="planSalesAmount" label="V1计划销售额GSV(RMB)">
               <template v-slot:header>
-                <div>V1计划销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
+                <div>V1计划销售额GSV(RMB)<br /><span class="subTitle">KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -487,7 +487,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="planCost" label="V1计划合同费用(RMB)">
               <template v-slot:header>
-                <div>V1计划合同费用(RMB)<br /><span class="subTitle">kA+Contract Item</span></div>
+                <div>V1计划合同费用(RMB)<br /><span class="subTitle">KA+Contract Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -497,7 +497,7 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="forecastRatio" label="V2预估合同点数(%)">
               <template v-slot:header>
-                <div>V2预估合同点数(%)<br /><span class="subTitle">kA+Contract Item</span></div>
+                <div>V2预估合同点数(%)<br /><span class="subTitle">KA+Contract Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -507,7 +507,7 @@
             </el-table-column>
             <el-table-column width="240" align="right" prop="forecastSalesAmount" label="V2预估销售额GSV(RMB)">
               <template v-slot:header>
-                <div>V2预估销售额GSV(RMB)<br /><span class="subTitle">kA</span></div>
+                <div>V2预估销售额GSV(RMB)<br /><span class="subTitle">KA</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -517,7 +517,7 @@
             </el-table-column>
             <el-table-column width="240" align="right" prop="forecastCost" label="V2预估合同费用(RMB)">
               <template v-slot:header>
-                <div>V2预估合同费用(RMB)<br /><span class="subTitle">kA+Contract Item</span></div>
+                <div>V2预估合同费用(RMB)<br /><span class="subTitle">KA+Contract Item</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -537,7 +537,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="actualSalesAmount" label="V3实际销售额GSV-默认(RMB)">
               <template v-slot:header>
-                <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
+                <div>V3实际销售额GSV-默认(RMB)<br /><span class="subTitle">KA+经销商+region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -567,7 +567,7 @@
             </el-table-column>
             <el-table-column width="260" align="right" prop="adjustedSalesAmount" label="V3实际销售额GSV-调整后(RMB)">
               <template v-slot:header>
-                <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">kA+经销商+region</span></div>
+                <div>V3实际销售额GSV-调整后(RMB)<br /><span class="subTitle">KA+经销商+region</span></div>
               </template>
               <template slot-scope="scope">
                 <div>

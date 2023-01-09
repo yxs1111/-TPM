@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-02 11:38:18
+ * @LastEditTime: 2023-01-09 15:25:56
 -->
 <template>
   <div class="MainContent">
@@ -137,7 +137,7 @@
           <div>
             V1计划合同点数(%)
             <br>
-            <span class="subTitle">kA+Brand+Contract Item</span>
+            <span class="subTitle">KA+Brand+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -151,7 +151,7 @@
           <div>
             V1计划销售额GSV(RMB)
             <br>
-            <span class="subTitle">kA+Brand</span>
+            <span class="subTitle">KA+Brand</span>
           </div>
         </template>
         <template slot-scope="scope">
@@ -165,7 +165,7 @@
           <div>
             V1计划合同费用(RMB)
             <br>
-            <span class="subTitle">kA+Brand+Contract Item</span>
+            <span class="subTitle">KA+Brand+Contract Item</span>
           </div>
         </template>
         <template slot-scope="scope">
