@@ -603,6 +603,7 @@ export default {
       filterObj: {
         supplierName: '', //供应商
         channelCode: '', //渠道
+        channelName: '',
         customerMdmCode: '', //客户MDM code
         customerCode: '', //客户系统名称
         distributorName: '', //经销商
@@ -639,7 +640,15 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.channelCode'() {
+      this.channelArr.forEach((item) => {
+        if (item.channelCode == this.filterObj.channelCode) {
+          this.filterObj.channelName = item.channelCsName
+        }
+      })
+    },
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -923,7 +932,7 @@ export default {
         // 导出数据筛选
         API.downloadTemplate({
           yearAndMonth: this.filterObj.month,
-          channelName: this.filterObj.channelCode,
+          channelName: this.filterObj.channelName,
           isSubmit: 1,
         }).then((res) => {
           downloadFile(
