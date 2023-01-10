@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-10 14:59:04
+ * @LastEditTime: 2023-01-10 15:50:36
 -->
 <template>
   <div class="MainContent">
@@ -191,7 +191,7 @@ import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
-  name: 'dealerContractEntry',
+  name: 'dealerContractTermApproval',
   data() {
     return {
       total: 0,

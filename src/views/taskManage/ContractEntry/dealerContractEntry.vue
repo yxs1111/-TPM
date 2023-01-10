@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-10 14:53:48
+ * @LastEditTime: 2023-01-10 15:47:12
 -->
 <template>
   <div class="MainContent">
@@ -398,7 +398,7 @@ export default {
         index: '',
         customerMdmCode: '',
         maxTargetSale: '',
-        nowTargetSale: '', //现阶段所有经销商目标销售额之和
+        // nowTargetSale: '', //现阶段所有经销商目标销售额之和
         isCollection: '', //是否补录
       },
       addDialogCustomer: [],
@@ -452,6 +452,9 @@ export default {
     this.getCustomerList()
     this.getCustomerListAll()
     this.getDistributorList()
+  },
+  activated() {
+    // this.getTableData()
   },
   directives: { elDragDialog, permission },
   watch: {
@@ -1080,12 +1083,12 @@ export default {
           this.addDialogCustomer.push(obj)
           this.getDistributorListByCustomer()
           //查该现阶段客户下所有经销商的和，新增经销商之和应等于客户目标销售额
-          this.addDialog.nowTargetSale = 0
-          distList.forEach((item) => {
-            if (item.contractState != '3' && item.contractState != '4' && item.contractState != '5') {
-              this.addDialog.nowTargetSale += item.saleAmount
-            }
-          })
+          // this.addDialog.nowTargetSale = 0
+          // distList.forEach((item) => {
+          //   if (item.contractState != '3' && item.contractState != '4' && item.contractState != '5') {
+          //     this.addDialog.nowTargetSale += item.saleAmount
+          //   }
+          // })
           let flag = distList.findIndex((item) => {
             return item.contractState == '3'
           })
@@ -1151,7 +1154,7 @@ export default {
         return
       }
       let list = []
-      let targetSaleLimit = 0
+      // let targetSaleLimit = 0
       this.addDialogDealerList.forEach((item) => {
         let obj = {
           ccId: this.customerArr[this.addDialog.index].id,
@@ -1162,31 +1165,38 @@ export default {
           effectiveBeginDate: item.systemDate[0],
           effectiveEndDate: item.systemDate[1],
         }
-        targetSaleLimit += Number(item.targetSale)
+        // targetSaleLimit += Number(item.targetSale)
         list.push(obj)
       })
-      //补录验证，不补录不验证（经销商之和可以大于客户合同目标销售额）
-      if (this.addDialog.isCollection) {
-        API.add(list).then((res) => {
-          if (res.code === 1000) {
-            this.isAddDialogVisible = false
-            this.getTableData()
-          }
-        })
-      } else {
-        if ((Number(targetSaleLimit) + Number(this.addDialog.nowTargetSale)).toFixed(2) != this.addDialogCustomer[0].saleAmount) {
-          this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
-          return
-        } else {
-          API.add(list).then((res) => {
-            if (res.code === 1000) {
-              this.isAddDialogVisible = false
-              this.$message.success('新增成功')
-              this.getTableData()
-            }
-          })
+      API.add(list).then((res) => {
+        if (res.code === 1000) {
+          this.isAddDialogVisible = false
+          this.$message.success('新增成功')
+          this.getTableData()
         }
-      }
+      })
+      // //补录验证，不补录不验证（经销商之和可以大于客户合同目标销售额）
+      // if (this.addDialog.isCollection) {
+      //   API.add(list).then((res) => {
+      //     if (res.code === 1000) {
+      //       this.isAddDialogVisible = false
+      //       this.getTableData()
+      //     }
+      //   })
+      // } else {
+      //   if ((Number(targetSaleLimit) + Number(this.addDialog.nowTargetSale)).toFixed(2) != this.addDialogCustomer[0].saleAmount) {
+      //     this.$message.info(`经销商目标销售额之和应等于客户目标销售额`)
+      //     return
+      //   } else {
+      //     API.add(list).then((res) => {
+      //       if (res.code === 1000) {
+      //         this.isAddDialogVisible = false
+      //         this.$message.success('新增成功')
+      //         this.getTableData()
+      //       }
+      //     })
+      //   }
+      // }
     },
     //打开条款明细弹窗
     showTermDetailDialog({ ccId }, index) {

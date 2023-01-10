@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-18 18:05:41
+ * @LastEditTime: 2023-01-10 15:50:44
 -->
 <template>
   <div class="MainContent">
@@ -113,7 +113,7 @@
       </el-table-column>
       <el-table-column prop="contractDate" align="center" width="200" label="合同期间">
         <template slot-scope="scope">
-          <div>
+          <div v-if="scope.row.contractBeginDate&&scope.row.contractEndDate">
             {{ scope.row.contractBeginDate.replaceAll('-','/') + ' - ' + scope.row.contractEndDate.replaceAll('-','/') }}
           </div>
         </template>
@@ -185,7 +185,7 @@ import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
-  name: 'dealerContractEntry',
+  name: 'dealerContractChangeApproval',
   data() {
     return {
       total: 0,
