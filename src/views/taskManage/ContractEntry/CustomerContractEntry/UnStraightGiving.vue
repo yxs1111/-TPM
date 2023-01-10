@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-21 09:43:27
+ * @LastEditTime: 2023-01-10 11:28:34
 -->
 <template>
   <div class="MainContent">
@@ -929,6 +929,7 @@ export default {
           API.termination({
             id: row.id,
             date: row.expireDate,
+            remark: row.applyRemark,
           }).then((res) => {
             if (res.code === 1000) {
               this.$message.success('调整成功')
@@ -947,6 +948,7 @@ export default {
               API.termination({
                 id: row.id,
                 date: row.expireDate,
+                remark: row.applyRemark,
               }).then((res) => {
                 if (res.code === 1000) {
                   this.$message.success('调整成功')
