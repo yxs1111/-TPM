@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2023-01-10 14:06:41
+ * @LastEditTime: 2023-01-10 16:51:11
 -->
 <template>
   <div class="ContentDetail">
@@ -503,6 +503,9 @@ export default {
                     frieslandTaxCostNoTax: variableItem.frieslandTaxCostNoTax, //菲仕兰承担未税金额
                     isEditor: 0,
                     isException:variableItem.costRatio!=variableObj.customerInfo.pointCount?1:0,
+                    isFrieslandException:variableItem.fcCostRatio!=variableObj.customerInfo.frieslandCostRatio?1:0, //菲仕兰承担 含税费比 是否等于客户 含税费比
+                    //经销商承担 含税费比 是否等于客户 含税费比
+                    isDistException:variableItem.distributorCostRatio!=variableObj.customerInfo.distCostRatio?1:0,
                     contractStateName: item.contractStateName,
                   })
                 }
@@ -961,7 +964,9 @@ export default {
       this.cancelSubmit()
     },
     cancelSubmit() {
-      this.$router.go(-1)
+      this.$router.push({
+        path: '/contractManagement/dealer/dealerContractApproval/dealerContractTermApproval',
+      })
     },
     //设置Variable、Fixed   Total
     setVariableTotal() {
@@ -1185,6 +1190,20 @@ export default {
       if(row.name.indexOf('Variable') !== -1&&columnIndex>14&&(columnIndex - 14) % 13 == 2) {
         let distributorIndex=Math.floor((columnIndex-14)/13)
         if(this.AllTableData[rowIndex].dealerList[distributorIndex].isException) {
+          return 'color: #5588ff !important;font-weight:600'
+        }
+      }
+      //菲仕兰承担 Exception 
+      if(row.name.indexOf('Variable') !== -1&&columnIndex>14&&(columnIndex - 14) % 13 == 4) {
+        let distributorIndex=Math.floor((columnIndex-14)/13)
+        if(this.AllTableData[rowIndex].dealerList[distributorIndex].isFrieslandException) {
+          return 'color: #5588ff !important;font-weight:600'
+        }
+      }
+      //经销商承担 Exception 
+      if(row.name.indexOf('Variable') !== -1&&columnIndex>14&&(columnIndex - 14) % 13 == 6) {
+        let distributorIndex=Math.floor((columnIndex-14)/13)
+        if(this.AllTableData[rowIndex].dealerList[distributorIndex].isDistException) {
           return 'color: #5588ff !important;font-weight:600'
         }
       }
