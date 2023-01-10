@@ -129,7 +129,7 @@ export default {
     clearData() {
       API.clearDataMMC({
         yearAndMonth: this.filterObj.yearAndMonth,
-        channelName: this.filterObj.channelName
+        channelName: this.filterObj.channelCode
       }).then((res) => {})
     },
     // 获取表格数据

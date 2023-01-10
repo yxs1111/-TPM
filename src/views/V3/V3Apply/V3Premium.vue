@@ -198,14 +198,14 @@
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="channelCode"
+                       prop="channelName"
                        label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -620,7 +620,7 @@
             </vxe-table-column>
             <vxe-table-column width="120"
                              align="center"
-                             field="channelCode"
+                             field="channelName"
                              title="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
