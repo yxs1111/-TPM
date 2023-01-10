@@ -962,7 +962,7 @@ export default {
         // 导出数据筛选
         API.downloadTemplate({
           yearAndMonth: this.filterObj.month,
-          channelName: this.filterObj.channelName,
+          channelName: this.filterObj.channelCode,
           isSubmit: 0,
         }).then((res) => {
           downloadFile(

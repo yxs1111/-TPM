@@ -939,7 +939,7 @@ export default {
         // 导出数据筛选
         API.exportTemplateExcel({
           yearAndMonth: this.filterObj.month,
-          channelName: this.filterObj.channelName,
+          channelName: this.filterObj.channelCode,
           isSubmit: 0,
         }).then((res) => {
           downloadFile(
