@@ -134,7 +134,7 @@ export default {
     },
     // 获取表格数据
     getTableData() {
-      if (!this.filterObj.yearAndMonth || !this.filterObj.channelName) {
+      if (!this.filterObj.yearAndMonth || !this.filterObj.channelCode) {
         return this.$message({
           message: '必选选择年月和渠道！',
           type: 'warning',
