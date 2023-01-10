@@ -1,12 +1,18 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-21 09:07:53
+ * @LastEditTime: 2023-01-10 14:59:04
 -->
 <template>
   <div class="MainContent">
     <div class="SelectBarWrap">
       <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
+          </el-select>
+        </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
@@ -192,6 +198,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        channelCode: '',
         contractDate: [],
         contractBeginDate: '',
         contractEndDate: '',
@@ -218,6 +225,7 @@ export default {
       permissions: getDefaultPermissions(),
       mainIdList:[],
       usernameLocal: "",
+      channelArr: [],
     }
   },
   mounted() {
@@ -227,7 +235,7 @@ export default {
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
-    // this.getTableData()
+    this.getChannel()
     this.getCustomerList()
     this.getDistributorList()
   },
@@ -267,6 +275,7 @@ export default {
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerChannelCode: this.filterObj.channelCode,
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,
@@ -311,9 +320,18 @@ export default {
           }
         })
     },
+    // 获取渠道下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      })
+    },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList({}).then((res) => {
+      this.filterObj.customerMdmCode = ''
+      API.getCustomerContractByChannel({channelCode:this.filterObj.channelCode}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
@@ -444,6 +462,7 @@ export default {
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
         contractState: this.filterObj.state,
+        customerChannelCode: this.filterObj.channelCode,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议审批明细-by KA-' + timestamp + '.xlsx') //自定义Excel文件名
@@ -456,6 +475,7 @@ export default {
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
         contractState: this.filterObj.state,
+        customerChannelCode: this.filterObj.channelCode,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议审批明细 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -468,6 +488,7 @@ export default {
         effectiveEndDate: this.filterObj.effectiveEndDate,
         customerMdmCode: this.filterObj.customerMdmCode,
         contractState: this.filterObj.state,
+        customerChannelCode: this.filterObj.channelCode,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议审批明细-list-' + timestamp + '.xlsx') //自定义Excel文件名

@@ -1,12 +1,18 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-21 09:08:10
+ * @LastEditTime: 2023-01-10 14:53:48
 -->
 <template>
   <div class="MainContent">
     <div class="SelectBarWrap">
       <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerListAll">
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
+          </el-select>
+        </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
@@ -363,6 +369,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        channelCode: '',
         customerMdmCode: '',
         distributorMdmCode: '',
         contractDate: [],
@@ -427,6 +434,7 @@ export default {
       },
       permissions: getDefaultPermissions(),
       systemValidityTimeRecordsDialogVisible: false,
+      channelArr: [],
     }
   },
   components: {
@@ -435,11 +443,12 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = window.innerHeight - 420
+        this.maxheight = window.innerHeight - 400
         // this.maxheightTerm = window.innerHeight - 320
       })()
     }
     // this.getTableData()
+    this.getChannel()
     this.getCustomerList()
     this.getCustomerListAll()
     this.getDistributorList()
@@ -486,6 +495,7 @@ export default {
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerChannelCode: this.filterObj.channelCode,
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,
@@ -509,6 +519,14 @@ export default {
         this.pageSize = response.data.pageSize
         this.total = response.data.total
         this.tempObj.tempInfo = null
+      })
+    },
+    // 获取渠道下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
       })
     },
     // 客户
@@ -540,7 +558,8 @@ export default {
         })
     },
     getCustomerListAll() {
-      selectAPI.queryCustomerList({}).then((res) => {
+      this.filterObj.customerMdmCode = ''
+      API.getCustomerContractByChannel({channelCode:this.filterObj.channelCode}).then((res) => {
         if (res.code === 1000) {
           this.customerAllArr = res.data
         }
@@ -994,6 +1013,7 @@ export default {
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerChannelCode: this.filterObj.channelCode,
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,
@@ -1007,6 +1027,7 @@ export default {
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerChannelCode: this.filterObj.channelCode,
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,
@@ -1020,6 +1041,7 @@ export default {
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
+        customerChannelCode: this.filterObj.channelCode,
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,

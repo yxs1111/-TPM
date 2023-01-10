@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-15 13:29:35
- * @LastEditTime: 2022-10-14 17:45:59
+ * @LastEditTime: 2023-01-10 14:41:49
  */
 /*
  * @Description: 客户合同录入
@@ -13,6 +13,10 @@ import request from '@/utils/request'
 
 export default {
   url: '/cityplan/distributorContract',
+  // 合同录入-渠道
+  getCustomerContractByChannel(data) {
+    return requestApi.request_post('/cityplan/customerContract/customerContractByChannel ', data)
+  },
   // 合同录入-客户
   getCustomerContract(data) {
     return requestApi.request_post('/cityplan/customerContract/customerContract', data)
