@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-26 10:45:36
+ * @LastEditTime: 2023-01-10 14:06:41
 -->
 <template>
   <div class="ContentDetail">
@@ -14,7 +14,7 @@
     <el-table :data="AllTableData" v-if="isShow" key="tabKey" :max-height="maxheight" :min-height="800" border :header-cell-style="HeadTable" :cell-style="columnStyle"
       :row-class-name="tableRowClassName" style="width: 100%">
       <!-- 客户 -->
-      <el-table-column align="left" width="890" fixed="left">
+      <el-table-column align="left" width="720" fixed="left">
         <template v-slot:header>
           <div class="topInfoWrap customerInfo">
             <span class="topInfo"> 客户名称: {{AllTableData[0].customerInfo.customerName}}</span>
@@ -54,7 +54,7 @@
         </template>
       </el-table-column>
       <!-- 客户合同承担信息 -->
-      <el-table-column width="1200">
+      <el-table-column width="1400">
         <template v-slot:header></template>
         <template>
           <el-table-column width="300">
@@ -279,7 +279,7 @@ import {
 } from '@/utils'
 import { add, sub, mul, div, BigToFixed, BigToFixedTwo } from '@/utils/Big.js'
 export default {
-  name: 'dealerTermDetail',
+  name: 'dealerTermView',
 
   data() {
     return {
