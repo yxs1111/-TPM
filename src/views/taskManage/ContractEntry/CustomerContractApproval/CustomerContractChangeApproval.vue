@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-17 11:42:56
+ * @LastEditTime: 2023-01-10 16:13:11
 -->
 <template>
   <div class="MainContent">
@@ -86,19 +86,26 @@
       </el-table-column>
       <el-table-column prop="contractDate" align="center" width="280" label="合同期间">
         <template slot-scope="scope">
-          <div>
+          <div v-if="scope.row.contractBeginDate">
             {{ scope.row.contractBeginDate?scope.row.contractBeginDate.replaceAll('-','/'):'' }} - {{scope.row.contractEndDate?scope.row.contractEndDate.replaceAll('-','/'):''}}
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间">
+      <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间-变更前">
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.oldEffectiveBeginDate + ' - ' + scope.row.oldEffectiveEndDate }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="systemDate" align="center" width="220" label="系统生效时间-变更后">
         <template slot-scope="scope">
           <div>
             {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
           </div>
         </template>
       </el-table-column>
-      <el-table-column v-slot="{row}" align="center" prop="approveStateName" width="240" label="变更状态">
+      <el-table-column v-slot="{row}" align="center" prop="approveStateName" width="240" label="合同状态">
         {{row.approveStateName=='审批中'&&row.activityName&&row.activityName.includes('审批')?'延期审批中'+'-'+row.activityName:row.approveStateName}}
       </el-table-column>
       <el-table-column width="120" align="center" label="合同条款">
@@ -108,8 +115,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="remark" align="center" width="220" label="申请人备注">
-      </el-table-column>
+      <el-table-column prop="createDate" align="center" width="220" label="变更时间"></el-table-column>
+      <el-table-column prop="createBy" align="center" width="220" label="变更人"></el-table-column>
+      <el-table-column prop="remark" align="center" width="220" label="变更人备注"></el-table-column>
       <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
         <template slot-scope="scope">
           <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
