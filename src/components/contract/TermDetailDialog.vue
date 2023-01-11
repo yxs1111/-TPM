@@ -1,7 +1,7 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2022-12-30 11:09:00
+ * @LastEditTime: 2023-01-11 20:46:48
 -->
 
 <template>
@@ -668,7 +668,7 @@ export default {
           }
           //行（contract Item  条件类型 ）不能重复
           let RepeatList = this.termFixData.filter(vItem => {
-            return vItem.contractItem == item.contractItem && vItem.conditions == item.conditions
+            return vItem.contractItem == item.contractItem && vItem.conditions == item.conditions && vItem.frieslandPayType == item.frieslandPayType
           })
           if (RepeatList.length > 1) {
             Repeat = 1
