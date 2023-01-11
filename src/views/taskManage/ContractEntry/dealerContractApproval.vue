@@ -1,7 +1,7 @@
 <!--
  * @Description: 经销商合同审批 Tab
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-12-17 17:57:31
+ * @LastEditTime: 2023-01-11 09:14:30
 -->
 <template>
   <div class="tabViewsWrap">
@@ -56,6 +56,14 @@ export default {
   },
   computed: {},
   mounted() {
+    if (sessionStorage.getItem('currentIndex')) {
+      this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+      this.$router.push(this.routerList[this.currentIndex].path)
+    } else {
+      this.currentIndex = 0
+    }
+  },
+  activated() {
     if (sessionStorage.getItem('currentIndex')) {
       this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
       this.$router.push(this.routerList[this.currentIndex].path)

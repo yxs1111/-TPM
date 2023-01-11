@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-12-12 09:56:29
+ * @LastEditTime: 2023-01-11 09:58:15
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -91,7 +91,7 @@ export default function() {
           name: 'dealerContract',
           code: 'dealerContract',
           alwaysShow: true,
-          component: () => import('@/views/master/modelIndex.vue'),
+          component: () => import('@/views/taskManage/ContractEntry.vue'),
           meta: { title: '经销商分摊协议', icon: 'apply', activeMenu: '/contractManagement' },
           children: [
             {
@@ -107,7 +107,7 @@ export default function() {
               code: 'dealerContractApply',
               name: 'dealerTermDetail',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractEntry/dealerTermDetail.vue'),
-              meta: { title: '经销商分摊协议录入-条款明细', icon: 'form', activeMenu: '/contractManagement/dealer/dealerContractEntry' }
+              meta: { title: '经销商分摊协议录入-条款明细', icon: 'form', activeMenu: '/contractManagement/dealer/dealerContractEntry',keepAlive: false }
             },
             {
               path: '/contractManagement/dealer/dealerContractApproval',
@@ -141,7 +141,7 @@ export default function() {
               code: 'dealerContractApproval',
               name: 'dealerTermView',
               component: () => import('@/views/taskManage/ContractEntry/dealerContractApproval/dealerTermView.vue'),
-              meta: { title: '经销商分摊协议录入-条款明细', icon: 'form', activeMenu: '/contractManagement/dealer/dealerContractApproval' }
+              meta: { title: '经销商分摊协议录入-条款明细', icon: 'form', activeMenu: '/contractManagement/dealer/dealerContractApproval',noCache:true,keepAlive: false}
             }
           ]
         }

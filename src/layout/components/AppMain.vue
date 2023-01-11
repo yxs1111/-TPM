@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2023-01-03 09:10:22
+ * @LastEditTime: 2023-01-11 10:03:43
 -->
 <template>
   <section class="app-main" :class="isDashBoard?'appMainDashBoard':'app-main'">
@@ -35,7 +35,7 @@
       </el-button>
     </el-popover>
     <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
+      <keep-alive :include="cachedViews" :exclude="['dealerTermView']">
         <router-view :key="key" class="routerContent"/>
       </keep-alive>
     </transition>
@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     cachedViews() {
-      return this.$store.state.tagsView.cachedViews
+      return [...this.$store.state.tagsView.cachedViews,'dealerContractEntry','ContractEntry']
     },
     key() {
       return this.$route.path

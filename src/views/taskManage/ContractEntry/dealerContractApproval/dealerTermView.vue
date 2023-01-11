@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2023-01-10 16:51:11
+ * @LastEditTime: 2023-01-11 10:04:11
 -->
 <template>
   <div class="ContentDetail">
@@ -309,7 +309,15 @@ export default {
     }
     this.getContractItemList()
   },
-
+  activated() {
+    if (this.$route.query.ccId) {
+      this.ccId = this.$route.query.ccId
+      sessionStorage.setItem('ccId', this.$route.query.ccId)
+    } else {
+      this.ccId = sessionStorage.getItem('ccId')
+    }
+    this.getContractItemList()
+  },
   methods: {
     //获取条款明细信息
     getTermInfo() {
@@ -350,7 +358,10 @@ export default {
           item.payType = this.getPaymentMethodText(item.deductionTaxRate, item.payType) //客户支付方式
           item.customerTaxPoint = this.getCustomerTaxPoint(item.deductionTaxRate) //客户--客户扣款税点
         })
-        let distributorList = res.data.distributorContract
+        //排除 经销商合同 是草稿的 合同
+        let distributorList = res.data.distributorContract.filter(
+          (item) => item.contractState != '0'
+        )
         //经销商添加对应数量的variable /fixed
         distributorList.forEach((item) => {
           if (item.fixed.length == 0 && item.variable.length == 0) {

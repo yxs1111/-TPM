@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
- * @LastEditTime: 2022-12-28 16:10:50
+ * @LastEditTime: 2023-01-11 10:04:41
 -->
 <template>
   <div class="ContentDetail">
@@ -353,6 +353,23 @@ export default {
   },
 
   mounted() {
+    if (this.$route.query.ccId) {
+      this.ccId = this.$route.query.ccId
+      sessionStorage.setItem('ccId', this.$route.query.ccId)
+    } else {
+      this.ccId = sessionStorage.getItem('ccId')
+    }
+    if (sessionStorage.getItem('isEditor')) {
+      let editorIndex = Number(sessionStorage.getItem('EditorIndex'))
+      let editorStrList = sessionStorage.getItem('isEditor').split('-')
+      if (editorIndex == Number(editorStrList[1])) {
+        this.isEditor = Number(editorStrList[0])
+      }
+      // this.isEditor=Number(sessionStorage.getItem("isEditor"))
+    }
+    this.getContractItemList()
+  },
+  activated() {
     if (this.$route.query.ccId) {
       this.ccId = this.$route.query.ccId
       sessionStorage.setItem('ccId', this.$route.query.ccId)
