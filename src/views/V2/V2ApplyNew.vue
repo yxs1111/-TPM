@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-11-29 09:25:32
+ * @LastEditTime: 2023-01-11 17:25:52
 -->
 <template>
   <div class="tabViewsWrap">
@@ -188,21 +188,21 @@ export default {
               path: '/costManagement/V2/V2Apply/V2Transport',
               minePackageName: 'Transport Costs',
             },
-            {
-              name: 'All-RKA/RTM',
-              path: '/costManagement/V2/V2Apply/V2Allrkartm',
-              minePackageName: 'Allrkartm',
-            },
-            {
-              name: 'Others-EC/NKA',
-              path: '/costManagement/V2/V2Apply/V2Others',
-              minePackageName: 'Others',
-            },
-            {
-              name: 'FG-RKA/RTM',
-              path: '/costManagement/V2/V2Apply/V2OthersFG',
-              minePackageName: 'OthersFG',
-            },
+            // {
+            //   name: 'All-RKA/RTM',
+            //   path: '/costManagement/V2/V2Apply/V2Allrkartm',
+            //   minePackageName: 'Allrkartm',
+            // },
+            // {
+            //   name: 'Others-EC/NKA',
+            //   path: '/costManagement/V2/V2Apply/V2Others',
+            //   minePackageName: 'Others',
+            // },
+            // {
+            //   name: 'FG-RKA/RTM',
+            //   path: '/costManagement/V2/V2Apply/V2OthersFG',
+            //   minePackageName: 'OthersFG',
+            // },
           ]
           let TabList = []
           sortList.forEach((item) => {
