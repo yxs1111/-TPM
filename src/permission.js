@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-09-02 11:13:37
  * @LastEditTime: 2022-09-29 14:16:20
  */
@@ -81,7 +81,7 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done()
     }
   }
-  //No-login 
+  //No-login
   // const hasToken = 'admin-token'
   // const role = 'admin'
   // if (hasToken) {

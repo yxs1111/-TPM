@@ -1109,7 +1109,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              API.approveApprove({
                 // mainId: this.tableData[0].mainId, // 主表id
                 yearAndMonth: this.filterObj.month,
                 channelCode: this.filterObj.channelCode, //渠道
@@ -1144,7 +1144,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              API.approveApprove({
                 paramMap: { opinion: 'reject', mainId: this.tableData[0].mainId}, // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1
               }).then((response) => {
