@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-09 15:24:10
+ * @LastEditTime: 2023-01-11 14:19:04
 -->
 <template>
   <div class="MainContent">
@@ -152,12 +152,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="100" align="center" prop="regionName" label="大区">
+      <el-table-column width="100" align="center" prop="zoneName" label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
-            {{ scope.row.regionName }}
+            {{ scope.row.zoneName }}
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="regionName" label="区域">
@@ -468,7 +468,7 @@
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="220" align="center" prop="brandName" label="品牌"></el-table-column>
             <el-table-column width="360" align="center" prop="distributorName" label="经销商" />
-            <el-table-column width="100" align="center" prop="regionName" label="大区" />
+            <el-table-column width="100" align="center" prop="zoneName" label="大区" />
             <el-table-column width="220" align="center" prop="regionName" label="区域" />
             <el-table-column width="360" align="center" prop="contractItemName" label="Contract Item" />
             <el-table-column width="320" align="right" prop="planRatio" label="V1计划合同点数(%)(KA+Contract Item)">

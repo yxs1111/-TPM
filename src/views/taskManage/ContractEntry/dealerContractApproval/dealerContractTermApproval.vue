@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 09:22:00
+ * @LastEditTime: 2023-01-11 14:15:13
 -->
 <template>
   <div class="MainContent">
@@ -213,7 +213,7 @@ export default {
       tableData: [],
       customerArr: [],
       distributorArr: [],
-      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
+      contractList: ['待审批', '被拒绝', '通过', '终止', '过期','延期审批中'],
       checkArr: [], //选中的数据
       tableKey: 0,
       //取消编辑 --》数据重置（不保存）
