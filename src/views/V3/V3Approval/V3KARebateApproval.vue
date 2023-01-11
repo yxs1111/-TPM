@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-11 14:19:04
+ * @LastEditTime: 2023-01-11 19:12:25
 -->
 <template>
   <div class="MainContent">
@@ -837,7 +837,7 @@ export default {
           costItemCode: 'KA rebate',
           isSubmit: 1,
         }).then((res) => {
-          downloadFile(res, `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V3_审批.xlsx`) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.month}_KA Rebate_${this.filterObj.channelCode}_V3_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {

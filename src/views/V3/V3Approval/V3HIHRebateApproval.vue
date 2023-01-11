@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2023-01-11 14:18:52
+ * @LastEditTime: 2023-01-11 19:12:09
 -->
 <!--
  * @Description:
@@ -844,7 +844,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V3_审批.xlsx`
+            `${this.filterObj.month}_HIH Rebate_${this.filterObj.channelCode}_V3_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })

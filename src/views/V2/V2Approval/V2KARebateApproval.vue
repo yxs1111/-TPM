@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-09 15:25:27
+ * @LastEditTime: 2023-01-11 19:11:15
 -->
 <template>
   <div class="MainContent">
@@ -832,7 +832,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           isSubmit: 1,
         }).then((res) => {
-          downloadFile(res, `${this.filterObj.month}_KA rebate_${this.filterObj.channelCode}_V2_审批.xlsx`) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.month}_KA rebate_${this.filterObj.channelCode}_V2_查询.xlsx`) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
       } else {
