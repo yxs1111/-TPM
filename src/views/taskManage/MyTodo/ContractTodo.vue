@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-20 17:26:08
+ * @LastEditTime: 2023-01-11 21:07:39
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -125,11 +125,11 @@ export default {
           label: '经销商分摊协议',
         },
         {
-          value: '客户合同系统生效时间调整',
+          value: '客户合同-变更',
           label: '客户合同-变更',
         },
         {
-          value: '经销商合同系统生效时间调整',
+          value: '经销商分摊协议-变更',
           label: '经销商分摊协议-变更',
         },
       ],

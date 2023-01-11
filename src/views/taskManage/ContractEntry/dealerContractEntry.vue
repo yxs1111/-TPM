@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 19:39:43
+ * @LastEditTime: 2023-01-11 21:27:19
 -->
 <template>
   <div class="MainContent">
@@ -436,12 +436,17 @@ export default {
       permissions: getDefaultPermissions(),
       systemValidityTimeRecordsDialogVisible: false,
       channelArr: [],
+      isFirstLoading: true, //是否是第一次进入
     }
   },
   components: {
     systemValidityTimeRecordsDialog,
   },
   mounted() {
+    //从sessionStorage中获取存储的 筛选项 数据
+    if (sessionStorage.getItem('filterObj')) {
+      this.filterObj = JSON.parse(sessionStorage.getItem('filterObj'))
+    }
     window.onresize = () => {
       return (() => {
         this.maxheight = window.innerHeight - 400
@@ -453,9 +458,6 @@ export default {
     this.getCustomerList()
     this.getCustomerListAll()
     this.getDistributorList()
-  },
-  deactivated() {
-    this.tableData=[]
   },
   directives: { elDragDialog, permission },
   watch: {
@@ -518,6 +520,7 @@ export default {
           item.contractDate = [item.contractBeginDate, item.contractEndDate]
           item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
         })
+        this.isFirstLoading=false
         this.tableData = [...list]
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
@@ -562,7 +565,9 @@ export default {
         })
     },
     getCustomerListAll() {
-      this.filterObj.customerMdmCode = ''
+      if(!this.isFirstLoading) {
+        this.filterObj.customerMdmCode = ''
+      }
       API.getCustomerContractByChannel({channelCode:this.filterObj.channelCode}).then((res) => {
         if (res.code === 1000) {
           this.customerAllArr = res.data
@@ -1204,6 +1209,8 @@ export default {
     },
     //打开条款明细弹窗
     showTermDetailDialog({ ccId }, index) {
+      // 保存筛选项到sessionStorage
+      sessionStorage.setItem('filterObj', JSON.stringify(this.filterObj))
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
         name: 'dealerTermDetail',

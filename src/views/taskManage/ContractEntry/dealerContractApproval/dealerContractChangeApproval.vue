@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 19:40:37
+ * @LastEditTime: 2023-01-11 21:26:41
 -->
 <template>
   <div class="MainContent">
@@ -242,6 +242,10 @@ export default {
     }
   },
   mounted() {
+    //从sessionStorage中获取存储的 筛选项 数据
+    if (sessionStorage.getItem('filterObj')) {
+      this.filterObj = JSON.parse(sessionStorage.getItem('filterObj'))
+    }
     window.onresize = () => {
       return (() => {
         this.maxheight = window.innerHeight - 420
@@ -480,6 +484,8 @@ export default {
     },
     //打开条款明细弹窗
     showTermDetailDialog({ ccId }) {
+      // 保存筛选项到sessionStorage
+      sessionStorage.setItem('filterObj', JSON.stringify(this.filterObj))
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
         name: 'dealerTermView',

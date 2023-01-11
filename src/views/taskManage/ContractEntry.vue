@@ -1,13 +1,14 @@
 <!--
  * @Description: 合同管理
  * @Date: 2023-01-11 08:56:13
- * @LastEditTime: 2023-01-11 10:01:05
+ * @LastEditTime: 2023-01-11 21:05:48
 -->
 <template>
   <div>
-    <keep-alive :include="cachedViews" :exclude="['dealerTermView']">
+    <router-view></router-view>
+    <!-- <keep-alive :include="cachedViews" :exclude="['dealerTermView']">
       <router-view></router-view>
-    </keep-alive>
+    </keep-alive> -->
   </div>
 </template>
 

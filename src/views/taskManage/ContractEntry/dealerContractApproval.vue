@@ -1,7 +1,7 @@
 <!--
  * @Description: 经销商合同审批 Tab
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2023-01-11 09:14:30
+ * @LastEditTime: 2023-01-11 21:29:50
 -->
 <template>
   <div class="tabViewsWrap">
@@ -75,6 +75,7 @@ export default {
     // tabview 切换
     changeTab(index) {
       this.currentIndex = index
+      sessionStorage.removeItem('filterObj')
       sessionStorage.setItem('currentIndex', index)
     },
   },

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2023-01-11 10:03:43
+ * @LastEditTime: 2023-01-11 21:09:37
 -->
 <template>
   <section class="app-main" :class="isDashBoard?'appMainDashBoard':'app-main'">
@@ -68,7 +68,8 @@ export default {
   },
   computed: {
     cachedViews() {
-      return [...this.$store.state.tagsView.cachedViews,'dealerContractEntry','ContractEntry']
+      // return [...this.$store.state.tagsView.cachedViews,'dealerContractEntry','ContractEntry']
+      return [...this.$store.state.tagsView.cachedViews,]
     },
     key() {
       return this.$route.path

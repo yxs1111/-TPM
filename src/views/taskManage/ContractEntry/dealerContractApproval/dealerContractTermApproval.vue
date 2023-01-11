@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 19:40:31
+ * @LastEditTime: 2023-01-11 21:32:10
 -->
 <template>
   <div class="MainContent">
@@ -226,9 +226,14 @@ export default {
       mainIdList:[],
       usernameLocal: "",
       channelArr: [],
+      isFirstLoading: true, //是否是第一次进入
     }
   },
   mounted() {
+    //从sessionStorage中获取存储的 筛选项 数据
+    if (sessionStorage.getItem('filterObj')) {
+      this.filterObj = JSON.parse(sessionStorage.getItem('filterObj'))
+    }
     window.onresize = () => {
       return (() => {
         this.maxheight = window.innerHeight - 420
@@ -238,9 +243,6 @@ export default {
     this.getChannel()
     this.getCustomerList()
     this.getDistributorList()
-  },
-  deactivated() {
-    this.tableData=[]
   },
   directives: { elDragDialog, permission },
   watch: {
@@ -293,6 +295,7 @@ export default {
           this.mainIdList.push(item.mainId)
         })
         this.tableData = [...list]
+        this.isFirstLoading=false
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
@@ -333,7 +336,9 @@ export default {
     },
     // 客户
     getCustomerList() {
-      this.filterObj.customerMdmCode = ''
+      if(!this.isFirstLoading) {
+        this.filterObj.customerMdmCode = ''
+      }
       API.getCustomerContractByChannel({channelCode:this.filterObj.channelCode}).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
@@ -500,6 +505,8 @@ export default {
     },
     //打开条款明细弹窗
     showTermDetailDialog({ ccId }) {
+      // 保存筛选项到sessionStorage
+      sessionStorage.setItem('filterObj', JSON.stringify(this.filterObj))
       // sessionStorage.setItem('ccId',row.ccId)
       this.$router.push({
         name: 'dealerTermView',

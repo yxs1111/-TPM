@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-09-15 16:17:33
- * @LastEditTime: 2021-12-06 20:18:55
+ * @LastEditTime: 2023-01-11 21:20:45
 -->
 <template>
   <div :class="{ 'has-logo': showLogo }" class="siderList">
@@ -64,6 +64,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     handleSelect() {
+      sessionStorage.removeItem('filterObj')
       sessionStorage.removeItem('currentIndex')
       this.$store.dispatch('app/openBreadCrumb')
     },
