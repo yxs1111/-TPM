@@ -1,12 +1,18 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-10 11:28:21
+ * @LastEditTime: 2023-01-11 22:45:10
 -->
 <template>
   <div class="MainContent">
     <div class="SelectBarWrap">
       <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
+          </el-select>
+        </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
@@ -246,6 +252,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        channelCode: '',
         customerMdmCode: '',
         contractDate: [],
         contractBeginDate: '',
@@ -259,6 +266,7 @@ export default {
       checkArr: [], //选中的数据
       tableData: [],
       customerArr: [],
+      customerArrAll: [],
       largeAreaList: [],
       contractList: contractList,
       isAddCount: 0,
@@ -298,6 +306,7 @@ export default {
       },
       permissions: getDefaultPermissions(),
       systemValidityTimeRecordsDialogVisible: false,
+      channelArr: [],
     }
   },
   mounted() {
@@ -308,7 +317,9 @@ export default {
     }
     // this.getTableData()
     this.getCustomerList()
+    this.getCustomerListAll()
     this.getLargeAreaList()
+    this.getChannel()
   },
   components: {
     TermDetailDialog,
@@ -344,6 +355,7 @@ export default {
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
         customerType: 1,
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -376,15 +388,38 @@ export default {
         this.tempObj.tempInfo = null
       })
     },
+    // 获取渠道下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      })
+    },
     // 客户
     getCustomerList() {
+      this.filterObj.customerMdmCode = ''
       selectAPI
         .getCustomerListByType({
           type: 1,
+          channelCode: this.filterObj.channelCode,
         })
         .then((res) => {
           if (res.code === 1000) {
             this.customerArr = res.data
+          }
+        })
+    },
+    // 客户
+    getCustomerListAll() {
+      selectAPI
+        .getCustomerListByType({
+          type: 3,
+          channelCode: '',
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            this.customerArrAll = res.data
           }
         })
     },
@@ -473,7 +508,7 @@ export default {
       })
     },
     saveSingle(row) {
-      let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
+      let isRequireRegion = this.customerArrAll.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
       console.log(isRequireRegion)
       if (isRequireRegion) {
         if (row.regionCode == '') {
@@ -570,6 +605,7 @@ export default {
     async exportData() {
       await API.exportCustomerContractInfo({
         customerType: 1,
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -583,6 +619,7 @@ export default {
       })
       await API.exportCustomerContractDetail({
         customerType: 1,
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -596,6 +633,7 @@ export default {
       })
       await API.exportCustomerContract({
         customerType: 1,
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -730,7 +768,7 @@ export default {
             this.saveCopy(row)
           }
         } else if (row.isEditor) {
-          let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
+          let isRequireRegion = this.customerArrAll.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
           console.log(isRequireRegion)
           //客户属于RKA ，大区必填项
           if (isRequireRegion) {
@@ -771,14 +809,14 @@ export default {
     },
     //判断当前选中的客户类型--》大区是否可选择
     changeCustomer(row) {
-      let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
+      let isRequireRegion = this.customerArrAll.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
       row.isRequireRegion = isRequireRegion
       console.log(isRequireRegion)
     },
     //复制
     copyRow(row, index) {
       console.log(row)
-      let isRequireRegion = this.customerArr.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
+      let isRequireRegion = this.customerArrAll.findIndex((item) => item.channelCode == 'RKA' && item.customerMdmCode == row.customerMdmCode) != -1 ? true : false
       this.tableData.unshift({
         id: row.id,
         customerName: row.customerName,
