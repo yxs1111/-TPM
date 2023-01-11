@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 14:15:13
+ * @LastEditTime: 2023-01-11 17:38:13
 -->
 <template>
   <div class="MainContent">
@@ -494,7 +494,7 @@ export default {
         customerChannelCode: this.filterObj.channelCode,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议审批明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
+        downloadFile(res, '经销商分摊协议审批-list-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
