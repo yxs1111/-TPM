@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 17:38:13
+ * @LastEditTime: 2023-01-11 19:40:31
 -->
 <template>
   <div class="MainContent">
@@ -239,8 +239,8 @@ export default {
     this.getCustomerList()
     this.getDistributorList()
   },
-  activated() {
-    this.getTableData()
+  deactivated() {
+    this.tableData=[]
   },
   directives: { elDragDialog, permission },
   watch: {
