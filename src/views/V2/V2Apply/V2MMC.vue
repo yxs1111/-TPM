@@ -12,7 +12,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
+            <el-option v-for="(item, index) in ['NKA']" :key="index" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -345,10 +345,6 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          //channelArr 只取channelCode为NKA
-          this.channelArr = this.channelArr.filter(
-            (item) => item.channelCode === 'NKA' 
-          )
         }
       })
     },
