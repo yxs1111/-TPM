@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 09:02:01
+ * @LastEditTime: 2023-01-11 17:18:04
 -->
 <template>
   <div class="MainContent">
@@ -361,6 +361,7 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 import dayjs from 'dayjs'
+import { div, BigToFixedTwo } from '@/utils/Big.js'
 export default {
   name: 'dealerContractEntry',
   data() {
@@ -880,6 +881,7 @@ export default {
             ccId: row.ccId,
             distributorMdmCode: row.distributorMdmCode,
             saleAmount: row.saleAmount,
+            exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
             contractBeginDate: row.contractDate[0],
             contractEndDate: row.contractDate[1],
             effectiveBeginDate: row.systemDate[0],
@@ -902,6 +904,7 @@ export default {
           ccId: row.ccId,
           distributorMdmCode: row.distributorMdmCode,
           saleAmount: row.saleAmount,
+          exclTaxSaleAmount: BigToFixedTwo(div(row.saleAmount, 1.13)),
           contractBeginDate: row.contractDate[0],
           contractEndDate: row.contractDate[1],
           effectiveBeginDate: row.systemDate[0],
@@ -1161,6 +1164,7 @@ export default {
           ccId: this.customerArr[this.addDialog.index].id,
           distributorMdmCode: item.distributorMdmCode,
           saleAmount: item.targetSale,
+          exclTaxSaleAmount: BigToFixedTwo(div(item.targetSale, 1.13)),
           contractBeginDate: item.contractDate[0],
           contractEndDate: item.contractDate[1],
           effectiveBeginDate: item.systemDate[0],
