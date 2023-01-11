@@ -1,7 +1,7 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2022-12-29 15:15:01
+ * @LastEditTime: 2023-01-11 16:39:56
 -->
 <template>
   <div class="portalWrap">
@@ -74,12 +74,20 @@ export default {
   mounted() {},
   methods: {
     goTPM() {
-      this.$router.push('/dashboard')
+      // 页面地址跳转，不会刷新页面
+      window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login'
+      // window.location.href = 'http://localhost:8080/#/login'
+      // this.$router.push('/dashboard')
     },
     goTPMContract() {
-      this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
+      // this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
+      window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
+      // window.location.href = 'http://localhost:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
     },
     async goSalesCpt() {
+      // window.location.href = 'http://localhost:8081/#/login'
+      window.location.href = 'https://uat-cpt.rfc-friso.com/SalesCPT/login'
+      return
       let username = sessionStorage.getItem('username')
       let password = sessionStorage.getItem('password')
       let loginObj = {
@@ -90,6 +98,8 @@ export default {
       await this.$store.dispatch('user/loginCPT', { ...loginObj })
     },
     async goMarketingCpt() {
+      window.location.href = 'https://uat-cpt.rfc-friso.com/MarketingCPT/login'
+      return
       let username = sessionStorage.getItem('username')
       let password = sessionStorage.getItem('password')
       let loginObj = {
