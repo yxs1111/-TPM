@@ -1,12 +1,18 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-18 17:47:41
+ * @LastEditTime: 2023-01-11 22:56:45
 -->
 <template>
   <div class="MainContent">
     <div class="SelectBarWrap">
       <div class="SelectBar">
+        <div class="Selectli">
+          <span class="SelectliTitle">渠道:</span>
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
+          </el-select>
+        </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户名称:</span>
           <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
@@ -157,6 +163,7 @@ export default {
       pageSize: 100,
       pageNum: 1,
       filterObj: {
+        channelCode: '',
         customerMdmCode: '',
         contractDate: [],
         contractBeginDate: '',
@@ -166,7 +173,7 @@ export default {
         effectiveEndDate: '',
         state: '',
       },
-      maxheight: getContractEntry(),
+      maxheight: window.innerHeight - 420,
       checkArr: [], //选中的数据
       tableData: [],
       customerArr: [],
@@ -182,6 +189,7 @@ export default {
       permissions: getDefaultPermissions(),
       mainIdList: [],
       usernameLocal: '',
+      channelArr: [],
     }
   },
   components: {
@@ -190,11 +198,12 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = window.innerHeight - 400
+        this.maxheight = window.innerHeight - 420
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
     // this.getTableData()
+    this.getChannel()
     this.getCustomerList()
   },
   computed: {},
@@ -226,6 +235,7 @@ export default {
       API.getApprovePageCustomer({
         pageNum: this.pageNum, //当前页
         pageSize: this.pageSize, //每页条数
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -254,6 +264,14 @@ export default {
         }
       })
     },
+    // 获取渠道下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+        }
+      })
+    },
     infoByMainId() {
       selectAPI.contractInfoByMainId(this.mainIdList).then((res) => {
         let activityList = res.data
@@ -272,7 +290,10 @@ export default {
     },
     // 客户
     getCustomerList() {
-      selectAPI.queryCustomerList({}).then((res) => {
+      this.filterObj.customerMdmCode=''
+      selectAPI.queryCustomerList({
+        channelCode: this.filterObj.channelCode,
+      }).then((res) => {
         if (res.code === 1000) {
           this.customerArr = res.data
         }
@@ -343,6 +364,7 @@ export default {
     },
     async exportData() {
       await API.exportApproveCustomerContractDetail({
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -355,6 +377,7 @@ export default {
         this.$message.success('导出成功!')
       })
       await API.exportApproveCustomerContractInfo({
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -368,6 +391,7 @@ export default {
         
       })
       await API.exportApprovePage({
+        channelCode: this.filterObj.channelCode,
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
