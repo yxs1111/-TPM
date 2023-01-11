@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-08 18:13:43
+ * @LastEditTime: 2022-12-28 17:15:09
 -->
 <template>
   <div class="MainContent">
@@ -117,13 +117,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelName" label="渠道">
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelName }}
+            {{ scope.row.channelCode }}
           </div>
         </template>
       </el-table-column>
