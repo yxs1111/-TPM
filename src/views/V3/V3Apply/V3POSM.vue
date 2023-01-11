@@ -1,7 +1,7 @@
 <!--
  * @Description: V3POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-08 16:50:05
+ * @LastEditTime: 2022-12-05 17:15:08
 -->
 <template>
   <div class="MainContent">
@@ -205,14 +205,14 @@
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="channelName"
+                       prop="channelCode"
                        label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelName }}
+            {{ scope.row.channelCode }}
           </div>
         </template>
       </el-table-column>
