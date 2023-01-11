@@ -6,7 +6,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道：</span>
           <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
-            <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelCsName" :value="item.channelEsName" />
+            <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -107,7 +107,7 @@
               <div class="grid-content bg-purple">
                 渠道：
                 <el-select v-model="dialogAdd.channelcode" placeholder="请选择" size="small">
-                  <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelCsName" :value="item.channelCode" />
+                  <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
                 </el-select>
               </div>
             </el-col>

@@ -13,7 +13,7 @@
                      placeholder="请选择">
             <el-option v-for="(item) in channelArr"
                        :key="item.channelCode"
-                       :label="item.channelCsName"
+                       :label="item.channelEsName"
                        :value="item.channelCode" />
           </el-select>
         </div>

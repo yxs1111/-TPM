@@ -31,7 +31,7 @@
             <el-option
               v-for="(item, index) in channelArr"
               :key="index"
-              :label="item.channelCsName"
+              :label="item.channelEsName"
               :value="item.channelCode"
             />
           </el-select>

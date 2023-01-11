@@ -5,7 +5,7 @@
     <el-form ref="modelSearchForm" :inline="true" :model="filterObj" class="demo-form-inline">
       <el-form-item label="渠道：">
         <el-select v-model="filterObj.channelCode" placeholder="请选择" clearable>
-          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelCsName" :value="item.channelEsName" />
+          <el-option v-for="item in channelOptons" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
         </el-select>
       </el-form-item>
       <el-form-item label="年月：">
@@ -135,7 +135,7 @@
                   <el-option
                     v-for="item in channelOptons"
                     :key="item.channelCode"
-                    :label="item.channelCsName"
+                    :label="item.channelEsName"
                     :value="item.channelCode"
                   />
                 </el-select>
