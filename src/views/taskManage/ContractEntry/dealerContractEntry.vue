@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 21:27:19
+ * @LastEditTime: 2023-01-11 21:49:47
 -->
 <template>
   <div class="MainContent">
@@ -446,6 +446,7 @@ export default {
     //从sessionStorage中获取存储的 筛选项 数据
     if (sessionStorage.getItem('filterObj')) {
       this.filterObj = JSON.parse(sessionStorage.getItem('filterObj'))
+      this.getTableData()
     }
     window.onresize = () => {
       return (() => {
