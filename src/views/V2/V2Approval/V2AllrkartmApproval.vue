@@ -294,14 +294,14 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDeptSpName"
+                       prop="costAscriptionDept"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDeptSpName }}
+            {{ scope.row.costAscriptionDept }}
           </div>
         </template>
       </el-table-column>
@@ -710,14 +710,14 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="costAscriptionDeptSpName"
+                             prop="costAscriptionDept"
                              label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costAscriptionDeptSpName }}
+                  {{ scope.row.costAscriptionDept }}
                 </div>
               </template>
             </el-table-column>
