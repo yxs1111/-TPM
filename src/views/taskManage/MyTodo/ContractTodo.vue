@@ -1,7 +1,7 @@
 <!--
  * @Description: 合同待办
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 21:07:39
+ * @LastEditTime: 2023-01-12 09:50:33
 -->
 <template>
   <div class="MainContent" @keyup.enter="pageList">
@@ -202,7 +202,7 @@ export default {
     operateProcess(version, name, item) {
       if (item.includes('经销商')) {
         if (name.indexOf('审批') != -1) {
-          if (item.includes('生效时间调整')) {
+          if (item.includes('变更')) {
             sessionStorage.setItem('currentIndex', 1)
           } else {
             sessionStorage.setItem('currentIndex', 0)
@@ -213,7 +213,7 @@ export default {
         }
       } else if (item.includes('客户')) {
         if (name.indexOf('审批') != -1) {
-          if (item.includes('生效时间调整')) {
+          if (item.includes('变更')) {
             sessionStorage.setItem('currentIndex', 1)
           } else {
             sessionStorage.setItem('currentIndex', 0)
