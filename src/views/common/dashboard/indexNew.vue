@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2023-01-12 09:34:04
+ * @LastEditTime: 2023-01-12 09:43:55
 -->
 <template>
   <div class="indexNew">
@@ -943,7 +943,7 @@ export default {
       this.OPEN_BREADCRUMB()
       if(item.includes('经销商')) {
         if(name.indexOf('审批') != -1) {
-          if(item.includes('生效时间调整')) {
+          if(item.includes('变更')) {
             sessionStorage.setItem('currentIndex', 1)
           } else{
             sessionStorage.setItem('currentIndex', 0)
@@ -954,7 +954,7 @@ export default {
         }
       } else if(item.includes('客户')) {
         if(name.indexOf('审批') != -1) {
-          if(item.includes('生效时间调整')) {
+          if(item.includes('变更')) {
             sessionStorage.setItem('currentIndex', 1)
           } else{
             sessionStorage.setItem('currentIndex', 0)
