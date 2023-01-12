@@ -17,6 +17,10 @@ export default {
   getPage(params) {
     return requestApi.request_get(this.url + '/getPosmPipVOnePage', params)
   },
+  // 清除数据
+  getClear(params) {
+    return requestApi.request_get(this.url + '/deletePosmData', params)
+  },
   //导出
   exportExcel(params) {
     // investCpPosmPipVOne/pipVOneExport
