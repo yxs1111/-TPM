@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2023-01-05 15:39:55
+ * @LastEditTime: 2023-01-12 09:34:04
 -->
 <template>
   <div class="indexNew">
@@ -121,9 +121,9 @@
         <div v-show="currentIndex == 0" class="TimeLineWrap">
           <el-table :header-cell-style="{ color: '#000000', height: '53px' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
             <el-table-column align="left" prop="yearAndMonth" label="活动周期" />
-            <el-table-column prop="costTypeName" label="Cost Type" />
+            <el-table-column prop="costTypeName" label="Cost Type" width="100" />
             <el-table-column width='125' prop="minePackageName" label="Mine Package" />
-            <el-table-column width='265' prop="costItemName" label="Cost Item" />
+            <el-table-column width='205' prop="costItemName" label="Cost Item" />
             <el-table-column prop="channelName" label="渠道" />
             <el-table-column prop="num" label="版本号" />
             <el-table-column width='170' align="left" prop="" label="查看">
@@ -131,7 +131,7 @@
                 <div class="transact" @click="openFlowDiagram(row)">查看流程</div>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="" label="操作">
+            <el-table-column align="center" prop="" label="操作" width="100">
               <template slot-scope="scope">
                 <div class="operation" @click="goAssignee(scope.row.version, scope.row.activityName, scope.row.channelCode, scope.row.minePackageName, scope.row)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
@@ -156,9 +156,9 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="" fixed="right" label="操作">
+            <el-table-column  fixed="right" label="操作" width="100">
               <template slot-scope="{ row }">
-                <div class="operation" @click="operateProcess(row.minePackageCode, row.name)">
+                <div class="operation" @click="operateProcess(row.minePackageCode, row.name,row.item)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
                   办理
                 </div>
@@ -939,7 +939,7 @@ export default {
           this.completeData = response.data.records
         })
     },
-    operateProcess(version, name) {
+    operateProcess(version, name,item) {
       this.OPEN_BREADCRUMB()
       if(item.includes('经销商')) {
         if(name.indexOf('审批') != -1) {
@@ -1811,27 +1811,27 @@ export default {
 //}
 .TimeLineWrap {
   /*滚动条的宽度*/
-  ::-webkit-scrollbar {
-    width: 0px !important;
-    height: 2px;
-  }
-  /* //滚动条的滑块 */
-  ::-webkit-scrollbar-thumb {
-    background-color: #d1d1d1;
-    border-radius: 3px;
-  }
-  .el-table {
-    border: 1px solid #ebeff5;
-    .el-table__fixed-right {
-      margin-top: 5px;
-    }
-    td {
-      padding: 6px 0px !important;
-    }
-    .cell {
-      padding: 0 10px;
-    }
-  }
+  // ::-webkit-scrollbar {
+  //   width: 0px !important;
+  //   height: 2px;
+  // }
+  // /* //滚动条的滑块 */
+  // ::-webkit-scrollbar-thumb {
+  //   background-color: #d1d1d1;
+  //   border-radius: 3px;
+  // }
+  // .el-table {
+  //   border: 1px solid #ebeff5;
+  //   .el-table__fixed-right {
+  //     margin-top: 5px;
+  //   }
+  //   td {
+  //     padding: 6px 0px !important;
+  //   }
+  //   .cell {
+  //     padding: 0 10px;
+  //   }
+  // }
 }
 .gunterTitle {
   width: 80px;
@@ -1922,9 +1922,9 @@ export default {
       //.is-scrolling-middle {
       //  max-height: 210px !important;
       //}
-      .is-scrolling-none {
-        max-height: 1900px !important;
-      }
+      // .is-scrolling-none {
+      //   max-height: 1900px !important;
+      // }
       .el-table__fixed-body-wrapper {
         top: 48px !important;
         //max-height: 1900px !important;
