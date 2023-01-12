@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2023-01-11 21:09:37
+ * @LastEditTime: 2023-01-12 08:58:10
 -->
 <template>
   <section class="app-main" :class="isDashBoard?'appMainDashBoard':'app-main'">
@@ -128,7 +128,7 @@ export default {
 }
 .app-main {
   /* 50= navbar  50  */
-  height: calc(100% - 60px);
+  height: calc(100% - 0px);
   width: 100%;
   position: relative;
   // overflow-y: auto;

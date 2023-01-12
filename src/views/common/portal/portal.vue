@@ -75,9 +75,9 @@ export default {
   methods: {
     goTPM() {
       // 页面地址跳转，不会刷新页面
-      window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login'
+      // window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login'
       // window.location.href = 'http://localhost:8080/#/login'
-      // this.$router.push('/dashboard')
+      this.$router.push('/dashboard')
     },
     goTPMContract() {
       // this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
