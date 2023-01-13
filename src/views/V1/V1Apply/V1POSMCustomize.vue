@@ -135,18 +135,18 @@ export default {
   methods: {
     // 清除数据
     clear() {
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
+      if (this.filterObj.channelName == '' || this.filterObj.yearAndMonth == '') {
+        if (this.filterObj.yearAndMonth == '') {
           this.$message.info(messageObj.requireMonth)
           return
         }
-        if (this.filterObj.channelCode == '') {
+        if (this.filterObj.channelName == '') {
           this.$message.info(messageObj.requireChannel)
         }
       } else {
         API.getClear({
-          channelCode: this.filterObj.channelCode, //渠道
-          yearAndMonth: this.filterObj.month,
+          channelCode: this.filterObj.channelName, //渠道
+          yearAndMonth: this.filterObj.yearAndMonth,
           costItem: 'In Store POSM - Customized'
           //   isSubmit: 0,
         }).then((res) => {
