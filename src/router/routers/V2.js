@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-09-14 16:18:30
+ * @LastEditTime: 2022-12-15 16:03:39
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -185,6 +185,18 @@ export default function () {
             },
             {
               hidden: true,
+              path: '/costManagement/V2/V2Apply/V2MMC',
+              code: 'price_nka_v2_apply',
+              name: 'V2MMC',
+              component: () => import('@/views/V2/V2Apply/V2MMC.vue'),
+              meta: {
+                title: 'MMC',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
               path: '/costManagement/V2/V2Apply/V2Premium',
               code: 'price_nka_v2_apply',
               name: 'V2Premium',
@@ -215,6 +227,66 @@ export default function () {
               component: () => import('@/views/V2/V2Apply/V2FreeGoodsWin2.vue'),
               meta: {
                 title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2DM',
+              code: 'price_nka_v2_apply',
+              name: 'V2DM',
+              component: () => import('@/views/V2/V2Apply/V2DM.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Transport',
+              code: 'price_nka_v2_apply',
+              name: 'V2Transport',
+              component: () => import('@/views/V2/V2Apply/V2Transport.vue'),
+              meta: {
+                title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Allrkartm',
+              code: 'price_nka_v2_apply',
+              name: 'V2Allrkartm',
+              component: () => import('@/views/V2/V2Apply/V2Allrkartm.vue'),
+              meta: {
+                title: 'All-RKA/RTM',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2Others',
+              code: 'price_nka_v2_apply',
+              name: 'V2Others',
+              component: () => import('@/views/V2/V2Apply/V2Others.vue'),
+              meta: {
+                title: 'Others-EC/NKA',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Apply/V2OthersFG',
+              code: 'price_nka_v2_apply',
+              name: 'V2OthersFG',
+              component: () => import('@/views/V2/V2Apply/V2OthersFG.vue'),
+              meta: {
+                title: 'FG-RKA/RTM',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Apply',
               },
@@ -281,10 +353,10 @@ export default function () {
             },
             {
               hidden: true,
-              path: '/costManagement/V2/V2Approval/V2KARebate',
+              path: '/costManagement/V2/V2Approval/V2KARebateApproval',
               code: 'price_nka_v2_approve',
-              name: 'V2KARebateApprove',
-              component: () => import('@/views/V2/V2Apply/V2KARebate.vue'),
+              name: 'V2KARebateApproval',
+              component: () => import('@/views/V2/V2Approval/V2KARebateApproval.vue'),
               meta: {
                 title: '折扣项-KA Rebate',
                 icon: 'form',
@@ -384,6 +456,19 @@ export default function () {
             },
             {
               hidden: true,
+              path: '/costManagement/V2/V2Approval/V2ApplyrovalMMC',
+              code: 'price_nka_v2_approve',
+              name: 'V2ApplyrovalMMC',
+              component: () =>
+                import('@/views/V2/V2Approval/V2ApplyrovalMMC.vue'),
+              meta: {
+                title: 'MMC',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
               path: '/costManagement/V2/V2Approval/V2PremiumApproval',
               code: 'price_nka_v2_approve',
               name: 'V2PremiumApproval',
@@ -417,6 +502,71 @@ export default function () {
                 import('@/views/V2/V2Approval/V2FreeGoodsWin2Approval.vue'),
               meta: {
                 title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2DMApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2DMApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2DMApproval.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2TransportApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2TransportApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2TransportApproval.vue'),
+              meta: {
+                title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2AllrkartmApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2AllrkartmApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2AllrkartmApproval.vue'),
+              meta: {
+                title: 'All-RKA/RTM',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2OthersApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2OthersApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2OthersApproval.vue'),
+              meta: {
+                title: 'Others-EC/NKA',
+                icon: 'form',
+                activeMenu: '/costManagement/V2/V2Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V2/V2Approval/V2OthersFGApproval',
+              code: 'price_nka_v2_approve',
+              name: 'V2OthersFGApproval',
+              component: () =>
+                import('@/views/V2/V2Approval/V2OthersFGApproval.vue'),
+              meta: {
+                title: 'FG-RKA/RTM',
                 icon: 'form',
                 activeMenu: '/costManagement/V2/V2Approval',
               },

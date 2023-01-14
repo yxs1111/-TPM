@@ -6,14 +6,13 @@
 <template>
   <div class="tabViewsWrap">
     <div class="tabViews" ref="tab" @mousemove="mousemove" @mousedown="mousedown" @mouseup="mouseup">
-      <router-link v-for="(item, index) in routerList" :key="index" :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''"
-        @click.native="changeTab(index)">
-        <img v-if="index != currentIndex" :src="item.img.light" alt="">
-        <img v-if="index == currentIndex" :src="item.img.dark" alt="">
-        <div class="tabTitle"> {{ item.name }}</div>
+      <router-link v-for="(item, index) in routerList" :key="index" :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" @click.native="changeTab(index)">
+        <img v-if="index != currentIndex" :src="item.img.light" alt="" />
+        <img v-if="index == currentIndex" :src="item.img.dark" alt="" />
+        <div class="tabTitle">{{ item.name }}</div>
       </router-link>
     </div>
-    <div style="margin-top: -5px;height: calc(100vh - 0px);">
+    <div style="margin-top: -5px">
       <router-view />
     </div>
   </div>
@@ -65,7 +64,7 @@ export default {
       startX: 0,
       endX: 0,
       isCanMove: 0,
-      setInterval:null
+      setInterval: null,
     }
   },
   computed: {},

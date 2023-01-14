@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2021-09-02 11:13:37
- * @LastEditTime: 2022-09-29 14:16:20
+ * @LastEditTime: 2023-01-11 16:34:06
  */
 import router from './router'
 import store from './store'
@@ -13,28 +13,23 @@ import getPageTitle from '@/utils/get-page-title'
 import { decrypt } from '@/utils/crypto/crypto-util'
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login', '/register'] // no redirect whitelist
+const whiteList = ['/register','/portal'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
   // set page title
   document.title = 'FrieslandCampina iInvest System'
-  if(to.path === '/login') {
-    store.dispatch('user/resetToken')
-  }
-  //门户登录
-  if(to.query.loginInfo&&!sessionStorage.getItem('isFirstEntrySystem')) {
-    let {username,password}=JSON.parse(decrypt(to.query.loginInfo))
-    await store.dispatch('user/loginOtherSystem', {username,password})
-    sessionStorage.setItem('isFirstEntrySystem',1)
-  }
   // determine whether the user has logged in
   const hasToken = auth.getToken()
+  if(to.path==='/login') {
+    next()
+    return 
+  }
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next({ path: '/' })
+      next({ path: '/dashboard' })
       NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
@@ -58,7 +53,11 @@ router.beforeEach(async(to, from, next) => {
           router.addRoutes(accessRoutes)
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
-          next({ ...to, replace: true })
+          if(to.path==='/portal'&&from.path==='/login') {
+            next({ path: '/dashboard' })
+          } else {
+            next({ ...to, replace: true })
+          }
         } catch (error) {
           console.error(error)
           // remove token and go to login page to re-login

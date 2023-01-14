@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-07-13 15:47:32
+ * @LastEditTime: 2022-12-05 17:02:11
 -->
 <template>
   <div class="V0Content">
@@ -17,7 +17,7 @@
           <div class="Selectli">
             <span class="SelectliTitle">渠道:</span>
             <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-              <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+              <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
             </el-select>
           </div>
           <div class="Selectli">
@@ -41,23 +41,23 @@
           <!-- 提交 有数据  正常 暗 -->
           <!-- 没有提交 有数据  正常点击 -->
           <!-- 没有提交 无数据  正常 暗 -->
-          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData&&isSelf?'':'noClick'" @click="importData">
+          <div class="TpmButtonBG" :class="!isSubmit && !isNoData && isSelf ? '' : 'noClick'" @click="importData">
             <img src="@/assets/images/import.png" alt="" />
             <span class="text">导入</span>
           </div>
 
-          <div class="TpmButtonBG" :class="!isSubmit&&!isNoData&&isSelf?'':'noClick'" @click="approve">
-            <svg-icon icon-class="passLocal" style="font-size: 22px;" />
+          <div class="TpmButtonBG" :class="!isSubmit && !isNoData && isSelf ? '' : 'noClick'" @click="approve">
+            <svg-icon icon-class="passLocal" style="font-size: 22px" />
             <span class="text">提交</span>
           </div>
         </div>
       </div>
       <!-- 商品 -->
       <div class="ContentWrap">
-        <div class="contentli" v-for="(tableData,key) in ContentData" :key="key">
+        <div class="contentli" v-for="(tableData, key) in ContentData" :key="key">
           <div class="contentTop">
             <div class="SKUTitle">
-              {{key}}
+              {{ key }}
             </div>
           </div>
           <div class="contentInfoWrap">
@@ -67,7 +67,7 @@
                   <div></div>
                 </template>
                 <template slot-scope="scope">
-                  <div :class="scope.$index==0?'filstColumn_total':'filstColumn'">
+                  <div :class="scope.$index == 0 ? 'filstColumn_total' : 'filstColumn'">
                     <span>{{ scope.row.dimCustomer }} </span>
                     <!-- {{scope.$index}} -->
                   </div>
@@ -76,46 +76,43 @@
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
               <el-table-column v-slot="{ row }" align="right" width="150" prop="cptVolBox" label="CPT VOL(CTN)">
-                {{FormateNum(row.cptVolBox)}}
+                {{ FormateNum(row.cptVolBox) }}
               </el-table-column>
-              <el-table-column align="right" width="250" v-for="(citem,cindex) in Number(tableData[0].priceGearNum)" :key="cindex">
-                <template slot="header">
-                  {{ tableData[0].customGearList[cindex].gear }}RMB/Tin 档位销量(CTN)
-                </template>
-                <template slot-scope="{row}">
+              <el-table-column align="right" width="250" v-for="(citem, cindex) in Number(tableData[0].priceGearNum)" :key="cindex">
+                <template slot="header"> {{ tableData[0].customGearList[cindex].gear }}RMB/Tin 档位销量(CTN) </template>
+                <template slot-scope="{ row }">
                   <div>
-                    {{FormateNum(row.customGearList[cindex].actualNum)}}
+                    {{ FormateNum(row.customGearList[cindex].actualNum) }}
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
-                {{FormateNum(row.cityPlanAveragePrice)}}
+              <el-table-column align="right" v-slot="{ row }" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
+                {{ FormateNum(row.cityPlanAveragePrice) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
-                {{FormateNum(row.cityPlanPromotionExpenses)}}
+              <el-table-column align="right" v-slot="{ row }" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
+                {{ FormateNum(row.cityPlanPromotionExpenses) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-                {{FormateNum(row.cptAveragePrice)}}
+              <el-table-column align="right" v-slot="{ row }" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
+                {{ FormateNum(row.cptAveragePrice) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
-                {{FormateNum(row.cptPromotionExpenses)}}
+              <el-table-column align="right" v-slot="{ row }" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
+                {{ FormateNum(row.cptPromotionExpenses) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
-                {{(row.averagePriceRange*1).toFixed(2)}}
+              <el-table-column align="right" v-slot="{ row }" width="160" prop="averagePriceRange" label="均价差值(%)">
+                {{ (row.averagePriceRange * 1).toFixed(2) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                {{FormateNum(row.promotionExpensesGapValue)}}
+              <el-table-column align="right" v-slot="{ row }" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
+                {{ FormateNum(row.promotionExpensesGapValue) }}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
-                <template slot-scope="{row}">
+                <template slot-scope="{ row }">
                   <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                    <div slot="content" v-html="getTip(row)">
-                    </div>
+                    <div slot="content" v-html="getTip(row)"></div>
                     <div class="statusWrap">
-                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
-                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
-                      <span class="judgmentText">{{row.judgmentType}}</span>
+                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType == 'Pass'" />
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType != null && row.judgmentType.indexOf('Exception') > -1" />
+                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType == 'Error'" />
+                      <span class="judgmentText">{{ row.judgmentType }}</span>
                     </div>
                   </el-tooltip>
                 </template>
@@ -128,7 +125,7 @@
         </div>
       </div>
       <div class="null_content" v-show="isNoData">
-        <img src="@/assets/images/null_content.jpg" alt="">
+        <img src="@/assets/images/null_content.jpg" alt="" />
         <div class="null_content_tit">暂无数据</div>
       </div>
       <el-dialog class="my-el-dialog" title="获取CPT数据" :visible="dialogVisible" width="50%" v-el-drag-dialog @close="closeDialog">
@@ -136,29 +133,22 @@
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="el-form-row">
             <el-form-item label="Mine package">
               <el-select v-model="ruleForm.Minepackage" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in ['Price Promotion',
-                  'New User',
-                  'KA Contract',
-                  'ListingFee',
-                  'ECM',
-                  'POSM',
-                  'Premium',
-                  'Free Goods',]" :key="index" :label="item" :value="item" />
+                <el-option v-for="(item, index) in minePackageList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Scenario" prop="dimScenario">
               <el-select v-model="ruleForm.dimScenario" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in yearAndMonthList" :key="index" :label="item" :value="item" />
+                <el-option v-for="(item, index) in yearAndMonthList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="Version" prop="dimVersion">
               <el-select v-model="ruleForm.dimVersion" placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in VersionList" :key="index" :label="item" :value="item" />
+                <el-option v-for="(item, index) in VersionList" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
             <el-form-item label="渠道" prop="channelCode">
               <el-select v-model="ruleForm.channelCode" disabled placeholder="请选择" class="my-el-select">
-                <el-option v-for="item,index in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+                <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
               </el-select>
             </el-form-item>
           </el-form>
@@ -169,7 +159,7 @@
         </span>
       </el-dialog>
       <!-- 导入 -->
-      <el-dialog width="66%" class="my-el-dialog " title="导入" :visible="importVisible" @close="closeImportDialog">
+      <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
         <div class="importDialog">
           <div class="el-downloadFileBar">
             <div>
@@ -185,33 +175,41 @@
                 <img src="@/assets/images/selectFile.png" alt="" />
                 <span class="text">选择文件</span>
               </div>
-              <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)">
-              <div class="fileName" v-if="uploadFileName!=''">
+              <input ref="filElem" id="fileElem" type="file" style="display: none" @change="parsingExcel($event)" />
+              <div class="fileName" v-if="uploadFileName != ''">
                 <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon" />
-                <span>{{uploadFileName}}</span>
+                <span>{{ uploadFileName }}</span>
               </div>
             </div>
-            <div class="seeData" style="width: auto;">
+            <div class="seeData" style="width: auto">
               <div class="exportError" @click="exportErrorList">
-                <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon">
+                <img src="@/assets/exportError_icon.png" alt="" class="exportError_icon" />
                 <span>导出错误信息</span>
               </div>
             </div>
           </div>
           <div class="tableWrap">
-            <el-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
-              background: '#fff',
-              color: '#333',
-              fontSize: '16px',
-              textAlign: 'center',
-              fontWeight: 400,
-              fontFamily: 'Source Han Sans CN'
-            }" :row-class-name="tableRowClassName" stripe>
+            <el-table
+              border
+              height="400"
+              :data="ImportData"
+              style="width: 100%"
+              :header-cell-style="{
+                background: '#fff',
+                color: '#333',
+                fontSize: '16px',
+                textAlign: 'center',
+                fontWeight: 400,
+                fontFamily: 'Source Han Sans CN',
+              }"
+              :row-class-name="tableRowClassName"
+              stripe
+            >
               <el-table-column fixed align="center" label="是否通过" width="100">
                 <template slot-scope="scope">
-                  <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg">
-                  <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width:25px;height:25px;">
-                  <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width:25px;height:25px;">
+                  <img v-if="scope.row.judgmentType == 'Error'" :src="errorImg" />
+                  <img v-else-if="scope.row.judgmentType.indexOf('Exception') > -1" :src="excepImg" style="width: 25px; height: 25px" />
+                  <img v-else-if="scope.row.judgmentType == 'Pass'" :src="passImg" style="width: 25px; height: 25px" />
                 </template>
               </el-table-column>
               <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
@@ -220,36 +218,35 @@
               <el-table-column align="center" width="120" prop="yearAndMonth" label="活动月"></el-table-column>
               <el-table-column align="center" width="120" prop="channelCode" label="渠道"></el-table-column>
               <el-table-column v-slot="{ row }" align="right" width="150" prop="cptVolBox" label="CPT VOL(CTN)">
-                {{FormateNum(row.cptVolBox)}}
+                {{ FormateNum(row.cptVolBox) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
-                {{FormateNum(row.cityPlanAveragePrice)}}
+              <el-table-column align="right" v-slot="{ row }" width="250" prop="cityPlanAveragePrice" label="City Plan预拆分均价(RMB/Tin)">
+                {{ FormateNum(row.cityPlanAveragePrice) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
-                {{FormateNum(row.cityPlanPromotionExpenses)}}
+              <el-table-column align="right" v-slot="{ row }" width="250" prop="cityPlanPromotionExpenses" label="City Plan预拆分费用(RMB)">
+                {{ FormateNum(row.cityPlanPromotionExpenses) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
-                {{FormateNum(row.cptAveragePrice)}}
+              <el-table-column align="right" v-slot="{ row }" width="250" prop="cptAveragePrice" label="CPT均价(RMB/Tin)">
+                {{ FormateNum(row.cptAveragePrice) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
-                {{FormateNum(row.cptPromotionExpenses)}}
+              <el-table-column align="right" v-slot="{ row }" width="160" prop="cptPromotionExpenses" label="CPT费用(RMB)">
+                {{ FormateNum(row.cptPromotionExpenses) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="averagePriceRange" label="均价差值(%)">
-                {{(row.averagePriceRange*1).toFixed(2)}}
+              <el-table-column align="right" v-slot="{ row }" width="160" prop="averagePriceRange" label="均价差值(%)">
+                {{ (row.averagePriceRange * 1).toFixed(2) }}
               </el-table-column>
-              <el-table-column align="right" v-slot={row} width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
-                {{FormateNum(row.promotionExpensesGapValue)}}
+              <el-table-column align="right" v-slot="{ row }" width="160" prop="promotionExpensesGapValue" label="费用差值(RMB)">
+                {{ FormateNum(row.promotionExpensesGapValue) }}
               </el-table-column>
               <el-table-column align="center" width="160" prop="judgmentType" label="系统判定">
-                <template slot-scope="{row}">
+                <template slot-scope="{ row }">
                   <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                    <div slot="content" v-html="getTip(row)">
-                    </div>
+                    <div slot="content" v-html="getTip(row)"></div>
                     <div class="statusWrap">
-                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
-                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
-                      <span class="judgmentText">{{row.judgmentType}}</span>
+                      <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType == 'Pass'" />
+                      <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType != null && row.judgmentType.indexOf('Exception') > -1" />
+                      <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType == 'Error'" />
+                      <span class="judgmentText">{{ row.judgmentType }}</span>
                     </div>
                   </el-tooltip>
                 </template>
@@ -260,21 +257,13 @@
             </el-table>
           </div>
         </div>
-
       </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  getDefaultPermissions,
-  yearAndMonthList,
-  VersionList,
-  messageMap,
-  formatThousandNum,
-  messageObj,
-} from '@/utils'
+import { getDefaultPermissions, yearAndMonthList, VersionList, messageMap, formatThousandNum, messageObj } from '@/utils'
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import API from '@/api/V0/V0.js'
@@ -336,26 +325,15 @@ export default {
       saveBtn: false,
       isCheck: false, //检测数据按钮显示或隐藏
       // yearAndMonthList: yearAndMonthList(),
-      yearAndMonthList: [
-        '2022 3+9',
-        '2022 2+10',
-        '2022 0+12',
-        '2021 11+1',
-        '2021 10+2',
-        '2021 9+3',
-        '2021 8+4',
-      ],
+      yearAndMonthList: ['2022 3+9', '2022 2+10', '2022 0+12', '2021 11+1', '2021 10+2', '2021 9+3', '2021 8+4'],
       VersionList: VersionList(),
       ChannelList: [],
-      backgroundList: [
-        'background:#EFFCF9',
-        'background:#FEF5F6',
-        'background:#F0F6FC',
-      ], //价格档位背景色
+      backgroundList: ['background:#EFFCF9', 'background:#FEF5F6', 'background:#F0F6FC'], //价格档位背景色
       isNoData: true,
       usernameLocal: '',
       mainId: '',
       messageMap: messageMap(),
+      minePackageList: ['Price Promotion', 'New User', 'KA Contract', 'ListingFee', 'ECM', 'DM', 'POSM', 'Transport Costs', 'Premium', 'Free Goods', 'Mama class', 'FMC', 'RoadShow'],
     }
   },
   directives: { elDragDialog, permission },
@@ -401,6 +379,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((response) => {
           if (response.code === 1000) {
             this.ContentData = response.data
@@ -454,10 +433,7 @@ export default {
         })
         .then((res) => {
           if (res.code === 1000) {
-            if (
-              res.data.version === 'V0' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
-            ) {
+            if (res.data.version === 'V0' && res.data.assignee.indexOf(this.usernameLocal) != -1) {
               //本人可以提交
               this.isSelf = true
             } else {
@@ -528,8 +504,7 @@ export default {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.importSuccess)
           this.ImportData = response.data
-          this.isCheck =
-            response.data[0].judgmentType === 'Error' ? false : true
+          this.isCheck = response.data[0].judgmentType === 'Error' ? false : true
         } else {
           this.$message.info(this.messageMap.importError)
         }
@@ -543,8 +518,7 @@ export default {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
           this.ImportData = response.data
-          this.saveBtn =
-            response.data[0].judgmentType === 'Error' ? false : true
+          this.saveBtn = response.data[0].judgmentType === 'Error' ? false : true
         } else {
           this.$message.info(this.messageMap.checkError)
         }
@@ -572,6 +546,7 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
           let timestamp = Date.parse(new Date())
           this.downloadFile(res, 'V0异常信息 -' + timestamp + '.xlsx') //自定义Excel文件名
@@ -589,11 +564,9 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
-          this.downloadFile(
-            res,
-            `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0_查询.xlsx`
-          ) //自定义Excel文件名
+          this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0_查询.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -608,11 +581,9 @@ export default {
           yearAndMonth: this.filterObj.month,
           dimProduct: this.filterObj.SKU,
           channelCode: this.filterObj.channelCode,
+          channelName: this.filterObj.channelCode,
         }).then((res) => {
-          this.downloadFile(
-            res,
-            `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0申请.xlsx`
-          ) //自定义Excel文件名
+          this.downloadFile(res, `${this.filterObj.month}_Price_${this.filterObj.channelCode}_V0申请.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
@@ -667,17 +638,33 @@ export default {
             case 'ECM':
               url = API.getECMcreate
               break
+            case 'DM':
+              url = API.getDMcreate
+              break
+            case 'Transport Costs':
+              url = API.getTransportCreate
+              break
             case 'Free Goods':
               url = API.getFreeGoods
+              break
+            case 'FMC':
+              url = API.getFMC
+              break
+            case 'RoadShow':
+              url = API.getRoadShow
+              break
+            case 'Mama class':
+              url = API.getMMCData
               break
           }
           let obj = {
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
+            channelName: this.ruleForm.channelCode,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
           }
-          if (this.ruleForm.Minepackage === 'POSM') {
+          if (this.ruleForm.Minepackage === 'POSM' || this.ruleForm.Minepackage === 'Transport') {
             obj = {
               yearAndMonth: this.filterObj.month,
               channelName: this.ruleForm.channelCode,
@@ -685,11 +672,13 @@ export default {
               dimVersion: this.ruleForm.dimVersion,
             }
           }
-          console.log(url)
+          // console.log(url)
           url(obj).then((response) => {
             if (response.code == 1000) {
               this.$message.success('成功获取数据!')
-              this.getList()
+              if (this.ruleForm.Minepackage == 'Price Promotion'||this.ruleForm.Minepackage == 'New User') {
+                this.getList()
+              }
               this.resetForm(formName)
             }
           })
@@ -767,11 +756,7 @@ export default {
         return 'background:#4192d3!important'
       }
       let num = (4 + Number(row.priceGearNum) - columnIndex) % 3
-      if (
-        4 <= columnIndex &&
-        columnIndex < 4 + Number(row.priceGearNum) &&
-        rowIndex != 0
-      ) {
+      if (4 <= columnIndex && columnIndex < 4 + Number(row.priceGearNum) && rowIndex != 0) {
         return this.backgroundList[num]
       }
     },

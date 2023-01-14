@@ -1,16 +1,37 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2022-09-29 14:10:31
+ * @LastEditTime: 2023-01-11 16:39:56
 -->
 <template>
   <div class="portalWrap">
     <div class="systemWrap">
-      <div class="systemLi" v-wave="{color: '#54af45',initialOpacity: 0.5,easing: 'ease-in'}" @click="goCpt">
+      <div class="systemLi" v-wave="{color: '#54af45',initialOpacity: 0.5,easing: 'ease-in'}" @mouseenter="showCPTSelect" @mouseleave="hiddenCPTSelect">
         <img src="@/assets/images/portal/cpt.png" alt="" class="systemImg cpt" />
         <div class="systemName">CPT</div>
         <div class="cycle">
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
+        </div>
+        <div class="selectHover"></div>
+        <div class="CPTSelect" v-if="isCptVisible">
+          <div class="CPTSelectContent">
+            <div class="CPTSelectContentItem" @click="goSalesCpt">
+              <img src="@/assets/images/portal/Sales CPT.png" class="CPTSelectContentItemSystemImg" />
+              <div class="CPTSelectContentItemTitleWrap">
+                <span class="CPTSelectContentItemTitle">Sales CPT</span>
+                <svg-icon icon-class="nextStepCPT" style="font-size: 20px;" />
+              </div>
+            </div>
+            <div class="CPTSelectContentItem" @click="goMarketingCpt">
+              <img src="@/assets/images/portal/Marketing CPT.png" class="CPTSelectContentItemSystemImg" />
+              <div class="CPTSelectContentItemTitleWrap">
+                <span class="CPTSelectContentItemTitle">Marketing CPT</span>
+                <svg-icon icon-class="nextStepCPT" style="font-size: 20px;" />
+              </div>
+            </div>
+          </div>
+          <!-- 三角 -->
+          <div class="triangle"></div>
         </div>
       </div>
       <div class="systemLi" @click="goTPM" v-wave="{color: '#4192d3',initialOpacity: 0.5,easing: 'ease-in'}">
@@ -27,16 +48,9 @@
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
         </div>
       </div>
-      <div class="systemLi" v-wave="{color: '#999',initialOpacity: 0.5,easing: 'ease-in'}">
-        <img src="@/assets/images/portal/soon.png" alt="" class="systemImg" />
-        <div class="systemName">
-          <div>Coming soon....</div>
-          <div class="subTitle">
-            <span>更多精彩内容</span>
-            <br />
-            <span>敬请期待</span>
-          </div>
-        </div>
+      <div class="systemLi" @click="goTPMContract" v-wave="{color: '#999',initialOpacity: 0.5,easing: 'ease-in'}">
+        <img src="@/assets/images/portal/contract.png" alt="" class="systemImg" />
+        <div class="systemName">合同管理</div>
         <div class="cycle">
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
         </div>
@@ -52,23 +66,54 @@ export default {
   name: 'Portal',
 
   data() {
-    return {}
+    return {
+      isCptVisible: false,
+    }
   },
 
   mounted() {},
   methods: {
     goTPM() {
+      // 页面地址跳转，不会刷新页面
+      // window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login'
+      // window.location.href = 'http://localhost:8080/#/login'
       this.$router.push('/dashboard')
     },
-    async goCpt() {
+    goTPMContract() {
+      // this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
+      window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
+      // window.location.href = 'http://localhost:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
+    },
+    async goSalesCpt() {
+      // window.location.href = 'http://localhost:8081/#/login'
+      window.location.href = 'https://uat-cpt.rfc-friso.com/SalesCPT/login'
+      return
       let username = sessionStorage.getItem('username')
       let password = sessionStorage.getItem('password')
       let loginObj = {
         username,
-        password
+        password,
       }
       //验证TPM账号
       await this.$store.dispatch('user/loginCPT', { ...loginObj })
+    },
+    async goMarketingCpt() {
+      window.location.href = 'https://uat-cpt.rfc-friso.com/MarketingCPT/login'
+      return
+      let username = sessionStorage.getItem('username')
+      let password = sessionStorage.getItem('password')
+      let loginObj = {
+        username,
+        password,
+      }
+      //验证TPM账号
+      await this.$store.dispatch('user/loginMarketingCPT', { ...loginObj })
+    },
+    showCPTSelect() {
+      this.isCptVisible = true
+    },
+    hiddenCPTSelect() {
+      this.isCptVisible = false
     },
     async goMDM() {
       // let username = sessionStorage.getItem('username')
@@ -80,7 +125,7 @@ export default {
       // //验证TPM账号
       // await this.$store.dispatch('user/loginOtherSystem', { ...loginObj })
     },
-  }
+  },
 }
 </script>
 
@@ -94,20 +139,20 @@ export default {
   position: relative;
   .systemWrap {
     width: 80%;
-    height: 500px;
+    height: 50%;
     background-image: url('./../../../assets/images/portal/systemWrapBG.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     // background-color: #F5F5F5;
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -40%);
     display: flex;
     justify-content: space-around;
     .systemLi {
       width: 330px;
-      height: 380px;
+      height: 78%;
       background-color: #fff;
       border-radius: 10px;
       display: flex;
@@ -119,7 +164,7 @@ export default {
       position: relative;
       .systemImg {
         width: 90%;
-        height: 250px;
+        height: 60%;
       }
       .systemName {
         margin-top: 20px;
@@ -157,7 +202,7 @@ export default {
         background-color: #999999;
       }
       &:nth-child(4) .cycle {
-        background-color: #999999;
+        background-color: #4192d3;
       }
     }
     .systemLi:hover {
@@ -183,6 +228,66 @@ export default {
     position: absolute;
     top: 57px;
     left: 60px;
+  }
+  .CPTSelect {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    transform: translateY(105%);
+    width: 450px;
+    background: #ffffff;
+    box-shadow: 0px 3px 32px 0px rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    .CPTSelectContent {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px;
+      box-sizing: border-box;
+      .CPTSelectContentItem {
+        width: 40%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .CPTSelectContentItemSystemImg {
+          width: 167px;
+          height: 100px;
+        }
+        .CPTSelectContentItemTitleWrap {
+          font-size: 18px;
+          font-family: Source Han Sans CN;
+          font-weight: bold;
+          color: #181818;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 20px;
+          .CPTSelectContentItemTitle {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+    .triangle {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #fff;
+      position: absolute;
+      top: -9px;
+      left: 37%;
+      transform: translateX(-50%);
+    }
+  }
+  .selectHover {
+    background: transparent;
+    position: absolute;
+    bottom: -32px;
+    width: 100%;
+    height: 30px;
   }
 }
 </style>

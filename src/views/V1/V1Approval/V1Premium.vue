@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-15 09:57:16
+ * @LastEditTime: 2022-12-05 17:13:31
 -->
 <template>
   <div class="MainContent">
@@ -698,7 +698,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeightHaveTab,
+  getHeightHaveTab1,
   messageObj,
   downloadFile,
   messageMap,
@@ -738,7 +738,7 @@ export default {
 
       BrandList: [],
 
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab1(),
       isSelf: 0, //是否是当前审批人
       mainId: '',
       usernameLocal: '',
@@ -761,7 +761,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightHaveTab1()
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')
@@ -830,7 +830,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },

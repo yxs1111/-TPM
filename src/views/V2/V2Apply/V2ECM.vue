@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ECM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-15 09:57:16
+ * @LastEditTime: 2022-12-05 17:13:46
 -->
 <template>
   <div class="MainContent">
@@ -500,36 +500,6 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
-            <!-- <el-table-column prop="date"
-                             align="center"
-                             label="是否通过"
-                             width="200">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="400"
-                             align="center"
-                             prop="judgmentContent"
-                             label="验证信息">
-            </el-table-column> -->
             <el-table-column width="180"
                              align="center"
                              fixed="left"
@@ -576,8 +546,7 @@
             <el-table-column align="center"
                              width="230"
                              prop="cpId"
-                             label="CPID"
-                             fixed="left">
+                             label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -797,47 +766,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="180"
-                             align="center"
-                             prop="judgmentType"
-                             label="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.judgmentType=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="800"
-                             align="left"
-                             prop="judgmentContent"
-                             label="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.judgmentContent }}
-                </div>
-              </template>
-            </el-table-column>
             <el-table-column width="120"
                              align="center"
                              prop="applyRemarks"
@@ -1054,7 +982,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },

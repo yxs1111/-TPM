@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-07-05 17:31:53
+ * @LastEditTime: 2022-12-16 17:07:13
 -->
 <template>
   <div class="app-container">
@@ -198,7 +198,6 @@ import {
   parseTime,
   getTextMap,
   getHeight,
-  contractList,
   downloadFile,
   CustomerDeductionsAndPayType,
 } from '@/utils'
@@ -265,7 +264,6 @@ export default {
       ConditionsTypeList: ['conditional', 'unconditional'],
       FixOrPointList: ['variable', 'fixed'],
       maxheight: getHeight(),
-      contractList: contractList,
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       //取消编辑 --》数据重置（不保存）
       tempObj: {

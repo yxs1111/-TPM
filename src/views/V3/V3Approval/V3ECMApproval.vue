@@ -1,7 +1,7 @@
 <!--
  * @Description: V3ECMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-15 09:57:58
+ * @LastEditTime: 2022-12-05 17:15:36
 -->
 <template>
   <div class="MainContent">
@@ -520,9 +520,9 @@
                              align="center"
                              fixed="left"
                              prop="judgmentType"
-                             label="是否通过">
+                             label="系统检验">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -531,38 +531,27 @@
                   <div slot="content"
                        v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.judgmentType=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="800"
+            <el-table-column width="250"
                              align="left"
                              fixed="left"
                              prop="judgmentContent"
-                             label="验证信息">
+                             label="系统检验">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
-                  {{ scope.row.judgmentContent }}
-                </div>
+                <span>检验通过</span>
               </template>
             </el-table-column>
             <el-table-column align="center"
                              width="460"
                              prop="cpId"
-                             fixed="left"
                              label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
@@ -998,7 +987,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },

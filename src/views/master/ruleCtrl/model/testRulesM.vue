@@ -2,24 +2,28 @@
  * @Description:
  * @Date: 2021-11-03 14:17:00
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @LastEditTime: 2022-07-19 18:13:10
 =======
  * @LastEditTime: 2022-09-19 16:03:00
 >>>>>>> dev
+=======
+ * @LastEditTime: 2022-12-03 10:44:37
+>>>>>>> dev
 -->
 <template>
-  <div class='tabViewsWrap'>
+  <div class="tabViewsWrap">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane :label="item.name" :name="item.name" v-for="item,index in routerList" :key="index">
+      <el-tab-pane :label="item.name" :name="item.name" v-for="(item, index) in routerList" :key="index">
         <!-- tab 内容 -->
         <template slot="label">
           <div class="TabWrap">
-            <div>{{item.name}}</div>
+            <div>{{ item.name }}</div>
           </div>
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: calc(100vh - 0px);">
+    <div>
       <router-view />
     </div>
   </div>
@@ -29,7 +33,7 @@
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import {sortList} from '@/utils/index'
+import { sortList } from '@/utils/index'
 export default {
   directives: { elDragDialog, permission },
   data() {
@@ -93,7 +97,7 @@ export default {
                 path: '/master/ruleCtrl/model/TestRules',
                 minePackageName: 'Price Promotion',
               },
-              { name: '新客', path: '/master/ruleCtrl/model/TestRulesNew', minePackageName: 'New User',},
+              { name: '新客', path: '/master/ruleCtrl/model/TestRulesNew', minePackageName: 'New User' },
             ]
           }
           this.routerList = [
@@ -158,15 +162,30 @@ export default {
               path: '/master/ruleCtrl/model/splitRulesFreeGoods-Win2',
               minePackageName: 'Free Goods-Win2',
             },
+            {
+              name: 'MMC',
+              path: '/master/ruleCtrl/model/splitRulesMMC',
+              minePackageName: 'MMC',
+            },
+            {
+              name: 'DM',
+              path: '/master/ruleCtrl/model/splitRulesDM',
+              minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/master/ruleCtrl/model/splitRulesTransport',
+              minePackageName: 'Transport Costs',
+            },
           ]
-          let TabList=[]
-          sortList.forEach(item=>{
-            let findIndex=this.routerList.findIndex(routerItem=>routerItem.minePackageName==item)
-            if(findIndex!=-1) {
+          let TabList = []
+          sortList.forEach((item) => {
+            let findIndex = this.routerList.findIndex((routerItem) => routerItem.minePackageName == item)
+            if (findIndex != -1) {
               TabList.push(this.routerList[findIndex])
             }
           })
-          this.routerList=TabList
+          this.routerList = TabList
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
           } else {
@@ -175,10 +194,7 @@ export default {
           if (!this.$route.query.minePackageName) {
           } else {
             // 我的待办跳转
-            this.currentIndex = this.routerList.findIndex(
-              (item) =>
-                item.minePackageName == this.$route.query.minePackageName
-            )
+            this.currentIndex = this.routerList.findIndex((item) => item.minePackageName == this.$route.query.minePackageName)
             sessionStorage.setItem('currentIndex', this.currentIndex)
           }
           this.tabInit()
@@ -228,10 +244,10 @@ export default {
 .el-tabs__item {
   padding: 0 10px !important;
   height: 38px;
-  background: #EFF2F9;
+  background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
   margin-right: 10px;
-  border: 1px solid #E8E8EA;
+  border: 1px solid #e8e8ea;
   font-size: 14px;
   color: #999;
   text-align: center;

@@ -1,7 +1,7 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-12-08 19:27:05
- * @LastEditTime: 2022-09-30 15:45:36
+ * @LastEditTime: 2022-10-31 17:42:12
  */
 import Vue from 'vue'
 
@@ -22,7 +22,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import i18n from './lang'
 import VCalendar from 'v-calendar'; // 引入日历插件
- 
+
 Vue.use(VCalendar, {
   componentPrefix: 'vc',
 });
@@ -51,10 +51,37 @@ Vue.use(ElementUI, {
 })
 Vue.config.productionTip = false
 
-new Vue({
+const app = new Vue({
   el: '#app',
   router,
   store,
   i18n,
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
   render: h => h(App)
+})
+let ganttState, ganttInstance
+app.$on('gantt-elastic-ready', ganttElasticInstance => {
+  ganttInstance = ganttElasticInstance
+  ganttState = ganttElasticInstance.state
+  ganttInstance.$on('chart-task-click', ({ event, data }) => {
+    //点击task 切换 当前Task
+    // console.log('task list clicked! (chart)', { event, data });
+    app.$emit('changeActive', data.parentId)
+    app.$emit('isActiveId', data.parentId)
+  })
+ ganttInstance.$on('chart-task-mouseenter', ({ event, data }) => {
+    console.log(data);
+    app.$emit('taskMouseEnter', { event, data })
+  })
+  ganttInstance.$on('chart-task-mouseout', ({ event, data }) => {
+    // console.log('task list mouseout! (chart)', { event, data });
+    app.$emit('taskMouseout', { event, data })
+  })
+})
+//监听更改CurrentTask
+app.$on('changeActive',data=>{
+  // console.log(data);
+  app.$emit('currentMonthChange',data)
 })

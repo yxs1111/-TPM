@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-22 16:42:40
+ * @LastEditTime: 2023-01-14 12:07:52
 -->
 <template>
   <div class="MainContent">
@@ -504,20 +504,20 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统检验" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
             </el-table-column>
-<!--            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />-->
+            <el-table-column width="320" align="center" prop="judgmentContent" label="系统检验" fixed>
+              <span>检验通过</span>
+            </el-table-column>
             <el-table-column align="center" width="460" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
@@ -578,8 +578,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="220" align="center" prop="judgmentType" label="系统判定" />
-            <el-table-column width="320" align="center" prop="judgmentContent" label="系统判定内容" />
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
             <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见" />
@@ -716,7 +714,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version === 'Premium-V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {
@@ -751,7 +749,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({pageSize: 9999}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
           console.log(res.data)
         }
       })

@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-12-04 08:20:46
- * @LastEditTime: 2022-07-18 10:23:36
+ * @LastEditTime: 2022-12-05 17:11:04
  */
 import requestApi from '@/api/request-api'
 // import request from '@/utils/request'
@@ -10,6 +10,10 @@ export default {
   // 渠道下拉框
   queryChannelSelect(params) {
     return requestApi.request_get('/mdm/common/queryChannelSelect', params)
+  },
+  // Others渠道下拉框
+  othersChannelSelect(params) {
+    return requestApi.request_get('/cityplan/investCpOthers/getChannel', params)
   },
   // SKU下拉框
   querySkuSelect(params) {
@@ -61,7 +65,7 @@ export default {
   },
   // 供应商信息
   getPageMdSupplier(params) {
-    return requestApi.request_get('/mdm/mdSupplier/getPage', params)
+    return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
   },
   //getCostTypeList
   getCostTypeList(params) {
@@ -150,6 +154,14 @@ export default {
   },
   // posmitem 下拉数据 下拉数据 mdm/mdDisplayItem/getEcmItemList
   getECMItemList(params) {
+    return requestApi.request_get('/mdm/mdDisplayItem/getEcmItemList', params)
+  },
+  // DMitem 下拉数据 下拉数据 mdm/mdDisplayItem/getDmItemList
+  getDMItemList(params) {
+    return requestApi.request_get('/mdm/mdDisplayItem/getDmItemList', params)
+  },
+  // TransportItemm 下拉数据 下拉数据 mdm/mdDisplayItem/getDmItemList
+  getTransportItemList(params) {
     return requestApi.request_get('/mdm/mdDisplayItem/getEcmItemList', params)
   },
 }

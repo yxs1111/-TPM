@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:10:09
+ * @LastEditTime: 2022-11-29 09:12:34
 -->
 <template>
   <div class="tabViewsWrap">
@@ -17,7 +17,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: calc(100vh - 0px)">
+    <div>
       <router-view />
     </div>
   </div>
@@ -25,7 +25,7 @@
 
 <script>
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import {sortList} from '@/utils/index'
+import { sortList } from '@/utils/index'
 export default {
   data() {
     return {
@@ -93,12 +93,12 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIH rebate',
+              name: 'HIHrebate',
               path: '/costManagement/V1/V1Apply/V1HIHRebate',
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KA rebate',
+              name: 'KArebate',
               path: '/costManagement/V1/V1Apply/V1KARebate',
               minePackageName: 'KA Rebate',
             },
@@ -143,24 +143,39 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FG tin',
+              name: '价促-FGtin',
               path: '/costManagement/V1/V1Apply/V1FreeGoodsTin',
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FG win2',
+              name: 'NU-FGwin2',
               path: '/costManagement/V1/V1Apply/V1FreeGoodsWin2',
               minePackageName: 'Free Goods-Win2',
             },
+            {
+              name: 'MMC',
+              path: '/costManagement/V1/V1Apply/V1MMC',
+              minePackageName: 'Mama class',
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V1/V1Apply/V1DM',
+              minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/costManagement/V1/V1Apply/V1Transport',
+              minePackageName: 'Transport Costs',
+            },
           ]
-          let TabList=[]
-          sortList.forEach(item=>{
-            let findIndex=this.routerList.findIndex(routerItem=>routerItem.minePackageName==item)
-            if(findIndex!=-1) {
+          let TabList = []
+          sortList.forEach((item) => {
+            let findIndex = this.routerList.findIndex((routerItem) => routerItem.minePackageName == item)
+            if (findIndex != -1) {
               TabList.push(this.routerList[findIndex])
             }
           })
-          this.routerList=TabList
+          this.routerList = TabList
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
           } else {
@@ -169,10 +184,7 @@ export default {
           if (!this.$route.query.minePackageName) {
           } else {
             // 我的待办跳转
-            this.currentIndex = this.routerList.findIndex(
-              (item) =>
-                item.minePackageName == this.$route.query.minePackageName
-            )
+            this.currentIndex = this.routerList.findIndex((item) => item.minePackageName == this.$route.query.minePackageName)
             sessionStorage.setItem('currentIndex', this.currentIndex)
           }
           this.tabInit()
@@ -222,10 +234,10 @@ export default {
 .el-tabs__item {
   padding: 0 10px !important;
   height: 38px;
-  background: #EFF2F9;
+  background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 10px;
-  border: 1px solid #E8E8EA;
+  margin-right: 0px;
+  border: 1px solid #e8e8ea;
   font-size: 14px;
   color: #999;
   text-align: center;

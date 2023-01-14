@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in ['NKA', 'EC']" :key="item" :label="item" :value="item" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -26,13 +26,13 @@
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">供应商:</span>
           <el-select v-model="filterObj.supplierName" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
-        <div class="Selectli">
+        <div class="Selectli" v-show='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.name" />
@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+    <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed >
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
@@ -211,6 +211,112 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-table v-if='this.filterObj.channelCode == "EC"' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" width="520" prop="cpId" label="CPID" fixed>
+        <template v-slot:header>
+          <div>CPID<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.cpId }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
+        <template v-slot:header>
+          <div>活动月<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.yearAndMonth }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="costType" label="费用类型">
+        <template v-slot:header>
+          <div>费用类型<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costType }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package">
+        <template v-slot:header>
+          <div>Mine Package<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.minePackage }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="180" align="center" prop="costAccount" label="费用科目">
+        <template v-slot:header>
+          <div>费用科目<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costAccount }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+        <template v-slot:header>
+          <div>渠道<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.channelCode }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称">
+        <template v-slot:header>
+          <div>客户系统名称<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.customerSystemName }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
+        <template v-slot:header>
+          <div>
+            V1计划费用(RMB)
+            <br>
+            <span class="subTitle">KA</span>
+          </div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ FormatNum(scope.row.v1PlanCost) }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门">
+        <template v-slot:header>
+          <div>费用归属部门<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costAscriptionDept }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式">
+        <template v-slot:header>
+          <div>费用核销方式<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.costWriteoffMethod }}
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
@@ -279,30 +385,58 @@ export default {
   methods: {
     // 获取表格数据
     getTableData() {
-      this.tableData = []
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
+      if (this.filterObj.channelCode == 'NKA') {
+        this.tableData = []
+        if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+          if (this.filterObj.month == '') {
+            this.$message.info(messageObj.requireMonth)
+            return
+          }
+          if (this.filterObj.channelCode == '') {
+            this.$message.info(messageObj.requireChannel)
+          }
+        } else {
+          API.getPage({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
         }
       } else {
-        API.getPage({
-          pageNum: this.pageNum, // 当前页
-          pageSize: this.pageSize, // 每页条数
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-        })
+        this.tableData = []
+        if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+          if (this.filterObj.month == '') {
+            this.$message.info(messageObj.requireMonth)
+            return
+          }
+          if (this.filterObj.channelCode == '') {
+            this.$message.info(messageObj.requireChannel)
+          }
+        } else {
+          API.getPageEC({
+            pageNum: this.pageNum, // 当前页
+            pageSize: this.pageSize, // 每页条数
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+            regionName: this.filterObj.regionName,
+          }).then((response) => {
+            this.tableData = response.data.records
+            this.pageNum = response.data.pageNum
+            this.pageSize = response.data.pageSize
+            this.total = response.data.total
+          })
+        }
       }
     },
     getAllMonth() {
@@ -355,22 +489,42 @@ export default {
     },
     // 导出
     downExcel() {
-      if (this.tableData.length) {
-        API.exportV1({
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((res) => {
-          downloadFile(
-            res,
-            `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
-          ) //自定义Excel文件名
-          this.$message.success('导出成功!')
-        })
+      if (this.filterObj.channelCode == 'NKA') {
+        if (this.tableData.length) {
+          API.exportV1({
+            customerSystemName: this.filterObj.customerCode,
+            channelCode: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       } else {
-        this.$message.info('数据为空')
+        if (this.tableData.length) {
+          API.exportVOne({
+            customerSystemName: this.filterObj.customerCode,
+            channelName: this.filterObj.channelCode,
+            regionName: this.filterObj.regionName,
+            yearAndMonth: this.filterObj.month,
+            supplierName: this.filterObj.supplierName,
+          }).then((res) => {
+            downloadFile(
+              res,
+              `${this.filterObj.month}_FMC_${this.filterObj.channelCode}_V1_查询.xlsx`
+            ) //自定义Excel文件名
+            this.$message.success('导出成功!')
+          })
+        } else {
+          this.$message.info('数据为空')
+        }
       }
     },
     // 每页显示页面数变更

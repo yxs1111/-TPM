@@ -10,7 +10,6 @@ import requestApi from '@/api/request-api'
 import request from '@/utils/request'
 
 export default {
-
   /**
    * @description: 产品信息--查询
    * @param {*} params
@@ -25,7 +24,7 @@ export default {
       url: '/mdm/mdProduct/exportProduct',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   /**
@@ -73,7 +72,7 @@ export default {
       url: 'mdm/mdPriceGear/exportPriceGear',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //下载模板
@@ -82,7 +81,7 @@ export default {
       url: 'mdm/mdPriceGear/exportTemplate',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //检测数据
@@ -95,7 +94,7 @@ export default {
       url: 'mdm/mdPriceGear/exportPriceGearError',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
 
@@ -135,7 +134,7 @@ export default {
       url: '/mdm/mdCustomer/exportCustomer',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 渠道信息
@@ -157,7 +156,7 @@ export default {
       url: '/mdm/mdChannel/exportChannel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 经销商信息
@@ -179,7 +178,7 @@ export default {
       url: '/mdm/mdDistributor/exportDistributor',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 费用科目
@@ -204,7 +203,7 @@ export default {
       url: '/mdm/mdCostType/exportCostType',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 品牌信息
@@ -226,7 +225,7 @@ export default {
       url: '/mdm/mdBrand/exportBrand',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 门店信息
@@ -248,7 +247,7 @@ export default {
       url: '/mdm/mdStore/exportStore',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 规则控制---检验规则
@@ -262,7 +261,10 @@ export default {
     return requestApi.request_get('/mdm/mdChannel/getMdChannelList', params)
   },
   queryYearAndMonth(params) {
-    return requestApi.request_get('/mdm/mdExceptionRule/queryYearAndMonth', params)
+    return requestApi.request_get(
+      '/mdm/mdExceptionRule/queryYearAndMonth',
+      params
+    )
   },
   saveNewExeRule(params) {
     return requestApi.request_get('/mdm/mdExceptionRule/saveNewExeRule', params)
@@ -290,7 +292,7 @@ export default {
       url: 'mdm/mdSupplier/exportSupplierEb',
       method: 'post',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   importSupplier(params) {
@@ -301,7 +303,7 @@ export default {
       url: 'mdm/mdSupplier/exportSupplier',
       method: 'post',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //下载模板
@@ -310,7 +312,7 @@ export default {
       url: 'mdm/mdSupplier/exportSupplierTemplate',
       method: 'post',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //客户组信息
@@ -341,20 +343,29 @@ export default {
   },
   //价促计算维护
   getPageSaleComputeKeep(params) {
-    return requestApi.request_get('/mdm/mdPricepromotionCalculationandmaintenance/getPageByDto', params)
+    return requestApi.request_get(
+      '/mdm/mdPricepromotionCalculationandmaintenance/getPageByDto',
+      params
+    )
   },
   DeleteSaleComputeKeep(params) {
-    return requestApi.request_delete('/mdm/mdPricepromotionCalculationandmaintenance/hasAuthlogicDeleteBatch', params)
+    return requestApi.request_delete(
+      '/mdm/mdPricepromotionCalculationandmaintenance/hasAuthlogicDeleteBatch',
+      params
+    )
   },
   importSaleComputeKeep(params) {
-    return requestApi.request_post('/mdm/mdPricepromotionCalculationandmaintenance/importData', params)
+    return requestApi.request_post(
+      '/mdm/mdPricepromotionCalculationandmaintenance/importData',
+      params
+    )
   },
   exportSaleComputeKeep(params) {
     return request({
       url: 'mdm/mdPricepromotionCalculationandmaintenance/exportToExcel',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
     // return requestApi.request_post('/mdm/mdPricepromotionCalculationandmaintenance/exportToExcel', params)
   },
@@ -363,29 +374,41 @@ export default {
       url: 'mdm/mdPricepromotionCalculationandmaintenance/templateDownload',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
     //return requestApi.request_get('/mdm/mdPricepromotionCalculationandmaintenance/templateDownload', params)
   },
   // NKAEC 导入测试
   importNkaRawData(params) {
-    return requestApi.request_post('/cityplan/importData/importNkaRawData', params)
+    return requestApi.request_post(
+      '/cityplan/importData/importNkaRawData',
+      params
+    )
   },
   importEcRawData(params) {
-    return requestApi.request_post('/cityplan/importData/importEcRawData', params)
+    return requestApi.request_post(
+      '/cityplan/importData/importEcRawData',
+      params
+    )
   },
   importNkaRawDataGuideline(params) {
-    return requestApi.request_post('/cityplan/importData/importNkaRawDataGuideline', params)
+    return requestApi.request_post(
+      '/cityplan/importData/importNkaRawDataGuideline',
+      params
+    )
   },
   importEcRawDataGuideline(params) {
-    return requestApi.request_post('/cityplan/importData/importEcRawDataGuideline', params)
+    return requestApi.request_post(
+      '/cityplan/importData/importEcRawDataGuideline',
+      params
+    )
   },
   // 机制池
   downloadExcelSyspool() {
     return request({
       url: '/mdm/mdCdmConfig/downloadExcel',
       method: 'get',
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   importExcelSyspool(params) {
@@ -393,7 +416,7 @@ export default {
       url: '/mdm/mdCdmConfig/importExcel',
       method: 'post',
       data: params,
-      headers: { 'Content-Type': 'multipart/form-data' }
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
   exportExcelSyspool(data) {
@@ -401,15 +424,21 @@ export default {
       url: '/mdm/mdCdmConfig/exportExcel',
       method: 'get',
       params: data,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 拆分规则
   getPageByRequestSplitRule(params) {
-    return requestApi.request_get('/mdm/mdSplitRuleConfig/getPageByRequest', params)
+    return requestApi.request_get(
+      '/mdm/mdSplitRuleConfig/getPageByRequest',
+      params
+    )
   },
   queryParentMinePackage(params) {
-    return requestApi.request_get('/mdm/mdSplitRuleConfig/queryParentMinePackage', params)
+    return requestApi.request_get(
+      '/mdm/mdSplitRuleConfig/queryParentMinePackage',
+      params
+    )
   },
   insertSplitRule(params) {
     return requestApi.request_post('/mdm/mdSplitRuleConfig/insertData', params)
@@ -425,21 +454,33 @@ export default {
       url: '/mdm/mdSplitRuleConfig/exportExcel',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // NKAEC
   getPageByDtoNKA(params) {
-    return requestApi.request_get('/cityplan/importData/nkaRawData/getPageByDto', params)
+    return requestApi.request_get(
+      '/cityplan/importData/nkaRawData/getPageByDto',
+      params
+    )
   },
   getPageByDtoEC(params) {
-    return requestApi.request_get('/cityplan/importData/ecRawData/getPageByDto', params)
+    return requestApi.request_get(
+      '/cityplan/importData/ecRawData/getPageByDto',
+      params
+    )
   },
   getPageByDtoNKAL(params) {
-    return requestApi.request_get('/cityplan/importData/nkaRawDataGuideline/getPageByDto', params)
+    return requestApi.request_get(
+      '/cityplan/importData/nkaRawDataGuideline/getPageByDto',
+      params
+    )
   },
   getPageByDtoECL(params) {
-    return requestApi.request_get('/cityplan/importData/ecRawDataGuideline/getPageByDto', params)
+    return requestApi.request_get(
+      '/cityplan/importData/ecRawDataGuideline/getPageByDto',
+      params
+    )
   },
   // 检验规则
   // 保存
@@ -452,7 +493,7 @@ export default {
       url: '/mdm/mdExceptionRule/excport',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // 销售架构
@@ -465,7 +506,7 @@ export default {
       url: '/mdm/mdCustomerDistributor/exportOrg',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // WBS-customer
@@ -487,7 +528,7 @@ export default {
       url: '/cityplan/mdCustomerWbs/exportToExcel',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // io
@@ -501,7 +542,10 @@ export default {
     return requestApi.request_put('/cityplan/mdOrganizationIo/update', params)
   },
   deleteIo(params) {
-    return requestApi.request_delete('/cityplan/mdOrganizationIo/delete', params)
+    return requestApi.request_delete(
+      '/cityplan/mdOrganizationIo/delete',
+      params
+    )
   },
   //导出
   exportIo(params) {
@@ -509,7 +553,7 @@ export default {
       url: '/cityplan/mdOrganizationIo/exportToExcel',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //监控管理
@@ -519,6 +563,17 @@ export default {
   //通知管理
   getNotification(params) {
     return requestApi.request_get('/mdm/mdEmailRecordRule/getPage', params)
+  },
+  // 模拟管理
+  getSimulation(params) {
+    return requestApi.request_get('/mdm/mdEmailTemplateConfig/getPage', params)
+  },
+  //编辑
+  editSimulation(data) {
+    return requestApi.request_post(
+      '/mdm/mdEmailTemplateConfig/updateConfig',
+      data
+    )
   },
   //确认发送
   importNormal(params) {
@@ -530,7 +585,10 @@ export default {
   },
   //接口名称下拉筛选
   getInterfaceList(params) {
-    return requestApi.request_get('/mdm/mdDataInterface/getInterfaceList', params)
+    return requestApi.request_get(
+      '/mdm/mdDataInterface/getInterfaceList',
+      params
+    )
   },
   //导出监控管理
   exportMdDataInterface(data) {
@@ -538,7 +596,7 @@ export default {
       url: '/mdm/mdDataInterface/exportMdData',
       method: 'post',
       data: data,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // WBSCodeEntity
@@ -560,7 +618,7 @@ export default {
       url: '/cityplan/mdEntityWbs/exportExcel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // WBSCodeYear
@@ -586,7 +644,7 @@ export default {
       url: '/cityplan/mdBrandWbs/exportExcel',
       method: 'post',
       data: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   // WBS Code - Department
@@ -608,7 +666,7 @@ export default {
       url: '/cityplan/mdDeptWbs/exportExcel',
       method: 'post',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
 
@@ -631,18 +689,21 @@ export default {
       url: '/mdm/mdContractItem/exportContractItem',
       method: 'post',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   importContractItem(params) {
-    return requestApi.request_post('/mdm/mdContractItem/importContractItem', params)
+    return requestApi.request_post(
+      '/mdm/mdContractItem/importContractItem',
+      params
+    )
   },
   downloadContractItemTemplate(params) {
     return request({
       url: '/mdm/mdContractItem/exportContractItemTemplate',
       method: 'post',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   //匹配关系
@@ -650,42 +711,56 @@ export default {
     return requestApi.request_get('/mdm/mdOrganizationSupplier/getPage', params)
   },
   getMatchingRelationMinePackage(params) {
-    return requestApi.request_get('/mdm/mdOrganizationSupplier/getMinePackage', params)
+    return requestApi.request_get(
+      '/mdm/mdOrganizationSupplier/getMinePackage',
+      params
+    )
   },
   getMatchingRelationZone(params) {
     return requestApi.request_get('/mdm/mdOrganizationSupplier/getZone', params)
   },
   getMatchingRelationRegion(params) {
-    return requestApi.request_get('/mdm/mdOrganizationSupplier/getRegion', params)
+    return requestApi.request_get(
+      '/mdm/mdOrganizationSupplier/getRegion',
+      params
+    )
   },
   getMatchingRelationSupplier(params) {
-    return requestApi.request_get('/mdm/mdOrganizationSupplier/getSupplier', params)
+    return requestApi.request_get(
+      '/mdm/mdOrganizationSupplier/getSupplier',
+      params
+    )
   },
   MatchingRelationDownloadExcel(params) {
     return request({
       url: '/mdm/mdOrganizationSupplier/downloadExcel',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
-
   },
   MatchingRelationImportExcel(params) {
-    return requestApi.request_post('/mdm/mdOrganizationSupplier/importExcel', params)
+    return requestApi.request_post(
+      '/mdm/mdOrganizationSupplier/importExcel',
+      params
+    )
   },
   MatchingRelationExportExcel(params) {
     return request({
       url: '/mdm/mdOrganizationSupplier/exportExcel',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   addMatchingRelation(params) {
     return requestApi.request_post('/mdm/mdOrganizationSupplier/insert', params)
   },
   deleteMatchingRelation(params) {
-    return requestApi.request_delete('/mdm/mdOrganizationSupplier/delete', params)
+    return requestApi.request_delete(
+      '/mdm/mdOrganizationSupplier/delete',
+      params
+    )
   },
   //package & 部门匹配关系
   getPagePdMatchingRelationship(params) {
@@ -696,50 +771,65 @@ export default {
     return requestApi.request_post('/mdm/mdDeptPackageMatching/addData', params)
   },
   updatePdMatchingRelationship(params) {
-    return requestApi.request_put('/mdm/mdDeptPackageMatching/updateData', params)
+    return requestApi.request_put(
+      '/mdm/mdDeptPackageMatching/updateData',
+      params
+    )
   },
   exportPdMatchingRelationship(params) {
     return request({
       url: '/mdm/mdDeptPackageMatching/exportData',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
   },
   deletePdMatchingRelationship(params) {
-    return requestApi.request_post('/mdm/mdDeptPackageMatching/deleteByIds', params)
+    return requestApi.request_post(
+      '/mdm/mdDeptPackageMatching/deleteByIds',
+      params
+    )
   },
   //新增时 获取相同的costType
   getExistingData(params) {
-    return requestApi.request_get('/mdm/mdDeptPackageMatching/getExistingData', params)
+    return requestApi.request_get(
+      '/mdm/mdDeptPackageMatching/getExistingData',
+      params
+    )
   },
   //新增时 获取部门id
   getDepartmentId(params) {
-    return requestApi.request_get('/mdm/mdDeptPackageMatching/getDepartmentId', params)
+    return requestApi.request_get(
+      '/mdm/mdDeptPackageMatching/getDepartmentId',
+      params
+    )
   },
   //Display Item
   getDisplayItem(params) {
-    return requestApi.request_get("/mdm/mdDisplayItem/getDisplayItemPage",params)
+    return requestApi.request_get(
+      '/mdm/mdDisplayItem/getDisplayItemPage',
+      params
+    )
   },
   addDisplayItem(params) {
-    return requestApi.request_post("/mdm/mdDisplayItem/saveData",params)
+    return requestApi.request_post('/mdm/mdDisplayItem/saveData', params)
   },
   updateDisplayItem(params) {
-    return requestApi.request_post("/mdm/mdDisplayItem/updateData",params)
+    return requestApi.request_post('/mdm/mdDisplayItem/updateData', params)
   },
   deleteDisplayItem(params) {
-    return requestApi.request_post("/mdm/mdDisplayItem/deleteByIds",params)
+    return requestApi.request_post('/mdm/mdDisplayItem/deleteByIds', params)
   },
   getCostItemList(params) {
-    return requestApi.request_get("/mdm/mdDisplayItem/getCostItemList",params)
+    return requestApi.request_get('/mdm/mdDisplayItem/getCostItemList', params)
   },
   exportDisplayItem(params) {
     return request({
       url: '/mdm/mdDisplayItem/exportData',
       method: 'get',
       params: params,
-      responseType: 'blob'
+      responseType: 'blob',
     })
-    return requestApi.request_get("/mdm/mdDisplayItem/exportData",params)
+    return requestApi.request_get('/mdm/mdDisplayItem/exportData', params)
   },
 }

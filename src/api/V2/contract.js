@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-28 15:43:24
- * @LastEditTime: 2022-05-30 10:06:27
+ * @LastEditTime: 2023-01-05 09:52:57
  */
 /*
  * @Description: V1 合同
@@ -31,6 +31,15 @@ export default {
   downApplyExcelTemplate(params) {
     return request({
       url: this.url+'/downApplyExcelTemplate',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //v2 KA 申请下载模板
+  downKARebateExcelTemplate(params) {
+    return request({
+      url: this.url+'/downKARebateExcelTemplate',
       method: 'get',
       params: params,
       responseType: 'blob'
@@ -88,6 +97,10 @@ export default {
   fileImport(params) {
     return requestApi.request_post(this.importUrl+'/fileImport', params)
   },
+  //KA V2申请、审批导入
+  fileKaRebateImport(params) {
+    return requestApi.request_post(this.importUrl+'/fileKaRebateImport', params)
+  },
   // V2申请、审批导入 
   formatCheck(params) {
     return requestApi.request_post(this.importUrl+'/formatCheck', params)
@@ -108,5 +121,18 @@ export default {
       params: params,
       responseType: 'blob'
     })
+  },
+  //KA 导出校验数据
+  downKaRebateCheckData(params){
+    return request({
+      url: this.importUrl+'/downKaRebateCheckData',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //获取合同数据
+  getContractData(params){
+    return requestApi.request_post('/cityplan/investCpContractVOneDetail/createCPT', params)
   }
 }

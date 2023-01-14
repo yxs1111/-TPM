@@ -103,12 +103,12 @@
                alt="">
           <span class="text">导出</span>
         </div>
-<!--        <div class="TpmButtonBG"-->
-<!--             @click="clearsmartplan(filterObj)">-->
-<!--          <img src="../../../assets/images/delete_l.png"-->
-<!--               alt="" />-->
-<!--          <span class="text">清除数据</span>-->
-<!--        </div>-->
+        <div class="TpmButtonBG"
+             @click="clearsmartplan(filterObj)">
+          <img src="../../../assets/images/delete_l.png"
+               alt="" />
+          <span class="text">清除数据</span>
+        </div>
       </div>
     </div>
     <el-table :data="tableData"
@@ -301,7 +301,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeightHaveTab,
+  getHeightHaveTab1,
   messageObj,
   downloadFile,
   formatThousandNum,
@@ -334,7 +334,7 @@ export default {
       zoneArr: [],
       regionArr: [],
       BrandList: [],
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab1(),
     }
   },
   computed: {},
@@ -348,7 +348,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightHaveTab1()
       })()
     }
     this.getChannel()

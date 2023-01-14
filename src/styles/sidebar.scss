@@ -1,7 +1,7 @@
 #app {
   .main-container {
     width: calc(100% - 280px);
-
+    height: 100%;
     // min-height: 100%;
     // overflow-y: scroll;
     transition: width 0.28s;
@@ -12,8 +12,8 @@
     transition: width 0.28s;
     width: calc(100% - 54px) !important;
   }
-  
-  .el-submenu__title{
+
+  .el-submenu__title {
     font-size: 14px !important;
     font-family: Source Han Sans CN Medium;
   }
@@ -22,8 +22,6 @@
     color: #909399;
     transform: rotateZ(270deg);
   }
-
-
 
   .sidebar-container {
     transition: width 0.28s;
@@ -52,8 +50,7 @@
 
     // reset element-ui css
     .horizontal-collapse-transition {
-      transition: 0s width ease-in-out, 0s padding-left ease-in-out,
-        0s padding-right ease-in-out;
+      transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
     }
 
     .scrollbar-wrapper {
@@ -88,12 +85,6 @@
       margin-right: 6px;
     }
 
-    .el-menu {
-      border: none;
-      height: 100%;
-      width: 100% !important;
-    }
-
     // menu hover
     .submenu-title-noDropdown,
     .el-submenu__title {
@@ -106,7 +97,7 @@
     .is-active > .el-submenu__title {
       color: $subMenuActiveText !important;
       background: #fff !important;
-      & i{
+      & i {
         transform: rotateZ(0deg);
         color: $subMenuActiveText !important;
       }

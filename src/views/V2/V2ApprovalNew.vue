@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:16:21
+ * @LastEditTime: 2023-01-11 17:26:02
 -->
 <template>
   <div class="tabViewsWrap">
@@ -15,7 +15,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: calc(100vh - 0px)">
+    <div>
       <router-view />
     </div>
   </div>
@@ -23,7 +23,7 @@
 
 <script>
 import selectAPI from '@/api/selectCommon/selectCommon.js'
-import {sortList} from '@/utils/index'
+import { sortList } from '@/utils/index'
 export default {
   data() {
     return {
@@ -107,7 +107,7 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIH rebate',
+              name: 'HI Hrebate',
               path: '/costManagement/V2/V2Approval/V2HIHRebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),
@@ -117,7 +117,7 @@ export default {
             },
             {
               name: 'KA rebate',
-              path: '/costManagement/V2/V2Approval/V2KARebate',
+              path: '/costManagement/V2/V2Approval/V2KARebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_KA.png'),
                 light: require('@/assets/images/tab/tab_KA_l.png'),
@@ -188,6 +188,15 @@ export default {
               minePackageName: 'Display',
             },
             {
+              name: 'MMC',
+              path: '/costManagement/V2/V2Approval/V2ApplyrovalMMC',
+              img: {
+                dark: require('@/assets/images/tab/UnStraightGiving.png'),
+                light: require('@/assets/images/tab/UnStraightGiving_l.png'),
+              },
+              minePackageName: 'Mama class',
+            },
+            {
               name: 'Premium',
               path: '/costManagement/V2/V2Approval/V2PremiumApproval',
               img: {
@@ -214,15 +223,60 @@ export default {
               },
               minePackageName: 'Free Goods-Win2',
             },
+            {
+              name: 'DM',
+              path: '/costManagement/V2/V2Approval/V2DMApproval',
+              img: {
+                dark: require('@/assets/images/tab/FreeGoodsTin.png'),
+                light: require('@/assets/images/tab/FreeGoodsTin_l.png'),
+              },
+              minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/costManagement/V2/V2Approval/V2TransportApproval',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              minePackageName: 'Transport Costs',
+            },
+            // {
+            //   name: 'All-RKA/RTM',
+            //   path: '/costManagement/V2/V2Approval/V2AllrkartmApproval',
+            //   img: {
+            //     dark: require('@/assets/images/tab/StraightGiving.png'),
+            //     light: require('@/assets/images/tab/StraightGiving_l.png'),
+            //   },
+            //   minePackageName: 'Allrkartm',
+            // },
+            // {
+            //   name: 'Others-EC/NKA',
+            //   path: '/costManagement/V2/V2Approval/V2OthersApproval',
+            //   img: {
+            //     dark: require('@/assets/images/tab/StraightGiving.png'),
+            //     light: require('@/assets/images/tab/StraightGiving_l.png'),
+            //   },
+            //   minePackageName: 'Others',
+            // },
+            // {
+            //   name: 'FG-RKA/RTM',
+            //   path: '/costManagement/V2/V2Approval/V2OthersFGApproval',
+            //   img: {
+            //     dark: require('@/assets/images/tab/StraightGiving.png'),
+            //     light: require('@/assets/images/tab/StraightGiving_l.png'),
+            //   },
+            //   minePackageName: 'OthersFG',
+            // },
           ]
-          let TabList=[]
-          sortList.forEach(item=>{
-            let findIndex=this.routerList.findIndex(routerItem=>routerItem.minePackageName==item)
-            if(findIndex!=-1) {
+          let TabList = []
+          sortList.forEach((item) => {
+            let findIndex = this.routerList.findIndex((routerItem) => routerItem.minePackageName == item)
+            if (findIndex != -1) {
               TabList.push(this.routerList[findIndex])
             }
           })
-          this.routerList=TabList
+          this.routerList = TabList
           if (sessionStorage.getItem('currentIndex')) {
             this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
           } else {
@@ -231,10 +285,7 @@ export default {
           if (!this.$route.query.minePackageName) {
           } else {
             // 我的待办跳转
-            this.currentIndex = this.routerList.findIndex(
-              (item) =>
-                item.minePackageName == this.$route.query.minePackageName
-            )
+            this.currentIndex = this.routerList.findIndex((item) => item.minePackageName == this.$route.query.minePackageName)
             sessionStorage.setItem('currentIndex', this.currentIndex)
           }
           this.tabInit()
@@ -291,7 +342,7 @@ export default {
   height: 38px;
   background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 10px;
+  margin-right: 0px;
   border: 1px solid #e8e8ea;
   font-size: 14px;
   color: #999;

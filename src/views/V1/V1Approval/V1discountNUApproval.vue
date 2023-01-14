@@ -68,7 +68,7 @@ import {
   getDefaultPermissions,
   parseTime,
   getTextMap,
-  getHeightHaveTab,
+  getHeightHaveTab1,
   messageObj,
   formatThousandNum
 } from '@/utils'
@@ -102,7 +102,7 @@ export default {
       submitBtn: 1,
       btnStatus: true,
       usernameLocal: '',
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab1(),
     }
   },
   computed: {},
@@ -115,7 +115,7 @@ export default {
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeightHaveTab()
+        this.maxheight = getHeightHaveTab1()
       })()
     }
     this.usernameLocal = localStorage.getItem('usernameLocal')

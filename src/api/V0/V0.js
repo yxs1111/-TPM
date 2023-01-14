@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-11-18 15:04:46
- * @LastEditTime: 2022-09-09 10:37:10
+ * @LastEditTime: 2022-11-21 17:03:51
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -50,6 +50,13 @@ export default {
       params
     )
   },
+  // 获取MMC妈妈班 数据
+  getMMCData(data) {
+    return requestApi.request_post(
+      '/cityplan/investCpMamaclassVOneDetail/createByCPT',
+      data
+    )
+  },
   //获取ListingFee数据
   getListingFee(params) {
     return requestApi.request_post(
@@ -64,6 +71,13 @@ export default {
       params
     )
   },
+  //获取RoadShow数据
+  getRoadShow(params) {
+    return requestApi.request_post(
+      '/cityplan/investCpRoadshowVOneDetail/create',
+      params
+    )
+  },
   //获取ecm数据 investCpEcmVOneDetail/create
   getECMcreate(params) {
     return requestApi.request_post(
@@ -71,10 +85,31 @@ export default {
       params
     )
   },
+  //获取dm数据 investCpEcmVOneDetail/create
+  getDMcreate(params) {
+    return requestApi.request_post(
+      '/cityplan/investCpDmVOneDetail/create',
+      params
+    )
+  },
+  //获取Transport数据 investCpEcmVOneDetail/getCptData
+  getTransportCreate(params) {
+    return requestApi.request_get(
+      '/cityplan/investCpTransportVOneDetail/getCptData',
+      params
+    )
+  },
   //获取Free Goods数据 investCpFreegoodsVOneDetail/createByCPT
   getFreeGoods(params) {
     return requestApi.request_post(
       '/cityplan/investCpFreegoodsVOneDetail/createByCPT',
+      params
+    )
+  },
+  //获取Free Goods数据 investCpVOneEFmc/createVOneByCpt
+  getFMC(params) {
+    return requestApi.request_get(
+      '/cityplan/investCpVOneEFmc/createVOneByCpt',
       params
     )
   },

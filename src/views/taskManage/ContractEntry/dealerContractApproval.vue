@@ -1,51 +1,18 @@
 <!--
- * @Description:
- * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-08-23 15:25:11
+ * @Description: 经销商合同审批 Tab
+ * @Date: 2021-11-03 14:17:00
+ * @LastEditTime: 2023-01-11 21:29:50
 -->
 <template>
-  <div class="MainContent">
-    <div class="SelectBarWrap">
-      <div class="SelectBar">
-        <div class="Selectli">
-          <span class="SelectliTitle">客户名称:</span>
-          <el-select v-model="filterObj.customerMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerMdmCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">经销商名称:</span>
-          <el-select v-model="filterObj.distributorMdmCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in distributorArr" :key="index" :label="item.distributorName" :value="item.distributorMdmCode" />
-          </el-select>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">合同期间:</span>
-          <el-date-picker v-model="filterObj.contractDate" class="select_date" type="daterange" value-format="yyyy-MM-dd" format="yyyy-MM-dd" range-separator="至"
-            start-placeholder="开始日期" end-placeholder="结束日期">
-          </el-date-picker>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">系统生效时间:</span>
-          <el-date-picker v-model="filterObj.systemDate" type="monthrange" value-format="yyyyMM" format="yyyyMM" range-separator="至" start-placeholder="开始月份"
-            end-placeholder="结束月份">
-          </el-date-picker>
-        </div>
-        <div class="Selectli">
-          <span class="SelectliTitle">合同状态:</span>
-          <el-select v-model="filterObj.state" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in contractList" :key="index" :label="item" :value="index+1" />
-          </el-select>
-        </div>
-      </div>
-      <div class="OpertionBar">
-        <el-button type="primary" class="TpmButtonBG" @click="search" v-permission="permissions['get']">查询</el-button>
-        <div class="TpmButtonBG" @click="exportData" v-permission="permissions['export']">
-          <img src="@/assets/images/export.png" alt="">
-          <span class="text">导出</span>
-        </div>
-      </div>
+  <div class="tabViewsWrap">
+    <div class="tabViews" ref="tab">
+      <router-link v-for="(item, index) in routerList" :key="index" :to="item.path" tag="div" class="tabli" :class="index === currentIndex ? 'currentTabli' : ''" @click.native="changeTab(index)">
+        <img v-if="index != currentIndex" :src="item.img.light" alt="" />
+        <img v-if="index == currentIndex" :src="item.img.dark" alt="" />
+        <span class="tabTitle">{{ item.name }}</span>
+      </router-link>
     </div>
+<<<<<<< HEAD
     <div class="TpmButtonBGWrap">
       <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">通过</el-button>
       <el-button type="primary" class="TpmButtonBG" @click="reject" v-permission="permissions['rejected']">驳回</el-button>
@@ -165,573 +132,138 @@
     <div class="TpmPaginationWrap">
       <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+=======
+    <div style="margin-top: -5px">
+      <router-view />
+>>>>>>> dev
     </div>
   </div>
 </template>
 
 <script>
-import API from '@/api/ContractEntry/customerApproval'
-import {
-  getDefaultPermissions,
-  getTextMap,
-  parseTime,
-  getContractEntry,
-  contractList,
-  formatThousandNum,
-  downloadFile,
-} from '@/utils'
-import elDragDialog from '@/directive/el-drag-dialog'
+import { getDefaultPermissions, parseTime, getTextMap } from '@/utils'
 import permission from '@/directive/permission'
+import elDragDialog from '@/directive/el-drag-dialog'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
-  name: 'dealerContractEntry',
+  directives: { elDragDialog, permission },
+  name: 'CustomerContractEntry',
   data() {
     return {
-      total: 0,
-      pageSize: 100,
-      pageNum: 1,
-      filterObj: {
-        contractDate: [],
-        contractBeginDate: '',
-        contractEndDate: '',
-        systemDate: [],
-        effectiveBeginDate: '',
-        effectiveEndDate: '',
-        customerMdmCode: '',
-        distributorMdmCode: '',
-        state: '',
-      },
-      maxheight: getContractEntry(),
-      tableData: [],
-      customerArr: [],
-      distributorArr: [],
-      contractList: ['待审批', '被拒绝', '通过', '终止', '过期'],
-      checkArr: [], //选中的数据
-      tableKey: 0,
-      //取消编辑 --》数据重置（不保存）
-      tempObj: {
-        rowIndex: 0,
-        tempInfo: null,
-      },
-      ccId: null,
-      permissions: getDefaultPermissions(),
-      mainIdList:[],
-      usernameLocal: "",
+      routerList: [
+        {
+          name: '明细审批',
+          path: '/contractManagement/dealer/dealerContractApproval/dealerContractTermApproval',
+          img: {
+            dark: require('@/assets/images/tab/Term.png'),
+            light: require('@/assets/images/tab/Term_l.png'),
+          },
+        },
+        {
+          name: '变更审批',
+          path: '/contractManagement/dealer/dealerContractApproval/dealerContractChangeApproval',
+          img: {
+            dark: require('@/assets/images/tab/Change.png'),
+            light: require('@/assets/images/tab/Change_l.png'),
+          },
+        },
+      ],
+      currentIndex: 0,
+      startX: 0,
+      endX: 0,
+      isCanMove: 0,
+      setInterval: null,
     }
   },
+  computed: {},
   mounted() {
-    window.onresize = () => {
-      return (() => {
-        this.maxheight = window.innerHeight - 420
-      })()
+    if (sessionStorage.getItem('currentIndex')) {
+      this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+      this.$router.push(this.routerList[this.currentIndex].path)
+    } else {
+      this.currentIndex = 0
     }
-    this.usernameLocal = localStorage.getItem('usernameLocal')
-    // this.getTableData()
-    this.getCustomerList()
-    this.getDistributorList()
   },
-  directives: { elDragDialog, permission },
-  watch: {
-    'filterObj.contractDate'(value) {
-      if (value) {
-        this.filterObj.contractBeginDate = value[0]
-        this.filterObj.contractEndDate = value[1]
-      } else {
-        this.filterObj.contractBeginDate = ''
-        this.filterObj.contractEndDate = ''
-      }
-    },
-    'filterObj.systemDate'(value) {
-      if (value) {
-        this.filterObj.effectiveBeginDate = value[0]
-        this.filterObj.effectiveEndDate = value[1]
-      } else {
-        this.filterObj.effectiveBeginDate = ''
-        this.filterObj.effectiveEndDate = ''
-      }
-    },
-    'filterObj.customerMdmCode'(value) {
-      this.filterObj.distributorMdmCode = ''
-      this.getDistributorList()
-    },
+  activated() {
+    if (sessionStorage.getItem('currentIndex')) {
+      this.currentIndex = Number(sessionStorage.getItem('currentIndex'))
+      this.$router.push(this.routerList[this.currentIndex].path)
+    } else {
+      this.currentIndex = 0
+    }
   },
   methods: {
-    //获取表格数据
-    getTableData() {
-      this.mainIdList=[]
-      API.getApprovePageDealer({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        distributorMdmCode: this.filterObj.distributorMdmCode,
-        contractState: this.filterObj.state,
-      }).then((response) => {
-        let list = response.data.records
-        list.forEach((item) => {
-          item.isEditor = 0
-          item.isCanSubmit = 0
-          item.name=''
-          item.contractDate = [item.contractBeginDate, item.contractEndDate]
-          item.systemDate = [item.effectiveBeginDate, item.effectiveEndDate]
-          this.mainIdList.push(item.mainId)
-        })
-        this.tableData = [...list]
-        this.pageNum = response.data.pageNum
-        this.pageSize = response.data.pageSize
-        this.total = response.data.total
-        this.ccId = this.tableData[0].ccId
-        this.tempObj.tempInfo = null
-        if(list.length) {
-          this.infoByMainId()
-        }
-      })
-    },
-    infoByMainId() {
-      selectAPI
-        .contractInfoByMainId(
-          this.mainIdList,
-        )
-        .then((res) => {
-          let activityList=res.data
-          if (res.code === 1000) {
-            this.tableData.forEach(item=>{
-              activityList.forEach(mItem=>{
-                if(mItem.id==item.mainId) {
-                  item.name=mItem.activityName
-                  let isFlag=mItem.assignee.indexOf(this.usernameLocal) != -1?1:0
-                  item.isCanSubmit=isFlag
-                }
-              })
-            })
-          }
-        })
-    },
-    // 客户
-    getCustomerList() {
-      selectAPI.queryCustomerList({}).then((res) => {
-        if (res.code === 1000) {
-          this.customerArr = res.data
-        }
-      })
-    },
-    getDistributorList() {
-      selectAPI
-        .queryDistributorList({
-          customerMdmCode: this.filterObj.customerMdmCode,
-        })
-        .then((res) => {
-          if (res.code === 1000) {
-            this.distributorArr = res.data
-          }
-        })
-    },
-    //经销商审批通过
-    submit() {
-      this.$confirm('此操作将审批通过, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          this.handleFunction(1)
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消',
-          })
-        })
-    },
-    //经销商审批通过
-    reject() {
-      this.$confirm('此操作将驳回审批, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-      })
-        .then(() => {
-          this.handleFunction(0)
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消',
-          })
-        })
-    },
-    handleFunction(flag) {
-      let obj = {
-        opinion: flag ? 'agree' : 'reject',
-        approveDetail: {},
-      }
-      //判断当前数据 所属角色审批
-      this.checkArr.forEach((item) => {
-        if (item.name.indexOf('Package Owner') != -1) {
-          obj.approveDetail[item.id] = item.poApprovalComments
-        } else if (item.name.indexOf('Finance') != -1) {
-          obj.approveDetail[item.id] = item.finApprovalComments
-        }
-      })
-      console.log(obj)
-      API.approveDistContract(obj).then((res) => {
-        if (res.code === 1000) {
-          this.getTableData()
-          if (flag) {
-            this.$message.success('审批成功！')
-          } else {
-            this.$message.success('驳回成功！')
-          }
-        }
-      })
-    },
-    //编辑行数据
-    editorRow(index, row) {
-      if (row.contractState !== '1' || !row.isCanSubmit) {
-        this.$message.info('该经销商不能进行编辑')
-        return
-      }
-      if (this.tempObj.tempInfo) {
-        this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
-      }
-      this.tempObj.rowIndex = index
-      this.tempObj.tempInfo = { ...this.tableData[index] }
-      //全部的编辑状态置空 -->保证当前只有一个处于编辑状态
-      this.tableData.forEach((item) => (item.isEditor = 0))
-      this.tableData[index].isEditor = 1
-      this.$forceUpdate()
-    },
-    CancelEditorRow(index) {
-      // this.tableData.forEach((item) => (item.isEditor = 0))
-      this.tableData[index].isEditor = 0
-      this.tableData[index] = this.tempObj.tempInfo
-    },
-    //保存 该行
-    saveRow(row) {
-      let obj = {}
-      if (row.name.indexOf('Package Owner') != -1) {
-        obj[row.id] = row.poApprovalComments
-      } else if (row.name.indexOf('Finance') != -1) {
-        obj[row.id] = row.finApprovalComments
-      }
-      API.saveDistApproveComments(obj).then((res) => {
-        if (res.code === 1000) {
-          this.getTableData()
-          if (res.data) {
-            this.$message.success('修改成功')
-          } else {
-            this.$message.info(`${res.message}`)
-          }
-        }
-      })
-    },
-    search() {
-      this.pageNum = 1
-      this.getTableData()
-    },
-    //导出数据
-    async exportData() {
-     await API.exportApproveDistributorContractDetail({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议明细-by KA-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-     await API.exportApproveDistributorContractInfo({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议明细-list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-     await API.exportDistApprovePage({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议审批 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
-      })
-    },
-    //打开条款明细弹窗
-    showTermDetailDialog({ ccId }) {
-      // sessionStorage.setItem('ccId',row.ccId)
-      this.$router.push({
-        name: 'dealerTermView',
-        query: {
-          ccId,
-        },
-      })
-    },
-    checkSelectable(row) {
-      return row.contractState === '1'&&row.isCanSubmit === 1
-    },
-    // 每页显示页面数变更
-    handleSizeChange(size) {
-      this.pageSize = size
-      this.getTableData()
-    },
-    // 当前页变更
-    handleCurrentChange(num) {
-      this.pageNum = num
-      this.getTableData()
-    },
-    // 行样式
-    tableRowClassName({ row, rowIndex }) {
-      if ((rowIndex + 1) % 2 === 0) {
-        return 'even-row'
-      } else {
-        return 'odd-row'
-      }
-    },
-    HeadTable() {
-      return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-    handleSelectionChange(val) {
-      this.checkArr = val
-    },
-    //格式化--千位分隔符、两位小数
-    FormateNum(num) {
-      return formatThousandNum(num)
-    },
-    //弹窗表格样式
-    tableRowClassNameDialog({ row, rowIndex }) {
-      if (row.name.indexOf('Total') === 0) {
-        return 'contract_firstRow'
-      }
-      if (row.name.indexOf('total') != -1) {
-        return 'first-row'
-      }
+    // tabview 切换
+    changeTab(index) {
+      this.currentIndex = index
+      sessionStorage.removeItem('filterObj')
+      sessionStorage.setItem('currentIndex', index)
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.MainContent {
-  height: 100% !important;
-  background-color: #fff;
-  padding: 20px;
-  overflow-y: auto;
-}
-.seeActivity {
-  height: 32px;
-  background: #d7e8f2;
-  border-radius: 6px;
-  font-size: 16px;
-  color: #4192d3;
-  font-weight: 600;
-  line-height: 32px;
-  cursor: pointer;
-}
-.operation {
+.tabViews {
+  width: 100%;
+  height: 38px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4192d3;
-  font-size: 16px;
-  cursor: pointer;
-  .submit_icon {
-    font-size: 26px;
-  }
-}
-.svgIcon {
-  width: 20px;
-  height: 20px;
-}
-.contractStatusWrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.timeOutWrap {
-  margin-left: 10px;
-  cursor: pointer;
-}
-//自定义el-input
-.my-el-input {
-  width: 180px !important;
-  border-radius: 5px;
-  .el-input__inner {
-    height: 37px;
-    width: 180px !important;
-  }
-  .el-input--suffix {
-    width: 180px !important;
-  }
-}
-.PopoverContent {
-  .PopoverContentTop {
+  margin-left: 25px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  .tabli {
     display: flex;
     align-items: center;
-    font-size: 16px;
-    color: #333;
+    padding: 0 52px;
+    height: 38px;
+    background: #4192d3;
+    border-radius: 6px 6px 0px 0px;
+    margin-right: 20px;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    line-height: 38px;
+    cursor: pointer;
+    img {
+      width: 17px;
+      height: 17px;
+      margin-right: 10px;
+    }
+    .tabTitle {
+      white-space: nowrap;
+      // width: 50px;
+      // padding: 30px 0;
+    }
+  }
+  .currentTabli {
+    background-color: #fff;
+    color: #666;
     font-weight: 600;
-    justify-content: space-between;
   }
-  .PopoverContentOption {
-    .PopoverContentOptionItem {
-      display: flex;
-      align-items: center;
-      margin: 10px 0;
-      .PopoverContentOptionItemText {
-        font-size: 14px;
-        color: #666;
-        margin-right: 10px;
-      }
-    }
-  }
-  .PopoverContentFoot {
-    margin-top: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    .TpmButtonBG {
-      min-width: 66px;
-      width: 66px;
-      height: 38px;
-      line-height: 38px;
-      text-align: center;
-      background: #4192d3;
-      border: 1px solid #e7e7e7;
-      border-radius: 5px;
-      padding: 0 10px;
-      cursor: pointer;
-      background-color: #4192d3 !important;
-      color: #fff;
-    }
-    .cancelButton {
-      width: 66px;
-      background-color: #fff !important;
-      color: #4192d3;
-      border: 1px solid #4192d3;
-      text-align: center;
-    }
-  }
-}
-.dialogContent {
-  .termInfo {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    .termItem {
-      font-size: 14px;
-      color: #666;
-      margin-right: 20px;
-    }
-    .selectBar {
-      margin-right: 10px;
-    }
-    .selectCustomer {
-      margin-right: 10px;
-    }
-  }
-  .termTableWrap {
-    width: 100%;
-    // border: 1px solid #e7e7e7;
-    .addNewRowWrap {
-      width: 100%;
-      height: 50px;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: #fff;
-      .addNewRow {
-        width: 100%;
-        height: 30px;
-        line-height: 30px;
-        text-align: center;
-        background-color: #f4f9ff;
-        color: #666;
-        cursor: pointer;
-        .addNewRowText {
-          margin-left: 10px;
-          color: #333;
-        }
-      }
-    }
-    .space {
-      width: 100%;
-      height: 20px;
-    }
-    .TableWrap_dealer {
-      width: 100%;
-      border: 1px solid #e7e7e7;
-    }
-  }
-  .dealersWrap {
-    width: 100%;
-    display: flex;
-    .dealersTableWrap {
-      display: flex;
-      overflow-x: scroll;
-    }
-  }
-  .dealerItem {
-    // display: flex;
-    .topInfo {
-      font-size: 16px;
-      color: #4192d3;
-      font-weight: 600;
-      .tax {
-        margin-left: 20px;
-      }
-    }
-  }
-  // /*滚动条的宽度*/
-  // ::-webkit-scrollbar {
-  //   width: 16px;
-  //   height: 16px;
-  // }
-  // /* //滚动条的滑块 */
-  // ::-webkit-scrollbar-thumb {
-  //   background: #b9b9b9;
-  //   border-radius: 8px;
-  // }
-}
-.line {
-  height: 80%;
-  width: 4px;
-  background-color: #4192d3;
 }
 </style>
-<style lang="less">
-.contract_firstRow {
-  background-color: #4192d3 !important;
-  color: #fff;
-  font-size: 14px;
+<style lang="scss">
+//   .tabViews ::-webkit-scrollbar {
+//   width: 6px !important;
+//   height: 6px!important;
+// }
+// /* //滚动条的滑块 */
+// .tabViews ::-webkit-scrollbar-thumb {
+//   background-color: #a1a3a9!important;
+//   border-radius: 3px!important;
+// }
+.tabViews::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+  -webkit-appearance: none;
 }
-.hover-row {
-  color: #666 !important;
-  background-color: #f3f7f8;
+.tabViews::-webkit-scrollbar:vertical {
+  width: 11px;
 }
-.hover-row .filstColumn {
-  color: #666;
-}
-.MainContent .select_date {
-  width: 240px !important;
-  .el-date-editor.el-input,
-  .el-date-editor.el-input__inner {
-    width: 240px !important;
-  }
+.tabViews::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: 2px solid white;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

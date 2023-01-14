@@ -1,7 +1,7 @@
 /*
  * @Description: 
  * @Date: 2022-04-21 09:55:35
- * @LastEditTime: 2022-07-19 14:08:37
+ * @LastEditTime: 2023-01-10 14:57:28
  */
 /*
  * @Description: 客户合同录入
@@ -14,6 +14,10 @@ import request from '@/utils/request'
 export default {
   url: '/cityplan/customerContract',
   distUrl: '/cityplan/distributorContract',
+  // 合同录入-渠道
+  getCustomerContractByChannel(data) {
+    return requestApi.request_post('/cityplan/customerContract/customerContractByChannel ', data)
+  },
   //客户合同审批--查询列表
   getApproveList(params) {
     return requestApi.request_get(this.url+'/pageApproveTaskList', params)
@@ -21,11 +25,36 @@ export default {
   getApprovePageCustomer(params) {
     return requestApi.request_get(this.url+'/getApprovePage', params)
   },
+  //客户合同审批变更审批 获取 列表
+  getChangeApproveList(params) {
+    return requestApi.request_get('/cityplan/contractPeriodChange/getCustomerPageList', params)
+  },
+  //客户合同审批变更审批--导出
+  exportCustomerContract(params) {
+    return request({
+      url: '/cityplan/contractPeriodChange/exportCustomerContract',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //客户合同审批变更审批--审批
+  approveCustomerContractChange(params) {
+    return requestApi.request_post('/cityplan/contractPeriodChange/approve', params)
+  },
   getApprovePageDealer(params) {
     return requestApi.request_get(this.distUrl+'/getApprovePage', params)
   },
+  //经销商 合同变更审批 获取 列表
+  getDistChangeApproveList(params) {
+    return requestApi.request_get('/cityplan/contractPeriodChange/getDistributorPageList', params)
+  },
   saveApproveComments(params) {
     return requestApi.request_post(this.url+'/saveApproveComments', params)
+  },
+  //保存变更审批意见
+  saveChangeApproveComments(params) {
+    return requestApi.request_post('/cityplan/contractPeriodChange/saveApproveComments', params)
   },
   saveDistApproveComments(params) {
     return requestApi.request_post(this.distUrl+'/saveApproveComments', params)
@@ -92,6 +121,15 @@ export default {
   exportApproveDistributorContractInfo(params) {
     return request({
       url: this.distUrl+'/exportApproveDistributorContractInfo',
+      method: 'get',
+      params: params,
+      responseType: 'blob'
+    })
+  },
+  //经销商 变更审批-导出
+  exportDistributorContract(params) {
+    return request({
+      url: '/cityplan/contractPeriodChange/exportDistributorContract',
       method: 'get',
       params: params,
       responseType: 'blob'

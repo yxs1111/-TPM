@@ -1,7 +1,11 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2022-04-28 14:44:18
+<<<<<<< HEAD
  * @LastEditTime: 2022-10-13 14:03:48
+=======
+ * @LastEditTime: 2023-01-06 10:49:43
+>>>>>>> dev
 -->
 <template>
   <div class="MainContent">
@@ -34,6 +38,7 @@
         </div>
       </div>
       <div class="OpertionBar">
+        <el-button type="primary" class="TpmButtonBG" @click="getContractData">获取合同数据</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
@@ -51,8 +56,8 @@
         <span class="text">提交</span>
       </div>
       <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-          <span class="tipStar">*</span>
-          注意事项：若未获取到LE销量，不能办理
+        <span class="tipStar">*</span>
+        注意事项：若未获取到 In-market 销量，不能办理
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -124,6 +129,14 @@
           <div>
             {{ scope.row.customerName }}
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
+        <template v-slot:header>
+          <div>大区<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+            {{ scope.row.regionName }}
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" >
@@ -367,7 +380,7 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统判定" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
@@ -380,14 +393,15 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column width="400" align="center" prop="judgmentContent" label="验证信息" />
-            <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed />
+            <el-table-column width="400" align="center" prop="judgmentContent" fixed label="系统判定内容" />
+            <el-table-column align="center" width="460" prop="cpId" label="CPID"/>
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
             <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
             <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
+            <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区" />
             <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" />
             <el-table-column width="220" align="right" prop="planRatio" label="V1计划合同点数(%)(kA+Contract Item)">
               <template v-slot:header>
@@ -590,6 +604,17 @@ export default {
     this.getContractItemList()
   },
   methods: {
+    //获取合同数据
+    getContractData() {
+      API.getContractData({
+        channelCode: this.filterObj.channelCode,
+        yearAndMonth: this.filterObj.month,
+      }).then(res => {
+        if (res.code == 1000) {
+          this.$message.success('获取合同数据成功')
+        }
+      })
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []

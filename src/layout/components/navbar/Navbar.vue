@@ -32,10 +32,10 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-        <div class="notice-box">
-          <notice class="right-menu-item" />
-        </div>
-        <div style="clear: both"></div>
+<!--        <div class="notice-box">-->
+<!--          <notice class="right-menu-item" />-->
+<!--        </div>-->
+<!--        <div style="clear: both"></div>-->
       </div>
     </div>
     <!-- 信息 -->
@@ -104,15 +104,16 @@
   color: #586aba;
 }
 .navbar-first {
-  background-color: #4192d3;
+  border-bottom: 1px solid #b2afaf;
+  background-color: #fff;
   background-size: 100% 100%;
 }
 .navbar-second {
-  background-color: #4192d3;
+  background-color: #fff;
   background-size: 100% 100%;
 }
 .navbar {
-  height: 80px;
+  height: 60px;
   overflow: hidden;
   position: relative;
   top: 0;
@@ -153,6 +154,7 @@
   }
 
   .breadcrumb-container {
+    width: 222px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -160,7 +162,7 @@
     font-size: 20px;
     font-weight: bold;
     color: #105aae;
-    height: 80px;
+    height: 60px;
     line-height: 80px;
     padding-left: 36px;
   }
@@ -196,7 +198,7 @@
       float: left;
 
       .avatar-wrapper {
-        margin-top: 5px;
+        margin-top: -3px;
         position: relative;
         float: left;
         .user-avatar {
@@ -215,7 +217,7 @@
           margin-right: 10px;
           font-size: 16px;
           margin-left: 10px;
-          color: #fff;
+          color: #000;
         }
 
         .el-icon-caret-bottom {
@@ -229,7 +231,7 @@
           float: left;
           width: 1px;
           height: 30px;
-          background-color: #f4f8ff;
+          background-color: #000;
           border-radius: 1px;
           margin-left: 10px;
           margin-top: 20px;

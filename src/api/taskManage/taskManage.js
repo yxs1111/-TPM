@@ -12,6 +12,10 @@ export default {
   getList(params) {
     return requestApi.request_get(this.url+'/pageList', params)
   },
+  //获取合同管理列表
+  getContract(params) {
+    return requestApi.request_get(this.url+'/getTaskPageContract', params)
+  },
   //获取流程跟踪
   getInvestCpVList(params) {
     return requestApi.request_get('/cityplan/investCpV/getPage', params)
@@ -27,6 +31,10 @@ export default {
   //我的待办--合同管理
   getContractListTodo(params) {
     return requestApi.request_get('/cityplan/myHandle/getTaskPageContract', params)
+  },
+  //我的帮助
+  getNeedHelp(params) {
+    return requestApi.request_get('/mdm/mdUserDocument/getAllFile', params)
   },
   //合同待办导出
   contractExport(params) {

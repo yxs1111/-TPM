@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-09-16 09:36:50
- * @LastEditTime: 2022-09-14 16:15:33
+ * @LastEditTime: 2022-11-28 17:39:57
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -199,13 +199,48 @@ export default function () {
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Apply/V1FreeGoodsWin2',
               code: 'price_nka_v1_apply',
               name: 'V1FreeGoodsWin2',
               component: () => import('@/views/V1/V1Apply/V1FreeGoodsWin2.vue'),
               meta: {
                 title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1DM',
+              code: 'price_nka_v1_apply',
+              name: 'V1DM',
+              component: () => import('@/views/V1/V1Apply/V1DM.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1Transport',
+              code: 'price_nka_v1_apply',
+              name: 'V1Transport',
+              component: () => import('@/views/V1/V1Apply/V1Transport.vue'),
+              meta: {
+                title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Apply',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Apply/V1MMC',
+              code: 'price_nka_v1_apply',
+              name: 'V1MMC',
+              component: () => import('@/views/V1/V1Apply/V1MMC.vue'),
+              meta: {
+                title: 'MMC',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Apply',
               },
@@ -397,13 +432,50 @@ export default function () {
             },
             {
               hidden: true,
-
               path: '/costManagement/V1/V1Approval/V1FreeGoodsWin2Approval',
               code: 'price_nka_v1_approve',
               name: 'V1FreeGoodsWin2Approval',
               component: () => import('@/views/V1/V1Apply/V1FreeGoodsWin2.vue'),
               meta: {
                 title: 'Free Goods-Win2',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1DM',
+              code: 'price_nka_v1_approve',
+              name: 'V1DMApproval',
+              component: () => import('@/views/V1/V1Apply/V1DM.vue'),
+              meta: {
+                title: 'DM',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1Transport',
+              code: 'price_nka_v1_approve',
+              name: 'V1TransportApproval',
+              component: () => import('@/views/V1/V1Apply/V1Transport.vue'),
+              meta: {
+                title: 'Transport',
+                icon: 'form',
+                activeMenu: '/costManagement/V1/V1Approval',
+              },
+              
+            },
+            {
+              hidden: true,
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalMMC',
+              code: 'price_nka_v1_approve',
+              name: 'V1ApplyrovalMMC',
+              component: () =>
+                import('@/views/V1/V1Approval/V1ApplyrovalMMC.vue'),
+              meta: {
+                title: 'MMC',
                 icon: 'form',
                 activeMenu: '/costManagement/V1/V1Approval',
               },

@@ -36,7 +36,7 @@ export default {
           },
         },
         {
-          name: '模拟管理',
+          name: '模板管理',
           path: '/os/NotificationManagement/MockManage',
           img: {
             dark: require('@/assets/images/tab/tab3.png'),

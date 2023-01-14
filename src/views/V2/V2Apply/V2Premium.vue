@@ -1,7 +1,11 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
+<<<<<<< HEAD
  * @LastEditTime: 2022-12-22 16:41:00
+=======
+ * @LastEditTime: 2022-12-05 17:13:55
+>>>>>>> dev
 -->
 <template>
   <div class="MainContent">
@@ -492,10 +496,10 @@
             <vxe-table-column width="180"
                              align="center"
                              field="systemJudgment"
-                             title="是否通过"
+                             title="系统判定"
                               fixed="left">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -518,49 +522,30 @@
                 </el-tooltip>
               </template>
             </vxe-table-column>
-            <vxe-table-column align="center"
-                             width="330"
-                             field="cpId"
-                             title="CPID"
-                              fixed="left">
-              <template v-slot:header>
-                <div>CPID<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.cpId }}
-                </div>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="180"
-                             align="center"
-                             field="systemJudgment"
-                             title="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </vxe-table-column>
             <vxe-table-column width="270"
-                             align="center"
-                             field="systemJudgmentContent"
-                             title="系统判定内容">
+                              align="center"
+                              fixed='left'
+                              field="systemJudgmentContent"
+                              title="系统判定内容">
               <template v-slot:header>
                 <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.judgmentContent }}
+                </div>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column align="center"
+                             width="330"
+                             field="cpId"
+                             title="CPID">
+              <template v-slot:header>
+                <div>CPID<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.cpId }}
                 </div>
               </template>
             </vxe-table-column>
@@ -665,6 +650,20 @@
               <template slot-scope="scope">
                 <div>
                   {{ scope.row.distributorName == null ? scope.row.supplierName : scope.row.distributorName }}
+                </div>
+              </template>
+              <!-- 数据未对接 -->
+            </vxe-table-column>
+            <vxe-table-column width="220"
+                              align="center"
+                              field="item"
+                              title="活动类型">
+              <template v-slot:header>
+                <div>活动类型<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <div>
+                  {{ scope.row.item }}
                 </div>
               </template>
               <!-- 数据未对接 -->
@@ -911,10 +910,11 @@ export default {
           yearAndMonth: this.filterObj.month, //活动月
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          console.log(this.pageNum, this.pageSize, this.total, 'dangqianye')
+          this.isSubmit = this.tableData[0].isSubmit
           this.mainId = this.tableData[0].mainId
           this.infoByMainId()
         })
@@ -929,7 +929,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version === 'Premium-V2' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -963,7 +963,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({pageSize: 9999}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },

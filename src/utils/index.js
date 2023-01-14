@@ -32,7 +32,7 @@ export function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay()
+    a: date.getDay(),
   }
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
@@ -74,17 +74,7 @@ export function formatTime(time, option) {
   if (option) {
     return parseTime(time, option)
   } else {
-    return (
-      d.getMonth() +
-      1 +
-      '月' +
-      d.getDate() +
-      '日' +
-      d.getHours() +
-      '时' +
-      d.getMinutes() +
-      '分'
-    )
+    return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
   }
 }
 
@@ -97,15 +87,7 @@ export function param2Obj(url) {
   if (!search) {
     return {}
   }
-  return JSON.parse(
-    '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"')
-        .replace(/\+/g, ' ') +
-      '"}'
-  )
+  return JSON.parse('{"' + decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"').replace(/\+/g, ' ') + '"}')
 }
 
 /**
@@ -122,7 +104,7 @@ export function getPickerOptions() {
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近一个月',
@@ -131,7 +113,7 @@ export function getPickerOptions() {
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近三个月',
@@ -140,9 +122,9 @@ export function getPickerOptions() {
           const start = new Date()
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
           picker.$emit('pick', [start, end])
-        }
-      }
-    ]
+        },
+      },
+    ],
   }
 }
 
@@ -161,7 +143,7 @@ export function getFormatPickerOptions() {
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
           setStartAndEnd(start, end)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近一个月',
@@ -171,7 +153,7 @@ export function getFormatPickerOptions() {
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
           setStartAndEnd(start, end)
           picker.$emit('pick', [start, end])
-        }
+        },
       },
       {
         text: '最近三个月',
@@ -181,9 +163,9 @@ export function getFormatPickerOptions() {
           start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
           setStartAndEnd(start, end)
           picker.$emit('pick', [start, end])
-        }
-      }
-    ]
+        },
+      },
+    ],
   }
 }
 
@@ -208,7 +190,7 @@ export function getTextMap() {
   return {
     update: '编辑',
     create: '新增',
-    info: '查看'
+    info: '查看',
   }
 }
 
@@ -223,7 +205,7 @@ export function getDefaultPermissions() {
     getCPT: 6,
     submit: 7,
     rejected: 8,
-    SAP: 9
+    SAP: 9,
   }
 }
 
@@ -234,19 +216,17 @@ export function getGrantTypeOptions() {
   return [
     {
       key: 'password',
-      label: 'password'
+      label: 'password',
     },
     {
       key: 'refresh',
-      label: 'refresh'
-    }
+      label: 'refresh',
+    },
   ]
 }
 
 export function randomNum(len, radix) {
-  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(
-    ''
-  )
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
   const uuid = []
   radix = radix || chars.length
 
@@ -304,7 +284,7 @@ export const beautifierConf = {
     indent_inner_html: true,
     comma_first: false,
     e4x: true,
-    indent_empty_lines: true
+    indent_empty_lines: true,
   },
   js: {
     indent_size: '2',
@@ -323,8 +303,8 @@ export const beautifierConf = {
     indent_inner_html: true,
     comma_first: false,
     e4x: true,
-    indent_empty_lines: true
-  }
+    indent_empty_lines: true,
+  },
 }
 /**
  * 下划转驼峰
@@ -341,7 +321,7 @@ export function isNumberStr(str) {
  * @returns {*}
  */
 export function titleCase(str) {
-  return str.replace(/( |^)[a-z]/g, L => L.toUpperCase())
+  return str.replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
 }
 
 /**
@@ -383,11 +363,7 @@ export function deepClone(obj) {
     return new RegExp(obj.source, flags.join(''))
   }
 
-  const result = Array.isArray(obj)
-    ? []
-    : obj.constructor
-    ? new obj.constructor()
-    : {}
+  const result = Array.isArray(obj) ? [] : obj.constructor ? new obj.constructor() : {}
 
   for (const key in obj) {
     result[key] = deepClone(obj[key])
@@ -476,7 +452,7 @@ export function ReportBgColorMap() {
   return {
     v1: 'background:#fdf0f1!important',
     v2: 'background:#ebfbf8!important',
-    v3: 'background:#fff6e5!important'
+    v3: 'background:#fff6e5!important',
   }
 }
 //message map
@@ -494,37 +470,19 @@ export function messageMap() {
     exportErrorError: '导出错误信息失败',
     saveSuccess: '保存成功',
     saveError: '保存失败',
-    requireChannel: '渠道不能为空，请选择渠道'
+    requireChannel: '渠道不能为空，请选择渠道',
   }
 }
 export const messageObj = {
   requireChannel: '渠道不能为空，请选择渠道',
-  requireMonth: '活动月不能为空，请选择活动月'
+  requireMonth: '活动月不能为空，请选择活动月',
 }
 //报表动态列
 export function ReportCheckList() {
-  return [
-    'passNum',
-    'exceptionOneNum',
-    'exceptionTwoNum',
-    'exceptionThreeNum',
-    'passRange',
-    'exceptionOneRange',
-    'exceptionTwoRange',
-    'exceptionThreeRange'
-  ]
+  return ['passNum', 'exceptionOneNum', 'exceptionTwoNum', 'exceptionThreeNum', 'passRange', 'exceptionOneRange', 'exceptionTwoRange', 'exceptionThreeRange']
 }
 export function ReportCheckListCost() {
-  return [
-    'passNum',
-    'exceptionOneNum',
-    'exceptionTwoNum',
-    'exceptionThreeNum',
-    'passRange',
-    'exceptionOneRange',
-    'exceptionTwoRange',
-    'exceptionThreeRange'
-  ]
+  return ['passNum', 'exceptionOneNum', 'exceptionTwoNum', 'exceptionThreeNum', 'passRange', 'exceptionOneRange', 'exceptionTwoRange', 'exceptionThreeRange']
 }
 //报表动态列
 export function dynamicColumn() {
@@ -536,7 +494,7 @@ export function dynamicColumn() {
     { title: 'Pass占比', value: 'passRange' },
     { title: 'Exception1占比', value: 'exceptionOneRange' },
     { title: 'Exception2占比', value: 'exceptionTwoRange' },
-    { title: 'Exception3占比', value: 'exceptionThreeRange' }
+    { title: 'Exception3占比', value: 'exceptionThreeRange' },
   ]
 }
 export const dynamicColumnCost = [
@@ -547,7 +505,7 @@ export const dynamicColumnCost = [
   { title: 'Pass占比', value: 'passRange' },
   { title: 'Exception1占比', value: 'exceptionOneRange' },
   { title: 'Exception2占比', value: 'exceptionTwoRange' },
-  { title: 'Exception3占比', value: 'exceptionThreeRange' }
+  { title: 'Exception3占比', value: 'exceptionThreeRange' },
 ]
 
 export function formatThousandNum(num) {
@@ -557,7 +515,7 @@ export function formatThousandNum(num) {
     const money = num * 1
     return money.toLocaleString('zh', {
       minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      maximumFractionDigits: 2,
     })
   }
 }
@@ -591,9 +549,13 @@ export function getYearAndMonthRange(start, end) {
   }
   return result
 }
-//多行筛选
+// 多行筛选
 export function getHeight() {
   return window.innerHeight - 450
+}
+// V1中不含导入按钮的tab
+export function getHeightHaveTab1() {
+  return window.innerHeight - 300
 }
 // tab
 export function getHeightHaveTab() {
@@ -601,18 +563,23 @@ export function getHeightHaveTab() {
 }
 // 单行筛选（1366 下筛选一行展示）
 export function getHeightSingle() {
+  console.log(window.innerHeight)
   return window.innerHeight - 340
 }
 // 合同同款明细
 export function contractView() {
   return window.innerHeight - 280
 }
+// 三行筛选 three
+export function getHeightHaveTabThree() {
+  return window.innerHeight - 500
+}
 /**
  * 合同录入表格最大高度
  * @returns el-table max-height
  */
 export function getContractEntry() {
-  return window.innerHeight - 400
+  return window.innerHeight - 440
 }
 /**
  *
@@ -701,21 +668,21 @@ export function setSplitAssignee(value) {
   }
   return formatString
 }
-export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止', '过期']
+export let contractList = ['草稿', '待审批', '被拒绝', '通过', '终止', '过期','延期审批中']
 
 //contract 合同 客户扣款点数与支付方式对应关系
 export let CustomerDeductionsAndPayType = [
   {
     CustomerDeduction: 6,
-    payTypeList: [{ label: 'PO', value: 1 }]
+    payTypeList: [{ label: 'PO', value: 1 }],
   },
   {
     CustomerDeduction: 13,
     payTypeList: [
       { label: '红票', value: 2 },
-      { label: '票扣', value: 3 }
-    ]
-  }
+      { label: '票扣', value: 3 },
+    ],
+  },
 ]
 /**
  * 合同--获取合同期间（同一年）
@@ -733,20 +700,20 @@ export function getCurrentYearRange() {
  */
 export let pickerOptions = {
   // 限制年月
-  disabledDate: time => {
+  disabledDate: (time) => {
     const date = new Date()
     const year = date.getFullYear()
     return (
       //日期限制（同一年）
       time.getFullYear() == year ? false : true
     )
-  }
+  },
 }
 
 export function pickerOptionsSystemDate(row) {
   return {
     // 限制年月
-    disabledDate: time => {
+    disabledDate: (time) => {
       //未选择初始日期时，不做限制
       if (!row.contractDate) {
         return false
@@ -755,27 +722,60 @@ export function pickerOptionsSystemDate(row) {
       const year = date.getFullYear()
       return (
         //日期限制（同一年）
-        time.getFullYear() == year || time.getFullYear() == year + 1
-          ? false
-          : true
+        time.getFullYear() == year || time.getFullYear() == year + 1 ? false : true
       )
-    }
+    },
   }
 }
-export let sortList = [
-  'Price Promotion',
-  'Free Goods-Tin',
-  'New User',
-  'Free Goods-Win2',
-  'FMC',
-  'Roadshow',
-  'Listing fee',
-  'KA Rebate',
-  'HIH Rebate',
-  'Display',
-  'POSM - Standard',
-  'POSM - Customized',
-  'ECM',
-  'Premium',
-  'Collection',
-]
+export let sortList = ['Price Promotion', 'Free Goods-Tin', 'New User', 'Free Goods-Win2', 'FMC', 'Roadshow', 'Listing fee', 'KA Rebate', 'HIH Rebate', 'Display', 'POSM - Standard', 'POSM - Customized', 'ECM', 'Premium', 'Mama class', 'MMC', 'DM', 'Transport Costs', 'Collection', 'Allrkartm', 'Others', 'OthersFG']
+// 文件格式正则
+// 根据文件名获取文件类型
+export function getFileType(fileName) {
+  const fileReg = {
+    // 图片格式
+    imgReg: /\.(jpg|jpeg|png|gif|bmp|JPG|PNG)$/,
+    // excel格式
+    excelReg: /\.(xls|xlsx|XLS|XLSX)$/,
+    // word格式
+    wordReg: /\.(doc|docx|DOC|DOCX)$/,
+    // pdf格式
+    pdfReg: /\.(pdf|PDF)$/,
+    // ppt格式
+    pptReg: /\.(ppt|pptx|PPT|PPTX)$/,
+    // txt格式
+    txtReg: /\.(txt|TXT)$/,
+    // rar格式
+    rarReg: /\.(rar|RAR|tar|TAR)$/,
+    // zip格式
+    zipReg: /\.(zip|ZIP)$/,
+    // 视频格式
+    videoReg: /\.(mp4|MP4)$/,
+    // 音频格式
+    audioReg: /\.(mp3|MP3)$/,
+    // 其他格式
+    otherReg: /\.(jpg|jpeg|png|gif|bmp|JPG|PNG|xls|xlsx|XLS|XLSX|doc|docx|DOC|DOCX|pdf|PDF|ppt|pptx|PPT|PPTX|txt|TXT|rar|RAR|zip|ZIP|mp4|MP4|mp3|MP3)$/,
+  }
+  if (fileReg.imgReg.test(fileName)) {
+    return 'img'
+  } else if (fileReg.excelReg.test(fileName)) {
+    return 'excel'
+  } else if (fileReg.wordReg.test(fileName)) {
+    return 'word'
+  } else if (fileReg.pdfReg.test(fileName)) {
+    return 'pdf'
+  } else if (fileReg.pptReg.test(fileName)) {
+    return 'ppt'
+  } else if (fileReg.txtReg.test(fileName)) {
+    return 'txt'
+  } else if (fileReg.rarReg.test(fileName)) {
+    return 'rar'
+  } else if (fileReg.zipReg.test(fileName)) {
+    return 'zip'
+  } else if (fileReg.videoReg.test(fileName)) {
+    return 'video'
+  } else if (fileReg.audioReg.test(fileName)) {
+    return 'audio'
+  } else {
+    return 'other'
+  }
+}

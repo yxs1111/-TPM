@@ -1,7 +1,7 @@
 <!--
  * @Description: V3POSMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-15 09:57:58
+ * @LastEditTime: 2022-12-05 17:15:40
 -->
 <template>
   <div class="MainContent">
@@ -10,92 +10,46 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-select v-model="filterObj.month"
-                     filterable
-                     clearable
-                     placeholder="请选择">
-            <el-option v-for="item in monthList"
-                       :key="item.id"
-                       :label="item.activityMonth"
-                       :value="item.activityMonth" />
+          <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
+            <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
           </el-select>
         </div>
-        <div class="Selectli"
-             @keyup.enter="search">
+        <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode"
-                     clearable
-                     filterable
-                     placeholder="请选择"
-                     @change="getCustomerList">
-            <el-option
-              v-for="(item, index) in channelArr"
-              :key="index"
-              :label="item.channelEsName"
-              :value="item.channelCode"
-            />
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">客户系统名称:</span>
-          <el-select v-model="filterObj.customerCode"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in customerArr"
-                       :key="index"
-                       :label="item.customerCsName"
-                       :value="item.customerCsName" />
+          <el-select v-model="filterObj.customerCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCsName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in supplierArr"
-                       :key="index"
-                       :label="item.supplierName"
-                       :value="item.supplierName" />
+          <el-select v-model="filterObj.supplierName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in supplierArr" :key="index" :label="item.supplierName" :value="item.supplierName" />
           </el-select>
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">大区:</span>
-          <el-select v-model="filterObj.zoneName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in zoneArr"
-                       :key="index"
-                       :label="item.name"
-                       :value="item.name" />
+          <el-select v-model="filterObj.zoneName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in zoneArr" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
 
         <div class="Selectli">
           <span class="SelectliTitle">区域:</span>
-          <el-select v-model="filterObj.regionName"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in regionArr"
-                       :key="index"
-                       :label="item.name"
-                       :value="item.name" />
+          <el-select v-model="filterObj.regionName" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in regionArr" :key="index" :label="item.name" :value="item.name" />
           </el-select>
         </div>
 
         <div class="Selectli">
           <span class="SelectliTitle">POSM item:</span>
-          <el-select v-model="filterObj.posmItem"
-                     clearable
-                     filterable
-                     placeholder="请选择">
-            <el-option v-for="(item, index) in BrandList"
-                       :key="index"
-                       :label="item.item"
-                       :value="item.item" />
+          <el-select v-model="filterObj.posmItem" clearable filterable placeholder="请选择">
+            <el-option v-for="(item, index) in BrandList" :key="index" :label="item.item" :value="item.item" />
           </el-select>
           <!-- 下拉数据接口未对接 -->
         </div>
@@ -103,51 +57,29 @@
       </div>
       <div class="OpertionBar">
 
-        <el-button type="primary"
-                   class="TpmButtonBG"
-                   @click="search">查询</el-button>
-        <div class="TpmButtonBG"
-             @click="downExcel">
-          <img src="@/assets/images/export.png"
-               alt="">
+        <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
+        <div class="TpmButtonBG" @click="downExcel">
+          <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
       </div>
     </div>
     <div class="TpmButtonBGWrap">
-      <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
-           @click="importData">
-        <img src="@/assets/images/import.png"
-             alt="">
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="importData">
+        <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
-           @click="approve(1)">
-        <svg-icon icon-class="passApprove"
-                  style="font-size: 24px;" />
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(1)">
+        <svg-icon icon-class="passApprove" style="font-size: 24px;" />
         <span class="text">通过</span>
       </div>
-      <div class="TpmButtonBG"
-           :class="!isSubmit?'':'noClick'"
-           @click="approve(0)">
-        <svg-icon icon-class="rejectApprove"
-                  style="font-size: 24px;" />
+      <div class="TpmButtonBG" :class="!isSubmit?'':'noClick'" @click="approve(0)">
+        <svg-icon icon-class="rejectApprove" style="font-size: 24px;" />
         <span class="text">驳回</span>
       </div>
     </div>
-    <el-table :data="tableData"
-              :max-height="maxheight"
-              border
-              :header-cell-style="HeadTable"
-              :row-class-name="tableRowClassName"
-              style="width: 100%">
-      <el-table-column align="center"
-                       width="460"
-                       prop="cpId"
-                       label="CPID"
-                       fixed>
+    <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
+      <el-table-column align="center" width="460" prop="cpId" label="CPID" fixed>
         <template v-slot:header>
           <div>CPID<br><span class="subTitle">-</span></div>
         </template>
@@ -157,10 +89,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120"
-                       align="center"
-                       prop="yearAndMonth"
-                       label="活动月">
+      <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月">
         <template v-slot:header>
           <div>活动月<br><span class="subTitle">-</span></div>
         </template>
@@ -170,10 +99,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120"
-                       align="center"
-                       prop="costType"
-                       label="费用类型">
+      <el-table-column width="120" align="center" prop="costType" label="费用类型">
         <template v-slot:header>
           <div>费用类型<br><span class="subTitle">-</span></div>
         </template>
@@ -183,10 +109,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="190"
-                       align="center"
-                       prop="minePackage"
-                       label="Mine Package">
+      <el-table-column width="190" align="center" prop="minePackage" label="Mine Package">
         <template v-slot:header>
           <div>Mine Package<br><span class="subTitle">-</span></div>
         </template>
@@ -196,10 +119,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="180"
-                       align="center"
-                       prop="costItem"
-                       label="费用科目">
+      <el-table-column width="180" align="center" prop="costItem" label="费用科目">
         <template v-slot:header>
           <div>费用科目<br><span class="subTitle">-</span></div>
         </template>
@@ -209,10 +129,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120"
-                       align="center"
-                       prop="channelCode"
-                       label="渠道">
+      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
@@ -222,10 +139,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="customerName"
-                       label="客户系统名称">
+      <el-table-column width="220" align="center" prop="customerName" label="客户系统名称">
         <template v-slot:header>
           <div>客户系统名称<br><span class="subTitle">-</span></div>
         </template>
@@ -235,10 +149,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="brandName"
-                       label="品牌">
+      <el-table-column width="220" align="center" prop="brandName" label="品牌">
         <template v-slot:header>
           <div>品牌<br><span class="subTitle">-</span></div>
         </template>
@@ -261,10 +172,7 @@
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="供应商">
+      <el-table-column width="220" align="center" prop="supplierName" label="供应商">
         <template v-slot:header>
           <div>供应商<br><span class="subTitle">-</span></div>
         </template>
@@ -288,10 +196,7 @@
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column width="220"
-                       align="center"
-                       prop="zoneName"
-                       label="大区">
+      <el-table-column width="220" align="center" prop="zoneName" label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle">-</span></div>
         </template>
@@ -302,10 +207,7 @@
         </template>
         <!-- 数据未对接 -->
       </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="regionName"
-                       label="区域">
+      <el-table-column width="220" align="center" prop="regionName" label="区域">
         <template v-slot:header>
           <div>区域<br><span class="subTitle">-</span></div>
         </template>
@@ -315,10 +217,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="posmItem"
-                       label="POSM item">
+      <el-table-column width="220" align="right" prop="posmItem" label="POSM item">
         <template v-slot:header>
           <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
         </template>
@@ -328,10 +227,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="voneCost"
-                       label="V1计划费用(RMB)">
+      <el-table-column width="220" align="right" prop="voneCost" label="V1计划费用(RMB)">
         <template v-slot:header>
           <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
@@ -342,10 +238,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="220"
-                       align="right"
-                       prop="vtwoCostAdjust"
-                       label="V2预估费用(RMB)">
+      <el-table-column width="220" align="right" prop="vtwoCostAdjust" label="V2预估费用(RMB)">
         <template v-slot:header>
           <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
         </template>
@@ -355,10 +248,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="vthreeCostDefault"
-                       label="V3实际费用-默认（RMB）">
+      <el-table-column width="220" align="right" prop="vthreeCostDefault" label="V3实际费用-默认（RMB）">
         <template v-slot:header>
           <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
@@ -368,10 +258,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="vthreeCostAdjust"
-                       label="V3实际费用-调整后(RMB)">
+      <el-table-column width="220" align="right" prop="vthreeCostAdjust" label="V3实际费用-调整后(RMB)">
         <template v-slot:header>
           <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
         </template>
@@ -381,10 +268,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="costAscriptionDept"
-                       label="费用归属部门">
+      <el-table-column width="220" align="center" prop="costAscriptionDept" label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
@@ -394,10 +278,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="costWriteoffMethod"
-                       label="费用核销方式">
+      <el-table-column width="220" align="center" prop="costWriteoffMethod" label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
@@ -407,10 +288,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="right"
-                       prop="costDifference"
-                       label="费用差值(RMB)">
+      <el-table-column width="220" align="right" prop="costDifference" label="费用差值(RMB)">
         <template v-slot:header>
           <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
         </template>
@@ -420,38 +298,23 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="180"
-                       align="center"
-                       prop="systemJudgment"
-                       label="系统判定">
+      <el-table-column width="180" align="center" prop="systemJudgment" label="系统判定">
         <template v-slot:header>
           <div>系统判定<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="{row}">
-          <el-tooltip effect="dark"
-                      placement="bottom"
-                      popper-class="tooltip">
-            <div slot="content"
-                 v-html="getTip(row)" />
+          <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+            <div slot="content" v-html="getTip(row)" />
             <div class="statusWrap">
-              <img v-if="row.systemJudgment=='Pass'"
-                   src="@/assets/images/success.png"
-                   alt="">
-              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                   src="@/assets/images/warning.png"
-                   alt="">
-              <img v-if="row.systemJudgment=='Error'"
-                   src="@/assets/images/selectError.png"
-                   alt="">
+              <img v-if="row.systemJudgment=='Pass'" src="@/assets/images/success.png" alt="">
+              <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
+              <img v-if="row.systemJudgment=='Error'" src="@/assets/images/selectError.png" alt="">
               <span class="judgmentText">{{ row.systemJudgment }}</span>
             </div>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column width="800"
-                       align="left"
-                       prop="systemJudgmentContent"
-                       label="系统判定内容">
+      <el-table-column width="800" align="left" prop="systemJudgmentContent" label="系统判定内容">
         <template v-slot:header>
           <div>系统判定内容<br><span class="subTitle">-</span></div>
         </template>
@@ -461,10 +324,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120"
-                       align="center"
-                       prop="applicantRemark"
-                       label="申请人备注">
+      <el-table-column width="120" align="center" prop="applicantRemark" label="申请人备注">
         <template v-slot:header>
           <div>申请人备注<br><span class="subTitle">-</span></div>
         </template>
@@ -474,10 +334,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="poApprovalComments"
-                       label="Package Owner审批意见">
+      <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见">
         <template v-slot:header>
           <div>Package Owner审批意见<br><span class="subTitle">-</span></div>
         </template>
@@ -487,10 +344,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="220"
-                       align="center"
-                       prop="finApprovalComments"
-                       label="Finance审批意见">
+      <el-table-column width="220" align="center" prop="finApprovalComments" label="Finance审批意见">
         <template v-slot:header>
           <div>Finance审批意见<br><span class="subTitle">-</span></div>
         </template>
@@ -503,149 +357,70 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum"
-                     :page-sizes="[5, 10, 50, 100]"
-                     :page-size="pageSize"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="total"
-                     @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange" />
+      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 导入 -->
-    <el-dialog width="66%"
-               class="my-el-dialog"
-               title="导入"
-               :visible="importVisible"
-               @close="closeImportDialog">
+    <el-dialog width="66%" class="my-el-dialog" title="导入" :visible="importVisible" @close="closeImportDialog">
       <div class="importDialog">
         <div class="el-downloadFileBar">
           <div>
-            <el-button type="primary"
-                       plain
-                       class="my-export"
-                       icon="el-icon-my-down"
-                       @click="downloadTemplate">下载模板</el-button>
+            <el-button type="primary" plain class="my-export" icon="el-icon-my-down" @click="downloadTemplate">下载模板</el-button>
             <!-- <el-button v-if="uploadFileName!=''" type="primary" plain class="my-export" icon="el-icon-my-checkData" @click="checkImport">检测数据</el-button> -->
           </div>
-          <el-button v-if="saveBtn"
-                     type="primary"
-                     class="TpmButtonBG"
-                     @click="confirmImport">保存</el-button>
+          <el-button v-if="saveBtn" type="primary" class="TpmButtonBG" @click="confirmImport">保存</el-button>
         </div>
         <div class="fileInfo">
           <div class="fileInfo">
             <div class="fileTitle">文件</div>
-            <div class="my-search selectFile"
-                 @click="parsingExcelBtn">
-              <img src="@/assets/images/selectFile.png"
-                   alt="">
+            <div class="my-search selectFile" @click="parsingExcelBtn">
+              <img src="@/assets/images/selectFile.png" alt="">
               <span class="text">选择文件</span>
             </div>
-            <input id="fileElem"
-                   ref="filElem"
-                   type="file"
-                   style="display: none"
-                   @change="parsingExcel($event)">
-            <div v-if="uploadFileName!=''"
-                 class="fileName">
-              <img src="@/assets/upview_fileicon.png"
-                   alt=""
-                   class="upview_fileicon">
+            <input id="fileElem" ref="filElem" type="file" style="display: none" @change="parsingExcel($event)">
+            <div v-if="uploadFileName!=''" class="fileName">
+              <img src="@/assets/upview_fileicon.png" alt="" class="upview_fileicon">
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-<!--          <div class="seeData"-->
-<!--               style="width: auto;">-->
-<!--            <div class="exportError"-->
-<!--                 @click="exportErrorList">-->
-<!--              <img src="@/assets/exportError_icon.png"-->
-<!--                   alt=""-->
-<!--                   class="exportError_icon">-->
-<!--              <span>导出错误信息</span>-->
-<!--            </div>-->
-<!--          </div>-->
         </div>
-
         <div class="tableWrap">
-          <vxe-table border
-                    height="400"
-                    :data="ImportData"
-                    style="width: 100%"
-                    :header-cell-style="{
+          <vxe-table border height="400" :data="ImportData" style="width: 100%" :header-cell-style="{
               background: '#fff',
               color: '#333',
               fontSize: '16px',
               textAlign: 'center',
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
-            }"
-                    :row-class-name="tableRowClassName"
-                    stripe>
+            }" :row-class-name="tableRowClassName" stripe>
             <!--            是否通过-->
-            <vxe-table-column width="180"
-                             align="center"
-                             field="systemJudgment"
-                             title="是否通过"
-                              fixed="left">
+            <vxe-table-column width="180" align="center" field="systemJudgment" title="系统检验" fixed="left">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
+                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
+                  <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
             </vxe-table-column>
             <!--            验证信息-->
-            <vxe-table-column width="400"
-                             align="left"
-                             field="systemJudgmentContent"
-                             title="验证信息"
-                              fixed="left">
+            <vxe-table-column width="400" align="left" field="systemJudgmentContent" title="系统检验" fixed="left">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
-                </div>
+                <span>检验通过</span>
               </template>
             </vxe-table-column>
             <!--            CPID-->
-            <vxe-table-column align="center"
-                             width="460"
-                             field="cpId"
-                             title="CPID"
-                              fixed="left">
-              <template v-slot:header>
-                <div>CPID<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.cpId }}
-                </div>
-              </template>
-            </vxe-table-column>
+            <vxe-table-column align="center" width="460" field="cpId" title="CPID"/>
             <!--            活动月-->
-            <vxe-table-column width="120"
-                             align="center"
-                             field="yearAndMonth"
-                             title="活动月">
+            <vxe-table-column width="120" align="center" field="yearAndMonth" title="活动月">
               <template v-slot:header>
                 <div>活动月<br><span class="subTitle">-</span></div>
               </template>
@@ -655,52 +430,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <!--            系统判定-->
-            <vxe-table-column width="180"
-                             align="center"
-                             field="systemJudgment"
-                             title="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.systemJudgment=='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.systemJudgment!=null&&row.systemJudgment.indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.systemJudgment=='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.systemJudgment }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="400"
-                             align="left"
-                             field="systemJudgmentContent"
-                             title="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.systemJudgmentContent }}
-                </div>
-              </template>
-            </vxe-table-column>
-            <vxe-table-column width="120"
-                             align="center"
-                             field="costType"
-                             title="费用类型">
+            <vxe-table-column width="120" align="center" field="costType" title="费用类型">
               <template v-slot:header>
                 <div>费用类型<br><span class="subTitle">-</span></div>
               </template>
@@ -710,10 +440,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="190"
-                             align="center"
-                             field="minePackage"
-                             title="Mine Package">
+            <vxe-table-column width="190" align="center" field="minePackage" title="Mine Package">
               <template v-slot:header>
                 <div>Mine Package<br><span class="subTitle">-</span></div>
               </template>
@@ -723,10 +450,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="180"
-                             align="center"
-                             field="costItem"
-                             title="费用科目">
+            <vxe-table-column width="180" align="center" field="costItem" title="费用科目">
               <template v-slot:header>
                 <div>费用科目<br><span class="subTitle">-</span></div>
               </template>
@@ -736,10 +460,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="120"
-                             align="center"
-                             field="channelCode"
-                             title="渠道">
+            <vxe-table-column width="120" align="center" field="channelCode" title="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
               </template>
@@ -749,10 +470,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="customerName"
-                             title="客户系统名称">
+            <vxe-table-column width="220" align="center" field="customerName" title="客户系统名称">
               <template v-slot:header>
                 <div>客户系统名称<br><span class="subTitle">-</span></div>
               </template>
@@ -762,10 +480,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="brandName"
-                             title="品牌">
+            <vxe-table-column width="220" align="center" field="brandName" title="品牌">
               <template v-slot:header>
                 <div>品牌<br><span class="subTitle">-</span></div>
               </template>
@@ -775,10 +490,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="supplierName"
-                             title="供应商">
+            <vxe-table-column width="220" align="center" field="supplierName" title="供应商">
               <template v-slot:header>
                 <div>供应商<br><span class="subTitle">-</span></div>
               </template>
@@ -789,10 +501,7 @@
               </template>
               <!-- 数据未对接 -->
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="zoneName"
-                             title="大区">
+            <vxe-table-column width="220" align="center" field="zoneName" title="大区">
               <template v-slot:header>
                 <div>大区<br><span class="subTitle">-</span></div>
               </template>
@@ -803,10 +512,7 @@
               </template>
               <!-- 数据未对接 -->
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="regionName"
-                             title="区域">
+            <vxe-table-column width="220" align="center" field="regionName" title="区域">
               <template v-slot:header>
                 <div>区域<br><span class="subTitle">-</span></div>
               </template>
@@ -816,10 +522,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="right"
-                             field="posmItem"
-                             title="POSM item">
+            <vxe-table-column width="220" align="right" field="posmItem" title="POSM item">
               <template v-slot:header>
                 <div>POSM item<br><span class="subTitle"> KA + Brand + Region + Item</span></div>
               </template>
@@ -829,10 +532,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="right"
-                             field="voneCost"
-                             title="V1计划费用(RMB)">
+            <vxe-table-column width="220" align="right" field="voneCost" title="V1计划费用(RMB)">
               <template v-slot:header>
                 <div>V1计划费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
@@ -843,10 +543,7 @@
               </template>
             </vxe-table-column>
 
-            <vxe-table-column width="220"
-                             align="right"
-                             field="vtwoCostAdjust"
-                             title="V2预估费用(RMB)">
+            <vxe-table-column width="220" align="right" field="vtwoCostAdjust" title="V2预估费用(RMB)">
               <template v-slot:header>
                 <div>V2预估费用(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
               </template>
@@ -856,10 +553,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="right"
-                             field="vthreeCostDefault"
-                             title="V3实际费用-默认（RMB）">
+            <vxe-table-column width="220" align="right" field="vthreeCostDefault" title="V3实际费用-默认（RMB）">
               <template v-slot:header>
                 <div>V3实际费用-默认（RMB）<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
@@ -869,10 +563,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="right"
-                             field="vthreeCostAdjust"
-                             title="V3实际费用-调整后(RMB)">
+            <vxe-table-column width="220" align="right" field="vthreeCostAdjust" title="V3实际费用-调整后(RMB)">
               <template v-slot:header>
                 <div>V3实际费用-调整后(RMB)<br><span class="subTitle"> KA + Brand + Region + Vendor + Item</span></div>
               </template>
@@ -882,10 +573,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="costAscriptionDept"
-                             title="费用归属部门">
+            <vxe-table-column width="220" align="center" field="costAscriptionDept" title="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
@@ -895,10 +583,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="costWriteoffMethod"
-                             title="费用核销方式">
+            <vxe-table-column width="220" align="center" field="costWriteoffMethod" title="费用核销方式">
               <template v-slot:header>
                 <div>费用核销方式<br><span class="subTitle">-</span></div>
               </template>
@@ -908,10 +593,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="right"
-                             field="costDifference"
-                             title="费用差值(RMB)">
+            <vxe-table-column width="220" align="right" field="costDifference" title="费用差值(RMB)">
               <template v-slot:header>
                 <div>费用差值(RMB)<br><span class="subTitle"> KA + Brand + Region + Item </span></div>
               </template>
@@ -921,10 +603,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="120"
-                             align="center"
-                             field="applicantRemark"
-                             title="申请人备注">
+            <vxe-table-column width="120" align="center" field="applicantRemark" title="申请人备注">
               <template v-slot:header>
                 <div>申请人备注<br><span class="subTitle">-</span></div>
               </template>
@@ -934,10 +613,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="poApprovalComments"
-                             title="Package Owner审批意见">
+            <vxe-table-column width="220" align="center" field="poApprovalComments" title="Package Owner审批意见">
               <template v-slot:header>
                 <div>Package Owner审批意见<br><span class="subTitle">-</span></div>
               </template>
@@ -947,10 +623,7 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="220"
-                             align="center"
-                             field="finApprovalComments"
-                             title="Finance审批意见">
+            <vxe-table-column width="220" align="center" field="finApprovalComments" title="Finance审批意见">
               <template v-slot:header>
                 <div>Finance审批意见<br><span class="subTitle">-</span></div>
               </template>
@@ -1127,7 +800,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },
@@ -1424,8 +1097,12 @@ export default {
 .tooltip {
   border-radius: 10px;
 }
-.statusWrap{
-  img{height: 25px;width: 25px;margin-right: 5px}
+.statusWrap {
+  img {
+    height: 25px;
+    width: 25px;
+    margin-right: 5px;
+  }
   align-items: center;
   display: flex;
   justify-content: center;

@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-09-19 15:36:40
+ * @LastEditTime: 2022-12-16 17:06:59
 -->
 <template>
   <div class="app-container">
@@ -153,7 +153,6 @@ import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
   getHeight,
-  contractList,
   downloadFile,
   CustomerDeductionsAndPayType,
 } from '@/utils'
@@ -200,6 +199,10 @@ export default {
         {
           name: 'Premium',
           code: 'H',
+        },
+        {
+          name: 'Roadshow',
+          code: 'L',
         },
       ],
       ruleForm: {
@@ -261,7 +264,6 @@ export default {
       ConditionsTypeList: ['conditional', 'unconditional'],
       FixOrPointList: ['variable', 'fixed'],
       maxheight: getHeight(),
-      contractList: contractList,
       CustomerDeductionsAndPayType: CustomerDeductionsAndPayType,
       //取消编辑 --》数据重置（不保存）
       tempObj: {
@@ -284,6 +286,7 @@ export default {
     }
     this.getTableData()
     this.getAllMonth()
+    this.getMinePackageList()
   },
   computed: {},
   watch: {},
@@ -314,6 +317,19 @@ export default {
         this.pageNum = response.data.pageNum
         this.pageSize = response.data.pageSize
         this.total = response.data.total
+      })
+    },
+    getMinePackageList() {
+      selectAPI.queryMinePackageSelect({
+      }).then((res) => {
+        if (res.code === 1000) {
+          let list=res.data
+          list.forEach((item) => {
+            item.name = item.costType
+            item.code = item.costTypeNumber
+          })
+          this.minePackageList=list
+        }
       })
     },
     //获取活动月数据

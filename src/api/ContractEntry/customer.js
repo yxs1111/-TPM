@@ -1,7 +1,7 @@
 /*
  * @Description: 客户合同录入
  * @Date: 2021-12-06 14:02:53
- * @LastEditTime: 2022-10-14 17:30:57
+ * @LastEditTime: 2023-01-14 12:07:09
  */
 import requestApi from '@/api/request-api'
 import request from '@/utils/request'
@@ -93,5 +93,14 @@ export default {
   getContractItemList(params) {
     return requestApi.request_get('/mdm/mdContractItem/getContractItemList', params)
   },
+
+  //合同系统有效期间调整记录查询
+  getRecords(params) {
+    return requestApi.request_get('/cityplan/customerContract/findContractPeriodChangeRecord', params)
+  },
+  //合同系统有效期间调整记录查询--经销商
+  getDistRecords(params) {
+    return requestApi.request_get('/cityplan/distributorContract/findContractPeriodChangeRecord', params)
+  }
 }
 

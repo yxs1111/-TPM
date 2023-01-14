@@ -83,7 +83,7 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-      this.$router.push(`/login`)
+      this.$router.push(`/portal`)
       //退出到CPT登录页
       // sessionStorage.removeItem('isFirstEntrySystem')
       // location.href = 'https://uat-cpt.rfc-friso.com/#/login'
@@ -99,7 +99,11 @@ export default {
     },
     // 查询方法
     getUser() {
+<<<<<<< HEAD
       let username = this.loginName.toLowerCase()
+=======
+      let username = this.loginName
+>>>>>>> dev
       requestApi.request_get('/auth/user/getByUsername', { username }).then(response => {
         const data = response.data
         this.data = data

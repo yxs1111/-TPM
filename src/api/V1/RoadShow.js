@@ -12,11 +12,15 @@ export default {
   getSmartplanData(params) {
     return requestApi.request_post(this.url+'/create', params)
   },
-  //分页查询
+  // 分页查询
   getPage(params) {
     return requestApi.request_get(this.url+'/getPage', params)
   },
-  //导出
+  // 清除数据
+  clearData(params) {
+    return requestApi.request_post(this.url+'/deleteAll', params)
+  },
+  // 导出
   downExcel(params) {
     return request({
       url:this.url+'/downExcel',

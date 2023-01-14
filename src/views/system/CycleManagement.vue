@@ -143,7 +143,7 @@
             <el-date-picker v-model="ruleForm.rsV2MtdVolDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
           </el-form-item>
-          
+
           <el-form-item label="V2LE销量日期" prop="leVtwoDate"  class="el_Dialog_dateRange" style="visibility: hidden;width:50%">
             <el-date-picker v-model="ruleForm.leVtwoDate" type="date" class="my-el-dateRange" placeholder="选择日期" value-format="yyyy/MM/dd" format="yyyy/MM/dd">
             </el-date-picker>
@@ -397,6 +397,7 @@ export default {
         if (valid) {
           if(!this.compareDate(this.ruleForm.startAndEndVTwo[1],this.ruleForm.startAndEndVThree[0])) {
             this.$message.info("V3的开始时间，不应早于V2的结束时间")
+            console.log(this.ruleForm.startAndEndVTwo[1], this.ruleForm.startAndEndVThree[0])
             return
           }
           if(!this.compareDate(this.ruleForm.startAndEndVOne[1],this.ruleForm.startAndEndVTwo[0])) {

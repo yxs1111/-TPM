@@ -1,7 +1,7 @@
 <!--
  * @Description: V2ECMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-15 09:57:35
+ * @LastEditTime: 2022-12-05 17:14:43
 -->
 <template>
   <div class="MainContent">
@@ -480,16 +480,6 @@
               <span>{{ uploadFileName }}</span>
             </div>
           </div>
-          <!-- <div class="seeData"
-               style="width: auto;">
-            <div class="exportError"
-                 @click="exportErrorList">
-              <img src="@/assets/exportError_icon.png"
-                   alt=""
-                   class="exportError_icon">
-              <span>导出错误信息</span>
-            </div>
-          </div> -->
         </div>
         <div class="tableWrap">
           <el-table border
@@ -506,43 +496,13 @@
             }"
                     :row-class-name="tableRowClassName"
                     stripe>
-            <!-- <el-table-column prop="date"
-                             align="center"
-                             label="是否通过"
-                             width="200">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <img v-if="row.judgmentType  =='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.judgmentType  !=null&&row.judgmentType  .indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.judgmentType  =='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.judgmentType   }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="400"
-                             align="center"
-                             prop="judgmentContent"
-                             label="验证信息">
-            </el-table-column> -->
             <el-table-column width="180"
                              align="center"
                              fixed="left"
                              prop="judgmentType  "
-                             label="是否通过">
+                             label="系统检验">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -551,16 +511,8 @@
                   <div slot="content"
                        v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType  =='Pass'"
-                         src="@/assets/images/success.png"
-                         alt="">
-                    <img v-if="row.judgmentType  !=null&&row.judgmentType  .indexOf('Exception') > -1"
-                         src="@/assets/images/warning.png"
-                         alt="">
-                    <img v-if="row.judgmentType  =='Error'"
-                         src="@/assets/images/selectError.png"
-                         alt="">
-                    <span class="judgmentText">{{ row.judgmentType   }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
               </template>
@@ -569,21 +521,20 @@
                              align="left"
                              fixed="left"
                              prop="judgmentContent"
-                             label="验证信息">
+                             label="系统检验">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统检验<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.judgmentContent }}
+                  <span>检验通过</span>
                 </div>
               </template>
             </el-table-column>
             <el-table-column align="center"
                              width="230"
                              prop="cpId"
-                             label="CPID"
-                             fixed="left">
+                             label="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -684,19 +635,6 @@
                 </div>
               </template>
             </el-table-column>
-            <!-- <el-table-column width="220"
-                       align="center"
-                       prop="supplierName"
-                       label="SKU">
-        <template v-slot:header>
-          <div>SKU<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.supplierName }}
-          </div>
-        </template>
-      </el-table-column> -->
             <el-table-column width="220"
                              align="center"
                              prop="supplierName"
@@ -803,7 +741,6 @@
                 </div>
               </template>
             </el-table-column>
-
             <el-table-column width="120"
                              align="center"
                              prop="applyRemarks"
@@ -1022,7 +959,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },

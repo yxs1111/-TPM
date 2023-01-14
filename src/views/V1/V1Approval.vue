@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-09-14 17:11:59
+ * @LastEditTime: 2022-11-29 09:12:54
 -->
 <template>
   <div class="tabViewsWrap">
@@ -15,7 +15,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div style="height: calc(100vh - 0px)">
+    <div>
       <router-view />
     </div>
   </div>
@@ -91,12 +91,12 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HIH rebate',
+              name: 'HIHrebate',
               path: '/costManagement/V1/V1Approval/V1HIHRebate',
               minePackageName: 'HIH Rebate',
             },
             {
-              name: 'KA rebate',
+              name: 'KArebate',
               path: '/costManagement/V1/V1Approval/V1KARebate',
               minePackageName: 'KA Rebate',
             },
@@ -141,21 +141,34 @@ export default {
               minePackageName: 'Premium',
             },
             {
-              name: '价促-FG tin',
+              name: '价促-FGtin',
               path: '/costManagement/V1/V1Approval/V1FreeGoodsTinApproval',
               minePackageName: 'Free Goods-Tin',
             },
             {
-              name: 'NU-FG win2',
+              name: 'NU-FGwin2',
               path: '/costManagement/V1/V1Approval/V1FreeGoodsWin2Approval',
               minePackageName: 'Free Goods-Win2',
+            },
+            {
+              name: 'MMC',
+              path: '/costManagement/V1/V1Approval/V1ApplyrovalMMC',
+              minePackageName: 'Mama class',
+            },
+            {
+              name: 'DM',
+              path: '/costManagement/V1/V1Approval/V1DM',
+              minePackageName: 'DM',
+            },
+            {
+              name: 'Transport',
+              path: '/costManagement/V1/V1Approval/V1Transport',
+              minePackageName: 'Transport Costs',
             },
           ]
           let TabList = []
           sortList.forEach((item) => {
-            let findIndex = this.routerList.findIndex(
-              (routerItem) => routerItem.minePackageName == item
-            )
+            let findIndex = this.routerList.findIndex((routerItem) => routerItem.minePackageName == item)
             if (findIndex != -1) {
               TabList.push(this.routerList[findIndex])
             }
@@ -169,10 +182,7 @@ export default {
           if (!this.$route.query.minePackageName) {
           } else {
             // 我的待办跳转
-            this.currentIndex = this.routerList.findIndex(
-              (item) =>
-                item.minePackageName == this.$route.query.minePackageName
-            )
+            this.currentIndex = this.routerList.findIndex((item) => item.minePackageName == this.$route.query.minePackageName)
             sessionStorage.setItem('currentIndex', this.currentIndex)
           }
           this.tabInit()
@@ -224,7 +234,7 @@ export default {
   height: 38px;
   background: #eff2f9;
   border-radius: 6px 6px 0px 0px;
-  margin-right: 10px;
+  margin-right: 0px;
   border: 1px solid #e8e8ea;
   font-size: 14px;
   color: #999;

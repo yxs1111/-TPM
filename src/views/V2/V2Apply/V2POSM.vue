@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-08-15 09:57:16
+ * @LastEditTime: 2022-12-05 17:13:50
 -->
 <template>
   <div class="MainContent">
@@ -574,10 +574,10 @@
             <vxe-table-column width="180"
                               align="center"
                               field="systemJudgment"
-                              title="是否通过"
+                              title="系统判定"
                               fixed="left">
               <template v-slot:header>
-                <div>是否通过<br><span class="subTitle">-</span></div>
+                <div>系统判定<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="{row}">
                 <el-tooltip effect="dark"
@@ -604,9 +604,9 @@
                               align="left"
                               fixed="left"
                               field="systemJudgmentContent"
-                              title="验证信息">
+                              title="系统判定内容">
               <template v-slot:header>
-                <div>验证信息<br><span class="subTitle">-</span></div>
+                <div>系统判定内容<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
@@ -617,8 +617,7 @@
             <vxe-table-column align="center"
                               width="330"
                               field="cpId"
-                              title="CPID"
-                              fixed="left">
+                              title="CPID">
               <template v-slot:header>
                 <div>CPID<br><span class="subTitle">-</span></div>
               </template>
@@ -1034,10 +1033,10 @@ export default {
           isSubmit: 0,
         }).then((response) => {
           this.tableData = response.data.records
-          this.isSubmit = this.tableData[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
+          this.isSubmit = this.tableData[0].isSubmit
           this.mainId = this.tableData[0].mainId
           if (this.tableData.length > 0) {
             this.infoByMainId()
@@ -1088,7 +1087,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({ pageSize: '99999' }).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },

@@ -1,7 +1,11 @@
 <!--
  * @Description: V3Premium
  * @Date: 2022-04-28 14:44:18
+<<<<<<< HEAD
  * @LastEditTime: 2022-12-22 16:46:00
+=======
+ * @LastEditTime: 2022-12-05 17:15:45
+>>>>>>> dev
 -->
 <template>
   <div class="MainContent">
@@ -508,17 +512,27 @@
               fontWeight: 400,
               fontFamily: 'Source Han Sans CN'
             }" :row-class-name="tableRowClassName" stripe>
-            <el-table-column prop="date" fixed align="center" label="是否通过" width="200">
+            <el-table-column prop="date" fixed align="center" label="系统检验" width="200">
               <template slot-scope="{row}">
                 <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
                   <div slot="content" v-html="getTip(row)" />
                   <div class="statusWrap">
-                    <img v-if="row.judgmentType=='Pass'" src="@/assets/images/success.png" alt="">
-                    <img v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1" src="@/assets/images/warning.png" alt="">
-                    <img v-if="row.judgmentType=='Error'" src="@/assets/images/selectError.png" alt="">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
+                    <img  src="@/assets/images/success.png" alt="">
+                    <span class="judgmentText">Pass</span>
                   </div>
                 </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column width="350"
+                             align="center"
+                             fixed='left'
+                             prop="judgmentContent"
+                             label="系统检验">
+              <template v-slot:header>
+                <div>系统检验<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                <span>检验通过</span>
               </template>
             </el-table-column>
             <!--            <el-table-column width="400" align="center" prop="systemJudgmentContent" label="验证信息" />-->
@@ -625,38 +639,6 @@
               <template slot-scope="scope">
                 <div>
                   {{ formatNum(scope.row.costDifference) }}
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column width="180"
-                             align="center"
-                             prop="judgmentType"
-                             label="系统判定">
-              <template v-slot:header>
-                <div>系统判定<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark"
-                            placement="bottom"
-                            popper-class="tooltip">
-                  <div slot="content"
-                       v-html="getTip(row)" />
-                  <div class="statusWrap">
-                    <span class="judgmentText">{{ row.judgmentType }}</span>
-                  </div>
-                </el-tooltip>
-              </template>
-            </el-table-column>
-            <el-table-column width="800"
-                             align="center"
-                             prop="judgmentContent"
-                             label="系统判定内容">
-              <template v-slot:header>
-                <div>系统判定内容<br><span class="subTitle">-</span></div>
-              </template>
-              <template slot-scope="scope">
-                <div>
-                  {{ scope.row.judgmentContent }}
                 </div>
               </template>
             </el-table-column>
@@ -833,7 +815,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version === 'Premium-V3' &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {
@@ -868,7 +850,7 @@ export default {
     getPageMdSupplier() {
       selectAPI.getPageMdSupplier({pageSize: 9999}).then((res) => {
         if (res.code === 1000) {
-          this.supplierArr = res.data.records
+          this.supplierArr = res.data
         }
       })
     },
