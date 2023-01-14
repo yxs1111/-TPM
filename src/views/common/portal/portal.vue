@@ -1,7 +1,7 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2023-01-11 16:39:56
+ * @LastEditTime: 2023-01-14 12:16:11
 -->
 <template>
   <div class="portalWrap">
@@ -81,12 +81,12 @@ export default {
     },
     goTPMContract() {
       // this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
-      window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
+      window.location.href = 'https://iinvest.rfc-friso.com:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
       // window.location.href = 'http://localhost:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
     },
     async goSalesCpt() {
       // window.location.href = 'http://localhost:8081/#/login'
-      window.location.href = 'https://uat-cpt.rfc-friso.com/SalesCPT/login'
+      window.location.href = 'https://cpt.rfc-friso.com/SalesCPT/login'
       return
       let username = sessionStorage.getItem('username')
       let password = sessionStorage.getItem('password')
@@ -98,7 +98,7 @@ export default {
       await this.$store.dispatch('user/loginCPT', { ...loginObj })
     },
     async goMarketingCpt() {
-      window.location.href = 'https://uat-cpt.rfc-friso.com/MarketingCPT/login'
+      window.location.href = 'https://cpt.rfc-friso.com/MarketingCPT/login'
       return
       let username = sessionStorage.getItem('username')
       let password = sessionStorage.getItem('password')
