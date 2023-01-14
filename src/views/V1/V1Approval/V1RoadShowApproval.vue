@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-11-28 14:27:30
+ * @LastEditTime: 2023-01-14 12:23:14
 -->
 <template>
   <div class="MainContent">
@@ -26,25 +26,16 @@
             <el-option v-for="(item, index) in customerArr" :key="index" :label="item.customerCsName" :value="item.customerCode" />
           </el-select>
         </div>
-<<<<<<< HEAD
-        <div class="Selectli">
-          <span class="SelectliTitle">供应商:</span>
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-            <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
-=======
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">大区:</span>
           <el-select v-model="filterObj.zoneCode" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in largeAreaDialogList" :key="index" :label="item.name" :value="item.nameAbridge" />
->>>>>>> dev
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
-<<<<<<< HEAD
-=======
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
@@ -57,7 +48,6 @@
           <span class="SelectliTitle">Sub_item:</span>
           <el-select v-model="filterObj.subItem" filterable clearable placeholder="请选择">
             <el-option v-for="item,index in ['场地费', '执行费', 'POSM费用']" :key="index" :label="item.item" :value="item" />
->>>>>>> dev
           </el-select>
         </div>
         <!-- <div class="Selectli">

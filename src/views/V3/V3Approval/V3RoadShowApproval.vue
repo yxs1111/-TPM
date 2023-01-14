@@ -1,11 +1,7 @@
 <!--
  * @Description: V3RoadShowApproval
  * @Date: 2022-04-28 14:44:18
-<<<<<<< HEAD
- * @LastEditTime: 2022-11-28 14:27:09
-=======
- * @LastEditTime: 2023-01-03 09:09:11
->>>>>>> dev
+ * @LastEditTime: 2023-01-14 12:27:39
 -->
 <template>
   <div class="MainContent">
@@ -32,11 +28,7 @@
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
           <span class="SelectliTitle">供应商:</span>
-<<<<<<< HEAD
-          <el-select v-model="filterObj.supplierCode" filterable clearable placeholder="请选择">
-=======
           <el-select v-model="filterObj.supplierCode" filterable :disabled='showSelect1' clearable placeholder="请选择" @change='getService1'>
->>>>>>> dev
             <el-option v-for="item,index in supplierList" :key="index" :label="item.supplierName" :value="item.supplierCode" />
           </el-select>
         </div>
@@ -56,8 +48,6 @@
           <span class="SelectliTitle">区域:</span>
           <el-select v-model="filterObj.regionCode" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in RegionList" :key="index" :label="item.name" :value="item.nameAbridge" />
-<<<<<<< HEAD
-=======
           </el-select>
         </div>
         <div class="Selectli" v-if='this.filterObj.channelCode !== "EC"'>
@@ -70,7 +60,6 @@
           <span class="SelectliTitle">Sub_item:</span>
           <el-select v-model="filterObj.subItem" clearable filterable placeholder="请选择">
             <el-option v-for="(item, index) in ['场地费', '执行费', 'POSM费用']" :key="index" :label="item" :value="item" />
->>>>>>> dev
           </el-select>
         </div>
       </div>

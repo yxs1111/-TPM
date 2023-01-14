@@ -1,11 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
-<<<<<<< HEAD
- * @LastEditTime: 2022-12-07 09:31:27
-=======
- * @LastEditTime: 2023-01-11 22:29:47
->>>>>>> dev
+ * @LastEditTime: 2023-01-14 12:31:04
 -->
 <template>
   <div class="MainContent">
@@ -609,23 +605,7 @@ export default {
     async exportData() {
       await API.exportCustomerContractInfo({
         customerType: 3,
-<<<<<<< HEAD
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '间供客户合同录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('客户合同录入 - list导出成功!')
-      })
-      await API.exportCustomerContractDetail({
-        customerType: 3,
-=======
         channelCode: this.filterObj.channelCode,
->>>>>>> dev
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -1064,13 +1044,8 @@ export default {
       }
       //避免同时出现多个el-popover
       for (const key in this.$refs) {
-<<<<<<< HEAD
-        if (key.indexOf('popover-') !== -1&&this.$refs[key]) {
-            this.$refs[key].doClose();
-=======
         if (key.indexOf('popover-') !== -1 && this.$refs[key]) {
           this.$refs[key].doClose()
->>>>>>> dev
         }
       }
       this.tableData[index].isPopoverShow = true

@@ -1,11 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
-<<<<<<< HEAD
- * @LastEditTime: 2022-12-22 16:41:00
-=======
- * @LastEditTime: 2022-12-05 17:13:55
->>>>>>> dev
+ * @LastEditTime: 2023-01-14 12:24:27
 -->
 <template>
   <div class="MainContent">

@@ -1,11 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
-<<<<<<< HEAD
- * @LastEditTime: 2022-12-07 09:29:08
-=======
- * @LastEditTime: 2023-01-11 21:49:47
->>>>>>> dev
+ * @LastEditTime: 2023-01-14 12:20:53
 -->
 <template>
   <div class="MainContent">
@@ -360,22 +356,7 @@
 <script>
 import systemValidityTimeRecordsDialog from '@/components/contract/systemValidityTimeRecordsDialog.vue'
 import API from '@/api/ContractEntry/dealer'
-<<<<<<< HEAD
-import {
-  getDefaultPermissions,
-  getTextMap,
-  parseTime,
-  getContractEntry,
-  contractList,
-  formatThousandNum,
-  downloadFile,
-  pickerOptions,
-  pickerOptionsSystemDate,
-  deepClone,
-} from '@/utils'
-=======
 import { getDefaultPermissions, getTextMap, parseTime, getContractEntry, contractList, formatThousandNum, downloadFile, pickerOptions, pickerOptionsSystemDate, deepClone } from '@/utils'
->>>>>>> dev
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
@@ -619,21 +600,12 @@ export default {
       this.$forceUpdate()
       sessionStorage.setItem('isEditor', `1-${index}`)
     },
-<<<<<<< HEAD
-    CancelEditorRow(index,row) {
-      //复制出来的 取消编辑
-      if(row.isEditor==2) {
-        // this.tableData.splice(index,1)
-        //找到源数据 进行重置操作
-        let findIndex= this.tableData.findIndex(item => item.id == row.id&&item.isEditor==0)
-=======
     CancelEditorRow(index, row) {
       //复制出来的 取消编辑
       if (row.isEditor == 2) {
         // this.tableData.splice(index,1)
         //找到源数据 进行重置操作
         let findIndex = this.tableData.findIndex((item) => item.id == row.id && item.isEditor == 0)
->>>>>>> dev
         let originData = this.tableData[findIndex]
         let newObj = {
           id: originData.id,
@@ -667,15 +639,6 @@ export default {
           fixed: originData.fixed,
           customerMdmCode: originData.customerMdmCode,
           isEditor: 2,
-<<<<<<< HEAD
-          isPopoverShow: false,  //定时任务弹窗显示
-          expireDate: originData.expireDate,
-          contractDate: originData.contractDate,
-          systemDate: originData.systemDate,
-          originId:originData.id
-          }
-        this.$set(this.tableData,index,newObj)
-=======
           isPopoverShow: false, //定时任务弹窗显示
           expireDate: originData.expireDate,
           contractDate: originData.contractDate,
@@ -683,7 +646,6 @@ export default {
           originId: originData.id,
         }
         this.$set(this.tableData, index, newObj)
->>>>>>> dev
         this.$forceUpdate()
         return
       }
@@ -862,11 +824,7 @@ export default {
         expireDate: row.expireDate,
         contractDate: row.contractDate,
         systemDate: row.systemDate,
-<<<<<<< HEAD
-        originId:row.id
-=======
         originId: row.id,
->>>>>>> dev
       })
     },
     //更改合同日期--匹配对应的客户合同
@@ -1037,13 +995,8 @@ export default {
       }
       //避免同时出现多个el-popover
       for (const key in this.$refs) {
-<<<<<<< HEAD
-        if (key.indexOf('popover-') !== -1&&this.$refs[key]) {
-            this.$refs[key].doClose();
-=======
         if (key.indexOf('popover-') !== -1 && this.$refs[key]) {
           this.$refs[key].doClose()
->>>>>>> dev
         }
       }
       this.tableData[index].isPopoverShow = true
@@ -1072,23 +1025,7 @@ export default {
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
         effectiveEndDate: this.filterObj.effectiveEndDate,
-<<<<<<< HEAD
-        customerMdmCode: this.filterObj.customerMdmCode,
-        distributorMdmCode: this.filterObj.distributorMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('经销商分摊协议录入 - list导出成功!')
-      })
-      await API.exportDistributorContractDetail({
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-=======
         customerChannelCode: this.filterObj.channelCode,
->>>>>>> dev
         customerMdmCode: this.filterObj.customerMdmCode,
         distributorMdmCode: this.filterObj.distributorMdmCode,
         contractState: this.filterObj.state,

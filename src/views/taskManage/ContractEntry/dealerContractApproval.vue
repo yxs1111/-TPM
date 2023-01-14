@@ -1,7 +1,7 @@
 <!--
  * @Description: 经销商合同审批 Tab
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2023-01-11 21:29:50
+ * @LastEditTime: 2023-01-14 12:20:03
 -->
 <template>
   <div class="tabViewsWrap">
@@ -12,130 +12,8 @@
         <span class="tabTitle">{{ item.name }}</span>
       </router-link>
     </div>
-<<<<<<< HEAD
-    <div class="TpmButtonBGWrap">
-      <el-button type="primary" class="TpmButtonBG" @click="submit" v-permission="permissions['submit']">通过</el-button>
-      <el-button type="primary" class="TpmButtonBG" @click="reject" v-permission="permissions['rejected']">驳回</el-button>
-    </div>
-    <el-table :data="tableData" :key="tableKey" :max-height="maxheight" :min-height="800" border @selection-change="handleSelectionChange" :header-cell-style="HeadTable"
-      :row-class-name="tableRowClassName" style="width: 100%">
-      <el-table-column type="selection" align="center" :selectable="checkSelectable" />
-
-      <el-table-column fixed align="center" width="80" label="序号">
-        <template slot-scope="scope">
-          {{ scope.$index+1 }}
-        </template>
-      </el-table-column>
-      <el-table-column fixed align="center" width="180" label="操作">
-        <template slot-scope="scope">
-          <div class="table_operation">
-            <div class="haveText_editor" v-show="scope.row.isEditor" @click="saveRow(scope.row, scope.$index)">
-              <svg-icon icon-class="save-light" class="svgIcon" />
-              <span>保存</span>
-            </div>
-            <div class="haveText_editor" v-permission="permissions['update']" v-show="!scope.row.isEditor" @click="editorRow(scope.$index,scope.row)">
-              <svg-icon icon-class="editor" class="svgIcon" />
-              <span>编辑</span>
-            </div>
-            <div class="haveText_editor" v-show="scope.row.isEditor" @click="CancelEditorRow(scope.$index)">
-              <svg-icon icon-class="editor" class="svgIcon" />
-              <span>取消编辑</span>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="contractCode" fixed align="center" width="320" label="经销商分摊协议ID">
-      </el-table-column>
-      <el-table-column prop="customerChannelCode" fixed align="center" width="120" label="渠道">
-      </el-table-column>
-      <el-table-column prop="customerName" fixed align="center" width="180" label="客户名称">
-        <template slot-scope="scope">
-          <div>
-            {{scope.row.customerName}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="customerRegionName" fixed align="center" width="120" label="大区">
-      </el-table-column>
-      <el-table-column prop="customerContractSaleAmount" align="center" width="160" label="客户目标销售额">
-        <template slot-scope="scope">
-          <div>
-            {{FormateNum(scope.row.customerContractSaleAmount)}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="distributorName" align="center" width="280" label="经销商名称">
-        <template slot-scope="scope">
-          <div>
-            {{scope.row.distributorName}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="distributorSaleAmount" align="center" width="160" label="目标销售额(RMB)">
-        <template slot-scope="scope">
-          <div>
-            {{FormateNum(scope.row.saleAmount)}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="contractDate" align="center" width="200" label="合同期间">
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.contractBeginDate.replaceAll('-','/') + ' - ' + scope.row.contractEndDate.replaceAll('-','/') }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="systemDate" align="center" width="160" label="系统生效时间">
-        <template slot-scope="scope">
-          <div>
-            {{ scope.row.effectiveBeginDate + ' - ' + scope.row.effectiveEndDate }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column v-slot={row} align="center" prop="contractStateName" width="240" label="合同状态">
-         {{row.contractStateName=='待审批'&&row.activityName&&row.activityName.indexOf('审批')!=-1?row.contractStateName+'-'+row.activityName:row.contractStateName}}
-      </el-table-column>
-      <el-table-column v-slot="{row}" prop="isSupplement" align="center" width="100" label="是否补录">
-        {{row.isSupplement?'是':'否'}}
-      </el-table-column>
-      <el-table-column v-slot={row} width="120" align="center" label="合同条款">
-        <div class="seeActivity" @click="showTermDetailDialog(row)">
-          条款明细
-        </div>
-      </el-table-column>
-      <el-table-column prop="remark" align="center" width="220" label="申请人备注">
-      </el-table-column>
-      <el-table-column prop="poApprovalComments" align="center" width="220" label="Package Owner意见">
-        <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Package Owner') != -1">
-            <el-input v-model="scope.row.poApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-else>
-            {{ scope.row.poApprovalComments }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="finance" align="center" width="220" label="Finance 意见">
-        <template slot-scope="scope">
-          <div v-if="scope.row.isEditor&&scope.row.name.indexOf('Finance') != -1">
-            <el-input v-model="scope.row.finApprovalComments"  type="textarea" autosize   clearable class="my-el-input my-textArea" placeholder="请输入">
-            </el-input>
-          </div>
-          <div v-else>
-            {{ scope.row.finApprovalComments }}
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页 -->
-    <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[100, 200, 500, 1000]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-=======
     <div style="margin-top: -5px">
       <router-view />
->>>>>>> dev
     </div>
   </div>
 </template>

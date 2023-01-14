@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-09-29 14:19:19
+ * @LastEditTime: 2023-01-14 12:34:19
  */
 import Layout from '@/layout/index'
 
@@ -32,7 +32,7 @@ export default [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard', //portal
+    redirect: '/portal', //portal
     children: [{
       path: 'dashboard',
       name: 'Dashboard',

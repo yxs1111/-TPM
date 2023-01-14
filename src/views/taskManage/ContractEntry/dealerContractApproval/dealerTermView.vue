@@ -1,11 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-12 08:50:29
-<<<<<<< HEAD
- * @LastEditTime: 2022-10-13 17:14:51
-=======
- * @LastEditTime: 2023-01-11 10:04:11
->>>>>>> dev
+ * @LastEditTime: 2023-01-14 12:31:15
 -->
 <template>
   <div class="ContentDetail">

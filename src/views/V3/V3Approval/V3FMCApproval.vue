@@ -1,7 +1,7 @@
 <!--
  * @Description: V3FMCApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-10-14 15:23:44
+ * @LastEditTime: 2023-01-14 12:26:50
 -->
 <template>
   <div class="MainContent">
@@ -1002,33 +1002,6 @@ export default {
     getTableData() {
       this.tableData = []
       this.isSubmit = true
-<<<<<<< HEAD
-      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
-        if (this.filterObj.month == '') {
-          this.$message.info(messageObj.requireMonth)
-          return
-        }
-        if (this.filterObj.channelCode == '') {
-          this.$message.info(messageObj.requireChannel)
-        }
-      } else {
-        API.getApproveList({
-          pageNum: this.pageNum, // 当前页
-          pageSize: this.pageSize, // 每页条数
-          customerSystemName: this.filterObj.customerCode,
-          channelCode: this.filterObj.channelCode,
-          yearAndMonth: this.filterObj.month,
-          supplierName: this.filterObj.supplierName,
-          regionName: this.filterObj.regionName,
-        }).then((response) => {
-          this.tableData = response.data.records
-          this.pageNum = response.data.pageNum
-          this.pageSize = response.data.pageSize
-          this.total = response.data.total
-          this.mainId = this.tableData[0].mainId
-          this.infoByMainId()
-        })
-=======
       if (this.filterObj.channelCode == 'NKA') {
         if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
           if (this.filterObj.month == '') {
@@ -1083,7 +1056,6 @@ export default {
             this.infoByMainId()
           })
         }
->>>>>>> dev
       }
     },
     // 通过与审批按钮控制

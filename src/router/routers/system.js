@@ -1,7 +1,7 @@
 /*
  * @Description:
  * @Date: 2021-08-30 10:38:43
- * @LastEditTime: 2022-10-14 15:11:28
+ * @LastEditTime: 2023-01-14 12:32:15
  */
 import Layout from '@/layout/index'
 import settings from '@/settings'
@@ -60,34 +60,6 @@ export default function () {
           component: () => import('@/views/system/MonitoringManagement.vue'),
           meta: { title: '监控管理', icon: 'form' },
         },
-<<<<<<< HEAD
-        // {
-        //   path: '/os/NotificationManagement',
-        //   code: 'MonitoringManagement',
-        //   name: 'NotificationManagement',
-        //   component: () => import('@/views/system/NotificationManagement.vue'),
-        //   meta: { title: '通知管理', icon: 'form' },
-        //   redirect: '/os/NotificationManagement/NotificationManagement',
-        //   children: [
-        //     {
-        //       hidden: true,
-        //       path: '/os/NotificationManagement/NotificationManagement',
-        //       code: 'MonitoringManagement',
-        //       name: 'NotificationManagement',
-        //       component: () => import('@/views/system/NotificationManagement/NotificationManagement.vue'),
-        //       meta: { title: '通知清单', icon: 'form' , activeMenu: '/NotificationManagement' },
-        //     },
-        //     {
-        //       hidden: true,
-        //       path: '/os/NotificationManagement/MockManage',
-        //       code: 'MonitoringManagement',
-        //       name: 'MockManage',
-        //       component: () => import('@/views/system/NotificationManagement/MockManage.vue'),
-        //       meta: { title: '模拟管理', icon: 'form' , activeMenu: '/MockManage' },
-        //     },
-        //   ],
-        // },
-=======
         {
           path: '/os/NotificationManagement',
           code: 'MonitoringManagement',
@@ -126,7 +98,6 @@ export default function () {
             },
           ],
         },
->>>>>>> dev
         {
           path: 'InterfaceManage',
           code: 'authPage_interface',

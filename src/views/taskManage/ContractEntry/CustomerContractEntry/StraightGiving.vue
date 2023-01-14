@@ -1,11 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
-<<<<<<< HEAD
- * @LastEditTime: 2022-12-07 09:31:43
-=======
- * @LastEditTime: 2023-01-11 22:45:10
->>>>>>> dev
+ * @LastEditTime: 2023-01-14 12:30:45
 -->
 <template>
   <div class="MainContent">
@@ -609,23 +605,7 @@ export default {
     async exportData() {
       await API.exportCustomerContractInfo({
         customerType: 1,
-<<<<<<< HEAD
-        contractBeginDate: this.filterObj.contractBeginDate,
-        contractEndDate: this.filterObj.contractEndDate,
-        effectiveBeginDate: this.filterObj.effectiveBeginDate,
-        effectiveEndDate: this.filterObj.effectiveEndDate,
-        customerMdmCode: this.filterObj.customerMdmCode,
-        contractState: this.filterObj.state,
-      }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, '直供客户合同录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('客户合同录入 - list导出成功!')
-      })
-      await API.exportCustomerContractDetail({
-        customerType: 1,
-=======
         channelCode: this.filterObj.channelCode,
->>>>>>> dev
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -634,20 +614,12 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-<<<<<<< HEAD
-        downloadFile(res, '直供客户合同录入明细 - by KA-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('客户合同录入明细 - by KA导出成功!')
-      })
-      await API.exportCustomerContract({
-        customerType: 1,
-=======
         downloadFile(res, '直供客户合同录入明细 -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('直供客户合同录入导出成功!')
       })
       await API.exportCustomerContractDetail({
         customerType: 1,
         channelCode: this.filterObj.channelCode,
->>>>>>> dev
         contractBeginDate: this.filterObj.contractBeginDate,
         contractEndDate: this.filterObj.contractEndDate,
         effectiveBeginDate: this.filterObj.effectiveBeginDate,
@@ -656,10 +628,6 @@ export default {
         contractState: this.filterObj.state,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-<<<<<<< HEAD
-        downloadFile(res, '直供客户合同录入 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('直供客户合同录入导出成功!')
-=======
         downloadFile(res, '直供客户合同录入明细 - by KA-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('客户合同录入明细 - by KA导出成功!')
       })
@@ -676,7 +644,6 @@ export default {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '直供客户合同录入 - list-' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('客户合同录入 - list导出成功!')
->>>>>>> dev
       })
     },
     //编辑行数据
@@ -1047,13 +1014,8 @@ export default {
       }
       //避免同时出现多个el-popover
       for (const key in this.$refs) {
-<<<<<<< HEAD
-        if (key.indexOf('popover-') !== -1&&this.$refs[key]) {
-            this.$refs[key].doClose();
-=======
         if (key.indexOf('popover-') !== -1 && this.$refs[key]) {
           this.$refs[key].doClose()
->>>>>>> dev
         }
       }
       this.tableData[index].isPopoverShow = true
