@@ -17,9 +17,9 @@ el-table {
     bottom: 17px !important;
   }
 }
-el-table__fixed-body-wrapper {
-  bottom: 5px !important;
-}
+// el-table__fixed-body-wrapper {
+//   bottom: 5px !important;
+// }
 label {
   font-weight: 700;
 }
@@ -442,7 +442,7 @@ div:focus {
   }
   .el-table__fixed-left {
     height: 100% !important; //设置高优先，以覆盖内联样式
-    // bottom: 20px;
+    bottom: 20px;
   }
   .el-table--striped .el-table__body tr.el-table__row--striped td {
     background: #fff;
@@ -1025,4 +1025,26 @@ input::-webkit-inner-spin-button {
     height: calc(100vh - 60px) !important;
     width: 100% !important;
   }
+}
+//给固定列设置下边距
+.el-table {
+  .el-table__fixed {
+      height:auto !important;
+      bottom:16px !important; //具体值是多少根据你横向滚动条的高度进行设置
+  }
+}
+//去掉固定列下方的横线
+.el-table__fixed::before, .el-table__fixed-right::before {
+  display:none;
+}
+
+.el-table__fixed-right .el-table__fixed-body-wrapper, .el-table__fixed-right .el-table__fixed-footer-wrapper, .el-table__fixed-right .el-table__fixed-header-wrapper {
+  left: auto;
+  right: 18px;
+  bottom: 16px;
+}
+.el-table__fixed-left .el-table__fixed-body-wrapper, .el-table__fixed-left .el-table__fixed-footer-wrapper, .el-table__fixed-left .el-table__fixed-header-wrapper {
+  left: auto;
+  left: 0;
+  bottom: 16px;
 }

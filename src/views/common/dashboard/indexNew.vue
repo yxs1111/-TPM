@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2023-01-12 09:43:55
+ * @LastEditTime: 2023-01-14 16:39:44
 -->
 <template>
   <div class="indexNew">
@@ -122,8 +122,8 @@
           <el-table :header-cell-style="{ color: '#000000', height: '53px' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
             <el-table-column align="left" prop="yearAndMonth" label="活动周期" />
             <el-table-column prop="costTypeName" label="Cost Type" width="100" />
-            <el-table-column width='125' prop="minePackageName" label="Mine Package" />
-            <el-table-column width='205' prop="costItemName" label="Cost Item" />
+            <el-table-column width='125' prop="minePackageName" show-overflow-tooltip label="Mine Package" />
+            <el-table-column width='205' prop="costItemName" show-overflow-tooltip label="Cost Item" />
             <el-table-column prop="channelName" label="渠道" />
             <el-table-column prop="num" label="版本号" />
             <el-table-column width='170' align="left" prop="" label="查看">
@@ -147,7 +147,7 @@
             <el-table-column prop="item" label="审批流类型" width="140" />
             <el-table-column prop="contractCode" label="合同ID" width="280" />
             <el-table-column prop="customerName" label="客户名称" />
-            <el-table-column prop="distributorName" label="经销商名称" />
+            <el-table-column prop="distributorName" show-overflow-tooltip label="经销商名称" />
             <el-table-column prop="activityName" label="当前节点" />
             <el-table-column prop="" label="查看" width="120">
               <template slot-scope="{ row }">
