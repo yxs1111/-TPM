@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:12:03
+ * @LastEditTime: 2023-01-15 17:44:03
 -->
 <template>
   <div class="MainContent">
@@ -103,12 +103,12 @@
                alt="">
           <span class="text">导出</span>
         </div>
-        <div class="TpmButtonBG"
+        <!-- <div class="TpmButtonBG"
              @click="clearsmartplan(filterObj)">
           <img src="../../../assets/images/delete_l.png"
                alt="" />
           <span class="text">清除数据</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <el-table :data="tableData"

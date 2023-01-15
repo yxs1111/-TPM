@@ -1,7 +1,7 @@
 <!--
  * @Description: V1Transport
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-06 17:15:44
+ * @LastEditTime: 2023-01-15 17:46:49
 -->
 <template>
   <div class="MainContent">
@@ -35,7 +35,7 @@
       </div>
       <div class="OpertionBar">
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
-        <el-button type="danger" class="TpmButtonBG" @click="deleteData">清除数据</el-button>
+        <!-- <el-button type="danger" class="TpmButtonBG" @click="deleteData">清除数据</el-button> -->
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>

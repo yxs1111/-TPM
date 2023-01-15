@@ -1,7 +1,7 @@
 <!--
  * @Description: V1RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-14 12:33:31
+ * @LastEditTime: 2023-01-15 17:46:38
 -->
 <template>
   <div class="MainContent">
@@ -68,7 +68,7 @@
           <img src="@/assets/images/huoqu.png" alt="">
           <span class="text">获取Smart Plan数据</span>
         </div>
-        <el-button type="primary" class="TpmButtonBG" @click="clear">清除数据</el-button>
+        <!-- <el-button type="primary" class="TpmButtonBG" @click="clear">清除数据</el-button> -->
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="">

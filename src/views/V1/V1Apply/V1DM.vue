@@ -1,7 +1,7 @@
 <!--
  * @Description: V1DM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-02 12:06:44
+ * @LastEditTime: 2023-01-15 17:43:55
 -->
 <template>
   <div class="MainContent">
@@ -46,10 +46,10 @@
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-        <div class="TpmButtonBG" @click="clearsmartplan(filterObj)">
+        <!-- <div class="TpmButtonBG" @click="clearsmartplan(filterObj)">
           <img src="../../../assets/images/delete_l.png" alt="" />
           <span class="text">清除数据</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">

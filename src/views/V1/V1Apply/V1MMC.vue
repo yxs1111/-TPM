@@ -38,7 +38,7 @@
             <img src="../../../assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
-          <el-button type="primary" class="TpmButtonBG" @click="clearData()">清除数据</el-button>
+          <!-- <el-button type="primary" class="TpmButtonBG" @click="clearData()">清除数据</el-button> -->
         </div>
       </div>
     </div>
