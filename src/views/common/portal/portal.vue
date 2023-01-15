@@ -1,7 +1,7 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2023-01-15 15:41:03
+ * @LastEditTime: 2023-01-15 15:42:29
 -->
 <template>
   <div class="portalWrap">
@@ -41,16 +41,16 @@
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
         </div>
       </div>
-      <div class="systemLi" @click="goMDM" v-wave="{color: '#f7931f',initialOpacity: 0.5,easing: 'ease-in'}">
-        <img src="@/assets/images/portal/mdmDark.png" alt="" class="systemImg" />
-        <div class="systemName">接口数据</div>
+      <div class="systemLi" @click="goTPMContract" v-wave="{color: '#999',initialOpacity: 0.5,easing: 'ease-in'}">
+        <img src="@/assets/images/portal/contract.png" alt="" class="systemImg" />
+        <div class="systemName">合同管理</div>
         <div class="cycle">
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
         </div>
       </div>
-      <div class="systemLi" @click="goTPMContract" v-wave="{color: '#999',initialOpacity: 0.5,easing: 'ease-in'}">
-        <img src="@/assets/images/portal/contract.png" alt="" class="systemImg" />
-        <div class="systemName">合同管理</div>
+      <div class="systemLi" @click="goMDM" v-wave="{color: '#f7931f',initialOpacity: 0.5,easing: 'ease-in'}">
+        <img src="@/assets/images/portal/mdmDark.png" alt="" class="systemImg" />
+        <div class="systemName">接口数据</div>
         <div class="cycle">
           <svg-icon icon-class="nextStep" style="font-size: 20px;" />
         </div>
@@ -80,8 +80,9 @@ export default {
       this.$router.push('/dashboard')
     },
     goTPMContract() {
+      this.$router.push('/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry')
       // this.$router.push('/contractManagement/ContractEntry/CustomerContractEntry')
-      window.location.href = 'https://uat-iinvest.rfc-friso.com:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
+      // window.location.href = 'https://uat-iinvest.rfc-friso.com/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
       // window.location.href = 'http://localhost:8080/#/login?redirect=/contractManagement/ContractEntry/CustomerContractEntry'
     },
     async goSalesCpt() {

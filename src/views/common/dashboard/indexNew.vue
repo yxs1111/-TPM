@@ -1,7 +1,7 @@
 <!--
  * @Description: 甘特图组件 --基于gantt-elastic
  * @Date: 2022-06-16 09:31:24
- * @LastEditTime: 2023-01-12 09:43:55
+ * @LastEditTime: 2023-01-15 15:46:11
 -->
 <template>
   <div class="indexNew">
@@ -555,7 +555,8 @@ export default {
           }
           this.startTimeArr = []
           item.label = item.activityMonth
-          item.startVZero = item.startAndEndVZero.substring(0, 10)
+          item.startVZero = item.startAndEndVZero.substring(0, 10) 
+          // console.log(item.EndVZero)
           item.EndVZero = item.startAndEndVZero.substring(item.startAndEndVZero.length - 10, item.startAndEndVZero.length)
           item.startVOne = item.startAndEndVOne.substring(0, 10)
           item.EndVOne = item.startAndEndVOne.substring(item.startAndEndVOne.length - 10, item.startAndEndVOne.length)
@@ -563,6 +564,11 @@ export default {
           item.EndVTwo = item.startAndEndVTwo.substring(item.startAndEndVTwo.length - 10, item.startAndEndVTwo.length)
           item.startVThree = item.startAndEndVThree.substring(0, 10)
           item.EndVThree = item.startAndEndVThree.substring(item.startAndEndVThree.length - 10, item.startAndEndVThree.length)
+          item.EndVZero=this.isCompare(item.startVZero,item.EndVZero)
+          item.EndVOne=this.isCompare(item.startVOne,item.EndVOne)
+          item.EndVTwo=this.isCompare(item.startVTwo,item.EndVTwo)
+          item.EndVThree=this.isCompare(item.startVThree,item.EndVThree)
+          
           this.startTimeArr.push(new Date(item.startVZero), new Date(item.EndVZero), new Date(item.startVOne), new Date(item.EndVOne), new Date(item.startVTwo), new Date(item.EndVTwo), new Date(item.startVThree), new Date(item.EndVThree))
           let maxDate = new Date(Math.max.apply(null, this.startTimeArr))
           let minDate = new Date(Math.min.apply(null, this.startTimeArr))
@@ -608,12 +614,14 @@ export default {
           item.end = dayjs(currentdate3).valueOf()
           item.type = 'group'
           item.tasks = []
+          console.log(item.startVThree)
+          console.log(item.end)
           // this.tasks.push(
           item.tasks.push(
             {
               id: item.id + 'v0',
               label: 'V0',
-              start: dayjs(currentdate1).valueOf(),
+              start: dayjs(item.startVZero).valueOf()<item.start?item.start:dayjs(item.startVZero).valueOf(),
               startTime2: dayjs(item.startVZero).valueOf(),
               end: dayjs(item.EndVZero).valueOf(),
               percent: 50,
@@ -660,11 +668,17 @@ export default {
                 },
               },
               parentId: item.id,
-            },
-            {
+            },      
+          )
+          //若V3的开始时间 大于甘特图的结束时间则不该显示
+          if(dayjs(item.startVThree).valueOf()>item.end) {
+
+          } else {
+            item.tasks.push(
+              {
               id: item.id + 'v3',
               label: 'V3',
-              start: dayjs(item.startVThree).valueOf(),
+              start: dayjs(item.startVThree).valueOf()>item.end?item.end:dayjs(item.startVThree).valueOf(),
               startTime2: dayjs(item.startVThree).valueOf(),
               end: dayjs(item.EndVThree).valueOf(),
               percent: 50,
@@ -678,10 +692,19 @@ export default {
               },
               parentId: item.id,
             }
-          )
+            )
+          }
           this.tasks.push(item)
         })
       })
+    },
+    //判断两天是否相等，若相等则结束日期加一天
+    isCompare(start,end) {
+      if(start==end){
+        return dayjs(end).add(1,'day').format('YYYY-MM-DD')
+      } else {
+        return end
+      }
     },
     dayjs(time) {
       return dayjs(time).format('YYYY-MM-DD')
@@ -699,8 +722,8 @@ export default {
         assigneeStr += `<span>${item}</span></br>`
       })
       return `<div class="Tip">
-                <span style='font-weight: bold'>${value.createDate ? value.createDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>-
-                <span style='font-weight: bold'>${value.updateDate ? value.updateDate.substring(0, 19).replaceAll('T', ' ') : ''}</span>
+                <span style='font-weight: bold'>${value.createDate ? value.createDate.substring(0, 11).replaceAll('T', ' ') : ''}</span>-
+                <span style='font-weight: bold'>${value.updateDate ? value.updateDate.substring(0, 11).replaceAll('T', ' ') : ''}</span>
               </div>`
     },
     // 获取信息列表
