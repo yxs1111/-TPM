@@ -1,7 +1,7 @@
 <!--
  * @Description: 门户--选择TPM||CPT||MDM
  * @Date: 2022-09-01 11:35:31
- * @LastEditTime: 2023-01-15 14:46:42
+ * @LastEditTime: 2023-01-15 15:19:09
 -->
 <template>
   <div class="portalWrap">
@@ -198,11 +198,11 @@ export default {
       &:nth-child(2) .cycle {
         background-color: #4192d3;
       }
-      &:nth-child(3) .cycle {
+      &:nth-child(4) .cycle {
         // background-color: #f7931f;
         background-color: #999999;
       }
-      &:nth-child(4) .cycle {
+      &:nth-child(3) .cycle {
         background-color: #4192d3;
       }
     }
