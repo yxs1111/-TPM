@@ -409,7 +409,7 @@ export default {
         })
       }
       API.excdisplayData({ ...this.filterObj }).then((response) => {
-        const fileName = `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelName}_V3_查询.xlsx`
+        const fileName = `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelCode}_V3_查询.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
@@ -427,7 +427,7 @@ export default {
     // 导出异常信息
     exportErrorList() {
       if (this.ImportData.length) {
-        API.downExcelError({ yearAndMonth: this.filterObj.yearAndMonth, channelName: this.filterObj.channelName }).then((res) => {
+        API.downExcelError({ yearAndMonth: this.filterObj.yearAndMonth, channelName: this.filterObj.channelCode }).then((res) => {
           const timestamp = Date.parse(new Date())
           downloadFile(res, 'V3_MMC异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
@@ -497,7 +497,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelName', this.filterObj.channelName)
+      formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', '1')
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -517,7 +517,7 @@ export default {
     },
     // 保存
     confirmImport() {
-      API.save({ yearAndMonth: this.filterObj.yearAndMonth, channelName: this.filterObj.channelName }).then((res) => {
+      API.save({ yearAndMonth: this.filterObj.yearAndMonth, channelName: this.filterObj.channelCode }).then((res) => {
         if (res.code == 1000) {
           this.$message.success(this.messageMap.saveSuccess)
           this.getTableData()
@@ -531,7 +531,7 @@ export default {
     checkImport() {
       API.exceptionCheck({
         yearAndMonth: this.filterObj.yearAndMonth,
-        channelName: this.filterObj.channelName,
+        channelName: this.filterObj.channelCode,
       }).then((response) => {
         if (response.code == 1000) {
           this.$message.success(this.messageMap.checkSuccess)
@@ -551,7 +551,7 @@ export default {
           channelName: this.filterObj.channelCode,
           downType: '1',
         }).then((res) => {
-          downloadFile(res, `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelName}_V3申请.xlsx`) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelCode}_V3申请.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {

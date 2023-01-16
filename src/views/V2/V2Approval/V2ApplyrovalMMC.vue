@@ -377,7 +377,7 @@ export default {
         })
       }
       API.excdisplayDataApprove({ ...this.filterObj }).then((response) => {
-        const fileName = `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelName}_V2_查询.xlsx`
+        const fileName = `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelCode}_V2_查询.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
@@ -452,7 +452,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelName', this.filterObj.channelName)
+      formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', '2')
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -479,7 +479,7 @@ export default {
           channelName: this.filterObj.channelCode,
           downType: '2',
         }).then((res) => {
-          downloadFile(res, `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelName}_V2审批.xlsx`) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelCode}_V2审批.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {
