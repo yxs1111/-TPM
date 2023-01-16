@@ -993,7 +993,14 @@ export default {
     getChannel() {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
-          this.channelArr = res.data
+          res.data.forEach((item) => {
+            if (item.channelCode == 'NKA') {
+              this.channelArr.push(item)
+            }
+            if (item.channelCode == 'EC') {
+              this.channelArr.push(item)
+            }
+          })
           this.getCustomerList(this.filterObj.channelCode)
         }
       })
