@@ -172,6 +172,7 @@ export default {
       }).then((response) => {
         this.tempObj.tempInfo = null
         this.tableData = response.data.records
+        // this.tableData.minePackageCode = response.data.records
         this.total = response.data.total
       })
     },
@@ -234,8 +235,8 @@ export default {
       // const code = this.minePackageList.filter(
       //   (item) => row.minePackage === item.costType
       // )[0].code
-      // console.log(code)
-      this.getCostItemList(row.minePackage)
+      console.log(row.minePackage)
+      this.getCostItemList(this.minePackageList[this.tempObj.rowIndex].costTypeNumber)
       this.isEditor = index
       this.$forceUpdate()
       console.log(
