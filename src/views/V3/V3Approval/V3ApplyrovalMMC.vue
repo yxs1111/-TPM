@@ -398,7 +398,7 @@ export default {
     },
     // 导出excel
     exportExcelInfo() {
-      if (!this.filterObj.yearAndMonth || !this.filterObj.channelName) {
+      if (!this.filterObj.yearAndMonth || !this.filterObj.channelCode) {
         return this.$message({
           message: '必选选择年月和渠道！',
           type: 'warning',
@@ -457,7 +457,7 @@ export default {
     // 导入框
     importData() {
       this.saveBtn = false
-      if (this.filterObj.channelName == '') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
