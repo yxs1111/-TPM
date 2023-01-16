@@ -347,7 +347,7 @@ export default {
           this.channelArr = res.data
           //channelArr 只取channelCode为NKA
           this.channelArr = this.channelArr.filter(
-            (item) => item.channelCode === 'NKA' 
+            (item) => item.channelCode === 'NKA'
           )
         }
       })

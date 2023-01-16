@@ -476,7 +476,7 @@ export default {
         // 导出数据筛选
         API.downExcelTemplate({
           yearAndMonth: this.filterObj.yearAndMonth,
-          channelName: this.filterObj.channelName,
+          channelName: this.filterObj.channelCode,
           downType: '2',
         }).then((res) => {
           downloadFile(res, `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelName}_V2审批.xlsx`) //自定义Excel文件名
