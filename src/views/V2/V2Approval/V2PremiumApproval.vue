@@ -712,17 +712,32 @@ export default {
           mainId: this.mainId,
         })
         .then((res) => {
-          if (res.code === 1000) {
-            if (
-              res.data.version === 'V2' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
-              this.tableData[0].isSubmit
-            ) {
-              //本人可以提交
-              this.isSubmit = false
-            } else {
-              //其他人禁用
-              this.isSubmit = true
+          if (this.filterObj.channelCode == 'NKA') {
+            if (res.code === 1000) {
+              if (
+                res.data.version === 'V2' &&
+                res.data.assignee.indexOf(this.usernameLocal) != -1
+              ) {
+                //本人可以提交
+                this.isSelf = true
+              } else {
+                //其他人禁用
+                this.isSelf = false
+              }
+            }
+          }
+          if (this.filterObj.channelCode == 'EC') {
+            if (res.code === 1000) {
+              if (
+                res.data.version === 'Premium-V2' &&
+                res.data.assignee.indexOf(this.usernameLocal) != -1
+              ) {
+                //本人可以提交
+                this.isSelf = true
+              } else {
+                //其他人禁用
+                this.isSelf = false
+              }
             }
           }
         })
