@@ -310,13 +310,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="payType" label="费用核销方式">
+      <el-table-column width="120" align="center" prop="payTypeName" label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.payType }}
+            {{ scope.row.payTypeName }}
           </div>
         </template>
       </el-table-column>
@@ -607,7 +607,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="120" align="center" prop="payType" label="费用核销方式"></el-table-column>
+            <el-table-column width="120" align="center" prop="payTypeName" label="费用核销方式"></el-table-column>
             <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
                 <div>点数差值(%)<br /><span class="subTitle">KA+Brand+Contract item</span></div>
