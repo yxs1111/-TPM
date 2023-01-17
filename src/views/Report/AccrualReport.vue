@@ -53,7 +53,7 @@ import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
 import {
   getDefaultPermissions,
-  getHeight,
+  getHeight2,
   getCurrentMonth,
 } from '@/utils'
 import API from '@/api/report/report.js'
@@ -79,14 +79,14 @@ export default {
       RegionList: [],
       BrandList: [],
       checkArr: [], //批量删除,存放选中
-      maxheight: getHeight(),
+      maxheight: getHeight2(),
     }
   },
   computed: {},
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeight()
+        this.maxheight = getHeight2()
       })()
     }
   },
