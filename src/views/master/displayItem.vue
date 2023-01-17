@@ -222,6 +222,7 @@ export default {
       })
     },
     editorRow(index, row) {
+      this.getCostItemList(this.tableData[index].minePackageCode)
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
@@ -235,8 +236,12 @@ export default {
       // const code = this.minePackageList.filter(
       //   (item) => row.minePackage === item.costType
       // )[0].code
-      console.log(row.minePackage)
-      this.getCostItemList(this.minePackageList[this.tempObj.rowIndex].costTypeNumber)
+      // this.minePackageList.forEach((item) => {
+      //   if (row.minePackage === item.costType) {
+      //     console.log(item.costTypeNumber)
+      //   }
+      // })
+      console.log(this.minePackageList)
       this.isEditor = index
       this.$forceUpdate()
       console.log(
