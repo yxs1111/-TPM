@@ -137,7 +137,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
+      <el-table-column width="100" align="center" prop="regionName" label="大区">
         <template v-slot:header>
           <div>大区<br><span class="subTitle">-</span></div>
         </template>
@@ -461,7 +461,7 @@
             <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
             <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
-            <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区" />
+            <el-table-column width="100" align="center" prop="regionName" label="大区" />
             <el-table-column width="220" align="center" prop="distributorName" label="经销商" />
             <el-table-column width="220" align="center" prop="regionName" label="区域" />
             <el-table-column width="220" align="center" prop="contractItemName" label="Contract Item" />
