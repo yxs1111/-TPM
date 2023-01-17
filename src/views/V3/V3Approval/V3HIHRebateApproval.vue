@@ -137,14 +137,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="100" align="center" prop="zoneName" label="大区">
-        <template v-slot:header>
-          <div>大区<br><span class="subTitle">-</span></div>
-        </template>
-        <template slot-scope="scope">
-            {{ scope.row.zoneName }}
-        </template>
-      </el-table-column>
       <el-table-column width="220" align="center" prop="distributorName" label="经销商">
         <template v-slot:header>
           <div>经销商<br><span class="subTitle">-</span></div>
@@ -153,6 +145,14 @@
           <div>
             {{ scope.row.distributorName }}
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="100" align="center" prop="zoneName" label="大区">
+        <template v-slot:header>
+          <div>大区<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.zoneName }}
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="regionName" label="区域">
