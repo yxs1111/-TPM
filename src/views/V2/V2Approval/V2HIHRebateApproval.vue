@@ -244,6 +244,16 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="120" align="center" prop="payTypeName" label="费用核销方式">
+        <template v-slot:header>
+          <div>费用核销方式<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.payTypeName }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="220" align="right" prop="ratioDifference" label="点数差值(%)">
         <template v-slot:header>
           <div>点数差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
@@ -483,6 +493,8 @@
               </template>
             </el-table-column>
             <el-table-column width="240" align="right" prop="costDeptName" label="费用归属部门">
+            </el-table-column>
+            <el-table-column width="120" align="center" prop="payTypeName" label="费用核销方式">
             </el-table-column>
             <el-table-column width="240" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
