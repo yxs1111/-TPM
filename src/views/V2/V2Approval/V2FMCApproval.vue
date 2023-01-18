@@ -1144,7 +1144,7 @@ export default {
               let isError = this.ImportData.findIndex((item) => {
                 return item.systemJudgment == 'Error'
               })
-              this.isCheck = isError == -1 ? 1 : 0
+              this.saveBtn = isError == -1 ? 1 : 0
             }
           } else {
             this.$message.info(this.messageMap.importError)
@@ -1183,7 +1183,7 @@ export default {
               let isError = this.ImportData.findIndex((item) => {
                 return item.systemJudgment == 'Error'
               })
-              this.isCheck = isError == -1 ? 1 : 0
+              this.saveBtn = isError == -1 ? 1 : 0
             }
           } else {
             this.$message.info(this.messageMap.importError)

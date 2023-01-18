@@ -244,7 +244,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.supplierName }}
+            {{scope.row.distributorName == null? scope.row.supplierName : scope.row.distributorName }}
           </div>
         </template>
         <!-- 数据未对接 -->
