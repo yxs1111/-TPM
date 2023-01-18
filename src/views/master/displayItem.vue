@@ -89,7 +89,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, getHeight, downloadFile } from '@/utils'
+import { getDefaultPermissions, getHeight2, downloadFile } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import item from '@/layout/components/Sidebar/Item'
 import selectAPI from '@/api/selectCommon/selectCommon'
@@ -120,14 +120,14 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      maxheight: getHeight(),
+      maxheight: getHeight2(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeight()
+        this.maxheight = getHeight2()
       })()
     }
     this.getTableData()
