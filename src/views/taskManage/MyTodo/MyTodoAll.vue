@@ -320,6 +320,9 @@ export default {
       if(minePackageName=='Roadshow and Live Stream') {
         minePackageName='Roadshow'
       }
+      if(minePackageName=='Discount_Others') {
+        minePackageName='Listing fee'
+      }
       if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
           this.$router.push({ path: '/costManagement/V0/V0ApplyList', params: { channelCode } })
