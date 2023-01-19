@@ -79,7 +79,7 @@ module.exports = {
         // target: `http://192.168.50.85:7777`, // 王宝兴
         // target: `http://192.168.40.172:7788`, // 王宝兴
         //target: `http://192.168.40.170:7777`, // 樊鹏伟
-        //target: `http://192.168.40.205:7777`, // 孙修为
+        //target: `http://192.168.40.21:7777`, // 孙修为
         // target: `http://192.168.30.116:7777`, // 王文建
         // target: `https://uat-iinvest.rfc-friso.com:8080/prod-api`, // 测试服务器
         target: `https://saledata.rfc-friso.com/prod-api`, // Others测试
