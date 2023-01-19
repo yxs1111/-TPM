@@ -676,6 +676,7 @@ export default {
             obj = {
               yearAndMonth: this.filterObj.month,
               channelName: this.ruleForm.channelCode,
+              channelCode: this.ruleForm.channelCode,
               dimScenario: this.ruleForm.dimScenario,
               dimVersion: this.ruleForm.dimVersion,
             }
