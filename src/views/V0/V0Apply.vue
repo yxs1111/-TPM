@@ -366,6 +366,7 @@ export default {
     getScenarioList() {
       API.getScenarioList({
         channelName: this.filterObj.channelCode,
+        channelCode: this.filterObj.channelCode,
       }).then((res) => {
         this.yearAndMonthList = res.data
       })
