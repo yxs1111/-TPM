@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-20 12:58:09
+ * @LastEditTime: 2023-01-20 14:17:43
 -->
 <template>
   <div class="MainContent">
@@ -573,7 +573,7 @@ export default {
         .then((res) => {
           if (this.filterObj.channelCode == 'NKA') {
             if (res.code === 1000) {
-              if (res.data.version === 'V2' && res.data.assignee.indexOf(this.usernameLocal) != -1) {
+              if (res.data.version.includes("V2") && res.data.assignee.indexOf(this.usernameLocal) != -1) {
                 //本人可以提交
                 this.isSelf = true
               } else {
@@ -584,7 +584,7 @@ export default {
           }
           if (this.filterObj.channelCode == 'EC') {
             if (res.code === 1000) {
-              if (res.data.version === 'Premium-V2' && res.data.assignee.indexOf(this.usernameLocal) != -1) {
+              if (res.data.version.includes("V2") && res.data.assignee.indexOf(this.usernameLocal) != -1) {
                 //本人可以提交
                 this.isSelf = true
               } else {
