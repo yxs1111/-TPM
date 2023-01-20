@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Premium
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-20 14:17:57
+ * @LastEditTime: 2023-01-20 14:33:08
 -->
 <template>
   <div class="MainContent">
@@ -571,6 +571,7 @@ export default {
     getTableData() {
       this.tableData = []
       this.isSubmit = true
+      this.isSelf=false
       if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
         if (this.filterObj.month == '') {
           this.$message.info(messageObj.requireMonth)
