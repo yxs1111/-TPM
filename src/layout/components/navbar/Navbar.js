@@ -142,7 +142,10 @@ export default {
             return
           }
           this.saveLoading = true
+          const loginUser = localStorage.usernameLocal
+          console.log(loginUser)
           params.id = id
+          params.loginName = id
           requestApi.request_post(userApi.url + '/updatePassword', params).then((res) => {
             this.saveLoading = false
             if (res && res.code === 1000) {
