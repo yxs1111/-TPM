@@ -30,8 +30,8 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-button slot="reference" class='needHelp' :class="changeScreen">
-        <div class="needHelpTxt">?</div>
+      <el-button slot="reference" class='needHlep' :class="changeScreen">
+        <div class="needHlepTxt">?</div>
       </el-button>
     </el-popover>
     <transition name="fade-transform" mode="out-in">
@@ -49,7 +49,7 @@ export default {
   name: 'AppMain',
   data() {
     return {
-      changeScreen: 'needHelp2',
+      changeScreen: 'needHlep2',
       gao: document.body.clientHeight,
       gridData: [
         {
@@ -81,32 +81,32 @@ export default {
   mounted() {
     this.changeScreen2()
     window.addEventListener('resize', this.changeScreen2)
-    this.needHelp()
+    this.needHlep()
   },
   methods: {
     changeScreen2() {
       const height = document.body.clientHeight
       if (height <= 929) {
-        this.changeScreen = 'needHelp2'
+        this.changeScreen = 'needHlep2'
       } else if (height <= 1032) {
-        this.changeScreen = 'needHelp3'
+        this.changeScreen = 'needHlep3'
       } else if (height == 1080) {
-        this.changeScreen = 'needHelp2'
+        this.changeScreen = 'needHlep2'
       } else if (height <= 1162) {
-        this.changeScreen = 'needHelp4'
+        this.changeScreen = 'needHlep4'
       } else if (height <= 1239) {
-        this.changeScreen = 'needHelp5'
+        this.changeScreen = 'needHlep5'
       } else if (height <= 1394) {
-        this.changeScreen = 'needHelp6'
+        this.changeScreen = 'needHlep6'
       } else if (height <= 1859) {
-        this.changeScreen = 'needHelp7'
+        this.changeScreen = 'needHlep7'
       } else if (height <= 2788) {
-        this.changeScreen = 'needHelp8'
+        this.changeScreen = 'needHlep8'
       } else if (height <= 3717) {
-        this.changeScreen = 'needHelp9'
+        this.changeScreen = 'needHlep9'
       }
     },
-    needHelp() {
+    needHlep() {
       this.gridData = []
       TaskAPI.getNeedHelp().then((res) => {
         res.data.forEach((item, index) => {
@@ -157,19 +157,19 @@ export default {
 
 <style lang="scss">
 // fix css style bug in open el-dialog
-.needHelp2 {
+.needHlep2 {
   width: 70px !important;
   height: 70px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 30px !important;
     height: 30px !important;
     font-size: 20px !important;
   }
 }
-.needHelp3 {
+.needHlep3 {
   width: 82px !important;
   height: 82px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 37px !important;
     height: 36px !important;
     font-size: 22px !important;
@@ -177,10 +177,10 @@ export default {
     padding-top: 6px !important;
   }
 }
-.needHelp4 {
+.needHlep4 {
   width: 97px !important;
   height: 97px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 45px !important;
     height: 44px !important;
     font-size: 26px !important;
@@ -188,10 +188,10 @@ export default {
     padding-top: 8px !important;
   }
 }
-.needHelp5 {
+.needHlep5 {
   width: 105px !important;
   height: 105px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 50px !important;
     height: 49px !important;
     font-size: 28px !important;
@@ -199,10 +199,10 @@ export default {
     padding-top: 10px !important;
   }
 }
-.needHelp6 {
+.needHlep6 {
   width: 123.5px !important;
   height: 123.5px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 58px !important;
     height: 56px !important;
     font-size: 36px !important;
@@ -210,10 +210,10 @@ export default {
     padding-top: 7px !important;
   }
 }
-.needHelp7 {
+.needHlep7 {
   width: 176px !important;
   height: 176px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 72px !important;
     height: 68px !important;
     font-size: 40px !important;
@@ -221,10 +221,10 @@ export default {
     padding-top: 9px !important;
   }
 }
-.needHelp8 {
+.needHlep8 {
   width: 256px !important;
   height: 256px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 112px !important;
     height: 111px !important;
     font-size: 62px !important;
@@ -232,10 +232,10 @@ export default {
     padding-top: 19px !important;
   }
 }
-.needHelp9 {
+.needHlep9 {
   width: 345px !important;
   height: 345px !important;
-  .needHelpTxt {
+  .needHlepTxt {
     width: 157px !important;
     height: 159px !important;
     font-size: 87px !important;
@@ -243,7 +243,7 @@ export default {
     padding-top: 29px !important;
   }
 }
-.needHelp {
+.needHlep {
   z-index: 45;
   box-shadow: 0px 0px 13px 0px rgba(127, 127, 127, 0.1);
   position: absolute;
@@ -258,7 +258,7 @@ export default {
   span {
     text-align: center;
   }
-  .needHelpTxt {
+  .needHlepTxt {
     font-weight: 600;
     border-radius: 50%;
     border: 2px solid rgba(65, 146, 211, 1);
@@ -268,27 +268,27 @@ export default {
     padding-top: 3px;
   }
 }
-.needHelp:active {
+.needHlep:active {
   background: #126c9e !important;
   font-weight: bold;
 }
 /*按钮悬浮*/
-.needHelp:hover {
+.needHlep:hover {
   background: rgba(65, 146, 211, 1) !important;
   color: white !important;
   font-weight: bold;
   border-color: rgba(65, 146, 211, 1) !important;
-  .needHelpTxt {
+  .needHlepTxt {
     border: 2px solid #fff;
   }
 }
 /*按钮点击*/
-.needHelp:focus {
+.needHlep:focus {
   background: rgba(65, 146, 211, 1) !important;
   color: white !important;
   font-weight: bold;
   border-color: rgba(65, 146, 211, 1) !important;
-  .needHelpTxt {
+  .needHlepTxt {
     border: 2px solid #fff;
   }
 }

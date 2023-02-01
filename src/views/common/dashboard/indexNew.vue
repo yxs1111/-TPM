@@ -446,12 +446,12 @@ export default {
     this.getContract()
     this.getCompleteData()
     this.getActivitycycle()
-    this.needHelp()
+    this.needHlep()
   },
   methods: {
     //app OPEN_BREADCRUMB 映射成openBreadcrumb方法
     ...mapMutations('app', ['OPEN_BREADCRUMB']),
-    needHelp() {
+    needHlep() {
       this.gridData = []
       TaskAPI.getNeedHelp().then((res) => {
         res.data.forEach((item, index) => {
@@ -2103,7 +2103,7 @@ export default {
   height: calc(100% - 33px);
   overflow-y: auto;
 }
-.needHelp {
+.needHlep {
   box-shadow: 0px 0px 13px 0px rgba(127, 127, 127, 0.1);
   position: absolute;
   //background-color: rgba(65, 146, 211, 1);
@@ -2114,7 +2114,7 @@ export default {
   color: rgba(65, 146, 211, 1);
   font-size: 20px;
   margin: 0px 0px 0px -90px;
-  .needHelpTxt {
+  .needHlepTxt {
     font-weight: 600;
     border-radius: 50%;
     border: 2px solid rgba(65, 146, 211, 1);
@@ -2124,27 +2124,27 @@ export default {
     padding-top: 3px;
   }
 }
-.needHelp:active {
+.needHlep:active {
   background: #126c9e !important;
   font-weight: bold;
 }
 /*按钮悬浮*/
-.needHelp:hover {
+.needHlep:hover {
   background: rgba(65, 146, 211, 1) !important;
   color: white !important;
   font-weight: bold;
   border-color: rgba(65, 146, 211, 1) !important;
-  .needHelpTxt {
+  .needHlepTxt {
     border: 2px solid #fff;
   }
 }
 /*按钮点击*/
-.needHelp:focus {
+.needHlep:focus {
   background: rgba(65, 146, 211, 1) !important;
   color: white !important;
   font-weight: bold;
   border-color: rgba(65, 146, 211, 1) !important;
-  .needHelpTxt {
+  .needHlepTxt {
     border: 2px solid #fff;
   }
 }
