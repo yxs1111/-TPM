@@ -976,7 +976,7 @@ export default {
           if (this.filterObj.channelCode == 'NKA') {
             if (res.code === 1000) {
               if (
-                res.data.version === 'V2' &&
+                res.data.version === 'V3' &&
                 res.data.assignee.indexOf(this.usernameLocal) != -1
               ) {
                 //本人可以提交
@@ -990,7 +990,7 @@ export default {
           if (this.filterObj.channelCode == 'EC') {
             if (res.code === 1000) {
               if (
-                res.data.version === 'Premium-V2' &&
+                res.data.version === 'Premium-V3' &&
                 res.data.assignee.indexOf(this.usernameLocal) != -1
               ) {
                 //本人可以提交
