@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-11 21:49:39
+ * @LastEditTime: 2023-02-02 09:55:08
 -->
 <template>
   <div class="MainContent">
@@ -475,7 +475,7 @@ export default {
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议审批明细-by KA-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        this.$message.success('经销商分摊协议审批明细-by KA导出成功!')
       })
      await API.exportApproveDistributorContractInfo({
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -488,7 +488,7 @@ export default {
       }).then((res) => {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '经销商分摊协议审批明细 -' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        this.$message.success('经销商分摊协议审批明细导出成功!')
       })
      await API.exportDistApprovePage({
         contractBeginDate: this.filterObj.contractBeginDate,
@@ -500,8 +500,8 @@ export default {
         customerChannelCode: this.filterObj.channelCode,
       }).then((res) => {
         let timestamp = Date.parse(new Date())
-        downloadFile(res, '经销商分摊协议审批-list-' + timestamp + '.xlsx') //自定义Excel文件名
-        this.$message.success('导出成功!')
+        downloadFile(res, '经销商分摊协议审批list-' + timestamp + '.xlsx') //自定义Excel文件名
+        this.$message.success('经销商分摊协议审批list导出成功!')
       })
     },
     //打开条款明细弹窗
