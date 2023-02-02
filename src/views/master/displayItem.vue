@@ -235,7 +235,7 @@ export default {
       //   (item) => row.minePackage === item.costType
       // )[0].code
       // console.log(code)
-      this.getCostItemList(row.minePackage)
+      this.getCostItemList(this.minePackageList[this.tempObj.rowIndex].costTypeNumber)
       this.isEditor = index
       this.$forceUpdate()
       console.log(
