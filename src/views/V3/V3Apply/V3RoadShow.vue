@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-03 09:08:35
+ * @LastEditTime: 2023-02-03 21:17:06
 -->
 <template>
   <div class="MainContent">
@@ -1330,7 +1330,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Roadshow-V3' &&
+              res.data.version.includes("V3")  &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
