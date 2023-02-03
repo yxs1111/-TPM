@@ -329,7 +329,8 @@ export default {
           if (res.code === 1000) {
             if (
               res.data.version === 'NUV3' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.isSubmit
             ) {
               this.btnStatus = true
             } else {
@@ -741,6 +742,7 @@ export default {
                 this.tableData = []
               }
               this.mainIdLocal = response.data.records[0].mainId
+              this.isSubmit = response.data.records[0].isSubmit
               this.infoByMainId()
             } else {
               this.tableData = []
