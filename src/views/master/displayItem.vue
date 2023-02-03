@@ -201,8 +201,8 @@ export default {
       API.exportDisplayItem({
         ...this.filterObj,
       }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, 'Display Item-' + timestamp + '.xlsx') //自定义Excel文件名
+        // let timestamp = Date.parse(new Date()) // 流水号
+        downloadFile(res, '细项匹配关系.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
