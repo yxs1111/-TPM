@@ -1,7 +1,7 @@
 <!--
  * @Description: V3RoadShowApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-14 12:27:39
+ * @LastEditTime: 2023-02-03 21:21:26
 -->
 <template>
   <div class="MainContent">
@@ -1384,7 +1384,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Roadshow-V3' &&
+              res.data.version.includes("V3") &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {
