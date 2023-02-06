@@ -936,7 +936,7 @@ export default {
         if (res.code === 1000) {
           res.data.forEach((item) => {
             if (item.channelEsName == 'NKA') {
-              this.channelArr.push(item)
+              this.channelArr.unshift(item)
             }
             if (item.channelEsName == 'EC') {
               this.channelArr.push(item)

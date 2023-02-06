@@ -1009,9 +1009,9 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             res.data.forEach((item) => {
-              if (item.costType === 'Price Promotion' || item.costType === 'New User') {
-                this.MinePackageList.push(item)
-              }
+              // if (item.costType === 'Price Promotion' || item.costType === 'New User') {
+              this.MinePackageList.push(item)
+              // }
             })
           }
           // this.getCostItemList(this.filterObj.MinePackageCode)
