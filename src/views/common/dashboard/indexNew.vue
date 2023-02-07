@@ -120,13 +120,13 @@
         <!--        费用管理-->
         <div v-show="currentIndex == 0" class="TimeLineWrap">
           <el-table :header-cell-style="{ color: '#000000', height: '53px' }" :data="TodoList" :max-height="maxheight" stripe style="width: 100%">
-            <el-table-column align="left" prop="yearAndMonth" label="活动周期" />
-            <el-table-column prop="costTypeName" label="Cost Type" />
-            <el-table-column width='125' prop="minePackageName" label="Mine Package" />
-            <el-table-column width='265' prop="costItemName" label="Cost Item" />
-            <el-table-column prop="channelName" label="渠道" />
-            <el-table-column prop="num" label="版本号" />
-            <el-table-column width='170' align="left" prop="" label="查看">
+            <el-table-column align="left" width='85' prop="yearAndMonth" show-overflow-tooltip label="活动周期" />
+            <el-table-column prop="costTypeName" width='120' show-overflow-tooltip label="Cost Type" />
+            <el-table-column prop="minePackageName" show-overflow-tooltip label="Mine Package" />
+            <el-table-column prop="costItemName" show-overflow-tooltip label="Cost Item" />
+            <el-table-column prop="channelName" width='100' show-overflow-tooltip label="渠道" />
+            <el-table-column prop="num" width='85' label="版本号" />
+            <el-table-column width='120' align="left" prop="" label="查看">
               <template slot-scope="{ row }">
                 <div class="transact" @click="openFlowDiagram(row)">查看流程</div>
               </template>
@@ -145,10 +145,10 @@
         <div v-show="currentIndex == 1" class="TimeLineWrap">
           <el-table :header-cell-style="{ color: '#000000' }" :max-height="maxheight" :data="contractList" stripe style="width: 100%">
             <el-table-column prop="item" label="审批流类型" width="140" />
-            <el-table-column prop="contractCode" label="合同ID" width="280" />
-            <el-table-column prop="customerName" label="客户名称" />
-            <el-table-column prop="distributorName" label="经销商名称" />
-            <el-table-column prop="activityName" label="当前节点" />
+            <el-table-column prop="contractCode" show-overflow-tooltip label="合同ID" width="280" />
+            <el-table-column prop="customerName" show-overflow-tooltip label="客户名称" />
+            <el-table-column prop="distributorName" show-overflow-tooltip label="经销商名称" />
+            <el-table-column prop="activityName" show-overflow-tooltip label="当前节点" />
             <el-table-column prop="" label="查看" width="120">
               <template slot-scope="{ row }">
                 <div class="transact" @click="openFlowDiagram(row)">
@@ -156,7 +156,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="" fixed="right" label="操作">
+            <el-table-column prop="" label="操作">
               <template slot-scope="{ row }">
                 <div class="operation" @click="operateProcess(row.minePackageCode, row.name)">
                   <svg-icon icon-class="submit_l" class="submit_icon" />
