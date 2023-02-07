@@ -796,41 +796,37 @@ export default {
       await roleApi.getDefaultRolePermissions({ userName }).then(res => {
         let {ciDataList,fsDatalist,kaDataList}=res.data
         ciDataList.forEach(item=>{
-          item.dataFirCode= 'Cost Item',
-          item.dataSecCode= item.ciDataSecCode,
-          item.dataTerCode= item.ciDataTerCode,
-          item.label= item.ciDataTerCode,
-          item.mid= item.ciDataSecCode + '-' + item.ciDataTerCode
+          item.dataFirCode= 'Cost Item'
+          item.dataSecCode= item.ciDataSecCode
+          item.dataTerCode= item.ciDataTerCode
+          item.label= item.ciDataTerCode
+          //不为null才勾选（目的：防止全部勾中）
+          if(item.ciDataSecCode!=null&&item.ciDataTerCode!=null) {
+            item.mid=item.ciDataSecCode + '-' + item.ciDataTerCode
+          }
         })
         this.$refs.MinePackageTree.setCheckedNodes([...ciDataList])
         let fsNodeKeyList=[]
         fsDatalist.forEach(item=>{
+          //不为null才勾选（目的：防止全部勾中）
           if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId!=null) {
             fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId+'-'+item.fsDataFouId)
-          } else if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId==null) {
-            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId)
-          } else if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId==null&&item.fsDataFouId==null) {
-            fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId)
-          }
+          } 
           //NodeKey:"FieldSales-zone-4539"
         })
-        console.log(fsNodeKeyList);
+        // console.log(fsNodeKeyList);
         this.$refs.FileSalesTree.setCheckedKeys([...fsNodeKeyList])
         let NoeKeyList=[]
         kaDataList.forEach(item=>{
-          if(item.kaDataTerCode==null) {
-            item.NodeKey= 'KA-' +item.kaDataSecCode
-            NoeKeyList.push(item.NodeKey)
-          }else {
+          //不为null才勾选（目的：防止全部勾中）
+          if(item.kaDataSecCode!=null&&item.kaDataTerCode!=null) {
             item.NodeKey= 'KA-' +item.kaDataSecCode+'-'+item.kaDataTerCode
             NoeKeyList.push(item.NodeKey)
           }
           //NodeKey:"KA-LKA-1003"
         })
-        console.log(NoeKeyList);
+        // console.log(NoeKeyList);
         this.$refs.KATree.setCheckedKeys([...NoeKeyList])
-        // this.$refs.KATree.setCheckedKeys([...kaDataList])
-        // this.$forceUpdate()
       })
     },
     //获取KA 权限  NodeKey: "KA-EC-007"
