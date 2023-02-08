@@ -282,7 +282,7 @@ export default {
       uploadFile: '',
       saveBtn: false,
       dialogData: [],
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       localDate: '',
       BrandList: [],
