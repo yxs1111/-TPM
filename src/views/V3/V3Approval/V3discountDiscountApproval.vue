@@ -401,7 +401,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version.includes('V3') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.submitBtn === 1
             ) {
