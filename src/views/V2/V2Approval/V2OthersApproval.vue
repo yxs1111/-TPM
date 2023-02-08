@@ -913,7 +913,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' && res.data.activityName.includes('审批') &&
+              res.data.version.includes('V2') && res.data.activityName.includes('审批') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
