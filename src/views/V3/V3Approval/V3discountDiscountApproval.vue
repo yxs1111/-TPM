@@ -520,7 +520,7 @@ export default {
         yearAndMonth: this.localDate,
         exportType: 'exportApproveTemplate',
         mainId: this.mainIdLocal,
-        channelName: this.filterObj.channelCode,
+        channelName: this.filterObj.channelName,
         importType:1
         // channelName: 'NKA'
       }).then((response) => {

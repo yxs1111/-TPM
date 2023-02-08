@@ -282,7 +282,7 @@ export default {
       uploadFile: '',
       saveBtn: false,
       dialogData: [],
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       localDate: '',
       BrandList: [],
@@ -555,6 +555,7 @@ export default {
                 })
               }
               this.dialogData = response.data
+              console.log(this.dialogData, '导入之后的弹窗表格')
               this.firstIsPass =
                 response.data[0].judgmentType !== 'Error' &&
                 response.data[0].judgmentType !== ''
@@ -777,9 +778,22 @@ export default {
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.statusWrap {
+  img {
+    height: 25px;
+    width: 25px;
+    margin-right: 5px;
+  }
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
 </style>
