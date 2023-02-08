@@ -711,7 +711,7 @@ export default {
             this.firstIsPassComple = false
             this.$message({
               type: 'success',
-              message: '第二次检测文件上传成功',
+              message: '检测文件上传成功',
             })
             if (res.data != null) {
               this.dialogDataF = res.data
@@ -727,7 +727,7 @@ export default {
             this.dialogDataF = []
             this.$message({
               type: 'error',
-              message: '第二次检测文件上传失败，请重新上传。',
+              message: '检测文件上传失败，请重新上传。',
             })
           }
         })
