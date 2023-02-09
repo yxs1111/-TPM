@@ -325,9 +325,9 @@ export default {
       }
       if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0ApplyList', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0ApprovalList', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Approva', params: { channelCode } })
         }
       }
       if (version.indexOf('V1')!=-1) {

@@ -17,7 +17,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
           <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select" @change="getCostItemList">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
         <div class="Selectli">
