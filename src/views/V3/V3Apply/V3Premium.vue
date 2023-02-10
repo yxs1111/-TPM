@@ -1,7 +1,7 @@
 <!--
  * @Description: V3Premium
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-14 12:11:58
+ * @LastEditTime: 2023-02-10 14:51:52
 -->
 <template>
   <div class="MainContent">
@@ -198,14 +198,14 @@
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="channelCode"
+                       prop="channelName"
                        label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -244,7 +244,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.supplierName }}
+            {{scope.row.distributorName == null? scope.row.supplierName : scope.row.distributorName }}
           </div>
         </template>
         <!-- 数据未对接 -->
@@ -620,7 +620,7 @@
             </vxe-table-column>
             <vxe-table-column width="120"
                              align="center"
-                             field="channelCode"
+                             field="channelName"
                              title="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
@@ -973,26 +973,16 @@ export default {
           mainId: this.mainId,
         })
         .then((res) => {
-          if (this.filterObj.channelCode == 'NKA') {
-            if (res.code === 1000) {
-              if (res.data.version.includes("V3") && res.data.assignee.indexOf(this.usernameLocal) != -1) {
-                //本人可以提交
-                this.isSelf = true
-              } else {
-                //其他人禁用
-                this.isSelf = false
-              }
-            }
-          }
-          if (this.filterObj.channelCode == 'EC') {
-            if (res.code === 1000) {
-              if (res.data.version.includes("V3") && res.data.assignee.indexOf(this.usernameLocal) != -1) {
-                //本人可以提交
-                this.isSelf = true
-              } else {
-                //其他人禁用
-                this.isSelf = false
-              }
+          if (res.code === 1000) {
+            if (
+              res.data.version.includes('V3') &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
             }
           }
         })

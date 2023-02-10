@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['EC','NKA','RKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -124,6 +124,14 @@
           <div>
             {{ scope.row.customerName }}
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
+        <template v-slot:header>
+          <div>大区<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          {{ scope.row.regionName }}
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="brandName" label="品牌">
@@ -469,6 +477,14 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column width="100" v-if="filterObj.channelCode=='RKA'" align="center" prop="regionName" label="大区">
+              <template v-slot:header>
+                <div>大区<br><span class="subTitle">-</span></div>
+              </template>
+              <template slot-scope="scope">
+                {{ scope.row.regionName }}
+              </template>
+            </el-table-column>
             <el-table-column width="220" align="center" prop="brandName" label="品牌">
               <template v-slot:header>
                 <div>品牌<br><span class="subTitle">-</span></div>
@@ -770,7 +786,7 @@ export default {
         })
         .then((res) => {
           if (res.code === 1000) {
-            if (res.data.version === 'V2' && res.data.assignee.indexOf(this.usernameLocal) != -1 && this.tableData[0].isSubmit) {
+            if (res.data.version.includes('V2') && res.data.assignee.indexOf(this.usernameLocal) != -1 && this.tableData[0].isSubmit) {
               //本人可以提交、已经是提交（申请过）、节点
               this.isSubmit = false
             } else {
@@ -798,7 +814,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.getCustomerList()
+          // channelArr 只取channelCode为NKA、EC、RKA的数据
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA' || item.channelCode === 'EC' || item.channelCode === 'RKA'
+          )
         }
       })
     },

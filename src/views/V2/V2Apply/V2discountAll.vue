@@ -75,10 +75,10 @@
         {{FormateNum(row.adjustedCost)}}
       </el-table-column>
       <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
-      
+
       </el-table-column>
       <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
-     
+
       </el-table-column>
       <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
         {{FormateNum(row.costDifference)}}
@@ -231,7 +231,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version.includes('V2') &&
               res.data.assignee === this.usernameLocal
             ) {
               //本人可以提交

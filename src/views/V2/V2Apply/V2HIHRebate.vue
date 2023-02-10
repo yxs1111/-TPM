@@ -245,6 +245,16 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="120" align="center" prop="payType" label="费用核销方式">
+        <template v-slot:header>
+          <div>费用核销方式<br><span class="subTitle">-</span></div>
+        </template>
+        <template slot-scope="scope">
+          <div>
+            {{ scope.row.payTypeName }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
         <template v-slot:header>
           <div>点数差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
@@ -491,6 +501,8 @@
             </el-table-column>
             <el-table-column width="220" align="right" prop="costDeptName" label="费用归属部门">
             </el-table-column>
+            <el-table-column width="120" align="center" prop="payTypeName" label="费用核销方式">
+            </el-table-column>
             <el-table-column width="220" align="right" prop="planCost" label="点数差值(%)">
               <template v-slot:header>
                 <div>点数差值(%)<br><span class="subTitle">kA+Contract Item</span></div>
@@ -652,7 +664,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version.includes('V2') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交

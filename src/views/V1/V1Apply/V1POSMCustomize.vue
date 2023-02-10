@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="item in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCsName" />
+            <el-option v-for="item in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -28,6 +28,9 @@
         </div>
       </div>
       <div class="OpertionBar">
+        <el-button type="primary"
+                   class="TpmButtonBG"
+                   @click="clear">清除数据</el-button>
         <el-button type="primary" class="TpmButtonBG" @click="search">查询</el-button>
         <div class="TpmButtonBG" @click="downExcel">
           <img src="@/assets/images/export.png" alt="" />
@@ -130,6 +133,31 @@ export default {
     this.getAllMonth()
   },
   methods: {
+    // 清除数据
+    clear() {
+      if (this.filterObj.channelName == '' || this.filterObj.yearAndMonth == '') {
+        if (this.filterObj.yearAndMonth == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelName == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.getClear({
+          channelCode: this.filterObj.channelName, //渠道
+          yearAndMonth: this.filterObj.yearAndMonth,
+          costItem: 'In Store POSM - Customized'
+          //   isSubmit: 0,
+        }).then((res) => {
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              this.$message.success('清除成功!')
+            })
+          }
+        })
+      }
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []

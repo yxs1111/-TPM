@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2023-01-14 12:21:01
+ * @LastEditTime: 2023-02-10 14:41:55
 -->
 <template>
   <div class="MainContent">
@@ -58,11 +58,17 @@
       <el-table-column align="center" width="240" prop="costTypeName" label="Cost Type"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="240" prop="costItemName" label="Cost Item"> </el-table-column>
-      <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
-      <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
+      <el-table-column align="center" min-width="150" prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" min-width="150" prop="version" label="版本号"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="300" prop="assignee" label="办理人">
-        <span v-html="setSplitAssignee(row.assignee)"></span>
+      <el-table-column align="left" prop="assignee" label="办理人" width="160" :show-overflow-tooltip="false">
+          <template slot-scope="scope">
+            <el-tooltip>
+              <!-- // {{}}会将数据解释为普通文本，而非 HTML 代码。 -->
+              <div v-html="setSplitAssignee(scope.row.assignee)" slot="content"></div>
+              <div class="ellipsis">{{scope.row.assignee}}</div>
+            </el-tooltip>
+          </template>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
         {{row.createTime?row.createTime.substring(0,19).replaceAll("T",' '):""}}
@@ -209,12 +215,15 @@ export default {
       if(value!=='') {
         this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
         this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+        this.getMinePackage(this.filterObj.CostTypeName)
       } else {
         this.filterObj.CostTypeName = ''
+        this.filterObj.CostType=''
+        this.MinePackageList = ''
+        this.getMinePackage()
       }
       this.filterObj.MinePackage = ''
       this.filterObj.costItem = ''
-      this.getMinePackage()
     },
   },
   methods: {
@@ -317,11 +326,17 @@ export default {
           minePackageName='New User'
         }
       }
+      if(minePackageName=='Roadshow and Live Stream') {
+        minePackageName='Roadshow'
+      }
+      if(minePackageName=='Discount_Others') {
+        minePackageName='Listing fee'
+      }
       if (version.indexOf('V0')!=-1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0ApplyList', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0ApprovalList', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Approva', params: { channelCode } })
         }
       }
       if (version.indexOf('V1')!=-1) {

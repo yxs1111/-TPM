@@ -17,7 +17,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">MinePackage:</span>
           <el-select v-model="filterObj.minePackage" clearable filterable placeholder="请选择" class="my-el-select" @change="getCostItemList">
-            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costTypeNumber" />
+            <el-option v-for="item,index in MinePackageList" :key="index" :label="item.costType" :value="item.costType" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -29,7 +29,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="(item) in ['NKA','EC','RKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
       </div>
@@ -290,7 +290,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V3' &&
+              res.data.version.includes('V3') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -312,6 +312,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          // channelArr 只取channelCode为NKA、EC、RKA的数据
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA' || item.channelCode === 'EC' || item.channelCode === 'RKA'
+          )
         }
       })
     },

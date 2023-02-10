@@ -10,14 +10,14 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">活动月:</span>
-          <el-select v-model="filterObj.month" filterable clearable placeholder="请选择">
+          <el-select v-model="filterObj.month" filterable clearable placeholder="请选择" @change="getCustomerList">
             <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
           </el-select>
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA', 'EC']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -112,13 +112,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道" >
+      <el-table-column width="120" align="center" prop="channelName" label="渠道" >
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -412,13 +412,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道" >
+      <el-table-column width="120" align="center" prop="channelName" label="渠道" >
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -616,7 +616,7 @@
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
             <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
-            <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+            <el-table-column width="120" align="center" prop="channelName" label="渠道" />
             <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
             <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
             <el-table-column width="220" align="center" prop="zoneName" label="大区" />
@@ -774,7 +774,7 @@
             <el-table-column width="120" align="center" prop="costType" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackage" label="Mine Package" />
             <el-table-column width="180" align="center" prop="costAccount" label="费用科目" />
-            <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+            <el-table-column width="120" align="center" prop="channelName" label="渠道" />
             <el-table-column width="220" align="center" prop="customerSystemName" label="客户系统名称" />
             <el-table-column width="220" align="center" prop="supplierName" label="供应商" />
             <el-table-column width="220" align="right" prop="v1PlanCost" label="V1计划费用(RMB)">
@@ -982,7 +982,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version=='FMC-V2'  &&
+              res.data.version.includes('V2')  &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交、已经是提交（申请过）、节点
@@ -1004,7 +1004,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.getCustomerList()
+          // channelArr 只取channelCode为NKA、EC、RKA的数据
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA' || item.channelCode === 'EC'
+          )
         }
       })
     },
@@ -1126,11 +1129,22 @@ export default {
               this.$message.info('导入数据为空，请检查模板')
             } else {
               this.$message.success(this.messageMap.importSuccess)
+              let importList = response.data
+              importList.forEach((item) => {
+                if (item.systemJudgment == 'Error') {
+                  item.sort = 1
+                } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                  item.sort = 2
+                } else {
+                  item.sort = 3
+                }
+              })
+              importList.sort((item, nextItem) => item.sort - nextItem.sort)
               this.ImportData = response.data
               let isError = this.ImportData.findIndex((item) => {
                 return item.systemJudgment == 'Error'
               })
-              this.isCheck = isError == -1 ? 1 : 0
+              this.saveBtn = isError == -1 ? 1 : 0
             }
           } else {
             this.$message.info(this.messageMap.importError)
@@ -1153,12 +1167,23 @@ export default {
               this.$message.info('导入数据为空，请检查模板')
             } else {
               this.$message.success(this.messageMap.importSuccess)
+              let importList = response.data
+              importList.forEach((item) => {
+                if (item.systemJudgment == 'Error') {
+                  item.sort = 1
+                } else if (item.systemJudgment.indexOf('Exception') != -1) {
+                  item.sort = 2
+                } else {
+                  item.sort = 3
+                }
+              })
+              importList.sort((item, nextItem) => item.sort - nextItem.sort)
               this.ImportData = response.data
               this.saveBtn = this.ImportData.length ? true : false
               let isError = this.ImportData.findIndex((item) => {
                 return item.systemJudgment == 'Error'
               })
-              this.isCheck = isError == -1 ? 1 : 0
+              this.saveBtn = isError == -1 ? 1 : 0
             }
           } else {
             this.$message.info(this.messageMap.importError)

@@ -289,14 +289,14 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDeptSpName"
+                       prop="costAscriptionDept"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDeptSpName }}
+            {{ scope.row.costAscriptionDept }}
           </div>
         </template>
       </el-table-column>
@@ -705,14 +705,14 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="costAscriptionDeptSpName"
+                             prop="costAscriptionDept"
                              label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costAscriptionDeptSpName }}
+                  {{ scope.row.costAscriptionDept }}
                 </div>
               </template>
             </el-table-column>
@@ -950,7 +950,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2-FG' && res.data.activityName.includes('调整') &&
+              res.data.version.includes('V2') && res.data.activityName.includes('调整') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -1009,9 +1009,9 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             res.data.forEach((item) => {
-              if (item.costType === 'Price Promotion' || item.costType === 'New User') {
-                this.MinePackageList.push(item)
-              }
+              // if (item.costType === 'Price Promotion' || item.costType === 'New User') {
+              this.MinePackageList.push(item)
+              // }
             })
           }
           // this.getCostItemList(this.filterObj.MinePackageCode)
@@ -1041,7 +1041,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_FG-RKA&RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1119,7 +1119,7 @@ export default {
           //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_FG-RKA/RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_FG-RKA&RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -1164,7 +1164,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_FG-RKA/RTM_${this.filterObj.channelCode}_V2申请.xlsx`
+          `${this.filterObj.month}_FG-RKA&RTM_${this.filterObj.channelCode}_V2申请.xlsx`
         ) // 自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

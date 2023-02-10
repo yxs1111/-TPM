@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-29 10:25:31
- * @LastEditTime: 2023-01-14 12:26:54
+ * @LastEditTime: 2023-02-10 14:52:44
 -->
 <!--
  * @Description:
@@ -22,7 +22,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['EC','NKA','RKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -152,7 +152,7 @@
           <div>大区<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
-            {{ scope.row.zoneName }}
+          {{ scope.row.zoneName }}
         </template>
       </el-table-column>
       <el-table-column width="220" align="center" prop="regionName" label="区域">
@@ -305,13 +305,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="payType" label="费用核销方式">
+      <el-table-column width="120" align="center" prop="payTypeName" label="费用核销方式">
         <template v-slot:header>
           <div>费用核销方式<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.payType }}
+            {{ scope.row.payTypeName }}
           </div>
         </template>
       </el-table-column>
@@ -595,7 +595,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="120" align="center" prop="payType" label="费用核销方式"></el-table-column>
+            <el-table-column width="120" align="center" prop="payTypeName" label="费用核销方式"></el-table-column>
             <el-table-column width="320" align="right" prop="ratioDifference" label="点数差值(%)">
               <template v-slot:header>
                 <div>点数差值(%)<br /><span class="subTitle">KA+Contract item</span></div>
@@ -794,7 +794,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.getCustomerList()
+          // channelArr 只取channelCode为NKA、EC、RKA的数据
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA' || item.channelCode === 'EC' || item.channelCode === 'RKA'
+          )
         }
       })
     },

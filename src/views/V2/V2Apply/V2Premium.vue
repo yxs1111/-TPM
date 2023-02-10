@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-14 12:24:27
+ * @LastEditTime: 2023-02-10 14:46:31
 -->
 <template>
   <div class="MainContent">
@@ -918,41 +918,23 @@ export default {
     },
     // 通过与审批按钮控制
     infoByMainId() {
-      if (this.mainId !== null) {
-        selectAPI
-          .infoByMainId({
-            mainId: this.mainId,
-          })
-          .then((res) => {
-            if (this.filterObj.channelCode == 'NKA') {
-              if (res.code === 1000) {
-                if (
-                  res.data.version === 'V2' &&
-                  res.data.assignee.indexOf(this.usernameLocal) != -1
-                ) {
-                  //本人可以提交
-                  this.isSelf = true
-                } else {
-                  //其他人禁用
-                  this.isSelf = false
-                }
-              }
+      selectAPI
+        .infoByMainId({
+          mainId: this.mainId,
+        })
+        .then((res) => {
+          if (res.code === 1000) {
+            if (
+              res.data.version.includes('V2') &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
             }
-            if (this.filterObj.channelCode == 'EC') {
-              if (res.code === 1000) {
-                if (
-                  res.data.version === 'Premium-V2' &&
-                  res.data.assignee.indexOf(this.usernameLocal) != -1
-                ) {
-                  //本人可以提交
-                  this.isSelf = true
-                } else {
-                  //其他人禁用
-                  this.isSelf = false
-                }
-              }
-            }
-          })
+          }})
       }
     },
     getAllMonth() {
@@ -1265,7 +1247,6 @@ export default {
     getTip(row) {
       return `<div class="Tip">${row.judgmentContent}</div>`
     },
-  },
 }
 </script>
 
