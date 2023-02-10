@@ -12,6 +12,10 @@ export default {
   getPage(params) {
     return requestApi.request_get(this.url + '/getPosmCustomizedPage', params)
   },
+  // 清除数据
+  getClear(params) {
+    return requestApi.request_get('/cityplan/investCpPosmPipVOne/deletePosmData', params)
+  },
   //导出
   exportExcel(params) {
     return request({

@@ -1,5 +1,5 @@
 /*
- * @Description: 
+ * @Description:
  * @Date: 2021-09-16 09:36:50
  * @LastEditTime: 2022-05-07 16:55:53
  */
@@ -26,7 +26,7 @@ export default function() {
         ...V3()
       ]
     },
-    
+
   ]
   if (showRouter([settings.stageKey])) {
     return []

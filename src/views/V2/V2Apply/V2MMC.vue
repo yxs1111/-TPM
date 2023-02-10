@@ -345,6 +345,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          //channelArr 只取channelCode为NKA
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA'
+          )
         }
       })
     },

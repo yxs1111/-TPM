@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-13 11:50:36
- * @LastEditTime: 2022-09-09 15:26:07
+ * @LastEditTime: 2023-02-10 14:31:07
 -->
 <template>
   <div class="app-container">
@@ -89,7 +89,7 @@
 <script>
 import permission from '@/directive/permission'
 import elDragDialog from '@/directive/el-drag-dialog'
-import { getDefaultPermissions, getHeight, downloadFile } from '@/utils'
+import { getDefaultPermissions, getHeight2, downloadFile } from '@/utils'
 import API from '@/api/masterData/masterData.js'
 import item from '@/layout/components/Sidebar/Item'
 import selectAPI from '@/api/selectCommon/selectCommon'
@@ -120,14 +120,14 @@ export default {
         rowIndex: 0,
         tempInfo: null,
       },
-      maxheight: getHeight(),
+      maxheight: getHeight2(),
     }
   },
   directives: { elDragDialog, permission },
   mounted() {
     window.onresize = () => {
       return (() => {
-        this.maxheight = getHeight()
+        this.maxheight = getHeight2()
       })()
     }
     this.getTableData()
@@ -172,6 +172,7 @@ export default {
       }).then((response) => {
         this.tempObj.tempInfo = null
         this.tableData = response.data.records
+        // this.tableData.minePackageCode = response.data.records
         this.total = response.data.total
       })
     },
@@ -200,8 +201,8 @@ export default {
       API.exportDisplayItem({
         ...this.filterObj,
       }).then((res) => {
-        let timestamp = Date.parse(new Date())
-        downloadFile(res, 'Display Item-' + timestamp + '.xlsx') //自定义Excel文件名
+        // let timestamp = Date.parse(new Date()) // 流水号
+        downloadFile(res, '细项匹配关系.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
       })
     },
@@ -221,6 +222,7 @@ export default {
       })
     },
     editorRow(index, row) {
+      this.getCostItemList(this.tableData[index].minePackageCode)
       if (this.tempObj.tempInfo) {
         this.tableData[this.tempObj.rowIndex] = this.tempObj.tempInfo
       }
@@ -234,8 +236,12 @@ export default {
       // const code = this.minePackageList.filter(
       //   (item) => row.minePackage === item.costType
       // )[0].code
-      // console.log(code)
-      this.getCostItemList(this.minePackageList[this.tempObj.rowIndex].costTypeNumber)
+      // this.minePackageList.forEach((item) => {
+      //   if (row.minePackage === item.costType) {
+      //     console.log(item.costTypeNumber)
+      //   }
+      // })
+      console.log(this.minePackageList)
       this.isEditor = index
       this.$forceUpdate()
       console.log(

@@ -1,7 +1,7 @@
 <!--
  * @Description: 
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-06-08 17:19:06
+ * @LastEditTime: 2023-02-10 14:20:43
 -->
 <template>
   <div class="MainContentNew">
@@ -59,8 +59,14 @@
       <el-table-column align="center"  prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" width="200" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="180" prop="name" label="审批节点"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="280" prop="assignee" label="办理人">
-         <span v-html="setSplitAssignee(row.assignee)"></span>  
+      <el-table-column align="left" prop="assignee" label="办理人" width="160" :show-overflow-tooltip="false">
+          <template slot-scope="scope">
+            <el-tooltip>
+              <!-- // {{}}会将数据解释为普通文本，而非 HTML 代码。 -->
+              <div v-html="setSplitAssignee(scope.row.assignee)" slot="content"></div>
+              <div class="ellipsis">{{scope.row.assignee}}</div>
+            </el-tooltip>
+          </template>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="150"  label="办理时间">
         {{row.dueDate?row.dueDate.substring(0,10):""}}

@@ -90,6 +90,9 @@
 
       </div>
       <div class="OpertionBar">
+        <el-button type="primary"
+                   class="TpmButtonBG"
+                   @click="clear">清除数据</el-button>
         <div class="TpmButtonBG"
              @click="getSmartPlan">
           <img src="@/assets/images/huoqu.png"
@@ -381,6 +384,31 @@ export default {
     this.getregionArr()
   },
   methods: {
+    // 清除数据
+    clear() {
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.getClear({
+          channelCode: this.filterObj.channelCode, //渠道
+          yearAndMonth: this.filterObj.month,
+          costItem: 'In Store POSM - Standard'
+          //   isSubmit: 0,
+        }).then((res) => {
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              this.$message.success('清除成功!')
+            })
+          }
+        })
+      }
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []

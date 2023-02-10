@@ -14,10 +14,10 @@
             <el-option v-for="item in monthList" :key="item.id" :label="item.activityMonth" :value="item.activityMonth" />
           </el-select>
         </div>
-        <div class="Selectli" @keyup.enter="search">
+        <div class="Selectli"  @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['NKA', 'EC']" :key="item" :label="item" :value="item" />
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -49,7 +49,7 @@
           <img src="@/assets/images/export.png" alt="">
           <span class="text">导出</span>
         </div>
-        <el-button v-show='this.filterObj.channelCode == "EC"' type="primary" class="TpmButtonBG" @click="clear">清除数据</el-button>
+        <el-button type="primary" class="TpmButtonBG" @click="clear">清除数据</el-button>
       </div>
     </div>
     <el-table v-if='this.filterObj.channelCode == "NKA" || this.filterObj.channelCode == ""' :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
@@ -103,13 +103,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -267,13 +267,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -410,16 +410,27 @@ export default {
     // 清除数据
     clear() {
       this.pageNum = 1
-      this.clearData()
-    },
-    // 清除数据
-    clearData() {
-      API.clearData({
-        yearAndMonth: this.filterObj.month,
-        channelName: this.filterObj.channelCode,
-      }).then(() => {
-        alert('清除数据成功')
-      })
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.clearData({
+          yearAndMonth: this.filterObj.month,
+          channelName: this.filterObj.channelCode,
+          //   isSubmit: 0,
+        }).then((res) => {
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              this.$message.success('清除成功!')
+            })
+          }
+        })
+      }
     },
     // 获取表格数据
     getTableData() {
@@ -487,7 +498,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.getCustomerList()
+          //channelArr 只取channelCode为NKA、EC、RKA的数据
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA' || item.channelCode === 'EC'
+          )
         }
       })
     },

@@ -31,8 +31,6 @@
             <img src="@/assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
-        </div>
-        <div class="OpertionBar">
           <!-- <el-button type="primary" @click="getCPTData" v-permission="permissions['getCPT']">获取CPT数据</el-button> -->
           <div class="TpmButtonBG" @click="getCPTData" v-permission="permissions['getCPT']">
             <img src="@/assets/images/huoqu.png" alt="" />
@@ -51,6 +49,8 @@
             <span class="text">提交</span>
           </div>
         </div>
+<!--        <div class="OpertionBar">-->
+<!--        </div>-->
       </div>
       <!-- 商品 -->
       <div class="ContentWrap">
@@ -359,6 +359,7 @@ export default {
     getScenarioList() {
       API.getScenarioList({
         channelName: this.filterObj.channelCode,
+        channelCode: this.filterObj.channelCode,
       }).then((res) => {
         this.yearAndMonthList = res.data
       })
@@ -668,6 +669,7 @@ export default {
             obj = {
               yearAndMonth: this.filterObj.month,
               channelName: this.ruleForm.channelCode,
+              channelCode: this.ruleForm.channelCode,
               dimScenario: this.ruleForm.dimScenario,
               dimVersion: this.ruleForm.dimVersion,
             }

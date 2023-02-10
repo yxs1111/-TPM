@@ -198,14 +198,14 @@
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="channelCode"
+                       prop="channelName"
                        label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -244,7 +244,7 @@
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.supplierName }}
+            {{scope.row.distributorName == null? scope.row.supplierName : scope.row.distributorName }}
           </div>
         </template>
         <!-- 数据未对接 -->
@@ -620,7 +620,7 @@
             </vxe-table-column>
             <vxe-table-column width="120"
                              align="center"
-                             field="channelCode"
+                             field="channelName"
                              title="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
@@ -975,7 +975,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Premium-V3' &&
+              res.data.version.includes('V3') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交

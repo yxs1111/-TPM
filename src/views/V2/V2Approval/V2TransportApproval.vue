@@ -580,6 +580,7 @@ export default {
       filterObj: {
         supplierName: '', //供应商
         channelCode: '', //渠道
+        channelName: '',
         customerMdmCode: '', //客户MDM code
         customerCode: '', //客户系统名称
         distributorName: '', //经销商
@@ -616,7 +617,15 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.channelCode'() {
+      this.channelArr.forEach((item) => {
+        if (item.channelCode == this.filterObj.channelCode) {
+          this.filterObj.channelName = item.channelCsName
+        }
+      })
+    },
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -676,7 +685,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Transport-V2' &&
+              res.data.version.includes('V2') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {

@@ -282,7 +282,7 @@ export default {
       uploadFile: '',
       saveBtn: false,
       dialogData: [],
-      btnStatus: true,
+      btnStatus: false,
       usernameLocal: '',
       localDate: '',
       BrandList: [],
@@ -328,8 +328,9 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'NUV3' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.version.includes('V3') &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.isSubmit
             ) {
               this.btnStatus = true
             } else {
@@ -554,6 +555,7 @@ export default {
                 })
               }
               this.dialogData = response.data
+              console.log(this.dialogData, '导入之后的弹窗表格')
               this.firstIsPass =
                 response.data[0].judgmentType !== 'Error' &&
                 response.data[0].judgmentType !== ''
@@ -741,6 +743,7 @@ export default {
                 this.tableData = []
               }
               this.mainIdLocal = response.data.records[0].mainId
+              this.isSubmit = response.data.records[0].isSubmit
               this.infoByMainId()
             } else {
               this.tableData = []
@@ -775,9 +778,22 @@ export default {
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
     },
+    getTip(row) {
+      return `<div class="Tip">${row.judgmentContent}</div>`
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.statusWrap {
+  img {
+    height: 25px;
+    width: 25px;
+    margin-right: 5px;
+  }
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
 </style>

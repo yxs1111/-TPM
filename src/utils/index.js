@@ -553,6 +553,10 @@ export function getYearAndMonthRange(start, end) {
 export function getHeight() {
   return window.innerHeight - 450
 }
+// 财务表格加高
+export function getHeight2() {
+  return window.innerHeight - 330
+}
 // V1中不含导入按钮的tab
 export function getHeightHaveTab1() {
   return window.innerHeight - 300

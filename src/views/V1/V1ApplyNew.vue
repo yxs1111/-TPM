@@ -69,7 +69,7 @@ export default {
                 minePackageName: 'Price Promotion',
               })
               signP = 1
-            } else if (element.costType === 'New User' && signN === 0) {
+            } else if (element.costType === 'New Users' && signN === 0) {
               this.routerList.push({
                 name: 'NU',
                 path: '/costManagement/V1/V1Apply/V1discountNU',

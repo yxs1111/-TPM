@@ -37,18 +37,18 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-          <span class="tipStar">*</span>
-          注意事项：若未获取到LE销量，不能办理
-      </div>
+<!--      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">-->
+<!--          <span class="tipStar">*</span>-->
+<!--          注意事项：若未获取到LE销量，不能办理-->
+<!--      </div>-->
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
@@ -335,7 +335,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'NUV2' &&
+              res.data.version.includes('V2') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
