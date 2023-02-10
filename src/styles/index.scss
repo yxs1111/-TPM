@@ -1026,3 +1026,11 @@ input::-webkit-inner-spin-button {
     width: 100% !important;
   }
 }
+//文本省略 一行
+.ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

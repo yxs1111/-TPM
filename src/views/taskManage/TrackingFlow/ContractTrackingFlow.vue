@@ -62,8 +62,14 @@
           {{ scope.row.originatorDate===null ? '': scope.row.originatorDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column v-slot={row}  align="center" prop="assignee" min-width="280" label="办理人">
-        <span v-html="setSplitAssignee(row.assignee)"></span>
+      <el-table-column align="left" prop="assignee" label="办理人" width="160" :show-overflow-tooltip="false">
+          <template slot-scope="scope">
+            <el-tooltip>
+              <!-- // {{}}会将数据解释为普通文本，而非 HTML 代码。 -->
+              <div v-html="setSplitAssignee(scope.row.assignee)" slot="content"></div>
+              <div class="ellipsis">{{scope.row.assignee}}</div>
+            </el-tooltip>
+          </template>
       </el-table-column>
       <el-table-column width="150" align="center" label="查看" fixed="right">
         <template slot-scope="{row}">

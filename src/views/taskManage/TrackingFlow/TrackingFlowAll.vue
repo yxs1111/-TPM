@@ -58,7 +58,7 @@
       <el-table-column align="center" width="240" prop="costTypeName" label="Cost Type"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="240" prop="costItemName" label="Cost Item"> </el-table-column>
-      <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" min-width="150" prop="channelName" label="渠道"> </el-table-column>
       <el-table-column align="center" v-slot={row} width="100" prop="processStatus" label="流程状态">
         {{row.processStatus===2?'已完成':'进行中'}}
       </el-table-column>
@@ -68,9 +68,14 @@
           {{ scope.row.createDate===null ? '': scope.row.createDate.replace('T', ' ') }}
         </template>
       </el-table-column>
-      <el-table-column v-slot={row} width="300" align="center" prop="assignee" label="办理人">
-        <!-- {{setSplitAssignee(row.assignee)}} -->
-        <span v-html="setSplitAssignee(row.assignee)"></span>
+      <el-table-column align="left" prop="assignee" label="办理人" width="160" :show-overflow-tooltip="false">
+          <template slot-scope="scope">
+            <el-tooltip>
+              <!-- // {{}}会将数据解释为普通文本，而非 HTML 代码。 -->
+              <div v-html="setSplitAssignee(scope.row.assignee)" slot="content"></div>
+              <div class="ellipsis">{{scope.row.assignee}}</div>
+            </el-tooltip>
+          </template>
       </el-table-column>
       <el-table-column width="150" align="center" label="查看" fixed="right">
         <template slot-scope="{row}">
@@ -143,7 +148,7 @@ export default {
     this.getQueryChannelSelect()
     this.getCostTypeList()
     this.getCostItemList()
-    // this.getMinePackageSelect()
+    this.getMinePackageSelect()
   },
   components: {
     FlowDiagram,
@@ -160,6 +165,8 @@ export default {
         this.filterObj.MinePackageIndex = ''
         this.filterObj.MinePackageName = ''
         this.minePackageList = ''
+        this.filterObj.CostType=''
+        this.getMinePackageSelect()
       }
       this.filterObj.CostTypeName = ''
     },
@@ -169,6 +176,7 @@ export default {
         this.filterObj.MinePackage=this.minePackageList[this.filterObj.MinePackageIndex].costTypeNumber
       } else {
         this.filterObj.MinePackage = ''
+        this.filterObj.MinePackageName = ''
       }
       this.filterObj.costItem = ''
       this.getCostItemList(this.filterObj.MinePackage)

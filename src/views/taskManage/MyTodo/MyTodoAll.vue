@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-16 14:01:16
- * @LastEditTime: 2022-12-30 10:36:41
+ * @LastEditTime: 2023-02-10 14:16:32
 -->
 <template>
   <div class="MainContent">
@@ -58,11 +58,17 @@
       <el-table-column align="center" width="240" prop="costTypeName" label="Cost Type"> </el-table-column>
       <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
       <el-table-column align="center" width="240" prop="costItemName" label="Cost Item"> </el-table-column>
-      <el-table-column align="center" prop="channelName" label="渠道"> </el-table-column>
-      <el-table-column align="center" prop="version" label="版本号"> </el-table-column>
+      <el-table-column align="center" min-width="150" prop="channelName" label="渠道"> </el-table-column>
+      <el-table-column align="center" min-width="150" prop="version" label="版本号"> </el-table-column>
       <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
-      <el-table-column v-slot={row} align="center" width="300" prop="assignee" label="办理人">
-        <span v-html="setSplitAssignee(row.assignee)"></span>
+      <el-table-column align="left" prop="assignee" label="办理人" width="160" :show-overflow-tooltip="false">
+          <template slot-scope="scope">
+            <el-tooltip>
+              <!-- // {{}}会将数据解释为普通文本，而非 HTML 代码。 -->
+              <div v-html="setSplitAssignee(scope.row.assignee)" slot="content"></div>
+              <div class="ellipsis">{{scope.row.assignee}}</div>
+            </el-tooltip>
+          </template>
       </el-table-column>
       <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
         {{row.createTime?row.createTime.substring(0,19).replaceAll("T",' '):""}}
@@ -198,7 +204,7 @@ export default {
     this.getTableData()
     this.getChannelList()
     this.getCostTypeList()
-    // this.getMinePackage()
+    this.getMinePackage()
   },
   components: {
     FlowDiagram,
@@ -212,7 +218,9 @@ export default {
         this.getMinePackage(this.filterObj.CostTypeName)
       } else {
         this.filterObj.CostTypeName = ''
+        this.filterObj.CostType=''
         this.MinePackageList = ''
+        this.getMinePackage()
       }
       this.filterObj.MinePackage = ''
       this.filterObj.costItem = ''
