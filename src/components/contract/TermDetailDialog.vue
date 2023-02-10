@@ -1,14 +1,14 @@
 <!--
  * @Description: 条款明细组件
  * @Date: 2022-12-08 10:16:37
- * @LastEditTime: 2023-01-11 20:46:48
+ * @LastEditTime: 2023-02-10 19:00:30
 -->
 
 <template>
   <el-dialog width="98%" ref="termDialog" class="termDialog" title="条款明细" :visible="isTermsDetailVisible" @close="closeTermsDetail">
     <div class="dialogContent">
       <div class="termTableWrap">
-        <el-table :data="termData" ref="termDialog" style="width: 100%" :span-method="mergeColumnMethod" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
+        <el-table :data="termData" ref="termDialog" style="width: 100%" max-height="800" :span-method="mergeColumnMethod" :header-cell-style="HeadTable" :row-class-name="tableRowClassNameDialog">
           <el-table-column align="center" width="760" fixed="left">
             <template v-slot:header>
               <div class="topInfoWrap">
