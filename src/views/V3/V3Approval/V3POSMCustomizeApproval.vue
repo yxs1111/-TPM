@@ -195,7 +195,7 @@
               </template>
             </el-table-column>
             <el-table-column width="400" fixed align="center" prop="systemJudgmentContent" label="系统检验">
-              <span>检验同构</span>
+              <span>检验通过</span>
             </el-table-column>
             <el-table-column align="center" width="460" prop="cpId" label="CPID" />
             <el-table-column width="120" align="center" prop="yearAndMonth" label="活动月" />

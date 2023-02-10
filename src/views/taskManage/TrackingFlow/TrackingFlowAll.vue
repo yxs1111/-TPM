@@ -154,11 +154,14 @@ export default {
       if(value!=='') {
         this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
         this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+        this.getMinePackageSelect(this.filterObj.CostTypeName)
       } else {
         this.filterObj.CostTypeName = ''
+        this.filterObj.MinePackageIndex = ''
+        this.filterObj.MinePackageName = ''
+        this.minePackageList = ''
       }
-      this.filterObj.MinePackageName = ''
-      this.getMinePackageSelect(this.filterObj.CostTypeName)
+      this.filterObj.CostTypeName = ''
     },
     'filterObj.MinePackageIndex'(value) {
       if(value!=='') {
