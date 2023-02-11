@@ -25,7 +25,7 @@
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column align="center" prop="channelCode" label="渠道编码"> </el-table-column>
-      <el-table-column align="center" prop="channelEsName" label="渠道中文名称"> </el-table-column>
+      <el-table-column align="center" prop="channelCsName" label="渠道中文名称"> </el-table-column>
       <el-table-column align="center" prop="channelEsName" label="渠道英文名称"> </el-table-column>
       <el-table-column width="150" align="center" prop="state" label="状态">
         <template slot-scope="{ row }">
