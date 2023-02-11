@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-11 17:20:28
+ * @LastEditTime: 2023-01-09 15:12:56
 -->
 <template>
   <div class="MainContent">
@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in ['EC','NKA','RKA']" :key="item" :label="item" :value="item" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -837,6 +837,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
+          //channelArr 只取channelCode为NKA、EC、RKA
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA' || item.channelCode === 'EC' || item.channelCode === 'RKA'
+          )
           this.getCustomerList()
         }
       })
