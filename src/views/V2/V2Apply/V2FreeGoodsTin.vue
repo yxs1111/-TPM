@@ -1,7 +1,7 @@
 <!--
  * @Description: V2RoadSHow
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-08 17:37:27
+ * @LastEditTime: 2023-02-11 16:14:26
 -->
 <template>
   <div class="MainContent">
@@ -106,13 +106,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -366,7 +366,7 @@
             <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
             <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
             <el-table-column width="280" align="center" prop="costItemName" label="费用科目" />
-            <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+            <el-table-column width="120" align="center" prop="channelName" label="渠道" />
             <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
             <el-table-column width="280" align="center" prop="brandName" label="品牌" />
             <el-table-column width="220" align="center" prop="productName" label="SKU" />

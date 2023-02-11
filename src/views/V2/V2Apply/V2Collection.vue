@@ -1,7 +1,7 @@
 <!--
  * @Description: V2Collection
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-08 17:46:31
+ * @LastEditTime: 2023-02-11 16:13:36
 -->
 <template>
   <div class="MainContent">
@@ -64,7 +64,7 @@
         </el-table-column>
         <el-table-column width="180" align="center" prop="costAccount" label="费用科目">
         </el-table-column>
-        <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+        <el-table-column width="120" align="center" prop="channelName" label="渠道">
         </el-table-column>
         <el-table-column width="220" align="center" prop="customerName" label="客户">
         </el-table-column>
