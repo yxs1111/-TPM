@@ -12,7 +12,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelCsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">

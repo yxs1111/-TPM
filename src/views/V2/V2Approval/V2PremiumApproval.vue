@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-02-10 14:50:59
+ * @LastEditTime: 2023-02-11 15:49:28
 -->
 <template>
   <div class="MainContent">
@@ -16,8 +16,17 @@
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+          <el-select v-model="filterObj.channelCode"
+                     clearable
+                     filterable
+                     placeholder="请选择"
+                     @change="getCustomerList">
+            <el-option
+              v-for="(item, index) in channelArr"
+              :key="index"
+              :label="item.channelCsName"
+              :value="item.channelCode"
+            />
           </el-select>
         </div>
         <div class="Selectli">
