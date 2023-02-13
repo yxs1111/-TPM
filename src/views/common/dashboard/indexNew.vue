@@ -21,9 +21,7 @@
           <div class="PointTipWrap3">
             <span class="date">{{ this.activeMoon }}</span>
             <el-radio-group class='btnGroup' v-model="tabPosition" @change="getHomePageData">
-              <el-radio-button label="NKA">NKA</el-radio-button>
-              <el-radio-button label="EC">EC</el-radio-button>
-              <el-radio-button label="RKA">RKA</el-radio-button>
+              <el-radio-button v-for="(item) in channelArr" :label=item.channelCsName>{{item.channelEsName}}</el-radio-button>
             </el-radio-group>
           </div>
           <div class="PointTipWrap2">
@@ -202,6 +200,7 @@ import item from '@/layout/components/Sidebar/Item'
 import { getFileType } from '@/utils'
 import requestApi from '@/api/request-api'
 import { mapMutations } from 'vuex'
+import selectAPI from '@/api/selectCommon/selectCommon'
 export default {
   name: 'Dashboard',
   components: {
@@ -315,7 +314,7 @@ export default {
           address: '上海市普陀区金沙江路 1518 弄',
         },
       ],
-      tabPosition: 'NKA',
+      tabPosition: '',
       avatar: auth.getAvatar(),
       name: auth.getName(),
       SalesAmountChart: '',
@@ -336,6 +335,7 @@ export default {
       startTimeArr: [],
       endTimeArr: [],
       ActivityList: [],
+      channelArr: [],
       TodoList: [],
       contractList: [],
       completeData: [],
@@ -447,6 +447,8 @@ export default {
     this.getCompleteData()
     this.getActivitycycle()
     this.needHlep()
+    this.getChannel()
+    this.getHomePageData()
   },
   methods: {
     //app OPEN_BREADCRUMB 映射成openBreadcrumb方法
@@ -460,6 +462,15 @@ export default {
           this.gridData.push(item)
           item.format = getFileType(item.fileName)
         })
+      })
+    },
+    // 获取下拉框
+    getChannel() {
+      selectAPI.queryChannelSelect().then((res) => {
+        if (res.code === 1000) {
+          this.channelArr = res.data
+          this.tabPosition = res.data[0].channelCsName
+        }
       })
     },
     changeScreen() {
@@ -555,7 +566,7 @@ export default {
           }
           this.startTimeArr = []
           item.label = item.activityMonth
-          item.startVZero = item.startAndEndVZero.substring(0, 10) 
+          item.startVZero = item.startAndEndVZero.substring(0, 10)
           // console.log(item.EndVZero)
           item.EndVZero = item.startAndEndVZero.substring(item.startAndEndVZero.length - 10, item.startAndEndVZero.length)
           item.startVOne = item.startAndEndVOne.substring(0, 10)
@@ -568,7 +579,7 @@ export default {
           item.EndVOne=this.isCompare(item.startVOne,item.EndVOne)
           item.EndVTwo=this.isCompare(item.startVTwo,item.EndVTwo)
           item.EndVThree=this.isCompare(item.startVThree,item.EndVThree)
-          
+
           this.startTimeArr.push(new Date(item.startVZero), new Date(item.EndVZero), new Date(item.startVOne), new Date(item.EndVOne), new Date(item.startVTwo), new Date(item.EndVTwo), new Date(item.startVThree), new Date(item.EndVThree))
           let maxDate = new Date(Math.max.apply(null, this.startTimeArr))
           let minDate = new Date(Math.min.apply(null, this.startTimeArr))
@@ -668,7 +679,7 @@ export default {
                 },
               },
               parentId: item.id,
-            },      
+            },
           )
           //若V3的开始时间 大于甘特图的结束时间则不该显示
           if(dayjs(item.startVThree).valueOf()>item.end) {
