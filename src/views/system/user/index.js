@@ -323,7 +323,7 @@ export default {
   },
   created() {
     this.fetchData()
-    this.getAllOrg()
+    // this.getAllOrg()
   },
   mounted() {
     window.onresize = () => {
@@ -572,13 +572,13 @@ export default {
       }
     },
     // 获取所有组织
-    getAllOrg() {
-      organizationApi.getAll().then(response => {
-        if (response.data) {
-          this.allOrg.push(response.data)
-        }
-      })
-    },
+    // getAllOrg() {
+    //   organizationApi.getAll().then(response => {
+    //     if (response.data) {
+    //       this.allOrg.push(response.data)
+    //     }
+    //   })
+    // },
     // 自定义树显示
     normalizer(node) {
       if (!node.children || node.children.length < 1) {
@@ -811,7 +811,7 @@ export default {
           //不为null才勾选（目的：防止全部勾中）
           if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId!=null) {
             fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId+'-'+item.fsDataFouId)
-          } 
+          }
           //NodeKey:"FieldSales-zone-4539"
         })
         // console.log(fsNodeKeyList);
