@@ -147,7 +147,7 @@ export default {
     this.getTableData()
     this.getQueryChannelSelect()
     this.getCostTypeList()
-    this.getCostItemList()
+    // this.getCostItemList()
     // this.getMinePackageSelect()
   },
   components: {
@@ -176,12 +176,13 @@ export default {
       if(value!=='') {
         this.filterObj.MinePackageName=this.minePackageList[this.filterObj.MinePackageIndex].costType
         this.filterObj.MinePackage=this.minePackageList[this.filterObj.MinePackageIndex].costTypeNumber
+        this.getCostItemList(this.filterObj.MinePackage)
       } else {
         this.filterObj.MinePackage = ''
         this.filterObj.MinePackageName = ''
+        this.CostItemList = null
       }
       this.filterObj.costItem = ''
-      this.getCostItemList(this.filterObj.MinePackage)
     },
   },
   methods: {

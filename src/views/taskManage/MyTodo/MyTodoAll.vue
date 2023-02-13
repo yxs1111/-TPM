@@ -219,6 +219,11 @@ export default {
       }
       this.filterObj.MinePackage = ''
       this.filterObj.costItem = ''
+    },
+    'filterObj.MinePackage'(value) {
+      if (value == '') {
+        this.CostItemList = []
+      }
     }
   },
   mounted() {
@@ -264,14 +269,19 @@ export default {
     },
     // 获取下拉框
     getCostItemList() {
-      this.filterObj.costItem = ''
-      selectAPI.getCostItemList({
-        minePackage: this.filterObj.MinePackage
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.CostItemList = res.data
-        }
-      })
+      console.log(this.filterObj.MinePackage)
+      if (this.filterObj.MinePackage !== '') {
+        this.filterObj.costItem = ''
+        selectAPI.getCostItemList({
+          minePackage: this.filterObj.MinePackage
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.CostItemList = res.data
+          }
+        })
+      } else {
+        this.CostItemList = []
+      }
     },
     getCostTypeList() {
       selectAPI
