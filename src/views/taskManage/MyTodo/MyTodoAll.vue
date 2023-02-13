@@ -204,7 +204,7 @@ export default {
     this.getTableData()
     this.getChannelList()
     this.getCostTypeList()
-    this.getMinePackage()
+    // this.getMinePackage()
   },
   components: {
     FlowDiagram,
@@ -212,19 +212,24 @@ export default {
   directives: { elDragDialog, permission },
   watch: {
     'filterObj.CostTypeIndex'(value) {
-      if(value!=='') {
-        this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
-        this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
+      if (value !== '') {
+        this.filterObj.CostType = this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+        this.filterObj.CostTypeName = this.CostTypeList[this.filterObj.CostTypeIndex].costType
         this.getMinePackage(this.filterObj.CostTypeName)
       } else {
         this.filterObj.CostTypeName = ''
-        this.filterObj.CostType=''
-        this.MinePackageList = ''
-        this.getMinePackage()
+        this.filterObj.CostType = ''
+        this.MinePackageList = null
+        // this.getMinePackage()
       }
       this.filterObj.MinePackage = ''
       this.filterObj.costItem = ''
     },
+    'filterObj.MinePackage'(value) {
+      if (value == '') {
+        this.CostItemList = []
+      }
+    }
   },
   methods: {
     //获取菜单明
