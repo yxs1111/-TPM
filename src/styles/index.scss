@@ -1048,3 +1048,11 @@ input::-webkit-inner-spin-button {
   left: 0;
   bottom: 16px;
 }
+//文本省略 一行
+.ellipsis {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

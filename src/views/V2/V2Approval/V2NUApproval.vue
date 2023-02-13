@@ -12,7 +12,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelCsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -57,7 +57,7 @@
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
-      <el-table-column width="250" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="250" align="center" prop="channelName" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" v-slot={row} align="right" prop="planVol" label="V1计划总销量（CTN）">
@@ -143,8 +143,10 @@
           }" :row-class-name="tableRowClassName" stripe>
             <el-table-column prop="date" fixed align="center" label="系统检验" width="100">
               <template slot-scope="scope">
-                <img  src="@/assets/images/success.png" alt="">
-                <span class="judgmentText">Pass</span>
+                <div class="statusWrap">
+                  <img  src="@/assets/images/success.png" alt="">
+                  <span class="judgmentText">Pass</span>
+                </div>
               </template>
             </el-table-column>
             <el-table-column width="250" align="center" prop="judgmentContent" label="系统检验" fixed >
@@ -180,20 +182,6 @@
             <el-table-column width="160" align="right" prop="achievementRate" label="达成率 (%)" />
             <el-table-column width="150" v-slot={row} align="right" prop="costDifferenceValue" label="费用差值(RMB)">
               {{FormateNum(row.costDifferenceValue)}}
-            </el-table-column>
-            <el-table-column width="120" align="center" prop="judgmentType" label="系统判定">
-              <template slot-scope="{row}">
-                <el-tooltip effect="dark" placement="bottom" popper-class="tooltip">
-                  <div slot="content" v-html="getTip(row)">
-                  </div>
-                  <div class="statusWrap">
-                    <img src="@/assets/images/success.png" alt="" v-if="row.judgmentType=='Pass'">
-                    <img src="@/assets/images/warning.png" alt="" v-if="row.judgmentType!=null&&row.judgmentType.indexOf('Exception') > -1">
-                    <img src="@/assets/images/selectError.png" alt="" v-if="row.judgmentType=='Error'">
-                    <span class="judgmentText">{{row.judgmentType}}</span>
-                  </div>
-                </el-tooltip>
-              </template>
             </el-table-column>
             <el-table-column width="120" align="center" prop="applyRemarks" label="申请人备注" />
             <el-table-column width="220" align="center" prop="poApprovalComments" label="Package Owner审批意见" />
@@ -303,6 +291,7 @@ export default {
         }).then((response) => {
           this.tableData = response.data.records
           this.mainId = this.tableData[0].mainId
+          this.isSubmit = this.tableData[0].isSubmit
           this.pageNum = response.data.pageNum
           this.pageSize = response.data.pageSize
           this.total = response.data.total
@@ -321,8 +310,9 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'NUV2' &&
-              res.data.assignee.indexOf(this.usernameLocal) != -1
+              res.data.version.includes('V2') &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.isSubmit
             ) {
               //本人可以提交
               this.isSubmit = false

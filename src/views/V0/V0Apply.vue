@@ -1,7 +1,7 @@
 <!--
  * @Description:
  * @Date: 2021-11-03 14:17:00
- * @LastEditTime: 2022-12-05 17:02:11
+ * @LastEditTime: 2023-01-08 15:25:38
 -->
 <template>
   <div class="V0Content">
@@ -17,7 +17,7 @@
           <div class="Selectli">
             <span class="SelectliTitle">渠道:</span>
             <el-select v-model="filterObj.channelCode" filterable clearable placeholder="请选择">
-              <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelCode" :value="item.channelCode" />
+              <el-option v-for="(item, index) in ChannelList" :key="index" :label="item.channelCsName" :value="item.channelCode" />
             </el-select>
           </div>
           <div class="Selectli">
@@ -31,8 +31,6 @@
             <img src="@/assets/images/export.png" alt="" />
             <span class="text">导出</span>
           </div>
-        </div>
-        <div class="OpertionBar">
           <!-- <el-button type="primary" @click="getCPTData" v-permission="permissions['getCPT']">获取CPT数据</el-button> -->
           <div class="TpmButtonBG" @click="getCPTData" v-permission="permissions['getCPT']">
             <img src="@/assets/images/huoqu.png" alt="" />
@@ -51,6 +49,8 @@
             <span class="text">提交</span>
           </div>
         </div>
+<!--        <div class="OpertionBar">-->
+<!--        </div>-->
       </div>
       <!-- 商品 -->
       <div class="ContentWrap">
@@ -276,6 +276,7 @@ export default {
         month: '',
         SKU: '',
         channelCode: '',
+        channelName: '',
       },
       monthList: [],
       skuOptons: [],
@@ -347,6 +348,12 @@ export default {
   watch: {
     'filterObj.channelCode'() {
       this.ruleForm.channelCode = this.filterObj.channelCode
+      //根据channelCode 取channelCsName
+      this.ChannelList.forEach((item) => {
+        if (item.channelCode == this.filterObj.channelCode) {
+          this.filterObj.channelName = item.channelCsName
+        }
+      })
     },
   },
   computed: {},
@@ -359,6 +366,7 @@ export default {
     getScenarioList() {
       API.getScenarioList({
         channelName: this.filterObj.channelCode,
+        channelCode: this.filterObj.channelCode,
       }).then((res) => {
         this.yearAndMonthList = res.data
       })
@@ -660,7 +668,7 @@ export default {
           let obj = {
             yearAndMonth: this.filterObj.month,
             channelCode: this.ruleForm.channelCode,
-            channelName: this.ruleForm.channelCode,
+            channelName: this.filterObj.channelName,
             dimScenario: this.ruleForm.dimScenario,
             dimVersion: this.ruleForm.dimVersion,
           }
@@ -668,6 +676,7 @@ export default {
             obj = {
               yearAndMonth: this.filterObj.month,
               channelName: this.ruleForm.channelCode,
+              channelCode: this.ruleForm.channelCode,
               dimScenario: this.ruleForm.dimScenario,
               dimVersion: this.ruleForm.dimVersion,
             }

@@ -29,7 +29,7 @@
                      placeholder="请选择">
             <el-option v-for="(item) in channelArr"
                        :key="item"
-                       :label="item.channelEsName"
+                       :label="item.channelCsName"
                        :value="item.channelCode" />
           </el-select>
         </div>
@@ -294,14 +294,14 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDeptSpName"
+                       prop="costAscriptionDept"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDeptSpName }}
+            {{ scope.row.costAscriptionDept }}
           </div>
         </template>
       </el-table-column>
@@ -710,14 +710,14 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="costAscriptionDeptSpName"
+                             prop="costAscriptionDept"
                              label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costAscriptionDeptSpName }}
+                  {{ scope.row.costAscriptionDept }}
                 </div>
               </template>
             </el-table-column>
@@ -923,7 +923,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' && res.data.activityName.includes('审批') &&
+              res.data.version.includes('V2') && res.data.activityName.includes('审批') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -1007,7 +1007,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_All-RKA&RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1095,7 +1095,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}All-RKA/RTM_${this.filterObj.channelCode}_V2审批.xlsx`
+          `${this.filterObj.month}All-RKA&RTM_${this.filterObj.channelCode}_V2审批.xlsx`
         ) //自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })
@@ -1109,7 +1109,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              API.approveApprove({
                 // mainId: this.tableData[0].mainId, // 主表id
                 yearAndMonth: this.filterObj.month,
                 channelCode: this.filterObj.channelCode, //渠道
@@ -1144,7 +1144,7 @@ export default {
             type: 'warning',
           })
             .then(() => {
-              API.approve({
+              API.approveApprove({
                 paramMap: { opinion: 'reject', mainId: this.tableData[0].mainId}, // 审批标识(agree：审批通过，reject：审批驳回)
                 // isSubmit: 1, //申请0,审批1
               }).then((response) => {

@@ -81,7 +81,7 @@ export default {
                 minePackageName: 'Price Promotion',
               })
               signP = 1
-            } else if (element.costType === 'New User' && signN === 0) {
+            } else if (element.costType === 'New Users' && signN === 0) {
               this.routerList.push({
                 name: '新客',
                 path: '/master/ruleCtrl/model/TestRulesNew',

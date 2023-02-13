@@ -12,7 +12,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -43,7 +43,7 @@
       <el-table-column width="120" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="190" align="center" prop="minePackageName" label="Mine Package" />
       <el-table-column width="180" align="center" prop="costItemName" label="费用科目" />
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="120" align="center" prop="channelName" label="渠道" />
       <el-table-column width="220" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="220" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" align="right" prop="planVol" label="V1计划总销量(CTN)" />

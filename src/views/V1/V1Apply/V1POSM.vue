@@ -1,7 +1,7 @@
 <!--
  * @Description: V1POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-06-27 17:12:03
+ * @LastEditTime: 2023-01-08 16:49:12
 -->
 <template>
   <div class="MainContent">
@@ -31,7 +31,7 @@
             <el-option
               v-for="(item, index) in channelArr"
               :key="index"
-              :label="item.channelEsName"
+              :label="item.channelCsName"
               :value="item.channelCode"
             />
           </el-select>
@@ -90,6 +90,9 @@
 
       </div>
       <div class="OpertionBar">
+        <el-button type="primary"
+                   class="TpmButtonBG"
+                   @click="clear">清除数据</el-button>
         <div class="TpmButtonBG"
              @click="getSmartPlan">
           <img src="@/assets/images/huoqu.png"
@@ -181,14 +184,14 @@
       </el-table-column>
       <el-table-column width="120"
                        align="center"
-                       prop="channelCode"
+                       prop="channelName"
                        label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -381,6 +384,31 @@ export default {
     this.getregionArr()
   },
   methods: {
+    // 清除数据
+    clear() {
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.getClear({
+          channelCode: this.filterObj.channelCode, //渠道
+          yearAndMonth: this.filterObj.month,
+          costItem: 'In Store POSM - Standard'
+          //   isSubmit: 0,
+        }).then((res) => {
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              this.$message.success('清除成功!')
+            })
+          }
+        })
+      }
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []

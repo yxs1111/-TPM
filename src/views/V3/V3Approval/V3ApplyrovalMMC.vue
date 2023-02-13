@@ -11,8 +11,8 @@
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item, index) in ['NKA']" :key="index" :label="item" :value="item" />
+          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
+            <el-option v-for="(item) in channelArr" :key="item.channelCsName" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -367,7 +367,10 @@ export default {
       selectAPI.queryChannelSelect().then((res) => {
         if (res.code === 1000) {
           this.channelArr = res.data
-          this.getCustomerList(this.filterObj.channelCode)
+          // channelArr 只取channelCode为NKA、EC、RKA的数据
+          this.channelArr = this.channelArr.filter(
+            (item) => item.channelCode === 'NKA'
+          )
         }
       })
     },
@@ -395,14 +398,14 @@ export default {
     },
     // 导出excel
     exportExcelInfo() {
-      if (!this.filterObj.yearAndMonth || !this.filterObj.channelName) {
+      if (!this.filterObj.yearAndMonth || !this.filterObj.channelCode) {
         return this.$message({
           message: '必选选择年月和渠道！',
           type: 'warning',
         })
       }
       API.excdisplayDataApprove({ ...this.filterObj }).then((response) => {
-        const fileName = `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelName}_V3_查询.xlsx`
+        const fileName = `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelCode}_V3_查询.xlsx`
         //   res.data:请求到的二进制数据
         const blob = new Blob([response], {
           type: 'application/vnd.ms-excel',
@@ -454,7 +457,7 @@ export default {
     // 导入框
     importData() {
       this.saveBtn = false
-      if (this.filterObj.channelName == '') {
+      if (this.filterObj.channelCode == '') {
         this.$message.info('请先选择渠道！')
       } else {
         this.importVisible = true
@@ -476,7 +479,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.uploadFile)
       formData.append('yearAndMonth', this.filterObj.yearAndMonth)
-      formData.append('channelName', this.filterObj.channelName)
+      formData.append('channelName', this.filterObj.channelCode)
       formData.append('importType', '2')
       API.importNormal(formData).then((response) => {
         //清除input的value ,上传一样的
@@ -500,10 +503,10 @@ export default {
         // 导出数据筛选
         API.downExcelTemplate({
           yearAndMonth: this.filterObj.yearAndMonth,
-          channelName: this.filterObj.channelName,
+          channelName: this.filterObj.channelCode,
           downType: '2',
         }).then((res) => {
-          downloadFile(res, `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelName}_V3审批.xlsx`) //自定义Excel文件名
+          downloadFile(res, `${this.filterObj.yearAndMonth}_MMC_${this.filterObj.channelCode}_V3审批.xlsx`) //自定义Excel文件名
           this.$message.success(this.messageMap.exportSuccess)
         })
       } else {

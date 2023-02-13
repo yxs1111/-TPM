@@ -18,7 +18,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -100,7 +100,7 @@
           </el-form-item>
           <el-form-item label="渠道" prop="channelCode">
             <el-select v-model="ruleForm.channelCode" @change="channelCodeDialog(ruleForm.channelCode)" class="my-el-input" clearable filterable placeholder="请选择">
-              <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+              <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelCsName" :value="item.channelCode" />
             </el-select>
           </el-form-item>
           <el-form-item label="大区" :required="ruleForm.channelCode==='RKA'?true:false"  prop="zoneName">

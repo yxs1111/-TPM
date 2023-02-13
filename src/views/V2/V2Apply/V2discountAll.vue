@@ -10,7 +10,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -75,10 +75,10 @@
         {{FormateNum(row.adjustedCost)}}
       </el-table-column>
       <el-table-column width="160"  align="right" prop="avePriceDifference" label="均价差值（%）">
-      
+
       </el-table-column>
       <el-table-column width="160"  align="right" prop="salesDifference" label="销量差值（%）">
-     
+
       </el-table-column>
       <el-table-column width="120" v-slot={row} align="right" prop="costDifference" label="费用差值">
         {{FormateNum(row.costDifference)}}
@@ -231,7 +231,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'V2' &&
+              res.data.version.includes('V2') &&
               res.data.assignee === this.usernameLocal
             ) {
               //本人可以提交

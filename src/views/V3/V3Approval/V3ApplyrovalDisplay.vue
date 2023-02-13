@@ -12,7 +12,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -511,7 +511,7 @@ export default {
         if (res.code === 1000) {
           if (
             res.data.assignee.indexOf(this.username) > -1 &&
-            res.data.version === 'Display-V3' &&
+            res.data.version.includes('V3') &&
             res.data.activityName.indexOf('审批') > -1
           ) {
             this.isSubmit = true

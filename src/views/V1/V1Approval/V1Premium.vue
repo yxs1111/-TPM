@@ -31,7 +31,7 @@
             <el-option
               v-for="(item, index) in channelArr"
               :key="index"
-              :label="item.channelEsName"
+              :label="item.channelCsName"
               :value="item.channelCode"
             />
           </el-select>
@@ -451,14 +451,14 @@
             </vxe-table-column>
             <vxe-table-column width="120"
                              align="center"
-                             field="channelCode"
+                             field="channelName"
                              title="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.channelCode }}
+                  {{ scope.row.channelName }}
                 </div>
               </template>
             </vxe-table-column>

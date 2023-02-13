@@ -1,7 +1,7 @@
 <!--
  * @Description: V3TransportApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-28 17:15:23
+ * @LastEditTime: 2023-01-08 18:13:53
 -->
 <template>
   <div class="MainContent">
@@ -17,7 +17,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelCsName" :value="item.channelCode" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -121,13 +121,13 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.channelCode }}
+            {{ scope.row.channelName }}
           </div>
         </template>
       </el-table-column>
@@ -419,13 +419,13 @@
                 </div>
               </template>
             </vxe-table-column>
-            <vxe-table-column width="120" align="center" field="channelCode" title="渠道">
+            <vxe-table-column width="120" align="center" field="channelName" title="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.channelCode }}
+                  {{ scope.row.channelName }}
                 </div>
               </template>
             </vxe-table-column>
@@ -603,6 +603,7 @@ export default {
       filterObj: {
         supplierName: '', //供应商
         channelCode: '', //渠道
+        channelName: '',
         customerMdmCode: '', //客户MDM code
         customerCode: '', //客户系统名称
         distributorName: '', //经销商
@@ -639,7 +640,15 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    'filterObj.channelCode'() {
+      this.channelArr.forEach((item) => {
+        if (item.channelCode == this.filterObj.channelCode) {
+          this.filterObj.channelName = item.channelCsName
+        }
+      })
+    },
+  },
   mounted() {
     window.onresize = () => {
       return (() => {
@@ -697,7 +706,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Transport-V3' &&
+              res.data.version.includes('V3') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {

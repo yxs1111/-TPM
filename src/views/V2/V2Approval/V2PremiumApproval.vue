@@ -1,7 +1,7 @@
 <!--
  * @Description: V2POSM
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2023-01-20 14:33:22
+ * @LastEditTime: 2023-02-11 16:20:19
 -->
 <template>
   <div class="MainContent">
@@ -16,8 +16,17 @@
         </div>
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
-          <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item, index) in channelArr" :key="index" :label="item.channelEsName" :value="item.channelCode" />
+          <el-select v-model="filterObj.channelCode"
+                     clearable
+                     filterable
+                     placeholder="请选择"
+                     @change="getCustomerList">
+            <el-option
+              v-for="(item, index) in channelArr"
+              :key="index"
+              :label="item.channelCsName"
+              :value="item.channelCode"
+            />
           </el-select>
         </div>
         <div class="Selectli">
@@ -127,7 +136,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
@@ -572,26 +581,17 @@ export default {
           mainId: this.mainId,
         })
         .then((res) => {
-          if (this.filterObj.channelCode == 'NKA') {
-            if (res.code === 1000) {
-              if (res.data.version.includes("V2") && res.data.assignee.indexOf(this.usernameLocal) != -1) {
-                //本人可以提交
-                this.isSelf = true
-              } else {
-                //其他人禁用
-                this.isSelf = false
-              }
-            }
-          }
-          if (this.filterObj.channelCode == 'EC') {
-            if (res.code === 1000) {
-              if (res.data.version.includes("V2") && res.data.assignee.indexOf(this.usernameLocal) != -1) {
-                //本人可以提交
-                this.isSelf = true
-              } else {
-                //其他人禁用
-                this.isSelf = false
-              }
+          if (res.code === 1000) {
+            if (
+              res.data.version.includes('V2') &&
+              res.data.assignee.indexOf(this.usernameLocal) != -1 &&
+              this.tableData[0].isSubmit
+            ) {
+              //本人可以提交
+              this.isSelf = true
+            } else {
+              //其他人禁用
+              this.isSelf = false
             }
           }
         })

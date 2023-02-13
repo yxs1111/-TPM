@@ -13,7 +13,7 @@
         <div class="Selectli">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelName" clearable filterable placeholder="请选择" @change="getCustomerList">
-            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelEsName" :value="item.channelEsName" />
+            <el-option v-for="(item) in channelArr" :key="item.channelCode" :label="item.channelCsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -711,7 +711,7 @@ export default {
             this.firstIsPassComple = false
             this.$message({
               type: 'success',
-              message: '第二次检测文件上传成功',
+              message: '检测文件上传成功',
             })
             if (res.data != null) {
               this.dialogDataF = res.data
@@ -727,7 +727,7 @@ export default {
             this.dialogDataF = []
             this.$message({
               type: 'error',
-              message: '第二次检测文件上传失败，请重新上传。',
+              message: '检测文件上传失败，请重新上传。',
             })
           }
         })
@@ -1157,7 +1157,7 @@ export default {
           if (res.code === 1000) {
             this.currentIsCalculation=0
             if (
-              res.data.version === 'V3' &&
+              res.data.version.includes('V3') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.submitBtn === 0
             ) {

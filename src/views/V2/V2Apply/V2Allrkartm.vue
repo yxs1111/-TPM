@@ -29,7 +29,7 @@
                      placeholder="请选择">
             <el-option v-for="(item) in channelArr"
                        :key="item"
-                       :label="item.channelEsName"
+                       :label="item.channelCsName"
                        :value="item.channelCode" />
           </el-select>
         </div>
@@ -53,7 +53,9 @@
         </div>
       </div>
       <div class="OpertionBar">
-
+        <el-button type="primary"
+                   class="TpmButtonBG"
+                   @click="clear">清除数据</el-button>
         <el-button type="primary"
                    class="TpmButtonBG"
                    @click="search">查询</el-button>
@@ -287,14 +289,14 @@
       </el-table-column>
       <el-table-column width="220"
                        align="center"
-                       prop="costAscriptionDeptSpName"
+                       prop="costAscriptionDept"
                        label="费用归属部门">
         <template v-slot:header>
           <div>费用归属部门<br><span class="subTitle">-</span></div>
         </template>
         <template slot-scope="scope">
           <div>
-            {{ scope.row.costAscriptionDeptSpName }}
+            {{ scope.row.costAscriptionDept }}
           </div>
         </template>
       </el-table-column>
@@ -703,14 +705,14 @@
             </el-table-column>
             <el-table-column width="220"
                              align="center"
-                             prop="costAscriptionDeptSpName"
+                             prop="costAscriptionDept"
                              label="费用归属部门">
               <template v-slot:header>
                 <div>费用归属部门<br><span class="subTitle">-</span></div>
               </template>
               <template slot-scope="scope">
                 <div>
-                  {{ scope.row.costAscriptionDeptSpName }}
+                  {{ scope.row.costAscriptionDept }}
                 </div>
               </template>
             </el-table-column>
@@ -864,6 +866,30 @@ export default {
     changeMinepackage() {
       this.filterObj.costAccount = ''
     },
+    // 清除数据
+    clear() {
+      if (this.filterObj.channelCode == '' || this.filterObj.month == '') {
+        if (this.filterObj.month == '') {
+          this.$message.info(messageObj.requireMonth)
+          return
+        }
+        if (this.filterObj.channelCode == '') {
+          this.$message.info(messageObj.requireChannel)
+        }
+      } else {
+        API.getClear({
+          channelCode: this.filterObj.channelCode, //渠道
+          yearAndMonth: this.filterObj.month,
+          //   isSubmit: 0,
+        }).then((res) => {
+          if (res.code === 1000) {
+            res.data.forEach((item) => {
+              this.$message.success('清除成功!')
+            })
+          }
+        })
+      }
+    },
     // 获取表格数据
     getTableData() {
       this.tableData = []
@@ -918,7 +944,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'Others-V2' && res.data.activityName.includes('调整') &&
+              res.data.version.includes('V2') && res.data.activityName.includes('调整') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
@@ -1003,7 +1029,7 @@ export default {
         }).then((res) => {
           downloadFile(
             res,
-            `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
+            `${this.filterObj.month}_All-RKA&RTM_${this.filterObj.channelCode}_V2_查询.xlsx`
           ) //自定义Excel文件名
           this.$message.success('导出成功!')
         })
@@ -1080,7 +1106,7 @@ export default {
           //   isSubmit: 0,
         }).then((res) => {
           const timestamp = Date.parse(new Date())
-          downloadFile(res, 'V2_All-RKA/RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
+          downloadFile(res, 'V2_All-RKA&RTM异常信息 -' + timestamp + '.xlsx') // 自定义Excel文件名
           this.$message.success(this.messageMap.exportErrorSuccess)
         })
       } else {
@@ -1123,7 +1149,7 @@ export default {
       }).then((res) => {
         downloadFile(
           res,
-          `${this.filterObj.month}_All-RKA/RTM_${this.filterObj.channelCode}_V2申请.xlsx`
+          `${this.filterObj.month}_All-RKA&RTM_${this.filterObj.channelCode}_V2申请.xlsx`
         ) // 自定义Excel文件名
         this.$message.success(this.messageMap.exportSuccess)
       })

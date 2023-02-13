@@ -1,7 +1,7 @@
 <!--
  * @Description: V2DMApproval
  * @Date: 2022-04-28 14:44:18
- * @LastEditTime: 2022-12-14 11:28:42
+ * @LastEditTime: 2023-02-11 16:16:20
 -->
 <template>
   <div class="MainContent">
@@ -123,7 +123,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+      <el-table-column width="120" align="center" prop="channelName" label="渠道">
         <template v-slot:header>
           <div>渠道<br><span class="subTitle">-</span></div>
         </template>
@@ -404,7 +404,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column width="120" align="center" prop="channelCode" label="渠道">
+            <el-table-column width="120" align="center" prop="channelName" label="渠道">
               <template v-slot:header>
                 <div>渠道<br><span class="subTitle">-</span></div>
               </template>
@@ -678,7 +678,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'DM-V2' &&
+              res.data.version.includes('V2') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1 &&
               this.tableData[0].isSubmit
             ) {

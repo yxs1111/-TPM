@@ -12,7 +12,7 @@
         <div class="Selectli" @keyup.enter="search">
           <span class="SelectliTitle">渠道:</span>
           <el-select v-model="filterObj.channelCode" clearable filterable placeholder="请选择">
-            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelEsName" :value="item.channelEsName" />
+            <el-option v-for="item,index in channelOptions" :key="index" :label="item.channelCsName" :value="item.channelEsName" />
           </el-select>
         </div>
         <div class="Selectli">
@@ -37,18 +37,18 @@
       </div>
     </div>
     <div class="TpmButtonBGWrap" style="align-items: center;">
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="importData">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="importData">
         <img src="@/assets/images/import.png" alt="">
         <span class="text">导入</span>
       </div>
-      <div class="TpmButtonBG" :class="!isSubmit&&isSelf&&isGainLe?'':'noClick'" @click="approve">
+      <div class="TpmButtonBG" :class="!isSubmit&&isSelf?'':'noClick'" @click="approve">
         <svg-icon icon-class="passLocal" style="font-size: 22px;" />
         <span class="text">提交</span>
       </div>
-      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">
-          <span class="tipStar">*</span>
-          注意事项：若未获取到LE销量，不能办理
-      </div>
+<!--      <div class="tip" v-if="!(!isSubmit&&isSelf&&isGainLe)">-->
+<!--          <span class="tipStar">*</span>-->
+<!--          注意事项：若未获取到LE销量，不能办理-->
+<!--      </div>-->
     </div>
     <el-table :data="tableData" :max-height="maxheight" border :header-cell-style="HeadTable" :row-class-name="tableRowClassName" style="width: 100%">
       <el-table-column width="420" align="center" prop="cpId" label="CPID" fixed />
@@ -56,7 +56,7 @@
       <el-table-column width="150" align="center" prop="costTypeName" label="费用类型" />
       <el-table-column width="180" align="center" prop="minePackageName" label="MinePackage" />
       <el-table-column width="250" align="center" prop="costItemName" label="费用科目" />
-      <el-table-column width="120" align="center" prop="channelCode" label="渠道" />
+      <el-table-column width="120" align="center" prop="channelName" label="渠道" />
       <el-table-column width="240" align="center" prop="customerName" label="客户系统名称" />
       <el-table-column width="120" align="center" prop="brandName" label="品牌" />
       <el-table-column width="220" v-slot={row} align="right" prop="planVol" label="V1计划总销量（CTN）">
@@ -335,7 +335,7 @@ export default {
         .then((res) => {
           if (res.code === 1000) {
             if (
-              res.data.version === 'NUV2' &&
+              res.data.version.includes('V2') &&
               res.data.assignee.indexOf(this.usernameLocal) != -1
             ) {
               //本人可以提交
