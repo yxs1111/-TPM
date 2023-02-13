@@ -148,7 +148,7 @@ export default {
     this.getQueryChannelSelect()
     this.getCostTypeList()
     this.getCostItemList()
-    this.getMinePackageSelect()
+    // this.getMinePackageSelect()
   },
   components: {
     FlowDiagram,
@@ -164,11 +164,13 @@ export default {
         this.filterObj.CostTypeName = ''
         this.filterObj.MinePackageIndex = ''
         this.filterObj.MinePackageName = ''
-        this.minePackageList = ''
+        this.minePackageList = null
         this.filterObj.CostType=''
-        this.getMinePackageSelect()
+        // this.getMinePackageSelect()
       }
-      this.filterObj.CostTypeName = ''
+      if (this.filterObj.CostTypeName == '') {
+        this.minePackageList = []
+      }
     },
     'filterObj.MinePackageIndex'(value) {
       if(value!=='') {

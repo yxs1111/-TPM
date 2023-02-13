@@ -323,7 +323,7 @@ export default {
   },
   created() {
     this.fetchData()
-    this.getAllOrg()
+    // this.getAllOrg()
   },
   mounted() {
     window.onresize = () => {
@@ -572,13 +572,13 @@ export default {
       }
     },
     // 获取所有组织
-    getAllOrg() {
-      organizationApi.getAll().then(response => {
-        if (response.data) {
-          this.allOrg.push(response.data)
-        }
-      })
-    },
+    // getAllOrg() {
+    //   organizationApi.getAll().then(response => {
+    //     if (response.data) {
+    //       this.allOrg.push(response.data)
+    //     }
+    //   })
+    // },
     // 自定义树显示
     normalizer(node) {
       if (!node.children || node.children.length < 1) {
