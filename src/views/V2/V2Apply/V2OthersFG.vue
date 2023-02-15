@@ -55,9 +55,6 @@
       <div class="OpertionBar">
         <el-button type="primary"
                    class="TpmButtonBG"
-                   @click="clear">清除数据</el-button>
-        <el-button type="primary"
-                   class="TpmButtonBG"
                    @click="search">查询</el-button>
         <div class="TpmButtonBG"
              @click="downExcel">
