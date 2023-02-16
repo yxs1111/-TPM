@@ -874,9 +874,10 @@ export default {
     },
     //获取Mine Package 权限
     async getMinePackage() {
-     await roleApi.getMinePackage().then(res => {
+      await roleApi.getMinePackage().then(res => {
         let list = []
-        let secondObj = res.data.secAndTerData[0]
+        let secondObj = res.data
+        console.log(secondObj, 'ddddd')
         for (const key in secondObj) {
           let obj = {
             children: [],
