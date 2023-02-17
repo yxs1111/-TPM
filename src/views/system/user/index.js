@@ -872,7 +872,7 @@ export default {
     async getMinePackage() {
      await roleApi.getMinePackage().then(res => {
         let list = []
-        let secondObj = res.data.secAndTerData[0]
+        let secondObj = res.data
         for (const key in secondObj) {
           let obj = {
             children: [],
