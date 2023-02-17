@@ -241,33 +241,33 @@ export default {
               },
               minePackageName: 'Transport Costs',
             },
-            // {
-            //   name: 'All-RKA/RTM',
-            //   path: '/costManagement/V2/V2Approval/V2AllrkartmApproval',
-            //   img: {
-            //     dark: require('@/assets/images/tab/StraightGiving.png'),
-            //     light: require('@/assets/images/tab/StraightGiving_l.png'),
-            //   },
-            //   minePackageName: 'Allrkartm',
-            // },
-            // {
-            //   name: 'Others-EC/NKA',
-            //   path: '/costManagement/V2/V2Approval/V2OthersApproval',
-            //   img: {
-            //     dark: require('@/assets/images/tab/StraightGiving.png'),
-            //     light: require('@/assets/images/tab/StraightGiving_l.png'),
-            //   },
-            //   minePackageName: 'Others',
-            // },
-            // {
-            //   name: 'FG-RKA/RTM',
-            //   path: '/costManagement/V2/V2Approval/V2OthersFGApproval',
-            //   img: {
-            //     dark: require('@/assets/images/tab/StraightGiving.png'),
-            //     light: require('@/assets/images/tab/StraightGiving_l.png'),
-            //   },
-            //   minePackageName: 'OthersFG',
-            // },
+            {
+              name: 'All-RKA/RTM',
+              path: '/costManagement/V2/V2Approval/V2AllrkartmApproval',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              minePackageName: 'Allrkartm',
+            },
+            {
+              name: 'Others-EC/NKA',
+              path: '/costManagement/V2/V2Approval/V2OthersApproval',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              minePackageName: 'Others',
+            },
+            {
+              name: 'FG-RKA/RTM',
+              path: '/costManagement/V2/V2Approval/V2OthersFGApproval',
+              img: {
+                dark: require('@/assets/images/tab/StraightGiving.png'),
+                light: require('@/assets/images/tab/StraightGiving_l.png'),
+              },
+              minePackageName: 'OthersFG',
+            },
           ]
           let TabList = []
           sortList.forEach((item) => {
