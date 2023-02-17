@@ -107,7 +107,7 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HI Hrebate',
+              name: 'HIH rebate',
               path: '/costManagement/V2/V2Approval/V2HIHRebateApproval',
               img: {
                 dark: require('@/assets/images/tab/tab_HIH.png'),

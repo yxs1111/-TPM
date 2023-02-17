@@ -109,7 +109,7 @@ export default {
           this.routerList = [
             ...this.routerList,
             {
-              name: 'HI Hrebate',
+              name: 'HIH rebate',
               path: '/costManagement/V2/V2Apply/V2HIHRebate',
               minePackageName: 'HIH Rebate',
             },
