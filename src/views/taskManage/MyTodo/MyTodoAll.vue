@@ -10,8 +10,7 @@
       <div class="SelectBar">
         <div class="Selectli">
           <span class="SelectliTitle">年月:</span>
-          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM">
-          </el-date-picker>
+          <el-date-picker v-model="filterObj.yearAndMonth" type="month" placeholder="选择年月" value-format="yyyyMM" format="yyyy-MM" />
         </div>
         <div class="Selectli">
           <span class="SelectliTitle">Cost Type:</span>
@@ -54,34 +53,34 @@
           {{ scope.$index+1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="yearAndMonth" label="年月"> </el-table-column>
-      <el-table-column align="center" width="240" prop="costTypeName" label="Cost Type"> </el-table-column>
-      <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package"> </el-table-column>
-      <el-table-column align="center" width="240" prop="costItemName" label="Cost Item"> </el-table-column>
-      <el-table-column align="center" min-width="150" prop="channelName" label="渠道"> </el-table-column>
-      <el-table-column align="center" min-width="150" prop="version" label="版本号"> </el-table-column>
-      <el-table-column align="center" width="180" prop="activityName" label="当前节点"> </el-table-column>
+      <el-table-column align="center" prop="yearAndMonth" label="年月" />
+      <el-table-column align="center" width="240" prop="costTypeName" label="Cost Type" />
+      <el-table-column align="center" width="240" prop="minePackageName" label="Mine Package" />
+      <el-table-column align="center" width="240" prop="costItemName" label="Cost Item" />
+      <el-table-column align="center" min-width="150" prop="channelName" label="渠道" />
+      <el-table-column align="center" min-width="150" prop="version" label="版本号" />
+      <el-table-column align="center" width="180" prop="activityName" label="当前节点" />
       <el-table-column align="left" prop="assignee" label="办理人" width="160" :show-overflow-tooltip="false">
-          <template slot-scope="scope">
-            <el-tooltip>
-              <!-- // {{}}会将数据解释为普通文本，而非 HTML 代码。 -->
-              <div v-html="setSplitAssignee(scope.row.assignee)" slot="content"></div>
-              <div class="ellipsis">{{scope.row.assignee}}</div>
-            </el-tooltip>
-          </template>
+        <template slot-scope="scope">
+          <el-tooltip>
+            <!-- // {{}}会将数据解释为普通文本，而非 HTML 代码。 -->
+            <div slot="content" v-html="setSplitAssignee(scope.row.assignee)" />
+            <div class="ellipsis">{{ scope.row.assignee }}</div>
+          </el-tooltip>
+        </template>
       </el-table-column>
-      <el-table-column v-slot={row} align="center" width="240" prop="createTime" label="提交时间">
-        {{row.createTime?row.createTime.substring(0,19).replaceAll("T",' '):""}}
+      <el-table-column v-slot="{row}" align="center" width="240" prop="createTime" label="提交时间">
+        {{ row.createTime?row.createTime.substring(0,19).replaceAll("T",' '):"" }}
       </el-table-column>
       <!-- <el-table-column width="150" align="center" prop="remark" label="备注"> </el-table-column> -->
-      <el-table-column width="150" align="center" prop="createDate" fixed='right' label="查看">
+      <el-table-column width="150" align="center" prop="createDate" fixed="right" label="查看">
         <template slot-scope="{row}">
           <div class="seeActivity" @click="openFlowDiagram(row)">
             查看流程
           </div>
         </template>
       </el-table-column>
-      <el-table-column width="150" align="center" prop="createDate" label="操作" fixed='right'>
+      <el-table-column width="150" align="center" prop="createDate" label="操作" fixed="right">
         <template slot-scope="{row}">
           <div class="operation" @click="operateProcess(row.version,row.activityName,row.channelCode,row.minePackageName,row)">
             <svg-icon icon-class="submit_l" class="submit_icon" />
@@ -92,8 +91,15 @@
     </el-table>
     <!-- 分页 -->
     <div class="TpmPaginationWrap">
-      <el-pagination :current-page="pageNum" :page-sizes="[5, 10, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total"
-        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      <el-pagination
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
     <!--  流程图  -->
     <div v-if="flowDiagram.visible">
@@ -109,7 +115,7 @@ import {
   getTextMap,
   parseTime,
   getHeightHaveTab,
-  setSplitAssignee,
+  setSplitAssignee
 } from '@/utils'
 import elDragDialog from '@/directive/el-drag-dialog'
 import permission from '@/directive/permission'
@@ -118,7 +124,11 @@ import FlowDiagram from '@/components/FlowDiagram'
 import selectAPI from '@/api/selectCommon/selectCommon.js'
 
 export default {
-  name:'MyTodoAll',
+  name: 'MyTodoAll',
+  components: {
+    FlowDiagram
+  },
+  directives: { elDragDialog, permission },
   data() {
     return {
       total: 0,
@@ -129,11 +139,11 @@ export default {
         CostTypeIndex: '',
         CostType: '',
         CostTypeName: '',
-        costItem:'',
+        costItem: '',
         version: '',
         channelCode: '',
         state: '',
-        MinePackage: '',
+        MinePackage: ''
       },
       permissions: getDefaultPermissions(),
       tableData: [],
@@ -146,7 +156,7 @@ export default {
         visible: false,
         activate: false,
         businessId: null,
-        processId: null,
+        processId: null
       },
       versionNameList: {
         V0: 'V0 - Pre city plan 预拆分',
@@ -156,43 +166,64 @@ export default {
         NUV2: 'NUV2 - Accrual 预提调整',
         NUV3: 'NUV3 - Actual 实际入账',
         FMCV2: 'FMCV2 - Accrual 预提调整',
-        FMCV3: 'FMCV3 - Actual 实际入账',
+        FMCV3: 'FMCV3 - Actual 实际入账'
       },
       versionList: [
         {
           version: 'V0',
-          name: 'V0 - Pre city plan 预拆分',
+          name: 'V0 - Pre city plan 预拆分'
         },
         {
           version: 'V1',
-          name: 'V1 - City plan 详细拆分',
+          name: 'V1 - City plan 详细拆分'
         },
         {
           version: 'V2',
-          name: 'V2 - Accrual 预提调整',
+          name: 'V2 - Accrual 预提调整'
         },
         {
           version: 'V3',
-          name: 'V3 - Actual 实际入账',
+          name: 'V3 - Actual 实际入账'
         },
         {
           version: 'NUV2',
-          name: 'V2 - Accrual 预提调整',
+          name: 'V2 - Accrual 预提调整'
         },
         {
           version: 'NUV3',
-          name: 'V3 - Actual 实际入账',
+          name: 'V3 - Actual 实际入账'
         },
         {
           version: 'FMC-V2',
-          name: 'V2 - Accrual 预提调整',
+          name: 'V2 - Accrual 预提调整'
         },
         {
           version: 'FMC-V3',
-          name: 'V3 - Actual 实际入账',
-        },
+          name: 'V3 - Actual 实际入账'
+        }
       ],
-      maxheight: getHeightHaveTab(),
+      maxheight: getHeightHaveTab()
+    }
+  },
+  watch: {
+    'filterObj.CostTypeIndex'(value) {
+      if (value !== '') {
+        this.filterObj.CostType = this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
+        this.filterObj.CostTypeName = this.CostTypeList[this.filterObj.CostTypeIndex].costType
+        this.getMinePackage(this.filterObj.CostTypeName)
+      } else {
+        this.filterObj.CostTypeName = ''
+        this.filterObj.CostType = ''
+        this.MinePackageList = null
+        // this.getMinePackage()
+      }
+      this.filterObj.MinePackage = ''
+      this.filterObj.costItem = ''
+    },
+    'filterObj.MinePackage'(value) {
+      if (value == '') {
+        this.CostItemList = []
+      }
     }
   },
   mounted() {
@@ -204,51 +235,31 @@ export default {
     this.getTableData()
     this.getChannelList()
     this.getCostTypeList()
-    this.getMinePackage()
-  },
-  components: {
-    FlowDiagram,
-  },
-  directives: { elDragDialog, permission },
-  watch: {
-    'filterObj.CostTypeIndex'(value) {
-      if(value!=='') {
-        this.filterObj.CostType=this.CostTypeList[this.filterObj.CostTypeIndex].costTypeNumber
-        this.filterObj.CostTypeName=this.CostTypeList[this.filterObj.CostTypeIndex].costType
-        this.getMinePackage(this.filterObj.CostTypeName)
-      } else {
-        this.filterObj.CostTypeName = ''
-        this.filterObj.CostType=''
-        this.MinePackageList = ''
-        this.getMinePackage()
-      }
-      this.filterObj.MinePackage = ''
-      this.filterObj.costItem = ''
-    },
+    // this.getMinePackage()
   },
   methods: {
-    //获取菜单明
+    // 获取菜单明
     getVersion(version) {
-      if(version) {
-       let index= this.versionList.findIndex(item=>item.version==version)
-       if (index!=-1) {
-        return this.versionList[index].name
-       }else {
-        return null
-       }
+      if (version) {
+        const index = this.versionList.findIndex(item => item.version == version)
+        if (index != -1) {
+          return this.versionList[index].name
+        } else {
+          return null
+        }
       }
     },
-    //获取表格数据
+    // 获取表格数据
     getTableData() {
       API.getList({
-        pageNum: this.pageNum, //当前页
-        pageSize: this.pageSize, //每页条数
+        pageNum: this.pageNum, // 当前页
+        pageSize: this.pageSize, // 每页条数
         yearAndMonth: this.filterObj.yearAndMonth,
         costTypeName: this.filterObj.CostTypeName,
         costItemName: this.filterObj.costItem,
         version: this.filterObj.version,
         channelCode: this.filterObj.channelCode,
-        minePackageCode: this.filterObj.MinePackage=='P'?'KA Contract':this.filterObj.MinePackage,
+        minePackageCode: this.filterObj.MinePackage == 'P' ? 'KA Contract' : this.filterObj.MinePackage
       }).then((response) => {
         this.tableData = response.data.records
         this.pageNum = response.data.pageNum
@@ -258,19 +269,24 @@ export default {
     },
     // 获取下拉框
     getCostItemList() {
-      this.filterObj.costItem = ''
-      selectAPI.getCostItemList({
-        minePackage: this.filterObj.MinePackage
-      }).then((res) => {
-        if (res.code === 1000) {
-          this.CostItemList = res.data
-        }
-      })
+      console.log(this.filterObj.MinePackage)
+      if (this.filterObj.MinePackage !== '') {
+        this.filterObj.costItem = ''
+        selectAPI.getCostItemList({
+          minePackage: this.filterObj.MinePackage
+        }).then((res) => {
+          if (res.code === 1000) {
+            this.CostItemList = res.data
+          }
+        })
+      } else {
+        this.CostItemList = []
+      }
     },
     getCostTypeList() {
       selectAPI
         .getCostTypeList({
-          costLevel: 1,
+          costLevel: 1
         })
         .then((res) => {
           if (res.code === 1000) {
@@ -287,7 +303,7 @@ export default {
     },
     getMinePackage() {
       selectAPI.queryMinePackageSelect({
-        parentId: this.filterObj.CostType,
+        parentId: this.filterObj.CostType
       }).then((res) => {
         this.MinePackageList = res.data
       })
@@ -296,72 +312,72 @@ export default {
       this.pageNum = 1
       this.getTableData()
     },
-    operateProcess(version, name, channelCode,minePackage,row) {
-      let minePackageName=minePackage
-      if(minePackageName=='KA Contract') {
-        if (row.costItemName=='HIH rebate') {
-          minePackageName='HIH Rebate'
-        } else if(row.costItemName=='KA rebate') {
-          minePackageName='KA Rebate'
+    operateProcess(version, name, channelCode, minePackage, row) {
+      let minePackageName = minePackage
+      if (minePackageName == 'KA Contract') {
+        if (row.costItemName == 'HIH rebate') {
+          minePackageName = 'HIH Rebate'
+        } else if (row.costItemName == 'KA rebate') {
+          minePackageName = 'KA Rebate'
         }
       }
-      if(minePackageName=='POSM') {
-        if (row.costItemName=='In Store POSM - Standard') {
-          minePackageName='POSM - Standard'
-        } else if(row.costItemName=='In Store POSM - Customized') {
-          minePackageName='POSM - Customized'
+      if (minePackageName == 'POSM') {
+        if (row.costItemName == 'In Store POSM - Standard') {
+          minePackageName = 'POSM - Standard'
+        } else if (row.costItemName == 'In Store POSM - Customized') {
+          minePackageName = 'POSM - Customized'
         }
       }
-      if(minePackageName=='Price Promotion') {
-        if (row.costItemName=='Free Goods - Tin') {
-          minePackageName='Free Goods-Tin'
+      if (minePackageName == 'Price Promotion') {
+        if (row.costItemName == 'Free Goods - Tin') {
+          minePackageName = 'Free Goods-Tin'
         } else {
-          minePackageName='Price Promotion'
+          minePackageName = 'Price Promotion'
         }
       }
-      if(minePackageName=='New User') {
-        if(row.costItemName=='Free Goods - Win 2') {
-          minePackageName='Free Goods-Win2'
+      if (minePackageName == 'New User') {
+        if (row.costItemName == 'Free Goods - Win 2') {
+          minePackageName = 'Free Goods-Win2'
         } else {
-          minePackageName='New User'
+          minePackageName = 'New User'
         }
       }
-      if(minePackageName=='Roadshow and Live Stream') {
-        minePackageName='Roadshow'
+      if (minePackageName == 'Roadshow and Live Stream') {
+        minePackageName = 'Roadshow'
       }
-      if(minePackageName=='Discount_Others') {
-        minePackageName='Listing fee'
+      if (minePackageName == 'Discount_Others') {
+        minePackageName = 'Listing fee'
       }
-      if (version.indexOf('V0')!=-1) {
+      if (version.indexOf('V0') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Apply', params: { channelCode }})
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V0/V0Approva', params: { channelCode } })
+          this.$router.push({ path: '/costManagement/V0/V0Approva', params: { channelCode }})
         }
       }
-      if (version.indexOf('V1')!=-1) {
+      if (version.indexOf('V1') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Apply', query: { channelCode ,minePackageName} })
+          this.$router.push({ path: '/costManagement/V1/V1Apply', query: { channelCode, minePackageName }})
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V1/V1Approval', query: { channelCode,minePackageName } })
+          this.$router.push({ path: '/costManagement/V1/V1Approval', query: { channelCode, minePackageName }})
         }
       }
-      if (version.indexOf('V2')!=-1) {
+      if (version.indexOf('V2') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Apply', query: { channelCode,minePackageName } })
+          this.$router.push({ path: '/costManagement/V2/V2Apply', query: { channelCode, minePackageName }})
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V2/V2Approval', query: { channelCode ,minePackageName} })
+          this.$router.push({ path: '/costManagement/V2/V2Approval', query: { channelCode, minePackageName }})
         }
       }
-      if (version.indexOf('V3')!=-1) {
+      if (version.indexOf('V3') != -1) {
         if (name.indexOf('调整') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Apply', query: { channelCode ,minePackageName} })
+          this.$router.push({ path: '/costManagement/V3/V3Apply', query: { channelCode, minePackageName }})
         } else if (name.indexOf('审批') != -1) {
-          this.$router.push({ path: '/costManagement/V3/V3Approval', query: { channelCode ,minePackageName} })
+          this.$router.push({ path: '/costManagement/V3/V3Approval', query: { channelCode, minePackageName }})
         }
       }
     },
-    //查看流程
+    // 查看流程
     openFlowDiagram(row) {
       this.flowDiagram.businessId = row.businessKey
       this.flowDiagram.processId = row.processId
@@ -390,8 +406,8 @@ export default {
     },
     HeadTable() {
       return ' background: #fff;color: #333;font-size: 16px;text-align: center;font-weight: 400;font-family: Source Han Sans CN;'
-    },
-  },
+    }
+  }
 }
 </script>
 

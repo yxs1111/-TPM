@@ -223,7 +223,7 @@
         </template>
       </el-table-column>
       <el-table-column width="220"
-                       align="right"
+                       align="center"
                        prop="distributorCode"
                        label="经销商">
         <template v-slot:header>
@@ -639,7 +639,7 @@
               </template>
             </el-table-column>
             <el-table-column width="220"
-                             align="right"
+                             align="center"
                              prop="distributorCode"
                              label="经销商">
               <template v-slot:header>

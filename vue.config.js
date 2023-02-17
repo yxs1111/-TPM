@@ -69,7 +69,7 @@ module.exports = {
       //   }
       // },
       [process.env.VUE_APP_BASE_API]: {
-        // target: `http://192.168.40.109:7777`,  //梁刚
+        // target: `http://192.168.40.156:7777`,  //梁刚
         //target: `http://192.168.30.32:7777`,  //现云
         //target: `http://192.168.30.35:7777`,  //泽圣
         //target: `http://192.168.40.69:7777`,  //宋佳

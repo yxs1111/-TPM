@@ -323,7 +323,7 @@ export default {
   },
   created() {
     this.fetchData()
-    this.getAllOrg()
+    // this.getAllOrg()
   },
   mounted() {
     window.onresize = () => {
@@ -572,13 +572,13 @@ export default {
       }
     },
     // 获取所有组织
-    getAllOrg() {
-      organizationApi.getAll().then(response => {
-        if (response.data) {
-          this.allOrg.push(response.data)
-        }
-      })
-    },
+    // getAllOrg() {
+    //   organizationApi.getAll().then(response => {
+    //     if (response.data) {
+    //       this.allOrg.push(response.data)
+    //     }
+    //   })
+    // },
     // 自定义树显示
     normalizer(node) {
       if (!node.children || node.children.length < 1) {
@@ -870,9 +870,10 @@ export default {
     },
     //获取Mine Package 权限
     async getMinePackage() {
-     await roleApi.getMinePackage().then(res => {
+      await roleApi.getMinePackage().then(res => {
         let list = []
-        let secondObj = res.data.secAndTerData[0]
+        let secondObj = res.data
+        console.log(secondObj, 'ddddd')
         for (const key in secondObj) {
           let obj = {
             children: [],
