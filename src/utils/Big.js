@@ -1,7 +1,7 @@
 /*
  * @Description: Big.js 封装
  * @Date: 2022-12-07 14:56:49
- * @LastEditTime: 2022-12-26 09:09:21
+ * @LastEditTime: 2023-02-17 14:32:21
  */
 import Big from 'big.js';
 //加法封装
@@ -47,6 +47,7 @@ export function div(a, b) {
     b = 0;
     return 0;
   }
+  if(b==0) return 0;
   return new Big(a).div(new Big(b)).toString();
 }
 //保留两位小数
