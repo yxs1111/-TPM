@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Date: 2021-11-16 14:01:16
  * @LastEditTime: 2023-02-02 09:43:04
 -->
@@ -388,7 +388,7 @@ export default {
         let timestamp = Date.parse(new Date())
         downloadFile(res, '客户合同审批明细 -' + timestamp + '.xlsx') //自定义Excel文件名
         this.$message.success('导出成功!')
-        
+
       })
       await API.exportApprovePage({
         channelCode: this.filterObj.channelCode,

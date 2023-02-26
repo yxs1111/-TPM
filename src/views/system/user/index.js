@@ -811,8 +811,8 @@ export default {
           //不为null才勾选（目的：防止全部勾中）
           if(item.fsDataFirId!=null&&item.fsDataSecId!=null&&item.fsDataTerId!=null&&item.fsDataFouId!=null) {
             fsNodeKeyList.push(item.fsDataFirId+'-'+item.fsDataSecId+'-'+item.fsDataTerId+'-'+item.fsDataFouId)
-          } 
-          //NodeKey:"FieldSales-zone-4539"
+          }
+          // NodeKey:"FieldSales-zone-4539"
         })
         // console.log(fsNodeKeyList);
         this.$refs.FileSalesTree.setCheckedKeys([...fsNodeKeyList])
